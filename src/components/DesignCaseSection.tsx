@@ -18,17 +18,17 @@ export function DesignCaseSection() {
   const totalPages = 5;
 
   return (
-    <div className="relative bg-gray-100 py-24 overflow-hidden">
+    <div className="relative bg-white py-12 lg:py-24 overflow-hidden">
       {/* 背景浮水印文字 */}
-      <div className="absolute top-0 right-0 text-[180px] font-bold text-gray-200/40 leading-none tracking-wider pointer-events-none">
+      <div className="absolute top-0 right-0 text-[80px] lg:text-[180px] font-bold text-gray-200/40 leading-none tracking-wider pointer-events-none">
         <div>SAKURA</div>
         <div>KITCHRO</div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-12 relative">
-        <div className="flex gap-6">
-          {/* 左側大圖 - 佔50% */}
-          <div className="w-1/2 relative aspect-[4/3] bg-gray-300 overflow-hidden group">
+      <div className="max-w-7xl mx-auto px-4 lg:px-12 relative">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* 左側大圖 */}
+          <div className="w-full lg:w-1/2 relative aspect-[4/3] bg-gray-300 overflow-hidden group">
             <img
               src={cases[currentCase].images[0]}
               alt="Kitchen case 1"
@@ -41,17 +41,17 @@ export function DesignCaseSection() {
               </div>
             </div>
             {/* 契約案例按鈕 */}
-            <div className="absolute bottom-12 left-12">
-              <button className="border-2 border-white text-white px-10 py-3 text-sm tracking-[0.3em] hover:bg-white hover:text-gray-900 transition-colors">
+            <div className="absolute bottom-8 left-8 lg:bottom-12 lg:left-12">
+              <button className="border-2 border-white text-white px-6 lg:px-10 py-3 text-sm tracking-[0.3em] hover:bg-white hover:text-gray-900 transition-colors">
                 契約案例
               </button>
             </div>
           </div>
 
-          {/* 右側區域 - 佔50% */}
-          <div className="w-1/2 flex flex-col gap-6">
+          {/* 右側區域 */}
+          <div className="w-full lg:w-1/2 flex flex-col gap-6">
             {/* 上方兩張小圖 */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4 lg:gap-6">
               <div className="relative aspect-[4/3] bg-gray-300 overflow-hidden group">
                 <img
                   src={cases[currentCase].images[1]}
@@ -59,13 +59,13 @@ export function DesignCaseSection() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 {/* Best Design 標籤 */}
-                <div className="absolute top-6 left-6">
+                <div className="absolute top-4 left-4 lg:top-6 lg:left-6">
                   <div className="bg-gray-900/70 backdrop-blur-sm px-3 py-1">
                     <span className="text-white text-sm italic tracking-wider">Best Design</span>
                   </div>
                 </div>
               </div>
-              
+
               <div className="relative aspect-[4/3] bg-gray-300 overflow-hidden group">
                 <img
                   src={cases[currentCase].images[2]}
@@ -76,9 +76,9 @@ export function DesignCaseSection() {
             </div>
 
             {/* 下方資訊卡片 */}
-            <div className="bg-white p-10 flex-1 shadow-lg relative">
-              {/* 分頁指示點 - 在卡片右上角 */}
-              <div className="absolute top-8 right-8 flex gap-2">
+            <div className="">
+              {/* 分頁指示點 */}
+              <div className="absolute top-6 right-6 lg:top-8 lg:right-8 flex gap-2">
                 {Array.from({ length: totalPages }).map((_, index) => (
                   <button
                     key={index}
@@ -97,7 +97,7 @@ export function DesignCaseSection() {
                 <div className="border-l-4 border-gray-400 pl-3 mb-6">
                   <span className="text-gray-600 text-sm italic tracking-wider">Best Design</span>
                 </div>
-                <h3 className="text-3xl leading-relaxed">
+                <h3 className="text-2xl lg:text-3xl leading-relaxed">
                   最完美的設計，來自<br />
                   最完美的決定
                 </h3>

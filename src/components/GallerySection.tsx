@@ -1,79 +1,115 @@
 import React, { useState } from 'react';
 
-export function GallerySection() {
-  const images = [
-    "https://images.unsplash.com/photo-1610177534644-34d881503b83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rkcm4lMjBraXRjaGVuJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4Mzc2MTc3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "https://images.unsplash.com/photo-1639405069836-f82aa6dcb900?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBraXRjaGVuJTIwZGVzaWdufGVufDF8fHx8MTc2ODQwMzI2MHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "https://images.unsplash.com/photo-1592839656073-833413ae8874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb250ZW1wb3JhcnklMjBraXRjaGVuJTIwZGluaW5nfGVufDF8fHx8MTc2ODQ1NTczNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "https://images.unsplash.com/photo-1585128833500-ec98262cb4f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwa2l0Y2hlbnxlbnwxfHx8fDE3NjgzNDM1OTF8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-  ];
+const IMGS = {
+  topL:
+    'https://images.unsplash.com/photo-1639405069836-f82aa6dcb900?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBraXRjaGVuJTIwZGVzaWdufGVufDF8fHx8MTc2ODQwMzI2MHww&ixlib=rb-4.1.0&q=80&w=1080',
+  topR:
+    'https://images.unsplash.com/photo-1610177534644-34d881503b83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVuJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4Mzc2MTc3fDA&ixlib=rb-4.1.0&q=80&w=1080',
+  t1: 'https://images.unsplash.com/photo-1610177534644-34d881503b83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVuJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4Mzc2MTc3fDA&ixlib=rb-4.1.0&q=80&w=600',
+  t2: 'https://images.unsplash.com/photo-1592839656073-833413ae8874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb250ZW1wb3JhcnklMjBraXRjaGVuJTIwZGluaW5nfGVufDF8fHx8MTc2ODQ1NTczNHww&ixlib=rb-4.1.0&q=80&w=600',
+  t3: 'https://images.unsplash.com/photo-1585128833500-ec98262cb4f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwa2l0Y2hlbnxlbnwxfHx8fDE3NjgzNDM1OTF8MA&ixlib=rb-4.1.0&q=80&w=600',
+};
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+const DOTS = 5;
+
+export function GallerySection() {
+  const [current, setCurrent] = useState(0);
 
   return (
-    <div className="relative bg-white pb-32">
-      <div className="flex">
-        {/* 左側留白區域 */}
-        <div className="w-[25%] bg-gray-50"></div>
+    <div className="">
+      {/* ── 上方：左灰色空白 + 右兩張廚房圖並排 ── */}
+      <div className="hidden lg:flex" style={{ height: '470px' }}>
+        {/* 左側灰色空白（與 Hero sidebar 視覺延伸） */}
+        <div
+          className="shrink-0 bg-white"
+          style={{ width: '41%',  }}
+        />
 
-        {/* 右側大圖區域 */}
-        <div className="w-[75%] relative">
-          <div className="relative h-[600px]">
+        {/* 右側兩張圖 */}
+        <div className="flex flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden">
             <img
-              src={images[currentIndex]}
-              alt="Kitchen Gallery"
+              src={IMGS.topL}
+              alt="Kitchen Design"
               className="w-full h-full object-cover"
             />
-            
-            {/* 尋找靈感按鈕 */}
-            <div className="absolute bottom-8 right-8">
-              <button className="px-8 py-3 border-2 border-white text-white text-sm tracking-[0.3em] hover:bg-white/10 transition-colors backdrop-blur-sm">
-                尋找靈感
-              </button>
-            </div>
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <img
+              src={IMGS.topR}
+              alt="Kitchen Interior"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </div>
 
-      {/* 底部縮圖區域 - 與大圖交疊，靠左對齊 */}
-      <div className="absolute bottom-0 left-0  bg-gray-100 py-8 max-w-[500px]">
-        <div className="pl-12 pr-12">
-          <div className="flex items-center gap-8">
-            {/* 三張縮圖 - 靠左 */}
-            <div className="grid grid-cols-3 gap-6 flex-shrink-0">
-              {images.slice(0, 3).map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`relative aspect-[16/10] w-64 overflow-hidden transition-all ${
-                    currentIndex === index 
-                      ? 'ring-2 ring-gray-400' 
-                      : 'opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <img
-                    src={image}
-                    alt={`Kitchen ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
+      {/* ── 下方：縮圖 × 3 ＋ 搜尋廚電 ＋ 分頁點 ── */}
+      <div
+        className="flex items-center"
+        style={{
+          paddingLeft: '8%',
+          paddingRight: '3%',
+          paddingTop: '36px',
+          paddingBottom: '48px',
+          background: '#fff',
+        }}
+      >
+        {/* 三張縮圖 */}
+        <div className="flex gap-5 flex-1 mr-6">
+          {[IMGS.t1, IMGS.t2, IMGS.t3].map((src, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className="flex-1 overflow-hidden"
+              style={{ height: '175px' }}
+            >
+              <img
+                src={src}
+                alt={`Slide ${i + 1}`}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              />
+            </button>
+          ))}
+        </div>
 
-            {/* 指示點 - 輪播右邊 */}
-            <div className="flex gap-3">
-              {images.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`rounded-full transition-all ${
-                    currentIndex === index 
-                      ? 'w-2 h-2 bg-gray-600' 
-                      : 'w-2 h-2 bg-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
+        {/* 搜尋廚電 ＋ 分頁點（右側欄） */}
+        <div
+          className="shrink-0 flex flex-col items-center gap-7"
+          style={{ width: '22%' }}
+        >
+          {/* 邊框按鈕 */}
+          <button
+            style={{
+              border: '1px solid rgba(120,120,120,0.65)',
+              padding: '14px 28px',
+              letterSpacing: '0.32em',
+              color: '#888',
+              fontSize: '13px',
+              background: 'transparent',
+              whiteSpace: 'nowrap',
+            }}
+            className="hover:bg-gray-50 transition-colors"
+          >
+            搜 尋 廚 電
+          </button>
+
+          {/* 分頁點 */}
+          <div className="flex items-center gap-[10px]">
+            {Array.from({ length: DOTS }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                style={{
+                  borderRadius: '50%',
+                  width: i === current ? '11px' : '8px',
+                  height: i === current ? '11px' : '8px',
+                  background: i === current ? '#444' : '#bbb',
+                  transition: 'all 0.2s',
+                  flexShrink: 0,
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>

@@ -8,11 +8,11 @@ export function Footer() {
 
   return (
     <footer className="bg-[#5a5a5a] text-white">
-      <div className="max-w-7xl mx-auto px-12 pt-12 pb-6">
+      <div className="max-w-7xl mx-auto px-4 lg:px-12 pt-12 pb-6">
         {/* 主要內容區 */}
-        <div className="flex justify-between items-start mb-12">
+        <div className="grid grid-cols-2 gap-8 lg:flex lg:justify-between lg:items-start mb-12">
           {/* Logo */}
-          <div className="w-[200px]">
+          <div className="col-span-2 lg:w-[200px]">
             <div className="text-2xl font-bold tracking-wider">
               SAKURA<br />
               KITCHEN
@@ -69,8 +69,8 @@ export function Footer() {
         </div>
 
         {/* 底部版權資訊 */}
-        <div className="pt-6 border-t border-gray-600 flex justify-between items-center text-xs text-gray-400">
-          <div className="flex items-center gap-4">
+        <div className="pt-6 border-t border-gray-600 flex flex-col lg:flex-row gap-2 lg:justify-between lg:items-center text-xs text-gray-400 text-center lg:text-left">
+          <div className="flex items-center justify-center lg:justify-start gap-4">
             <span>Copyright © 2025 Taiwan Sakura Corporation.</span>
             <span>|</span>
             <a href="#" className="hover:text-white transition-colors">隱私權聲明</a>

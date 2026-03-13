@@ -44,36 +44,38 @@ export function StoreLocationSection() {
 
   return (
     <div className="bg-gray-100 py-16">
-      <div className="max-w-7xl mx-auto px-12">
-        <div className="flex gap-8">
+      <div className="max-w-7xl mx-auto px-4 lg:px-12">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* 左側地圖區 */}
-          <div className="w-[45%] flex-shrink-0">
-            <div className="bg-gray-200 h-[400px] mb-6 relative overflow-hidden">
+          <div className="w-full lg:w-[45%] lg:flex-shrink-0">
+            <div className="bg-gray-200 h-[250px] lg:h-[400px] mb-6 relative overflow-hidden">
               {/* 台灣地圖 */}
               <div className="absolute inset-0 flex items-center justify-center">
-              
+
               </div>
             </div>
 
             {/* 搜尋表單 */}
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <input
                 type="text"
                 placeholder="縣 市"
-                className="w-[140px] px-3 py-2.5 bg-white border border-gray-300 text-sm focus:outline-none focus:border-gray-400"
+                className="w-full sm:w-[140px] px-3 py-2.5 bg-white border border-gray-300 text-sm focus:outline-none focus:border-gray-400"
               />
               <input
                 type="text"
                 placeholder="鄉 鎮"
-                className="w-[140px] px-3 py-2.5 bg-white border border-gray-300 text-sm focus:outline-none focus:border-gray-400"
+                className="w-full sm:w-[140px] px-3 py-2.5 bg-white border border-gray-300 text-sm focus:outline-none focus:border-gray-400"
               />
-              <button className="px-3 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 transition-colors">
-                <MapPin className="w-4 h-4 text-orange-400" />
-              </button>
-              <button className="px-8 py-2.5 bg-[#c9a961] text-white flex items-center gap-2 hover:bg-[#b89551] transition-colors">
-                <Search className="w-4 h-4" />
-                <span className="text-sm tracking-wider">搜尋</span>
-              </button>
+              <div className="flex gap-3 flex-1 sm:flex-none">
+                <button className="px-3 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 transition-colors">
+                  <MapPin className="w-4 h-4 text-orange-400" />
+                </button>
+                <button className="flex-1 sm:flex-none px-8 py-2.5 bg-[#c9a961] text-white flex items-center justify-center gap-2 hover:bg-[#b89551] transition-colors">
+                  <Search className="w-4 h-4" />
+                  <span className="text-sm tracking-wider">搜尋</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -89,7 +91,7 @@ export function StoreLocationSection() {
                     : 'bg-white text-gray-800 hover:bg-gray-50'
                 }`}
               >
-                <div className="px-6 py-3.5">
+                <div className="px-4 lg:px-6 py-3.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-baseline gap-3">
                       <span className="text-sm">{store.region}</span>
