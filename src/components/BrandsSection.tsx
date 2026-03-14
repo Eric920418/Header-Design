@@ -17,50 +17,59 @@ export function BrandsSection() {
   ];
 
   return (
-    <div className="bg-white py-20">
-      {/* 標題區 */}
-      <div className="text-center mb-16">
-        <h2 className="text-4xl mb-4 tracking-wider">品牌陣容</h2>
-        <p className="text-gray-500 text-sm tracking-[0.3em]">Domestic Appliances</p>
-      </div>
-
+    <div className="bg-white pb-20 mt-[250px]">
       {/* 內容區 */}
       <div className="max-w-7xl mx-auto px-4 lg:px-12">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
-          {/* 左側：三張品牌圖片 */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 flex-1 w-full">
-            {brands.map((brand, index) => (
-              <div
-                key={index}
-                className="relative aspect-[3/4] bg-gray-200 overflow-hidden group cursor-pointer"
-              >
-                <img
-                  src={brand.image}
-                  alt={brand.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* 品牌名稱覆蓋層 */}
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <span className="text-white text-3xl font-light tracking-wider">
-                    {brand.name}
-                  </span>
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-end">
+          <div>
+            {/* 標題區 */}
+            <div className="text-center mb-16">
+              <h2 className="text-4xl mb-4 tracking-wider">品牌陣容</h2>
+              <p className="text-gray-500 text-sm tracking-[0.3em]">
+                Domestic Appliances
+              </p>
+            </div>
+            {/* 左側：三張品牌圖片 */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 flex-1 w-full">
+              {brands.map((brand, index) => (
+                <div
+                  key={index}
+                  className="relative aspect-[3/4] bg-gray-200 overflow-hidden group cursor-pointer"
+                >
+                  <img
+                    src={brand.image}
+                    alt={brand.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  {/* 品牌名稱覆蓋層 */}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <span className="text-white text-3xl font-light tracking-wider">
+                      {brand.name}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* 右側：文字內容 */}
-          <div className="w-full lg:w-[400px] space-y-8">
+          <div className="w-full space-y-8 ">
             <div className="border-l-4 border-gray-400 pl-4">
-              <p className="text-gray-600 text-sm tracking-wider mb-2">Best Deal gas</p>
+              <p className="text-gray-600 text-sm tracking-wider mb-2">
+                Best Deal gas
+              </p>
             </div>
 
             <h3 className="text-3xl leading-relaxed">
-              最完美的設計，來自<br />最完美的決定
+              最完美的設計，來自
+              <br />
+              最完美的決定
             </h3>
 
             <p className="text-gray-500 text-sm tracking-wider leading-relaxed">
-              Every beautiful moment<br />in your life.
+              Every beautiful moment
+              <br />
+              in your life.
             </p>
 
             <button className="bg-gray-600 text-white px-8 py-3 text-sm tracking-[0.2em] hover:bg-gray-700 transition-colors">
