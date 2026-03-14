@@ -21,7 +21,7 @@ export function HeroSection() {
   const brands = ['SAKURA', 'TLA', 'TEKA', 'svago', '---'];
 
   return (
-    <div className="flex">
+    <div className="flex relative z-10">
       {/* ── 左側邊欄：跨越 Hero + Gallery ── */}
       <aside
         className="hidden lg:flex flex-col bg-white shrink-0 gap-[60px]"
@@ -228,14 +228,16 @@ export function HeroSection() {
 
         {/* Gallery 下方：縮圖 × 3 ＋ 搜尋廚電 ＋ 分頁點 */}
         <div
-          className="absolute left-0 top-[1130px] flex  justify-between items-center"
+          className="absolute left-0 top-[1000px] flex justify-between items-center"
           style={{
             paddingLeft: "8%",
             paddingRight: "3%",
             paddingTop: "36px",
             paddingBottom: "48px",
-            background: "#fff",
-            width: "75%",
+            width: "90%",
+            background: "linear-gradient(#fff 36%, transparent 36%)",
+            backgroundSize: "75% 100%",
+            backgroundRepeat: "no-repeat",
           }}
         >
           <div className="flex gap-5 flex-1 mr-6">
@@ -256,20 +258,20 @@ export function HeroSection() {
           </div>
 
           <div
-            className="shrink-0 flex flex-col items-center gap-7"
-            style={{ width: "22%" }}
+            className="shrink-0 flex flex-col items-center gap-[50px] mt-[-6%] z-20"
+            style={{ width: "25%" }}
           >
             <button
               style={{
-                border: "1px solid rgba(120,120,120,0.65)",
+                border: "1px solid white",
                 padding: "14px 28px",
                 letterSpacing: "0.32em",
-                color: "#888",
+                color: "white",
                 fontSize: "13px",
                 background: "transparent",
                 whiteSpace: "nowrap",
               }}
-              className="hover:bg-gray-50 transition-colors"
+              className=" hover:bg-white hover:text-gray-600 transition-colors z-20"
             >
               搜 尋 廚 電
             </button>

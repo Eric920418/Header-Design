@@ -56,16 +56,7 @@ export function Footer() {
             </div>
           </div>
 
-          {/* 回到上方 */}
-          <div>
-            <button
-              onClick={scrollToTop}
-              className="flex flex-col items-center gap-1 hover:opacity-80 transition-opacity"
-            >
-              <ChevronUp className="w-5 h-5" />
-              <span className="text-xs tracking-wider">回到上方</span>
-            </button>
-          </div>
+         
         </div>
 
         {/* 底部版權資訊 */}

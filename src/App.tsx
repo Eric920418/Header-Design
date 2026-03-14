@@ -18,9 +18,16 @@ export default function App() {
       <div className="flex">
         <div className="flex-1 min-w-0">
           <HeroSection />
-          <BrandsSection />
-          <DesignCaseSection />
-          <AboutSection />
+          {/* 梯形灰色背景橫跨三個 section */}
+          <div className="relative isolate">
+            <div
+              className="absolute inset-0 bg-gray-100 pointer-events-none z-[-1]"
+              style={{ clipPath: 'polygon(50% 0%, 100% 0%, 100% 100%, 20% 100%)', top: '-350px', left: 0, width: '100%', height: '85%' }}
+            />
+            <BrandsSection />
+            <DesignCaseSection />
+          </div>
+            <AboutSection />
           <StoreLocationSection />
         </div>
 

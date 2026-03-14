@@ -18,7 +18,7 @@ export function DesignCaseSection() {
   const totalPages = 5;
 
   return (
-    <div className="relative bg-white py-12 lg:py-24 overflow-hidden">
+    <div className="relative py-6 lg:py-12 overflow-hidden">
       {/* 背景浮水印文字 */}
       <div className="absolute top-0 right-0 text-[80px] lg:text-[180px] font-bold text-gray-200/40 leading-none tracking-wider pointer-events-none">
         <div>SAKURA</div>
@@ -26,18 +26,21 @@ export function DesignCaseSection() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 lg:px-12 relative">
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="absolute top-90 left-12 w-[400px] h-[220px] bg-gray-100 z-0"></div>
+        <div className="flex flex-col lg:flex-row gap-1">
           {/* 左側大圖 */}
-          <div className="w-full lg:w-1/2 relative aspect-[4/3] bg-gray-300 overflow-hidden group">
+          <div className="w-full lg:w-1/2 relative aspect-[4/3] bg-gray-300 overflow-hidden group h-[450px] z-10">
             <img
               src={cases[currentCase].images[0]}
               alt="Kitchen case 1"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-10"
             />
             {/* Best Design 標籤 */}
             <div className="absolute top-8 left-8">
               <div className="bg-white/20 backdrop-blur-sm px-4 py-2 border border-white/40">
-                <span className="text-white text-sm italic tracking-wider">Best Design</span>
+                <span className="text-white text-sm italic tracking-wider">
+                  Best Design
+                </span>
               </div>
             </div>
             {/* 契約案例按鈕 */}
@@ -51,7 +54,7 @@ export function DesignCaseSection() {
           {/* 右側區域 */}
           <div className="w-full lg:w-1/2 flex flex-col gap-6">
             {/* 上方兩張小圖 */}
-            <div className="grid grid-cols-2 gap-4 lg:gap-6">
+            <div className="grid grid-cols-2 gap-1">
               <div className="relative aspect-[4/3] bg-gray-300 overflow-hidden group">
                 <img
                   src={cases[currentCase].images[1]}
@@ -61,7 +64,9 @@ export function DesignCaseSection() {
                 {/* Best Design 標籤 */}
                 <div className="absolute top-4 left-4 lg:top-6 lg:left-6">
                   <div className="bg-gray-900/70 backdrop-blur-sm px-3 py-1">
-                    <span className="text-white text-sm italic tracking-wider">Best Design</span>
+                    <span className="text-white text-sm italic tracking-wider">
+                      Best Design
+                    </span>
                   </div>
                 </div>
               </div>
@@ -76,41 +81,50 @@ export function DesignCaseSection() {
             </div>
 
             {/* 下方資訊卡片 */}
-            <div className="">
+            <div className="p-12">
               {/* 分頁指示點 */}
-              <div className="absolute top-6 right-6 lg:top-8 lg:right-8 flex gap-2">
-                {Array.from({ length: totalPages }).map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentCase(index)}
-                    className={`rounded-full transition-all ${
-                      currentCase === index
-                        ? 'w-2 h-2 bg-gray-800'
-                        : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    aria-label={`Go to case ${index + 1}`}
-                  />
-                ))}
-              </div>
 
               <div className="mb-8">
-                <div className="border-l-4 border-gray-400 pl-3 mb-6">
-                  <span className="text-gray-600 text-sm italic tracking-wider">Best Design</span>
+                <div className="flex justify-between items-center">
+                  <div className="border-l-4 border-gray-400 pl-3 mb-6">
+                    <span className="text-gray-600 text-sm italic tracking-wider">
+                      Best Design
+                    </span>
+                  </div>
+                  <div className="flex gap-2 justify-end ">
+                    {Array.from({ length: totalPages }).map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentCase(index)}
+                        className={`rounded-full transition-all ${
+                          currentCase === index
+                            ? "w-2 h-2 bg-gray-800"
+                            : "w-2 h-2 bg-gray-300 hover:bg-gray-400"
+                        }`}
+                        aria-label={`Go to case ${index + 1}`}
+                      />
+                    ))}
+                  </div>
                 </div>
                 <h3 className="text-2xl lg:text-3xl leading-relaxed">
-                  最完美的設計，來自<br />
+                  最完美的設計，來自
+                  <br />
                   最完美的決定
                 </h3>
               </div>
 
-              <div className="space-y-4 border-t border-gray-200 pt-6">
-                <div className="flex items-center text-sm">
+              <div className="space-y-4 border-t border-black pt-3 w-[350px]">
+                <div className="flex items-center text-base">
                   <span className="text-gray-600 w-24">設計師</span>
-                  <span className="text-gray-900">{cases[currentCase].designer}</span>
+                  <span className="text-gray-900">
+                    {cases[currentCase].designer}
+                  </span>
                 </div>
-                <div className="flex items-center text-sm border-t border-gray-100 pt-4">
+                <div className="flex items-center text-base border-y border-black py-3">
                   <span className="text-gray-600 w-24">設計門市</span>
-                  <span className="text-gray-900">{cases[currentCase].location}</span>
+                  <span className="text-gray-900">
+                    {cases[currentCase].location}
+                  </span>
                 </div>
               </div>
             </div>

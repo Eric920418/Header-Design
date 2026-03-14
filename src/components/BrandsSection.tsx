@@ -17,7 +17,7 @@ export function BrandsSection() {
   ];
 
   return (
-    <div className="bg-white pb-20 mt-[250px]">
+    <div className="pb-20 mt-[250px]">
       {/* 內容區 */}
       <div className="max-w-7xl mx-auto px-4 lg:px-12">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-end">
