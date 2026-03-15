@@ -73,7 +73,7 @@ export function HeroSection() {
         <div
           className="relative overflow-hidden"
           style={{
-            height: "590px",
+            height: "var(--hero-h)",
             background:
               "linear-gradient(180deg, #b2c4d4 0%, #bccbd8 18%, #c6d2db 38%, #cfd8e1 58%, #d8e2ea 76%, #dce5ec 88%, #d4dfe9 100%)",
           }}
@@ -97,7 +97,7 @@ export function HeroSection() {
 
           <div
             className="absolute inset-0 flex flex-col items-center z-10"
-            style={{ paddingTop: "110px", gap: "18px" }}
+            style={{ paddingTop: "var(--hero-pt)", gap: "var(--hero-gap)" }}
           >
             <div className="text-center">
               <div
@@ -107,7 +107,7 @@ export function HeroSection() {
                 <span
                   style={{
                     fontFamily: '"Courier New", Courier, monospace',
-                    fontSize: "72px",
+                    fontSize: "var(--hero-ai-font)",
                     fontWeight: 200,
                     letterSpacing: "0.05em",
                     lineHeight: 1,
@@ -119,7 +119,7 @@ export function HeroSection() {
 
                 <svg
                   viewBox="0 0 430 85"
-                  style={{ height: "72px", overflow: "visible" }}
+                  style={{ height: "var(--hero-svg-h)", overflow: "visible" }}
                 >
                   <polyline
                     points="14,18 2,18 2,2"
@@ -150,7 +150,7 @@ export function HeroSection() {
 
               <p
                 className="mt-3 text-white/72"
-                style={{ fontSize: "17px", letterSpacing: "0.28em" }}
+                style={{ fontSize: "var(--hero-subtitle-font)", letterSpacing: "0.28em" }}
               >
                 突破未來格局，開啟廚房智高點
               </p>
@@ -159,22 +159,22 @@ export function HeroSection() {
             <button
               className="flex items-center justify-center rounded-full transition-all hover:scale-105"
               style={{
-                width: "120px",
-                height: "120px",
+                width: "var(--hero-play-size)",
+                height: "var(--hero-play-size)",
                 background: "rgba(18,26,38,0.62)",
                 backdropFilter: "blur(3px)",
                 border: "1px solid rgba(255,255,255,0.15)",
-                marginTop: "8px",
+                marginTop: "var(--hero-play-mt)",
               }}
             >
               <div
                 style={{
                   width: 0,
                   height: 0,
-                  borderTop: "18px solid transparent",
-                  borderBottom: "18px solid transparent",
-                  borderLeft: "30px solid rgba(255,255,255,0.82)",
-                  marginLeft: "8px",
+                  borderTop: "var(--hero-play-border-tb) solid transparent",
+                  borderBottom: "var(--hero-play-border-tb) solid transparent",
+                  borderLeft: "var(--hero-play-border-l) solid rgba(255,255,255,0.82)",
+                  marginLeft: "var(--hero-play-ml)",
                 }}
               />
             </button>
@@ -184,7 +184,7 @@ export function HeroSection() {
         {/* 品牌 Logo 條 */}
         <div
           className="flex items-center justify-around px-8"
-          style={{ height: "52px", background: "rgba(16,22,32,0.90)" }}
+          style={{ height: "var(--hero-brand-h)", background: "rgba(16,22,32,0.90)" }}
         >
           {brands.map((brand, i) => (
             <span
@@ -228,7 +228,7 @@ export function HeroSection() {
 
         {/* Gallery 下方：縮圖 × 3 ＋ 搜尋廚電 ＋ 分頁點 */}
         <div
-          className="absolute left-0 top-[1000px] flex justify-between items-center"
+          className="hidden lg:flex absolute left-0 top-[1000px] justify-between items-center"
           style={{
             paddingLeft: "8%",
             paddingRight: "3%",

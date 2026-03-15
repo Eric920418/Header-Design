@@ -31,29 +31,34 @@ pnpm build
 
 ## 響應式設計
 
-採用 **Desktop-first** 策略：
+採用 **三斷點** 策略，透過 CSS Custom Properties + 媒體查詢實現：
 
-- 預設樣式為手機端（< 1024px）
-- 使用 `lg:` 前綴（≥ 1024px）標記桌面端樣式
-- 斷點：`sm` (640px)、`lg` (1024px)
+| 層級 | 範圍 | 策略 |
+|------|------|------|
+| 手機 | <768px | 獨立的較小固定值（CSS 變數默認值） |
+| 平板 | 768px - 1023px | `min()` + `dvh` 流動縮放 |
+| 桌面 | ≥1024px | 原始像素值，視覺零改動 |
+
+### 技術方案
+
+- **inline style 值**：使用 `globals.css` 中定義的 CSS 變數（如 `var(--hero-h)`），值隨斷點自動切換
+- **className 值**：直接使用 Tailwind 響應式前綴（如 `h-[280px] md:h-[380px] lg:h-[450px]`）
 
 ### 主要響應式適配
 
-| 組件 | 手機版行為 |
-|------|-----------|
-| Header | 漢堡選單展開/收合 |
-| HeroSection | 隱藏左側邊欄，縮小標題和播放按鈕 |
-| GallerySection | 全寬大圖，縮圖改為相對定位 |
-| BrandsSection | 品牌圖片垂直堆疊 |
-| DesignCaseSection | 左右分欄改為上下堆疊 |
-| AboutSection | 文字區和影片區垂直堆疊 |
-| StoreLocationSection | 地圖和門市列表垂直堆疊，搜尋表單自動換行 |
-| Footer | Grid 2 欄重排 |
-| FloatingButtons | 右側按鈕隱藏，改為底部固定導航列 |
+| 組件 | 手機版 | 平板版 | 桌面版 |
+|------|--------|--------|--------|
+| Header | 漢堡選單 | 漢堡選單 | 完整導航 |
+| HeroSection | 隱藏側邊欄/Gallery，縮小標題和播放按鈕 | 隱藏側邊欄/Gallery，中等尺寸 | 完整佈局 |
+| BrandsSection | `mt-16` 較小間距 | `mt-24` 中等間距 | `mt-[250px]` 原始間距 |
+| DesignCaseSection | 上下堆疊，`h-[280px]` | 上下堆疊，`h-[380px]` | 左右分欄，`h-[450px]` |
+| StoreLocationSection | 地址電話垂直堆疊，地圖 200px | 地圖 320px | 地圖 400px |
+| App 梯形背景 | `top: -150px` | `top: -250px` | `top: -350px` |
 
 ### 驗證方式
 
-1. 瀏覽器 DevTools → 1280px → 確認桌面版完全不變
-2. 375px（iPhone SE）→ 所有區塊垂直堆疊、無水平溢出
-3. 414px（iPhone Plus）→ 同上
-4. 768px（iPad）→ 中間尺寸過渡正常
+1. **桌面版（1920x1080）**：逐頁比對確認零視覺差異
+2. **桌面邊界（1024x768）**：確認 `lg:` 斷點切換正常
+3. **平板（768x1024 iPad）**：佈局合理、字體可讀、間距適當
+4. **手機（390x844 iPhone 14）**：佈局不溢出、文字可讀
+5. **斷點跳變**：拖動瀏覽器寬度在 768px 和 1024px 附近確認過渡平滑

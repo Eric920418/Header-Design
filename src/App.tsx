@@ -22,7 +22,7 @@ export default function App() {
           <div className="relative isolate">
             <div
               className="absolute inset-0 bg-gray-100 pointer-events-none z-[-1]"
-              style={{ clipPath: 'polygon(50% 0%, 100% 0%, 100% 100%, 20% 100%)', top: '-350px', left: 0, width: '100%', height: '85%' }}
+              style={{ clipPath: 'polygon(50% 0%, 100% 0%, 100% 100%, 20% 100%)', top: 'var(--clip-top)', left: 0, width: '100%', height: '85%' }}
             />
             <BrandsSection />
             <DesignCaseSection />

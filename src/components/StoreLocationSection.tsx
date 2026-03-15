@@ -48,7 +48,7 @@ export function StoreLocationSection() {
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* 左側地圖區 */}
           <div className="w-full lg:w-[45%] lg:flex-shrink-0">
-            <div className="bg-gray-200 h-[250px] lg:h-[400px] mb-4 relative overflow-hidden">
+            <div className="bg-gray-200 h-[200px] md:h-[320px] lg:h-[400px] mb-4 relative overflow-hidden">
               {/* 台灣地圖 */}
               <div className="absolute inset-0 flex items-center justify-center"></div>
             </div>
@@ -101,7 +101,7 @@ export function StoreLocationSection() {
                     </div>
                   </div>
                   <div
-                    className={`text-base mt-4 ms-11 flex justify-between ${
+                    className={`text-base mt-4 ms-0 md:ms-11 flex flex-col md:flex-row md:justify-between ${
                       selectedStore === store.id
                         ? "text-white/90"
                         : "text-gray-600"

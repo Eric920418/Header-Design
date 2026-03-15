@@ -184,6 +184,78 @@ html {
   font-size: var(--font-size);
 }
 
+/* ── 響應式 CSS 變數 ── */
+
+/* 手機版（默認 <768px） */
+:root {
+  --hero-h: 320px;
+  --hero-pt: 60px;
+  --hero-gap: 12px;
+  --hero-ai-font: 40px;
+  --hero-svg-h: 40px;
+  --hero-subtitle-font: 13px;
+  --hero-play-size: 72px;
+  --hero-play-border-tb: 11px;
+  --hero-play-border-l: 18px;
+  --hero-play-ml: 5px;
+  --hero-play-mt: 4px;
+  --hero-brand-h: 40px;
+  --brands-mt: 60px;
+  --design-left-h: 280px;
+  --design-info-p: 1.5rem;
+  --design-border-w: 100%;
+  --store-map-h: 250px;
+  --clip-top: -150px;
+}
+
+/* 平板版（768px - 1023px） */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --hero-h: min(450px, 50dvh);
+    --hero-pt: 80px;
+    --hero-gap: 15px;
+    --hero-ai-font: min(56px, calc(56 / 1080 * 100dvh));
+    --hero-svg-h: min(56px, calc(56 / 1080 * 100dvh));
+    --hero-subtitle-font: 15px;
+    --hero-play-size: min(96px, calc(96 / 1080 * 100dvh));
+    --hero-play-border-tb: 14px;
+    --hero-play-border-l: 24px;
+    --hero-play-ml: 6px;
+    --hero-play-mt: 6px;
+    --hero-brand-h: 46px;
+    --brands-mt: 100px;
+    --design-left-h: 380px;
+    --design-info-p: 2rem;
+    --design-border-w: 280px;
+    --store-map-h: 320px;
+    --clip-top: -250px;
+  }
+}
+
+/* 桌面版（≥1024px）— 恢復原始值 */
+@media (min-width: 1024px) {
+  :root {
+    --hero-h: 590px;
+    --hero-pt: 110px;
+    --hero-gap: 18px;
+    --hero-ai-font: 72px;
+    --hero-svg-h: 72px;
+    --hero-subtitle-font: 17px;
+    --hero-play-size: 120px;
+    --hero-play-border-tb: 18px;
+    --hero-play-border-l: 30px;
+    --hero-play-ml: 8px;
+    --hero-play-mt: 8px;
+    --hero-brand-h: 52px;
+    --brands-mt: 250px;
+    --design-left-h: 450px;
+    --design-info-p: 3rem;
+    --design-border-w: 350px;
+    --store-map-h: 400px;
+    --clip-top: -350px;
+  }
+}
+
 /* 垂直文字書寫 */
 .writing-vertical {
   writing-mode: vertical-rl;

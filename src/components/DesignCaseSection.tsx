@@ -20,16 +20,16 @@ export function DesignCaseSection() {
   return (
     <div className="relative py-6 lg:py-12 overflow-hidden">
       {/* 背景浮水印文字 */}
-      <div className="absolute top-0 right-0 text-[80px] lg:text-[180px] font-bold text-gray-200/40 leading-none tracking-wider pointer-events-none">
+      <div className="absolute top-0 right-0 text-[80px] md:text-[120px] lg:text-[180px] font-bold text-gray-200/40 leading-none tracking-wider pointer-events-none">
         <div>SAKURA</div>
         <div>KITCHRO</div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 lg:px-12 relative">
-        <div className="absolute top-90 left-12 w-[400px] h-[220px] bg-gray-100 z-0"></div>
+        <div className="hidden md:block absolute top-90 left-12 md:w-[300px] md:h-[180px] lg:w-[400px] lg:h-[220px] bg-gray-100 z-0"></div>
         <div className="flex flex-col lg:flex-row gap-1">
           {/* 左側大圖 */}
-          <div className="w-full lg:w-1/2 relative aspect-[4/3] bg-gray-300 overflow-hidden group h-[450px] z-10">
+          <div className="w-full lg:w-1/2 relative aspect-[4/3] bg-gray-300 overflow-hidden group h-[280px] md:h-[380px] lg:h-[450px] z-10">
             <img
               src={cases[currentCase].images[0]}
               alt="Kitchen case 1"
@@ -81,7 +81,7 @@ export function DesignCaseSection() {
             </div>
 
             {/* 下方資訊卡片 */}
-            <div className="p-12">
+            <div className="p-4 md:p-8 lg:p-12">
               {/* 分頁指示點 */}
 
               <div className="mb-8">
@@ -113,7 +113,7 @@ export function DesignCaseSection() {
                 </h3>
               </div>
 
-              <div className="space-y-4 border-t border-black pt-3 w-[350px]">
+              <div className="space-y-4 border-t border-black pt-3 w-full md:w-[280px] lg:w-[350px]">
                 <div className="flex items-center text-base">
                   <span className="text-gray-600 w-24">設計師</span>
                   <span className="text-gray-900">
