@@ -1,300 +1,195 @@
 import React, { useState } from 'react';
-import { Facebook, Youtube } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 const KITCHEN_BG =
-  'https://images.unsplash.com/photo-1610177534644-34d881503b83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVuJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4Mzc2MTc3fDA&ixlib=rb-4.1.0&q=80&w=1600';
+  'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=1920&h=1080&q=80';
 
-const IMGS = {
-  topL:
-    'https://images.unsplash.com/photo-1639405069836-f82aa6dcb900?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBraXRjaGVuJTIwZGVzaWdufGVufDF8fHx8MTc2ODQwMzI2MHww&ixlib=rb-4.1.0&q=80&w=1080',
-  topR:
-    'https://images.unsplash.com/photo-1610177534644-34d881503b83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVuJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4Mzc2MTc3fDA&ixlib=rb-4.1.0&q=80&w=1080',
-  t1: 'https://images.unsplash.com/photo-1610177534644-34d881503b83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVuJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4Mzc2MTc3fDA&ixlib=rb-4.1.0&q=80&w=600',
-  t2: 'https://images.unsplash.com/photo-1592839656073-833413ae8874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb250ZW1wb3JhcnklMjBraXRjaGVuJTIwZGluaW5nfGVufDF8fHx8MTc2ODQ1NTczNHww&ixlib=rb-4.1.0&q=80&w=600',
-  t3: 'https://images.unsplash.com/photo-1585128833500-ec98262cb4f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwa2l0Y2hlbnxlbnwxfHx8fDE3NjgzNDM1OTF8MA&ixlib=rb-4.1.0&q=80&w=600',
-};
+// 品牌重點金（沿用原站色）
+const GOLD = '#C4A574';
 
-const DOTS = 5;
+// 品牌系列中文名（品牌系列 10 款中有中文的 8 款；Basic+ / AI kitchen 無中文故略）
+const SERIES = ['巧域廚房', '潮派廚房', '童樂廚房', '君璽廚房', '臻美廚房', '大廚廚房', '鄉村廚房', '閣樂廚房'];
+
+// 佔位品牌 logo（inline SVG：線條 icon + 品牌名，灰階、hover 轉金）
+// 待正式 logo 檔提供後，把 <svg> 內容替換為真實 logo 即可。
+function BrandLogo({ name }: { name: string }) {
+  return (
+    <a
+      href="#"
+      title={name}
+      className="shrink-0 text-gray-400 hover:text-[#C4A574] transition-colors"
+    >
+      <svg
+        viewBox="0 0 150 40"
+        className="h-8 lg:h-9 w-auto"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect x="1" y="7" width="26" height="26" rx="5" stroke="currentColor" strokeWidth="1.6" />
+        <path
+          d="M7 27l7-11 6 11"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <text
+          x="38"
+          y="27"
+          fill="currentColor"
+          style={{ fontFamily: 'inherit', fontSize: 17, fontWeight: 600, letterSpacing: 1 }}
+        >
+          {name}
+        </text>
+      </svg>
+    </a>
+  );
+}
 
 export function HeroSection() {
-  const [current, setCurrent] = useState(0);
-  const brands = ['SAKURA', 'TLA', 'TEKA', 'svago', '---'];
+  const brands = ['現代風', '輕奢風', '北歐風', '工業風', '美式風', '鄉村風'];
+  // 左側品牌系列抽屜：展開時把內容/按鈕/浮水印一起右推，避免被蓋
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex relative z-10">
-      {/* ── 左側邊欄：跨越 Hero + Gallery ── */}
-      <aside
-        className="hidden lg:flex flex-col bg-white shrink-0 gap-[60px]"
-        style={{ width: "350px", padding: "36px 0 0 100px" }}
+    <div className="relative z-10">
+      {/* ──────────────────────────────────────────────
+          主視覺 Hero — 採 Home Six 版型（滿版深色大圖 + 左對齊雙色大標題）
+          色系字型沿用原站；文案皆為佔位，待正式文案替換。
+          高度沿用 var(--hero-h)，維持下方 Gallery 絕對定位不受影響。
+      ────────────────────────────────────────────── */}
+      <section
+        className="relative w-full overflow-hidden"
+        style={{ height: '850px' }}
       >
-        <nav className="flex flex-col gap-7">
-          {["Home", "Stores", "Product", "Appliances"].map((item) => (
-            <a
-              key={item}
-              href="#"
-              className="text-gray-700 text-[15px] hover:text-[#C4A574] transition-colors"
-            >
-              {item}
-            </a>
-          ))}
-        </nav>
-
-        <div>
-          <hr className="border-gray-200 mb-7" />
-          <div className="text-gray-600 text-sm leading-relaxed">
-            <div>Franchise</div>
-            <div className="font-medium text-gray-800">SAKURA KITCHEN</div>
-          </div>
-        </div>
-
-        {/* 灰色方塊：grow 填滿剩餘高度（Hero + Gallery 全部） */}
+        {/* 背景大圖 */}
+        <img
+          src={KITCHEN_BG}
+          alt="SAKURA Kitchen"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* 深色遮罩：左深右淺，確保左側文字可讀（Home Six 手法） */}
         <div
-          className="flex flex-col items-start gap-[30px] bg-gray-100 py-[60px]"
-          style={{ height: "350px", width: "100%" }}
-        >
-          <a
-            href="#"
-            className="text-gray-400 hover:text-gray-600 transition-colors ps-[20px]"
-          >
-            <Facebook size={36} />
-          </a>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-gray-600 transition-colors ps-[20px]"
-          >
-            <Youtube size={42} />
-          </a>
-        </div>
-      </aside>
-
-      {/* ── 右側：Hero + Gallery 全部內容 ── */}
-      <div className="flex-1 min-w-0">
-        {/* Hero Banner */}
-        <div
-          className="relative overflow-hidden"
+          className="absolute inset-0"
           style={{
-            height: "var(--hero-h)",
             background:
-              "linear-gradient(180deg, #b2c4d4 0%, #bccbd8 18%, #c6d2db 38%, #cfd8e1 58%, #d8e2ea 76%, #dce5ec 88%, #d4dfe9 100%)",
+              'linear-gradient(90deg, rgba(14,16,18,0.82) 0%, rgba(14,16,18,0.55) 50%, rgba(14,16,18,0.5) 100%)',
           }}
-        >
-          <img
-            src={KITCHEN_BG}
-            alt="AI Kitchen Products"
-            className="absolute bottom-0 left-0 w-full"
+        />
+
+        {/* 底部浮水印大字（裝飾層，佔位）；抽屜展開時往右推、避免被蓋 */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none select-none z-[1]">
+          <span
+            className="block whitespace-nowrap font-bold leading-none transition-transform duration-500 ease-out"
             style={{
-              height: "68%",
-              objectFit: "cover",
-              objectPosition: "center top",
-              opacity: 0.88,
-              mixBlendMode: "multiply",
-              maskImage:
-                "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,1) 100%)",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,1) 100%)",
+              color: 'rgba(196,165,116,0.14)',
+              fontSize: 'clamp(72px, 17vw, 240px)',
+              transform: open ? 'translateX(250px) translateY(24%)' : 'translateX(0) translateY(24%)',
             }}
-          />
-
-          <div
-            className="absolute inset-0 flex flex-col items-center z-10"
-            style={{ paddingTop: "var(--hero-pt)", gap: "var(--hero-gap)" }}
           >
-            <div className="text-center">
-              <div
-                className="flex items-center justify-center gap-3"
-                style={{ color: "rgba(255,255,255,0.88)" }}
-              >
-                <span
-                  style={{
-                    fontFamily: '"Courier New", Courier, monospace',
-                    fontSize: "var(--hero-ai-font)",
-                    fontWeight: 200,
-                    letterSpacing: "0.05em",
-                    lineHeight: 1,
-                    textShadow: "0 0 1px rgba(255,255,255,0.9)",
-                  }}
-                >
-                  AI
-                </span>
-
-                <svg
-                  viewBox="0 0 430 85"
-                  style={{ height: "var(--hero-svg-h)", overflow: "visible" }}
-                >
-                  <polyline
-                    points="14,18 2,18 2,2"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.78)"
-                    strokeWidth="2.5"
-                  />
-                  <polyline
-                    points="416,67 428,67 428,83"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.78)"
-                    strokeWidth="2.5"
-                  />
-                  <text
-                    x="215"
-                    y="68"
-                    textAnchor="middle"
-                    fontFamily='"Courier New", Courier, monospace'
-                    fontSize="64"
-                    fontWeight="200"
-                    fill="rgba(255,255,255,0.86)"
-                    letterSpacing="8"
-                  >
-                    KITCHEN
-                  </text>
-                </svg>
-              </div>
-
-              <p
-                className="mt-3 text-white/72"
-                style={{ fontSize: "var(--hero-subtitle-font)", letterSpacing: "0.28em" }}
-              >
-                突破未來格局，開啟廚房智高點
-              </p>
-            </div>
-
-            <button
-              className="flex items-center justify-center rounded-full transition-all hover:scale-105"
-              style={{
-                width: "var(--hero-play-size)",
-                height: "var(--hero-play-size)",
-                background: "rgba(18,26,38,0.62)",
-                backdropFilter: "blur(3px)",
-                border: "1px solid rgba(255,255,255,0.15)",
-                marginTop: "var(--hero-play-mt)",
-              }}
-            >
-              <div
-                style={{
-                  width: 0,
-                  height: 0,
-                  borderTop: "var(--hero-play-border-tb) solid transparent",
-                  borderBottom: "var(--hero-play-border-tb) solid transparent",
-                  borderLeft: "var(--hero-play-border-l) solid rgba(255,255,255,0.82)",
-                  marginLeft: "var(--hero-play-ml)",
-                }}
-              />
-            </button>
-          </div>
+            SAKURA KITCHEN
+          </span>
         </div>
 
-        {/* 品牌 Logo 條 */}
+        {/* 內容層：左對齊、垂直置中；抽屜展開時整體右移、避免被蓋 */}
         <div
-          className="flex items-center justify-around px-8"
-          style={{ height: "var(--hero-brand-h)", background: "rgba(16,22,32,0.90)" }}
+          className="relative z-10 h-full flex flex-col justify-center px-6 lg:pl-[100px] lg:pr-[60px] transition-transform duration-500 ease-out"
+          style={{ transform: open ? 'translateX(200px)' : 'translateX(0)' }}
         >
-          {brands.map((brand, i) => (
+          {/* eyebrow */}
+          <div className="flex items-center gap-2.5 mb-4 lg:mb-6">
             <span
-              key={i}
-              className="text-white/45 text-sm font-light"
-              style={{ letterSpacing: "0.22em" }}
-            >
-              {brand}
-            </span>
-          ))}
-        </div>
-
-        {/* Gallery 上方：兩張廚房圖 */}
-        <div className="hidden lg:flex relative" style={{ height: "450px" }}>
-          {/* 上半段背景 */}
-          <div
-            className="bg-gray-100"
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "80%",
-              height: "25%",
-              zIndex: 0,
-            }}
-          />
-
-          {/* 圖片層 */}
-          <div
-            className="flex-1 overflow-hidden w-full flex justify-center"
-            style={{ position: "relative", zIndex: 0 }}
-          >
-            <img
-              src={IMGS.topL}
-              alt="Kitchen Design"
-              className="h-full object-cover"
-              width={800}
+              className="inline-block w-2 h-2 rounded-full shrink-0"
+              style={{ background: GOLD }}
             />
+            <span className="text-white/85 text-[11px] lg:text-xs tracking-[0.25em] uppercase">
+              Welcome to SAKURA Kitchen
+            </span>
           </div>
+
+          {/* 雙色大標題（佔位） */}
+          <h1 className="text-white font-bold leading-[1.05] text-4xl md:text-6xl lg:text-7xl">
+            We Shape
+            <br />
+            <span style={{ color: GOLD }}>Inspiring Spaces</span>
+          </h1>
+
+          {/* 副標（佔位） */}
+          <p className="mt-5 lg:mt-7 text-white/70 text-sm lg:text-base max-w-md leading-relaxed">
+            We transform your vision into reality — thoughtfully designed, beautifully
+            crafted spaces built for the way you live.
+          </p>
         </div>
 
-        {/* Gallery 下方：縮圖 × 3 ＋ 搜尋廚電 ＋ 分頁點 */}
-        <div
-          className="hidden lg:flex absolute left-0 top-[1000px] justify-between items-center"
-          style={{
-            paddingLeft: "8%",
-            paddingRight: "3%",
-            paddingTop: "36px",
-            paddingBottom: "48px",
-            width: "90%",
-            background: "linear-gradient(#fff 36%, transparent 36%)",
-            backgroundSize: "75% 100%",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <div className="flex gap-5 flex-1 mr-6">
-            {[IMGS.t1, IMGS.t2, IMGS.t3].map((src, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className="flex-1 overflow-hidden"
-                style={{ height: "175px" }}
-              >
-                <img
-                  src={src}
-                  alt={`Slide ${i + 1}`}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </button>
-            ))}
-          </div>
-
+        {/* ── 左側「品牌系列」伸縮抽屜（桌面）── */}
+        <div className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-30 items-stretch">
+          {/* 抽屜面板：w-0 ↔ w-190 伸縮 */}
           <div
-            className="shrink-0 flex flex-col items-center gap-[50px] mt-[-6%] z-20"
-            style={{ width: "25%" }}
+            className={`overflow-hidden transition-all duration-500 ease-out ${
+              open ? 'w-[190px] opacity-100' : 'w-0 opacity-0'
+            }`}
           >
-            <button
-              style={{
-                border: "1px solid white",
-                padding: "14px 28px",
-                letterSpacing: "0.32em",
-                color: "white",
-                fontSize: "13px",
-                background: "transparent",
-                whiteSpace: "nowrap",
-              }}
-              className=" hover:bg-white hover:text-gray-600 transition-colors z-20"
-            >
-              搜 尋 廚 電
-            </button>
-
-            <div className="flex items-center gap-[10px]">
-              {Array.from({ length: DOTS }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  style={{
-                    borderRadius: "50%",
-                    width: i === current ? "11px" : "8px",
-                    height: i === current ? "11px" : "8px",
-                    background: i === current ? "#444" : "#bbb",
-                    transition: "all 0.2s",
-                    flexShrink: 0,
-                  }}
-                />
-              ))}
+            <div className="w-[190px] bg-[rgba(18,20,24,0.55)] backdrop-blur-md border-y border-white/10 py-3">
+              <ul>
+                {SERIES.map((name, i) => (
+                  <li key={i}>
+                    <a
+                      href="#"
+                      className="block pl-6 pr-4 py-2 text-sm text-white/85 border-l-2 border-transparent hover:border-[#C4A574] hover:text-[#C4A574] hover:bg-white/5 transition-colors whitespace-nowrap"
+                    >
+                      {name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
+
+          {/* 把手：點擊伸縮，隨抽屜滑出 */}
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? '收合品牌系列選單' : '展開品牌系列選單'}
+            className="self-center flex flex-col items-center justify-center gap-2 w-10 h-36 bg-[rgba(18,20,24,0.55)] backdrop-blur-md border border-white/10 rounded-r-2xl text-white/85 hover:text-[#C4A574] transition-colors"
+          >
+            <ChevronRight className={`w-5 h-5 transition-transform ${open ? 'rotate-180' : ''}`} />
+            <span className="writing-vertical text-[11px] tracking-[0.3em]">品牌系列</span>
+          </button>
         </div>
+
+        {/* 左下圓形按鈕（佔位，桌面版）；抽屜展開時同步右移 */}
+        <button
+          className="hidden lg:flex absolute left-[100px] bottom-10 z-20 items-center justify-center rounded-full transition-transform duration-500 hover:scale-105"
+          style={{
+            width: '120px',
+            height: '120px',
+            background: 'rgba(18,20,24,0.55)',
+            backdropFilter: 'blur(4px)',
+            border: '1px solid rgba(255,255,255,0.18)',
+            color: 'white',
+            transform: open ? 'translateX(200px)' : 'translateX(0)',
+          }}
+        >
+          <span className="text-sm leading-tight text-center">
+            Discover
+            <br />
+            More
+          </span>
+        </button>
+      </section>
+
+      {/* ── 以下：品牌條與 Gallery，維持原樣不變 ── */}
+
+      {/* 品牌 Logo 條 — 採 Home Four 版型：淺色背景 + 灰階 SVG logo 列（logo 為佔位，待正式檔替換） */}
+      <div
+        className="flex flex-wrap items-center justify-around gap-x-6 gap-y-4 px-8 py-3 lg:py-0"
+        style={{ minHeight: 'var(--hero-brand-h)', background: '#f6f6f6' }}
+      >
+        {brands.map((brand, i) => (
+          <BrandLogo key={i} name={brand} />
+        ))}
       </div>
+
+      {/* Gallery 已移除：改由 App.tsx 的 ProjectSection（Home Six 專案輪播）取代 */}
     </div>
   );
 }

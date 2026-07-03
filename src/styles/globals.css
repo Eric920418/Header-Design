@@ -1,5 +1,17 @@
 @custom-variant dark (&:is(.dark *));
 
+/* ── 全站等比例縮放：凍結所有 Tailwind 斷點成極小遞增值 ──
+   讓每個 sm:/md:/lg:/xl:/2xl: 變體「永遠命中」，全站一律渲染桌面版外觀
+   （不受真實 viewport 影響）；再由 ScaleToFit 把 1512px 畫布等比縮放到視窗寬。
+   遞增值讓 lg: 蓋過 md:、桌面值勝出。 */
+@theme {
+  --breakpoint-sm: 1px;
+  --breakpoint-md: 2px;
+  --breakpoint-lg: 3px;
+  --breakpoint-xl: 4px;
+  --breakpoint-2xl: 5px;
+}
+
 :root {
   --font-size: 16px;
   --background: #ffffff;
@@ -184,6 +196,11 @@ html {
   font-size: var(--font-size);
 }
 
+/* 等比縮放畫布外，禁止水平溢出（防子像素捨入造成 1px 橫捲） */
+body {
+  overflow-x: hidden;
+}
+
 /* ── 響應式 CSS 變數 ── */
 
 /* 手機版（默認 <768px） */
@@ -199,12 +216,12 @@ html {
   --hero-play-border-l: 18px;
   --hero-play-ml: 5px;
   --hero-play-mt: 4px;
-  --hero-brand-h: 40px;
+  --hero-brand-h: 88px; /* 釘桌面值（凍結成桌面版，避免手機寬度降級） */
   --brands-mt: 60px;
   --design-left-h: 280px;
   --design-info-p: 1.5rem;
   --design-border-w: 100%;
-  --store-map-h: 250px;
+  --store-map-h: 400px; /* 釘桌面值 */
   --clip-top: -150px;
 }
 
@@ -222,12 +239,12 @@ html {
     --hero-play-border-l: 24px;
     --hero-play-ml: 6px;
     --hero-play-mt: 6px;
-    --hero-brand-h: 46px;
+    --hero-brand-h: 88px; /* 釘桌面值（凍結成桌面版） */
     --brands-mt: 100px;
     --design-left-h: 380px;
     --design-info-p: 2rem;
     --design-border-w: 280px;
-    --store-map-h: 320px;
+    --store-map-h: 400px; /* 釘桌面值 */
     --clip-top: -250px;
   }
 }
@@ -246,7 +263,7 @@ html {
     --hero-play-border-l: 30px;
     --hero-play-ml: 8px;
     --hero-play-mt: 8px;
-    --hero-brand-h: 52px;
+    --hero-brand-h: 88px;
     --brands-mt: 250px;
     --design-left-h: 450px;
     --design-info-p: 3rem;
@@ -260,4 +277,41 @@ html {
 .writing-vertical {
   writing-mode: vertical-rl;
   text-orientation: upright;
+}
+
+/* 隱藏橫向捲動軸（專案輪播用） */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* 跑馬燈（採 Home Two elementor-scrolling；內容重複兩組，位移 -50% 無縫循環） */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+/* 圖庫輪播卡片切換動畫（Home Three 聯動輪播） */
+@keyframes gallery-card-in {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-gallery-card {
+  animation: gallery-card-in 0.6s ease both;
 }

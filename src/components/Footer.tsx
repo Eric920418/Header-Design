@@ -1,73 +1,61 @@
 import React from 'react';
-import { Instagram, Youtube, Facebook, ChevronUp } from 'lucide-react';
+
+// 文字連結（網站地圖、隱私權政策）
+const TEXT_LINKS = [
+  { label: '網站地圖', href: '#' },
+  // 隱私權政策 → 由 docx 內文抽出、產生的輕量靜態頁 public/privacy.html
+  { label: '隱私權政策', href: '/privacy.html' },
+];
+
+// icon 連結（數位展板、YouTube）— 白色去背 PNG，黑底顯白
+const ICON_LINKS = [
+  { label: '數位展板', href: '#', icon: '/icons/digital-board.png' },
+  { label: 'YouTube', href: '#', icon: '/icons/youtube.png' },
+];
 
 export function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
-    <footer className="bg-[#5a5a5a] text-white">
-      <div className="max-w-7xl mx-auto px-4 lg:px-12 pt-12 pb-6">
-        {/* 主要內容區 */}
-        <div className="grid grid-cols-2 gap-8 lg:flex lg:justify-between lg:items-start mb-12">
-          {/* Logo */}
-          <div className="col-span-2 lg:w-[200px]">
-            <div className="text-2xl font-bold tracking-wider">
-              SAKURA<br />
-              KITCHEN
-            </div>
-          </div>
+    <footer className="bg-black text-white">
+      {/* 手機底部有 FloatingButtons 固定列，pb 留高避免被蓋住 */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-28 lg:pb-16">
+        {/* 金色 SAKURA KITCHEN logo（僅英文，中文段已裁除） */}
+        <img
+          src="/sakura-logo-gold.png"
+          alt="SAKURA KITCHEN"
+          className="h-6 sm:h-7 lg:h-8 w-auto"
+        />
 
-          {/* About */}
-          <div>
-            <h3 className="text-sm mb-4 tracking-wider">About</h3>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><a href="#" className="hover:text-white transition-colors">廚房產品</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">整修案例</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">優惠消息</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">品牌承諾</a></li>
-            </ul>
-          </div>
+        {/* 版權 */}
+        <p className="mt-6 text-sm text-gray-400">
+          Copyright © Taiwan Sakura Corporation. All rights reserved
+        </p>
 
-          {/* Service */}
-          <div>
-            <h3 className="text-sm mb-4 tracking-wider">Service</h3>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><a href="#" className="hover:text-white transition-colors">到府丈量</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">客服中心</a></li>
-            </ul>
-          </div>
-
-          {/* Social Media */}
-          <div>
-            <h3 className="text-sm mb-4 tracking-wider">Social Media</h3>
-            <div className="flex gap-4">
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <Instagram className="w-6 h-6" />
+        {/* 分隔線 + 導覽列（左：文字連結 / 右：icon 連結） */}
+        <div className="mt-8 pt-8 border-t border-white/15 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <nav className="flex items-center gap-8">
+            {TEXT_LINKS.map((l) => (
+              <a
+                key={l.label}
+                href={l.href}
+                className="text-sm text-gray-300 hover:text-[#C4A574] transition-colors"
+              >
+                {l.label}
               </a>
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <Youtube className="w-6 h-6" />
-              </a>
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <Facebook className="w-6 h-6" />
-              </a>
-            </div>
-          </div>
+            ))}
+          </nav>
 
-         
-        </div>
-
-        {/* 底部版權資訊 */}
-        <div className="pt-6 border-t border-gray-600 flex flex-col lg:flex-row gap-2 lg:justify-between lg:items-center text-xs text-gray-400 text-center lg:text-left">
-          <div className="flex items-center justify-center lg:justify-start gap-4">
-            <span>Copyright © 2025 Taiwan Sakura Corporation.</span>
-            <span>|</span>
-            <a href="#" className="hover:text-white transition-colors">隱私權聲明</a>
-          </div>
-          <div>
-            All Rights Reserved. Designed website by Valas
+          <div className="flex items-center gap-6">
+            {ICON_LINKS.map((l) => (
+              <a
+                key={l.label}
+                href={l.href}
+                aria-label={l.label}
+                title={l.label}
+                className="opacity-90 hover:opacity-100 transition-opacity"
+              >
+                <img src={l.icon} alt={l.label} className="w-6 h-6 object-contain" />
+              </a>
+            ))}
           </div>
         </div>
       </div>

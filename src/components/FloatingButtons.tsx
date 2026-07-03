@@ -4,8 +4,8 @@ import { Ruler, MessageCircle, MapPin } from 'lucide-react';
 export function FloatingButtons() {
   return (
     <>
-      {/* 桌面版 - 右側 sticky 欄，跟主內容並排 */}
-      <div className="hidden lg:flex flex-col sticky top-0 h-screen w-[75px] shrink-0 z-50 justify-center">
+      {/* 桌面版 - 右側浮動欄（目前隱藏；要顯示把 hidden 改回 hidden lg:flex） */}
+      <div className="hidden flex-col fixed right-0 top-1/2 -translate-y-1/2 z-50">
         <a
           href="#"
           className="w-[75px] h-[80px] flex flex-col items-center justify-center gap-1 bg-[#c9a961] text-white hover:bg-[#b89551] transition-colors mb-8"
