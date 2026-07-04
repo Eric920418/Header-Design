@@ -53,7 +53,7 @@ export function ProjectSection() {
   }, [emblaApi]);
 
   return (
-    <section className="relative z-10 bg-white py-10">
+    <section className="relative z-10 bg-[#f6f6f6] py-10">
       <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
         <div className="flex">
           {STYLES.map((s, i) => (
