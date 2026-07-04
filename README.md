@@ -131,12 +131,11 @@ pnpm build
 
 `ProductsSection.tsx`（**原 `PricingSection` 已正名**——此區內容不是價目表而是產品展示）：沿用 Antra Pricing 版型骨架，改成 SAKURA 三大廚房品牌卡（金色 `#C4A574`、系統字）。
 
-- **標題**：**無 eyebrow**；雙色大標「Search Your ⟨Kitchen⟩ / ⟨Product⟩ The OOOO」（`Kitchen` / `Product` 金色；`OOOO` 為佔位強調詞，待替換）。
-- **三張品牌卡**（`md:grid-cols-3`，`BRANDS` 資料）：產品圖（`aspect-[4/3]`，hover 放大）+ 品牌名 + 描述 + 分類標籤膠囊 + 「了解更多」金色圓箭頭按鈕（`ArrowUpRight`，卡片 hover 旋轉）。
-  - **SAKURA 廚電**：標籤 廚房商品 / 淨水器 / 熱水器（正式）。
-  - **SVAGO**：標籤 紅酒櫃 / 精品家電（**佔位**）；描述佔位。
-  - **TEKA**：標籤 嵌入式烤箱 / 進口廚電（**佔位**）；描述佔位。
-- **圖片**：`public/products/{sakura,svago,teka}.jpg`（來源 `影像/廚房產品`，與 Header mega-menu 同一批圖）。
+- **標題列（照模板）**：**eyebrow 膠囊在最左（`our kitchen products`，佔位文字）、大標右移至 1/3 處**（`flex` + 左欄 `w-1/3`），同一列——非堆疊。大標「Search Your ⟨Kitchen⟩ / ⟨Product⟩ The OOOO」（`OOOO` 佔位待換）。
+- **三欄（照模板 [深色標語圖卡]+[方案卡]×2 構造）**：
+  - **欄1 = SAKURA 廚電**（主品牌，模板 statement 卡位）：深色圖卡（sakura.jpg 滿版 + 上深下淺漸層遮罩）+ 白金雙色標題 + 描述。
+  - **欄2/3 = SVAGO / TEKA**（模板方案卡構造）：品牌名 45/50 → 描述 20/30 → 分隔線 → **金圓底白勾清單**（原標籤轉清單，20/36）→ 底部「了解更多」CTA 膠囊（65 高）；**卡底 absolute 淡浮水印產品圖**（`opacity-10`，仿模板 pricing-banner 手法）。
+- 佔位待換：eyebrow 文字、OOOO、SVAGO/TEKA 描述與清單項、連結。圖片 `public/products/{sakura,svago,teka}.jpg`（來源 `影像/廚房產品`，與 Header mega-menu 同批）。
 - **底部跑馬燈（採 Home Two `elementor-scrolling`）**：全出血「kitchen product」無限捲動（`@keyframes marquee`，`background-clip:text` + 上淺灰→透明漸層填充 + `line-height 0.9` 輕裁切，定義於 `globals.css`）。
 - 卡片連結為 `#` 佔位；放在 `App.tsx` 專案輪播之後。
 
