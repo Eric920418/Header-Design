@@ -67,45 +67,46 @@ export function ProductsSection() {
             </div>
           </div>
 
-          {/* 欄2/3：方案卡構造（標題→描述→分隔線→金勾清單→CTA + 卡底淡浮水印產品圖） */}
+          {/* 欄2/3：方案卡構造（標題→描述→分隔線→金勾清單 + 下半部清晰產品圖鋪底，如 SAKURA 卡） */}
           {PLAN_BRANDS.map((b, i) => (
             <div
               key={i}
-              className="relative rounded-3xl bg-white overflow-hidden flex flex-col px-8 lg:px-10 pt-10 pb-12"
+              className="rounded-3xl bg-white overflow-hidden flex flex-col min-h-[673px]"
             >
-              {/* 卡底淡浮水印（模板 pricing-banner 手法：absolute 底部、低透明度） */}
-              <img
-                src={b.image}
-                alt=""
-                aria-hidden
-                className="absolute bottom-0 right-0 w-[85%] opacity-10 pointer-events-none select-none"
-              />
+              {/* 上：文字內容 */}
+              <div className="px-8 lg:px-10 pt-10">
+                <h3 className="text-[45px] leading-[50px] font-bold text-[#1c1c1d]">{b.name}</h3>
+                <p className="mt-4 text-gray-500 text-[20px] leading-[30px]">{b.desc}</p>
 
-              <h3 className="text-[45px] leading-[50px] font-bold text-[#1c1c1d]">{b.name}</h3>
-              <p className="mt-4 text-gray-500 text-[20px] leading-[30px]">{b.desc}</p>
+                <hr className="border-gray-200 my-7" />
 
-              <hr className="border-gray-200 my-7" />
+                {/* 金圓底白勾清單（模板 features list） */}
+                <ul className="space-y-4">
+                  {b.features.map((f, j) => (
+                    <li key={j} className="flex items-center gap-3 text-[#1c1c1d] text-[20px] leading-[36px]">
+                      <span
+                        className="inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0"
+                        style={{ background: GOLD }}
+                      >
+                        <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+                      </span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-              {/* 金圓底白勾清單（模板 features list） */}
-              <ul className="space-y-4 mb-10">
-                {b.features.map((f, j) => (
-                  <li key={j} className="flex items-center gap-3 text-[#1c1c1d] text-[20px] leading-[36px]">
-                    <span
-                      className="inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0"
-                      style={{ background: GOLD }}
-                    >
-                      <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
-                    </span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA 膠囊（依模板實測：高 65、字 19、內圓 47） */}
-              <div className="mt-auto relative z-10">
+              {/* 下：清晰產品圖鋪滿卡片下半部（如最左 SAKURA 卡）+ CTA 疊在左下 */}
+              <div className="relative mt-8 flex-1 min-h-[260px]">
+                <img
+                  src={b.image}
+                  alt={b.name}
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                />
+                {/* CTA 膠囊（依模板實測：高 65、字 19、內圓 47） */}
                 <a
                   href={b.href}
-                  className="group inline-flex items-center justify-between gap-4 rounded-full border border-gray-300 bg-white/70 pl-[30px] pr-[9px] py-[8px] text-[#1c1c1d] hover:border-[#C4A574] transition-colors"
+                  className="group absolute left-8 bottom-8 inline-flex items-center justify-between gap-4 rounded-full bg-white pl-[30px] pr-[9px] py-[8px] text-[#1c1c1d] shadow-md hover:shadow-lg transition-shadow"
                 >
                   <span className="text-[19px]">了解更多</span>
                   <span

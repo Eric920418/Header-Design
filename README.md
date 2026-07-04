@@ -134,7 +134,7 @@ pnpm build
 - **標題列（照模板）**：**eyebrow 膠囊在最左（`our kitchen products`，佔位文字）、大標右移至 1/3 處**（`flex` + 左欄 `w-1/3`），同一列——非堆疊。大標「Search Your ⟨Kitchen⟩ / ⟨Product⟩ The OOOO」（`OOOO` 佔位待換）。
 - **三欄（照模板 [深色標語圖卡]+[方案卡]×2 構造）**：
   - **欄1 = SAKURA 廚電**（主品牌，模板 statement 卡位）：深色圖卡（sakura.jpg 滿版 + 上深下淺漸層遮罩）+ 白金雙色標題 + 描述。
-  - **欄2/3 = SVAGO / TEKA**（模板方案卡構造）：品牌名 45/50 → 描述 20/30 → 分隔線 → **金圓底白勾清單**（原標籤轉清單，20/36）→ 底部「了解更多」CTA 膠囊（65 高）；**卡底 absolute 淡浮水印產品圖**（`opacity-10`，仿模板 pricing-banner 手法）。
+  - **欄2/3 = SVAGO / TEKA**：上半白底文字（品牌名 45/50 → 描述 20/30 → 分隔線 → **金圓底白勾清單** 20/36），**下半部清晰產品圖鋪滿卡片底部**（`object-cover`、full opacity，與最左 SAKURA 卡同樣「清晰產品圖」擺法，非淡浮水印）；「了解更多」CTA 白膠囊（65 高）疊在圖左下角。卡片 `min-h-[673px]` 三欄等高。
 - 佔位待換：eyebrow 文字、OOOO、SVAGO/TEKA 描述與清單項、連結。圖片 `public/products/{sakura,svago,teka}.jpg`（來源 `影像/廚房產品`，與 Header mega-menu 同批）。
 - **底部跑馬燈（採 Home Two `elementor-scrolling`）**：全出血「kitchen product」無限捲動（`@keyframes marquee`，`background-clip:text` + 上淺灰→透明漸層填充 + `line-height 0.9` 輕裁切，定義於 `globals.css`）。
 - 卡片連結為 `#` 佔位；放在 `App.tsx` 專案輪播之後。
