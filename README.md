@@ -41,6 +41,27 @@ pnpm build
 - **副作用**：凍結成桌面後**已無手機版概念**——`FloatingButtons` 的手機底部固定列（`flex lg:hidden`）與桌面軌道（`hidden`）**皆不顯示**；手機上字會等比變小（可雙指放大）。要保留快捷鈕就把桌面軌道 `hidden`→`flex` 開回。
 - **驗證**：拖動視窗寬 / DevTools 模擬 375~3840px，版面完全不重排、無水平捲軸；模擬 605px（scale 0.4）實測仍渲染完整桌面版、`scrollWidth === innerWidth`。
 
+## 間距節奏 — 依 Antra 模板實測、零誤差
+
+所有 section 的間距/尺寸已對齊 **Antra demo 實測值**（@1512 視窗 computed style，localhost 逐項驗收 0px 誤差）。此規範**取代**先前「section py 上限 20」的暫行規則：
+
+| 項目 | 值 |
+|---|---|
+| 內容容器（版心） | `max-w-[1410px] mx-auto`（畫布 1512、兩側各 51px；Header mega-menu 面板與 Footer 同版心） |
+| Section 上下留白 | `py-[120px]`（Gallery 特例：`pt-[133px] pb-[138px]`，實測值） |
+| Section 大標 h2 | `text-[60px] leading-[64px]`（Gallery 特例：`text-[75px] leading-[80px]`） |
+| 標題區 → 內容距 | `mb-[60px]` |
+| eyebrow | `text-[15px]`、`mb-5`(20px) |
+| 卡片 grid 間距 | `gap-[30px]`；三欄卡寬自然 = (1410−60)/3 = **450** |
+| 兩欄 section | 欄距 `gap-[90px]`、文欄 `w-[600px]`、媒體欄 flex-1(≈720) |
+| CTA 膠囊按鈕 | 總高 **65**：`pl-[30px] pr-[9px] py-[8px]`(8+47+8+邊框2=65)、字 `text-[19px]`、內圓 `w-[47px] h-[47px]` |
+| 專案卡（project-style-4） | 378×880、hover 567、標題 `text-[36px]` |
+| Gallery 案例卡 | `basis-[450px]` × `aspect-[45/61]` = 450×610、間距 30 |
+| 卡片圓角 | `rounded-3xl`(24px) |
+
+- 因斷點已凍結（Scale-to-Fit），本次校正把被改到的 className **寫死為單一桌面值**（消掉 `md:/lg:` 階梯）；未實測的細節（專案卡膠囊、門市卡內距等）**維持原樣、不捏造**。
+- Header／Footer／Hero 為自訂設計（SAKURA mockup、使用者提供之設計），不在模板還原範圍；僅版心同步 1410。
+
 ## 響應式設計（已凍結為單一桌面版）
 
 > ⚠️ 導入上述 Scale-to-Fit 後，下表的三斷點**已被凍結**：斷點值改為極小值使 `lg:` 恆勝出，全站一律套**桌面版**再等比縮放。以下保留為歷史/元件內 `md:/lg:` 前綴的原始語意參考（前綴未移除，凍結後 `lg:` 自然勝出）。
@@ -110,7 +131,7 @@ pnpm build
 
 - **聯動輪播（疊層構圖）**：滿版案例照當背景 = 目前主圖(#1)，右邊固定**只 2 張加大卡片** = 下兩張(#2、#3)。前進時背景與兩卡一起輪替（背景交叉淡入、卡片 `animate-gallery-card` 滑入）。以 `useState(active)` 驅動，非 embla。
 - **左：標題區**（~440px）：金點 eyebrow（`門市案例`）+ 巨大白色雙行大標（`Kitchen Design`）+ **隨主圖聯動的案例說明文字**（`CASES[active].caption`）+ **CTA 按鈕**（`查看所有案例` + 金色 `ArrowUpRight` 圓圈，深底版：白字白框、hover 邊框轉金、箭頭旋轉）+ 左右箭頭。
-- **右：2 張卡**：圓角 24px（`aspect-[11/12]`、`basis-[360px]`、30px 間距），向右溢出。
+- **右：2 張卡**：圓角 24px（`basis-[450px]`、`aspect-[45/61]`=450×610、30px 間距，依模板實測）。
 - **互動**：箭頭 / 每 4s 自動前進（滑入暫停）/ 指標拖曳（`onPointerDown/Up`）切換。
 - **內容 = 3 則門市案例**：`CASES`（`{image, caption}`）；圖片 `public/store-cases/case{1,2,3}.jpg`（來源 `影像/門市案例`）。案例1 文案「袁艾菲與老公結婚二周年甜蜜獻禮」為正式；案例2/3 文案為**佔位**待替換。CTA 連結 `#` 佔位。放在 `App.tsx` 產品區之後。
 

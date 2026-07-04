@@ -31,15 +31,16 @@ export function StoreLocationSection() {
   )}&z=16&output=embed`;
 
   return (
-    <section className="relative bg-[#f6f6f6] py-20 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 lg:px-12">
+    // 間距依模板實測：py 120、標題 60/64、標題→內容 60
+    <section className="relative bg-[#f6f6f6] py-[120px] overflow-hidden">
+      <div className="max-w-[1410px] mx-auto">
         {/* 標題區（模板風格：膠囊 eyebrow + 雙色大標） */}
-        <div className="mb-10 lg:mb-14">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-6 text-[11px] tracking-[0.2em] uppercase text-[#1c1c1d]">
+        <div className="mb-[60px]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-5 text-[15px] tracking-[0.2em] uppercase text-[#1c1c1d]">
             <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
             store locations
           </span>
-          <h2 className="text-3xl lg:text-5xl font-bold leading-tight text-[#1c1c1d]">
+          <h2 className="text-[60px] font-bold leading-[64px] text-[#1c1c1d]">
             OOOOO <span style={{ color: GOLD }}>Store</span>
             <br />
             <span style={{ color: GOLD }}>Locator</span> OOOOO

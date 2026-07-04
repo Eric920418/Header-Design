@@ -12,11 +12,12 @@ const VIDEO_POSTER =
 
 export function WhatWeDoSection() {
   return (
-    <section className="relative bg-white py-20 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 lg:px-12 flex flex-col lg:flex-row items-center gap-12 lg:gap-[56px]">
+    // 間距依模板實測（Home 6 兩欄區）：py 120、欄距 90、文欄 600
+    <section className="relative bg-white py-[120px] overflow-hidden">
+      <div className="max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
         {/* 左：文字 */}
-        <div className="lg:w-[460px] lg:shrink-0">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-6 text-[11px] tracking-[0.2em] uppercase text-[#1c1c1d]">
+        <div className="lg:w-[600px] lg:shrink-0">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-5 text-[15px] tracking-[0.2em] uppercase text-[#1c1c1d]">
             <span
               className="inline-block w-1.5 h-1.5 rounded-full"
               style={{ background: GOLD }}
@@ -24,7 +25,7 @@ export function WhatWeDoSection() {
             what we do
           </span>
 
-          <h2 className="text-[#1c1c1d] font-bold leading-[1.12] text-4xl lg:text-[56px]">
+          <h2 className="text-[#1c1c1d] font-bold text-[60px] leading-[64px]">
             Antra<span style={{ color: GOLD }}>BrandPromise</span>{" "}
             Architectural Designs.
           </h2>
@@ -55,11 +56,11 @@ export function WhatWeDoSection() {
 
           <a
             href="#"
-            className="group inline-flex items-center justify-between gap-4 mt-8 rounded-full border border-gray-300 pl-7 pr-1.5 py-1.5 text-[#1c1c1d] hover:border-[#C4A574] transition-colors"
+            className="group inline-flex items-center justify-between gap-4 mt-8 rounded-full border border-gray-300 pl-[30px] pr-[9px] py-[8px] text-[#1c1c1d] hover:border-[#C4A574] transition-colors"
           >
-            <span className="text-sm tracking-wider">櫻花優勢</span>
-            {/* 箭頭包成主色金圓底、白色箭頭（與產品區按鈕一致） */}
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#C4A574] text-white transition-transform group-hover:translate-x-0.5">
+            <span className="text-[19px] tracking-wide">櫻花優勢</span>
+            {/* 箭頭包成主色金圓底、白色箭頭（CTA 膠囊依模板實測：高 65、內圓 47） */}
+            <span className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full bg-[#C4A574] text-white transition-transform group-hover:translate-x-0.5">
               <ArrowRight className="w-5 h-5" />
             </span>
           </a>

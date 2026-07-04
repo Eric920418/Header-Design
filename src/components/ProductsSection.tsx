@@ -31,11 +31,11 @@ const BRANDS = [
 
 export function ProductsSection() {
   return (
-    <section className="relative bg-[#f6f6f6] pt-20 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 lg:px-12">
-        {/* 雙色大標題（eyebrow 已移除） */}
-        <div className="mb-12 lg:mb-16">
-          <h2 className="text-4xl lg:text-6xl font-bold leading-[1.08] text-[#1c1c1d] max-w-3xl">
+    <section className="relative bg-[#f6f6f6] pt-[120px] overflow-hidden">
+      <div className="max-w-[1410px] mx-auto">
+        {/* 雙色大標題（eyebrow 已移除）；尺寸依模板實測：60px/64、標題→卡片 60px */}
+        <div className="mb-[60px]">
+          <h2 className="text-[60px] font-bold leading-[64px] text-[#1c1c1d] max-w-3xl">
             Search Your <span style={{ color: GOLD }}>Kitchen</span>
             <br />
             <span style={{ color: GOLD }}>Product</span> The OOOO
@@ -43,7 +43,7 @@ export function ProductsSection() {
         </div>
 
         {/* 三大品牌卡 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-3 gap-[30px] items-stretch">
           {BRANDS.map((b, i) => (
             <div
               key={i}
@@ -75,19 +75,21 @@ export function ProductsSection() {
                   ))}
                 </div>
 
-                {/* 了解更多（沿用金色圓箭頭按鈕，縮小版） */}
-                <a
-                  href={b.href}
-                  className="mt-auto pt-7 inline-flex items-center gap-3 text-[#1c1c1d] hover:text-[#C4A574] transition-colors"
-                >
-                  <span className="text-sm tracking-wider">了解更多</span>
-                  <span
-                    className="inline-flex items-center justify-center w-9 h-9 rounded-full text-white transition-transform group-hover:rotate-45"
-                    style={{ background: GOLD }}
+                {/* 了解更多（CTA 膠囊，依模板實測：高 65 = pl30/pr9/py9、字 19、內圓 47） */}
+                <div className="mt-auto pt-7">
+                  <a
+                    href={b.href}
+                    className="inline-flex items-center justify-between gap-4 rounded-full border border-gray-300 pl-[30px] pr-[9px] py-[8px] text-[#1c1c1d] hover:border-[#C4A574] transition-colors"
                   >
-                    <ArrowUpRight className="w-4 h-4" />
-                  </span>
-                </a>
+                    <span className="text-[19px] tracking-wide">了解更多</span>
+                    <span
+                      className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full text-white transition-transform group-hover:rotate-45"
+                      style={{ background: GOLD }}
+                    >
+                      <ArrowUpRight className="w-5 h-5" />
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
           ))}
@@ -95,7 +97,7 @@ export function ProductsSection() {
       </div>
 
       {/* 底部跑馬燈（採 Home Two elementor-scrolling；文字改為 kitchen product） */}
-      <div className="mt-16 lg:mt-24 overflow-hidden select-none" aria-hidden>
+      <div className="mt-24 overflow-hidden select-none" aria-hidden>
         <div className="flex w-max animate-marquee">
           {[0, 1].map((group) => (
             <div key={group} className="flex shrink-0">

@@ -17,7 +17,7 @@ export function Footer() {
   return (
     <footer className="bg-black text-white">
       {/* 手機底部有 FloatingButtons 固定列，pb 留高避免被蓋住 */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-28 lg:pb-16">
+      <div className="max-w-[1410px] mx-auto pt-16 pb-16">
         {/* 金色 SAKURA KITCHEN logo（僅英文，中文段已裁除） */}
         <img
           src="/sakura-logo-gold.png"

@@ -69,15 +69,16 @@ export function GallerySection() {
       />
 
       {/* 內容：左文字 + 右 2 卡（中下） */}
-      <div className="relative z-10 pt-[100px] lg:pt-[250px] pb-16 lg:pb-[180px]">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-12 pl-12 lg:pl-32">
+      {/* 間距依模板實測（Home 3 antra-image-carousel）：pt 133 / pb 138、左緣對齊 1410 版心（51px） */}
+      <div className="relative z-10 pt-[133px] pb-[138px]">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-12 pl-[51px]">
           {/* 左：標題區 */}
           <div className="lg:w-[440px] lg:shrink-0 pr-4">
             <div className="flex items-center gap-2.5 mb-5">
               <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
-              <span className="text-white/80 text-[13px] tracking-[0.2em] uppercase">門市案例</span>
+              <span className="text-white/80 text-[15px] tracking-[0.2em] uppercase">門市案例</span>
             </div>
-            <h2 className="text-white font-bold capitalize leading-[0.95] text-6xl lg:text-8xl">
+            <h2 className="text-white font-bold capitalize text-[75px] leading-[80px]">
               Kitchen Design
             </h2>
 
@@ -89,11 +90,11 @@ export function GallerySection() {
             {/* CTA 按鈕（深底版：白字白框 + 金色圓箭頭） */}
             <a
               href="#"
-              className="group inline-flex items-center gap-4 mt-8 rounded-full border border-white/30 pl-7 pr-1.5 py-1.5 text-white hover:border-[#C4A574] transition-colors"
+              className="group inline-flex items-center gap-4 mt-8 rounded-full border border-white/30 pl-[30px] pr-[9px] py-[8px] text-white hover:border-[#C4A574] transition-colors"
             >
-              <span className="text-sm tracking-wider">查看所有案例</span>
+              <span className="text-[19px] tracking-wide">查看所有案例</span>
               <span
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full text-white transition-transform group-hover:rotate-45"
+                className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full text-white transition-transform group-hover:rotate-45"
                 style={{ background: GOLD }}
               >
                 <ArrowUpRight className="w-5 h-5" />
@@ -125,13 +126,14 @@ export function GallerySection() {
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
-            <div key={active} className="flex lg:justify-end gap-[30px] animate-gallery-card">
+            {/* 卡片依模板實測 450×610（aspect 45/61）、間距 30 */}
+            <div key={active} className="flex gap-[30px] animate-gallery-card">
               {cards.map((c, i) => (
                 <div
                   key={i}
-                  className="shrink-0 basis-[240px] md:basis-[300px] lg:basis-[360px]"
+                  className="shrink-0 basis-[450px]"
                 >
-                  <div className="aspect-[11/12] rounded-3xl overflow-hidden">
+                  <div className="aspect-[45/61] rounded-3xl overflow-hidden">
                     <img
                       src={c.image}
                       alt=""

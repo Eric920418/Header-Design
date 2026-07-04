@@ -50,8 +50,8 @@ function DesktopNavItem({ item }: { item: NavItem }) {
         {/* 面板：絕對定位於 header（滿寬），淡入展開（opacity+visibility，300ms，仿模板） */}
         <div className="absolute left-0 right-0 top-[72px] z-40 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-300">
           <div className="bg-white shadow-2xl border-t border-black/5">
-            <div className="max-w-7xl mx-auto px-6 py-8">
-              <div className="grid grid-cols-3 gap-5">
+            <div className="max-w-[1410px] mx-auto py-8">
+              <div className="grid grid-cols-3 gap-[30px]">
                 {item.mega.map((m, i) => (
                   <a key={i} href={m.href} className="group/card block">
                     <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-900">

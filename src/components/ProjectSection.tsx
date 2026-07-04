@@ -90,7 +90,7 @@ export function ProjectSection() {
 
                 {/* 底部：英文大標 + 中文 */}
                 <div className="absolute inset-x-0 bottom-0 z-[2] px-8 pb-9">
-                  <h3 className="text-white text-2xl lg:text-[30px] font-semibold leading-tight group-hover:text-[#C4A574] transition-colors">
+                  <h3 className="text-white text-[36px] font-semibold leading-tight group-hover:text-[#C4A574] transition-colors">
                     {s.en}
                   </h3>
                   {s.zh && (
