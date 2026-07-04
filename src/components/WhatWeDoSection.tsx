@@ -17,7 +17,7 @@ export function WhatWeDoSection() {
       <div className="max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
         {/* 左：文字 */}
         <div className="lg:w-[600px] lg:shrink-0">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-5 text-[15px] tracking-[0.2em] uppercase text-[#1c1c1d]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-5 text-[15px] tracking-[1px] uppercase text-[#1c1c1d]">
             <span
               className="inline-block w-1.5 h-1.5 rounded-full"
               style={{ background: GOLD }}
@@ -35,7 +35,7 @@ export function WhatWeDoSection() {
             {ITEMS.map((t, i) => (
               <li
                 key={i}
-                className="flex items-center gap-3 py-4 border-b border-gray-200 text-[#1c1c1d] font-medium"
+                className="flex items-center gap-3 py-4 border-b border-gray-200 text-[#1c1c1d] text-[18px] leading-[24px] font-medium"
               >
                 <span
                   className="inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0"
@@ -48,7 +48,7 @@ export function WhatWeDoSection() {
             ))}
           </ul>
 
-          <p className="text-gray-500 mt-7 max-w-md leading-relaxed">
+          <p className="text-gray-500 mt-7 max-w-md text-[16px] leading-[24px]">
             We specialize in transforming visions into reality. Explore our
             portfolio of innovative architectural and interior design projects
             crafted with precision.
@@ -58,7 +58,7 @@ export function WhatWeDoSection() {
             href="#"
             className="group inline-flex items-center justify-between gap-4 mt-8 rounded-full border border-gray-300 pl-[30px] pr-[9px] py-[8px] text-[#1c1c1d] hover:border-[#C4A574] transition-colors"
           >
-            <span className="text-[19px] tracking-wide">櫻花優勢</span>
+            <span className="text-[19px]">櫻花優勢</span>
             {/* 箭頭包成主色金圓底、白色箭頭（CTA 膠囊依模板實測：高 65、內圓 47） */}
             <span className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full bg-[#C4A574] text-white transition-transform group-hover:translate-x-0.5">
               <ArrowRight className="w-5 h-5" />

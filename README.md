@@ -41,9 +41,24 @@ pnpm build
 - **副作用**：凍結成桌面後**已無手機版概念**——`FloatingButtons` 的手機底部固定列（`flex lg:hidden`）與桌面軌道（`hidden`）**皆不顯示**；手機上字會等比變小（可雙指放大）。要保留快捷鈕就把桌面軌道 `hidden`→`flex` 開回。
 - **驗證**：拖動視窗寬 / DevTools 模擬 375~3840px，版面完全不重排、無水平捲軸；模擬 605px（scale 0.4）實測仍渲染完整桌面版、`scrollWidth === innerWidth`。
 
-## 間距節奏 — 依 Antra 模板實測、零誤差
+## 間距與文字排版 — 依 Antra 模板實測、零誤差
 
-所有 section 的間距/尺寸已對齊 **Antra demo 實測值**（@1512 視窗 computed style，localhost 逐項驗收 0px 誤差）。此規範**取代**先前「section py 上限 20」的暫行規則：
+所有 section 的間距/尺寸/**字級**已對齊 **Antra demo 實測值**（@1512 視窗 computed style，localhost 逐項驗收 0px 誤差）。此規範**取代**先前「section py 上限 20」的暫行規則。
+
+**文字排版 token**（size/line-height/letter-spacing/text-transform 照模板；**字重不照抄**——模板字重 400 是因其自帶裝飾字體、400 已顯粗，我們依全域規則維持系統字，照抄 400 會視覺過細，故字重維持現狀）：
+
+| 角色 | 值 |
+|---|---|
+| Section h2 | `text-[60px] leading-[64px]`（Gallery 特例 `text-[75px] leading-[80px]`） |
+| 專案卡標題 / 中文副標 / 左上膠囊 | `text-[36px] leading-[44px]` / `text-[20px] leading-[30px]` / `text-[16px]` |
+| 品牌卡標題 / 描述（=模板 Pricing 卡） | `text-[45px] leading-[50px]` / `text-[20px] leading-[30px]` |
+| eyebrow | `text-[15px] tracking-[1px] uppercase` |
+| 內文段落 | `text-[16px] leading-[24px]` |
+| 打勾清單 | `text-[18px] leading-[24px]` |
+| CTA 按鈕字 | `text-[19px]`（無 letter-spacing；模板 ls normal，故移除 `tracking-wide`） |
+| 跑馬燈 | `text-[220px]` |
+
+無模板對應的自訂文字（產品卡標籤、門市卡內文、Header/Footer/Hero）不動。
 
 | 項目 | 值 |
 |---|---|

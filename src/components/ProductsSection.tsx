@@ -60,8 +60,8 @@ export function ProductsSection() {
 
               {/* 內容 */}
               <div className="p-7 lg:p-8 flex flex-col flex-1">
-                <h3 className="text-2xl lg:text-[28px] font-bold text-[#1c1c1d]">{b.name}</h3>
-                <p className="mt-3 text-gray-500 leading-relaxed">{b.desc}</p>
+                <h3 className="text-[45px] leading-[50px] font-bold text-[#1c1c1d]">{b.name}</h3>
+                <p className="mt-3 text-gray-500 text-[20px] leading-[30px]">{b.desc}</p>
 
                 {/* 分類標籤 */}
                 <div className="mt-5 flex flex-wrap gap-2">
@@ -81,7 +81,7 @@ export function ProductsSection() {
                     href={b.href}
                     className="inline-flex items-center justify-between gap-4 rounded-full border border-gray-300 pl-[30px] pr-[9px] py-[8px] text-[#1c1c1d] hover:border-[#C4A574] transition-colors"
                   >
-                    <span className="text-[19px] tracking-wide">了解更多</span>
+                    <span className="text-[19px]">了解更多</span>
                     <span
                       className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full text-white transition-transform group-hover:rotate-45"
                       style={{ background: GOLD }}
@@ -104,7 +104,7 @@ export function ProductsSection() {
               {Array.from({ length: 4 }).map((_, i) => (
                 <span
                   key={i}
-                  className="block font-bold leading-[0.9] whitespace-nowrap pr-[0.2em] text-[72px] md:text-[140px] lg:text-[220px]"
+                  className="block font-bold leading-[0.9] whitespace-nowrap pr-[0.2em] text-[220px]"
                   style={{
                     backgroundImage:
                       'linear-gradient(rgb(216,216,216) 0%, rgba(153,153,153,0) 90%)',

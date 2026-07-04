@@ -76,14 +76,14 @@ export function GallerySection() {
           <div className="lg:w-[440px] lg:shrink-0 pr-4">
             <div className="flex items-center gap-2.5 mb-5">
               <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
-              <span className="text-white/80 text-[15px] tracking-[0.2em] uppercase">門市案例</span>
+              <span className="text-white/80 text-[15px] tracking-[1px] uppercase">門市案例</span>
             </div>
             <h2 className="text-white font-bold capitalize text-[75px] leading-[80px]">
               Kitchen Design
             </h2>
 
             {/* 說明文字：隨主圖聯動（案例標題） */}
-            <p key={active} className="text-white/75 mt-6 max-w-sm leading-relaxed animate-gallery-card">
+            <p key={active} className="text-white/75 mt-6 max-w-sm text-[16px] leading-[24px] animate-gallery-card">
               {CASES[active].caption}
             </p>
 
@@ -92,7 +92,7 @@ export function GallerySection() {
               href="#"
               className="group inline-flex items-center gap-4 mt-8 rounded-full border border-white/30 pl-[30px] pr-[9px] py-[8px] text-white hover:border-[#C4A574] transition-colors"
             >
-              <span className="text-[19px] tracking-wide">查看所有案例</span>
+              <span className="text-[19px]">查看所有案例</span>
               <span
                 className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full text-white transition-transform group-hover:rotate-45"
                 style={{ background: GOLD }}

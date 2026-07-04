@@ -36,7 +36,7 @@ export function StoreLocationSection() {
       <div className="max-w-[1410px] mx-auto">
         {/* 標題區（模板風格：膠囊 eyebrow + 雙色大標） */}
         <div className="mb-[60px]">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-5 text-[15px] tracking-[0.2em] uppercase text-[#1c1c1d]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-5 text-[15px] tracking-[1px] uppercase text-[#1c1c1d]">
             <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
             store locations
           </span>

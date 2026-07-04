@@ -83,18 +83,18 @@ export function ProjectSection() {
 
                 {/* 左上膠囊：中文名（無中文則不顯示） */}
                 {s.zh && (
-                  <span className="absolute top-8 left-8 z-[2] inline-block rounded-full border border-white/50 text-white text-sm px-4 py-1.5 backdrop-blur-sm">
+                  <span className="absolute top-8 left-8 z-[2] inline-block rounded-full border border-white/50 text-white text-[16px] px-4 py-1.5 backdrop-blur-sm">
                     {s.zh}
                   </span>
                 )}
 
                 {/* 底部：英文大標 + 中文 */}
                 <div className="absolute inset-x-0 bottom-0 z-[2] px-8 pb-9">
-                  <h3 className="text-white text-[36px] font-semibold leading-tight group-hover:text-[#C4A574] transition-colors">
+                  <h3 className="text-white text-[36px] font-semibold leading-[44px] group-hover:text-[#C4A574] transition-colors">
                     {s.en}
                   </h3>
                   {s.zh && (
-                    <p className="text-white/85 text-base lg:text-lg mt-1.5 tracking-wide">{s.zh}</p>
+                    <p className="text-white/85 text-[20px] leading-[30px] mt-1.5">{s.zh}</p>
                   )}
                 </div>
               </article>
