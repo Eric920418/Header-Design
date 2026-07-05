@@ -86,13 +86,7 @@ export function WhatWeDoSection() {
 
         {/* 右：16:9 影片區塊（整塊淡入上升；影片卡自有 hover:scale，故 Reveal 掛在外層不搶 transform） */}
         <Reveal className="relative flex-1 w-full">
-          {/* 壓底圖：淡建築藍圖，延伸至影片下方（仿 Home One）；.wwd-blueprint 掛捲動視差 */}
-          <img
-            src={BLUEPRINT}
-            alt=""
-            aria-hidden
-            className="wwd-blueprint pointer-events-none select-none absolute -bottom-14 -right-6 w-[88%] max-w-none opacity-[0.12] grayscale"
-          />
+         
           {/* 影片卡：hover 依比例微放大 */}
           <div className="group relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black transition-transform duration-500 hover:scale-[1.02]">
             <img
