@@ -3,6 +3,10 @@ import { Search, Menu, X, ChevronDown } from 'lucide-react';
 
 const GOLD = '#C4A574';
 
+// 對齊參考站 sakura-kitchenlife.com.tw 的 .l-header / .l-nav__item 實測值
+const HEADER_GRADIENT = 'linear-gradient(90deg, #B79258 20%, #D2B587)';
+const HEADER_FONT = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", 微軟正黑體';
+
 type MegaCard = { label: string; image: string; href?: string };
 type NavItem = {
   label: string;
@@ -43,7 +47,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
     return (
       <div className="group">
         {/* 觸發鈕撐滿 bar 高度，讓面板無縫貼合、避免 hover 中斷 */}
-        <button className="flex items-center gap-1 h-[72px] px-3 text-sm text-white/90 hover:text-white transition-colors whitespace-nowrap">
+        <button className="flex items-center gap-1 h-[72px] px-3 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap">
           {item.label}
           <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
         </button>
@@ -89,7 +93,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
       <a
         href={item.href}
         {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-        className="px-3 py-2 text-sm text-white/90 hover:text-white transition-colors whitespace-nowrap"
+        className="px-3 py-2 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap"
       >
         {item.label}
       </a>
@@ -97,7 +101,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
   }
   return (
     <div className="group relative">
-      <button className="flex items-center gap-1 px-3 py-2 text-sm text-white/90 hover:text-white transition-colors whitespace-nowrap">
+      <button className="flex items-center gap-1 px-3 py-2 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap">
         {item.label}
         <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
       </button>
@@ -128,9 +132,9 @@ export function Header() {
   const allNav = [...NAV_LEFT, ...NAV_RIGHT];
 
   return (
-    <header className="w-full relative z-50">
-      <div className="bg-gradient-to-r from-[#C4A574] to-[#D4B887]">
-        <div className="max-w-7xl mx-auto px-6 h-[72px] flex items-center">
+    <header className="w-full relative z-50" style={{ fontFamily: HEADER_FONT }}>
+      <div style={{ background: HEADER_GRADIENT }}>
+        <div className="px-5 lg:px-12 h-[72px] flex items-center">
           {/* ── 桌面版：左導覽 | logo | 右導覽 + 搜尋 ── */}
           <nav className="hidden lg:flex items-center w-full">
             <div className="flex-1 flex items-center justify-start gap-1">
@@ -185,7 +189,7 @@ export function Header() {
         {/* ── 搜尋展開列（桌面 + 手機共用） ── */}
         {openSearch && (
           <div className="border-t border-white/20">
-            <div className="max-w-7xl mx-auto px-6 py-3">
+            <div className="px-5 lg:px-12 py-3">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input

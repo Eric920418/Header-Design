@@ -10,6 +10,10 @@ const ITEMS = ['Residence And Condo', 'Modern Kitchen Renovate', 'Interior House
 const VIDEO_POSTER =
   'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1280&h=720&q=80';
 
+// 壓底圖：影片區下方的淡色建築線稿/藍圖背景（仿 Home One 模板；佔位圖，可替換為正式線稿）
+const BLUEPRINT =
+  'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80';
+
 export function WhatWeDoSection() {
   return (
     // 間距依模板實測（Home 6 兩欄區）：py 120、欄距 90、文欄 600
@@ -54,21 +58,29 @@ export function WhatWeDoSection() {
             crafted with precision.
           </p>
 
+          {/* CTA：依模板改為外框圓箭頭，hover 填金 + 箭頭右移 */}
           <a
             href="#"
             className="group inline-flex items-center justify-between gap-4 mt-8 rounded-full border border-gray-300 pl-[30px] pr-[9px] py-[8px] text-[#1c1c1d] hover:border-[#C4A574] transition-colors"
           >
             <span className="text-[19px]">櫻花優勢</span>
-            {/* 箭頭包成主色金圓底、白色箭頭（CTA 膠囊依模板實測：高 65、內圓 47） */}
-            <span className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full bg-[#C4A574] text-white transition-transform group-hover:translate-x-0.5">
-              <ArrowRight className="w-5 h-5" />
+            <span className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full border border-gray-300 text-[#1c1c1d] transition-all duration-300 group-hover:bg-[#C4A574] group-hover:border-[#C4A574] group-hover:text-white">
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" />
             </span>
           </a>
         </div>
 
-        {/* 右：16:9 影片區塊（縮圖 + 主色金播放鈕；待接真實影片） */}
-        <div className="flex-1 w-full">
-          <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black">
+        {/* 右：16:9 影片區塊（縮圖 + 主色金播放鈕；下方壓底建築藍圖、影片可放大） */}
+        <div className="relative flex-1 w-full">
+          {/* 壓底圖：淡建築藍圖，延伸至影片下方（仿 Home One） */}
+          <img
+            src={BLUEPRINT}
+            alt=""
+            aria-hidden
+            className="pointer-events-none select-none absolute -bottom-14 -right-6 w-[88%] max-w-none opacity-[0.12] grayscale"
+          />
+          {/* 影片卡：hover 依比例微放大 */}
+          <div className="group relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black transition-transform duration-500 hover:scale-[1.02]">
             <img
               src={VIDEO_POSTER}
               alt=""
@@ -77,13 +89,19 @@ export function WhatWeDoSection() {
             <button
               type="button"
               aria-label="播放影片"
-              className="group absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center"
             >
               <span
-                className="flex items-center justify-center w-20 h-20 rounded-full text-white shadow-lg transition-transform group-hover:scale-105"
+                className="relative flex items-center justify-center w-20 h-20 rounded-full text-white shadow-lg transition-transform duration-300 group-hover:scale-110"
                 style={{ background: GOLD }}
               >
-                <Play className="w-7 h-7 translate-x-0.5" fill="currentColor" />
+                {/* 脈動光圈（icon 動畫） */}
+                <span
+                  className="absolute inset-0 rounded-full animate-ping opacity-30"
+                  style={{ background: GOLD }}
+                  aria-hidden
+                />
+                <Play className="relative w-7 h-7 translate-x-0.5" fill="currentColor" />
               </span>
             </button>
           </div>

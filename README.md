@@ -127,17 +127,17 @@ pnpm build
 - **捲動 + 自動輪播**：`embla-carousel-react`（`loop:true` + `dragFree`）。**自動輪播**：`setInterval` 每 3.5s 呼叫 `emblaApi.scrollNext()`；滑鼠移入輪播（`rootNode` 的 `mouseenter`）以 `pausedRef` 暫停、移出（`mouseleave`）恢復。仍可手動拖曳;**拖曳時（`pointerDown`）以 `dragging` state 暫停 hover 變寬**，否則卡片一碰就展開會把拖曳打斷（拖不動）。無箭頭。
 - **內容 = 10 種廚房風格**（真圖）：Basic+ / AI kitchen（僅英文）、Clever 巧域廚房 / Loft Chic 潮派廚房 / Joyful 童樂廚房 / premium 君璽廚房 / Elegant 臻美廚房 / Chef 大廚廚房 / Country 鄉村廚房 / Harmony 閣樂廚房。圖片放在 `public/kitchen-styles/*.jpg`（來源 `Downloads/首頁用圖/品牌系列x10`；Clever 已縮圖）。
 
-## 廚房產品（Products）— 三大品牌展示
+## 價目表（Pricing）— Antra Pricing 忠實複刻
 
-`ProductsSection.tsx`（**原 `PricingSection` 已正名**——此區內容不是價目表而是產品展示）：沿用 Antra Pricing 版型骨架，改成 SAKURA 三大廚房品牌卡（金色 `#C4A574`、系統字）。
+`PricingSection.tsx`（原 `ProductsSection` 已還原；此區為 **Antra 模板 Pricing 區 100% 複刻**，只把大標改成 `Design your space, know the cost`，並保留底部跑馬燈）。金色沿用 `#C4A574`（模板為 `#CAA05C`，依全域「色系不改」規則）。
 
-- **標題列（照模板）**：**eyebrow 膠囊在最左（`our kitchen products`，佔位文字）、大標右移至 1/3 處**（`flex` + 左欄 `w-1/3`），同一列——非堆疊。大標「Search Your ⟨Kitchen⟩ / ⟨Product⟩ The OOOO」（`OOOO` 佔位待換）。
-- **三欄（照模板 [深色標語圖卡]+[方案卡]×2 構造）**：
-  - **欄1 = SAKURA 廚電**（主品牌，模板 statement 卡位）：深色圖卡（sakura.jpg 滿版 + 上深下淺漸層遮罩）+ 白金雙色標題 + 描述。
-  - **欄2/3 = SVAGO / TEKA**：上半白底文字（品牌名 45/50 → 描述 20/30 → 分隔線 → **金圓底白勾清單** 20/36），**下半部清晰產品圖鋪滿卡片底部**（`object-cover`、full opacity，與最左 SAKURA 卡同樣「清晰產品圖」擺法，非淡浮水印）；「了解更多」CTA 白膠囊（65 高）疊在圖左下角。卡片 `min-h-[673px]` 三欄等高。
-- 佔位待換：eyebrow 文字、OOOO、SVAGO/TEKA 描述與清單項、連結。圖片 `public/products/{sakura,svago,teka}.jpg`（來源 `影像/廚房產品`，與 Header mega-menu 同批）。
-- **底部跑馬燈（採 Home Two `elementor-scrolling`）**：全出血「kitchen product」無限捲動（`@keyframes marquee`，`background-clip:text` + 上淺灰→透明漸層填充 + `line-height 0.9` 輕裁切，定義於 `globals.css`）。
-- 卡片連結為 `#` 佔位；放在 `App.tsx` 專案輪播之後。
+- **標題列**：eyebrow `● our pricing plans`（左，`w-1/3`）+ 雙色大標 `Design your ⟨space, know⟩ the cost`（60/64 capitalize，右）+ 2 個裝飾小箭頭 SVG（絕對定位、桌面顯示）。
+- **三欄（`grid-cols-3 gap-[30px]`，各 450、`min-h-[673px]`）**：
+  - **欄1 深色標語卡**：暗色室內圖 + 漸層遮罩 + `Your dreams, ⟨our mission, let's⟩ make it happen.`（36/44）。
+  - **欄2 Basic Plan / 欄3 Blueprint Plan**（照模板原文）：標題 45/50 → 副標 20/30(`#59585d`) → **價格 `$` 小 + 數字 100px 金 + `/ Per Month` 20/24** → **金勾清單**（`Check` 24px 金、每項 20/36）→ `Get Started Now` 膠囊按鈕（高 ~61、`pl-30 pr-7 py-7` + 金圓 `ArrowUpRight`）；**卡底建築線稿浮水印** `public/pricing/pricing-banner-2.png`（absolute，來源 demo 授權素材）。
+- **跑馬燈已移出本區**：抽成獨立元件 `MarqueeBand.tsx`，放在 `App.tsx` **頁面最底部（Footer 之上）**——「kitchen product」無限捲動（`@keyframes marquee` + `background-clip:text` 漸層，定義於 `globals.css`）。
+- **按鈕 hover（依模板實測）**：整顆膠囊填金 `#C4A574` + 文字轉白 + 邊框金（0.5s），同時金圓箭頭 45° 旋轉。
+- 內容為模板佔位英文（$99/$169…）依「100% 複製」照抄，連結 `#`，待正式文案；模板背景裝飾圖 `pricing-background-1.jpg`（很淡、demo 上該 URL 失效）暫略。放 `App.tsx` 專案輪播之後。
 
 ## 門市案例（Gallery）— Antra Home Three 版型
 
@@ -153,22 +153,28 @@ pnpm build
 
 `WhatWeDoSection.tsx`：複刻 Home Six 的「What we do」兩欄區（淺色白底、字型沿用原站、金色 `#C4A574`）。
 
-- **左欄**：膠囊 eyebrow（`what we do`）+ 雙色大標（`Antra Has ⟨Created Exceptional⟩ Architectural Designs.`）+ 金色打勾清單（3 項、含上下分隔線）+ 描述 + 「櫻花優勢」膠囊按鈕（**金色 `#C4A574` 圓底 + 白色 `ArrowRight`**，與產品區 / 價目骨架同源的金圓箭頭按鈕同款；hover 邊框轉金、箭頭右移）。
-- **右欄**：**16:9 影片區塊**（`aspect-video`，圓角 24px + 陰影 + 黑底）：縮圖 poster（`VIDEO_POSTER`）鋪滿 + 置中**主色金圓形播放鈕**（lucide `Play` 實心白三角，hover 放大）。原本的「兩張圖對角錯位交疊 + 捲動視差」已移除（連同 scroll 監聽 / `useEffect`/`useRef`/`useState`）。
+- **左欄**：膠囊 eyebrow（`what we do`）+ 雙色大標 + 金色打勾清單（3 項、含上下分隔線）+ 描述 + 「櫻花優勢」膠囊按鈕。
+- **CTA 依模板（「首頁 Section 說明.pptx」slide 1 品牌承諾）**：箭頭圓改為**外框圓 + 內箭頭**，hover 時填金 `#C4A574` + 邊框轉金 + 字轉白 + 箭頭右移（`ArrowRight`，`transition-all`）。
+- **右欄影片區**：**16:9 影片區塊**（`aspect-video`，圓角 24px + 陰影 + 黑底）：縮圖 poster（`VIDEO_POSTER`）鋪滿 + 置中主色金圓播放鈕（`Play`），播放鈕加**脈動光圈**（`animate-ping`）與 hover 放大；影片卡 hover 依比例微放大（`hover:scale-[1.02]`）。
+- **壓底圖**：影片區下方疊一張**淡建築藍圖**（`BLUEPRINT`，`opacity-[0.12] grayscale`、絕對定位延伸至影片下方、`pointer-events-none`，仿 Home One）——**佔位圖，待換正式線稿**。
 - 影片來源未定：poster 為佔位、播放鈕 `onClick` 尚未接（待提供 YouTube 連結或影片檔即可接 lightbox/iframe）。文字為佔位。放在 `App.tsx` 圖庫區之後。
 
 ## 門市查詢（Store Locations）— Antra Contact Us 風格 + 可用地圖搜尋
 
 `StoreLocationSection.tsx`：套 Antra「Contact Us」視覺（淺灰底 `#f6f6f6`、膠囊 eyebrow、雙色大標、白色圓角卡片、金色 `#C4A574`），並把原本的空佔位地圖與無效搜尋**做成真的能用**：
 
-- **左欄**：真 **Google Maps embed iframe**（`src = https://maps.google.com/maps?q=<地址>&output=embed`，高度 `var(--store-map-h)`），選取/搜尋門市時自動定位；下方白色圓角搜尋框（金色 Search 圓鈕）。
-- **右欄**：門市列表卡片（區域標籤 + 店名 + `MapPin` 地址 + 電話），選中 → 金色底白字。
-- **狀態**：`selected`（點卡片切換、更新地圖）+ `query`（即時 `filter` 名稱/區域/地址）。選取的門市若被篩掉，自動退回第一個可見門市；無結果顯示「查無門市」。
-- 門市資料（5 間）沿用原檔；標題為佔位文案。
+- **標題／eyebrow（依「首頁 Section 說明.pptx」slide 2 門市地圖）**：eyebrow `get in touch`；大標 `Have A Project In ⟨Store Locator⟩ It Happen`（`Store Locator` 金色）。
+- **左欄**：真 **Google Maps embed iframe**（`src = https://maps.google.com/maps?q=<地址>&output=embed`，高度 `var(--store-map-h)`），選取/篩選門市時自動定位。
+- **右欄**：`我的位置`（`LocateFixed` 金色準星）+ **`選擇區域` / `選擇城市` 兩個下拉**（`appearance-none` + 疊自訂 `ChevronDown`）；下方門市列表卡片（區域標籤=模版灰底 pill + 店名 + `MapPin` 地址 + **金色電話**，字級 14），選中 → 金色底白字。
+- **級聯篩選**：`region` / `city` 兩個 state 驅動；選區域自動清空城市、城市下拉未選區域時 disabled（`REGIONS` 提供五大區→縣市對照）。`filtered = STORES.filter(區域符合 && 城市符合)`；選取門市若被濾掉自動退回第一筆可見門市；該區無資料顯示「此區域尚無門市資料」。
+- **門市資料**：pptx 真實資料共 5 間（承德 / 石牌 / 民權 / 中山南京 / 八德，皆北部/臺北市，含真地址電話）；其他區暫無資料，補上即可用。
 
 ## Header — SAKURA 巨型選單（mega-menu）
 
-`Header.tsx`：單一金色 bar（沿用漸層 `#C4A574→#D4B887`）、**中央 logo**、左右各一組導覽，自訂 Tailwind 實作（未用 Radix，與全站一致）。
+`Header.tsx`：單一金色 bar、**中央 logo**、左右各一組導覽，自訂 Tailwind 實作（未用 Radix，與全站一致）。
+
+- **背景／字型／字級對齊參考站 `sakura-kitchenlife.com.tw`**（實測 `.l-header`／`.l-nav__item`，常數定義於 `Header.tsx` 頂部）：背景漸層 `linear-gradient(90deg, #B79258 20%, #D2B587)`（`HEADER_GRADIENT`）；字型堆疊 `"Noto Sans TC","PingFang TC","Microsoft JhengHei",微軟正黑體`（`HEADER_FONT`，套在 `<header>` 上向下繼承，**未外連 Google Fonts**、Mac 上 fallback 至 PingFang TC）；導覽字級 `text-[15px]`、weight 400、字色純白。
+- **間距對齊參考站**：bar 容器改 `px-5 lg:px-12`（20/48px）且**滿寬**（移除原 `max-w-7xl mx-auto`），對齊參考站左右邊距 48px；搜尋展開列同步 `px-5 lg:px-12`。導覽項文字間距 28px（既有 `px-3`+`gap-1` 已等於 28px，與參考站一致）。bar 高度仍維持 `72px`（未動，因 mega-menu 以 `top-[72px]` 定位）。**注意**：參考站為「logo 靠左＋導覽靠右」的 space-between 版型，本專案為「導覽左半｜中央 logo｜導覽右半」置中版型（README 明載之自訂設計），故僅間距數值對齊，整體佈局結構刻意不同。
 
 - **導覽資料**：`NAV_LEFT` / `NAV_RIGHT` config 陣列，每項 `{ label, children?, href?, external?, mega?, megaCatalog? }`。有 `mega` → 圖片式大選單；有 `children` → 文字下拉；只有 `href` → 連結（`external` 用 `target="_blank"`，如櫻花集團連 sakura.com.tw）。
 - **桌面（`lg+`）**：三段 flex（左群 / logo / 右群 + 🔍）；有子選單者 `group relative` + `group-hover` 展開白色下拉（子項 hover 轉金、`ChevronDown` 旋轉；`pt-2` 橋接避免 hover 中斷）。

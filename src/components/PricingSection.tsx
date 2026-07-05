@@ -1,0 +1,136 @@
+import React from 'react';
+import { Check, ArrowUpRight } from 'lucide-react';
+import { MarqueeBand } from './MarqueeBand';
+
+// 品牌重點金（沿用原站色；模板為 #CAA05C，依全域「色系不改」規則用站上金）
+const GOLD = '#C4A574';
+
+// SAKURA 廚電（深色卡）的三個產品線
+const SAKURA_ITEMS = ['廚房商品', '淨水器', '熱水器'];
+
+// SVAGO / TEKA（白卡 + 產品圖；圖源 影像/廚房產品 → public/products/*.jpg，描述為佔位）
+const BRANDS = [
+  { name: 'SVAGO', desc: '義式精品家電，為居家注入質感與品味。', image: '/products/svago.jpg' },
+  { name: 'TEKA', desc: '德國進口廚電，專業級的料理表現。', image: '/products/teka.jpg' },
+];
+
+export function PricingSection() {
+  return (
+    <section className="relative bg-[#f6f6f6] pt-[125px] overflow-hidden">
+      <div className="max-w-[1410px] mx-auto">
+        {/* 標題列（座標依模板實測，相對 1410 版心）：十字裝飾線 + eyebrow(左,top46) + 大標(left424) */}
+        <div className="relative mb-[60px]">
+          {/* 十字裝飾線（桌面）：橫線 0→502 @y7、直線 x354 y0→159 + 端點箭頭 */}
+          <div aria-hidden className="hidden lg:block absolute left-[54px] top-[7px] w-[490px] h-px bg-[#dcdcdc]" />
+          <div aria-hidden className="hidden lg:block absolute left-[354px] top-0 h-[159px] w-px bg-[#dcdcdc]" />
+          <svg
+            aria-hidden
+            className="hidden lg:block absolute left-[412px] top-0 text-[#c9c9c9]"
+            width="15" height="15" viewBox="0 0 15 15"
+          >
+            <path d="M15 15L3 11L0 11L12 15L15 15Z" fill="currentColor" />
+          </svg>
+          <svg
+            aria-hidden
+            className="hidden lg:block absolute left-[347px] top-[84px] text-[#c9c9c9]"
+            width="15" height="15" viewBox="0 0 15 15"
+          >
+            <path d="M15 15L11 3L11 0L15 12L15 15Z" fill="currentColor" />
+          </svg>
+
+          <div className="flex items-start pt-[46px]">
+            <div className="w-[424px] shrink-0">
+              <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#1c1c1d]">
+                <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
+                our pricing plans
+              </span>
+            </div>
+            <h2 className="w-[661px] text-[60px] font-bold leading-[64px] capitalize text-[#1c1c1d]">
+              Design your <span style={{ color: GOLD }}>space,</span>
+              <br />
+              <span style={{ color: GOLD }}>know</span> the cost
+            </h2>
+          </div>
+        </div>
+
+        {/* 三欄：SAKURA 廚電（深色圖卡）+ SVAGO / TEKA（白卡 + 產品圖）；高度維持 min-h-[673px] */}
+        <div className="grid grid-cols-3 gap-[30px] items-stretch">
+          {/* 欄1：SAKURA 廚電 — 深色圖卡 + 三產品線金勾 */}
+          <div className="relative rounded-3xl overflow-hidden min-h-[771px]">
+            <img
+              src="/products/sakura.jpg"
+              alt="SAKURA 廚電"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(180deg, rgba(14,16,18,0.8) 0%, rgba(14,16,18,0.35) 45%, rgba(14,16,18,0.5) 100%)',
+              }}
+            />
+            <div className="relative z-10 p-8 lg:p-10 flex flex-col h-full">
+              <h3 className="text-white text-[36px] leading-[44px] font-bold">
+                SAKURA <span style={{ color: GOLD }}>廚電</span>
+              </h3>
+              <ul className="mt-7 space-y-4">
+                {SAKURA_ITEMS.map((item, j) => (
+                  <li
+                    key={j}
+                    className="flex items-center gap-3 text-white text-[20px] leading-[36px] font-semibold"
+                  >
+                    <span
+                      className="inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0"
+                      style={{ background: GOLD }}
+                    >
+                      <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* 欄2/3：SVAGO / TEKA — 白卡（上文字、下產品圖鋪滿）+ 了解更多按鈕 */}
+          {BRANDS.map((b, i) => (
+            <div
+              key={i}
+              className="rounded-3xl bg-white overflow-hidden flex flex-col min-h-[771px]"
+            >
+              <div className="px-8 lg:px-10 pt-10">
+                <h3 className="text-[45px] leading-[50px] font-bold text-[#1c1c1d]">{b.name}</h3>
+                <p className="mt-4 text-[#59585d] text-[20px] leading-[30px]">{b.desc}</p>
+              </div>
+              {/* 產品圖鋪滿卡片下半 + CTA 疊左下（沿用金填滿白字 + 箭頭旋轉 hover） */}
+              <div className="relative mt-8 flex-1 min-h-[260px]">
+                <img
+                  src={b.image}
+                  alt={b.name}
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                />
+                <a
+                  href="#"
+                  className="group absolute left-8 bottom-8 inline-flex items-center justify-between gap-4 rounded-full bg-white pl-[30px] pr-[7px] py-[7px] text-[#1c1c1d] shadow-md transition-colors duration-500 hover:bg-[#C4A574] hover:text-white"
+                >
+                  <span className="text-[19px] font-semibold">了解更多</span>
+                  <span
+                    className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full text-white transition-transform duration-500 group-hover:rotate-45"
+                    style={{ background: GOLD }}
+                  >
+                    <ArrowUpRight className="w-5 h-5" />
+                  </span>
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 跑馬燈：Pricing 區最底部 */}
+      <div className="mt-24">
+        <MarqueeBand />
+      </div>
+    </section>
+  );
+}
