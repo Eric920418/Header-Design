@@ -315,3 +315,41 @@ body {
 .animate-gallery-card {
   animation: gallery-card-in 0.6s ease both;
 }
+
+/* ── 捲動出場動畫（複刻 Antra elementor-invisible→animated 的 opalMoveUp：淡入 + 上升）──
+   由 src/motion/Reveal.tsx 的 IntersectionObserver 在進場時加上 .is-visible 觸發。
+   鐵則：勿套在 Embla / animate-gallery-card / hover-scale 佔用 transform 的元素上。 */
+.reveal {
+  opacity: 0;
+  transform: translateY(56px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+/* 內部小元素用較小位移（模板 100px 在 overflow-hidden 段會被裁，故縮小） */
+.reveal-inner {
+  transform: translateY(32px);
+}
+.reveal-delay-1 {
+  transition-delay: 0.15s;
+}
+.reveal-delay-2 {
+  transition-delay: 0.3s;
+}
+.reveal-delay-3 {
+  transition-delay: 0.45s;
+}
+
+/* 減少動態：直接顯示、不位移、不過場 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

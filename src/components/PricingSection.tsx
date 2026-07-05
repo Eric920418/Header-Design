@@ -1,6 +1,7 @@
 import React from 'react';
 import { Check, ArrowUpRight } from 'lucide-react';
 import { MarqueeBand } from './MarqueeBand';
+import { Reveal } from '../motion/Reveal';
 
 // 品牌重點金（沿用原站色；模板為 #CAA05C，依全域「色系不改」規則用站上金）
 const GOLD = '#C4A574';
@@ -18,8 +19,8 @@ export function PricingSection() {
   return (
     <section className="relative bg-[#f6f6f6] pt-[125px] overflow-hidden">
       <div className="max-w-[1410px] mx-auto">
-        {/* 標題列（座標依模板實測，相對 1410 版心）：十字裝飾線 + eyebrow(左,top46) + 大標(left424) */}
-        <div className="relative mb-[60px]">
+        {/* 標題列（座標依模板實測，相對 1410 版心）：十字裝飾線 + eyebrow(左,top46) + 大標(left424） */}
+        <Reveal className="relative mb-[60px]">
           {/* 十字裝飾線（桌面，模板實測照抄）：橫線 y16 寬502、直線 x363 上臂54/下臂125、兩端箭頭 15px；線與箭頭同色 #e3e3e8 */}
           <div aria-hidden className="hidden lg:block absolute left-[-13px] top-[16px] w-[502px] h-px bg-[#e3e3e8]" />
           <div aria-hidden className="hidden lg:block absolute left-[363px] top-[-38px] h-[179px] w-px bg-[#e3e3e8]" />
@@ -51,12 +52,12 @@ export function PricingSection() {
               <span style={{ color: GOLD }}>know</span> the cost
             </h2>
           </div>
-        </div>
+        </Reveal>
 
         {/* 三欄：SAKURA 廚電（深色圖卡）+ SVAGO / TEKA（白卡 + 產品圖）；高度維持 min-h-[673px] */}
         <div className="grid grid-cols-3 gap-[30px] items-stretch">
-          {/* 欄1：SAKURA 廚電 — 深色圖卡 + 三產品線金勾 */}
-          <div className="relative rounded-3xl overflow-hidden min-h-[771px]">
+          {/* 欄1：SAKURA 廚電 — 深色圖卡 + 三產品線金勾（stagger 首張，無延遲） */}
+          <Reveal inner className="relative rounded-3xl overflow-hidden min-h-[771px]">
             <img
               src="/products/sakura.jpg"
               alt="SAKURA 廚電"
@@ -90,12 +91,14 @@ export function PricingSection() {
                 ))}
               </ul>
             </div>
-          </div>
+          </Reveal>
 
-          {/* 欄2/3：SVAGO / TEKA — 白卡（上文字、下產品圖鋪滿）+ 了解更多按鈕 */}
+          {/* 欄2/3：SVAGO / TEKA — 白卡（上文字、下產品圖鋪滿）+ 了解更多按鈕；stagger delay 1、2 */}
           {BRANDS.map((b, i) => (
-            <div
+            <Reveal
               key={i}
+              inner
+              delay={(i + 1) as 1 | 2}
               className="rounded-3xl bg-white overflow-hidden flex flex-col min-h-[771px]"
             >
               <div className="px-8 lg:px-10 pt-10">
@@ -122,7 +125,7 @@ export function PricingSection() {
                   </span>
                 </a>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

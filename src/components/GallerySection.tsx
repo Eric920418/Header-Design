@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { Reveal } from '../motion/Reveal';
+import { useParallax } from '../motion/useParallax';
 
 // 品牌重點金（沿用原站色）
 const GOLD = '#C4A574';
@@ -14,6 +16,9 @@ const CASES = [
 
 export function GallerySection() {
   const len = CASES.length;
+  const sectionRef = useRef<HTMLElement>(null);
+  // 背景主圖隨捲動位移（取代模板 gallery pin widget 的 scrub 視差；scale 留出血避免露邊）
+  useParallax(sectionRef, { targets: '.gallery-bg', fromY: -8, toY: 8, scale: 1.12 });
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -45,6 +50,7 @@ export function GallerySection() {
 
   return (
     <section
+      ref={sectionRef}
       className="relative overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -55,7 +61,7 @@ export function GallerySection() {
           key={i}
           src={c.image}
           alt=""
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+          className={`gallery-bg absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
             i === active ? 'opacity-100' : 'opacity-0'
           }`}
         />
@@ -68,9 +74,9 @@ export function GallerySection() {
         }}
       />
 
-      {/* 內容：左文字 + 右 2 卡（中下） */}
+      {/* 內容：左文字 + 右 2 卡（中下），整塊淡入上升（背景不隨之淡入、僅做視差） */}
       {/* 間距依模板實測（Home 3 antra-image-carousel）：pt 133 / pb 138、左緣對齊 1410 版心（51px） */}
-      <div className="relative z-10 pt-[133px] pb-[138px]">
+      <Reveal className="relative z-10 pt-[133px] pb-[138px]">
         <div className="flex flex-col lg:flex-row lg:items-center gap-12 pl-[51px]">
           {/* 左：標題區 */}
           <div className="lg:w-[440px] lg:shrink-0 pr-4">
@@ -146,7 +152,7 @@ export function GallerySection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

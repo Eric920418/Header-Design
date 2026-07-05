@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Check, ArrowRight, Play } from 'lucide-react';
+import { Reveal } from '../motion/Reveal';
+import { useParallax } from '../motion/useParallax';
 
 // 品牌重點金（沿用原站色）
 const GOLD = '#C4A574';
@@ -15,12 +17,15 @@ const BLUEPRINT =
   'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80';
 
 export function WhatWeDoSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  // 裝飾藍圖隨捲動輕微位移（GSAP scrub 視差）
+  useParallax(sectionRef, { targets: '.wwd-blueprint', fromY: -6, toY: 6 });
   return (
     // 間距依模板實測（Home 6 兩欄區）：py 120、欄距 90、文欄 600
-    <section className="relative bg-white py-[120px] overflow-hidden">
+    <section ref={sectionRef} className="relative bg-white py-[120px] overflow-hidden">
       <div className="max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
-        {/* 左：文字 */}
-        <div className="lg:w-[600px] lg:shrink-0">
+        {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
+        <Reveal className="lg:w-[600px] lg:shrink-0">
           <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-5 text-[15px] tracking-[1px] uppercase text-[#1c1c1d]">
             <span
               className="inline-block w-1.5 h-1.5 rounded-full"
@@ -43,8 +48,11 @@ export function WhatWeDoSection() {
           {/* 打勾清單（含分隔線） */}
           <ul className="mt-9 border-t border-gray-200">
             {ITEMS.map((t, i) => (
-              <li
+              <Reveal
+                as="li"
                 key={i}
+                inner
+                delay={(i + 1) as 1 | 2 | 3}
                 className="flex items-center gap-3 py-4 border-b border-gray-200 text-[#1c1c1d] text-[18px] leading-[24px] font-medium"
               >
                 <span
@@ -54,7 +62,7 @@ export function WhatWeDoSection() {
                   <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
                 </span>
                 {t}
-              </li>
+              </Reveal>
             ))}
           </ul>
 
@@ -74,16 +82,16 @@ export function WhatWeDoSection() {
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" />
             </span>
           </a>
-        </div>
+        </Reveal>
 
-        {/* 右：16:9 影片區塊（縮圖 + 主色金播放鈕；下方壓底建築藍圖、影片可放大） */}
-        <div className="relative flex-1 w-full">
-          {/* 壓底圖：淡建築藍圖，延伸至影片下方（仿 Home One） */}
+        {/* 右：16:9 影片區塊（整塊淡入上升；影片卡自有 hover:scale，故 Reveal 掛在外層不搶 transform） */}
+        <Reveal className="relative flex-1 w-full">
+          {/* 壓底圖：淡建築藍圖，延伸至影片下方（仿 Home One）；.wwd-blueprint 掛捲動視差 */}
           <img
             src={BLUEPRINT}
             alt=""
             aria-hidden
-            className="pointer-events-none select-none absolute -bottom-14 -right-6 w-[88%] max-w-none opacity-[0.12] grayscale"
+            className="wwd-blueprint pointer-events-none select-none absolute -bottom-14 -right-6 w-[88%] max-w-none opacity-[0.12] grayscale"
           />
           {/* 影片卡：hover 依比例微放大 */}
           <div className="group relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black transition-transform duration-500 hover:scale-[1.02]">
@@ -111,7 +119,7 @@ export function WhatWeDoSection() {
               </span>
             </button>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

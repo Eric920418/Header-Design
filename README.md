@@ -41,6 +41,14 @@ pnpm build
 - **副作用**：凍結成桌面後**已無手機版概念**——`FloatingButtons` 的手機底部固定列（`flex lg:hidden`）與桌面軌道（`hidden`）**皆不顯示**；手機上字會等比變小（可雙指放大）。要保留快捷鈕就把桌面軌道 `hidden`→`flex` 開回。
 - **驗證**：拖動視窗寬 / DevTools 模擬 375~3840px，版面完全不重排、無水平捲軸；模擬 605px（scale 0.4）實測仍渲染完整桌面版、`scrollWidth === innerWidth`。
 
+## 捲動動態（Lenis 阻尼 + 出場動畫 + GSAP 視差）— 複刻 Antra 模板
+
+模組集中在 **`src/motion/`**，三種效果皆對映 Antra 模板實測值，且都受 `prefers-reduced-motion` 保護。套件（pnpm）：`lenis`、`gsap`。
+
+- **平滑捲動阻尼（Lenis）** — `src/motion/{useSmoothScroll.ts, ScrollMotionProvider.tsx}`。對映模板 config：`duration: 1.5` + expo ease-out `t=>Math.min(1,1.001-2**(-10*t))`。用 **原生捲動模式**（不設 wrapper/content transform），故不碰 `ScaleToFit` 的 canvas `scale`、也不破壞 `FloatingButtons` 的 `fixed`。只在 **桌面（>992px）且非 reduced-motion** 啟用，跨 992px / 偏好變更自動啟停。GSAP 與 Lenis 共用單一 rAF（`gsap.ticker`），內容高度變動時自建 `ResizeObserver` → `lenis.resize()` + `ScrollTrigger.refresh()`。`ScrollMotionProvider` 掛在 `ScaleToFit` **外層**。
+- **出場動畫（IntersectionObserver + CSS）** — `src/motion/Reveal.tsx` + `globals.css` 的 `.reveal`。複刻模板 `opalMoveUp`（淡入 + 上升）：section 級 `translateY(56px)`、內部 stagger `.reveal-inner` `32px` + `.reveal-delay-1~3`。進場一次不重播。`<Reveal>` 包裹元件或 `useReveal(ref)` 掛在 `<section>` 根。**鐵則：勿套在 Embla / `animate-gallery-card` / hover-scale 佔用 transform 的元素上**（Pricing 三卡、WhatWeDo 三 li 做 stagger；Gallery 改包內容塊、Project 只包 section 根）。
+- **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。**不用 `pin`**：pin 的 `position:fixed`+pin-spacer 在 `transform:scale()` 祖先下量測錯誤，改用 `yPercent` scrub（`scrub:0.5`）位移達到同觀感。目標：ProjectSection 每張 `.project-parallax-img`（scale 1.08 留出血）、GallerySection 背景 `.gallery-bg`（scale 1.12，取代模板 gallery pin widget）、WhatWeDo 裝飾 `.wwd-blueprint`。只寫內層 transform，永不碰 `canvasRef`。
+
 ## 間距與文字排版 — 依 Antra 模板實測、零誤差
 
 所有 section 的間距/尺寸/**字級**已對齊 **Antra demo 實測值**（@1512 視窗 computed style，localhost 逐項驗收 0px 誤差）。此規範**取代**先前「section py 上限 20」的暫行規則。

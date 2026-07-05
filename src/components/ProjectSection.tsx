@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
+import { useReveal } from '../motion/Reveal';
+import { useParallax } from '../motion/useParallax';
 
 // 10 種廚房風格（英中雙標 + 本地圖；Basic+ / AI kitchen 僅英文）
 const STYLES = [
@@ -24,6 +26,10 @@ export function ProjectSection() {
   // 拖曳中暫停 hover 變寬（否則卡片一碰就展開、拖曳會被打斷）
   const [dragging, setDragging] = useState(false);
   const pausedRef = useRef(false);
+
+  // section 進場淡入上升 + 每張圖隨捲動視差（皆不碰 Embla 的軌道 transform）
+  const sectionRef = useReveal<HTMLElement>();
+  useParallax(sectionRef, { targets: '.project-parallax-img', fromY: -8, toY: 8, scale: 1.08 });
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -53,7 +59,7 @@ export function ProjectSection() {
   }, [emblaApi]);
 
   return (
-    <section className="relative z-10 bg-[#f6f6f6]">
+    <section ref={sectionRef} className="reveal relative z-10 bg-[#f6f6f6]">
       <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
         <div className="flex">
           {STYLES.map((s, i) => (
@@ -69,7 +75,7 @@ export function ProjectSection() {
                   src={s.image}
                   alt={s.zh ? `${s.en} ${s.zh}` : s.en}
                   draggable={false}
-                  className="absolute inset-0 w-full h-full object-cover object-center"
+                  className="project-parallax-img absolute inset-0 w-full h-full object-cover object-center"
                 />
 
                 {/* 底部黑色漸層 scrim */}

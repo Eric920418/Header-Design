@@ -67,6 +67,8 @@ export function GoogleStoreMap({ address }: { address: string }) {
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const geocodeCache = useRef<Map<string, { lat: number; lng: number }>>(new Map());
+  const centerRef = useRef<{ lat: number; lng: number }>(DEFAULT_CENTER);
+  const observerRef = useRef<IntersectionObserver | null>(null);
   const [error, setError] = useState('');
 
   // 初始化地圖（金鑰就緒後載入 script、建立地圖）
@@ -88,6 +90,24 @@ export function GoogleStoreMap({ address }: { address: string }) {
             zoomControl: true,
             gestureHandling: 'cooperative',
           });
+
+          // 修正「地圖在視窗外/初始化尺寸未定時圖磚不繪製」：進入視窗時（一次性、延後一個 tick）觸發重繪
+          observerRef.current = new IntersectionObserver(
+            (entries) => {
+              if (entries.some((e) => e.isIntersecting) && mapRef.current) {
+                observerRef.current?.disconnect(); // 只需觸發一次
+                // 延後發送，避開「建立當下」尚未完成合成的時機
+                setTimeout(() => {
+                  if (!mapRef.current) return;
+                  maps.event.trigger(mapRef.current, 'resize');
+                  window.dispatchEvent(new Event('resize'));
+                  mapRef.current.setCenter(centerRef.current);
+                }, 300);
+              }
+            },
+            { threshold: 0.01 }
+          );
+          if (containerRef.current) observerRef.current.observe(containerRef.current);
         }
         updateMarker(maps, address);
       })
@@ -96,6 +116,7 @@ export function GoogleStoreMap({ address }: { address: string }) {
       });
     return () => {
       cancelled = true;
+      observerRef.current?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -108,6 +129,7 @@ export function GoogleStoreMap({ address }: { address: string }) {
   }, [address]);
 
   function placeAt(maps: any, loc: { lat: number; lng: number }) {
+    centerRef.current = loc;
     mapRef.current.panTo(loc);
     if (!markerRef.current) {
       markerRef.current = new maps.Marker({
