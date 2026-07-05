@@ -21,8 +21,8 @@ export function PricingSection() {
         {/* 標題列（座標依模板實測，相對 1410 版心）：十字裝飾線 + eyebrow(左,top46) + 大標(left424) */}
         <div className="relative mb-[60px]">
           {/* 十字裝飾線（桌面）：橫線 0→502 @y7、直線 x354 y0→159 + 端點箭頭 */}
-          <div aria-hidden className="hidden lg:block absolute left-[54px] top-[7px] w-[490px] h-px bg-[#dcdcdc]" />
-          <div aria-hidden className="hidden lg:block absolute left-[354px] top-0 h-[159px] w-px bg-[#dcdcdc]" />
+          <div aria-hidden className="hidden lg:block absolute left-[54px] top-[13px] w-[490px] h-px bg-[#dcdcdc]" />
+          <div aria-hidden className="hidden lg:block absolute left-[354px] top-[1px] h-[127px] w-px bg-[#dcdcdc]" />
           <svg
             aria-hidden
             className="hidden lg:block absolute left-[412px] top-0 text-[#c9c9c9]"
@@ -32,7 +32,7 @@ export function PricingSection() {
           </svg>
           <svg
             aria-hidden
-            className="hidden lg:block absolute left-[347px] top-[84px] text-[#c9c9c9]"
+            className="hidden lg:block absolute left-[347px] top-[113px] text-[#c9c9c9]"
             width="15" height="15" viewBox="0 0 15 15"
           >
             <path d="M15 15L11 3L11 0L15 12L15 15Z" fill="currentColor" />
