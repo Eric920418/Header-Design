@@ -20,19 +20,19 @@ export function PricingSection() {
       <div className="max-w-[1410px] mx-auto">
         {/* 標題列（座標依模板實測，相對 1410 版心）：十字裝飾線 + eyebrow(左,top46) + 大標(left424) */}
         <div className="relative mb-[60px]">
-          {/* 十字裝飾線（桌面）：橫線 0→502 @y7、直線 x354 y0→159 + 端點箭頭 */}
-          <div aria-hidden className="hidden lg:block absolute left-[54px] top-[13px] w-[490px] h-px bg-[#dcdcdc]" />
-          <div aria-hidden className="hidden lg:block absolute left-[354px] top-[1px] h-[127px] w-px bg-[#dcdcdc]" />
+          {/* 十字裝飾線（桌面，模板實測照抄）：橫線 y16 寬502、直線 x363 上臂54/下臂125、兩端箭頭 15px；線與箭頭同色 #e3e3e8 */}
+          <div aria-hidden className="hidden lg:block absolute left-[-13px] top-[16px] w-[502px] h-px bg-[#e3e3e8]" />
+          <div aria-hidden className="hidden lg:block absolute left-[363px] top-[-38px] h-[179px] w-px bg-[#e3e3e8]" />
           <svg
             aria-hidden
-            className="hidden lg:block absolute left-[412px] top-0 text-[#c9c9c9]"
+            className="hidden lg:block absolute left-[474px] top-0 text-[#e3e3e8]"
             width="15" height="15" viewBox="0 0 15 15"
           >
             <path d="M15 15L3 11L0 11L12 15L15 15Z" fill="currentColor" />
           </svg>
           <svg
             aria-hidden
-            className="hidden lg:block absolute left-[347px] top-[113px] text-[#c9c9c9]"
+            className="hidden lg:block absolute left-[347px] top-[126px] text-[#e3e3e8]"
             width="15" height="15" viewBox="0 0 15 15"
           >
             <path d="M15 15L11 3L11 0L15 12L15 15Z" fill="currentColor" />

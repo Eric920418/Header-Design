@@ -58,26 +58,8 @@ export function StoreLocationSection() {
     // 間距依模板實測：py 120
     <section className="relative bg-[#f6f6f6] py-[120px] overflow-hidden">
       <div className="max-w-[1410px] mx-auto">
-        {/* ── 標題列：與 PricingSection 同款「十字裝飾線 + eyebrow(左欄) + 大標(右偏)」 ── */}
+        {/* ── 標題列：eyebrow(左欄) + 大標(右偏)；不加十字裝飾線 ── */}
         <div className="relative mb-[60px]">
-          {/* 十字裝飾線（桌面）：橫線 + 直線 + 端點箭頭 */}
-          <div aria-hidden className="hidden lg:block absolute left-[54px] top-[13px] w-[490px] h-px bg-[#dcdcdc]" />
-          <div aria-hidden className="hidden lg:block absolute left-[354px] top-[1px] h-[127px] w-px bg-[#dcdcdc]" />
-          <svg
-            aria-hidden
-            className="hidden lg:block absolute left-[412px] top-0 text-[#c9c9c9]"
-            width="15" height="15" viewBox="0 0 15 15"
-          >
-            <path d="M15 15L3 11L0 11L12 15L15 15Z" fill="currentColor" />
-          </svg>
-          <svg
-            aria-hidden
-            className="hidden lg:block absolute left-[347px] top-[84px] text-[#c9c9c9]"
-            width="15" height="15" viewBox="0 0 15 15"
-          >
-            <path d="M15 15L11 3L11 0L15 12L15 15Z" fill="currentColor" />
-          </svg>
-
           <div className="flex flex-col lg:flex-row items-start lg:pt-[46px]">
             <div className="lg:w-[424px] lg:shrink-0 mb-5 lg:mb-0">
               <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#1c1c1d]">
@@ -102,7 +84,7 @@ export function StoreLocationSection() {
                 title="門市地圖"
                 src={mapSrc}
                 loading="lazy"
-                className="w-full h-full border-0"
+                className="w-full h-full border-0 grayscale contrast-[1.05]"
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>

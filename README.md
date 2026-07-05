@@ -163,8 +163,8 @@ pnpm build
 
 `StoreLocationSection.tsx`：套 Antra「Contact Us」視覺（淺灰底 `#f6f6f6`、膠囊 eyebrow、雙色大標、白色圓角卡片、金色 `#C4A574`），並把原本的空佔位地圖與無效搜尋**做成真的能用**：
 
-- **標題版型（依「首頁 Section 說明.pptx」slide 2 門市地圖）**：與 `PricingSection` 同款**分欄標題**——十字裝飾線（橫線+直線+端點箭頭，`hidden lg:block` 絕對定位）+ eyebrow `get in touch`（左 424px 欄）+ 大標推到右邊 `Have A Project In ⟨Store Locator⟩ It Happen`（`Store Locator` 金色）。**非**舊版的靠左堆疊。
-- **左欄（寬，~62%）**：真 **Google Maps embed iframe**（`src = https://maps.google.com/maps?q=<地址>&output=embed`，高度 `var(--store-map-h)`），選取/篩選門市時自動定位。
+- **標題版型（依「首頁 Section 說明.pptx」slide 2 門市地圖）**：**分欄標題**——eyebrow `get in touch`（左 424px 欄）+ 大標推到右邊 `Have A Project In ⟨Store Locator⟩ It Happen`（`Store Locator` 金色）。**不加**十字裝飾線（與 `PricingSection` 不同），也非舊版靠左堆疊。
+- **左欄（寬，~62%）**：真 **Google Maps embed iframe**（`src = https://maps.google.com/maps?q=<地址>&output=embed`，高度 `var(--store-map-h)`），選取/篩選門市時自動定位。**灰階黑白**（仿官網 store/location：iframe 加 `grayscale contrast-[1.05]` CSS 濾鏡，仍可縮放拖曳、免 API 金鑰）。
 - **右欄（窄）**：`我的位置`（`LocateFixed` 金色準星）+ **`選擇區域` / `選擇城市` 兩個下拉**（`appearance-none` + 疊自訂 `ChevronDown`）；下方門市列表卡片——第一行區域灰底 pill + 店名，第二行 `MapPin` 地址（左）+ **金色電話（右靠同行）**，字級 14；選中 → 金色底白字。
 - **級聯篩選**：`region` / `city` 兩個 state 驅動；選區域自動清空城市、城市下拉未選區域時 disabled（`REGIONS` 提供五大區→縣市對照）。`filtered = STORES.filter(區域符合 && 城市符合)`；選取門市若被濾掉自動退回第一筆可見門市；該區無資料顯示「此區域尚無門市資料」。
 - **門市資料**：pptx 真實資料共 5 間（承德 / 石牌 / 民權 / 中山南京 / 八德，皆北部/臺北市，含真地址電話）；其他區暫無資料，補上即可用。
