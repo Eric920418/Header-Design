@@ -193,16 +193,16 @@ pnpm build
 - **搜尋**：🔍 切換 `openSearch`，在 bar 下方展開白色圓角搜尋輸入框（前端介面，功能待接）。
 - header 維持**靜態**（非 sticky）；子項 href 為佔位 `#`；設計圖「SUKURA」視為 SAKURA 錯字已更正。
 
-## 頁尾（Footer）— 黑底 + 品牌金 logo
+## 頁尾（Footer）— 巨型 SAKURA 浮水印（灰底）+ 模板暗色版權列
 
-`Footer.tsx`：依設計圖改為**純黑底**、金色 SAKURA KITCHEN logo（僅英文）、版權列、下方一排導覽。
+`Footer.tsx`：依 mockup 改為兩段式，取 Antra 頁尾精神（巨型品牌浮水印 + 暗色版權列）。
 
-- **logo**：`public/sakura-logo-gold.png`。原始素材 `Logo/櫻花整體廚房_logo-07_0.png` 是「金色 SAKURA KITCHEN ｜ 灰色 櫻花整體廚房」，依需求**用 ImageMagick 裁掉右側中文與分隔線、只留左側金色英文**（`-crop` + `-trim`，成品 20K）。
-- **版權**：`Copyright © Taiwan Sakura Corporation. All rights reserved`（設計圖原文 "All right reserved" 屬文法錯字，已更正為 rights）。
-- **導覽列**（分隔線下、桌面 `justify-between`）：
-  - 左：文字連結 **網站地圖**（`#` 佔位）、**隱私權政策**（→ `/privacy.html`）。
-  - 右：icon 連結 **數位展板**（`/icons/digital-board.png`）、**YouTube**（`/icons/youtube.png`）。兩者皆白色去背 PNG（來源 `Icon/展板icon.png`、`YTicon.png`），黑底顯白；`href` 目前為 `#` 佔位（無官方連結，未捏造）。
-- **手機**：`pb-28` 預留高度，避免被 `FloatingButtons` 底部固定列蓋住。
+- **上半（灰底 `#f6f6f6`，同上一區 StoreLocation，無縫接）**：巨型「**SAKURA**」文字浮水印，`text-[330px] font-bold leading-none`、品牌金 `#C4A574 @ opacity 0.18`（對映模板浮水印低透明；金色屬既有色系）、`pointer-events-none select-none`；外層 `overflow-hidden` 裁邊。
+- **下半（版權列）**：**模板暗色 `#272625`**（Antra 頁尾覆蓋層基色 `rgb(39,38,37)`）滿寬列，用 `-mt-[90px]` 疊在浮水印下緣之上（浮水印下緣被暗列蓋住，仿模板）。版心 `max-w-[1410px] px-[51px] py-7`、`flex justify-between`：
+  - 左：**網站地圖**（`#`）、**隱私權政策**（`/privacy.html`），**字級 14**、hover 轉金。
+  - 中：`Copyright © Taiwan Sakura Corporation. All rights reserved`（`absolute` 置中，不受左右欄寬影響）。
+  - 右：**數位展板** `/icons/digital-board.png` **30×30**、**YouTube** `/icons/youtube.png` **33×33**（白色去背 PNG，暗底顯白；`href` 佔位 `#`）。
+- 舊的小金 logo `sakura-logo-gold.png` 已由巨型浮水印取代（檔案保留備用）。`App.tsx` 以 `<Reveal>` 包 Footer（出場淡入上升）。
 
 ### 隱私權政策頁 — `public/privacy.html`
 

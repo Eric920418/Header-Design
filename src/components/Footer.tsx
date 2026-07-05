@@ -1,61 +1,72 @@
 import React from 'react';
 
-// 文字連結（網站地圖、隱私權政策）
+// 文字連結（網站地圖、隱私權政策）— 字級 14
 const TEXT_LINKS = [
   { label: '網站地圖', href: '#' },
   // 隱私權政策 → 由 docx 內文抽出、產生的輕量靜態頁 public/privacy.html
   { label: '隱私權政策', href: '/privacy.html' },
 ];
 
-// icon 連結（數位展板、YouTube）— 白色去背 PNG，黑底顯白
+// icon 連結：數位展板 30×30、YouTube 33×33（白色去背 PNG，暗底顯白）
 const ICON_LINKS = [
-  { label: '數位展板', href: '#', icon: '/icons/digital-board.png' },
-  { label: 'YouTube', href: '#', icon: '/icons/youtube.png' },
+  { label: '數位展板', href: '#', icon: '/icons/digital-board.png', size: 30 },
+  { label: 'YouTube', href: '#', icon: '/icons/youtube.png', size: 33 },
 ];
 
 export function Footer() {
   return (
-    <footer className="bg-black text-white">
-      {/* 手機底部有 FloatingButtons 固定列，pb 留高避免被蓋住 */}
-      <div className="max-w-[1410px] mx-auto pt-16 pb-16">
-        {/* 金色 SAKURA KITCHEN logo（僅英文，中文段已裁除） */}
-        <img
-          src="/sakura-logo-gold.png"
-          alt="SAKURA KITCHEN"
-          className="h-6 sm:h-7 lg:h-8 w-auto"
-        />
+    <footer className="bg-[#f6f6f6]">
+      <div className="relative overflow-hidden">
+        {/* 上半：灰底 + 巨型 SAKURA 浮水印（淡金，下緣被暗色版權列蓋住） */}
+        <div aria-hidden className="pointer-events-none select-none flex justify-center pt-20">
+          <span
+            className="font-bold leading-none whitespace-nowrap text-[330px]"
+            style={{ color: '#C4A574', opacity: 0.18 }}
+          >
+            SAKURA
+          </span>
+        </div>
 
-        {/* 版權 */}
-        <p className="mt-6 text-sm text-gray-400">
-          Copyright © Taiwan Sakura Corporation. All rights reserved
-        </p>
+        {/* 版權列：模板暗色 #272625，滿寬、負 margin 疊在浮水印下緣之上 */}
+        <div className="relative -mt-[90px] bg-[#272625] text-white">
+          <div className="relative max-w-[1410px] mx-auto px-[51px] py-7 flex items-center justify-between gap-6">
+            {/* 左：文字連結（字級 14） */}
+            <nav className="flex items-center gap-6 shrink-0">
+              {TEXT_LINKS.map((l) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  className="text-[14px] text-white/85 hover:text-[#C4A574] transition-colors"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </nav>
 
-        {/* 分隔線 + 導覽列（左：文字連結 / 右：icon 連結） */}
-        <div className="mt-8 pt-8 border-t border-white/15 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <nav className="flex items-center gap-8">
-            {TEXT_LINKS.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                className="text-sm text-gray-300 hover:text-[#C4A574] transition-colors"
-              >
-                {l.label}
-              </a>
-            ))}
-          </nav>
+            {/* 中：版權（絕對置中，不受左右欄寬影響） */}
+            <p className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-[14px] text-white/70">
+              Copyright © Taiwan Sakura Corporation. All rights reserved
+            </p>
 
-          <div className="flex items-center gap-6">
-            {ICON_LINKS.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                aria-label={l.label}
-                title={l.label}
-                className="opacity-90 hover:opacity-100 transition-opacity"
-              >
-                <img src={l.icon} alt={l.label} className="w-6 h-6 object-contain" />
-              </a>
-            ))}
+            {/* 右：icon 30×30 / 33×33 */}
+            <div className="flex items-center gap-6 shrink-0">
+              {ICON_LINKS.map((l) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  aria-label={l.label}
+                  title={l.label}
+                  className="opacity-85 hover:opacity-100 transition-opacity"
+                >
+                  <img
+                    src={l.icon}
+                    alt={l.label}
+                    style={{ width: l.size, height: l.size }}
+                    className="object-contain"
+                  />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
