@@ -30,7 +30,13 @@ export function WhatWeDoSection() {
           </span>
 
           <h2 className="text-[#1c1c1d] font-bold text-[60px] leading-[64px]">
-            Antra<span style={{ color: GOLD }}>BrandPromise</span>{" "}
+            Antra Has{" "}
+            <span style={{ color: GOLD }}>
+              Brand
+              <br />
+              Promise
+            </span>
+            <br />
             Architectural
           </h2>
 
