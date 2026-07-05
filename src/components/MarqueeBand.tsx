@@ -1,6 +1,6 @@
 import React from 'react';
 
-// 底部跑馬燈（採 Home Two elementor-scrolling）：全出血「kitchen product」無限捲動。
+// 底部跑馬燈（採 Home Two elementor-scrolling）：全出血「KITCHEN PRODUCT」無限捲動。
 // 字身用 background-clip:text + 上淺灰→透明漸層 + line-height 0.9 輕裁切（keyframes 定義於 globals.css）。
 export function MarqueeBand() {
   return (
@@ -21,7 +21,7 @@ export function MarqueeBand() {
                   color: 'transparent',
                 }}
               >
-                kitchen product
+KITCHEN PRODUCT
               </span>
             ))}
           </div>
