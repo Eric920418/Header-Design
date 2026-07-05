@@ -31,7 +31,7 @@ export function WhatWeDoSection() {
 
           <h2 className="text-[#1c1c1d] font-bold text-[60px] leading-[64px]">
             Antra<span style={{ color: GOLD }}>BrandPromise</span>{" "}
-            Architectural Designs.
+            Architectural
           </h2>
 
           {/* 打勾清單（含分隔線） */}

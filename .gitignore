@@ -1,0 +1,4 @@
+# 環境變數（含 Google Maps API 金鑰）——切勿 commit
+.env
+.env.local
+.env.*.local

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { MapPin, LocateFixed, ChevronDown } from 'lucide-react';
+import { GoogleStoreMap } from './GoogleStoreMap';
 
 // 品牌重點金（沿用原站色）
 const GOLD = '#C4A574';
@@ -50,9 +51,6 @@ export function StoreLocationSection() {
     filtered.find((s) => s.id === selected) ??
     filtered[0] ??
     STORES.find((s) => s.id === selected)!;
-  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
-    visible.address
-  )}&z=16&output=embed`;
 
   return (
     // 間距依模板實測：py 120
@@ -79,14 +77,8 @@ export function StoreLocationSection() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* 左：地圖（撐高與右側列表等高） */}
           <div className="w-full lg:w-[62%] lg:shrink-0 flex flex-col">
-            <div className="rounded-3xl overflow-hidden bg-gray-200 shadow-sm h-[var(--store-map-h)] lg:h-auto lg:flex-1 lg:min-h-[var(--store-map-h)]">
-              <iframe
-                title="門市地圖"
-                src={mapSrc}
-                loading="lazy"
-                className="w-full h-full border-0 grayscale contrast-[1.05]"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+            <div className="rounded-3xl overflow-hidden bg-[#f5f5f5] shadow-sm h-[var(--store-map-h)] lg:h-auto lg:flex-1 lg:min-h-[var(--store-map-h)]">
+              <GoogleStoreMap address={visible.address} />
             </div>
           </div>
 
