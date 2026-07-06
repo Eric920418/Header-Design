@@ -29,7 +29,7 @@ export function FloatingButtons() {
       </div>
 
       {/* 手機版 - 底部固定導航 */}
-      <div className="flex lg:hidden fixed bottom-0 left-0 right-0 z-[9999] bg-white border-t border-gray-200">
+      <div className="flex lg:hidden fixed bottom-0 left-0 right-0 z-[9999] bg-white border-t border-[#E3DED7]">
         <a
           href="#"
           className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#C9AA79] text-white text-sm font-medium"

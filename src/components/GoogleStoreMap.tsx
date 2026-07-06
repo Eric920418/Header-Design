@@ -166,7 +166,7 @@ export function GoogleStoreMap({ address }: { address: string }) {
     <div className="relative w-full h-full">
       <div ref={containerRef} className="w-full h-full" />
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 p-6 text-center text-sm text-[#F5333F]">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#F4F0EA] p-6 text-center text-sm text-[#F5333F]">
           {error}
         </div>
       )}

@@ -3,18 +3,18 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { useReveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
 
-// 10 種廚房風格（英中雙標 + 本地圖；Basic+ / AI kitchen 僅英文）
+// 10 種廚房風格（依對照表：英文標題 / 中文膠囊 / hover 描述；Basic+ 無中文）
 const STYLES = [
-  { en: 'Basic+', zh: '', image: '/kitchen-styles/basic-plus.jpg' },
-  { en: 'AI kitchen', zh: '', image: '/kitchen-styles/ai-kitchen.jpg' },
-  { en: 'Clever', zh: '巧域廚房', image: '/kitchen-styles/clever.jpg' },
-  { en: 'Loft Chic', zh: '潮派廚房', image: '/kitchen-styles/loft-chic.jpg' },
-  { en: 'Joyful', zh: '童樂廚房', image: '/kitchen-styles/joyful.jpg' },
-  { en: 'premium', zh: '君璽廚房', image: '/kitchen-styles/premium.jpg' },
-  { en: 'Elegant', zh: '臻美廚房', image: '/kitchen-styles/elegant.jpg' },
-  { en: 'Chef', zh: '大廚廚房', image: '/kitchen-styles/chef.jpg' },
-  { en: 'Country', zh: '鄉村廚房', image: '/kitchen-styles/country.jpg' },
-  { en: 'Harmony', zh: '閣樂廚房', image: '/kitchen-styles/harmony.jpg' },
+  { en: 'Basic+', zh: '', desc: 'Basic+廚房系列 以生活的基本為出發', image: '/kitchen-styles/basic-plus.jpg' },
+  { en: 'AI Kitchen', zh: 'AI廚房', desc: '突破未來格局 開啟廚房智高點', image: '/kitchen-styles/ai-kitchen.jpg' },
+  { en: 'Clever Kitchen', zh: '巧域廚房', desc: '極致收納 在廚房', image: '/kitchen-styles/clever.jpg' },
+  { en: 'Loft Chic Kitchen', zh: '潮派廚房', desc: '品味浪漫 在廚房', image: '/kitchen-styles/loft-chic.jpg' },
+  { en: 'Joyful Kitchen', zh: '童樂廚房', desc: '幸福享樂 在廚房', image: '/kitchen-styles/joyful.jpg' },
+  { en: 'Premium Kitchen', zh: '君璽廚房', desc: '成就不凡 在廚房', image: '/kitchen-styles/premium.jpg' },
+  { en: 'Elegant Kitchen', zh: '臻美廚房', desc: '臻萃美緻 在廚房', image: '/kitchen-styles/elegant.jpg' },
+  { en: 'Chef Kitchen', zh: '大廚廚房', desc: '心滿藝足 在廚房', image: '/kitchen-styles/chef.jpg' },
+  { en: 'Country Kitchen', zh: '鄉村廚房', desc: '鄉村慢活 在廚房', image: '/kitchen-styles/country.jpg' },
+  { en: 'Harmony Kitchen', zh: '閣樂廚房', desc: '天倫團聚 在廚房', image: '/kitchen-styles/harmony.jpg' },
 ];
 
 export function ProjectSection() {
@@ -87,20 +87,22 @@ export function ProjectSection() {
                   }}
                 />
 
-                {/* 左上膠囊：中文名（無中文則不顯示） */}
+                {/* 左上膠囊：中文名（粗體；無中文則不顯示） */}
                 {s.zh && (
-                  <span className="absolute top-8 left-8 z-[2] inline-block rounded-full border border-white/50 text-white text-[16px] px-4 py-1.5 backdrop-blur-sm">
+                  <span className="absolute top-8 left-8 z-[2] inline-block rounded-full border border-white/50 text-white text-[16px] font-bold px-4 py-1.5 backdrop-blur-sm">
                     {s.zh}
                   </span>
                 )}
 
-                {/* 底部：英文大標 + 中文 */}
+                {/* 底部：英文大標（hover 轉金 #C9AA79）+ 描述（hover 由下淡入浮現） */}
                 <div className="absolute inset-x-0 bottom-0 z-[2] px-8 pb-9">
-                  <h3 className="text-white text-[36px] font-semibold leading-[44px] group-hover:text-[#C9AA79] transition-colors">
+                  <h3 className="text-white text-[36px] font-semibold leading-[44px] group-hover:text-[#C9AA79] transition-colors duration-300">
                     {s.en}
                   </h3>
-                  {s.zh && (
-                    <p className="text-white/85 text-[20px] leading-[30px] mt-1.5">{s.zh}</p>
+                  {s.desc && (
+                    <p className="text-white/90 text-[16px] leading-[24px] max-h-0 opacity-0 overflow-hidden group-hover:max-h-20 group-hover:opacity-100 group-hover:mt-2.5 transition-all duration-500 ease-out">
+                      {s.desc}
+                    </p>
                   )}
                 </div>
               </article>

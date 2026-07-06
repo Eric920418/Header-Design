@@ -63,7 +63,9 @@ pnpm build
 | 主-白 | White | `#FFFFFF` |
 
 - **對齊範圍**：所有金 → `#C9AA79`；深色 → `#000` / `#3E3A39`；紅 → `#F5333F`。Header 列漸層由舊 `#B79258 / #D2B587` 改為 CIS 衍生 `#B8965F → #D8C29A`；深色圖面 scrim 統一為 `rgba(0,0,0,α)`（Black C）。
-- **支援性中性色**（非 CIS、功能性 UI 保留）：section 底 `#f6f6f6`、線 `#e3e3e8 / #dcdcdc`、Tailwind `gray-*` 與 `white/xx`·`black/xx` 透明階（黑白本即 CIS、灰視為其淡階，未逐一改）。
+- **消除所有 Tailwind 冷灰**：Tailwind 具名灰（`gray-*`，色相偏藍）computed 出來是 **oklch**，rgb-only 掃描會漏掉——故做了 **oklch-aware 全屬性掃描**（color/bg/border/fill/outline/gradient）。全站冷灰已清零：文字/圖示 `text-gray-400~700` → CIS 深灰 `#3E3A39`；深色底 `bg-gray-900` → `#3E3A39`；淺邊框/分隔線 `border/divide-gray-100~300` → **暖線 `#E3DED7`**；淺底 `bg-gray-50/100` → **暖底 `#F4F0EA`**；`placeholder` / 停用 `select` 的灰 → **暖灰 `#8c877f`**。連全域預設也校正：`--foreground` `oklch(0.145)` → `#000`、`--ring`（`outline-ring` 焦點框）`oklch(0.708)` → `#3E3A39`、`--destructive` → `#F5333F`。
+- **`<select>` placeholder（已修）**：門市查詢的區域/城市 `<select>` 原本用 `disabled` 屬性 → 瀏覽器**強制灰化**「選擇城市」為 `#808080`（CSS `color` 蓋不動）。已改為**不用 `disabled`、改以 CSS 控制未選態**：placeholder 用暖灰 `#8c877f`，城市未選區域時加暖底 `#F4F0EA` + `pointer-events-none`(保留「先選區域」的停用觀感)。`#808080` 已清零 → **全站 0 個非 CIS/非暖中性色**。
+- **支援性中性色**（功能性保留）：section 底 `#f6f6f6`、暖線 `#E3DED7`、暖底 `#F4F0EA`、`white/xx`·`black/xx` 透明階（白/黑即 CIS、其餘為暖/中性淡階）。跑馬燈以 `color: transparent` + 漸層 `background-clip:text` 呈現（刻意技法）。
 - **地圖（`GoogleStoreMap` 的 `LIGHT_STYLE`）**：各階中性灰改為**偏暖灰**（R>G>B，如陸地 `#f4f0ea`、道路 `#fdfbf8`、水域 `#e5dfd6`）對齊 CIS 調性；標記水滴改 `#3E3A39`、錯誤字改 `#F5333F`。
 - **未動**：未渲染的 shadcn `ui/` 色票與 oklch chart tokens。
 - 先前文中「色系沿用原站／不改」之敘述，已由本次 CIS 對齊取代。
@@ -136,11 +138,12 @@ pnpm build
 
 `HeroSection.tsx` 的 Hero 採用 Antra 模板 Home Six 的版型（僅借版型/構圖，字型沿用原站；金色已對齊 **CIS 466c `#C9AA79`**、系統字型，未引入模板字體）。
 
-- **滿螢幕高**：Hero 高度為 `100dvh`（用 `dvh` 避免手機網址列造成跳動）。
+- **尺寸/位置零誤差對齊 Home Six（@1512 實測，逐項 0px）**：section 高 **958px**；內容左緣 **30**、eyebrow 上緣 **244**；eyebrow **15px / letter-spacing 1px / uppercase / 白 + 金點**；大標 **100 / 行高 110 / capitalize / letter-spacing -1px**（@T300，白+金）；副標 **18 / 24 / 字重 500 / 寬 522**（@T550）；左下圓鈕 **120×120 / left 30 / 底 82**（`rgba(92,92,92,.46)` + `1px rgba(255,255,255,.07)`，內含白字）；浮水印 **320px @ left 426 / top 725**。模板 Cal Sans → 系統粗體、金 → CIS，其餘尺寸/位置照抄。
+- **與模板的唯一差**：模板 header 透明疊在 hero 上（hero 由畫面頂 0 起）；本站為**實心金色 sticky header（72px）**，故 hero 由 72px 起——**hero 內部排版與模板 0 誤差**，整體在頁面上比模板低 72px。
 - **滿寬**：`FloatingButtons` 桌面版改為 `fixed` 浮動欄、不再佔用 75px 軌道，主內容因此滿寬。
-- **構成**：全出血深色大圖 + 左對齊金點 eyebrow + 雙色大標題（白/金交錯）+ 副標 + 左下圓形按鈕（`Discover More`）+ 底部半透明金色浮水印（`SAKURA KITCHEN`）。**文案為英文佔位**（大標 `We Shape / Inspiring Spaces`，兩行兩色；沿用 Antra Home Six 語彙），待正式內容替換。
+- **構成**：全出血深色大圖 + 左對齊金點 eyebrow + 雙色大標題（白/金交錯）+ 副標 + 左下圓形按鈕（`Discover More`）+ 底部半透明金色浮水印（`SAKURA`，`gold @0.14`，對位模板 T725）。**文案為英文佔位**（大標 `We Shape / Inspiring Spaces`，兩行兩色），待正式內容替換。
 - **左側「品牌系列」伸縮抽屜（桌面）**：左緣一個玻璃把手（`ChevronRight` + 直排「品牌系列」，用 `.writing-vertical`），點擊 `open` state 切換。抽屜面板 `w-0 ↔ w-[190px]` 伸縮淡入，列出**品牌系列 8 個中文名**（`SERIES`：巧域／潮派／童樂／君璽／臻美／大廚／鄉村／閣樂廚房；Basic+ / AI kitchen 無中文故略），hover 顯示金色左邊條 + 金字。**「不蓋過主視覺」的做法**：展開時把**內容層（標題/副標，`translateX(200px)`）、左下圓鈕（同 200px）、底部浮水印（`translateX(250px)`）**一起右推、讓出左側空間（皆 `transition 500ms`）。收合時只剩把手在左緣、不佔畫面。**手機不顯示**此抽屜（`hidden lg:flex`），故不觸發位移。
-- **品牌帶（採 Antra Home Four 版型）**：Hero 下方改為淺色背景（`#f6f6f6`）+ 一排灰階 inline SVG（`BrandLogo` 元件，icon + 文字、hover 轉金）。目前為 6 個設計風格標籤（現代風／輕奢風／北歐風／工業風／美式風／鄉村風），皆為佔位，待正式 logo/圖示替換。高度沿用 `--hero-brand-h`（64/76/88px）；容器用 `flex-wrap + minHeight`，桌面一排、手機自動換行。
+- **品牌帶（採 Antra Home Four 版型）**：Hero 下方淺色背景（`#f6f6f6`）+ 一排 `BrandLogo`（`STYLE_TAGS`）。**6 個靜態項**（`STYLE_TAGS`，非跑馬燈），每項 = 左**圖示** `public/brand-logos/icon.svg`（`img` 58×58、`opacity-60` hover→100）+ 右**「中文（粗體 15px）／英文（13px）」兩行**：現代風/Modern、輕奢風/Modern Luxury、北歐風/Scandinavian、工業風/Industrial、美式風/American、鄉村風/Country。`icon.svg` 是從 Home Four `elementor-brand` 的模板 logo `4.svg`（BUILDING CONSTRUCTION）**只抽出左側建築圖示路徑**（SVG 文字為向量路徑無法直接改字，故移除字、留 icon），`#59585D`→CIS `#3E3A39`。`public/brand-logos/1–4.svg` 為抓下來的 4 個完整模板示範 logo（備用）；換正式圖示改 `BrandTag` 的 `src` 即可。高度沿用 `--hero-brand-h`（64/76/88px）；容器用 `flex-wrap + minHeight`，桌面一排、手機自動換行。
 - **Gallery 已移除**：原本 Hero 下方的圖庫展示（大圖 + 縮圖）已拿掉，改由 `ProjectSection`（專案輪播）取代，見下方 Section 2。
 
 ## Section 2（專案輪播）— Antra Home Six 精準複刻
@@ -149,7 +152,8 @@ pnpm build
 
 - **取代**了原本 `HeroSection` 內的 Gallery（大圖 + 縮圖展示）；放在 `App.tsx` 的 Hero 之後。
 - **無標題區**：模板此 widget 只有卡片，沒有 heading/箭頭。
-- **卡片**：378×880 直式、底部黑色漸層 scrim；**左上膠囊放中文名、底部同時放英文大標 + 中文副標**（`STYLES` 資料；Basic+/AI 無中文則膠囊與底部中文都不顯示、只留英文）。中文在膠囊與底部各出現一次（依需求兩處都要有中文）。
+- **卡片**：378×880 直式、底部黑色漸層 scrim；**左上膠囊放中文名（`font-bold` 加粗）、底部放英文大標**（`STYLES` 依對照表：英文 `X Kitchen`、中文膠囊 `AI廚房/巧域廚房…`、每筆 `desc`；Basic+ 無中文膠囊）。
+- **hover 效果**：滑到卡片時卡片變寬（378→567）+ **英文標題轉金 `#C9AA79`** + **底部由下淡入浮現該風格描述**（`s.desc`，如「極致收納 在廚房」；`max-h-0 opacity-0 → group-hover:max-h-20 opacity-100`，`transition-all 500ms`）。
 - **hover 伸縮**：卡片寬度 `×1.5`（`378→567px`，固定高度只變寬），橫式廚房圖靜態裁成直切片、hover 變寬露出更多；EN 標題 hover 轉金（`#C9AA79`）。
 - **捲動 + 自動輪播**：`embla-carousel-react`（`loop:true` + `dragFree`）。**自動輪播**：`setInterval` 每 3.5s 呼叫 `emblaApi.scrollNext()`；滑鼠移入輪播（`rootNode` 的 `mouseenter`）以 `pausedRef` 暫停、移出（`mouseleave`）恢復。仍可手動拖曳;**拖曳時（`pointerDown`）以 `dragging` state 暫停 hover 變寬**，否則卡片一碰就展開會把拖曳打斷（拖不動）。無箭頭。
 - **內容 = 10 種廚房風格**（真圖）：Basic+ / AI kitchen（僅英文）、Clever 巧域廚房 / Loft Chic 潮派廚房 / Joyful 童樂廚房 / premium 君璽廚房 / Elegant 臻美廚房 / Chef 大廚廚房 / Country 鄉村廚房 / Harmony 閣樂廚房。圖片放在 `public/kitchen-styles/*.jpg`（來源 `Downloads/首頁用圖/品牌系列x10`；Clever 已縮圖）。

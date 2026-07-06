@@ -26,7 +26,7 @@ export function WhatWeDoSection() {
       <div className="max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
         <Reveal className="lg:w-[600px] lg:shrink-0">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 mb-5 text-[15px] tracking-[1px] uppercase text-[#000000]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#E3DED7] px-4 py-2 mb-5 text-[15px] tracking-[1px] uppercase text-[#000000]">
             <span
               className="inline-block w-1.5 h-1.5 rounded-full"
               style={{ background: GOLD }}
@@ -46,14 +46,14 @@ export function WhatWeDoSection() {
           </h2>
 
           {/* 打勾清單（含分隔線） */}
-          <ul className="mt-9 border-t border-gray-200">
+          <ul className="mt-9 border-t border-[#E3DED7]">
             {ITEMS.map((t, i) => (
               <Reveal
                 as="li"
                 key={i}
                 inner
                 delay={(i + 1) as 1 | 2 | 3}
-                className="flex items-center gap-3 py-4 border-b border-gray-200 text-[#000000] text-[18px] leading-[24px] font-medium"
+                className="flex items-center gap-3 py-4 border-b border-[#E3DED7] text-[#000000] text-[18px] leading-[24px] font-medium"
               >
                 <span
                   className="inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0"
@@ -66,7 +66,7 @@ export function WhatWeDoSection() {
             ))}
           </ul>
 
-          <p className="text-gray-500 mt-7 max-w-md text-[16px] leading-[24px]">
+          <p className="text-[#3E3A39] mt-7 max-w-md text-[16px] leading-[24px]">
             We specialize in transforming visions into reality. Explore our
             portfolio of innovative architectural and interior design projects
             crafted with precision.
@@ -75,10 +75,10 @@ export function WhatWeDoSection() {
           {/* CTA：依模板改為外框圓箭頭，hover 填金 + 箭頭右移 */}
           <a
             href="#"
-            className="group inline-flex items-center justify-between gap-4 mt-8 rounded-full border border-gray-300 pl-[30px] pr-[9px] py-[8px] text-[#000000] hover:border-[#C9AA79] transition-colors"
+            className="group inline-flex items-center justify-between gap-4 mt-8 rounded-full border border-[#E3DED7] pl-[30px] pr-[9px] py-[8px] text-[#000000] hover:border-[#C9AA79] transition-colors"
           >
             <span className="text-[19px]">櫻花優勢</span>
-            <span className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full border border-gray-300 text-[#000000] transition-all duration-300 group-hover:bg-[#C9AA79] group-hover:border-[#C9AA79] group-hover:text-white">
+            <span className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full border border-[#E3DED7] text-[#000000] transition-all duration-300 group-hover:bg-[#C9AA79] group-hover:border-[#C9AA79] group-hover:text-white">
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" />
             </span>
           </a>
