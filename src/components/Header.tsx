@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
 
-const GOLD = '#C4A574';
+import { GOLD } from '../theme/cis';
 
 // 對齊參考站 sakura-kitchenlife.com.tw 的 .l-header / .l-nav__item 實測值
-const HEADER_GRADIENT = 'linear-gradient(90deg, #B79258 20%, #D2B587)';
+const HEADER_GRADIENT = 'linear-gradient(90deg, #B8965F 20%, #D8C29A)';
 const HEADER_FONT = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", 微軟正黑體';
 
 type MegaCard = { label: string; image: string; href?: string };
@@ -65,7 +65,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                      <span className="absolute bottom-4 left-5 text-white text-lg font-semibold tracking-wide group-hover/card:text-[#C4A574] transition-colors">
+                      <span className="absolute bottom-4 left-5 text-white text-lg font-semibold tracking-wide group-hover/card:text-[#C9AA79] transition-colors">
                         {m.label}
                       </span>
                     </div>
@@ -75,7 +75,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
               {item.megaCatalog && (
                 <a
                   href="#"
-                  className="mt-6 inline-flex items-center gap-2 text-sm text-[#1c1c1d] hover:text-[#C4A574] transition-colors"
+                  className="mt-6 inline-flex items-center gap-2 text-sm text-[#000000] hover:text-[#C9AA79] transition-colors"
                 >
                   {item.megaCatalog}
                   <span aria-hidden>→</span>
@@ -112,7 +112,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
             <li key={i}>
               <a
                 href="#"
-                className="block px-5 py-2.5 text-sm text-gray-700 hover:text-[#C4A574] hover:bg-gray-50 transition-colors whitespace-nowrap"
+                className="block px-5 py-2.5 text-sm text-gray-700 hover:text-[#C9AA79] hover:bg-gray-50 transition-colors whitespace-nowrap"
               >
                 {c}
               </a>
@@ -196,7 +196,7 @@ export function Header() {
                   autoFocus
                   type="text"
                   placeholder="搜尋商品 / 案例 / 門市…"
-                  className="w-full h-12 rounded-full bg-white pl-12 pr-5 text-[#1c1c1d] placeholder:text-gray-400 focus:outline-none"
+                  className="w-full h-12 rounded-full bg-white pl-12 pr-5 text-[#000000] placeholder:text-gray-400 focus:outline-none"
                 />
               </div>
             </div>
@@ -221,7 +221,7 @@ export function Header() {
                   <>
                     <button
                       onClick={() => setExpanded(expanded === i ? null : i)}
-                      className="w-full flex items-center justify-between px-6 py-4 text-left text-[#1c1c1d]"
+                      className="w-full flex items-center justify-between px-6 py-4 text-left text-[#000000]"
                     >
                       <span>{item.label}</span>
                       <ChevronDown
@@ -236,7 +236,7 @@ export function Header() {
                             <a
                               href="#"
                               onClick={() => setMobileOpen(false)}
-                              className="block pl-10 pr-6 py-2.5 text-sm text-gray-600 hover:text-[#C4A574] transition-colors"
+                              className="block pl-10 pr-6 py-2.5 text-sm text-gray-600 hover:text-[#C9AA79] transition-colors"
                             >
                               {c}
                             </a>
@@ -250,7 +250,7 @@ export function Header() {
                     href={item.href}
                     {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     onClick={() => setMobileOpen(false)}
-                    className="block px-6 py-4 text-[#1c1c1d]"
+                    className="block px-6 py-4 text-[#000000]"
                   >
                     {item.label}
                   </a>

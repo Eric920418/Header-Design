@@ -2,8 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { MapPin, LocateFixed, ChevronDown } from 'lucide-react';
 import { GoogleStoreMap } from './GoogleStoreMap';
 
-// 品牌重點金（沿用原站色）
-const GOLD = '#C4A574';
+// 品牌金 = CIS 466c #C9AA79（單一來源）
+import { GOLD } from '../theme/cis';
 
 type Store = {
   id: number;
@@ -60,12 +60,12 @@ export function StoreLocationSection() {
         <div className="relative mb-[60px]">
           <div className="flex flex-col lg:flex-row items-start lg:pt-[46px]">
             <div className="lg:w-[424px] lg:shrink-0 mb-5 lg:mb-0">
-              <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#1c1c1d]">
+              <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
                 <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
                 get in touch
               </span>
             </div>
-            <h2 className="lg:w-[661px] text-[60px] font-bold leading-[64px] text-[#1c1c1d]">
+            <h2 className="lg:w-[661px] text-[60px] font-bold leading-[64px] text-[#000000]">
               Have A Project In <span style={{ color: GOLD }}>Store</span>
               <br />
               <span style={{ color: GOLD }}>Locator</span> It Happen
@@ -85,7 +85,7 @@ export function StoreLocationSection() {
           {/* 右：我的位置 + 區域/城市下拉 + 門市列表 */}
           <div className="flex-1">
             {/* 我的位置標示 */}
-            <div className="flex items-center gap-2 mb-4 text-[#1c1c1d]">
+            <div className="flex items-center gap-2 mb-4 text-[#000000]">
               <span className="text-[15px]">我的位置</span>
               <LocateFixed className="w-[22px] h-[22px]" style={{ color: GOLD }} />
             </div>
@@ -99,7 +99,7 @@ export function StoreLocationSection() {
                     setRegion(e.target.value);
                     setCity(''); // 換區域時清空城市
                   }}
-                  className="w-full h-[52px] appearance-none rounded-full bg-white border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] text-[#1c1c1d] focus:outline-none focus:border-[#C4A574] transition-colors cursor-pointer"
+                  className="w-full h-[52px] appearance-none rounded-full bg-white border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] text-[#000000] focus:outline-none focus:border-[#C9AA79] transition-colors cursor-pointer"
                 >
                   <option value="">選擇區域</option>
                   {Object.keys(REGIONS).map((r) => (
@@ -116,7 +116,7 @@ export function StoreLocationSection() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   disabled={!region}
-                  className="w-full h-[52px] appearance-none rounded-full bg-white border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] text-[#1c1c1d] focus:outline-none focus:border-[#C4A574] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:text-gray-400 disabled:bg-gray-50"
+                  className="w-full h-[52px] appearance-none rounded-full bg-white border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] text-[#000000] focus:outline-none focus:border-[#C9AA79] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:text-gray-400 disabled:bg-gray-50"
                 >
                   <option value="">選擇城市</option>
                   {(REGIONS[region] ?? []).map((c) => (
@@ -144,8 +144,8 @@ export function StoreLocationSection() {
                       onClick={() => setSelected(store.id)}
                       className={`w-full text-left rounded-2xl border transition-colors ${
                         active
-                          ? 'bg-[#C4A574] border-[#C4A574] text-white'
-                          : 'bg-white border-gray-200 hover:border-[#C4A574]/50 text-[#1c1c1d]'
+                          ? 'bg-[#C9AA79] border-[#C9AA79] text-white'
+                          : 'bg-white border-gray-200 hover:border-[#C9AA79]/50 text-[#000000]'
                       }`}
                     >
                       <div className="px-5 lg:px-6 py-4">
@@ -172,7 +172,7 @@ export function StoreLocationSection() {
                           </span>
                           <span
                             className={`shrink-0 tracking-wider ${
-                              active ? 'text-white' : 'text-[#C4A574]'
+                              active ? 'text-white' : 'text-[#C9AA79]'
                             }`}
                           >
                             {store.phone}

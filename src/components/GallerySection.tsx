@@ -3,8 +3,8 @@ import { ArrowUpRight } from 'lucide-react';
 import { Reveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
 
-// 品牌重點金（沿用原站色）
-const GOLD = '#C4A574';
+// 品牌金 = CIS 466c #C9AA79（單一來源）
+import { GOLD } from '../theme/cis';
 
 // 門市案例（背景=主圖(#1)，右邊 2 張卡=(#2,#3)，聯動輪替）
 // 圖片來源：影像/門市案例 → public/store-cases/*.jpg
@@ -70,7 +70,7 @@ export function GallerySection() {
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(90deg, rgba(12,12,14,0.76) 0%, rgba(12,12,14,0.48) 42%, rgba(12,12,14,0.26) 100%)',
+            'linear-gradient(90deg, rgba(0,0,0,0.76) 0%, rgba(0,0,0,0.48) 42%, rgba(0,0,0,0.26) 100%)',
         }}
       />
 
@@ -96,7 +96,7 @@ export function GallerySection() {
             {/* CTA 按鈕（深底版：白字白框 + 金色圓箭頭） */}
             <a
               href="#"
-              className="group inline-flex items-center gap-4 mt-8 rounded-full border border-white/30 pl-[30px] pr-[9px] py-[8px] text-white hover:border-[#C4A574] transition-colors"
+              className="group inline-flex items-center gap-4 mt-8 rounded-full border border-white/30 pl-[30px] pr-[9px] py-[8px] text-white hover:border-[#C9AA79] transition-colors"
             >
               <span className="text-[19px]">查看所有案例</span>
               <span

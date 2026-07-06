@@ -13,6 +13,14 @@
 }
 
 :root {
+  /* ── SAKURA KITCHEN CIS 品牌色（單一來源；JS 端見 src/theme/cis.ts）── */
+  --gold: #c9aa79;          /* PANTONE 466c / Varnished 871c */
+  --gold-strong: #b8965f;   /* 金-壓深（hover / 漸層深端） */
+  --gold-soft: #d8c29a;     /* 金-提亮（漸層淺端） */
+  --ink: #000000;           /* PANTONE Black C */
+  --ink-80: #3e3a39;        /* PANTONE Black C 80% */
+  --brand-red: #f5333f;     /* PANTONE Red 032c */
+
   --font-size: 16px;
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
@@ -28,7 +36,7 @@
   --muted-foreground: #717182;
   --accent: #e9ebef;
   --accent-foreground: #030213;
-  --destructive: #d4183d;
+  --destructive: #f5333f; /* CIS Red 032c（原 shadcn #d4183d） */
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.1);
   --input: transparent;
@@ -91,6 +99,13 @@
 }
 
 @theme inline {
+  /* CIS 品牌色 → Tailwind：text-gold / bg-gold / border-gold、bg-ink / text-ink-80、text-brand-red… */
+  --color-gold: var(--gold);
+  --color-gold-strong: var(--gold-strong);
+  --color-gold-soft: var(--gold-soft);
+  --color-ink: var(--ink);
+  --color-ink-80: var(--ink-80);
+  --color-brand-red: var(--brand-red);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

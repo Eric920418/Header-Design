@@ -3,8 +3,7 @@ import { Check, ArrowUpRight } from 'lucide-react';
 import { MarqueeBand } from './MarqueeBand';
 import { Reveal } from '../motion/Reveal';
 
-// 品牌重點金（沿用原站色；模板為 #CAA05C，依全域「色系不改」規則用站上金）
-const GOLD = '#C4A574';
+import { GOLD } from '../theme/cis'; // 品牌金 = CIS 466c #C9AA79（單一來源）
 
 // SAKURA 廚電（深色卡）的三個產品線
 const SAKURA_ITEMS = ['廚房商品', '淨水器', '熱水器'];
@@ -41,12 +40,12 @@ export function PricingSection() {
 
           <div className="flex items-start pt-[46px]">
             <div className="w-[424px] shrink-0">
-              <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#1c1c1d]">
+              <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
                 <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
                 our pricing plans
               </span>
             </div>
-            <h2 className="w-[661px] text-[60px] font-bold leading-[64px] capitalize text-[#1c1c1d]">
+            <h2 className="w-[661px] text-[60px] font-bold leading-[64px] capitalize text-[#000000]">
               Design your <span style={{ color: GOLD }}>space,</span>
               <br />
               <span style={{ color: GOLD }}>know</span> the cost
@@ -67,7 +66,7 @@ export function PricingSection() {
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(180deg, rgba(14,16,18,0.8) 0%, rgba(14,16,18,0.35) 45%, rgba(14,16,18,0.5) 100%)',
+                  'linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.5) 100%)',
               }}
             />
             <div className="relative z-10 p-8 lg:p-10 flex flex-col h-full">
@@ -102,8 +101,8 @@ export function PricingSection() {
               className="rounded-3xl bg-white overflow-hidden flex flex-col min-h-[771px]"
             >
               <div className="px-8 lg:px-10 pt-10">
-                <h3 className="text-[45px] leading-[50px] font-bold text-[#1c1c1d]">{b.name}</h3>
-                <p className="mt-4 text-[#59585d] text-[20px] leading-[30px]">{b.desc}</p>
+                <h3 className="text-[45px] leading-[50px] font-bold text-[#000000]">{b.name}</h3>
+                <p className="mt-4 text-[#3E3A39] text-[20px] leading-[30px]">{b.desc}</p>
               </div>
               {/* 產品圖鋪滿卡片下半 + CTA 疊左下（沿用金填滿白字 + 箭頭旋轉 hover） */}
               <div className="relative mt-8 flex-1 min-h-[260px]">
@@ -114,7 +113,7 @@ export function PricingSection() {
                 />
                 <a
                   href="#"
-                  className="group absolute left-8 bottom-8 inline-flex items-center justify-between gap-4 rounded-full bg-white pl-[30px] pr-[7px] py-[7px] text-[#1c1c1d] shadow-md transition-colors duration-500 hover:bg-[#C4A574] hover:text-white"
+                  className="group absolute left-8 bottom-8 inline-flex items-center justify-between gap-4 rounded-full bg-white pl-[30px] pr-[7px] py-[7px] text-[#000000] shadow-md transition-colors duration-500 hover:bg-[#C9AA79] hover:text-white"
                 >
                   <span className="text-[19px] font-semibold">了解更多</span>
                   <span

@@ -8,20 +8,20 @@ export function FloatingButtons() {
       <div className="hidden flex-col fixed right-0 top-1/2 -translate-y-1/2 z-50">
         <a
           href="#"
-          className="w-[75px] h-[80px] flex flex-col items-center justify-center gap-1 bg-[#c9a961] text-white hover:bg-[#b89551] transition-colors mb-8"
+          className="w-[75px] h-[80px] flex flex-col items-center justify-center gap-1 bg-[#C9AA79] text-white hover:bg-[#B8965F] transition-colors mb-8"
         >
           <span className="text-[12px] font-medium whitespace-nowrap tracking-[2px]">門市案例</span>
         </a>
         <a
           href="#"
-          className="w-[75px] h-[70px] flex flex-col items-center justify-center gap-1 bg-[#5a5a5a] text-white hover:bg-[#4a4a4a] transition-colors"
+          className="w-[75px] h-[70px] flex flex-col items-center justify-center gap-1 bg-[#3E3A39] text-white hover:bg-[#2E2B2A] transition-colors"
         >
           <Ruler className="w-5 h-5" />
           <span className="text-[12px] font-medium whitespace-nowrap tracking-[2px]">到府丈量</span>
         </a>
         <a
           href="#"
-          className="w-[75px] h-[70px] flex flex-col items-center justify-center gap-1 bg-[#5a5a5a] text-white hover:bg-[#4a4a4a] transition-colors"
+          className="w-[75px] h-[70px] flex flex-col items-center justify-center gap-1 bg-[#3E3A39] text-white hover:bg-[#2E2B2A] transition-colors"
         >
           <MessageCircle className="w-5 h-5" />
           <span className="text-[12px] font-medium whitespace-nowrap tracking-[2px]">線上諮詢</span>
@@ -32,21 +32,21 @@ export function FloatingButtons() {
       <div className="flex lg:hidden fixed bottom-0 left-0 right-0 z-[9999] bg-white border-t border-gray-200">
         <a
           href="#"
-          className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#c9a961] text-white text-sm font-medium"
+          className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#C9AA79] text-white text-sm font-medium"
         >
           <MapPin className="w-4 h-4" />
           <span>門市案例</span>
         </a>
         <a
           href="#"
-          className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#5a5a5a] text-white text-sm font-medium"
+          className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#3E3A39] text-white text-sm font-medium"
         >
           <Ruler className="w-4 h-4" />
           <span>到府丈量</span>
         </a>
         <a
           href="#"
-          className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#5a5a5a] text-white text-sm font-medium"
+          className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#3E3A39] text-white text-sm font-medium"
         >
           <MessageCircle className="w-4 h-4" />
           <span>線上諮詢</span>

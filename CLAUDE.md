@@ -47,7 +47,7 @@ Header → HeroSection → BrandsSection → DesignCaseSection → AboutSection 
 ## 樣式慣例
 
 - **Tailwind v4**，透過 `@tailwindcss/vite` plugin，**無 `tailwind.config.js`、無 PostCSS**。設定全在 `globals.css` 裡用 `@theme inline` 與 `@custom-variant` 完成。
-- 顏色等 design token 是 `globals.css` `:root` 的 CSS 變數，再經 `@theme inline` 暴露給 Tailwind。品牌金色 `#C4A574`。
+- 顏色等 design token 是 `globals.css` `:root` 的 CSS 變數，再經 `@theme inline` 暴露給 Tailwind。品牌色依 **SAKURA KITCHEN CIS**：金 466c `#C9AA79`、黑 Black C `#000`、深灰 Black80% `#3E3A39`、紅 Red032c `#F5333F`。單一來源：`src/theme/cis.ts`（JS）+ `globals.css` 的 CIS tokens（`--gold`…→ Tailwind `text-gold`/`bg-ink-80`…）。
 - 大量 **inline `style={{}}` 寫死像素值 / 漸層**（Figma 匯出的精確值），這是刻意的還原手段，**不要當技術債去「重構成 class」**——會破壞與設計稿的對位。
 - class 合併用 `cn()`（`src/components/ui/utils.ts`，clsx + tailwind-merge）。
 - 垂直中文排版用 `.writing-vertical` utility（定義在 `globals.css`）。

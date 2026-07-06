@@ -21,14 +21,14 @@ export function Footer() {
         <div aria-hidden className="pointer-events-none select-none flex justify-center pt-20">
           <span
             className="font-bold leading-none whitespace-nowrap text-[330px]"
-            style={{ color: '#C4A574', opacity: 0.18 }}
+            style={{ color: '#C9AA79', opacity: 0.18 }}
           >
             SAKURA
           </span>
         </div>
 
-        {/* 版權列：模板暗色 #272625，滿寬、負 margin 疊在浮水印下緣之上 */}
-        <div className="relative -mt-[90px] bg-[#272625] text-white">
+        {/* 版權列：模板暗色 #3E3A39，滿寬、負 margin 疊在浮水印下緣之上 */}
+        <div className="relative -mt-[90px] bg-[#3E3A39] text-white">
           <div className="relative max-w-[1410px] mx-auto px-[51px] py-7 flex items-center justify-between gap-6">
             {/* 左：文字連結（字級 14） */}
             <nav className="flex items-center gap-6 shrink-0">
@@ -36,7 +36,7 @@ export function Footer() {
                 <a
                   key={l.label}
                   href={l.href}
-                  className="text-[14px] text-white/85 hover:text-[#C4A574] transition-colors"
+                  className="text-[14px] text-white/85 hover:text-[#C9AA79] transition-colors"
                 >
                   {l.label}
                 </a>

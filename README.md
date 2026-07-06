@@ -49,6 +49,25 @@ pnpm build
 - **出場動畫（IntersectionObserver + CSS）** — `src/motion/Reveal.tsx` + `globals.css` 的 `.reveal`。複刻模板 `opalMoveUp`（淡入 + 上升）：section 級 `translateY(56px)`、內部 stagger `.reveal-inner` `32px` + `.reveal-delay-1~3`。進場一次不重播。`<Reveal>` 包裹元件或 `useReveal(ref)` 掛在 `<section>` 根。**鐵則：勿套在 Embla / `animate-gallery-card` / hover-scale 佔用 transform 的元素上**（Pricing 三卡、WhatWeDo 三 li 做 stagger；Gallery 改包內容塊、Project 只包 section 根）。
 - **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。**不用 `pin`**：pin 的 `position:fixed`+pin-spacer 在 `transform:scale()` 祖先下量測錯誤，改用 `yPercent` scrub（`scrub:0.5`）位移達到同觀感。目標：ProjectSection 每張 `.project-parallax-img`（scale 1.08 留出血）、GallerySection 背景 `.gallery-bg`（scale 1.12，取代模板 gallery pin widget）、WhatWeDo 裝飾 `.wwd-blueprint`。只寫內層 transform，永不碰 `canvasRef`。
 
+## 色彩規範（SAKURA KITCHEN CIS）— 全站已對齊
+
+全站品牌色**嚴格對齊官方 CIS**（先前散落的 7 種不一致暖金、`#1c1c1d`/`#272625` 等已收斂）。**單一來源**：`src/theme/cis.ts`（供 inline `style={{}}`）+ `globals.css` 的 CIS tokens（`--gold`… 經 `@theme inline` 暴露為 Tailwind `text-gold`/`bg-ink-80`/`text-brand-red`…）。
+
+| 角色 | 名稱 | HEX |
+|---|---|---|
+| 主-金 | PANTONE 466c / Varnished 871c | `#C9AA79` |
+| 金-漸層深 / 淺（衍生） | — | `#B8965F` / `#D8C29A`（Header 金屬漸層、hover） |
+| 主-黑 | PANTONE Black C | `#000000`（標題 / 內文） |
+| 輔-深灰 | PANTONE Black C 80% | `#3E3A39`（footer、深色面、次要文字） |
+| 輔-紅 | PANTONE Red 032c | `#F5333F`（強調 / 錯誤，覆蓋原 shadcn `--destructive`） |
+| 主-白 | White | `#FFFFFF` |
+
+- **對齊範圍**：所有金 → `#C9AA79`；深色 → `#000` / `#3E3A39`；紅 → `#F5333F`。Header 列漸層由舊 `#B79258 / #D2B587` 改為 CIS 衍生 `#B8965F → #D8C29A`；深色圖面 scrim 統一為 `rgba(0,0,0,α)`（Black C）。
+- **支援性中性色**（非 CIS、功能性 UI 保留）：section 底 `#f6f6f6`、線 `#e3e3e8 / #dcdcdc`、Tailwind `gray-*` 與 `white/xx`·`black/xx` 透明階（黑白本即 CIS、灰視為其淡階，未逐一改）。
+- **地圖（`GoogleStoreMap` 的 `LIGHT_STYLE`）**：各階中性灰改為**偏暖灰**（R>G>B，如陸地 `#f4f0ea`、道路 `#fdfbf8`、水域 `#e5dfd6`）對齊 CIS 調性；標記水滴改 `#3E3A39`、錯誤字改 `#F5333F`。
+- **未動**：未渲染的 shadcn `ui/` 色票與 oklch chart tokens。
+- 先前文中「色系沿用原站／不改」之敘述，已由本次 CIS 對齊取代。
+
 ## 間距與文字排版 — 依 Antra 模板實測、零誤差
 
 所有 section 的間距/尺寸/**字級**已對齊 **Antra demo 實測值**（@1512 視窗 computed style，localhost 逐項驗收 0px 誤差）。此規範**取代**先前「section py 上限 20」的暫行規則。
@@ -115,7 +134,7 @@ pnpm build
 
 ## 主視覺（Hero）— Antra Home Six 版型
 
-`HeroSection.tsx` 的 Hero 採用 Antra 模板 Home Six 的版型（僅借版型/構圖，**色系與字型沿用原站**：金色 `#C4A574`、系統字型，未引入模板字體）。
+`HeroSection.tsx` 的 Hero 採用 Antra 模板 Home Six 的版型（僅借版型/構圖，字型沿用原站；金色已對齊 **CIS 466c `#C9AA79`**、系統字型，未引入模板字體）。
 
 - **滿螢幕高**：Hero 高度為 `100dvh`（用 `dvh` 避免手機網址列造成跳動）。
 - **滿寬**：`FloatingButtons` 桌面版改為 `fixed` 浮動欄、不再佔用 75px 軌道，主內容因此滿寬。
@@ -131,25 +150,25 @@ pnpm build
 - **取代**了原本 `HeroSection` 內的 Gallery（大圖 + 縮圖展示）；放在 `App.tsx` 的 Hero 之後。
 - **無標題區**：模板此 widget 只有卡片，沒有 heading/箭頭。
 - **卡片**：378×880 直式、底部黑色漸層 scrim；**左上膠囊放中文名、底部同時放英文大標 + 中文副標**（`STYLES` 資料；Basic+/AI 無中文則膠囊與底部中文都不顯示、只留英文）。中文在膠囊與底部各出現一次（依需求兩處都要有中文）。
-- **hover 伸縮**：卡片寬度 `×1.5`（`378→567px`，固定高度只變寬），橫式廚房圖靜態裁成直切片、hover 變寬露出更多；EN 標題 hover 轉金（`#C4A574`）。
+- **hover 伸縮**：卡片寬度 `×1.5`（`378→567px`，固定高度只變寬），橫式廚房圖靜態裁成直切片、hover 變寬露出更多；EN 標題 hover 轉金（`#C9AA79`）。
 - **捲動 + 自動輪播**：`embla-carousel-react`（`loop:true` + `dragFree`）。**自動輪播**：`setInterval` 每 3.5s 呼叫 `emblaApi.scrollNext()`；滑鼠移入輪播（`rootNode` 的 `mouseenter`）以 `pausedRef` 暫停、移出（`mouseleave`）恢復。仍可手動拖曳;**拖曳時（`pointerDown`）以 `dragging` state 暫停 hover 變寬**，否則卡片一碰就展開會把拖曳打斷（拖不動）。無箭頭。
 - **內容 = 10 種廚房風格**（真圖）：Basic+ / AI kitchen（僅英文）、Clever 巧域廚房 / Loft Chic 潮派廚房 / Joyful 童樂廚房 / premium 君璽廚房 / Elegant 臻美廚房 / Chef 大廚廚房 / Country 鄉村廚房 / Harmony 閣樂廚房。圖片放在 `public/kitchen-styles/*.jpg`（來源 `Downloads/首頁用圖/品牌系列x10`；Clever 已縮圖）。
 
 ## 價目表（Pricing）— Antra Pricing 忠實複刻
 
-`PricingSection.tsx`（原 `ProductsSection` 已還原；此區為 **Antra 模板 Pricing 區 100% 複刻**，只把大標改成 `Design your space, know the cost`，並保留底部跑馬燈）。金色沿用 `#C4A574`（模板為 `#CAA05C`，依全域「色系不改」規則）。
+`PricingSection.tsx`（原 `ProductsSection` 已還原；此區為 **Antra 模板 Pricing 區 100% 複刻**，只把大標改成 `Design your space, know the cost`，並保留底部跑馬燈）。金色已對齊 **CIS 466c `#C9AA79`**。
 
 - **標題列**：eyebrow `● our pricing plans`（左，`w-1/3`）+ 雙色大標 `Design your ⟨space, know⟩ the cost`（60/64 capitalize，右）+ 2 個裝飾小箭頭 SVG（絕對定位、桌面顯示）。
 - **三欄（`grid-cols-3 gap-[30px]`，各 450、`min-h-[673px]`）**：
   - **欄1 深色標語卡**：暗色室內圖 + 漸層遮罩 + `Your dreams, ⟨our mission, let's⟩ make it happen.`（36/44）。
   - **欄2 Basic Plan / 欄3 Blueprint Plan**（照模板原文）：標題 45/50 → 副標 20/30(`#59585d`) → **價格 `$` 小 + 數字 100px 金 + `/ Per Month` 20/24** → **金勾清單**（`Check` 24px 金、每項 20/36）→ `Get Started Now` 膠囊按鈕（高 ~61、`pl-30 pr-7 py-7` + 金圓 `ArrowUpRight`）；**卡底建築線稿浮水印** `public/pricing/pricing-banner-2.png`（absolute，來源 demo 授權素材）。
 - **跑馬燈已移出本區**：抽成獨立元件 `MarqueeBand.tsx`，放在 `App.tsx` **頁面最底部（Footer 之上）**——「kitchen product」無限捲動（`@keyframes marquee` + `background-clip:text` 漸層，定義於 `globals.css`）。
-- **按鈕 hover（依模板實測）**：整顆膠囊填金 `#C4A574` + 文字轉白 + 邊框金（0.5s），同時金圓箭頭 45° 旋轉。
+- **按鈕 hover（依模板實測）**：整顆膠囊填金 `#C9AA79` + 文字轉白 + 邊框金（0.5s），同時金圓箭頭 45° 旋轉。
 - 內容為模板佔位英文（$99/$169…）依「100% 複製」照抄，連結 `#`，待正式文案；模板背景裝飾圖 `pricing-background-1.jpg`（很淡、demo 上該 URL 失效）暫略。放 `App.tsx` 專案輪播之後。
 
 ## 門市案例（Gallery）— Antra Home Three 版型
 
-`GallerySection.tsx`：複刻 Home Three 的 `antra-image-carousel`（字型沿用原站，金色 `#C4A574`），內容改為 **SAKURA 門市案例**。
+`GallerySection.tsx`：複刻 Home Three 的 `antra-image-carousel`（字型沿用原站，金色 `#C9AA79`），內容改為 **SAKURA 門市案例**。
 
 - **聯動輪播（疊層構圖）**：滿版案例照當背景 = 目前主圖(#1)，右邊固定**只 2 張加大卡片** = 下兩張(#2、#3)。前進時背景與兩卡一起輪替（背景交叉淡入、卡片 `animate-gallery-card` 滑入）。以 `useState(active)` 驅動，非 embla。
 - **左：標題區**（~440px）：金點 eyebrow（`門市案例`）+ 巨大白色雙行大標（`Kitchen Design`）+ **隨主圖聯動的案例說明文字**（`CASES[active].caption`）+ **CTA 按鈕**（`查看所有案例` + 金色 `ArrowUpRight` 圓圈，深底版：白字白框、hover 邊框轉金、箭頭旋轉）+ 左右箭頭。
@@ -159,17 +178,17 @@ pnpm build
 
 ## What We Do — Antra Home Six 版型
 
-`WhatWeDoSection.tsx`：複刻 Home Six 的「What we do」兩欄區（淺色白底、字型沿用原站、金色 `#C4A574`）。
+`WhatWeDoSection.tsx`：複刻 Home Six 的「What we do」兩欄區（淺色白底、字型沿用原站、金色 `#C9AA79`）。
 
 - **左欄**：膠囊 eyebrow（`what we do`）+ 雙色大標 + 金色打勾清單（3 項、含上下分隔線）+ 描述 + 「櫻花優勢」膠囊按鈕。
-- **CTA 依模板（「首頁 Section 說明.pptx」slide 1 品牌承諾）**：箭頭圓改為**外框圓 + 內箭頭**，hover 時填金 `#C4A574` + 邊框轉金 + 字轉白 + 箭頭右移（`ArrowRight`，`transition-all`）。
+- **CTA 依模板（「首頁 Section 說明.pptx」slide 1 品牌承諾）**：箭頭圓改為**外框圓 + 內箭頭**，hover 時填金 `#C9AA79` + 邊框轉金 + 字轉白 + 箭頭右移（`ArrowRight`，`transition-all`）。
 - **右欄影片區**：**16:9 影片區塊**（`aspect-video`，圓角 24px + 陰影 + 黑底）：縮圖 poster（`VIDEO_POSTER`）鋪滿 + 置中主色金圓播放鈕（`Play`），播放鈕加**脈動光圈**（`animate-ping`）與 hover 放大；影片卡 hover 依比例微放大（`hover:scale-[1.02]`）。
 - **壓底圖**：影片區下方疊一張**淡建築藍圖**（`BLUEPRINT`，`opacity-[0.12] grayscale`、絕對定位延伸至影片下方、`pointer-events-none`，仿 Home One）——**佔位圖，待換正式線稿**。
 - 影片來源未定：poster 為佔位、播放鈕 `onClick` 尚未接（待提供 YouTube 連結或影片檔即可接 lightbox/iframe）。文字為佔位。放在 `App.tsx` 圖庫區之後。
 
 ## 門市查詢（Store Locations）— Antra Contact Us 風格 + 可用地圖搜尋
 
-`StoreLocationSection.tsx`：套 Antra「Contact Us」視覺（淺灰底 `#f6f6f6`、膠囊 eyebrow、雙色大標、白色圓角卡片、金色 `#C4A574`），並把原本的空佔位地圖與無效搜尋**做成真的能用**：
+`StoreLocationSection.tsx`：套 Antra「Contact Us」視覺（淺灰底 `#f6f6f6`、膠囊 eyebrow、雙色大標、白色圓角卡片、金色 `#C9AA79`），並把原本的空佔位地圖與無效搜尋**做成真的能用**：
 
 - **標題版型（依「首頁 Section 說明.pptx」slide 2 門市地圖）**：**分欄標題**——eyebrow `get in touch`（左 424px 欄）+ 大標推到右邊 `Have A Project In ⟨Store Locator⟩ It Happen`（`Store Locator` 金色）。**不加**十字裝飾線（與 `PricingSection` 不同），也非舊版靠左堆疊。
 - **左欄（寬，~62%）**：**Google Maps JavaScript API 自訂地圖**（`GoogleStoreMap.tsx`），套**極簡淺灰樣式**（`LIGHT_STYLE` style JSON，仿官網 store/location 的 Positron 淺灰風）+ **深色水滴「S」標記**（inline SVG）；選取/篩選門市時 `google.maps.Geocoder` 依地址定位、`panTo` 平移（結果 cache）。
@@ -197,7 +216,7 @@ pnpm build
 
 `Footer.tsx`：依 mockup 改為兩段式，取 Antra 頁尾精神（巨型品牌浮水印 + 暗色版權列）。
 
-- **上半（灰底 `#f6f6f6`，同上一區 StoreLocation，無縫接）**：巨型「**SAKURA**」文字浮水印，`text-[330px] font-bold leading-none`、品牌金 `#C4A574 @ opacity 0.18`（對映模板浮水印低透明；金色屬既有色系）、`pointer-events-none select-none`；外層 `overflow-hidden` 裁邊。
+- **上半（灰底 `#f6f6f6`，同上一區 StoreLocation，無縫接）**：巨型「**SAKURA**」文字浮水印，`text-[330px] font-bold leading-none`、品牌金 `#C9AA79 @ opacity 0.18`（對映模板浮水印低透明；金色屬既有色系）、`pointer-events-none select-none`；外層 `overflow-hidden` 裁邊。
 - **下半（版權列）**：**模板暗色 `#272625`**（Antra 頁尾覆蓋層基色 `rgb(39,38,37)`）滿寬列，用 `-mt-[90px]` 疊在浮水印下緣之上（浮水印下緣被暗列蓋住，仿模板）。版心 `max-w-[1410px] px-[51px] py-7`、`flex justify-between`：
   - 左：**網站地圖**（`#`）、**隱私權政策**（`/privacy.html`），**字級 14**、hover 轉金。
   - 中：`Copyright © Taiwan Sakura Corporation. All rights reserved`（`absolute` 置中，不受左右欄寬影響）。

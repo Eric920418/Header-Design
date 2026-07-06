@@ -4,8 +4,8 @@ import { ChevronRight } from 'lucide-react';
 const KITCHEN_BG =
   'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=1920&h=1080&q=80';
 
-// 品牌重點金（沿用原站色）
-const GOLD = '#C4A574';
+// 品牌金 = CIS 466c #C9AA79（單一來源）
+import { GOLD } from '../theme/cis';
 
 // 品牌系列中文名（品牌系列 10 款中有中文的 8 款；Basic+ / AI kitchen 無中文故略）
 const SERIES = ['巧域廚房', '潮派廚房', '童樂廚房', '君璽廚房', '臻美廚房', '大廚廚房', '鄉村廚房', '閣樂廚房'];
@@ -17,7 +17,7 @@ function BrandLogo({ name }: { name: string }) {
     <a
       href="#"
       title={name}
-      className="shrink-0 text-gray-400 hover:text-[#C4A574] transition-colors"
+      className="shrink-0 text-gray-400 hover:text-[#C9AA79] transition-colors"
     >
       <svg
         viewBox="0 0 150 40"
@@ -73,7 +73,7 @@ export function HeroSection() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(90deg, rgba(14,16,18,0.82) 0%, rgba(14,16,18,0.55) 50%, rgba(14,16,18,0.5) 100%)',
+              'linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.5) 100%)',
           }}
         />
 
@@ -82,7 +82,7 @@ export function HeroSection() {
           <span
             className="block whitespace-nowrap font-bold leading-none transition-transform duration-500 ease-out"
             style={{
-              color: 'rgba(196,165,116,0.14)',
+              color: 'rgba(201,170,121,0.14)',
               fontSize: 'clamp(72px, 17vw, 240px)',
               transform: open ? 'translateX(250px) translateY(24%)' : 'translateX(0) translateY(24%)',
             }}
@@ -129,13 +129,13 @@ export function HeroSection() {
               open ? 'w-[190px] opacity-100' : 'w-0 opacity-0'
             }`}
           >
-            <div className="w-[190px] bg-[rgba(18,20,24,0.55)] backdrop-blur-md border-y border-white/10 py-3">
+            <div className="w-[190px] bg-[rgba(0,0,0,0.55)] backdrop-blur-md border-y border-white/10 py-3">
               <ul>
                 {SERIES.map((name, i) => (
                   <li key={i}>
                     <a
                       href="#"
-                      className="block pl-6 pr-4 py-2 text-sm text-white/85 border-l-2 border-transparent hover:border-[#C4A574] hover:text-[#C4A574] hover:bg-white/5 transition-colors whitespace-nowrap"
+                      className="block pl-6 pr-4 py-2 text-sm text-white/85 border-l-2 border-transparent hover:border-[#C9AA79] hover:text-[#C9AA79] hover:bg-white/5 transition-colors whitespace-nowrap"
                     >
                       {name}
                     </a>
@@ -149,7 +149,7 @@ export function HeroSection() {
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? '收合品牌系列選單' : '展開品牌系列選單'}
-            className="self-center flex flex-col items-center justify-center gap-2 w-10 h-36 bg-[rgba(18,20,24,0.55)] backdrop-blur-md border border-white/10 rounded-r-2xl text-white/85 hover:text-[#C4A574] transition-colors"
+            className="self-center flex flex-col items-center justify-center gap-2 w-10 h-36 bg-[rgba(0,0,0,0.55)] backdrop-blur-md border border-white/10 rounded-r-2xl text-white/85 hover:text-[#C9AA79] transition-colors"
           >
             <ChevronRight className={`w-5 h-5 transition-transform ${open ? 'rotate-180' : ''}`} />
             <span className="writing-vertical text-[11px] tracking-[0.3em]">品牌系列</span>
@@ -162,7 +162,7 @@ export function HeroSection() {
           style={{
             width: '120px',
             height: '120px',
-            background: 'rgba(18,20,24,0.55)',
+            background: 'rgba(0,0,0,0.55)',
             backdropFilter: 'blur(4px)',
             border: '1px solid rgba(255,255,255,0.18)',
             color: 'white',
