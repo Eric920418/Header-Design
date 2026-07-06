@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from './components/Header';
+import { StickyHeader, HEADER_H } from './components/StickyHeader';
 import { HeroSection } from './components/HeroSection';
 import { ProjectSection } from './components/ProjectSection';
 import { PricingSection } from './components/PricingSection';
@@ -16,12 +16,14 @@ export default function App() {
   return (
     // 平滑捲動阻尼（Lenis）啟動點，掛在 ScaleToFit 外層
     <ScrollMotionProvider>
+    {/* 固定頁首：抽到 ScaleToFit 畫布外自成 fixed 層，才能真正釘住視窗頂 */}
+    <StickyHeader />
     <ScaleToFit>
     <div className="bg-white">
-      {/* Header 完全獨立，滿寬 */}
-      <Header />
+      {/* 頂端 spacer：等於 Header 高度，避免內容被固定頁首蓋住（同在畫布內、同步縮放） */}
+      <div style={{ height: HEADER_H }} aria-hidden />
 
-      {/* Header 以下：主內容 + 右側按鈕並排 */}
+      {/* 主內容 + 右側按鈕並排 */}
       <div className="flex">
         <div className="flex-1 min-w-0">
           {/* Hero 為首屏，載入即淡入上升（section 級 Reveal，不碰內部抽屜 transform） */}

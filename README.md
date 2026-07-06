@@ -191,7 +191,7 @@ pnpm build
 - **廚房產品 → 圖片式 mega-menu（仿 Antra Home 選單）**：hover 從 header 下方**淡入展開滿寬白色面板**（`opacity`+`visibility` 300ms；面板 `absolute left-0 right-0 top-[72px]`，定位參考 `header`，故滿寬）。內含**三張品牌大圖卡**（SAKURA 廚電 / SVAGO / TEKA，`public/products/*.jpg`，來源 `影像/廚房產品`）：`aspect-[4/3]` 圓角 + 底部漸層 + 白字標籤，卡片 hover 圖片放大、標籤轉金；面板底部 `廚房商品型錄 →` 文字連結。觸發鈕撐滿 `h-[72px]` 讓面板無縫貼合、hover 不中斷。手機版則把三品牌 + 型錄當 accordion 子項展開。
 - **手機（`< lg`）**：logo + 🔍 + 漢堡；漢堡開白色抽屜，主項點擊 **accordion 展開**子選單（`useState expanded`），純連結直接點。
 - **搜尋**：🔍 切換 `openSearch`，在 bar 下方展開白色圓角搜尋輸入框（前端介面，功能待接）。
-- header 維持**靜態**（非 sticky）；子項 href 為佔位 `#`；設計圖「SUKURA」視為 SAKURA 錯字已更正。
+- **固定頁首（sticky）**：因整站被 `ScaleToFit` 的 `transform: scale()` 包住、頁面用 body 原生捲動，畫布內用 `sticky`/`fixed` 都無法真正釘住視窗頂（transform 祖先讓 `fixed` 相對畫布、`overflow:hidden` 祖先讓 `sticky` 失效）。解法：`StickyHeader.tsx` 把 `<Header>` 抽到 `ScaleToFit` **畫布外**、自成 `position: fixed` 頂層，並用**同一 scale（`innerWidth/1512`）等比縮放**維持比例一致；`App.tsx` 在畫布內容頂端放 `HEADER_H`(72px) spacer 避免被蓋住。子項 href 為佔位 `#`；設計圖「SUKURA」視為 SAKURA 錯字已更正。
 
 ## 頁尾（Footer）— 巨型 SAKURA 浮水印（灰底）+ 模板暗色版權列
 
