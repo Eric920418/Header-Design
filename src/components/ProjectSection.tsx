@@ -95,13 +95,24 @@ export function ProjectSection() {
       if (!pausedRef.current) emblaApi.scrollNext();
     };
     let timer = setInterval(tick, 3500);
-    const pause = () => (pausedRef.current = true);
-    const resume = () => (pausedRef.current = false);
+    // 延遲恢復：滑鼠移入立即暫停；移出後不馬上恢復，等 hover 卡片的寬度動畫(500ms)
+    // 完全收回、所有卡回到等寬後才讓輪播移動。否則卡片還在變寬/收窄時輪播就前進，
+    // Embla 的迴圈總長(=10×378)是舊值，環繞接縫處會露出縫隙（本區最重要的一條）。
+    let resumeTimer: ReturnType<typeof setTimeout> | undefined;
+    const pause = () => {
+      if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = undefined; }
+      pausedRef.current = true;
+    };
+    const resume = () => {
+      if (resumeTimer) clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { pausedRef.current = false; }, 560);
+    };
     root.addEventListener('mouseenter', pause);
     root.addEventListener('mouseleave', resume);
 
     return () => {
       clearInterval(timer);
+      if (resumeTimer) clearTimeout(resumeTimer);
       emblaApi.off('pointerDown', onDown);
       emblaApi.off('pointerUp', onUp);
       root.removeEventListener('mouseenter', pause);
@@ -120,8 +131,11 @@ export function ProjectSection() {
                 w-[280px] md:w-[340px] lg:w-[378px]
                 ${dragging ? '' : 'hover:w-[420px] md:hover:w-[510px] lg:hover:w-[567px]'}`}
             >
-              {/* 固定高度、hover 變寬（伸縮）+ 底部漸層 + 左上膠囊 + 英中標 */}
-              <article className="relative overflow-hidden w-full h-[480px] md:h-[640px] lg:h-[880px]">
+              {/* 固定高度、hover 變寬（伸縮）+ 底部漸層 + 左上膠囊 + 英中標。
+                  w-[calc(100%+1px)]：內容比卡槽寬 1px、右緣蓋住與下一張的接縫，
+                  避免軌道以小數 transform 位移時、卡間露出次像素髮絲縫（背景色透出）。
+                  卡槽(.group)仍是 378，Embla 量測/迴圈總長不受影響。 */}
+              <article className="relative overflow-hidden w-[calc(100%+1px)] h-[480px] md:h-[640px] lg:h-[880px]">
                 <img
                   src={s.image}
                   alt={s.zh ? `${s.en} ${s.zh}` : s.en}
