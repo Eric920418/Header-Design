@@ -88,12 +88,12 @@ export function StoreLocationSection() {
 
           <div className="flex flex-col lg:flex-row items-start lg:pt-[46px]">
             <div className="lg:w-[424px] lg:shrink-0 mb-5 lg:mb-0">
-              <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
+              <span className="font-display inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
                 <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
                 get in touch
               </span>
             </div>
-            <h2 className="lg:w-[661px] text-[60px] font-bold leading-[64px] text-[#000000]">
+            <h2 className="font-display lg:w-[661px] text-[60px] leading-[64px] capitalize text-[#000000]">
               Have A Project In <span style={{ color: GOLD }}>Store</span>
               <br />
               <span style={{ color: GOLD }}>Locator</span> It Happen

@@ -10,6 +10,14 @@
   --breakpoint-lg: 3px;
   --breakpoint-xl: 4px;
   --breakpoint-2xl: 5px;
+
+  /* ── Antra 模板字型（單一來源）──
+     內文 = Golos Text；標題/eyebrow/顯示字 = Cal Sans（僅 weight 400）。
+     兩者皆為拉丁字型，故堆疊必接 CJK fallback：英文走 Cal Sans/Golos、
+     中文逐字 fallback 到中文字型。--font-sans 設定後 body 預設即 Golos Text；
+     --font-display 自動產生 `font-display` utility 供標題/eyebrow 使用。 */
+  --font-sans: "Golos Text", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", 微軟正黑體, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Cal Sans", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", 微軟正黑體, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 :root {
@@ -204,6 +212,18 @@
       font-weight: var(--font-weight-normal);
       line-height: 1.5;
     }
+  }
+}
+
+/* ── Antra 標題基準（對齊模板 h1..h6）──
+   全部標題一律 Cal Sans / weight 400 / capitalize；字級與顏色仍由各元件的
+   text-*/leading-*/color utility 決定。weight 400 生效的前提＝各標題已移除 font-bold/semibold
+   （Cal Sans 僅 400，留 bold 會 faux-bold）。 */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: capitalize;
   }
 }
 

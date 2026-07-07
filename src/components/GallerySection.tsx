@@ -93,7 +93,7 @@ export function GallerySection() {
             </div>
 
             {/* 大標（模板 110/100、capitalize、粗體） */}
-            <h2 className="text-white font-bold capitalize text-[110px] leading-[100px]">
+            <h2 className="font-display text-white capitalize text-[75px] leading-[80px]">
               Kitchen Design
             </h2>
 

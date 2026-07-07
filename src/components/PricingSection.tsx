@@ -52,7 +52,7 @@ export function PricingSection() {
 
           <div className="flex items-start pt-[46px]">
             <div className="w-[424px] shrink-0">
-              <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
+              <span className="font-display inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
                 <span
                   className="inline-block w-1.5 h-1.5 rounded-full"
                   style={{ background: GOLD }}
@@ -60,7 +60,7 @@ export function PricingSection() {
                 our pricing plans
               </span>
             </div>
-            <h2 className="w-[661px] text-[60px] font-bold leading-[64px] capitalize text-[#000000]">
+            <h2 className="font-display w-[661px] text-[60px] leading-[64px] capitalize text-[#000000]">
               Design your <span style={{ color: GOLD }}>space,</span>
               <br />
               <span style={{ color: GOLD }}>know</span> the cost

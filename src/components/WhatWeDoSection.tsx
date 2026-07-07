@@ -34,7 +34,7 @@ export function WhatWeDoSection() {
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
         <Reveal anim="slideInLeft" className="lg:w-[600px] lg:shrink-0">
           {/* 副標膠囊（照模板：border rgba(114,114,114,.18)、radius 24、padding 3/13/3/10、金點 + 15/ls1/uppercase） */}
-          <span className="inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px] mb-5 text-[15px] tracking-[1px] uppercase text-[#000000]">
+          <span className="font-display inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px] mb-5 text-[15px] tracking-[1px] uppercase text-[#000000]">
             <span
               className="inline-block w-2 h-2 rounded-full"
               style={{ background: GOLD }}
@@ -42,7 +42,7 @@ export function WhatWeDoSection() {
             what we do
           </span>
 
-          <h2 className="text-[#000000] font-bold text-[60px] leading-[64px]">
+          <h2 className="font-display text-[#000000] text-[60px] leading-[64px] capitalize">
             Antra Has{" "}
             <span style={{ color: GOLD }}>
               Brand

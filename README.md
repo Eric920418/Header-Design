@@ -77,11 +77,20 @@ pnpm build
 
 所有 section 的間距/尺寸/**字級**已對齊 **Antra demo 實測值**（@1512 視窗 computed style，localhost 逐項驗收 0px 誤差）。此規範**取代**先前「section py 上限 20」的暫行規則。
 
-**文字排版 token**（size/line-height/letter-spacing/text-transform 照模板；**字重不照抄**——模板字重 400 是因其自帶裝飾字體、400 已顯粗，我們依全域規則維持系統字，照抄 400 會視覺過細，故字重維持現狀）：
+### 字型系統（已引入 Antra 模板字體 — Cal Sans / Golos Text）
+
+全站英文文字改用模板實際字體（比照主題 `inc/class-main.php` 從 **Google Fonts** 載入，`index.html` 加 `<link>`）：
+- **標題／eyebrow／顯示字＝`Cal Sans`（僅 weight 400）**、`capitalize`。Cal Sans 是裝飾顯示體，400 已顯粗、觀感不單薄；**只有 400 一個字重，任何標題都不可留 `font-bold`/`font-semibold`（會 faux-bold 變醜）**——故各標題已移除 bold class。
+- **內文＝`Golos Text`（400–900）**。
+- 兩者皆拉丁字型，字型堆疊在 `globals.css` `@theme` 定義並**接 CJK fallback**（`--font-sans`＝Golos Text＋CJK；`--font-display`＝Cal Sans＋CJK）：英文逐字走 Cal Sans/Golos，中文 fallback 到中文字型，並存不衝突。`--font-sans` 設定後 body 預設即 Golos Text；`--font-display` 產生 `font-display` utility。
+- **套用方式**：標題 `<h1..h6>` 與英文 eyebrow/`<span>` 加 `font-display` class（`globals.css` 另有 `h1..h6` 基準規則設 Cal Sans/400/capitalize，但 utility 層優先，故實務靠各元件的 `font-display` class 生效）。內文英文無需逐一改（body 預設已 Golos Text）。
+- **標題字級（對照 demo `html`=20px 實測，逐一驗證）**：Hero h1 **100**、Pricing/WhatWeDo/Store h2 **60**、Gallery h2 **75**（原 110，不符模板任何標題、已改對齊 home-three gallery 75/lh80）、Project 卡 h3 36。Hero 大標移除原 `-1px` letter-spacing（模板標題 letter-spacing 0）。
+
+**文字排版 token**（size/line-height/letter-spacing/text-transform/字重/字型皆照模板）：
 
 | 角色 | 值 |
 |---|---|
-| Section h2 | `text-[60px] leading-[64px]`（Gallery 特例 `text-[110px] leading-[100px]`，對位 Home Three） |
+| Section h2 | `text-[60px] leading-[64px]`（Gallery 為 `text-[75px] leading-[80px]`，對齊 Home Three gallery 標題實測 75/80） |
 | 專案卡標題 / 中文副標 / 左上膠囊 | `text-[36px] leading-[44px]` / `text-[20px] leading-[30px]` / `text-[16px]` |
 | 品牌卡標題 / 描述（=模板 Pricing 卡） | `text-[45px] leading-[50px]` / `text-[20px] leading-[30px]` |
 | eyebrow | `text-[15px] tracking-[1px] uppercase` |
@@ -139,9 +148,9 @@ pnpm build
 
 ## 主視覺（Hero）— Antra Home Six 版型
 
-`HeroSection.tsx` 的 Hero 採用 Antra 模板 Home Six 的版型（僅借版型/構圖，字型沿用原站；金色已對齊 **CIS 466c `#C9AA79`**、系統字型，未引入模板字體）。
+`HeroSection.tsx` 的 Hero 採用 Antra 模板 Home Six 的版型（金色已對齊 **CIS 466c `#C9AA79`**；字型已引入模板 **Cal Sans/Golos Text**，見上「字型系統」）。
 
-- **尺寸/位置零誤差對齊 Home Six（@1512 實測，逐項 0px）**：section 高 **958px**；內容左緣 **30**、eyebrow 上緣 **244**；eyebrow **15px / letter-spacing 1px / uppercase / 白 + 金點**；大標 **100 / 行高 110 / capitalize / letter-spacing -1px**（@T300，白+金）；副標 **18 / 24 / 字重 500 / 寬 522**（@T550）；左下圓鈕 **120×120 / left 30 / 底 82**（`rgba(92,92,92,.46)` + `1px rgba(255,255,255,.07)`，內含白字）；浮水印 **320px @ left 426 / top 725**。模板 Cal Sans → 系統粗體、金 → CIS，其餘尺寸/位置照抄。
+- **尺寸/位置零誤差對齊 Home Six（@1512 實測，逐項 0px）**：section 高 **958px**；內容左緣 **30**、eyebrow 上緣 **244**；eyebrow **15px / letter-spacing 1px / uppercase / 白 + 金點**；大標 **100 / 行高 110 / capitalize**（@T300，白+金；Cal Sans/400，已移除原 `-1px` letter-spacing 對齊模板）；副標 **18 / 24 / 字重 500 / 寬 522**（@T550，Golos Text）；左下圓鈕 **120×120 / left 30 / 底 82**（`rgba(92,92,92,.46)` + `1px rgba(255,255,255,.07)`，內含白字）；浮水印 **320px @ left 426 / top 725**（Cal Sans/400）。字型＝模板 **Cal Sans/Golos Text**（見上「字型系統」）、金 → CIS，其餘尺寸/位置照抄。
 - **與模板的唯一差**：模板 header 透明疊在 hero 上（hero 由畫面頂 0 起）；本站為**實心金色 sticky header（72px）**，故 hero 由 72px 起——**hero 內部排版與模板 0 誤差**，整體在頁面上比模板低 72px。
 - **滿寬**：`FloatingButtons` 桌面版改為 `fixed` 浮動欄、不再佔用 75px 軌道，主內容因此滿寬。
 - **`FloatingButtons` 圖示**：三顆（門市案例=金底、到府丈量/客服中心=深灰底）圖示改用**官方白色 PNG** `public/floating-icons/{store,measure,service}.png`（原 lucide `MapPin/Ruler/MessageCircle` 已換掉；皆純白，金底/深底皆可見）。桌面 `h-5`、手機 `h-4`。元件已重構為 `BUTTONS` 陣列 map（桌面 `hidden lg:flex` 直欄 + 手機 `flex lg:hidden` 底列共用同資料，`gold` 旗標決定金/深底）。
@@ -152,7 +161,7 @@ pnpm build
 
 ## Section 2（專案輪播）— Antra Home Six 精準複刻
 
-`ProjectSection.tsx`：精準複刻 Home Six 的 `antra-project`「project-style-4」（僅字型沿用原站系統字，其餘結構/尺寸/行為照模板）。
+`ProjectSection.tsx`：精準複刻 Home Six 的 `antra-project`「project-style-4」（字型已用模板 Cal Sans，見「字型系統」；其餘結構/尺寸/行為照模板）。
 
 - **取代**了原本 `HeroSection` 內的 Gallery（大圖 + 縮圖展示）；放在 `App.tsx` 的 Hero 之後。
 - **無標題區**：模板此 widget 只有卡片（無 heading）。**箭頭為額外加上**（模板此 instance 沒開，但使用者要求）。
@@ -180,7 +189,7 @@ pnpm build
 
 ## 門市案例（Gallery）— Antra Home Three 版型
 
-`GallerySection.tsx`：對位 Home Three gallery 版型（section 高/位置/膠囊/大標/箭頭照模板實測 + 主題 `heading.php`），**但右側依使用者規則做「背景=主圖 + 2 卡聯動」**（非模板原生的 3 欄 swiper）。字型沿用原站、金 `#C9AA79`，內容為 **SAKURA 門市案例**。
+`GallerySection.tsx`：對位 Home Three gallery 版型（section 高/位置/膠囊/大標/箭頭照模板實測 + 主題 `heading.php`），**但右側依使用者規則做「背景=主圖 + 2 卡聯動」**（非模板原生的 3 欄 swiper）。字型用模板 Cal Sans、金 `#C9AA79`，內容為 **SAKURA 門市案例**。
 
 - **輪播規則（使用者指定）**：**全出血背景 = 目前主圖(#active)**，右邊固定**只 2 張卡** = 下兩張(#active+1、#active+2)；前進時背景與兩卡一起輪替（背景交叉淡入 + `useParallax('.gallery-bg')` scale 1.12、卡片/段落 `animate-gallery-card` 滑入）。`useState(active)` 驅動、autoplay 4s（滑入暫停）、指標拖曳。
 - **section 高度 = `min-h-[956px]`**（實測模板 956）；內容**非置中**，照模板 `e-con-inner` `padding-top` 推到下半部 —— 內容容器 `lg:pt-[388px]`、`items-start`。實測靜止：副標/卡片頂 y388、大標 y445、段落 y682、箭頭 y788（與模板 0–1px）。左標題區 `lg:w-[479px]`（L51）+ 右卡欄 `flex-1`。內部間距：膠囊 `mb-[26px]`、段落 `mt-[37px]`、箭頭 `mt-[40px]`。**右側卡片靠右**：右卡欄 `flex justify-end`（容器 `lg:pr-[51px]`）內包一層縮到卡片寬度的區塊 → 卡片右緣對齊右版心 1461（右邊距 51、與左緣對稱），左側 530–771 留白露出背景主圖。**箭頭在該區塊內靠左**（不加 `justify`）→ 落在**卡片群左緣 771 的正下方**（卡片下方 40px），非靠右。
@@ -194,7 +203,7 @@ pnpm build
 
 ## What We Do — Antra Home Six 版型
 
-`WhatWeDoSection.tsx`：複刻 Home Six 的「What we do」兩欄區（淺色白底、字型沿用原站、金色 `#C9AA79`）。
+`WhatWeDoSection.tsx`：複刻 Home Six 的「What we do」兩欄區（淺色白底、字型用模板 Cal Sans、金色 `#C9AA79`）。
 
 - **左欄（依主題原始碼對齊模板）**：
   - **副標膠囊**：`rounded-[24px]` + `border rgba(114,114,114,.18)` + `padding 3/13/3/10` + 金點 + `what we do` 15/ls1/uppercase（實測模板 `.elementor-title-span`；與 Hero eyebrow 同款）。

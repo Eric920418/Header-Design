@@ -75,7 +75,7 @@ export function HeroSection() {
           <Reveal anim="fadeInUp" delayMs={900}>
             {/* 依模板實測：金漸層(金頂→透明底) + background-clip:text + opacity 0.75 */}
             <span
-              className="block whitespace-nowrap font-bold leading-[0.75] pl-[426px]"
+              className="block whitespace-nowrap font-display font-normal leading-[0.75] pl-[426px]"
               style={{
                 fontSize: '320px',
                 opacity: 0.75,
@@ -103,14 +103,14 @@ export function HeroSection() {
             <div className="mb-4 lg:mb-[33px]">
               <span className="inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px]">
                 <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: GOLD }} />
-                <span className="text-white text-[13px] lg:text-[15px] tracking-[1px] uppercase">
+                <span className="font-display text-white text-[13px] lg:text-[15px] tracking-[1px] uppercase">
                   Welcome to SAKURA Kitchen
                 </span>
               </span>
             </div>
 
-            {/* 雙色大標（模板：100/110、capitalize、letter-spacing -1px、粗體） */}
-            <h1 className="text-white font-bold capitalize text-5xl lg:text-[100px] lg:leading-[110px] lg:tracking-[-1px]">
+            {/* 雙色大標（模板 Home Six：Cal Sans/400、capitalize、100/110；模板標題 letter-spacing 0，故不加 tracking） */}
+            <h1 className="font-display text-white capitalize text-5xl lg:text-[100px] lg:leading-[110px]">
               We Shape
               <br />
               <span style={{ color: GOLD }}>Inspiring Spaces</span>
@@ -172,7 +172,7 @@ export function HeroSection() {
             transform: open ? 'translateX(200px)' : 'translateX(0)',
           }}
         >
-          <span className="text-[16px] leading-tight text-center">
+          <span className="font-display text-[16px] leading-tight text-center">
             Discover
             <br />
             More

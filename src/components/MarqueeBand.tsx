@@ -11,7 +11,7 @@ export function MarqueeBand() {
             {Array.from({ length: 4 }).map((_, i) => (
               <span
                 key={i}
-                className="block font-bold leading-[0.9] whitespace-nowrap pr-[0.2em] text-[220px]"
+                className="block font-display font-normal leading-[0.9] whitespace-nowrap pr-[0.2em] text-[220px]"
                 style={{
                   backgroundImage:
                     "linear-gradient(rgb(216,216,216) 0%, rgba(153,153,153,0) 90%)",
