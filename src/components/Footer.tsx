@@ -12,18 +12,18 @@ const TEXT_LINKS = [
 // 掃描非透明邊界得 YT 視覺偏上 6px，故單獨往下推 6px 讓「可見圖案」的中心對齊。
 const ICON_LINKS = [
   { label: '數位展板', href: '#', icon: '/icons/digital-board.png', size: 35, offsetY: 0 },
-  { label: 'YouTube', href: '#', icon: '/icons/youtube.png', size: 35, offsetY: 6 },
+  { label: 'YouTube', href: '#', icon: '/icons/youtube.png', size: 40, offsetY: 7 },
 ];
 
 export function Footer() {
   return (
     <footer className="bg-[#f6f6f6]">
       <div className="relative overflow-hidden">
-        {/* 上半：灰底 + 巨型 SAKURA 浮水印（淡金，下緣被暗色版權列蓋住） */}
-        <div aria-hidden className="pointer-events-none select-none flex justify-center pt-20">
+        {/* 上半：灰底 + 巨型 SAKURA 浮水印（加深金 + z-10 疊在暗色版權列之上、下緣蓋上 footer） */}
+        <div aria-hidden className="relative z-10 pointer-events-none select-none flex justify-center pt-20">
           <span
             className="font-bold leading-none whitespace-nowrap text-[330px]"
-            style={{ color: '#C9AA79', opacity: 0.18 }}
+            style={{ color: '#C9AA79', opacity: 0.4 }}
           >
             SAKURA
           </span>

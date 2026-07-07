@@ -74,7 +74,7 @@ export function HeroSection() {
             className="block whitespace-nowrap font-bold leading-[0.75] pl-[426px]"
             style={{
               fontSize: '320px',
-              opacity: 0.64,
+              opacity: 0.75,
               backgroundImage:
                 'linear-gradient(#C9AA79 14.9%, rgba(153,153,153,0) 80.95%)',
               WebkitBackgroundClip: 'text',

@@ -62,7 +62,7 @@ pnpm build
 | 輔-紅 | PANTONE Red 032c | `#F5333F`（強調 / 錯誤，覆蓋原 shadcn `--destructive`） |
 | 主-白 | White | `#FFFFFF` |
 
-- **對齊範圍**：所有金 → `#C9AA79`；深色 → `#000` / `#3E3A39`；紅 → `#F5333F`。Header 列漸層由舊 `#B79258 / #D2B587` 改為 CIS 衍生 `#B8965F → #D8C29A`；深色圖面 scrim 統一為 `rgba(0,0,0,α)`（Black C）。
+- **對齊範圍**：所有金 → `#C9AA79`；深色 → `#000` / `#3E3A39`；紅 → `#F5333F`。深色圖面 scrim 統一為 `rgba(0,0,0,α)`（Black C）。**Header 列漸層**：曾於稽核改為 CIS 衍生 `#B8965F → #D8C29A`，後**依使用者指定改回模板原值 `linear-gradient(90deg, #b79258 20%, #d2b587)`**（`Header.tsx` `HEADER_GRADIENT`）——此為刻意的非-CIS 例外。
 - **消除所有 Tailwind 冷灰**：Tailwind 具名灰（`gray-*`，色相偏藍）computed 出來是 **oklch**，rgb-only 掃描會漏掉——故做了 **oklch-aware 全屬性掃描**（color/bg/border/fill/outline/gradient）。全站冷灰已清零：文字/圖示 `text-gray-400~700` → CIS 深灰 `#3E3A39`；深色底 `bg-gray-900` → `#3E3A39`；淺邊框/分隔線 `border/divide-gray-100~300` → **暖線 `#E3DED7`**；淺底 `bg-gray-50/100` → **暖底 `#F4F0EA`**；`placeholder` / 停用 `select` 的灰 → **暖灰 `#8c877f`**。連全域預設也校正：`--foreground` `oklch(0.145)` → `#000`、`--ring`（`outline-ring` 焦點框）`oklch(0.708)` → `#3E3A39`、`--destructive` → `#F5333F`。
 - **`<select>` placeholder（已修）**：門市查詢的區域/城市 `<select>` 原本用 `disabled` 屬性 → 瀏覽器**強制灰化**「選擇城市」為 `#808080`（CSS `color` 蓋不動）。已改為**不用 `disabled`、改以 CSS 控制未選態**：placeholder 用暖灰 `#8c877f`，城市未選區域時加暖底 `#F4F0EA` + `pointer-events-none`(保留「先選區域」的停用觀感)。`#808080` 已清零 → **全站 0 個非 CIS/非暖中性色**。
 - **支援性中性色**（功能性保留）：section 底 `#f6f6f6`、暖線 `#E3DED7`、暖底 `#F4F0EA`、`white/xx`·`black/xx` 透明階（白/黑即 CIS、其餘為暖/中性淡階）。跑馬燈以 `color: transparent` + 漸層 `background-clip:text` 呈現（刻意技法）。

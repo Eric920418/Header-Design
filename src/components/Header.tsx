@@ -4,7 +4,7 @@ import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import { GOLD } from '../theme/cis';
 
 // 對齊參考站 sakura-kitchenlife.com.tw 的 .l-header / .l-nav__item 實測值
-const HEADER_GRADIENT = 'linear-gradient(90deg, #B8965F 20%, #D8C29A)';
+const HEADER_GRADIENT = 'linear-gradient(90deg, #b79258 20%, #d2b587)';
 const HEADER_FONT = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", 微軟正黑體';
 
 type MegaCard = { label: string; image: string; href?: string };
