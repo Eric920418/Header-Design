@@ -12,9 +12,8 @@ const ITEMS = ['Residence And Condo', 'Modern Kitchen Renovate', 'Interior House
 const VIDEO_POSTER =
   'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1280&h=720&q=80';
 
-// 壓底圖：影片區下方的淡色建築線稿/藍圖背景（仿 Home One 模板；佔位圖，可替換為正式線稿）
-const BLUEPRINT =
-  'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80';
+// 背景右下裝飾圖 = 模板 Home Six 的 h6-bg-3.png（下載至 public/decor；PNG 本身半透明，故不再壓 opacity）
+const BLUEPRINT = '/decor/h6-bg-3.png';
 
 export function WhatWeDoSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -23,7 +22,15 @@ export function WhatWeDoSection() {
   return (
     // 間距依模板實測（Home 6 兩欄區）：py 120、欄距 90、文欄 600
     <section ref={sectionRef} className="relative bg-white py-[120px] overflow-hidden">
-      <div className="max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
+      {/* 背景右下半透明建築圖 = 模板 f0420ee 的 h6-bg-3.png（原尺寸 821×520；bg-position 100% 100% / no-repeat）。
+          PNG 本身半透明，opacity 用 1（同模板 layer opacity）；掛 .wwd-blueprint 讓既有 useParallax 做輕微視差。 */}
+      <img
+        src={BLUEPRINT}
+        alt=""
+        aria-hidden
+        className="wwd-blueprint pointer-events-none select-none absolute bottom-0 right-0 z-0 w-[600px] max-w-[48%]"
+      />
+      <div className="relative z-10 max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
         <Reveal className="lg:w-[600px] lg:shrink-0">
           {/* 副標膠囊（照模板：border rgba(114,114,114,.18)、radius 24、padding 3/13/3/10、金點 + 15/ls1/uppercase） */}
@@ -69,14 +76,19 @@ export function WhatWeDoSection() {
             crafted with precision.
           </p>
 
-          {/* CTA：依模板改為外框圓箭頭，hover 填金 + 箭頭右移 */}
+          {/* CTA — 依主題原始碼 elementor-button-default（=antra 標準款，elementor.css 9147）：
+              透明底、border 1px rgba(159,159,164,.64)、字 15、金圓 40 箭頭預設 -45°；
+              hover 整顆填金(bg+border=#C9AA79) + 字白 + 箭頭轉正 rotate(0)。文字保留「櫻花優勢」。 */}
           <a
             href="#"
-            className="group inline-flex items-center justify-between gap-4 mt-8 rounded-full border border-[#E3DED7] pl-[30px] pr-[9px] py-[8px] text-[#000000] hover:border-[#C9AA79] transition-colors"
+            className="group inline-flex items-center gap-4 mt-8 rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-[#000000] transition-colors duration-500 hover:border-[#C9AA79] hover:bg-[#C9AA79] hover:text-white"
           >
-            <span className="text-[19px]">櫻花優勢</span>
-            <span className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full border border-[#E3DED7] text-[#000000] transition-all duration-300 group-hover:bg-[#C9AA79] group-hover:border-[#C9AA79] group-hover:text-white">
-              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" />
+            <span className="text-[15px]">櫻花優勢</span>
+            <span
+              className="inline-flex items-center justify-center w-[40px] h-[40px] rounded-full text-white transition-transform duration-500 -rotate-45 group-hover:rotate-0"
+              style={{ background: GOLD }}
+            >
+              <ArrowRight className="w-5 h-5" />
             </span>
           </a>
         </Reveal>

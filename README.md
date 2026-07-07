@@ -191,10 +191,13 @@ pnpm build
 
 `WhatWeDoSection.tsx`：複刻 Home Six 的「What we do」兩欄區（淺色白底、字型沿用原站、金色 `#C9AA79`）。
 
-- **左欄**：膠囊 eyebrow（`what we do`）+ 雙色大標 + 金色打勾清單（3 項、含上下分隔線）+ 描述 + 「櫻花優勢」膠囊按鈕。
-- **CTA 依模板（「首頁 Section 說明.pptx」slide 1 品牌承諾）**：箭頭圓改為**外框圓 + 內箭頭**，hover 時填金 `#C9AA79` + 邊框轉金 + 字轉白 + 箭頭右移（`ArrowRight`，`transition-all`）。
+- **左欄（依主題原始碼對齊模板）**：
+  - **副標膠囊**：`rounded-[24px]` + `border rgba(114,114,114,.18)` + `padding 3/13/3/10` + 金點 + `what we do` 15/ls1/uppercase（實測模板 `.elementor-title-span`；與 Hero eyebrow 同款）。
+  - **雙色大標** `text-[60px] leading-[64px]`（h2 文字目前為佔位「Antra Has Brand Promise Architectural」，模板原文是「Antra has created exceptional architectural designs.」，待定案）。
+  - **打勾清單**：照模板為**純金 `Check` icon（`w-[19px]`、色 `#C9AA79`、無圓底）**（非先前的金圓底+白勾）；清單字 18/24 `font-normal`（模板 weight 400）。
+  - **CTA「櫻花優勢」= antra 標準按鈕**，**與上一個 section（Gallery「查看所有案例」）尺寸一致**：透明底、`border 1px rgba(159,159,164,.64)`、字 **15px**、`padding 7/7/7/30`、`gap-4`、盒高 **56**、金圓 **40** 箭頭預設 `-rotate-45`；hover 整顆填金 `#C9AA79` + 字白 + 箭頭 `rotate-0`。差別僅字色（淺底黑字，`hover:text-white`）。（三顆 antra 按鈕 Gallery/Pricing/WhatWeDo 統一 7/7/7/30/gap-4/高 56。）
 - **右欄影片區**：**16:9 影片區塊**（`aspect-video`，圓角 24px + 陰影 + 黑底）：縮圖 poster（`VIDEO_POSTER`）鋪滿 + 置中主色金圓播放鈕（`Play`），播放鈕加**脈動光圈**（`animate-ping`）與 hover 放大；影片卡 hover 依比例微放大（`hover:scale-[1.02]`）。
-- **壓底圖**：影片區下方疊一張**淡建築藍圖**（`BLUEPRINT`，`opacity-[0.12] grayscale`、絕對定位延伸至影片下方、`pointer-events-none`，仿 Home One）——**佔位圖，待換正式線稿**。
+- **背景右下半透明建築圖 = 模板原圖 `h6-bg-3.png`**（已下載至 `public/decor/h6-bg-3.png`，821×520、PNG 本身半透明的現代建築線稿）：`<img src={BLUEPRINT}>` `absolute bottom-0 right-0 z-0 w-[600px] max-w-[48%] pointer-events-none`（opacity 用 1，同模板 layer；PNG 自帶半透明）；內容容器 `relative z-10` 疊其上；掛 `.wwd-blueprint` 讓 `useParallax` 做輕微視差。對應模板 `f0420ee` 的 `background-position:100% 100% / no-repeat`。
 - 影片來源未定：poster 為佔位、播放鈕 `onClick` 尚未接（待提供 YouTube 連結或影片檔即可接 lightbox/iframe）。文字為佔位。放在 `App.tsx` 圖庫區之後。
 
 ## 門市查詢（Store Locations）— Antra Contact Us 風格 + 可用地圖搜尋
