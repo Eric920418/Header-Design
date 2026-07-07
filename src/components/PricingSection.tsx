@@ -86,9 +86,13 @@ export function PricingSection() {
               }}
             />
             <div className="relative z-10 p-8 lg:p-10 flex flex-col h-full">
-              <h3 className="text-white text-[36px] leading-[44px] font-bold">
-                SAKURA <span style={{ color: GOLD }}>廚電</span>
-              </h3>
+              {/* 品牌 logo（替代文字標題）：SAKURA KITCHEN 官方白色字標，深卡上直接可讀；高度對齊原 44px 標題行高 */}
+              <img
+                src="/sakura-kitchen-logo.png"
+                alt="SAKURA KITCHEN 櫻花整體廚房"
+                className="h-[44px] w-auto self-start"
+              />
+              <h3 className="sr-only">SAKURA 廚電</h3>
               <ul className="mt-7 space-y-4">
                 {SAKURA_ITEMS.map((item, j) => (
                   <li

@@ -168,7 +168,7 @@ pnpm build
 
 - **標題列**：eyebrow `● our pricing plans`（左，`w-1/3`）+ 雙色大標 `Design your ⟨space, know⟩ the cost`（60/64 capitalize，右）+ 2 個裝飾小箭頭 SVG（絕對定位、桌面顯示）。
 - **三欄（`grid-cols-3 gap-[30px]`，各 450、`min-h-[673px]`）**：
-  - **欄1 深色標語卡**：暗色室內圖 + 漸層遮罩 + `Your dreams, ⟨our mission, let's⟩ make it happen.`（36/44）。
+  - **欄1 SAKURA 深色圖卡**：暗色廚電圖 + 漸層遮罩；標題改用**官方白色字標** `public/sakura-kitchen-logo.png`（來源 `首頁用圖 2/Logo/2023 SAKURA KITCHEN…LOGO_3.png`，純白 RGB 255）取代原 `<h3>SAKURA 廚電</h3>`（保留為 `sr-only`）；`img h-[44px] w-auto self-start`（**`self-start` 必要**：父層 `flex flex-col` 預設 `align-items:stretch` 會把 img 橫向撐滿到卡寬 370→壓扁,故用 `self-start` 回自然寬 287、比例 6.53）。下接三產品線金勾清單（廚房商品／淨水器／熱水器，`Check` 金圓）。與 SVAGO/TEKA 白卡的 logo 圖手法一致（白卡用黑版 SVG、深卡用白版 PNG）。
   - **欄2 Basic Plan / 欄3 Blueprint Plan**（照模板原文）：標題 45/50 → 副標 20/30(`#59585d`) → **價格 `$` 小 + 數字 100px 金 + `/ Per Month` 20/24** → **金勾清單**（`Check` 24px 金、每項 20/36）→ `Get Started Now` 膠囊按鈕（高 ~61、`pl-30 pr-7 py-7` + 金圓 `ArrowUpRight`）；**卡底建築線稿浮水印** `public/pricing/pricing-banner-2.png`（absolute，來源 demo 授權素材）。
 - **跑馬燈已移出本區**：抽成獨立元件 `MarqueeBand.tsx`，放在 `App.tsx` **頁面最底部（Footer 之上）**——「kitchen product」無限捲動（`@keyframes marquee` + `background-clip:text` 漸層，定義於 `globals.css`）。
 - **按鈕 hover（依模板實測）**：整顆膠囊填金 `#C9AA79` + 文字轉白 + 邊框金（0.5s），同時金圓箭頭 45° 旋轉。
