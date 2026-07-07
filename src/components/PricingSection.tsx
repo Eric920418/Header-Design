@@ -21,19 +21,29 @@ export function PricingSection() {
         {/* 標題列（座標依模板實測，相對 1410 版心）：十字裝飾線 + eyebrow(左,top46) + 大標(left424） */}
         <Reveal className="relative mb-[60px]">
           {/* 十字裝飾線（桌面，模板實測照抄）：橫線 y16 寬502、直線 x363 上臂54/下臂125、兩端箭頭 15px；線與箭頭同色 #e3e3e8 */}
-          <div aria-hidden className="hidden lg:block absolute left-[-13px] top-[16px] w-[502px] h-px bg-[#e3e3e8]" />
-          <div aria-hidden className="hidden lg:block absolute left-[363px] top-[-38px] h-[179px] w-px bg-[#e3e3e8]" />
+          <div
+            aria-hidden
+            className="hidden lg:block absolute left-[-13px] top-[16px] w-[502px] h-px bg-[#e3e3e8]"
+          />
+          <div
+            aria-hidden
+            className="hidden lg:block absolute left-[363px] top-[-38px] h-[179px] w-px bg-[#e3e3e8]"
+          />
           <svg
             aria-hidden
             className="hidden lg:block absolute left-[474px] top-0 text-[#e3e3e8]"
-            width="15" height="15" viewBox="0 0 15 15"
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
           >
             <path d="M15 15L3 11L0 11L12 15L15 15Z" fill="currentColor" />
           </svg>
           <svg
             aria-hidden
             className="hidden lg:block absolute left-[347px] top-[126px] text-[#e3e3e8]"
-            width="15" height="15" viewBox="0 0 15 15"
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
           >
             <path d="M15 15L11 3L11 0L15 12L15 15Z" fill="currentColor" />
           </svg>
@@ -41,7 +51,10 @@ export function PricingSection() {
           <div className="flex items-start pt-[46px]">
             <div className="w-[424px] shrink-0">
               <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
-                <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
+                <span
+                  className="inline-block w-1.5 h-1.5 rounded-full"
+                  style={{ background: GOLD }}
+                />
                 our pricing plans
               </span>
             </div>
@@ -56,7 +69,10 @@ export function PricingSection() {
         {/* 三欄：SAKURA 廚電（深色圖卡）+ SVAGO / TEKA（白卡 + 產品圖）；高度維持 min-h-[673px] */}
         <div className="grid grid-cols-3 gap-[30px] items-stretch">
           {/* 欄1：SAKURA 廚電 — 深色圖卡 + 三產品線金勾（stagger 首張，無延遲） */}
-          <Reveal inner className="relative rounded-3xl overflow-hidden min-h-[771px]">
+          <Reveal
+            inner
+            className="relative rounded-3xl overflow-hidden min-h-[771px]"
+          >
             <img
               src="/products/sakura.jpg"
               alt="SAKURA 廚電"
@@ -66,7 +82,7 @@ export function PricingSection() {
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.5) 100%)',
+                  "linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.5) 100%)",
               }}
             />
             <div className="relative z-10 p-8 lg:p-10 flex flex-col h-full">
@@ -83,7 +99,10 @@ export function PricingSection() {
                       className="inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0"
                       style={{ background: GOLD }}
                     >
-                      <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+                      <Check
+                        className="w-3.5 h-3.5 text-white"
+                        strokeWidth={3}
+                      />
                     </span>
                     {item}
                   </li>
@@ -101,8 +120,12 @@ export function PricingSection() {
               className="rounded-3xl bg-white overflow-hidden flex flex-col min-h-[771px]"
             >
               <div className="px-8 lg:px-10 pt-10">
-                <h3 className="text-[45px] leading-[50px] font-bold text-[#000000]">{b.name}</h3>
-                <p className="mt-4 text-[#3E3A39] text-[20px] leading-[30px]">{b.desc}</p>
+                <h3 className="text-[45px] leading-[50px] font-bold text-[#000000]">
+                  {b.name}
+                </h3>
+                <p className="mt-4 text-[#3E3A39] text-[20px] leading-[30px]">
+                  {b.desc}
+                </p>
               </div>
               {/* 產品圖鋪滿卡片下半 + CTA 疊左下（沿用金填滿白字 + 箭頭旋轉 hover） */}
               <div className="relative mt-8 flex-1 min-h-[260px]">
@@ -115,7 +138,7 @@ export function PricingSection() {
                   href="#"
                   className="group absolute left-8 bottom-8 inline-flex items-center justify-between gap-4 rounded-full bg-white pl-[30px] pr-[7px] py-[7px] text-[#000000] shadow-md transition-colors duration-500 hover:bg-[#C9AA79] hover:text-white"
                 >
-                  <span className="text-[19px] font-semibold">了解更多</span>
+                  <span className="text-[19px] font-semibold">更多廚電</span>
                   <span
                     className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full text-white transition-transform duration-500 group-hover:rotate-45"
                     style={{ background: GOLD }}

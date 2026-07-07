@@ -14,14 +14,14 @@ export function MarqueeBand() {
                 className="block font-bold leading-[0.9] whitespace-nowrap pr-[0.2em] text-[220px]"
                 style={{
                   backgroundImage:
-                    'linear-gradient(rgb(216,216,216) 0%, rgba(153,153,153,0) 90%)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  color: 'transparent',
+                    "linear-gradient(rgb(216,216,216) 0%, rgba(153,153,153,0) 90%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  color: "transparent",
                 }}
               >
-KITCHEN PRODUCT
+                Kitchen Product
               </span>
             ))}
           </div>
