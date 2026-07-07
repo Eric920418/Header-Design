@@ -69,9 +69,19 @@ export function HeroSection() {
           className="absolute left-0 top-[725px] w-full overflow-hidden pointer-events-none select-none z-[1] transition-transform duration-500 ease-out"
           style={{ transform: open ? 'translateX(250px)' : 'translateX(0)' }}
         >
+          {/* 依模板實測：金漸層(金頂→透明底) + background-clip:text + opacity 0.64（比舊版 0.14 深約 4.5×） */}
           <span
             className="block whitespace-nowrap font-bold leading-[0.75] pl-[426px]"
-            style={{ color: 'rgba(201,170,121,0.14)', fontSize: '320px' }}
+            style={{
+              fontSize: '320px',
+              opacity: 0.64,
+              backgroundImage:
+                'linear-gradient(#C9AA79 14.9%, rgba(153,153,153,0) 80.95%)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              color: 'transparent',
+            }}
           >
             SAKURA
           </span>

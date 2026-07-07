@@ -54,10 +54,38 @@ export function StoreLocationSection() {
 
   return (
     // 間距依模板實測：py 120
-    <section className="relative bg-[#f6f6f6] py-[120px] overflow-hidden">
+    <section className="relative bg-[#f6f6f6] py-[80px] overflow-hidden">
       <div className="max-w-[1410px] mx-auto">
-        {/* ── 標題列：eyebrow(左欄) + 大標(右偏)；不加十字裝飾線 ── */}
+        {/* ── 標題列：eyebrow(左欄) + 大標(右偏) + 十字裝飾線（同 PricingSection，相同座標/位置） ── */}
         <div className="relative mb-[60px]">
+          {/* 十字裝飾線（桌面，座標與 PricingSection 一致）：橫線 y16 寬502、直線 x363、兩端箭頭 15px；#e3e3e8 */}
+          <div
+            aria-hidden
+            className="hidden lg:block absolute left-[-13px] top-[16px] w-[502px] h-px bg-[#e3e3e8]"
+          />
+          <div
+            aria-hidden
+            className="hidden lg:block absolute left-[363px] top-[-38px] h-[179px] w-px bg-[#e3e3e8]"
+          />
+          <svg
+            aria-hidden
+            className="hidden lg:block absolute left-[474px] top-0 text-[#e3e3e8]"
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
+          >
+            <path d="M15 15L3 11L0 11L12 15L15 15Z" fill="currentColor" />
+          </svg>
+          <svg
+            aria-hidden
+            className="hidden lg:block absolute left-[347px] top-[126px] text-[#e3e3e8]"
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
+          >
+            <path d="M15 15L11 3L11 0L15 12L15 15Z" fill="currentColor" />
+          </svg>
+
           <div className="flex flex-col lg:flex-row items-start lg:pt-[46px]">
             <div className="lg:w-[424px] lg:shrink-0 mb-5 lg:mb-0">
               <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
@@ -84,8 +112,8 @@ export function StoreLocationSection() {
 
           {/* 右：我的位置 + 區域/城市下拉 + 門市列表 */}
           <div className="flex-1">
-            {/* 我的位置標示 */}
-            <div className="flex items-center gap-2 mb-4 text-[#000000]">
+            {/* 我的位置標示（左內縮 pl-5，對齊下方下拉選單的文字起點 20px） */}
+            <div className="flex items-center gap-2 mb-4 pl-5 text-[#000000]">
               <span className="text-[15px]">我的位置</span>
               <LocateFixed className="w-[22px] h-[22px]" style={{ color: GOLD }} />
             </div>
