@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { Reveal } from '../motion/Reveal';
+import { Reveal, useReveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
 
 // 品牌金 = CIS 466c #C9AA79（單一來源）
@@ -21,6 +21,8 @@ export function GallerySection() {
   useParallax(sectionRef, { targets: '.gallery-bg', fromY: -8, toY: 8, scale: 1.12 });
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  // 右卡欄進場：slideInUp 延 400（有拖曳 handler，故用 hook 不用 <Reveal> 包裹）
+  const cardsRef = useReveal<HTMLDivElement>();
 
   const next = useCallback(() => setActive((a) => (a + 1) % len), [len]);
   const prev = useCallback(() => setActive((a) => (a - 1 + len) % len), [len]);
@@ -76,12 +78,12 @@ export function GallerySection() {
         }}
       />
 
-      {/* 內容整塊淡入上升（背景僅做視差不淡入） */}
-      <Reveal className="relative z-10 w-full">
+      {/* 內容：左標題區 / 右卡欄各自 slideInUp 進場（stagger 200 / 400，同模板 Home Three） */}
+      <div className="relative z-10 w-full">
         {/* 內容非置中：照模板 e-con-inner padding-top 推到下半部（內容從 y≈388 起） */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-12 lg:gap-0 pt-[120px] lg:pt-[388px] pl-[51px] lg:pr-[51px]">
-          {/* 左：標題區（照模板 L51/w479；膠囊 → 大標 → 段落，無 CTA） */}
-          <div className="lg:w-[479px] lg:shrink-0 pr-4">
+          {/* 左：標題區 slideInUp 延 200（照模板 L51/w479；膠囊 → 大標 → 段落 + CTA） */}
+          <Reveal anim="slideInUp" delayMs={200} className="lg:w-[479px] lg:shrink-0 pr-4">
             {/* 副標膠囊（照模板 .elementor-title-span：border white/25、radius 24、padding 3/13/3/9、金點 + 15/ls1/uppercase） */}
             <div className="mb-[26px]">
               <span className="inline-flex items-center gap-2 rounded-[24px] border border-white/25 pt-[3px] pr-[13px] pb-[3px] pl-[9px]">
@@ -118,11 +120,14 @@ export function GallerySection() {
                 <ArrowRight className="w-5 h-5" />
               </span>
             </a>
-          </div>
+          </Reveal>
 
-          {/* 右：2 張卡（#active+1、#active+2），隨主圖聯動輪替 */}
+          {/* 右：2 張卡 slideInUp 延 400（含拖曳，故用 useReveal ref） */}
           <div
-            className="lg:flex-1 lg:min-w-0 flex justify-end select-none touch-pan-y"
+            ref={cardsRef}
+            data-ev="slideInUp"
+            style={{ animationDelay: '400ms' }}
+            className="ev lg:flex-1 lg:min-w-0 flex justify-end select-none touch-pan-y mt-[53px]"
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
@@ -165,7 +170,7 @@ export function GallerySection() {
             </div>
           </div>
         </div>
-      </Reveal>
+      </div>
     </section>
   );
 }

@@ -6,16 +6,66 @@ import { useParallax } from '../motion/useParallax';
 
 // 10 種廚房風格（依對照表：英文標題 / 中文膠囊 / hover 描述；Basic+ 無中文）
 const STYLES = [
-  { en: 'Basic+', zh: '', desc: 'Basic+廚房系列 以生活的基本為出發', image: '/kitchen-styles/basic-plus.jpg' },
-  { en: 'AI Kitchen', zh: 'AI廚房', desc: '突破未來格局 開啟廚房智高點', image: '/kitchen-styles/ai-kitchen.jpg' },
-  { en: 'Clever Kitchen', zh: '巧域廚房', desc: '極致收納 在廚房', image: '/kitchen-styles/clever.jpg' },
-  { en: 'Loft Chic Kitchen', zh: '潮派廚房', desc: '品味浪漫 在廚房', image: '/kitchen-styles/loft-chic.jpg' },
-  { en: 'Joyful Kitchen', zh: '童樂廚房', desc: '幸福享樂 在廚房', image: '/kitchen-styles/joyful.jpg' },
-  { en: 'Premium Kitchen', zh: '君璽廚房', desc: '成就不凡 在廚房', image: '/kitchen-styles/premium.jpg' },
-  { en: 'Elegant Kitchen', zh: '臻美廚房', desc: '臻萃美緻 在廚房', image: '/kitchen-styles/elegant.jpg' },
-  { en: 'Chef Kitchen', zh: '大廚廚房', desc: '心滿藝足 在廚房', image: '/kitchen-styles/chef.jpg' },
-  { en: 'Country Kitchen', zh: '鄉村廚房', desc: '鄉村慢活 在廚房', image: '/kitchen-styles/country.jpg' },
-  { en: 'Harmony Kitchen', zh: '閣樂廚房', desc: '天倫團聚 在廚房', image: '/kitchen-styles/harmony.jpg' },
+  {
+    en: "Basic+",
+    zh: "Basic+",
+    desc: "Basic+廚房系列 以生活的基本為出發",
+    image: "/kitchen-styles/basic-plus.jpg",
+  },
+  {
+    en: "AI Kitchen",
+    zh: "AI廚房",
+    desc: "突破未來格局 開啟廚房智高點",
+    image: "/kitchen-styles/ai-kitchen.jpg",
+  },
+  {
+    en: "Clever Kitchen",
+    zh: "巧域廚房",
+    desc: "極致收納 在廚房",
+    image: "/kitchen-styles/clever.jpg",
+  },
+  {
+    en: "Loft Chic Kitchen",
+    zh: "潮派廚房",
+    desc: "品味浪漫 在廚房",
+    image: "/kitchen-styles/loft-chic.jpg",
+  },
+  {
+    en: "Joyful Kitchen",
+    zh: "童樂廚房",
+    desc: "幸福享樂 在廚房",
+    image: "/kitchen-styles/joyful.jpg",
+  },
+  {
+    en: "Premium Kitchen",
+    zh: "君璽廚房",
+    desc: "成就不凡 在廚房",
+    image: "/kitchen-styles/premium.jpg",
+  },
+  {
+    en: "Elegant Kitchen",
+    zh: "臻美廚房",
+    desc: "臻萃美緻 在廚房",
+    image: "/kitchen-styles/elegant.jpg",
+  },
+  {
+    en: "Chef Kitchen",
+    zh: "大廚廚房",
+    desc: "心滿藝足 在廚房",
+    image: "/kitchen-styles/chef.jpg",
+  },
+  {
+    en: "Country Kitchen",
+    zh: "鄉村廚房",
+    desc: "鄉村慢活 在廚房",
+    image: "/kitchen-styles/country.jpg",
+  },
+  {
+    en: "Harmony Kitchen",
+    zh: "閣樂廚房",
+    desc: "天倫團聚 在廚房",
+    image: "/kitchen-styles/harmony.jpg",
+  },
 ];
 
 export function ProjectSection() {
@@ -60,7 +110,7 @@ export function ProjectSection() {
   }, [emblaApi]);
 
   return (
-    <section ref={sectionRef} className="reveal relative z-10 bg-[#f6f6f6]">
+    <section ref={sectionRef} data-ev="slideInUp" className="ev relative z-10 bg-[#f6f6f6]">
       <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
         <div className="flex">
           {STYLES.map((s, i) => (
@@ -117,14 +167,14 @@ export function ProjectSection() {
       <button
         onClick={() => emblaApi?.scrollPrev()}
         aria-label="上一個"
-        className="absolute left-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-[#E3DED7] bg-white text-[#3E3A39] flex items-center justify-center transition-colors duration-300 hover:bg-[#C9AA79] hover:border-[#C9AA79] hover:text-white"
+        className="absolute left-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#C9AA79] hover:border-[#C9AA79] hover:text-white"
       >
         <ArrowLeft className="w-6 h-6" />
       </button>
       <button
         onClick={() => emblaApi?.scrollNext()}
         aria-label="下一個"
-        className="absolute right-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-[#E3DED7] bg-white text-[#3E3A39] flex items-center justify-center transition-colors duration-300 hover:bg-[#C9AA79] hover:border-[#C9AA79] hover:text-white"
+        className="absolute right-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#C9AA79] hover:border-[#C9AA79] hover:text-white"
       >
         <ArrowRight className="w-6 h-6" />
       </button>

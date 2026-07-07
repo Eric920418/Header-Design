@@ -19,7 +19,7 @@ export function PricingSection() {
     <section className="relative bg-[#f6f6f6] pt-[125px] overflow-hidden">
       <div className="max-w-[1410px] mx-auto">
         {/* 標題列（座標依模板實測，相對 1410 版心）：十字裝飾線 + eyebrow(左,top46) + 大標(left424） */}
-        <Reveal className="relative mb-[60px]">
+        <Reveal anim="slideInUp" className="relative mb-[60px]">
           {/* 十字裝飾線（桌面，模板實測照抄）：橫線 y16 寬502、直線 x363 上臂54/下臂125、兩端箭頭 15px；線與箭頭同色 #e3e3e8 */}
           <div
             aria-hidden
@@ -70,7 +70,7 @@ export function PricingSection() {
         <div className="grid grid-cols-3 gap-[30px] items-stretch">
           {/* 欄1：SAKURA 廚電 — 深色圖卡 + 三產品線金勾（stagger 首張，無延遲） */}
           <Reveal
-            inner
+            anim="slideInUp"
             className="relative rounded-3xl overflow-hidden min-h-[771px]"
           >
             <img
@@ -111,12 +111,12 @@ export function PricingSection() {
             </div>
           </Reveal>
 
-          {/* 欄2/3：SVAGO / TEKA — 白卡（上文字、下產品圖鋪滿）+ 了解更多按鈕；stagger delay 1、2 */}
+          {/* 欄2/3：SVAGO / TEKA — 白卡；slideInUp stagger（模板 300 / 500） */}
           {BRANDS.map((b, i) => (
             <Reveal
               key={i}
-              inner
-              delay={(i + 1) as 1 | 2}
+              anim="slideInUp"
+              delayMs={300 + i * 200}
               className="rounded-3xl bg-white overflow-hidden flex flex-col min-h-[771px]"
             >
               <div className="px-8 lg:px-10 pt-10">

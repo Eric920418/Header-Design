@@ -144,7 +144,7 @@ export function Header() {
             </div>
 
             <a href="#" className="shrink-0 px-6">
-              <img src="/logo.svg" alt="SAKURA KITCHEN" className="h-6" />
+              <img src="/sakura-logo.png" alt="SAKURA KITCHEN" className="h-11" />
             </a>
 
             <div className="flex-1 flex items-center justify-end gap-1">
@@ -165,7 +165,7 @@ export function Header() {
           {/* ── 手機版 bar：logo + 搜尋 + 漢堡 ── */}
           <div className="flex lg:hidden items-center justify-between w-full">
             <a href="#">
-              <img src="/logo.svg" alt="SAKURA KITCHEN" className="h-6" />
+              <img src="/sakura-logo.png" alt="SAKURA KITCHEN" className="h-11" />
             </a>
             <div className="flex items-center gap-1">
               <button

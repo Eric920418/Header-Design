@@ -331,40 +331,48 @@ body {
   animation: gallery-card-in 0.6s ease both;
 }
 
-/* ── 捲動出場動畫（複刻 Antra elementor-invisible→animated 的 opalMoveUp：淡入 + 上升）──
-   由 src/motion/Reveal.tsx 的 IntersectionObserver 在進場時加上 .is-visible 觸發。
-   鐵則：勿套在 Embla / animate-gallery-card / hover-scale 佔用 transform 的元素上。 */
-.reveal {
-  opacity: 0;
-  transform: translateY(56px);
-  transition:
-    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
-  will-change: opacity, transform;
+/* ── 捲動出場動畫：完全比照 Antra 模板（Elementor elementor-invisible → animated <name>）──
+   hidden state = visibility:hidden（同模板 .elementor-invisible）；由 src/motion/Reveal.tsx 的
+   IntersectionObserver 進場時加 .is-visible 觸發，animation-name 由 data-ev 決定，1.25s / fill both。
+   鐵則：勿套在 Embla / animate-gallery-card / hover-scale / GSAP 視差 佔用 transform 的元素上（包外層 wrapper）。 */
+.ev {
+  visibility: hidden;
 }
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
+.ev.is-visible {
+  visibility: visible;
+  animation-duration: 1.25s;
+  animation-fill-mode: both;
+  animation-timing-function: ease;
 }
-/* 內部小元素用較小位移（模板 100px 在 overflow-hidden 段會被裁，故縮小） */
-.reveal-inner {
-  transform: translateY(32px);
-}
-.reveal-delay-1 {
-  transition-delay: 0.15s;
-}
-.reveal-delay-2 {
-  transition-delay: 0.3s;
-}
-.reveal-delay-3 {
-  transition-delay: 0.45s;
-}
+.ev.is-visible[data-ev="slideInUp"]    { animation-name: slideInUp; }
+.ev.is-visible[data-ev="slideInDown"]  { animation-name: slideInDown; }
+.ev.is-visible[data-ev="slideInLeft"]  { animation-name: slideInLeft; }
+.ev.is-visible[data-ev="slideInRight"] { animation-name: slideInRight; }
+.ev.is-visible[data-ev="fadeIn"]       { animation-name: fadeIn; }
+.ev.is-visible[data-ev="fadeInUp"]     { animation-name: fadeInUp; }
+.ev.is-visible[data-ev="fadeInDown"]   { animation-name: fadeInDown; }
+.ev.is-visible[data-ev="opalMoveUp"]    { animation-name: opalMoveUp; }
+.ev.is-visible[data-ev="opalMoveDown"]  { animation-name: opalMoveDown; }
+.ev.is-visible[data-ev="opalMoveLeft"]  { animation-name: opalMoveLeft; }
+.ev.is-visible[data-ev="opalMoveRight"] { animation-name: opalMoveRight; }
+.ev.is-visible[data-ev="opalScaleUp"]   { animation-name: opalScaleUp; }
 
-/* 減少動態：直接顯示、不位移、不過場 */
+/* Elementor 核心進場 keyframe（100% 位移，逐字取自 demo styleSheets） */
+@keyframes slideInUp    { 0% { transform: translate3d(0, 100%, 0); visibility: visible; }  100% { transform: translate3d(0, 0, 0); } }
+@keyframes slideInDown  { 0% { transform: translate3d(0, -100%, 0); visibility: visible; } 100% { transform: translate3d(0, 0, 0); } }
+@keyframes slideInLeft  { 0% { transform: translate3d(-100%, 0, 0); visibility: visible; } 100% { transform: translate3d(0, 0, 0); } }
+@keyframes slideInRight { 0% { transform: translate3d(100%, 0, 0); visibility: visible; }  100% { transform: translate3d(0, 0, 0); } }
+@keyframes fadeIn       { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes fadeInUp     { 0% { opacity: 0; transform: translate3d(0, 100%, 0); }  100% { opacity: 1; transform: none; } }
+@keyframes fadeInDown   { 0% { opacity: 0; transform: translate3d(0, -100%, 0); } 100% { opacity: 1; transform: none; } }
+/* Antra 自訂進場 keyframe（100px 位移 + 淡入，取自主題 elementor.css）— 備用（可將 slide* 對映到此） */
+@keyframes opalMoveUp    { 0% { transform: translateY(100px); opacity: 0; }  100% { transform: translateY(0); opacity: 1; } }
+@keyframes opalMoveDown  { 0% { transform: translateY(-100px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes opalMoveLeft  { 0% { transform: translateX(100px); opacity: 0; }  100% { transform: translateX(0); opacity: 1; } }
+@keyframes opalMoveRight { 0% { transform: translateX(-100px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+@keyframes opalScaleUp   { 0% { opacity: 0; transform: scale(0.6); } 100% { transform: scale(1); opacity: 1; } }
+
+/* 減少動態：直接顯示、不動畫 */
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
+  .ev, .ev.is-visible { visibility: visible !important; animation: none !important; }
 }

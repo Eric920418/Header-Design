@@ -32,7 +32,7 @@ export function WhatWeDoSection() {
       />
       <div className="relative z-10 max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
-        <Reveal className="lg:w-[600px] lg:shrink-0">
+        <Reveal anim="slideInLeft" className="lg:w-[600px] lg:shrink-0">
           {/* 副標膠囊（照模板：border rgba(114,114,114,.18)、radius 24、padding 3/13/3/10、金點 + 15/ls1/uppercase） */}
           <span className="inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px] mb-5 text-[15px] tracking-[1px] uppercase text-[#000000]">
             <span
@@ -56,17 +56,14 @@ export function WhatWeDoSection() {
           {/* 打勾清單（含分隔線） */}
           <ul className="mt-9 border-t border-[#E3DED7]">
             {ITEMS.map((t, i) => (
-              <Reveal
-                as="li"
+              <li
                 key={i}
-                inner
-                delay={(i + 1) as 1 | 2 | 3}
                 className="flex items-center gap-3 py-4 border-b border-[#E3DED7] text-[#000000] text-[18px] leading-[24px] font-normal"
               >
                 {/* 打勾：照模板為純金 check icon（~19px、無圓底） */}
                 <Check className="w-[19px] h-[19px] shrink-0" strokeWidth={3} style={{ color: GOLD }} />
                 {t}
-              </Reveal>
+              </li>
             ))}
           </ul>
 
@@ -94,7 +91,7 @@ export function WhatWeDoSection() {
         </Reveal>
 
         {/* 右：16:9 影片區塊（整塊淡入上升；影片卡自有 hover:scale，故 Reveal 掛在外層不搶 transform） */}
-        <Reveal className="relative flex-1 w-full">
+        <Reveal anim="slideInRight" delayMs={300} className="relative flex-1 w-full">
          
           {/* 影片卡：hover 依比例微放大 */}
           <div className="group relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black transition-transform duration-500 hover:scale-[1.02]">
@@ -108,14 +105,15 @@ export function WhatWeDoSection() {
               aria-label="播放影片"
               className="absolute inset-0 flex items-center justify-center"
             >
+              {/* 依模板 .elementor-video-popup：半透明白圓 rgba(255,255,255,0.36) + 白播放三角（非金） */}
               <span
-                className="relative flex items-center justify-center w-20 h-20 rounded-full text-white shadow-lg transition-transform duration-300 group-hover:scale-110"
-                style={{ background: GOLD }}
+                className="relative flex items-center justify-center w-20 h-20 rounded-full text-white shadow-lg backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
+                style={{ background: 'rgba(255,255,255,0.36)' }}
               >
-                {/* 脈動光圈（icon 動畫） */}
+                {/* 脈動光圈（icon 動畫）— 同白色 */}
                 <span
                   className="absolute inset-0 rounded-full animate-ping opacity-30"
-                  style={{ background: GOLD }}
+                  style={{ background: 'rgba(255,255,255,0.36)' }}
                   aria-hidden
                 />
                 <Play className="relative w-7 h-7 translate-x-0.5" fill="currentColor" />

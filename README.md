@@ -46,7 +46,10 @@ pnpm build
 模組集中在 **`src/motion/`**，三種效果皆對映 Antra 模板實測值，且都受 `prefers-reduced-motion` 保護。套件（pnpm）：`lenis`、`gsap`。
 
 - **平滑捲動阻尼（Lenis）** — `src/motion/{useSmoothScroll.ts, ScrollMotionProvider.tsx}`。對映模板 config：`duration: 1.5` + expo ease-out `t=>Math.min(1,1.001-2**(-10*t))`。用 **原生捲動模式**（不設 wrapper/content transform），故不碰 `ScaleToFit` 的 canvas `scale`、也不破壞 `FloatingButtons` 的 `fixed`。只在 **桌面（>992px）且非 reduced-motion** 啟用，跨 992px / 偏好變更自動啟停。GSAP 與 Lenis 共用單一 rAF（`gsap.ticker`），內容高度變動時自建 `ResizeObserver` → `lenis.resize()` + `ScrollTrigger.refresh()`。`ScrollMotionProvider` 掛在 `ScaleToFit` **外層**。
-- **出場動畫（IntersectionObserver + CSS）** — `src/motion/Reveal.tsx` + `globals.css` 的 `.reveal`。複刻模板 `opalMoveUp`（淡入 + 上升）：section 級 `translateY(56px)`、內部 stagger `.reveal-inner` `32px` + `.reveal-delay-1~3`。進場一次不重播。`<Reveal>` 包裹元件或 `useReveal(ref)` 掛在 `<section>` 根。**鐵則：勿套在 Embla / `animate-gallery-card` / hover-scale 佔用 transform 的元素上**（Pricing 三卡、WhatWeDo 三 li 做 stagger；Gallery 改包內容塊、Project 只包 section 根）。
+- **出場動畫（IntersectionObserver + CSS，完全比照 Antra 模板）** — `src/motion/Reveal.tsx` + `globals.css` 的 `.ev`。逐 section 用模板實際的 Elementor 進場動畫（keyframe 逐字取自 demo `styleSheets`；`.animated` = `1.25s` / fill `both`；hidden state = `visibility:hidden` 同 `.elementor-invisible`）。機制：`.ev { visibility:hidden }`、IntersectionObserver 進場加 `.is-visible`、`animation-name` 由 `data-ev` 決定（進場一次不重播、reduced-motion 直接顯示）。
+  - **API**：`<Reveal anim="slideInLeft" delayMs={300}>` 或 `useReveal(ref)` 掛既有元素（配 `className="ev"` + `data-ev` + inline `animationDelay`）。`anim` 支援 `slideInUp/Down/Left/Right`、`fadeIn/Up/Down`（Elementor 核心 **100% 位移**）+ `opalMoveUp/…/opalScaleUp`（主題 100px 版，備用）。
+  - **逐 section 對映（實測 demo）**：Hero section `fadeInDown` + 標題區 `slideInLeft` + 浮水印 `fadeInUp`(900)；Project section `slideInUp`；Pricing 標題 `slideInUp` + 三卡 `slideInUp`(0/300/500)；Gallery 標題 `slideInUp`(200) + 右卡欄 `slideInUp`(400)；WhatWeDo 左 `slideInLeft` + 右影片 `slideInRight`(300)；StoreLocation `slideInUp`；**Footer 無進場**（模板亦無）。
+  - **鐵則**：`.ev` 用 `transform`（fill both 收在 none），**勿套在已佔 transform 的元素**（Embla 軌道、`.project-parallax-img`/`.gallery-bg`/`.wwd-blueprint` 視差、`animate-gallery-card`、hover-scale/rotate）→ 一律包外層 wrapper。`slideInLeft/Right` 的 100% 位移靠 section `overflow-hidden` 裁切避免水平捲軸。
 - **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。**不用 `pin`**：pin 的 `position:fixed`+pin-spacer 在 `transform:scale()` 祖先下量測錯誤，改用 `yPercent` scrub（`scrub:0.5`）位移達到同觀感。目標：ProjectSection 每張 `.project-parallax-img`（scale 1.08 留出血）、GallerySection 全出血背景 `.gallery-bg`（scale 1.12）、WhatWeDo 裝飾 `.wwd-blueprint`。只寫內層 transform，永不碰 `canvasRef`。
 
 ## 色彩規範（SAKURA KITCHEN CIS）— 全站已對齊
@@ -143,7 +146,7 @@ pnpm build
 - **滿寬**：`FloatingButtons` 桌面版改為 `fixed` 浮動欄、不再佔用 75px 軌道，主內容因此滿寬。
 - **構成**：全出血深色大圖 + 左對齊金點 eyebrow + 雙色大標題（白/金交錯）+ 副標 + 左下圓形按鈕（`Discover More`）+ 底部金色浮水印（`SAKURA`，對位模板 T725）——**依模板 Home Six「Interior」浮水印實測：金漸層 `linear-gradient(#C9AA79 14.9%, transparent 80.95%)`（金頂→透明底）+ `background-clip:text` + `opacity 0.64`**（比舊版 `gold @0.14` 深約 4.5×，才「跟模板一樣深」）。**文案為英文佔位**（大標 `We Shape / Inspiring Spaces`，兩行兩色），待正式內容替換。
 - **左側「品牌系列」伸縮抽屜（桌面）**：左緣一個玻璃把手（`ChevronRight` + 直排「品牌系列」，用 `.writing-vertical`），點擊 `open` state 切換。抽屜面板 `w-0 ↔ w-[190px]` 伸縮淡入，列出**品牌系列 8 個中文名**（`SERIES`：巧域／潮派／童樂／君璽／臻美／大廚／鄉村／閣樂廚房；Basic+ / AI kitchen 無中文故略），hover 顯示金色左邊條 + 金字。**「不蓋過主視覺」的做法**：展開時把**內容層（標題/副標，`translateX(200px)`）、左下圓鈕（同 200px）、底部浮水印（`translateX(250px)`）**一起右推、讓出左側空間（皆 `transition 500ms`）。收合時只剩把手在左緣、不佔畫面。**手機不顯示**此抽屜（`hidden lg:flex`），故不觸發位移。
-- **品牌帶（採 Antra Home Four 版型）**：Hero 下方淺色背景（`#f6f6f6`）+ 一排 `BrandLogo`（`STYLE_TAGS`）。**6 個靜態項**（`STYLE_TAGS`，非跑馬燈），每項 = 左**圖示** `public/brand-logos/icon.svg`（`img` 58×58、`opacity-60` hover→100）+ 右**「中文（粗體 15px）／英文（13px）」兩行**：現代風/Modern、輕奢風/Modern Luxury、北歐風/Scandinavian、工業風/Industrial、美式風/American、鄉村風/Country。`icon.svg` 是從 Home Four `elementor-brand` 的模板 logo `4.svg`（BUILDING CONSTRUCTION）**只抽出左側建築圖示路徑**（SVG 文字為向量路徑無法直接改字，故移除字、留 icon），`#59585D`→CIS `#3E3A39`。`public/brand-logos/1–4.svg` 為抓下來的 4 個完整模板示範 logo（備用）；換正式圖示改 `BrandTag` 的 `src` 即可。高度沿用 `--hero-brand-h`（64/76/88px）；容器用 `flex-wrap + minHeight`，桌面一排、手機自動換行。
+- **品牌帶（採 Antra Home Four 版型）**：Hero 下方淺色背景（`#f6f6f6`）+ **marquee 輪播**（同模板 `elementor-brand` 動態）。**6 項**（`STYLE_TAGS`），每項 = **上：對應的模板品牌「icon」**（只留圖示、**去掉 SVG 原生的品牌英文字**；`img h-[38px]`、`opacity-70` hover→100）+ **下：中文（粗體 15px）／英文（13px）兩行置中**。**每項用不同 icon**（Home Four 6 個 `elementor-brand`，實測依 viewBox 寬度配對、對照使用者 Image #40）：現代風→`5.svg`(ARCHITECT)、輕奢風→`6.svg`(BUILDING圓)、北歐風→`4.svg`(BUILDING2)、工業風→`3.svg`(REAL ESTATE)、美式風→`1.svg`(TREND)、鄉村風→`2.svg`(INTERIOR)。`public/brand-logos/1–6.svg` = 6 個 icon-only SVG，統一 `#3E3A39`：**用瀏覽器 `getBBox` 把每個 wordmark 的 icon 路徑與文字路徑依 x 座標間隙分群、只保留 icon 群、重算 viewBox**（原 wordmark 版已被覆寫）。`icon.svg` 為更早的單一建築圖示（已停用）。**輪播**：`[...STYLE_TAGS, ...STYLE_TAGS]` 重複兩組 + `.animate-marquee`（`marquee` keyframe，40s，`-50%` 無縫循環）+ `group-hover:[animation-play-state:paused]`。高度沿用 `--hero-brand-h`。
 - **Gallery 已移除**：原本 Hero 下方的圖庫展示（大圖 + 縮圖）已拿掉，改由 `ProjectSection`（專案輪播）取代，見下方 Section 2。
 
 ## Section 2（專案輪播）— Antra Home Six 精準複刻
@@ -156,7 +159,7 @@ pnpm build
 - **hover 效果**：滑到卡片時卡片變寬（378→567）+ **英文標題轉金 `#C9AA79`** + **底部由下淡入浮現該風格描述**（`s.desc`，如「極致收納 在廚房」；`max-h-0 opacity-0 → group-hover:max-h-20 opacity-100`，`transition-all 500ms`）。
 - **hover 伸縮**：卡片寬度 `×1.5`（`378→567px`，固定高度只變寬），橫式廚房圖靜態裁成直切片、hover 變寬露出更多；EN 標題 hover 轉金（`#C9AA79`）。
 - **捲動 + 自動輪播**：`embla-carousel-react`（`loop:true` + `dragFree`）。**自動輪播**：`setInterval` 每 3.5s 呼叫 `emblaApi.scrollNext()`；滑鼠移入輪播（`rootNode` 的 `mouseenter`）以 `pausedRef` 暫停、移出（`mouseleave`）恢復。仍可手動拖曳;**拖曳時（`pointerDown`）以 `dragging` state 暫停 hover 變寬**，否則卡片一碰就展開會把拖曳打斷（拖不動）。
-- **左右兩側 prev/next 箭頭**（依主題原始碼 `style.css` `.antra-swiper-wrapper .elementor-swiper-button`）：`w-12 h-12`(**48×48**) 白圓 + `border 1px #E3DED7`(≈`--e-global-color-border`) + lucide 箭頭 `w-6`(**24**)；`absolute left/right-[30px] top-1/2 -translate-y-1/2 z-20`（垂直置中、貼左右邊 30）；**hover 金底 `#C9AA79` + 金邊 + 白箭頭**；`onClick` 呼叫 `emblaApi.scrollPrev/Next`。（48/24 為 px 值，不受 demo root 20px 影響。）
+- **左右兩側 prev/next 箭頭**（源自主題 `style.css` `.antra-swiper-wrapper .elementor-swiper-button` 的 48×48）：`w-12 h-12`(**48×48**) + lucide 箭頭 `w-6`(**24**)、**半透明磨砂**（`bg-white/10 backdrop-blur-md` + `border-white/30` + 白 icon，透出後方廚房照，非實心白）；`absolute left/right-[30px] top-1/2 -translate-y-1/2 z-20`（垂直置中、貼左右邊 30）；**hover 金底 `#C9AA79` + 金邊 + 白箭頭**；`onClick` 呼叫 `emblaApi.scrollPrev/Next`。
 - **內容 = 10 種廚房風格**（真圖）：Basic+ / AI kitchen（僅英文）、Clever 巧域廚房 / Loft Chic 潮派廚房 / Joyful 童樂廚房 / premium 君璽廚房 / Elegant 臻美廚房 / Chef 大廚廚房 / Country 鄉村廚房 / Harmony 閣樂廚房。圖片放在 `public/kitchen-styles/*.jpg`（來源 `Downloads/首頁用圖/品牌系列x10`；Clever 已縮圖）。
 
 ## 價目表（Pricing）— Antra Pricing 忠實複刻
@@ -196,7 +199,7 @@ pnpm build
   - **雙色大標** `text-[60px] leading-[64px]`（h2 文字目前為佔位「Antra Has Brand Promise Architectural」，模板原文是「Antra has created exceptional architectural designs.」，待定案）。
   - **打勾清單**：照模板為**純金 `Check` icon（`w-[19px]`、色 `#C9AA79`、無圓底）**（非先前的金圓底+白勾）；清單字 18/24 `font-normal`（模板 weight 400）。
   - **CTA「櫻花優勢」= antra 標準按鈕**，**與上一個 section（Gallery「查看所有案例」）尺寸一致**：透明底、`border 1px rgba(159,159,164,.64)`、字 **15px**、`padding 7/7/7/30`、`gap-4`、盒高 **56**、金圓 **40** 箭頭預設 `-rotate-45`；hover 整顆填金 `#C9AA79` + 字白 + 箭頭 `rotate-0`。差別僅字色（淺底黑字，`hover:text-white`）。（三顆 antra 按鈕 Gallery/Pricing/WhatWeDo 統一 7/7/7/30/gap-4/高 56。）
-- **右欄影片區**：**16:9 影片區塊**（`aspect-video`，圓角 24px + 陰影 + 黑底）：縮圖 poster（`VIDEO_POSTER`）鋪滿 + 置中主色金圓播放鈕（`Play`），播放鈕加**脈動光圈**（`animate-ping`）與 hover 放大；影片卡 hover 依比例微放大（`hover:scale-[1.02]`）。
+- **右欄影片區**：**16:9 影片區塊**（`aspect-video`，圓角 24px + 陰影 + 黑底）：縮圖 poster（`VIDEO_POSTER`）鋪滿 + 置中播放鈕（`Play`）；**播放鈕依模板 `.elementor-video-popup` 改為半透明白圓 `rgba(255,255,255,0.36)` + `backdrop-blur` + 白三角**（非金），加**脈動光圈**（`animate-ping`，同白）與 hover 放大；影片卡 hover 依比例微放大（`hover:scale-[1.02]`）。
 - **背景右下半透明建築圖 = 模板原圖 `h6-bg-3.png`**（已下載至 `public/decor/h6-bg-3.png`，821×520、PNG 本身半透明的現代建築線稿）：`<img src={BLUEPRINT}>` `absolute bottom-0 right-0 z-0 w-[600px] max-w-[48%] pointer-events-none`（opacity 用 1，同模板 layer；PNG 自帶半透明）；內容容器 `relative z-10` 疊其上；掛 `.wwd-blueprint` 讓 `useParallax` 做輕微視差。對應模板 `f0420ee` 的 `background-position:100% 100% / no-repeat`。
 - 影片來源未定：poster 為佔位、播放鈕 `onClick` 尚未接（待提供 YouTube 連結或影片檔即可接 lightbox/iframe）。文字為佔位。放在 `App.tsx` 圖庫區之後。
 
@@ -214,7 +217,7 @@ pnpm build
 
 ## Header — SAKURA 巨型選單（mega-menu）
 
-`Header.tsx`：單一金色 bar、**中央 logo**、左右各一組導覽，自訂 Tailwind 實作（未用 Radix，與全站一致）。
+`Header.tsx`：單一金色 bar、**中央 logo**（`public/sakura-logo.png`，白色雙行「SAKURA／KITCHEN」含紅標記，`img h-8`；桌面/手機共用）、左右各一組導覽，自訂 Tailwind 實作（未用 Radix，與全站一致）。
 
 - **背景／字型／字級對齊參考站 `sakura-kitchenlife.com.tw`**（實測 `.l-header`／`.l-nav__item`，常數定義於 `Header.tsx` 頂部）：背景漸層 `linear-gradient(90deg, #B79258 20%, #D2B587)`（`HEADER_GRADIENT`）；字型堆疊 `"Noto Sans TC","PingFang TC","Microsoft JhengHei",微軟正黑體`（`HEADER_FONT`，套在 `<header>` 上向下繼承，**未外連 Google Fonts**、Mac 上 fallback 至 PingFang TC）；導覽字級 `text-[15px]`、weight 400、字色純白。
 - **間距對齊參考站**：bar 容器改 `px-5 lg:px-12`（20/48px）且**滿寬**（移除原 `max-w-7xl mx-auto`），對齊參考站左右邊距 48px；搜尋展開列同步 `px-5 lg:px-12`。導覽項文字間距 28px（既有 `px-3`+`gap-1` 已等於 28px，與參考站一致）。bar 高度仍維持 `72px`（未動，因 mega-menu 以 `top-[72px]` 定位）。**注意**：參考站為「logo 靠左＋導覽靠右」的 space-between 版型，本專案為「導覽左半｜中央 logo｜導覽右半」置中版型（README 明載之自訂設計），故僅間距數值對齊，整體佈局結構刻意不同。

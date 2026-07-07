@@ -35,29 +35,38 @@ export function useReveal<T extends HTMLElement>() {
   return ref;
 }
 
+/** 模板進場動畫名（對應 globals.css 的 @keyframes；slideIn/fadeIn = Elementor 核心 100% 位移，opal = 主題 100px 版備用） */
+export type EvName =
+  | 'slideInUp' | 'slideInDown' | 'slideInLeft' | 'slideInRight'
+  | 'fadeIn' | 'fadeInUp' | 'fadeInDown'
+  | 'opalMoveUp' | 'opalMoveDown' | 'opalMoveLeft' | 'opalMoveRight' | 'opalScaleUp';
+
 type RevealProps = {
   as?: keyof JSX.IntrinsicElements;
   className?: string;
-  /** stagger 序位：0 無延遲、1/2/3 對應 .reveal-delay-N */
-  delay?: 0 | 1 | 2 | 3;
-  /** 內部小元素用較小位移：套 .reveal-inner */
-  inner?: boolean;
+  /** 模板進場動畫名（預設 opalMoveUp = 淡入上升 100px） */
+  anim?: EvName;
+  /** stagger 延遲（毫秒），對應模板 animation_delay */
+  delayMs?: number;
   children: React.ReactNode;
 };
 
 /**
- * 出場動畫包裹元件（淡入 + 上升）。預設 <div>，可用 as 指定標籤。
- * 鐵則：不要包在會被 Embla / animate-gallery-card / hover-scale 佔用 transform 的元素上。
+ * 出場動畫包裹元件（完全比照 Antra 模板）。預設 <div>，可用 as 指定標籤。
+ * anim 決定方向（slideInLeft/Right/Up/Down、fadeIn*、opal*），delayMs 決定 stagger。
+ * 鐵則：不要包在會被 Embla / animate-gallery-card / hover-scale / GSAP 視差 佔用 transform 的元素上。
  */
-export function Reveal({ as = 'div', className = '', delay = 0, inner = false, children }: RevealProps) {
+export function Reveal({ as = 'div', className = '', anim = 'opalMoveUp', delayMs = 0, children }: RevealProps) {
   const ref = useReveal<HTMLElement>();
-  const cls = [
-    'reveal',
-    inner ? 'reveal-inner' : '',
-    delay ? `reveal-delay-${delay}` : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-  return React.createElement(as, { ref, className: cls }, children);
+  const cls = ['ev', className].filter(Boolean).join(' ');
+  return React.createElement(
+    as,
+    {
+      ref,
+      className: cls,
+      'data-ev': anim,
+      style: delayMs ? { animationDelay: `${delayMs}ms` } : undefined,
+    },
+    children
+  );
 }
