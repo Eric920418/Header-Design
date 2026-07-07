@@ -9,9 +9,10 @@ import { GOLD } from '../theme/cis'; // 品牌金 = CIS 466c #C9AA79（單一來
 const SAKURA_ITEMS = ['廚房商品', '淨水器', '熱水器'];
 
 // SVAGO / TEKA（白卡 + 產品圖；圖源 影像/廚房產品 → public/products/*.jpg，描述為佔位）
+// logoH：各品牌 SVG 內部留白不同（svago 貼字無留白、teka 內含留白），故用各自高度讓「可見字形」視覺一致。
 const BRANDS = [
-  { name: 'SVAGO', logo: '/brand-logos/svago.svg', desc: '義式精品家電，為居家注入質感與品味。', image: '/products/svago.jpg' },
-  { name: 'TEKA', logo: '/brand-logos/teka.svg', desc: '德國進口廚電，專業級的料理表現。', image: '/products/teka.jpg' },
+  { name: 'SVAGO', logo: '/brand-logos/svago.svg', logoH: 38, desc: '義式精品家電，為居家注入質感與品味。', image: '/products/svago.jpg' },
+  { name: 'TEKA', logo: '/brand-logos/teka.svg', logoH: 48, desc: '德國進口廚電，專業級的料理表現。', image: '/products/teka.jpg' },
 ];
 
 export function PricingSection() {
@@ -90,7 +91,7 @@ export function PricingSection() {
               <img
                 src="/sakura-kitchen-logo.png"
                 alt="SAKURA KITCHEN 櫻花整體廚房"
-                className="h-[44px] w-auto self-start"
+                className="h-[56px] w-auto self-start"
               />
               <h3 className="sr-only">SAKURA 廚電</h3>
               <ul className="mt-7 space-y-4">
@@ -125,7 +126,7 @@ export function PricingSection() {
             >
               <div className="px-8 lg:px-10 pt-10">
                 {/* 品牌 logo（替代文字標題）：SVAGO / TEKA 官方 SVG，高度對齊原 50px 標題 */}
-                <img src={b.logo} alt={b.name} className="h-[48px] w-auto" />
+                <img src={b.logo} alt={b.name} style={{ height: b.logoH }} className="w-auto" />
                 <h3 className="sr-only">{b.name}</h3>
                 <p className="mt-4 text-[#3E3A39] text-[20px] leading-[30px]">
                   {b.desc}
