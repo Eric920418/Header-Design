@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useReveal } from '../motion/Reveal';
-import { useParallax } from '../motion/useParallax';
 
 // 10 種廚房風格（依對照表：英文標題 / 中文膠囊 / hover 描述；Basic+ 無中文）
 const STYLES = [
@@ -77,9 +76,10 @@ export function ProjectSection() {
   const [dragging, setDragging] = useState(false);
   const pausedRef = useRef(false);
 
-  // section 進場淡入上升 + 每張圖隨捲動視差（皆不碰 Embla 的軌道 transform）
+  // section 進場淡入上升。
+  // ※ 已移除照片視差(useParallax)：視差給每張照片獨立 transform→GPU 獨立圖層，
+  //   輪播移動時相鄰圖層在環繞接縫對不齊而露縫（「照片才會、到點才合併」）。移除後照片與軌道同層、無縫。
   const sectionRef = useReveal<HTMLElement>();
-  useParallax(sectionRef, { targets: '.project-parallax-img', fromY: -8, toY: 8, scale: 1.08 });
 
   useEffect(() => {
     if (!emblaApi) return;

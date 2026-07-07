@@ -12,17 +12,17 @@ export function FloatingButtons() {
   return (
     <>
       {/* 桌面版 - 右側浮動欄（釘在視窗右側垂直置中）：左圓角 + 陰影 的整組 tab */}
-      <div className="hidden lg:flex flex-col fixed right-0 top-1/2 -translate-y-1/2 z-50 rounded-l-2xl overflow-hidden shadow-[0_12px_40px_-8px_rgba(0,0,0,0.28)]">
+      <div className="hidden lg:flex flex-col fixed right-0 top-1/2 -translate-y-1/2 z-50 rounded-l-xl overflow-hidden shadow-[0_12px_40px_-8px_rgba(0,0,0,0.28)]">
         {BUTTONS.map((b, i) => (
           <a
             key={b.label}
             href="#"
-            className={`w-[80px] h-[86px] flex flex-col items-center justify-center gap-1.5 text-white transition-colors ${
+            className={`w-[75px] h-[80px] flex flex-col items-center justify-center gap-1.5 text-white transition-colors ${
               b.gold ? 'bg-[#C9AA79] hover:bg-[#B8965F]' : 'bg-[#3E3A39] hover:bg-[#2E2B2A]'
             } ${i > 0 ? 'border-t border-white/10' : ''}`}
           >
             <img src={b.icon} alt="" className="h-5 w-auto" />
-            <span className="text-[12px] font-medium whitespace-nowrap tracking-[2px]">{b.label}</span>
+            <span className="text-[10px] font-medium whitespace-nowrap tracking-[2px]">{b.label}</span>
           </a>
         ))}
       </div>
