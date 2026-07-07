@@ -112,7 +112,7 @@ export function GallerySection() {
               href="#"
               className="group/cta inline-flex items-center gap-4 mt-[40px] rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-white capitalize transition-colors duration-500 hover:border-[#C9AA79] hover:bg-[#C9AA79]"
             >
-              <span className="text-[15px]">查看所有案例</span>
+              <span className="text-[15px]">更多設計</span>
               <span
                 className="inline-flex items-center justify-center w-[40px] h-[40px] rounded-full text-white transition-transform duration-500 -rotate-45 group-hover/cta:rotate-0"
                 style={{ background: GOLD }}

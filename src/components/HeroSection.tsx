@@ -138,7 +138,7 @@ export function HeroSection() {
                   <li key={i}>
                     <a
                       href="#"
-                      className="block pl-6 pr-4 py-2 text-base text-white/85 border-l-2 border-transparent hover:border-[#C9AA79] hover:text-[#C9AA79] hover:bg-white/5 transition-colors whitespace-nowrap"
+                      className="block pl-6 pr-4 py-2 text-base text-white border-l-2 border-transparent hover:border-[#C9AA79] hover:text-[#C9AA79] hover:bg-white/5 transition-colors whitespace-nowrap"
                     >
                       {name}
                     </a>

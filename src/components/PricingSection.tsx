@@ -10,8 +10,8 @@ const SAKURA_ITEMS = ['廚房商品', '淨水器', '熱水器'];
 
 // SVAGO / TEKA（白卡 + 產品圖；圖源 影像/廚房產品 → public/products/*.jpg，描述為佔位）
 const BRANDS = [
-  { name: 'SVAGO', desc: '義式精品家電，為居家注入質感與品味。', image: '/products/svago.jpg' },
-  { name: 'TEKA', desc: '德國進口廚電，專業級的料理表現。', image: '/products/teka.jpg' },
+  { name: 'SVAGO', logo: '/brand-logos/svago.svg', desc: '義式精品家電，為居家注入質感與品味。', image: '/products/svago.jpg' },
+  { name: 'TEKA', logo: '/brand-logos/teka.svg', desc: '德國進口廚電，專業級的料理表現。', image: '/products/teka.jpg' },
 ];
 
 export function PricingSection() {
@@ -120,9 +120,9 @@ export function PricingSection() {
               className="rounded-3xl bg-white overflow-hidden flex flex-col min-h-[771px]"
             >
               <div className="px-8 lg:px-10 pt-10">
-                <h3 className="text-[45px] leading-[50px] font-bold text-[#000000]">
-                  {b.name}
-                </h3>
+                {/* 品牌 logo（替代文字標題）：SVAGO / TEKA 官方 SVG，高度對齊原 50px 標題 */}
+                <img src={b.logo} alt={b.name} className="h-[48px] w-auto" />
+                <h3 className="sr-only">{b.name}</h3>
                 <p className="mt-4 text-[#3E3A39] text-[20px] leading-[30px]">
                   {b.desc}
                 </p>

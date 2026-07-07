@@ -31,7 +31,7 @@ export function Footer() {
 
         {/* 版權列：模板暗色 #3E3A39，滿寬、負 margin 疊在浮水印下緣之上 */}
         <div className="relative -mt-[90px] bg-[#3E3A39] text-white">
-          <div className="relative max-w-[1410px] mx-auto px-[51px] pb-16 pt-36 flex items-center justify-between gap-6">
+          <div className="relative max-w-[1410px] mx-auto px-[51px] pb-12 pt-30 flex items-center justify-between gap-6">
             {/* 左：文字連結（字級 14） */}
             <nav className="flex items-center gap-6 shrink-0">
               {TEXT_LINKS.map((l) => (
