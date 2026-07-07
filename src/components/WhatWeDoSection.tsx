@@ -26,9 +26,10 @@ export function WhatWeDoSection() {
       <div className="max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
         <Reveal className="lg:w-[600px] lg:shrink-0">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#E3DED7] px-4 py-2 mb-5 text-[15px] tracking-[1px] uppercase text-[#000000]">
+          {/* 副標膠囊（照模板：border rgba(114,114,114,.18)、radius 24、padding 3/13/3/10、金點 + 15/ls1/uppercase） */}
+          <span className="inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px] mb-5 text-[15px] tracking-[1px] uppercase text-[#000000]">
             <span
-              className="inline-block w-1.5 h-1.5 rounded-full"
+              className="inline-block w-2 h-2 rounded-full"
               style={{ background: GOLD }}
             />
             what we do
@@ -53,14 +54,10 @@ export function WhatWeDoSection() {
                 key={i}
                 inner
                 delay={(i + 1) as 1 | 2 | 3}
-                className="flex items-center gap-3 py-4 border-b border-[#E3DED7] text-[#000000] text-[18px] leading-[24px] font-medium"
+                className="flex items-center gap-3 py-4 border-b border-[#E3DED7] text-[#000000] text-[18px] leading-[24px] font-normal"
               >
-                <span
-                  className="inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0"
-                  style={{ background: GOLD }}
-                >
-                  <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
-                </span>
+                {/* 打勾：照模板為純金 check icon（~19px、無圓底） */}
+                <Check className="w-[19px] h-[19px] shrink-0" strokeWidth={3} style={{ color: GOLD }} />
                 {t}
               </Reveal>
             ))}

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Reveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
 
 // 品牌金 = CIS 466c #C9AA79（單一來源）
 import { GOLD } from '../theme/cis';
 
-// 門市案例（背景=主圖(#1)，右邊 2 張卡=(#2,#3)，聯動輪替）
+// 門市案例；輪播規則：背景 = 目前主圖(#1)，右邊兩張卡 = 下兩張(#2、#3)，前進時聯動輪替。
 // 圖片來源：影像/門市案例 → public/store-cases/*.jpg
 const CASES = [
   { image: '/store-cases/case1.jpg', caption: '案例1：袁艾菲與老公結婚二周年甜蜜獻禮' },
@@ -17,7 +17,7 @@ const CASES = [
 export function GallerySection() {
   const len = CASES.length;
   const sectionRef = useRef<HTMLElement>(null);
-  // 背景主圖隨捲動位移（取代模板 gallery pin widget 的 scrub 視差；scale 留出血避免露邊）
+  // 全出血主圖隨捲動輕微位移（scale 留出血避免露邊）
   useParallax(sectionRef, { targets: '.gallery-bg', fromY: -8, toY: 8, scale: 1.12 });
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -45,17 +45,18 @@ export function GallerySection() {
     dragX.current = null;
   };
 
-  // 右邊兩張卡 = 主圖之後的兩張
+  // 右邊兩張卡 = 主圖之後的兩張（聯動輪替）：背景=#active、卡片=#active+1、#active+2
   const cards = [CASES[(active + 1) % len], CASES[(active + 2) % len]];
 
   return (
+    // 全出血底圖(=當前主圖) + 右 2 卡；section 高度對位模板 956
     <section
       ref={sectionRef}
-      className="relative overflow-hidden"
+      className="relative overflow-hidden min-h-[956px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* 背景 = 主圖(#1)，交叉淡入 */}
+      {/* 背景 = 目前主圖(#active)，交叉淡入 */}
       {CASES.map((c, i) => (
         <img
           key={i}
@@ -66,89 +67,101 @@ export function GallerySection() {
           }`}
         />
       ))}
+      {/* 深色遮罩：整體壓深成模板沉穩深調 + 左側再深保文字可讀 */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(90deg, rgba(0,0,0,0.76) 0%, rgba(0,0,0,0.48) 42%, rgba(0,0,0,0.26) 100%)',
+            'linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.62) 45%, rgba(0,0,0,0.5) 100%)',
         }}
       />
 
-      {/* 內容：左文字 + 右 2 卡（中下），整塊淡入上升（背景不隨之淡入、僅做視差） */}
-      {/* 間距依模板實測（Home 3 antra-image-carousel）：pt 133 / pb 138、左緣對齊 1410 版心（51px） */}
-      <Reveal className="relative z-10 pt-[133px] pb-[138px]">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-12 pl-[51px]">
-          {/* 左：標題區 */}
-          <div className="lg:w-[440px] lg:shrink-0 pr-4">
-            <div className="flex items-center gap-2.5 mb-5">
-              <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
-              <span className="text-white/80 text-[15px] tracking-[1px] uppercase">門市案例</span>
+      {/* 內容整塊淡入上升（背景僅做視差不淡入） */}
+      <Reveal className="relative z-10 w-full">
+        {/* 內容非置中：照模板 e-con-inner padding-top 推到下半部（內容從 y≈388 起） */}
+        <div className="flex flex-col lg:flex-row lg:items-start gap-12 lg:gap-0 pt-[120px] lg:pt-[388px] pl-[51px] lg:pr-[51px]">
+          {/* 左：標題區（照模板 L51/w479；膠囊 → 大標 → 段落，無 CTA） */}
+          <div className="lg:w-[479px] lg:shrink-0 pr-4">
+            {/* 副標膠囊（照模板 .elementor-title-span：border white/25、radius 24、padding 3/13/3/9、金點 + 15/ls1/uppercase） */}
+            <div className="mb-[26px]">
+              <span className="inline-flex items-center gap-2 rounded-[24px] border border-white/25 pt-[3px] pr-[13px] pb-[3px] pl-[9px]">
+                <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: GOLD }} />
+                <span className="text-white text-[15px] tracking-[1px] uppercase">門市案例</span>
+              </span>
             </div>
-            <h2 className="text-white font-bold capitalize text-[75px] leading-[80px]">
+
+            {/* 大標（模板 110/100、capitalize、粗體） */}
+            <h2 className="text-white font-bold capitalize text-[110px] leading-[100px]">
               Kitchen Design
             </h2>
 
-            {/* 說明文字：隨主圖聯動（案例標題） */}
-            <p key={active} className="text-white/75 mt-6 max-w-sm text-[16px] leading-[24px] animate-gallery-card">
+            {/* 段落（模板 18/24、寬 378）：隨主圖聯動（當前案例標題） */}
+            <p
+              key={active}
+              className="text-white/75 mt-[37px] w-[378px] max-w-full text-[18px] leading-[24px] animate-gallery-card"
+            >
               {CASES[active].caption}
             </p>
 
-            {/* CTA 按鈕（深底版：白字白框 + 金色圓箭頭） */}
+            {/* CTA — 依主題原始碼 antra-elementor-button 真值：透明底/灰框、字 15px、
+                圖示圈 40（箭頭 20）金底白箭頭、預設 rotate(-45°)；hover 整顆填金(bg+border) + 圖示轉正 rotate(0)。
+                （模板底色淺→字深；本區深底故字用白，其餘尺寸/hover 完全一致。demo 站 root 20px 會放大成 18.75/45，勿量網頁。） */}
             <a
               href="#"
-              className="group inline-flex items-center gap-4 mt-8 rounded-full border border-white/30 pl-[30px] pr-[9px] py-[8px] text-white hover:border-[#C9AA79] transition-colors"
+              className="group/cta inline-flex items-center gap-4 mt-[40px] rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-white capitalize transition-colors duration-500 hover:border-[#C9AA79] hover:bg-[#C9AA79]"
             >
-              <span className="text-[19px]">查看所有案例</span>
+              <span className="text-[15px]">查看所有案例</span>
               <span
-                className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full text-white transition-transform group-hover:rotate-45"
+                className="inline-flex items-center justify-center w-[40px] h-[40px] rounded-full text-white transition-transform duration-500 -rotate-45 group-hover/cta:rotate-0"
                 style={{ background: GOLD }}
               >
-                <ArrowUpRight className="w-5 h-5" />
+                <ArrowRight className="w-5 h-5" />
               </span>
             </a>
-
-            {/* 上/下一張箭頭 */}
-            <div className="flex items-center gap-3 mt-8">
-              <button
-                onClick={prev}
-                aria-label="上一張"
-                className="w-11 h-11 rounded-full border border-white/25 text-white/90 flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors"
-              >
-                ←
-              </button>
-              <button
-                onClick={next}
-                aria-label="下一張"
-                className="w-11 h-11 rounded-full border border-white/25 text-white/90 flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors"
-              >
-                →
-              </button>
-            </div>
           </div>
 
-          {/* 右：2 張大卡（#2,#3），隨主圖聯動輪替 */}
+          {/* 右：2 張卡（#active+1、#active+2），隨主圖聯動輪替 */}
           <div
-            className="lg:flex-1 lg:min-w-0 select-none touch-pan-y"
+            className="lg:flex-1 lg:min-w-0 flex justify-end select-none touch-pan-y"
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
-            {/* 卡片依模板實測 450×610（aspect 45/61）、間距 30 */}
+            {/* 內層縮到卡片寬度並右對齊；箭頭在其內靠左 → 對齊卡片群左緣 */}
+            <div>
+            {/* 卡片沿用模板卡尺寸 330×360、圓角 24、gap 30；左側留白露出背景主圖 */}
             <div key={active} className="flex gap-[30px] animate-gallery-card">
               {cards.map((c, i) => (
-                <div
-                  key={i}
-                  className="shrink-0 basis-[450px]"
-                >
-                  <div className="aspect-[45/61] rounded-3xl overflow-hidden">
+                <div key={i} className="group/card shrink-0">
+                  {/* hover：陰影加深 + 圖片微放大（overflow 裁切） */}
+                  <div className="w-[330px] h-[360px] rounded-3xl overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)] transition-shadow duration-500 group-hover/card:shadow-[0_32px_80px_-8px_rgba(0,0,0,0.7)]">
                     <img
                       src={c.image}
                       alt=""
                       draggable={false}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-[1.06]"
                     />
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* 箭頭：卡片下方、靠卡片群左緣 40px；42×42 圓框、透明底、白 icon */}
+            <div className="flex items-center gap-5 mt-[40px]">
+              <button
+                onClick={prev}
+                aria-label="上一張"
+                className="w-[42px] h-[42px] rounded-full border border-white/25 bg-transparent text-white/90 flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors"
+              >
+                <ArrowLeft className="w-[18px] h-[18px]" />
+              </button>
+              <button
+                onClick={next}
+                aria-label="下一張"
+                className="w-[42px] h-[42px] rounded-full border border-white/25 bg-transparent text-white/90 flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors"
+              >
+                <ArrowRight className="w-[18px] h-[18px]" />
+              </button>
+            </div>
             </div>
           </div>
         </div>

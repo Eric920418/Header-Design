@@ -1,0 +1,120 @@
+{
+    "system_colors": [
+        {
+            "_id": "primary",
+            "title": "Primary",
+            "color": "#CAA05C"
+        },
+        {
+            "_id": "secondary",
+            "title": "Secondary(Heading)",
+            "color": "#1C1C1D"
+        },
+        {
+            "_id": "text",
+            "title": "Text",
+            "color": "#59585D"
+        },
+        {
+            "_id": "accent",
+            "title": "Accent",
+            "color": "#1C1C1D"
+        },
+        {
+            "_id": "lighter",
+            "title": "Lighter",
+            "color": "#9F9FA4"
+        },
+        {
+            "_id": "dark",
+            "title": "Dark",
+            "color": "#000000"
+        },
+        {
+            "_id": "border",
+            "title": "Border",
+            "color": "#E3E3E8"
+        },
+        {
+            "_id": "background-field",
+            "title": "Background Field",
+            "color": "#F6F6F6"
+        }
+    ],
+    "custom_colors": [],
+    "system_typography": [
+        {
+            "_id": "primary",
+            "title": "Primary",
+            "typography_typography": "custom",
+            "typography_font_family": "Cal Sans",
+            "typography_font_weight": "400"
+        },
+        {
+            "_id": "secondary",
+            "title": "Secondary(Heading)",
+            "typography_typography": "custom",
+            "typography_font_family": "Cal Sans",
+            "typography_font_weight": "400"
+        },
+        {
+            "_id": "text",
+            "title": "Text",
+            "typography_typography": "custom",
+            "typography_font_family": "Golos Text",
+            "typography_font_weight": "400"
+        },
+        {
+            "_id": "accent",
+            "title": "Accent",
+            "typography_typography": "custom",
+            "typography_font_family": "Cal Sans",
+            "typography_font_weight": "400"
+        },
+        {
+            "_id": "special",
+            "title": "Special",
+            "typography_typography": "custom"
+        }
+    ],
+    "custom_typography": [],
+    "default_generic_fonts": "Serif",
+    "site_name": "Antra",
+    "site_description": "Architecture & Interior Design WordPress Theme",
+    "page_title_selector": "h1.entry-title",
+    "activeItemIndex": 1,
+    "active_breakpoints": [
+        "viewport_mobile",
+        "viewport_mobile_extra",
+        "viewport_tablet",
+        "viewport_tablet_extra",
+        "viewport_laptop"
+    ],
+    "viewport_md": 768,
+    "viewport_lg": 1025,
+    "container_width": {
+        "unit": "px",
+        "size": 1410,
+        "sizes": []
+    },
+    "space_between_widgets": {
+        "column": "0",
+        "row": "0",
+        "isLinked": true,
+        "unit": "px",
+        "size": 0,
+        "sizes": []
+    },
+    "body_background_background": "classic",
+    "body_background_color": "#F6F6F6",
+    "container_padding": {
+        "unit": "px",
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0",
+        "isLinked": true
+    },
+    "hfe_scroll_to_top_button_text": "Up",
+    "typography_enable_styleguide_preview": "yes"
+}

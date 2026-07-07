@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useReveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
 
@@ -110,6 +111,23 @@ export function ProjectSection() {
           ))}
         </div>
       </div>
+
+      {/* 左右兩側 prev/next 箭頭 — 依主題原始碼 antra swiper button（style.css 13949）：
+          48×48 白圓 + 1px 邊框 + icon 24；hover 金底(#C9AA79)白箭頭。可點觸發 embla scrollPrev/Next。 */}
+      <button
+        onClick={() => emblaApi?.scrollPrev()}
+        aria-label="上一個"
+        className="absolute left-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-[#E3DED7] bg-white text-[#3E3A39] flex items-center justify-center transition-colors duration-300 hover:bg-[#C9AA79] hover:border-[#C9AA79] hover:text-white"
+      >
+        <ArrowLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={() => emblaApi?.scrollNext()}
+        aria-label="下一個"
+        className="absolute right-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-[#E3DED7] bg-white text-[#3E3A39] flex items-center justify-center transition-colors duration-300 hover:bg-[#C9AA79] hover:border-[#C9AA79] hover:text-white"
+      >
+        <ArrowRight className="w-6 h-6" />
+      </button>
     </section>
   );
 }

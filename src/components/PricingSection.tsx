@@ -136,11 +136,11 @@ export function PricingSection() {
                 />
                 <a
                   href="#"
-                  className="group absolute left-8 bottom-8 inline-flex items-center justify-between gap-4 rounded-full bg-white pl-[30px] pr-[7px] py-[7px] text-[#000000] shadow-md transition-colors duration-500 hover:bg-[#C9AA79] hover:text-white"
+                  className="group absolute left-8 bottom-8 inline-flex items-center justify-between gap-4 rounded-full border border-transparent bg-white pl-[30px] pr-[7px] py-[7px] text-[#000000] transition-colors duration-500 hover:bg-[#C9AA79] hover:text-white"
                 >
-                  <span className="text-[19px] font-semibold">更多廚電</span>
+                  <span className="text-[15px] font-normal">更多廚電</span>
                   <span
-                    className="inline-flex items-center justify-center w-[47px] h-[47px] rounded-full text-white transition-transform duration-500 group-hover:rotate-45"
+                    className="inline-flex items-center justify-center w-[40px] h-[40px] rounded-full text-white transition-transform duration-500 group-hover:rotate-45"
                     style={{ background: GOLD }}
                   >
                     <ArrowUpRight className="w-5 h-5" />

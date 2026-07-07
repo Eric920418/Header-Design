@@ -1,0 +1,3890 @@
+@charset "UTF-8";
+/* Text meant only for screen readers. */
+/* ===== Start ICONS CSS ===== */
+@font-face {
+  font-family: "antra-icon";
+  src: url("./assets/fonts/icons/antra-icon-1.0.12.eot");
+  src: url("./assets/fonts/icons/antra-icon-1.0.12.eot?#iefix") format("eot"), url("./assets/fonts/icons/antra-icon-1.0.12.woff2") format("woff2"), url("./assets/fonts/icons/antra-icon-1.0.12.woff") format("woff"), url("./assets/fonts/icons/antra-icon-1.0.12.ttf") format("truetype"), url("./assets/fonts/icons/antra-icon-1.0.12.svg#antra-icon-1.0.12") format("svg");
+}
+[class*=antra-icon-] {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.antra-icon-360-view:before {
+  content: "";
+}
+
+.antra-icon-antra:before {
+  content: "";
+}
+
+.antra-icon-architectural:before {
+  content: "";
+}
+
+.antra-icon-ask:before {
+  content: "";
+}
+
+.antra-icon-before-after:before {
+  content: "";
+}
+
+.antra-icon-blueprint:before {
+  content: "";
+}
+
+.antra-icon-breadcrumb:before {
+  content: "";
+}
+
+.antra-icon-bullet-list-line:before {
+  content: "";
+}
+
+.antra-icon-calendar:before {
+  content: "";
+}
+
+.antra-icon-check:before {
+  content: "";
+}
+
+.antra-icon-clapperboard:before {
+  content: "";
+}
+
+.antra-icon-clock:before {
+  content: "";
+}
+
+.antra-icon-consulting:before {
+  content: "";
+}
+
+.antra-icon-dot:before {
+  content: "";
+}
+
+.antra-icon-download-file:before {
+  content: "";
+}
+
+.antra-icon-email:before {
+  content: "";
+}
+
+.antra-icon-filters:before {
+  content: "";
+}
+
+.antra-icon-galleries:before {
+  content: "";
+}
+
+.antra-icon-help:before {
+  content: "";
+}
+
+.antra-icon-house:before {
+  content: "";
+}
+
+.antra-icon-information1:before {
+  content: "";
+}
+
+.antra-icon-interior:before {
+  content: "";
+}
+
+.antra-icon-list-2:before {
+  content: "";
+}
+
+.antra-icon-list-ul:before {
+  content: "";
+}
+
+.antra-icon-management:before {
+  content: "";
+}
+
+.antra-icon-map-line:before {
+  content: "";
+}
+
+.antra-icon-map-pin:before {
+  content: "";
+}
+
+.antra-icon-menu-bar:before {
+  content: "";
+}
+
+.antra-icon-menu-fly-close:before {
+  content: "";
+}
+
+.antra-icon-menu-fly:before {
+  content: "";
+}
+
+.antra-icon-movies:before {
+  content: "";
+}
+
+.antra-icon-phone:before {
+  content: "";
+}
+
+.antra-icon-photo:before {
+  content: "";
+}
+
+.antra-icon-play-fill:before {
+  content: "";
+}
+
+.antra-icon-play:before {
+  content: "";
+}
+
+.antra-icon-plus2:before {
+  content: "";
+}
+
+.antra-icon-quote1:before {
+  content: "";
+}
+
+.antra-icon-receipt:before {
+  content: "";
+}
+
+.antra-icon-reply-line:before {
+  content: "";
+}
+
+.antra-icon-setting:before {
+  content: "";
+}
+
+.antra-icon-share-all:before {
+  content: "";
+}
+
+.antra-icon-shopping-bag:before {
+  content: "";
+}
+
+.antra-icon-shoppingcart-o:before {
+  content: "";
+}
+
+.antra-icon-sliders-v:before {
+  content: "";
+}
+
+.antra-icon-spaceop:before {
+  content: "";
+}
+
+.antra-icon-tags:before {
+  content: "";
+}
+
+.antra-icon-th-large-o:before {
+  content: "";
+}
+
+.antra-icon-time-line:before {
+  content: "";
+}
+
+.antra-icon-two-line:before {
+  content: "";
+}
+
+.antra-icon-user1:before {
+  content: "";
+}
+
+.antra-icon-view-line-2:before {
+  content: "";
+}
+
+.antra-icon-360:before {
+  content: "";
+}
+
+.antra-icon-Clip-path-group:before {
+  content: "";
+}
+
+.antra-icon-Online_Support:before {
+  content: "";
+}
+
+.antra-icon-arrow-down:before {
+  content: "";
+}
+
+.antra-icon-arrow-left:before {
+  content: "";
+}
+
+.antra-icon-arrow-right:before {
+  content: "";
+}
+
+.antra-icon-arrow-up:before {
+  content: "";
+}
+
+.antra-icon-bars:before {
+  content: "";
+}
+
+.antra-icon-bullet-list-line2:before {
+  content: "";
+}
+
+.antra-icon-camrera-1:before {
+  content: "";
+}
+
+.antra-icon-caret-down:before {
+  content: "";
+}
+
+.antra-icon-caret-left:before {
+  content: "";
+}
+
+.antra-icon-caret-right:before {
+  content: "";
+}
+
+.antra-icon-caret-up:before {
+  content: "";
+}
+
+.antra-icon-cart-1:before {
+  content: "";
+}
+
+.antra-icon-cart-empty:before {
+  content: "";
+}
+
+.antra-icon-cart:before {
+  content: "";
+}
+
+.antra-icon-check-mark:before {
+  content: "";
+}
+
+.antra-icon-check-square:before {
+  content: "";
+}
+
+.antra-icon-chevron-down:before {
+  content: "";
+}
+
+.antra-icon-chevron-left:before {
+  content: "";
+}
+
+.antra-icon-chevron-right:before {
+  content: "";
+}
+
+.antra-icon-chevron-up:before {
+  content: "";
+}
+
+.antra-icon-circle:before {
+  content: "";
+}
+
+.antra-icon-cloud-download-alt:before {
+  content: "";
+}
+
+.antra-icon-comment:before {
+  content: "";
+}
+
+.antra-icon-comments:before {
+  content: "";
+}
+
+.antra-icon-compare:before {
+  content: "";
+}
+
+.antra-icon-credit-card:before {
+  content: "";
+}
+
+.antra-icon-delivery-truck:before {
+  content: "";
+}
+
+.antra-icon-dot-circle:before {
+  content: "";
+}
+
+.antra-icon-edit:before {
+  content: "";
+}
+
+.antra-icon-envelope:before {
+  content: "";
+}
+
+.antra-icon-expand-alt:before {
+  content: "";
+}
+
+.antra-icon-external-link-alt:before {
+  content: "";
+}
+
+.antra-icon-file-alt:before {
+  content: "";
+}
+
+.antra-icon-file-archive:before {
+  content: "";
+}
+
+.antra-icon-filter:before {
+  content: "";
+}
+
+.antra-icon-fire1:before {
+  content: "";
+}
+
+.antra-icon-folder-open:before {
+  content: "";
+}
+
+.antra-icon-folder:before {
+  content: "";
+}
+
+.antra-icon-frown:before {
+  content: "";
+}
+
+.antra-icon-gift:before {
+  content: "";
+}
+
+.antra-icon-grid-view-line:before {
+  content: "";
+}
+
+.antra-icon-grip-horizontal:before {
+  content: "";
+}
+
+.antra-icon-heart-fill:before {
+  content: "";
+}
+
+.antra-icon-heart:before {
+  content: "";
+}
+
+.antra-icon-history:before {
+  content: "";
+}
+
+.antra-icon-home:before {
+  content: "";
+}
+
+.antra-icon-info-circle:before {
+  content: "";
+}
+
+.antra-icon-instagram:before {
+  content: "";
+}
+
+.antra-icon-level-up-alt:before {
+  content: "";
+}
+
+.antra-icon-list:before {
+  content: "";
+}
+
+.antra-icon-mail:before {
+  content: "";
+}
+
+.antra-icon-map-marker-check:before {
+  content: "";
+}
+
+.antra-icon-meh:before {
+  content: "";
+}
+
+.antra-icon-menu-down:before {
+  content: "";
+}
+
+.antra-icon-menu:before {
+  content: "";
+}
+
+.antra-icon-minus-circle:before {
+  content: "";
+}
+
+.antra-icon-minus:before {
+  content: "";
+}
+
+.antra-icon-mobile-android-alt:before {
+  content: "";
+}
+
+.antra-icon-money-bill:before {
+  content: "";
+}
+
+.antra-icon-money:before {
+  content: "";
+}
+
+.antra-icon-paper-plane:before {
+  content: "";
+}
+
+.antra-icon-pencil-alt:before {
+  content: "";
+}
+
+.antra-icon-plus-circle:before {
+  content: "";
+}
+
+.antra-icon-plus:before {
+  content: "";
+}
+
+.antra-icon-quickview:before {
+  content: "";
+}
+
+.antra-icon-random:before {
+  content: "";
+}
+
+.antra-icon-rating-stroke:before {
+  content: "";
+}
+
+.antra-icon-rating:before {
+  content: "";
+}
+
+.antra-icon-repeat:before {
+  content: "";
+}
+
+.antra-icon-reply-all:before {
+  content: "";
+}
+
+.antra-icon-reply:before {
+  content: "";
+}
+
+.antra-icon-search-plus:before {
+  content: "";
+}
+
+.antra-icon-search:before {
+  content: "";
+}
+
+.antra-icon-shield-check:before {
+  content: "";
+}
+
+.antra-icon-shopping-basket:before {
+  content: "";
+}
+
+.antra-icon-shopping-cart:before {
+  content: "";
+}
+
+.antra-icon-sign-out-alt:before {
+  content: "";
+}
+
+.antra-icon-smile:before {
+  content: "";
+}
+
+.antra-icon-spinner:before {
+  content: "";
+}
+
+.antra-icon-square:before {
+  content: "";
+}
+
+.antra-icon-star:before {
+  content: "";
+}
+
+.antra-icon-store:before {
+  content: "";
+}
+
+.antra-icon-sync:before {
+  content: "";
+}
+
+.antra-icon-sync_alt:before {
+  content: "";
+}
+
+.antra-icon-tachometer-alt:before {
+  content: "";
+}
+
+.antra-icon-th-large:before {
+  content: "";
+}
+
+.antra-icon-th-list:before {
+  content: "";
+}
+
+.antra-icon-thumbtack:before {
+  content: "";
+}
+
+.antra-icon-ticket:before {
+  content: "";
+}
+
+.antra-icon-times-circle:before {
+  content: "";
+}
+
+.antra-icon-times:before {
+  content: "";
+}
+
+.antra-icon-trophy-alt:before {
+  content: "";
+}
+
+.antra-icon-truck:before {
+  content: "";
+}
+
+.antra-icon-user-headset:before {
+  content: "";
+}
+
+.antra-icon-user-shield:before {
+  content: "";
+}
+
+.antra-icon-user:before {
+  content: "";
+}
+
+.antra-icon-video:before {
+  content: "";
+}
+
+.antra-icon-wishlist-empty:before {
+  content: "";
+}
+
+.antra-icon-wishlist:before {
+  content: "";
+}
+
+.antra-icon-adobe:before {
+  content: "";
+}
+
+.antra-icon-amazon:before {
+  content: "";
+}
+
+.antra-icon-android:before {
+  content: "";
+}
+
+.antra-icon-angular:before {
+  content: "";
+}
+
+.antra-icon-apper:before {
+  content: "";
+}
+
+.antra-icon-apple:before {
+  content: "";
+}
+
+.antra-icon-atlassian:before {
+  content: "";
+}
+
+.antra-icon-behance:before {
+  content: "";
+}
+
+.antra-icon-bitbucket:before {
+  content: "";
+}
+
+.antra-icon-bitcoin:before {
+  content: "";
+}
+
+.antra-icon-bity:before {
+  content: "";
+}
+
+.antra-icon-bluetooth:before {
+  content: "";
+}
+
+.antra-icon-btc:before {
+  content: "";
+}
+
+.antra-icon-centos:before {
+  content: "";
+}
+
+.antra-icon-chrome:before {
+  content: "";
+}
+
+.antra-icon-codepen:before {
+  content: "";
+}
+
+.antra-icon-cpanel:before {
+  content: "";
+}
+
+.antra-icon-discord:before {
+  content: "";
+}
+
+.antra-icon-dochub:before {
+  content: "";
+}
+
+.antra-icon-docker:before {
+  content: "";
+}
+
+.antra-icon-dribbble:before {
+  content: "";
+}
+
+.antra-icon-dropbox:before {
+  content: "";
+}
+
+.antra-icon-drupal:before {
+  content: "";
+}
+
+.antra-icon-ebay:before {
+  content: "";
+}
+
+.antra-icon-facebook-f:before {
+  content: "";
+}
+
+.antra-icon-facebook-o:before {
+  content: "";
+}
+
+.antra-icon-facebook:before {
+  content: "";
+}
+
+.antra-icon-figma:before {
+  content: "";
+}
+
+.antra-icon-firefox:before {
+  content: "";
+}
+
+.antra-icon-google-plus:before {
+  content: "";
+}
+
+.antra-icon-google:before {
+  content: "";
+}
+
+.antra-icon-grunt:before {
+  content: "";
+}
+
+.antra-icon-gulp:before {
+  content: "";
+}
+
+.antra-icon-html5:before {
+  content: "";
+}
+
+.antra-icon-instagram-o:before {
+  content: "";
+}
+
+.antra-icon-joomla:before {
+  content: "";
+}
+
+.antra-icon-link-brand:before {
+  content: "";
+}
+
+.antra-icon-linkedin-in:before {
+  content: "";
+}
+
+.antra-icon-linkedin:before {
+  content: "";
+}
+
+.antra-icon-mailchimp:before {
+  content: "";
+}
+
+.antra-icon-opencart:before {
+  content: "";
+}
+
+.antra-icon-paypal:before {
+  content: "";
+}
+
+.antra-icon-pinterest-p:before {
+  content: "";
+}
+
+.antra-icon-reddit:before {
+  content: "";
+}
+
+.antra-icon-skype:before {
+  content: "";
+}
+
+.antra-icon-slack:before {
+  content: "";
+}
+
+.antra-icon-snapchat:before {
+  content: "";
+}
+
+.antra-icon-spotify:before {
+  content: "";
+}
+
+.antra-icon-trello:before {
+  content: "";
+}
+
+.antra-icon-twitter:before {
+  content: "";
+}
+
+.antra-icon-vimeo:before {
+  content: "";
+}
+
+.antra-icon-whatsapp:before {
+  content: "";
+}
+
+.antra-icon-wordpress:before {
+  content: "";
+}
+
+.antra-icon-yoast:before {
+  content: "";
+}
+
+.antra-icon-youtube:before {
+  content: "";
+}
+
+/* ===== End ICONS CSS ===== */
+.antra-social ul {
+  margin: 0;
+  list-style-type: none;
+}
+.antra-social ul li {
+  display: inline-block;
+  margin-right: 10px;
+  line-height: 1;
+}
+.antra-social ul li:last-child {
+  margin-right: 0;
+}
+.antra-social ul li a:before {
+  position: relative;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.antra-social ul li a[href*=twitter]:before {
+  content: "";
+  color: #1DA1F2;
+}
+.antra-social ul li a[href*=instagram]:before {
+  content: "";
+  color: #262626;
+}
+.antra-social ul li a[href*=docker]:before {
+  content: "";
+}
+.antra-social ul li a[href*=dochub]:before {
+  content: "";
+}
+.antra-social ul li a[href*=yelp]:before {
+  content: "";
+  color: #af0606;
+}
+.antra-social ul li a[href*=flickr]:before {
+  content: "";
+  color: #0063dc;
+}
+.antra-social ul li a[href*=github]:before {
+  content: "";
+  color: #333333;
+}
+.antra-social ul li a[href*=dribbble]:before {
+  content: "";
+  color: #ea4c89;
+}
+.antra-social ul li a[href*=wordpress]:before {
+  content: "";
+  color: #21759b;
+}
+.antra-social ul li a[href*=tumblr]:before {
+  content: "";
+  color: #35465c;
+}
+.antra-social ul li a[href*=angular]:before {
+  content: "";
+}
+.antra-social ul li a[href*=atlassian]:before {
+  content: "";
+}
+.antra-social ul li a[href*=snapchat]:before {
+  content: "";
+  color: #fffc00;
+}
+.antra-social ul li a[href*=apper]:before {
+  content: "";
+}
+.antra-social ul li a[href*=codepen]:before {
+  content: "";
+}
+.antra-social ul li a[href*=gulp]:before {
+  content: "";
+}
+.antra-social ul li a[href*=cpanel]:before {
+  content: "";
+}
+.antra-social ul li a[href*=skype]:before {
+  content: "";
+  color: #00AFF0;
+}
+.antra-social ul li a[href*=reddit]:before {
+  content: "";
+  color: #ff4500;
+}
+.antra-social ul li a[href*=whatsapp]:before {
+  content: "";
+}
+.antra-social ul li a[href*=slack]:before {
+  content: "";
+}
+.antra-social ul li a[href*=amazon]:before {
+  content: "";
+}
+.antra-social ul li a[href*=android]:before {
+  content: "";
+}
+.antra-social ul li a[href*=grunt]:before {
+  content: "";
+}
+.antra-social ul li a[href*=firefox]:before {
+  content: "";
+}
+.antra-social ul li a[href*=adobe]:before {
+  content: "";
+}
+.antra-social ul li a[href*=behance]:before {
+  content: "";
+}
+.antra-social ul li a[href*=dropbox]:before {
+  content: "";
+}
+.antra-social ul li a[href*=facebook]:before {
+  content: "";
+  color: #3b5998;
+}
+.antra-social ul li a[href*=linkedin]:before {
+  content: "";
+  color: #0077b5;
+}
+.antra-social ul li a[href*=paypal]:before {
+  content: "";
+}
+.antra-social ul li a[href*=trello]:before {
+  content: "";
+}
+.antra-social ul li a[href*=vimeo]:before {
+  content: "";
+  color: #1ab7ea;
+}
+.antra-social ul li a[href*=youtube]:before {
+  content: "";
+  color: #cd201f;
+}
+.antra-social ul li a[href*=apple]:before {
+  content: "";
+  color: #999999;
+}
+.antra-social ul li a[href*=bitbucket]:before {
+  content: "";
+}
+.antra-social ul li a[href*=bitcoin]:before {
+  content: "";
+}
+.antra-social ul li a[href*=bluetooth]:before {
+  content: "";
+}
+.antra-social ul li a[href*=bity]:before {
+  content: "";
+}
+.antra-social ul li a[href*="google/chrome"]:before {
+  content: "";
+}
+.antra-social ul li a[href*=drupal]:before {
+  content: "";
+}
+.antra-social ul li a[href*=html5]:before {
+  content: "";
+}
+.antra-social ul li a[href*=mailchimp]:before {
+  content: "";
+}
+.antra-social ul li a[href*=jenkins]:before {
+  content: "";
+}
+.antra-social ul li a[href*=spotify]:before {
+  content: "";
+  color: #2ebd59;
+}
+.antra-social ul li a[href*=ebay]:before {
+  content: "";
+}
+.antra-social ul li a[href*=telegram]:before {
+  content: "";
+  color: #2CA5E0;
+}
+.antra-social ul li a[href*=yoast]:before {
+  content: "";
+}
+.antra-social ul li a[href*=btc-e]:before {
+  content: "";
+}
+.antra-social ul li a[href*=discord]:before {
+  content: "";
+}
+.antra-social ul li a[href*=google]:before {
+  content: "";
+  color: #dd4b39;
+}
+.antra-social ul li a[href*=google-plus]:before {
+  content: "";
+}
+.antra-social ul li a[href*=figma]:before {
+  content: "";
+}
+.antra-social ul li a[href*=joomla]:before {
+  content: "";
+}
+.antra-social ul li a[href*=opencart]:before {
+  content: "";
+}
+.antra-social ul li a[href*=pinterest]:before {
+  content: "";
+  color: #bd081c;
+}
+.antra-social ul li a[href*=vimeo]:before {
+  content: "";
+  color: #1ab7ea;
+}
+.antra-social ul li a[href*=centos]:before {
+  content: "";
+}
+.antra-social ul li a[href*=whatsapp]:before {
+  content: "";
+}
+
+#comments .commentlist .bypostauthor > .comment-body cite::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 0.5407797364em;
+}
+#comments .comment-meta a.comment-date::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+#comments .reply a::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+#comments .reply a.comment-edit-link::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.woocommerce-pagination .page-numbers.prev::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  display: block;
+}
+.woocommerce-pagination .page-numbers.next::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  display: block;
+}
+
+#respond #cancel-comment-reply-link::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  display: block;
+}
+
+.sticky .entry-title::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+}
+
+.editor-styles-wrapper blockquote, .elementor-widget-antra-project-content blockquote,
+.hentry .entry-content blockquote {
+  clear: both;
+}
+.editor-styles-wrapper blockquote:before, .elementor-widget-antra-project-content blockquote:before,
+.hentry .entry-content blockquote:before {
+  font-size: 36px;
+  font-size: 2.25rem;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  line-height: inherit;
+  vertical-align: top;
+}
+@media (max-width: 568px) {
+  .editor-styles-wrapper blockquote:before, .elementor-widget-antra-project-content blockquote:before,
+.hentry .entry-content blockquote:before {
+    font-size: 30px;
+    font-size: 1.875rem;
+  }
+}
+.editor-styles-wrapper blockquote:after, .elementor-widget-antra-project-content blockquote:after,
+.hentry .entry-content blockquote:after {
+  font-size: 167px;
+  font-size: 10.4375rem;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  line-height: inherit;
+  vertical-align: top;
+}
+
+a[class*=product_type_].loading,
+.added_to_cart.loading {
+  position: relative;
+}
+a[class*=product_type_].loading:before,
+.added_to_cart.loading:before {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 16px;
+  width: 16px;
+  font-size: 16px;
+  line-height: 16px;
+  color: var(--e-global-color-dark);
+  left: 28%;
+  top: 15%;
+  position: absolute;
+}
+
+.product-list a[class*=product_type_].loading,
+.product-list .added_to_cart.loading {
+  position: relative;
+}
+.product-list a[class*=product_type_].loading:before,
+.product-list .added_to_cart.loading:before {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 20px;
+  width: 20px;
+  font-size: 20px;
+  line-height: 20px;
+  color: var(--e-global-color-dark);
+  left: 43%;
+  top: 30%;
+  position: absolute;
+}
+
+.woocommerce-pagination-wrap .products-load-more-btn:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.woocommerce-pagination-wrap .products-load-more-btn:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.shop-action .blockUI.blockOverlay:before,
+.shop-action .loader:before {
+  opacity: 1 !important;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  font-size: 14px;
+  font-size: 0.875rem;
+  width: 100%;
+  height: 100%;
+  line-height: 1;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shop-action .blockUI.blockOverlay {
+  opacity: 1 !important;
+  overflow: hidden;
+  background-image: none !important;
+  background: #fff !important;
+}
+
+.main-navigtion ul li a::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+}
+
+.mobile-navigation ul li button::after, .mobile-navigation-categories ul li button::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.mobile-navigation ul li button.toggled-on::after, .mobile-navigation-categories ul li button.toggled-on::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.widget_search:not(.widget_block) form::before,
+.widget_product_search form::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  transform: translate(0, -50%);
+  z-index: 1;
+  height: 24px;
+  width: 24px;
+  color: var(--e-global-color-secondary);
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+}
+
+form.wp-block-search::before {
+  display: none;
+}
+form.wp-block-search .wp-block-search__inside-wrapper {
+  position: relative;
+}
+form.wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  color: #ffffff;
+  font-size: 20px;
+  line-height: 24px;
+  height: 24px;
+  width: 24px;
+  background-color: transparent;
+}
+
+.single-product .pswp__button {
+  background-color: transparent;
+}
+.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger {
+  text-indent: -999px;
+  overflow: hidden;
+}
+.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  display: block;
+  line-height: 20px;
+  text-indent: 0;
+  font-weight: var(--e-global-typography-primary-font-weight);
+  font-size: 20px;
+  font-size: 1.25rem;
+}
+.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger img {
+  display: none !important;
+}
+.single-product div.product .entry-summary .yith-wcwl-add-to-wishlist > div > a:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.single-product div.product .entry-summary .compare:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.stock::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  margin-right: 0.5407797364em;
+  margin-top: -4px;
+}
+.stock.in-stock::before {
+  content: "";
+}
+
+a.remove {
+  display: block;
+  width: 1.618034em;
+  height: 1.618034em;
+  line-height: 1.618;
+  font-weight: var(--e-global-typography-text-font-weight);
+  text-indent: -9999px;
+  position: relative;
+}
+a.remove::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: var(--e-global-color-lighter);
+  line-height: 1.618;
+  text-indent: 0;
+  text-align: center;
+}
+
+.woocommerce-shipping-calculator > p:first-child a::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.3342202552em;
+}
+
+.blockUI::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  font-size: 30px;
+  font-size: 1.875rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -15px;
+  margin-top: -15px;
+}
+
+.woocommerce-pagination .next,
+.woocommerce-pagination .prev {
+  display: inline-block;
+  position: relative;
+}
+
+#shipping_method li > label {
+  cursor: pointer;
+  padding-right: 20px;
+  position: relative;
+}
+#shipping_method li > label::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#shipping_method li > input[type=radio]:first-child {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+  /* Many screen reader and browser combinations announce broken words as they would appear visually. */
+}
+#shipping_method li > input[type=radio]:first-child:focus {
+  background-color: #f1f1f1;
+  color: #21759b;
+  border-radius: 24px;
+  -webkit-box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+  clip: auto !important;
+  display: block;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-family: var(--e-global-typography-check-typo(secondary)-font-family);
+  font-weight: var(--e-global-typography-check-typo(secondary)-font-weight);
+  text-transform: var(--e-global-typography-check-typo(secondary)-text-transform);
+  font-style: var(--e-global-typography-check-typo(secondary)-font-style);
+  text-decoration: var(--e-global-typography-check-typo(secondary)-text-decoration);
+  line-height: var(--e-global-typography-check-typo(secondary)-line-height);
+  letter-spacing: var(--e-global-typography-check-typo(secondary)-letter-spacing);
+  height: auto;
+  left: 5px;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 5px;
+  width: auto;
+  z-index: 100000;
+  /* Above WP toolbar. */
+}
+#shipping_method li > input[type=radio]:first-child:checked + label::after {
+  content: "";
+}
+#shipping_method li > input[type=hidden]:first-child + label {
+  padding-right: 0;
+}
+#shipping_method li > input[type=hidden]:first-child + label::after {
+  content: none;
+}
+
+#payment .payment_methods li > label {
+  cursor: pointer;
+}
+#payment .payment_methods li > label::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+  transition: color, ease, 0.2s;
+}
+#payment .payment_methods li > input[type=radio]:first-child {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+  /* Many screen reader and browser combinations announce broken words as they would appear visually. */
+}
+#payment .payment_methods li > input[type=radio]:first-child:focus {
+  background-color: #f1f1f1;
+  color: #21759b;
+  border-radius: 24px;
+  -webkit-box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+  clip: auto !important;
+  display: block;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-family: var(--e-global-typography-check-typo(secondary)-font-family);
+  font-weight: var(--e-global-typography-check-typo(secondary)-font-weight);
+  text-transform: var(--e-global-typography-check-typo(secondary)-text-transform);
+  font-style: var(--e-global-typography-check-typo(secondary)-font-style);
+  text-decoration: var(--e-global-typography-check-typo(secondary)-text-decoration);
+  line-height: var(--e-global-typography-check-typo(secondary)-line-height);
+  letter-spacing: var(--e-global-typography-check-typo(secondary)-letter-spacing);
+  height: auto;
+  left: 5px;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 5px;
+  width: auto;
+  z-index: 100000;
+  /* Above WP toolbar. */
+}
+#payment .payment_methods li > input[type=radio]:first-child:checked + label::before {
+  content: "";
+}
+
+.woocommerce-password-strength::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 0.5407797364em;
+}
+.woocommerce-password-strength.strong::after {
+  content: "";
+}
+.woocommerce-password-strength.good::after {
+  content: "";
+}
+
+.woocommerce-MyAccount-navigation ul li.is-active a::before {
+  opacity: 1;
+}
+.woocommerce-MyAccount-navigation ul li a::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  line-height: 1.618;
+  margin-left: 0.5407797364em;
+  width: 1.41577975em;
+  text-align: right;
+  float: right;
+  opacity: 0.25;
+}
+.woocommerce-MyAccount-navigation ul li a:hover::before {
+  opacity: 1;
+}
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--dashboard a::before {
+  content: "";
+}
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--orders a::before {
+  content: "";
+}
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--downloads a::before {
+  content: "";
+}
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--edit-address a::before {
+  content: "";
+}
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--payment-methods a::before {
+  content: "";
+}
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--edit-account a::before {
+  content: "";
+}
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--customer-logout a::before {
+  content: "";
+}
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--subscriptions a::before {
+  content: "";
+}
+
+.my_account_orders .button.view::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 0.5407797364em;
+}
+
+p.order-again .button::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 0.5407797364em;
+}
+
+.woocommerce-MyAccount-downloads .button::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 0.5407797364em;
+}
+
+.demo_store::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+}
+
+/**
+ * Composite Products
+ */
+.single-product div.product .component_selections .clear_component_options::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+}
+
+/**
+ * Mix and Match
+ */
+.cart .mnm_table_item .mnm_table_item_indent::before,
+.shop_table .mnm_table_item .mnm_table_item_indent::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  transform: rotate(90deg);
+  margin-right: 0.3819660059em;
+  opacity: 0.25;
+}
+
+/**
+ * Quick view
+ */
+.quick-view-button::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.6180339845em;
+}
+
+/**
+ * Ship multiple addresses
+ */
+.woocommerce-page .ship_address .gift-form label::after,
+.woocommerce-page .no_shipping_address .gift-form label::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 0.5407797364em;
+}
+.woocommerce-page .ship_address .modify-address-button::before,
+.woocommerce-page .no_shipping_address .modify-address-button::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+}
+.woocommerce-page .addresses + .addresses header.title a::before {
+  content: "";
+}
+
+/**
+ * Product reviews pro
+ */
+.woocommerce .woocommerce-MyAccount-navigation li.woocommerce-MyAccount-navigation-link--contributions a::before,
+.woocommerce-page .woocommerce-MyAccount-navigation li.woocommerce-MyAccount-navigation-link--contributions a::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+/**
+ * Variation Swatches
+ */
+a#variations_clear::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+}
+
+/**
+ * Wishlists
+ */
+.wl-add-link::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+}
+
+.button.wl-create-new::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 0.5407797364em;
+}
+
+.site-header-cart .cart-contents::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-widget-antra-vertical-menu .vertical-navigation .antra-icon {
+  position: relative;
+}
+.elementor-widget-antra-vertical-menu .vertical-navigation .antra-icon::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 12px;
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+}
+
+@media (min-width: 768px) {
+  .header-side .main-navigation ul.menu > li.menu-item-has-children > a::after, .header-side .main-navigation ul.menu > li.page_item_has_children > a::after, .header-side .main-navigation ul.menu > li.has-mega-menu > a::after,
+.header-side .main-navigation ul.nav-menu > li.menu-item-has-children > a::after,
+.header-side .main-navigation ul.nav-menu > li.page_item_has_children > a::after,
+.header-side .main-navigation ul.nav-menu > li.has-mega-menu > a::after {
+    font-family: "antra-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: middle;
+    content: "";
+    margin-left: 1em;
+    margin-right: -25px;
+  }
+
+  .vertical-navigation ul.menu > li.menu-item-has-children > a::after, .vertical-navigation ul.menu > li.page_item_has_children > a::after, .vertical-navigation ul.menu > li.has-mega-menu > a::after,
+.vertical-navigation ul.nav-menu > li.menu-item-has-children > a::after,
+.vertical-navigation ul.nav-menu > li.page_item_has_children > a::after,
+.vertical-navigation ul.nav-menu > li.has-mega-menu > a::after {
+    font-family: "antra-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: middle;
+    content: "";
+    margin-left: auto;
+    float: right;
+    font-size: 9px;
+    font-size: 0.5625rem;
+  }
+
+  .main-navigation ul.menu > li.menu-item-has-children > a::after,
+.main-navigation ul.nav-menu > li.menu-item-has-children > a::after {
+    font-family: "antra-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: middle;
+    content: "";
+    margin-left: 7px;
+    margin-top: 0;
+    line-height: 1.5;
+    font-size: 8px;
+    font-size: 0.5rem;
+    font-weight: 700;
+  }
+  .main-navigation ul.menu > li.menu-item-has-children > .sub-menu:not(.mega-menu) > li.menu-item-has-children > a::after,
+.main-navigation ul.nav-menu > li.menu-item-has-children > .sub-menu:not(.mega-menu) > li.menu-item-has-children > a::after {
+    font-family: "antra-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: middle;
+    content: "";
+  }
+
+  .demo_store a.woocommerce-store-notice__dismiss-link::before {
+    font-family: "antra-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: middle;
+    content: "";
+    margin-right: 0.3342202552em;
+  }
+
+  .addresses header.title a {
+    display: block;
+    width: 1em;
+    height: 1em;
+    text-indent: -9999px;
+    position: relative;
+    padding: 0.875em;
+    margin-top: 0.6180339845em;
+  }
+  .addresses header.title a::before {
+    font-family: "antra-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: middle;
+    content: "";
+    line-height: 1.618;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    text-indent: 0;
+  }
+
+  /**
+   * Wishlists
+   */
+  #wl-wrapper .wl-tabs > li.active::after {
+    font-family: "antra-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: middle;
+    content: "";
+    display: block !important;
+    position: absolute;
+    top: 50%;
+    height: 1em;
+    width: 1em;
+    margin-top: -0.5em;
+  }
+}
+ul.wishlist_table.mobile .remove_from_wishlist:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.slick-prev:before {
+  content: "";
+}
+[dir=rtl] .slick-prev:before {
+  content: "";
+}
+.woocommerce-product-gallery-vertical .slick-prev:before {
+  content: "";
+}
+.woocommerce-product-gallery-horizontal .slick-prev:before {
+  content: "";
+}
+
+.slick-next:before {
+  content: "";
+}
+[dir=rtl] .slick-next:before {
+  content: "";
+}
+.woocommerce-product-gallery-vertical .slick-next:before {
+  content: "";
+}
+.woocommerce-product-gallery-horizontal .slick-next:before {
+  content: "";
+}
+
+.arrow-style-3 .slick-prev:before {
+  content: "";
+}
+[dir=rtl] .arrow-style-3 .slick-prev:before {
+  content: "";
+}
+.arrow-style-3 .slick-next:before {
+  content: "";
+}
+[dir=rtl] .arrow-style-3 .slick-next:before {
+  content: "";
+}
+
+body.loading {
+  position: relative;
+}
+body.loading::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  font-size: 40px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  display: block;
+  z-index: 999999;
+  color: #fff;
+}
+body.loading:before {
+  content: "";
+  display: block;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 999998;
+}
+
+.woocommerce-cart .cart-empty:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 164px;
+  color: var(--e-global-color-lighter);
+  display: block;
+  margin-bottom: 50px;
+}
+.woocommerce-cart .wc-block-components-totals-coupon__form button:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.woocommerce-cart .wc-block-components-totals-coupon__form button:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.widget_product_categories .icon-minus {
+  float: right;
+  cursor: pointer;
+}
+.widget_product_categories .icon-minus:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 10px;
+  font-size: 0.625rem;
+}
+.widget_product_categories .icon-plus {
+  float: right;
+  cursor: pointer;
+}
+.widget_product_categories .icon-plus:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 10px;
+  font-size: 0.625rem;
+}
+
+ul.products-list li.product-list .product-caption .woosc-btn:after,
+ul.products-list li.product-list .product-caption .woosw-btn:after,
+ul.products-list li.product-list .product-caption .woosq-btn:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+}
+ul.products-list li.product-list .product-caption .woosw-btn:after {
+  content: "";
+}
+ul.products-list li.product-list .product-caption .woosw-btn.woosw-adding:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  line-height: inherit;
+  content: "" !important;
+}
+ul.products-list li.product-list .product-caption .woosc-btn:before {
+  content: "";
+}
+ul.products-list li.product-list .product-caption .woosq-btn:before {
+  content: "";
+}
+
+ul.products li.product .product-block a[class*=product_type_].loading:after {
+  content: "";
+}
+ul.products li.product .product-block a[class*=product_type_].loading:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  font-size: 20px;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.shop-action .woosc-btn:after,
+.shop-action .woosq-btn:after,
+.shop-action .woosw-btn:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+}
+.shop-action .woosc-btn.loading,
+.shop-action .woosq-btn.loading,
+.shop-action .woosw-btn.loading {
+  position: relative;
+}
+.shop-action .woosc-btn.loading:after,
+.shop-action .woosq-btn.loading:after,
+.shop-action .woosw-btn.loading:after {
+  content: "";
+}
+.shop-action .woosc-btn.loading:before,
+.shop-action .woosq-btn.loading:before,
+.shop-action .woosw-btn.loading:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  line-height: 20px;
+  font-size: 14px !important;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  margin: 0;
+}
+.shop-action .woosc-btn.woosw-adding:after,
+.shop-action .woosq-btn.woosw-adding:after,
+.shop-action .woosw-btn.woosw-adding:after {
+  display: none !important;
+}
+.shop-action .woosc-btn.woosw-adding:before,
+.shop-action .woosq-btn.woosw-adding:before,
+.shop-action .woosw-btn.woosw-adding:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 100%;
+  width: 100%;
+  line-height: 20px;
+  font-size: 14px;
+  font-size: 0.875rem;
+  position: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(0);
+  background-color: transparent;
+}
+.shop-action .woosw-btn:after {
+  content: "";
+}
+.shop-action .woosw-btn.woosw-adding:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  line-height: inherit;
+  content: "" !important;
+  background-color: transparent;
+}
+.shop-action .woosc-btn:after {
+  content: "";
+}
+.shop-action .woosq-btn:after {
+  content: "";
+}
+.shop-action a[class*=product_type_].loading {
+  position: relative;
+}
+.shop-action a[class*=product_type_].loading:after {
+  content: "";
+}
+.shop-action a[class*=product_type_].loading:before {
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+}
+
+.woocommerce-widget-layered-nav-list li a:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 18px;
+  font-size: 1.125rem;
+  color: var(--e-global-color-border);
+  cursor: pointer;
+  margin-right: 13px;
+}
+.woocommerce-widget-layered-nav-list li.chosen > a:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 19px;
+  font-size: 1.1875rem;
+  color: var(--e-global-color-border);
+  cursor: pointer;
+  margin-right: 12px;
+  margin-bottom: 2px;
+}
+
+.woocommerce .active .toggled-on:has(span.antra_title_filter) .antra_title_filter:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: -2px;
+  display: none;
+}
+
+.woocommerce .widget-title:has(span.antra_title_filter) .antra_title_filter:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: -2px;
+  display: none;
+}
+
+.single-product div.product .entry-summary .woosc-btn:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  line-height: inherit;
+}
+.single-product div.product .entry-summary .woosc-btn.loading {
+  position: relative;
+}
+.single-product div.product .entry-summary .woosc-btn.loading::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+  font-size: 20px;
+  font-size: 1.25rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  display: block;
+}
+.single-product div.product .entry-summary .woosw-btn:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.single-product div.product .entry-summary .woosw-btn.loading {
+  position: relative;
+}
+.single-product div.product .entry-summary .woosw-btn.loading::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+  font-size: 20px;
+  font-size: 1.25rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  display: block;
+}
+
+a.read-more:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 5px;
+}
+
+.elementor-widget-antra-language-switcher.language-switcher-style-mobile .antra-language-switcher .language-switcher-head:after {
+  position: relative;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 0.5em;
+  line-height: 12px;
+}
+
+.loading-quick-shop .product-transition::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.search-by-category .input-dropdown-inner > a:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.popup-navigation ul.menu > li.menu-item-has-children > a:after, .popup-navigation ul.menu > li.page_item_has_children > a:after, .popup-navigation ul.menu > li.has-mega-menu > a:after,
+.popup-navigation ul.nav-menu > li.menu-item-has-children > a:after,
+.popup-navigation ul.nav-menu > li.page_item_has_children > a:after,
+.popup-navigation ul.nav-menu > li.has-mega-menu > a:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-left: 0.5em;
+  font-size: 16px;
+  font-size: 1rem;
+}
+
+.elementor-widget-antra-image-gallery .grid__item a:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.woosw-list .woosw-content-mid-notice:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 164px;
+  color: var(--e-global-color-lighter);
+  display: block;
+  margin-bottom: 50px;
+}
+
+.woosw-list .woosw-item--actions .add_to_cart .button:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.woosw-list .woosw-item--actions .add_to_cart .button:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+@keyframes mf-spin-fast {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+  50% {
+    -webkit-transform: rotate(900deg);
+    transform: rotate(900deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  to {
+    -webkit-transform: rotate(1800deg);
+    transform: rotate(1800deg);
+  }
+}
+@-webkit-keyframes mf-spin-fast {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+  50% {
+    -webkit-transform: rotate(900deg);
+    transform: rotate(900deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  to {
+    -webkit-transform: rotate(1800deg);
+    transform: rotate(1800deg);
+  }
+}
+@-o-keyframes mf-spin-fast {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+  50% {
+    -webkit-transform: rotate(900deg);
+    transform: rotate(900deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  to {
+    -webkit-transform: rotate(1800deg);
+    transform: rotate(1800deg);
+  }
+}
+@-ms-keyframes mf-spin-fast {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+  50% {
+    -webkit-transform: rotate(900deg);
+    transform: rotate(900deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  to {
+    -webkit-transform: rotate(1800deg);
+    transform: rotate(1800deg);
+  }
+}
+.elementor-widget-antra-search .widget.widget_product_search button[type=submit]:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-left: 0;
+}
+
+.woocommerce-tabs.product-accordions .accordion-head:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.woocommerce-tabs.product-accordions .accordion-head:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-widget-opal-image-hotspots .elementor-tab-title:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.elementor-widget-opal-image-hotspots .elementor-tab-title.elementor-active:before {
+  content: "";
+}
+
+.scrollup .scrollup-icon:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-widget-woocommerce-breadcrumb .woocommerce-breadcrumb > a:first-of-type:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-right: 5px;
+  top: -2px;
+  position: relative;
+  font-size: 16px;
+  opacity: 0.85;
+  display: none;
+}
+
+.star-rating {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+}
+.star-rating:before {
+  content: "" " " "" " " "" " " "" " " "";
+}
+.star-rating span::before {
+  content: "" " " "" " " "" " " "" " " "";
+}
+.wc-block-grid__product .wc-block-grid__product-rating .star-rating {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+}
+.wc-block-grid__product .wc-block-grid__product-rating .star-rating:before {
+  content: "" " " "" " " "" " " "" " " "";
+}
+.wc-block-grid__product .wc-block-grid__product-rating .star-rating span::before {
+  content: "" " " "" " " "" " " "" " " "";
+  color: #F5A011;
+}
+
+.elementor-testimonial-item-wrapper .layout-4 .caption-top:before {
+  border: 1px solid var(--e-global-color-border);
+  border-radius: 50%;
+  content: "";
+  position: absolute;
+  animation-timing-function: linear;
+  z-index: -1;
+  transform: scale(1);
+  pointer-events: none;
+  width: 200px;
+  height: 200px;
+  top: 6px;
+  right: 0;
+  bottom: 0;
+  left: 8px;
+}
+
+form.woocommerce-form-track-order button:after {
+  font-size: 16px;
+  font-size: 1rem;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  padding-left: 7px;
+}
+
+.pbr-social-share .bo-social-facebook i.opal-icon-facebook-f:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.pbr-social-share .bo-social-twitter i.opal-icon-twitter:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.pbr-social-share .bo-social-youtube i.opal-icon-youtube:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.pbr-social-share .bo-social-instagram i.opal-icon-instagram:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.pbr-social-share .add_to_cart .button:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.carousehover a:hover:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 30px;
+}
+
+.shipping_class:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 18px;
+  font-size: 1.125rem;
+  margin-right: 10px;
+}
+
+.flex-direction-nav .flex-nav-prev a:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 15px;
+  font-size: 0.9375rem;
+}
+
+.flex-direction-nav .flex-nav-next a:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 15px;
+  font-size: 0.9375rem;
+}
+
+.time-sale .deal-text:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 35px;
+  font-size: 2.1875rem;
+}
+
+.single-product div.product .single_add_to_cart_button:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.single-product div.product .single_add_to_cart_button.loading {
+  position: relative;
+  border-color: var(--e-global-color-primary);
+  background-color: var(--e-global-color-primary);
+}
+.single-product div.product .single_add_to_cart_button.loading:after {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 18px;
+  width: 18px;
+  font-size: 18px;
+  line-height: 18px;
+  margin-left: 0;
+  color: #ffffff;
+  left: 40%;
+  top: 19%;
+  position: absolute;
+  background-color: transparent;
+}
+
+table.woocommerce-grouped-product-list .woocommerce-grouped-product-list-item__quantity a.button:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+table.woocommerce-grouped-product-list .woocommerce-grouped-product-list-item__quantity a.button:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+@media (max-width: 767px) {
+  .nav-previous .nav-content {
+    padding-left: 0;
+  }
+}
+.nav-previous .nav-content:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  left: 10px;
+}
+
+@media (max-width: 767px) {
+  .nav-next .nav-content {
+    padding-right: 0;
+  }
+}
+.nav-next .nav-content:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  right: 10px;
+}
+
+.antra-icon-left-arrow:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.antra-icon-right-arrow:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-widget-portfolio-text-scrolling .elementor-scrolling-item:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-banner-wrap-title .elementor-banner-button:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  margin-top: -3px;
+  margin-left: 8px;
+}
+
+.antra-image-hotspots-tooltips-link .antra-image-hotspots-icon:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.single-product .summary .inventory_status:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.single-product .summary .inventory_status.out-stock:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 18px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  margin-top: -5px;
+}
+.single-product .pswp .pswp__button--arrow--left:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.single-product .pswp .pswp__button--arrow--right:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.single-product .custom-list li:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.mfp-woosq .mfp-arrow-left:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.mfp-woosq .mfp-arrow-right:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.sizechart-button:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.wp-block-woocommerce-cart-totals-block .wp-block-woocommerce-proceed-to-checkout-block a:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.wp-block-woocommerce-cart-totals-block .wp-block-woocommerce-proceed-to-checkout-block a:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.antra-image-hotspots-main-icons .antra-image-hotspots-icon:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+#woosq-popup .product .slick-slider .slick-prev:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+#woosq-popup .product .slick-slider .slick-next:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.error404 .error-button a:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.coach .single-content .custom-list li:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 14px;
+  font-size: 0.875rem;
+  margin-right: 10px;
+}
+
+.comment-form .form-submit .submit:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+[dir=rtl] .comment-form .form-submit .submit:after {
+  content: "";
+}
+
+.elementor-swiper-button-next.elementor-lightbox-prevent-close::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-swiper-button-prev.elementor-lightbox-prevent-close::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.sub-title-style-yes .elementor-sub-title span:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.bf-separator-bullet .bf-left-arrow:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.bf-separator-bullet .bf-right-arrow:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-widget-antra-engineers .engineer-block .engineer-button a .hover-text:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.wpcf7-form .date-style .wpcf7-form-control-wrap:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.wpcf7-form .time-style .wpcf7-form-control-wrap:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.wpcf7-form button.loading, .wpcf7-form input[type=button].loading, .wpcf7-form input[type=reset].loading, .wpcf7-form input[type=submit].loading, .wpcf7-form .button.loading {
+  position: relative;
+}
+.wpcf7-form button.loading::after, .wpcf7-form input[type=button].loading::after, .wpcf7-form input[type=reset].loading::after, .wpcf7-form input[type=submit].loading::after, .wpcf7-form .button.loading::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+  font-size: 16px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+form.woocommerce-form-login .show-password-input:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.project-loadmor a.loading:after {
+  content: "";
+}
+.project-loadmor a.loading:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  font-size: 20px;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.antra-loadmore a.loading:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  font-size: 20px;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.antra-elementor-gallery-loadmore .loadmore-btn:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  font-size: 20px;
+  font-size: 1.25rem;
+}
+.antra-elementor-gallery-loadmore .loadmore-btn.loading:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-canvas-info-wrapper .antra-info-button:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.icon-canvas-2 .elementor-canvas-info-wrapper .antra-info-button:before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.single-event .antra-event-details .more-link:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.antra-theme-style-yes .hfe-layout-vertical ul.hfe-nav-menu .menu-item a::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-widget-antra-project-content ul.custom-list li::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.elementor-widget-antra-project .project-loadmore a::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.elementor-widget-antra-project .project-loadmore a.loading {
+  background-color: var(--e-global-color-secondary);
+  border-color: var(--e-global-color-secondary);
+  opacity: 0.5;
+}
+.elementor-widget-antra-project .project-loadmore a.loading::before {
+  opacity: 0;
+}
+.elementor-widget-antra-project .project-loadmore a.loading:after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+  animation: fa-spin 0.75s linear infinite;
+  font-size: 20px;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  margin-left: 0;
+}
+
+.single-team ul.custom-list li::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+.single-project .elementor-widget-antra-post-navigation .elementor-post-navigation__prev a::before {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+.single-project .elementor-widget-antra-post-navigation .elementor-post-navigation__next a::after {
+  font-family: "antra-icon";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+  content: "";
+}
+
+/*# sourceMappingURL=icons.css.map */

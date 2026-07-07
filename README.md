@@ -47,7 +47,7 @@ pnpm build
 
 - **平滑捲動阻尼（Lenis）** — `src/motion/{useSmoothScroll.ts, ScrollMotionProvider.tsx}`。對映模板 config：`duration: 1.5` + expo ease-out `t=>Math.min(1,1.001-2**(-10*t))`。用 **原生捲動模式**（不設 wrapper/content transform），故不碰 `ScaleToFit` 的 canvas `scale`、也不破壞 `FloatingButtons` 的 `fixed`。只在 **桌面（>992px）且非 reduced-motion** 啟用，跨 992px / 偏好變更自動啟停。GSAP 與 Lenis 共用單一 rAF（`gsap.ticker`），內容高度變動時自建 `ResizeObserver` → `lenis.resize()` + `ScrollTrigger.refresh()`。`ScrollMotionProvider` 掛在 `ScaleToFit` **外層**。
 - **出場動畫（IntersectionObserver + CSS）** — `src/motion/Reveal.tsx` + `globals.css` 的 `.reveal`。複刻模板 `opalMoveUp`（淡入 + 上升）：section 級 `translateY(56px)`、內部 stagger `.reveal-inner` `32px` + `.reveal-delay-1~3`。進場一次不重播。`<Reveal>` 包裹元件或 `useReveal(ref)` 掛在 `<section>` 根。**鐵則：勿套在 Embla / `animate-gallery-card` / hover-scale 佔用 transform 的元素上**（Pricing 三卡、WhatWeDo 三 li 做 stagger；Gallery 改包內容塊、Project 只包 section 根）。
-- **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。**不用 `pin`**：pin 的 `position:fixed`+pin-spacer 在 `transform:scale()` 祖先下量測錯誤，改用 `yPercent` scrub（`scrub:0.5`）位移達到同觀感。目標：ProjectSection 每張 `.project-parallax-img`（scale 1.08 留出血）、GallerySection 背景 `.gallery-bg`（scale 1.12，取代模板 gallery pin widget）、WhatWeDo 裝飾 `.wwd-blueprint`。只寫內層 transform，永不碰 `canvasRef`。
+- **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。**不用 `pin`**：pin 的 `position:fixed`+pin-spacer 在 `transform:scale()` 祖先下量測錯誤，改用 `yPercent` scrub（`scrub:0.5`）位移達到同觀感。目標：ProjectSection 每張 `.project-parallax-img`（scale 1.08 留出血）、GallerySection 全出血背景 `.gallery-bg`（scale 1.12）、WhatWeDo 裝飾 `.wwd-blueprint`。只寫內層 transform，永不碰 `canvasRef`。
 
 ## 色彩規範（SAKURA KITCHEN CIS）— 全站已對齊
 
@@ -78,7 +78,7 @@ pnpm build
 
 | 角色 | 值 |
 |---|---|
-| Section h2 | `text-[60px] leading-[64px]`（Gallery 特例 `text-[75px] leading-[80px]`） |
+| Section h2 | `text-[60px] leading-[64px]`（Gallery 特例 `text-[110px] leading-[100px]`，對位 Home Three） |
 | 專案卡標題 / 中文副標 / 左上膠囊 | `text-[36px] leading-[44px]` / `text-[20px] leading-[30px]` / `text-[16px]` |
 | 品牌卡標題 / 描述（=模板 Pricing 卡） | `text-[45px] leading-[50px]` / `text-[20px] leading-[30px]` |
 | eyebrow | `text-[15px] tracking-[1px] uppercase` |
@@ -93,7 +93,7 @@ pnpm build
 |---|---|
 | 內容容器（版心） | `max-w-[1410px] mx-auto`（畫布 1512、兩側各 51px；Header mega-menu 面板與 Footer 同版心） |
 | Section 上下留白 | `py-[120px]`（Gallery 特例：`pt-[133px] pb-[138px]`，實測值） |
-| Section 大標 h2 | `text-[60px] leading-[64px]`（Gallery 特例：`text-[75px] leading-[80px]`） |
+| Section 大標 h2 | `text-[60px] leading-[64px]`（Gallery 特例：`text-[110px] leading-[100px]`，對位 Home Three） |
 | 標題區 → 內容距 | `mb-[60px]` |
 | eyebrow | `text-[15px]`、`mb-5`(20px) |
 | 卡片 grid 間距 | `gap-[30px]`；三欄卡寬自然 = (1410−60)/3 = **450** |
@@ -151,11 +151,12 @@ pnpm build
 `ProjectSection.tsx`：精準複刻 Home Six 的 `antra-project`「project-style-4」（僅字型沿用原站系統字，其餘結構/尺寸/行為照模板）。
 
 - **取代**了原本 `HeroSection` 內的 Gallery（大圖 + 縮圖展示）；放在 `App.tsx` 的 Hero 之後。
-- **無標題區**：模板此 widget 只有卡片，沒有 heading/箭頭。
+- **無標題區**：模板此 widget 只有卡片（無 heading）。**箭頭為額外加上**（模板此 instance 沒開，但使用者要求）。
 - **卡片**：378×880 直式、底部黑色漸層 scrim；**左上膠囊放中文名（`font-bold` 加粗）、底部放英文大標**（`STYLES` 依對照表：英文 `X Kitchen`、中文膠囊 `AI廚房/巧域廚房…`、每筆 `desc`；Basic+ 無中文膠囊）。
 - **hover 效果**：滑到卡片時卡片變寬（378→567）+ **英文標題轉金 `#C9AA79`** + **底部由下淡入浮現該風格描述**（`s.desc`，如「極致收納 在廚房」；`max-h-0 opacity-0 → group-hover:max-h-20 opacity-100`，`transition-all 500ms`）。
 - **hover 伸縮**：卡片寬度 `×1.5`（`378→567px`，固定高度只變寬），橫式廚房圖靜態裁成直切片、hover 變寬露出更多；EN 標題 hover 轉金（`#C9AA79`）。
-- **捲動 + 自動輪播**：`embla-carousel-react`（`loop:true` + `dragFree`）。**自動輪播**：`setInterval` 每 3.5s 呼叫 `emblaApi.scrollNext()`；滑鼠移入輪播（`rootNode` 的 `mouseenter`）以 `pausedRef` 暫停、移出（`mouseleave`）恢復。仍可手動拖曳;**拖曳時（`pointerDown`）以 `dragging` state 暫停 hover 變寬**，否則卡片一碰就展開會把拖曳打斷（拖不動）。無箭頭。
+- **捲動 + 自動輪播**：`embla-carousel-react`（`loop:true` + `dragFree`）。**自動輪播**：`setInterval` 每 3.5s 呼叫 `emblaApi.scrollNext()`；滑鼠移入輪播（`rootNode` 的 `mouseenter`）以 `pausedRef` 暫停、移出（`mouseleave`）恢復。仍可手動拖曳;**拖曳時（`pointerDown`）以 `dragging` state 暫停 hover 變寬**，否則卡片一碰就展開會把拖曳打斷（拖不動）。
+- **左右兩側 prev/next 箭頭**（依主題原始碼 `style.css` `.antra-swiper-wrapper .elementor-swiper-button`）：`w-12 h-12`(**48×48**) 白圓 + `border 1px #E3DED7`(≈`--e-global-color-border`) + lucide 箭頭 `w-6`(**24**)；`absolute left/right-[30px] top-1/2 -translate-y-1/2 z-20`（垂直置中、貼左右邊 30）；**hover 金底 `#C9AA79` + 金邊 + 白箭頭**；`onClick` 呼叫 `emblaApi.scrollPrev/Next`。（48/24 為 px 值，不受 demo root 20px 影響。）
 - **內容 = 10 種廚房風格**（真圖）：Basic+ / AI kitchen（僅英文）、Clever 巧域廚房 / Loft Chic 潮派廚房 / Joyful 童樂廚房 / premium 君璽廚房 / Elegant 臻美廚房 / Chef 大廚廚房 / Country 鄉村廚房 / Harmony 閣樂廚房。圖片放在 `public/kitchen-styles/*.jpg`（來源 `Downloads/首頁用圖/品牌系列x10`；Clever 已縮圖）。
 
 ## 價目表（Pricing）— Antra Pricing 忠實複刻
@@ -168,17 +169,23 @@ pnpm build
   - **欄2 Basic Plan / 欄3 Blueprint Plan**（照模板原文）：標題 45/50 → 副標 20/30(`#59585d`) → **價格 `$` 小 + 數字 100px 金 + `/ Per Month` 20/24** → **金勾清單**（`Check` 24px 金、每項 20/36）→ `Get Started Now` 膠囊按鈕（高 ~61、`pl-30 pr-7 py-7` + 金圓 `ArrowUpRight`）；**卡底建築線稿浮水印** `public/pricing/pricing-banner-2.png`（absolute，來源 demo 授權素材）。
 - **跑馬燈已移出本區**：抽成獨立元件 `MarqueeBand.tsx`，放在 `App.tsx` **頁面最底部（Footer 之上）**——「kitchen product」無限捲動（`@keyframes marquee` + `background-clip:text` 漸層，定義於 `globals.css`）。
 - **按鈕 hover（依模板實測）**：整顆膠囊填金 `#C9AA79` + 文字轉白 + 邊框金（0.5s），同時金圓箭頭 45° 旋轉。
+- **產品圖上的白底 CTA（`更多廚電`，`absolute left-8 bottom-8`）依主題原始碼 `assets/css/base/elementor.css` 的 `.elementor-price-table__button`**：字 **15px（`0.9375rem`）/`font-normal`(400)**、金圓 **40×40**（箭頭 20px `w-5` + `padding 10`）、`padding 7/7/7/30`、`border-radius 100`、**無陰影**（`box-shadow:none`）→ 盒高 **56**；白底無可見邊框故加 `border border-transparent`。hover 填金 + 字白 + 箭頭 45° 旋轉。
+  - ⚠ **重要（勿再犯）**：demo 站 `demo2.themelexus.com` 的 `html` root 是 **20px**（非常規 16px），所以直接量網頁的 `rem` 值會**放大 1.25×**（`0.9375rem`→量到 18.75px、`1.25rem`→25px、圈→45、高→61，皆偏大顯「粗胖」）。**按鈕等 rem 尺寸要讀主題原始碼 CSS 的真值，不要量 live demo**。見 [[antra-template-measure-pitfalls]]。
 - 內容為模板佔位英文（$99/$169…）依「100% 複製」照抄，連結 `#`，待正式文案；模板背景裝飾圖 `pricing-background-1.jpg`（很淡、demo 上該 URL 失效）暫略。放 `App.tsx` 專案輪播之後。
 
 ## 門市案例（Gallery）— Antra Home Three 版型
 
-`GallerySection.tsx`：複刻 Home Three 的 `antra-image-carousel`（字型沿用原站，金色 `#C9AA79`），內容改為 **SAKURA 門市案例**。
+`GallerySection.tsx`：對位 Home Three gallery 版型（section 高/位置/膠囊/大標/箭頭照模板實測 + 主題 `heading.php`），**但右側依使用者規則做「背景=主圖 + 2 卡聯動」**（非模板原生的 3 欄 swiper）。字型沿用原站、金 `#C9AA79`，內容為 **SAKURA 門市案例**。
 
-- **聯動輪播（疊層構圖）**：滿版案例照當背景 = 目前主圖(#1)，右邊固定**只 2 張加大卡片** = 下兩張(#2、#3)。前進時背景與兩卡一起輪替（背景交叉淡入、卡片 `animate-gallery-card` 滑入）。以 `useState(active)` 驅動，非 embla。
-- **左：標題區**（~440px）：金點 eyebrow（`門市案例`）+ 巨大白色雙行大標（`Kitchen Design`）+ **隨主圖聯動的案例說明文字**（`CASES[active].caption`）+ **CTA 按鈕**（`查看所有案例` + 金色 `ArrowUpRight` 圓圈，深底版：白字白框、hover 邊框轉金、箭頭旋轉）+ 左右箭頭。
-- **右：2 張卡**：圓角 24px（`basis-[450px]`、`aspect-[45/61]`=450×610、30px 間距，依模板實測）。
-- **互動**：箭頭 / 每 4s 自動前進（滑入暫停）/ 指標拖曳（`onPointerDown/Up`）切換。
-- **內容 = 3 則門市案例**：`CASES`（`{image, caption}`）；圖片 `public/store-cases/case{1,2,3}.jpg`（來源 `影像/門市案例`）。案例1 文案「袁艾菲與老公結婚二周年甜蜜獻禮」為正式；案例2/3 文案為**佔位**待替換。CTA 連結 `#` 佔位。放在 `App.tsx` 產品區之後。
+- **輪播規則（使用者指定）**：**全出血背景 = 目前主圖(#active)**，右邊固定**只 2 張卡** = 下兩張(#active+1、#active+2)；前進時背景與兩卡一起輪替（背景交叉淡入 + `useParallax('.gallery-bg')` scale 1.12、卡片/段落 `animate-gallery-card` 滑入）。`useState(active)` 驅動、autoplay 4s（滑入暫停）、指標拖曳。
+- **section 高度 = `min-h-[956px]`**（實測模板 956）；內容**非置中**，照模板 `e-con-inner` `padding-top` 推到下半部 —— 內容容器 `lg:pt-[388px]`、`items-start`。實測靜止：副標/卡片頂 y388、大標 y445、段落 y682、箭頭 y788（與模板 0–1px）。左標題區 `lg:w-[479px]`（L51）+ 右卡欄 `flex-1`。內部間距：膠囊 `mb-[26px]`、段落 `mt-[37px]`、箭頭 `mt-[40px]`。**右側卡片靠右**：右卡欄 `flex justify-end`（容器 `lg:pr-[51px]`）內包一層縮到卡片寬度的區塊 → 卡片右緣對齊右版心 1461（右邊距 51、與左緣對稱），左側 530–771 留白露出背景主圖。**箭頭在該區塊內靠左**（不加 `justify`）→ 落在**卡片群左緣 771 的正下方**（卡片下方 40px），非靠右。
+  - ⚠ **驗證陷阱**：`.reveal` 用個別 `translate` 屬性做進場，隱藏分頁 transition 卡住停在 `translate:0 56px` → 量測會**整體 +56**；驗證垂直位置要先 `translate:none!important` 清掉再量（見 [[mcp-tab-hidden-raf-io]]）。卡片另有 `animate-gallery-card` 的 `translateX(40px)` 進場，量水平也要結算。
+- **背景底圖**：= 當前 `CASES[active].image`（crossfade）。遮罩 `linear-gradient(90deg, rgba(0,0,0,.82)→.5)` 壓成模板沉穩深調 + 保左側文字可讀。
+- **左：標題區**：**副標膠囊**（`border-white/25`、`rounded-[24px]`、`padding 3/13/3/9`、金點 + `門市案例` 15/ls1/uppercase）+ 大標（`Kitchen Design` **110/100/capitalize/粗體**）+ 段落（隨主圖聯動 `CASES[active].caption` 18/24、寬 378）+ **CTA 按鈕**（見下）。
+- **CTA 按鈕 — 依主題原始碼 `antra-elementor-button`**（`elementor.css` `.elementor-price-table__button` 真值）：透明底、`border 1px rgba(159,159,164,.64)`、`rounded-full`、`padding 7/7/7/30`、字 **15px/weight400/capitalize**、`transition .5s`；圖示圈 **40×40** 金底白箭頭（lucide `ArrowRight` `w-5`=20）、**預設 `-rotate-45`**（↗）。**hover**：整顆填金（`bg`+`border`=`#C9AA79`）、圖示 `group-hover/cta:rotate-0`（→）。文字用「查看所有案例」；模板淺底字深、本區深底故**字用白**。⚠ 尺寸取**原始碼**非量網頁（demo root 20px 會放大成 18.75/45，見門市案例區備註）。
+- **右：2 張卡**：`w-[330px] h-[360px] rounded-3xl`（沿用模板卡尺寸）、gap 30；右側留白處露出背景主圖。**卡片高度受限於 956 + y388 起點，故為 360（非早期的 610）**；要更高卡片就得把 section 拉高過模板 956。卡片 hover：陰影加深 `shadow-[0_32px_80px_-8px_rgba(0,0,0,.7)]` + 圖片 `group-hover/card:scale-[1.06]`（`overflow-hidden` 裁切）。
+- **箭頭**：模板位置 —— 卡片**下方左側**（`mt-[40px]`、42×42 圓框、`border-white/25`、透明底、lucide `ArrowLeft/ArrowRight`）控制聯動 `prev/next`。
+- **內容 = 3 則門市案例**：`CASES`（`{image, caption}`）；圖片 `public/store-cases/case{1,2,3}.jpg`（來源 `影像/門市案例`）。案例1 文案為正式；案例2/3 文案為**佔位**待替換。放在 `App.tsx` 產品區之後。
 
 ## What We Do — Antra Home Six 版型
 
