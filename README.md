@@ -233,8 +233,8 @@ pnpm build
 
 `Footer.tsx`：依 mockup 改為兩段式，取 Antra 頁尾精神（巨型品牌浮水印 + 暗色版權列）。
 
-- **上半（灰底 `#f6f6f6`，同上一區 StoreLocation，無縫接）**：巨型「**SAKURA**」文字浮水印，`text-[330px] font-bold leading-none`、品牌金 `#C9AA79 @ opacity 0.7`、`pointer-events-none select-none`；**浮水印層 `relative z-10`，下緣蓋在深色版權列之上**（跨越灰底/深色列交界）；外層 `overflow-hidden` 裁邊。
-- **下半（版權列）**：**模板暗色 `#272625`**（Antra 頁尾覆蓋層基色 `rgb(39,38,37)`）滿寬列，用 `-mt-[90px]` 疊在浮水印下緣之上（浮水印下緣被暗列蓋住，仿模板）。版心 `max-w-[1410px] px-[51px] py-7`、`flex justify-between`：
+- **上半（灰底 `#f6f6f6`，同上一區 StoreLocation，無縫接）**：巨型「**SAKURA**」金色字標**浮水印(向量 SVG)** `public/footer-sakura.svg`、`w-[1320px] h-auto` 置中、`opacity 0.8`、`max-w-full` 防溢；`aria-hidden pointer-events-none select-none`；**浮水印層 `relative z-10`，下緣蓋在深色版權列之上**（跨越灰底/深色列交界）；外層 `overflow-hidden` 裁邊。（演進：`text-[330px]` 文字 →`IMG_1185.PNG` 點陣(555×107，放大到 1320 會糊)→ **potrace 向量化成 SVG**：`magick footer-sakura.png -alpha extract -resize 400% -threshold 50% -negate mask.pbm` → `potrace mask.pbm -s --color '#C9AA79' -O 0.4 -t 8`（**不加 `--tight`**，保留原 PNG 比例 5.19=2220×428，src 一換即可、`-mt`/尺寸不動）；填色已烙入 CIS 金 `#C9AA79`，任意縮放皆銳利。）
+- **下半（版權列）**：**模板暗色 `#3E3A39`** 滿寬列，用 `-mt-[20px]` 疊在浮水印下緣之上（圖片無文字 330px 行框下方的空白，故負 margin 由文字版的 `-90` 縮為 `-20`；實測圖底與暗列重疊 ~28px、SAKURA 下緣輕蓋上暗列，仿模板）。版心 `max-w-[1410px] px-[51px] py-7`、`flex justify-between`：
   - 左：**網站地圖**（`#`）、**隱私權政策**（`/privacy.html`），**字級 14**、hover 轉金。
   - 中：`Copyright © Taiwan Sakura Corporation. All rights reserved`（`absolute` 置中，不受左右欄寬影響）。
   - 右：**數位展板** `/icons/digital-board.png` **30×30**、**YouTube** `/icons/youtube.png` **33×33**（白色去背 PNG，暗底顯白；`href` 佔位 `#`）。

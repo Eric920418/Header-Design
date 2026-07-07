@@ -19,18 +19,18 @@ export function Footer() {
   return (
     <footer className="bg-[#f6f6f6]">
       <div className="relative overflow-hidden">
-        {/* 上半：灰底 + 巨型 SAKURA 浮水印（加深金 + z-10 疊在暗色版權列之上、下緣蓋上 footer） */}
+        {/* 上半：灰底 + 巨型 SAKURA 浮水印（改用金色字標 PNG；加深金 opacity + z-10 疊在暗色版權列之上、下緣蓋上 footer） */}
         <div aria-hidden className="relative z-10 pointer-events-none select-none flex justify-center pt-20 translate-y-[8px]">
-          <span
-            className="font-bold leading-none whitespace-nowrap text-[330px]"
-            style={{ color: '#C9AA79', opacity: 0.8 }}
-          >
-            SAKURA
-          </span>
+          <img
+            src="/footer-sakura.svg"
+            alt=""
+            className="w-[1320px] max-w-full h-auto"
+            style={{ opacity: 0.8 }}
+          />
         </div>
 
-        {/* 版權列：模板暗色 #3E3A39，滿寬、負 margin 疊在浮水印下緣之上 */}
-        <div className="relative -mt-[90px] bg-[#3E3A39] text-white">
+        {/* 版權列：模板暗色 #3E3A39，滿寬、負 margin 疊在浮水印下緣之上（圖片無文字行框空白，故負 margin 比文字版小） */}
+        <div className="relative -mt-[92px] bg-[#3E3A39] text-white">
           <div className="relative max-w-[1410px] mx-auto px-[51px] pb-12 pt-30 flex items-center justify-between gap-6">
             {/* 左：文字連結（字級 14） */}
             <nav className="flex items-center gap-6 shrink-0">
