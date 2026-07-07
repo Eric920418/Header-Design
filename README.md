@@ -230,7 +230,7 @@ pnpm build
 
 `Footer.tsx`：依 mockup 改為兩段式，取 Antra 頁尾精神（巨型品牌浮水印 + 暗色版權列）。
 
-- **上半（灰底 `#f6f6f6`，同上一區 StoreLocation，無縫接）**：巨型「**SAKURA**」文字浮水印，`text-[330px] font-bold leading-none`、品牌金 `#C9AA79 @ opacity 0.18`（對映模板浮水印低透明；金色屬既有色系）、`pointer-events-none select-none`；外層 `overflow-hidden` 裁邊。
+- **上半（灰底 `#f6f6f6`，同上一區 StoreLocation，無縫接）**：巨型「**SAKURA**」文字浮水印，`text-[330px] font-bold leading-none`、品牌金 `#C9AA79 @ opacity 0.7`、`pointer-events-none select-none`；**浮水印層 `relative z-10`，下緣蓋在深色版權列之上**（跨越灰底/深色列交界）；外層 `overflow-hidden` 裁邊。
 - **下半（版權列）**：**模板暗色 `#272625`**（Antra 頁尾覆蓋層基色 `rgb(39,38,37)`）滿寬列，用 `-mt-[90px]` 疊在浮水印下緣之上（浮水印下緣被暗列蓋住，仿模板）。版心 `max-w-[1410px] px-[51px] py-7`、`flex justify-between`：
   - 左：**網站地圖**（`#`）、**隱私權政策**（`/privacy.html`），**字級 14**、hover 轉金。
   - 中：`Copyright © Taiwan Sakura Corporation. All rights reserved`（`absolute` 置中，不受左右欄寬影響）。

@@ -9,9 +9,9 @@ import { GOLD } from '../theme/cis';
 // 門市案例；輪播規則：背景 = 目前主圖(#1)，右邊兩張卡 = 下兩張(#2、#3)，前進時聯動輪替。
 // 圖片來源：影像/門市案例 → public/store-cases/*.jpg
 const CASES = [
-  { image: '/store-cases/case1.jpg', caption: '案例1：袁艾菲與老公結婚二周年甜蜜獻禮' },
-  { image: '/store-cases/case2.jpg', caption: '案例2：老宅廚房翻新，重拾生活溫度' }, // 佔位文案，待正式替換
-  { image: '/store-cases/case3.jpg', caption: '案例3：量身打造，成就理想廚房' }, // 佔位文案，待正式替換
+  { image: '/store-cases/case1.jpg', caption: '袁艾菲與老公結婚二周年甜蜜獻禮' },
+  { image: '/store-cases/case2.jpg', caption: '老宅廚房翻新，重拾生活溫度' }, // 佔位文案，待正式替換
+  { image: '/store-cases/case3.jpg', caption: '量身打造，成就理想廚房' }, // 佔位文案，待正式替換
 ];
 
 export function GallerySection() {

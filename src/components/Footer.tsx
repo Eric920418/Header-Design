@@ -12,7 +12,7 @@ const TEXT_LINKS = [
 // 掃描非透明邊界得 YT 視覺偏上 6px，故單獨往下推 6px 讓「可見圖案」的中心對齊。
 const ICON_LINKS = [
   { label: '數位展板', href: '#', icon: '/icons/digital-board.png', size: 35, offsetY: 0 },
-  { label: 'YouTube', href: '#', icon: '/icons/youtube.png', size: 40, offsetY: 7 },
+  { label: 'YouTube', href: '#', icon: '/icons/youtube.png', size: 40, offsetY: 5 },
 ];
 
 export function Footer() {
@@ -20,10 +20,10 @@ export function Footer() {
     <footer className="bg-[#f6f6f6]">
       <div className="relative overflow-hidden">
         {/* 上半：灰底 + 巨型 SAKURA 浮水印（加深金 + z-10 疊在暗色版權列之上、下緣蓋上 footer） */}
-        <div aria-hidden className="relative z-10 pointer-events-none select-none flex justify-center pt-20">
+        <div aria-hidden className="relative z-10 pointer-events-none select-none flex justify-center pt-20 translate-y-[8px]">
           <span
             className="font-bold leading-none whitespace-nowrap text-[330px]"
-            style={{ color: '#C9AA79', opacity: 0.4 }}
+            style={{ color: '#C9AA79', opacity: 0.8 }}
           >
             SAKURA
           </span>
@@ -31,7 +31,7 @@ export function Footer() {
 
         {/* 版權列：模板暗色 #3E3A39，滿寬、負 margin 疊在浮水印下緣之上 */}
         <div className="relative -mt-[90px] bg-[#3E3A39] text-white">
-          <div className="relative max-w-[1410px] mx-auto px-[51px] py-24 flex items-center justify-between gap-6">
+          <div className="relative max-w-[1410px] mx-auto px-[51px] pb-16 pt-36 flex items-center justify-between gap-6">
             {/* 左：文字連結（字級 14） */}
             <nav className="flex items-center gap-6 shrink-0">
               {TEXT_LINKS.map((l) => (
