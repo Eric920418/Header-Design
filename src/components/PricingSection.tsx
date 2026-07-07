@@ -87,7 +87,7 @@ export function PricingSection() {
                   "linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.5) 100%)",
               }}
             />
-            <div className="relative z-10 p-8 lg:p-10 flex flex-col h-full">
+            <div className="relative z-10 p-8 lg:p-12 flex flex-col h-full">
               {/* 品牌 logo（替代文字標題）：SAKURA KITCHEN 官方白色字標，深卡上直接可讀；高度對齊原 44px 標題行高 */}
               <img
                 src="/sakura-kitchen-logo.png"

@@ -69,11 +69,10 @@ const STYLES = [
 ];
 
 export function ProjectSection() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: 'start',
-    dragFree: true,
-  });
+  // 一格一格步進輪播：吸附(snap)模式——刻意「不用 dragFree」。
+  // dragFree 會讓 scrollNext 變慣性滑動、在 loop 環繞重定位時對不齊而露縫；
+  // snap 模式每次精準走一格、於乾淨的卡邊界重定位，既是「一格一格」又不露縫。
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
   // 拖曳中暫停 hover 變寬（否則卡片一碰就展開、拖曳會被打斷）
   const [dragging, setDragging] = useState(false);
   const pausedRef = useRef(false);
@@ -89,24 +88,15 @@ export function ProjectSection() {
     emblaApi.on('pointerDown', onDown);
     emblaApi.on('pointerUp', onUp);
 
-    // 自動輪播（每 3.5s 前進一張；滑鼠移入暫停）
+    // 自動輪播：每 3.5s 前進一格（步進感）；滑鼠移入暫停。
     const root = emblaApi.rootNode();
-    const tick = () => {
-      if (!pausedRef.current) emblaApi.scrollNext();
-    };
-    let timer = setInterval(tick, 3500);
-    // 延遲恢復：滑鼠移入立即暫停；移出後不馬上恢復，等 hover 卡片的寬度動畫(500ms)
-    // 完全收回、所有卡回到等寬後才讓輪播移動。否則卡片還在變寬/收窄時輪播就前進，
-    // Embla 的迴圈總長(=10×378)是舊值，環繞接縫處會露出縫隙（本區最重要的一條）。
+    const tick = () => { if (!pausedRef.current) emblaApi.scrollNext(); };
+    const timer = setInterval(tick, 3500);
+    // 延遲 560ms 恢復：hover 卡片的 500ms 展開/收回動畫期間輪播保持停住，
+    // 避免「寬度還在變、輪播就移動」導致迴圈總長過期而露縫。
     let resumeTimer: ReturnType<typeof setTimeout> | undefined;
-    const pause = () => {
-      if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = undefined; }
-      pausedRef.current = true;
-    };
-    const resume = () => {
-      if (resumeTimer) clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(() => { pausedRef.current = false; }, 560);
-    };
+    const pause = () => { if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = undefined; } pausedRef.current = true; };
+    const resume = () => { if (resumeTimer) clearTimeout(resumeTimer); resumeTimer = setTimeout(() => { pausedRef.current = false; }, 560); };
     root.addEventListener('mouseenter', pause);
     root.addEventListener('mouseleave', resume);
 
@@ -122,9 +112,11 @@ export function ProjectSection() {
 
   return (
     <section ref={sectionRef} data-ev="slideInUp" className="ev relative z-10 bg-[#f6f6f6]">
-      <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
+      {/* bg 深色：作為次像素髮絲縫的保險——即使卡間偶有 <1px 縫，透出的是深色(近卡片暗部)而非亮背景，肉眼難察 */}
+      <div className="overflow-hidden cursor-grab active:cursor-grabbing bg-[#2a2a2a]" ref={emblaRef}>
         <div className="flex">
-          {STYLES.map((s, i) => (
+          {/* 卡片複製兩份(10→20)：給 Embla loop 足夠緩衝，避免捲動動畫中接縫來不及補齊而露縫 */}
+          {[...STYLES, ...STYLES].map((s, i) => (
             <div
               key={i}
               className={`group shrink-0 transition-[width] duration-500 ease-out
@@ -132,10 +124,11 @@ export function ProjectSection() {
                 ${dragging ? '' : 'hover:w-[420px] md:hover:w-[510px] lg:hover:w-[567px]'}`}
             >
               {/* 固定高度、hover 變寬（伸縮）+ 底部漸層 + 左上膠囊 + 英中標。
-                  w-[calc(100%+1px)]：內容比卡槽寬 1px、右緣蓋住與下一張的接縫，
-                  避免軌道以小數 transform 位移時、卡間露出次像素髮絲縫（背景色透出）。
+                  w-[calc(100%+2px)] + -ml-px：內容比卡槽左右各寬 1px（共 +2px），
+                  接縫「兩側」都被相鄰卡內容蓋住 → 軌道以小數 transform 位移(如 -3004.36)時，
+                  不論往左往右移，卡間都不露出次像素髮絲縫（背景 #f6f6f6 透出）。
                   卡槽(.group)仍是 378，Embla 量測/迴圈總長不受影響。 */}
-              <article className="relative overflow-hidden w-[calc(100%+1px)] h-[480px] md:h-[640px] lg:h-[880px]">
+              <article className="relative overflow-hidden w-[calc(100%+2px)] -ml-px h-[480px] md:h-[640px] lg:h-[880px]">
                 <img
                   src={s.image}
                   alt={s.zh ? `${s.en} ${s.zh}` : s.en}
