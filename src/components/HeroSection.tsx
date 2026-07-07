@@ -24,11 +24,11 @@ const STYLE_TAGS = [
 
 function BrandTag({ zh, en, logo }: { zh: string; en: string; logo: string }) {
   return (
-    <a href="#" title={zh} className="group shrink-0 flex items-center gap-3 px-8">
+    <a href="#" title={zh} className="group shrink-0 flex items-center gap-4 px-14  border-[#E3DED7]">
       <img
         src={logo}
         alt=""
-        className="h-[38px] w-auto opacity-70 group-hover:opacity-100 transition-opacity shrink-0"
+        className="h-[44px] w-auto opacity-70 group-hover:opacity-100 transition-opacity shrink-0"
       />
       <span className="leading-tight text-[#3E3A39] group-hover:text-[#C9AA79] transition-colors">
         <span className="block font-bold text-[15px]">{zh}</span>
