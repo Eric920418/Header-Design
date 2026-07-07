@@ -54,7 +54,7 @@ export function StoreLocationSection() {
 
   return (
     // 間距依模板實測：py 120
-    <section className="relative bg-[#f6f6f6] py-[80px] overflow-hidden">
+    <section className="relative bg-[#f6f6f6] py-[60px] overflow-hidden">
       <div className="max-w-[1410px] mx-auto">
         {/* ── 標題列：eyebrow(左欄) + 大標(右偏) + 十字裝飾線（同 PricingSection，相同座標/位置） ── */}
         <div className="relative mb-[60px]">
