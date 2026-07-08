@@ -1,7 +1,5 @@
 import React, { useLayoutEffect, useRef } from 'react';
-
-// 設計基準寬：整站以此寬度當「畫布」，等比縮放填滿視窗寬
-const DESIGN_W = 1512;
+import { DESIGN_W } from './useCanvasScale';
 
 /**
  * 全站等比例縮放外殼（Scale-to-Fit）。

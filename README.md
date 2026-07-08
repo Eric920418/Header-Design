@@ -36,9 +36,11 @@ pnpm build
 **做法**：整站以 **1512px 當「設計畫布」**，用一層 `transform: scale(視窗寬 / 1512)` 把整張畫布等比縮放到視窗寬。大螢幕放大填滿、小螢幕整體縮小塞進畫面——**全程同一種版面，只放大/縮小，永不重排、永不橫向溢出**。
 
 - **`src/components/ScaleToFit.tsx`**（外殼）：固定 1512px 寬畫布 + `transform: scale`，`transform-origin: top left`；用 `ResizeObserver` 把外層高度同步為「畫布自然高 × scale」（transform 不改 layout box，否則底部留白）。`useLayoutEffect` 在首次 paint 前套好、無閃爍。`src/App.tsx` 用它包住整個 App。
+- **共用 scale hook `src/components/useCanvasScale.ts`**：單一來源 `DESIGN_W = 1512` + 「`resize` 時 `scale(innerWidth/1512)`」邏輯。`ScaleToFit` 共用 `DESIGN_W`（自有 effect 因還要同步高度）；**畫布外的 fixed 層（StickyHeader / FloatingButtons）用 `useCanvasScale(origin)` 各自補回等比縮放**——因為畫布的 `transform` 會讓內部 `fixed` 相對畫布、無法真正釘視窗，故這兩者必須抽到畫布外、再自行 scale 保持與全站同比例。
+- **`FloatingButtons`（右側浮動鈕）也等比縮放**：三層結構＝定位層（`fixed inset-y-0 right-0` 滿高右側條 + `items-center` 用 layout 垂直置中 + `pointer-events-none`）→ scaler（`useCanvasScale('right center')`）→ 按鈕欄。`right center` origin 使縮放時右緣恆貼視窗右、垂直中心不動；`pointer-events-auto` 收回內層可點。（實測 scale 0.4 時鈕 75→30px、仍貼右且置中。）
 - **凍結斷點到桌面版**（`globals.css` 的 `@theme`）：把 Tailwind `--breakpoint-sm~2xl` 設成極小遞增值（`1px`~`5px`），使 `sm:/md:/lg:` 變體**全部無條件恆生效**（編譯出的 utility 不帶 media query）→ 全站在**任何 viewport 都渲染桌面版外觀**（不受真實 viewport 影響）。這是關鍵：否則手機上 media query 會渲染手機版再被縮放，變「縮小的手機版」。
-- **配套**：`HeroSection` 由 `height:100dvh` 改**固定 `850px`**（`dvh` 不會被 scale 等比帶動）；`App` 根移除 `min-h-screen`/`pb-14`；`body { overflow-x: hidden }`；still-used 的 `--store-map-h`/`--hero-brand-h` 釘死桌面值。
-- **副作用**：凍結成桌面後**已無手機版概念**——`FloatingButtons` 的手機底部固定列（`flex lg:hidden`）與桌面軌道（`hidden`）**皆不顯示**；手機上字會等比變小（可雙指放大）。要保留快捷鈕就把桌面軌道 `hidden`→`flex` 開回。
+- **配套**：`HeroSection` 由 `height:100dvh` 改**固定 px**（`dvh`/`vh` 不會被 scale 等比帶動）；`App` 根移除 `min-h-screen`/`pb-14`；`body { overflow-x: hidden }`；still-used 的 `--store-map-h`/`--hero-brand-h` 釘死桌面值。**已清除殘留的死 `dvh` 變數** `--hero-h`/`--hero-ai-font`/`--hero-svg-h`/`--hero-play-size`（`globals.css` 三斷點區塊，rendered code 未引用，是唯一殘留的 viewport 單位）。
+- **副作用**：凍結成桌面後**已無手機版概念**——`FloatingButtons` 的手機底部固定列（`flex lg:hidden`）因 `lg:` 恆生效而 `lg:hidden` **永不顯示**；桌面右側浮欄（`hidden lg:flex`）則**恆顯示並隨全站等比縮放**。所有內容（含文字）在小螢幕一起等比變小（可雙指放大）。
 - **驗證**：拖動視窗寬 / DevTools 模擬 375~3840px，版面完全不重排、無水平捲軸；模擬 605px（scale 0.4）實測仍渲染完整桌面版、`scrollWidth === innerWidth`。
 
 ## 捲動動態（Lenis 阻尼 + 出場動畫 + GSAP 視差）— 複刻 Antra 模板

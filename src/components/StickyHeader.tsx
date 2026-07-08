@@ -1,8 +1,6 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { Header } from './Header';
-
-// 與 ScaleToFit 同一基準寬
-const DESIGN_W = 1512;
+import { DESIGN_W, useCanvasScale } from './useCanvasScale';
 
 // 頁首高度（Header bar `h-[72px]`）；App 內容頂端要留同高 spacer 避免被固定頁首蓋住。
 export const HEADER_H = 72;
@@ -15,23 +13,12 @@ export const HEADER_H = 72;
  * `position: fixed` 頂欄，並用同一 scale 等比縮放，維持與全站一致的比例。
  */
 export function StickyHeader() {
-  const scalerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const scaler = scalerRef.current;
-    if (!scaler) return;
-    const apply = () => {
-      scaler.style.transform = `scale(${window.innerWidth / DESIGN_W})`;
-    };
-    window.addEventListener('resize', apply);
-    apply();
-    return () => window.removeEventListener('resize', apply);
-  }, []);
+  const scalerRef = useCanvasScale<HTMLDivElement>('top left');
 
   return (
     // 固定於視窗頂、滿寬；mega-menu 需往下展開，故不加 overflow-hidden
     <div className="fixed top-0 left-0 right-0 z-50">
-      <div ref={scalerRef} style={{ width: DESIGN_W, transformOrigin: 'top left' }}>
+      <div ref={scalerRef} style={{ width: DESIGN_W }}>
         <Header />
       </div>
     </div>
