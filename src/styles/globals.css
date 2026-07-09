@@ -339,6 +339,14 @@ body {
   animation: gallery-card-in 0.6s ease both;
 }
 
+/* 英雄輪播底圖 Ken Burns：緩放大 + 往左平移（使用者要的「背景往左跑」）。
+   時長＝單張停留時間、ease-out、fill both（收在終態，張與張切換用 opacity 交叉淡入遮住回跳）。
+   scale>1 留出溢出邊，translateX 才不會露出空白。由 HeroSection 對 active 圖做 reflow 重啟（含輪回同一張）。 */
+@keyframes hero-kenburns {
+  from { transform: scale(1.06) translate3d(0, 0, 0); }
+  to   { transform: scale(1.16) translate3d(-4%, 0, 0); }
+}
+
 /* ── 捲動出場動畫：完全比照 Antra 模板（Elementor elementor-invisible → animated <name>）──
    hidden state = visibility:hidden（同模板 .elementor-invisible）；由 src/motion/Reveal.tsx 的
    IntersectionObserver 進場時加 .is-visible 觸發，animation-name 由 data-ev 決定，1.25s / fill both。

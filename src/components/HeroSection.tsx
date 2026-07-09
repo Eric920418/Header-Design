@@ -1,12 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Reveal, useReveal } from '../motion/Reveal';
+import { prefersReducedMotion } from '../motion/prefersReducedMotion';
+// 品牌金 = CIS 466c #C9AA79（單一來源）
+import { GOLD } from '../theme/cis';
 
 const KITCHEN_BG =
   'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=1920&h=1080&q=80';
 
-// 品牌金 = CIS 466c #C9AA79（單一來源）
-import { GOLD } from '../theme/cis';
+// 單張停留時間（ms）＝底圖 Ken Burns 一輪時長；亦為自動輪播間隔。
+const SLIDE_MS = 6000;
+
+// 英雄輪播 3 張：底圖往左跑（hero-kenburns）＋內文逐張切換。
+// ⚠ 底圖（Unsplash 外連，已實測可載入）與英文文案皆為 SAKURA 佔位，正式素材請替換 bg/eyebrow/title/subtitle。
+const SLIDES: {
+  bg: string;
+  eyebrow: string;
+  title: React.ReactNode;
+  subtitle: string;
+}[] = [
+  {
+    bg: KITCHEN_BG,
+    eyebrow: 'Trusted Design Partner',
+    // 金字重點跨行斷點（對位模板 Home Six 大標結構）
+    title: (
+      <>
+        Find Your{' '}
+        <span style={{ color: GOLD }}>
+          Inspired
+          <br />
+          Interior
+        </span>{' '}
+        Design
+      </>
+    ),
+    subtitle:
+      'Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.',
+  },
+  {
+    bg: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1920&h=1080&q=80',
+    eyebrow: 'Bespoke Kitchen Craft',
+    title: (
+      <>
+        Design That{' '}
+        <span style={{ color: GOLD }}>
+          Elevates
+          <br />
+          Your
+        </span>{' '}
+        Everyday
+      </>
+    ),
+    subtitle:
+      'Where thoughtful layouts meet premium materials — kitchens engineered around the way you cook, host, and truly live.',
+  },
+  {
+    bg: 'https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?auto=format&fit=crop&w=1920&h=1080&q=80',
+    eyebrow: 'Crafted Since 1989',
+    title: (
+      <>
+        Built For{' '}
+        <span style={{ color: GOLD }}>
+          Modern
+          <br />
+          Living
+        </span>{' '}
+        Spaces
+      </>
+    ),
+    subtitle:
+      'From first concept to final installation, we shape lasting beauty and function into every corner of your home.',
+  },
+];
 
 // 品牌系列中文名（品牌系列 10 款中有中文的 8 款；Basic+ / AI kitchen 無中文故略）
 const SERIES = ['巧域廚房', '潮派廚房', '童樂廚房', '君璽廚房', '臻美廚房', '大廚廚房', '鄉村廚房', '閣樂廚房'];
@@ -48,21 +113,64 @@ export function HeroSection() {
   // 左下圓鈕進場：fadeIn 延遲 900 slow（對位模板 Start Project heading）。
   const startBtnRef = useReveal<HTMLButtonElement>();
 
+  // ── 英雄輪播狀態（底圖往左跑 + 內文逐張切換）──
+  const [reduce] = useState(() => prefersReducedMotion()); // reduced-motion：靜態顯示第 0 張、不輪播、不 Ken Burns
+  const [active, setActive] = useState(0);
+  const pausedRef = useRef(false);                        // hover 英雄區暫停自動輪播
+  const bgRefs = useRef<(HTMLImageElement | null)[]>([]); // 供 reflow 重啟 Ken Burns
+
+  // 自動輪播：每 SLIDE_MS 前進一張；hover 暫停；reduced-motion 或單張時不啟動。
+  useEffect(() => {
+    if (reduce || SLIDES.length < 2) return;
+    const id = setInterval(() => {
+      if (!pausedRef.current) setActive((a) => (a + 1) % SLIDES.length);
+    }, SLIDE_MS);
+    return () => clearInterval(id);
+  }, [reduce]);
+
+  // 每次切到某張，對該圖重啟 Ken Burns：animation='none' → 讀 offsetWidth 強制回流 → 再設回。
+  // 若不 reflow，輪回同一張時 inline animation 字串不變、React 不會重播（會停在放大終態）。
+  useEffect(() => {
+    if (reduce) return;
+    const el = bgRefs.current[active];
+    if (!el) return;
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = `hero-kenburns ${SLIDE_MS}ms ease-out both`;
+  }, [active, reduce]);
+
   return (
     <div className="relative z-10">
       {/* ──────────────────────────────────────────────
           主視覺 Hero — 依 Antra Home Six 實測「零誤差」對位（@1512）：
-          section 958、內容左緣 30 / 上緣 244；eyebrow 15/ls1、大標 100/110 capitalize/-1px、
+          section 958、內容左緣 30 / 上緣 244；eyebrow 15/ls1、大標 100/110 capitalize、
           副標 18/24/500；圓鈕 120 (L30/底82)、浮水印 320 (下方)。
-          色系字型走 CIS/系統字（模板 Cal Sans → 系統粗體）。文案為 SAKURA 佔位。
+          進場動畫比照模板 home-6；輪播（底圖往左跑 + 內文切換）為 SAKURA 加值（模板 hero 無輪播）。
       ────────────────────────────────────────────── */}
-      <section ref={heroRef} data-ev="fadeInDown" className="ev relative w-full overflow-hidden" style={{ height: '958px' }}>
-        {/* 背景大圖 */}
-        <img
-          src={KITCHEN_BG}
-          alt="SAKURA Kitchen"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+      <section
+        ref={heroRef}
+        data-ev="fadeInDown"
+        className="ev relative w-full overflow-hidden"
+        style={{ height: '958px' }}
+        onMouseEnter={() => { pausedRef.current = true; }}
+        onMouseLeave={() => { pausedRef.current = false; }}
+      >
+        {/* 背景輪播：多張底圖疊放，active 者 opacity 1（交叉淡入 1s）+ Ken Burns 往左跑；其餘 opacity 0 */}
+        {SLIDES.map((s, i) => (
+          <img
+            key={i}
+            ref={(el) => { bgRefs.current[i] = el; }}
+            src={s.bg}
+            alt={i === 0 ? 'SAKURA Kitchen' : ''}
+            aria-hidden={i !== active}
+            onError={(e) => {
+              // 外連圖萬一失效 → 退回已知可用底圖，避免破圖
+              if (e.currentTarget.src !== KITCHEN_BG) e.currentTarget.src = KITCHEN_BG;
+            }}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-out"
+            style={{ opacity: i === active ? 1 : 0, willChange: 'transform, opacity' }}
+          />
+        ))}
         {/* 深色遮罩：左深右淺，確保左側文字可讀（Home Six 手法） */}
         <div
           className="absolute inset-0"
@@ -105,32 +213,43 @@ export function HeroSection() {
         >
           {/* 內容進場：模板 Home Six 標題區 slideInLeft（slow=2s，與容器 fadeInDown 巢狀複合）；在抽屜 translateX 的內層，不衝突 */}
           <Reveal anim="slideInLeft" speed="slow" className="lg:absolute lg:left-[30px] lg:top-[244px] flex flex-col justify-center h-full lg:h-auto lg:block">
-            {/* eyebrow（模板：膠囊外框 border rgba(114,114,114,.18) / radius 24 / padding 3·13·3·10；字 15/ls1/uppercase/白 + 金點） */}
-            <div className="mb-4 lg:mb-[33px]">
-              <span className="inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px]">
-                <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: GOLD }} />
-                <span className="font-display text-white text-[13px] lg:text-[15px] tracking-[1px] uppercase">
-                  Trusted Design Partner
-                </span>
-              </span>
+            {/* 內文逐張切換：各張疊放，active 者 relative(定高)+滑入+淡入，其餘 absolute+左移+淡出（transition-all 700） */}
+            <div className="relative">
+              {SLIDES.map((s, i) => {
+                const on = i === active;
+                return (
+                  <div
+                    key={i}
+                    aria-hidden={!on}
+                    className={`transition-all duration-700 ease-out ${
+                      on
+                        ? 'relative opacity-100 translate-x-0'
+                        : 'absolute inset-0 opacity-0 -translate-x-6 pointer-events-none'
+                    }`}
+                  >
+                    {/* eyebrow（模板：膠囊外框 border rgba(114,114,114,.18) / radius 24 / padding 3·13·3·10；字 15/ls1/uppercase/白 + 金點） */}
+                    <div className="mb-4 lg:mb-[33px]">
+                      <span className="inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px]">
+                        <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: GOLD }} />
+                        <span className="font-display text-white text-[13px] lg:text-[15px] tracking-[1px] uppercase">
+                          {s.eyebrow}
+                        </span>
+                      </span>
+                    </div>
+
+                    {/* 雙色大標（金字重點跨行斷點） */}
+                    <h1 className="font-display text-white capitalize text-5xl lg:text-[100px] lg:leading-[110px]">
+                      {s.title}
+                    </h1>
+
+                    {/* 副標（模板：18/24、字重 500、白、寬 522，距大標 30px） */}
+                    <p className="mt-5 lg:mt-[30px] text-white text-sm lg:text-[18px] lg:leading-[24px] font-medium lg:w-[522px] leading-relaxed">
+                      {s.subtitle}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
-
-            {/* 雙色大標（模板 Home Six 逐字：Find Your [Inspired Interior] Design；金字重點 = Inspired Interior，跨行斷點） */}
-            <h1 className="font-display text-white capitalize text-5xl lg:text-[100px] lg:leading-[110px]">
-              Find Your{' '}
-              <span style={{ color: GOLD }}>
-                Inspired
-                <br />
-                Interior
-              </span>{' '}
-              Design
-            </h1>
-
-            {/* 副標（模板：18/24、字重 500、白、寬 522，距大標 30px） */}
-            <p className="mt-5 lg:mt-[30px] text-white text-sm lg:text-[18px] lg:leading-[24px] font-medium lg:w-[522px] leading-relaxed">
-              Transform your vision into reality with our innovative designs, creating
-              modern spaces that blend functionality, aesthetics, and sustainability.
-            </p>
           </Reveal>
         </div>
 
@@ -191,6 +310,23 @@ export function HeroSection() {
             Project
           </span>
         </button>
+
+        {/* 輪播指示點（右下）：active 為金色長條、可點擊跳張 */}
+        <div className="hidden lg:flex absolute right-[40px] bottom-[70px] z-20 items-center gap-2">
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              aria-label={`切換到第 ${i + 1} 張主視覺`}
+              aria-current={i === active}
+              className="h-[6px] rounded-full transition-all duration-300"
+              style={{
+                width: i === active ? '30px' : '10px',
+                background: i === active ? GOLD : 'rgba(255,255,255,0.45)',
+              }}
+            />
+          ))}
+        </div>
       </section>
 
       {/* ── 以下：品牌條與 Gallery，維持原樣不變 ── */}
