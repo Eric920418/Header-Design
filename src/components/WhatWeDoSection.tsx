@@ -39,18 +39,16 @@ export function WhatWeDoSection() {
               className="inline-block w-2 h-2 rounded-full"
               style={{ background: GOLD }}
             />
-            what we do
+            What we do
           </span>
 
+          {/* 模板 Home Six 逐字：SAKURA has [created exceptional] architectural designs.（Antra→SAKURA；金字重點 created exceptional） */}
           <h2 className="font-display text-[#000000] text-[60px] leading-[64px] capitalize">
-            Antra Has{" "}
-            <span style={{ color: GOLD }}>
-              Brand
-              <br />
-              Promise
-            </span>
+            SAKURA has
             <br />
-            Architectural
+            <span style={{ color: GOLD }}>created exceptional</span>
+            <br />
+            architectural designs.
           </h2>
 
           {/* 打勾清單（含分隔線） */}

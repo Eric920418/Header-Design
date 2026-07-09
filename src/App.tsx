@@ -9,6 +9,7 @@ import { StoreLocationSection } from './components/StoreLocationSection';
 import { Footer } from './components/Footer';
 import { FloatingButtons } from './components/FloatingButtons';
 import { ScaleToFit } from './components/ScaleToFit';
+import { ScaleHUD } from './components/ScaleHUD';
 import { ScrollMotionProvider } from './motion/ScrollMotionProvider';
 import { Reveal } from './motion/Reveal';
 
@@ -44,6 +45,8 @@ export default function App() {
     </ScaleToFit>
     {/* 右側浮動按鈕：抽到 ScaleToFit 外自成 fixed 層，才能真正釘住視窗右側（同 StickyHeader 做法） */}
     <FloatingButtons />
+    {/* 對位提示 HUD（僅開發模式；正式 build 會被移除）——顯示縮放係數 / 1512 對位點 */}
+    {import.meta.env.DEV && <ScaleHUD />}
     </ScrollMotionProvider>
   );
 }

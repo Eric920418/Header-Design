@@ -48,6 +48,8 @@ type RevealProps = {
   anim?: EvName;
   /** stagger 延遲（毫秒），對應模板 animation_delay */
   delayMs?: number;
+  /** 速度檔（對應 Elementor animation_duration）：normal=1.25s、slow=2s、fast=0.75s */
+  speed?: 'normal' | 'slow' | 'fast';
   children: React.ReactNode;
 };
 
@@ -56,9 +58,10 @@ type RevealProps = {
  * anim 決定方向（slideInLeft/Right/Up/Down、fadeIn*、opal*），delayMs 決定 stagger。
  * 鐵則：不要包在會被 Embla / animate-gallery-card / hover-scale / GSAP 視差 佔用 transform 的元素上。
  */
-export function Reveal({ as = 'div', className = '', anim = 'opalMoveUp', delayMs = 0, children }: RevealProps) {
+export function Reveal({ as = 'div', className = '', anim = 'opalMoveUp', delayMs = 0, speed = 'normal', children }: RevealProps) {
   const ref = useReveal<HTMLElement>();
-  const cls = ['ev', className].filter(Boolean).join(' ');
+  const speedCls = speed === 'slow' ? 'ev-slow' : speed === 'fast' ? 'ev-fast' : '';
+  const cls = ['ev', speedCls, className].filter(Boolean).join(' ');
   return React.createElement(
     as,
     {

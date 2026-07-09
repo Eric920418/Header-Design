@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
-import { Reveal } from '../motion/Reveal';
+import { Reveal, useReveal } from '../motion/Reveal';
 
 const KITCHEN_BG =
   'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=1920&h=1080&q=80';
@@ -42,6 +42,12 @@ export function HeroSection() {
   // 左側品牌系列抽屜：展開時把內容/按鈕/浮水印一起右推，避免被蓋
   const [open, setOpen] = useState(false);
 
+  // 容器級進場：整個英雄區（含底圖）fadeInDown 落下（對位模板 section ee91316：1.25s normal）。
+  // 與內層 slideInLeft 巢狀複合，形成模板「邊落下邊左推」的斜向動態，而非單一由下往上。
+  const heroRef = useReveal<HTMLElement>();
+  // 左下圓鈕進場：fadeIn 延遲 900 slow（對位模板 Start Project heading）。
+  const startBtnRef = useReveal<HTMLButtonElement>();
+
   return (
     <div className="relative z-10">
       {/* ──────────────────────────────────────────────
@@ -50,7 +56,7 @@ export function HeroSection() {
           副標 18/24/500；圓鈕 120 (L30/底82)、浮水印 320 (下方)。
           色系字型走 CIS/系統字（模板 Cal Sans → 系統粗體）。文案為 SAKURA 佔位。
       ────────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden" style={{ height: '958px' }}>
+      <section ref={heroRef} data-ev="fadeInDown" className="ev relative w-full overflow-hidden" style={{ height: '958px' }}>
         {/* 背景大圖 */}
         <img
           src={KITCHEN_BG}
@@ -71,8 +77,8 @@ export function HeroSection() {
           className="absolute left-0 top-[725px] w-full overflow-hidden pointer-events-none select-none z-[1] transition-transform duration-500 ease-out"
           style={{ transform: open ? 'translateX(250px)' : 'translateX(0)' }}
         >
-          {/* 浮水印進場：模板 fadeInUp、延遲 900（在抽屜 translateX 的內層，不衝突） */}
-          <Reveal anim="fadeInUp" delayMs={900}>
+          {/* 浮水印進場：模板 fadeInUp、延遲 900、slow=2s（在抽屜 translateX 的內層，不衝突） */}
+          <Reveal anim="fadeInUp" delayMs={900} speed="slow">
             {/* 依模板實測：金漸層(金頂→透明底) + background-clip:text + opacity 0.75 */}
             <span
               className="block whitespace-nowrap font-display font-normal leading-[0.75] pl-[426px]"
@@ -97,29 +103,33 @@ export function HeroSection() {
           className="relative z-10 h-full px-6 lg:px-0 transition-transform duration-500 ease-out"
           style={{ transform: open ? 'translateX(200px)' : 'translateX(0)' }}
         >
-          {/* 內容進場：模板 Home Six 標題區 slideInLeft（在抽屜 translateX 的內層，不衝突） */}
-          <Reveal anim="slideInLeft" className="lg:absolute lg:left-[30px] lg:top-[244px] flex flex-col justify-center h-full lg:h-auto lg:block">
+          {/* 內容進場：模板 Home Six 標題區 slideInLeft（slow=2s，與容器 fadeInDown 巢狀複合）；在抽屜 translateX 的內層，不衝突 */}
+          <Reveal anim="slideInLeft" speed="slow" className="lg:absolute lg:left-[30px] lg:top-[244px] flex flex-col justify-center h-full lg:h-auto lg:block">
             {/* eyebrow（模板：膠囊外框 border rgba(114,114,114,.18) / radius 24 / padding 3·13·3·10；字 15/ls1/uppercase/白 + 金點） */}
             <div className="mb-4 lg:mb-[33px]">
               <span className="inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px]">
                 <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: GOLD }} />
                 <span className="font-display text-white text-[13px] lg:text-[15px] tracking-[1px] uppercase">
-                  Welcome to SAKURA Kitchen
+                  Trusted Design Partner
                 </span>
               </span>
             </div>
 
-            {/* 雙色大標（模板 Home Six：Cal Sans/400、capitalize、100/110；模板標題 letter-spacing 0，故不加 tracking） */}
+            {/* 雙色大標（模板 Home Six 逐字：Find Your [Inspired Interior] Design；金字重點 = Inspired Interior，跨行斷點） */}
             <h1 className="font-display text-white capitalize text-5xl lg:text-[100px] lg:leading-[110px]">
-              We Shape
-              <br />
-              <span style={{ color: GOLD }}>Inspiring Spaces</span>
+              Find Your{' '}
+              <span style={{ color: GOLD }}>
+                Inspired
+                <br />
+                Interior
+              </span>{' '}
+              Design
             </h1>
 
             {/* 副標（模板：18/24、字重 500、白、寬 522，距大標 30px） */}
             <p className="mt-5 lg:mt-[30px] text-white text-sm lg:text-[18px] lg:leading-[24px] font-medium lg:w-[522px] leading-relaxed">
-              We transform your vision into reality — thoughtfully designed, beautifully
-              crafted spaces built for the way you live.
+              Transform your vision into reality with our innovative designs, creating
+              modern spaces that blend functionality, aesthetics, and sustainability.
             </p>
           </Reveal>
         </div>
@@ -161,7 +171,9 @@ export function HeroSection() {
 
         {/* 左下圓形按鈕（對位模板 Home Six：120×120 / L30 / 底82 / 半透灰底 + 細白框）；抽屜展開時右移 */}
         <button
-          className="hidden lg:flex absolute left-[30px] bottom-[82px] z-20 items-center justify-center rounded-full transition-transform duration-500 hover:scale-105"
+          ref={startBtnRef}
+          data-ev="fadeIn"
+          className="ev ev-slow hidden lg:flex absolute left-[30px] bottom-[82px] z-20 items-center justify-center rounded-full transition-transform duration-500 hover:scale-105"
           style={{
             width: '120px',
             height: '120px',
@@ -170,12 +182,13 @@ export function HeroSection() {
             border: '1px solid rgba(255,255,255,0.07)',
             color: 'white',
             transform: open ? 'translateX(200px)' : 'translateX(0)',
+            animationDelay: '900ms',
           }}
         >
           <span className="font-display text-[16px] leading-tight text-center">
-            Discover
+            Start
             <br />
-            More
+            Project
           </span>
         </button>
       </section>

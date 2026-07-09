@@ -352,6 +352,10 @@ body {
   animation-fill-mode: both;
   animation-timing-function: ease;
 }
+/* Elementor 速度檔（animation_duration 控制項）：slow=2s、fast=0.75s；預設 normal=1.25s。
+   Home Six 英雄區內層（標題/副標/圓鈕/浮水印）皆為 slow=2s，容器 fadeInDown 用 normal。 */
+.ev.is-visible.ev-slow { animation-duration: 2s; }
+.ev.is-visible.ev-fast { animation-duration: 0.75s; }
 .ev.is-visible[data-ev="slideInUp"]    { animation-name: slideInUp; }
 .ev.is-visible[data-ev="slideInDown"]  { animation-name: slideInDown; }
 .ev.is-visible[data-ev="slideInLeft"]  { animation-name: slideInLeft; }

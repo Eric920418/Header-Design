@@ -93,10 +93,15 @@ export function StoreLocationSection() {
                 get in touch
               </span>
             </div>
+            {/* 模板 Contact 頁逐字：Have a Project in [Mind? Let’s Make] It Happen（金字重點 Mind? Let’s Make；彎引號 ’） */}
             <h2 className="font-display lg:w-[661px] text-[60px] leading-[64px] capitalize text-[#000000]">
-              Have A Project In <span style={{ color: GOLD }}>Store</span>
-              <br />
-              <span style={{ color: GOLD }}>Locator</span> It Happen
+              Have a Project in{" "}
+              <span style={{ color: GOLD }}>
+                Mind?
+                <br />
+                Let’s Make
+              </span>{" "}
+              It Happen
             </h2>
           </div>
         </div>

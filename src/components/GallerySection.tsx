@@ -94,7 +94,7 @@ export function GallerySection() {
 
             {/* 大標（模板 110/100、capitalize、粗體） */}
             <h2 className="font-display text-white capitalize text-[75px] leading-[80px]">
-              Kitchen Design
+              Interior Design
             </h2>
 
             {/* 段落（模板 18/24、寬 378）：隨主圖聯動（當前案例標題） */}

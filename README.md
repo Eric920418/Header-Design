@@ -37,6 +37,8 @@ pnpm build
 
 - **`src/components/ScaleToFit.tsx`**（外殼）：固定 1512px 寬畫布 + `transform: scale`，`transform-origin: top left`；用 `ResizeObserver` 把外層高度同步為「畫布自然高 × scale」（transform 不改 layout box，否則底部留白）。`useLayoutEffect` 在首次 paint 前套好、無閃爍。`src/App.tsx` 用它包住整個 App。
 - **共用 scale hook `src/components/useCanvasScale.ts`**：單一來源 `DESIGN_W = 1512` + 「`resize` 時 `scale(innerWidth/1512)`」邏輯。`ScaleToFit` 共用 `DESIGN_W`（自有 effect 因還要同步高度）；**畫布外的 fixed 層（StickyHeader / FloatingButtons）用 `useCanvasScale(origin)` 各自補回等比縮放**——因為畫布的 `transform` 會讓內部 `fixed` 相對畫布、無法真正釘視窗，故這兩者必須抽到畫布外、再自行 scale 保持與全站同比例。
+- **設計基準＝1512（＝與模板 1:1 對位點）**：全站在 `DESIGN_W`(=1512) 上量測製作。**任一元素螢幕實際大小 = CSS 值 × (innerWidth/1512)**，只有 `innerWidth=1512` 時 scale=1、與模板 demo「同 px 同尺寸」；窄於 1512 整站等比縮小、寬於則放大。⚠ **DevTools 的 `font-size` 欄位不含祖先 `transform:scale`**——會顯示 CSS 原始值（如 100px），但眼睛看到的是 ×scale 後的大小；想看真實渲染尺寸要看元素 hover 的 `寬×高` 標籤或 `getBoundingClientRect()`。
+- **對位提示 HUD `src/components/ScaleHUD.tsx`（僅開發模式）**：釘右下角、顯示 `基準 1512 · 視窗 {w}px · {scale}× · 是否 1:1 對位`；落在 1512 時轉綠標「✓ 1:1 對位（＝模板同尺寸）」，否則標放大/縮小百分比 + 「模板 100px ≈ 你 {N}px」。按 **G** 顯示/隱藏。`App.tsx` 以 `{import.meta.env.DEV && <ScaleHUD/>}` 掛在 `ScaleToFit` 外；**正式 `pnpm build`（`import.meta.env.DEV=false`）時整段被 Vite tree-shake，不會上線**。用途：和模板 demo 比對時先把視窗調到 HUD 顯示綠色（1512）再比，才是公平對位。
 - **`FloatingButtons`（右側浮動鈕）也等比縮放**：三層結構＝定位層（`fixed inset-y-0 right-0` 滿高右側條 + `items-center` 用 layout 垂直置中 + `pointer-events-none`）→ scaler（`useCanvasScale('right center')`）→ 按鈕欄。`right center` origin 使縮放時右緣恆貼視窗右、垂直中心不動；`pointer-events-auto` 收回內層可點。（實測 scale 0.4 時鈕 75→30px、仍貼右且置中。）
 - **凍結斷點到桌面版**（`globals.css` 的 `@theme`）：把 Tailwind `--breakpoint-sm~2xl` 設成極小遞增值（`1px`~`5px`），使 `sm:/md:/lg:` 變體**全部無條件恆生效**（編譯出的 utility 不帶 media query）→ 全站在**任何 viewport 都渲染桌面版外觀**（不受真實 viewport 影響）。這是關鍵：否則手機上 media query 會渲染手機版再被縮放，變「縮小的手機版」。
 - **配套**：`HeroSection` 由 `height:100dvh` 改**固定 px**（`dvh`/`vh` 不會被 scale 等比帶動）；`App` 根移除 `min-h-screen`/`pb-14`；`body { overflow-x: hidden }`；still-used 的 `--store-map-h`/`--hero-brand-h` 釘死桌面值。**已清除殘留的死 `dvh` 變數** `--hero-h`/`--hero-ai-font`/`--hero-svg-h`/`--hero-play-size`（`globals.css` 三斷點區塊，rendered code 未引用，是唯一殘留的 viewport 單位）。
@@ -49,8 +51,8 @@ pnpm build
 
 - **平滑捲動阻尼（Lenis）** — `src/motion/{useSmoothScroll.ts, ScrollMotionProvider.tsx}`。對映模板 config：`duration: 1.5` + expo ease-out `t=>Math.min(1,1.001-2**(-10*t))`。用 **原生捲動模式**（不設 wrapper/content transform），故不碰 `ScaleToFit` 的 canvas `scale`、也不破壞 `FloatingButtons` 的 `fixed`。只在 **桌面（>992px）且非 reduced-motion** 啟用，跨 992px / 偏好變更自動啟停。GSAP 與 Lenis 共用單一 rAF（`gsap.ticker`），內容高度變動時自建 `ResizeObserver` → `lenis.resize()` + `ScrollTrigger.refresh()`。`ScrollMotionProvider` 掛在 `ScaleToFit` **外層**。
 - **出場動畫（IntersectionObserver + CSS，完全比照 Antra 模板）** — `src/motion/Reveal.tsx` + `globals.css` 的 `.ev`。逐 section 用模板實際的 Elementor 進場動畫（keyframe 逐字取自 demo `styleSheets`；`.animated` = `1.25s` / fill `both`；hidden state = `visibility:hidden` 同 `.elementor-invisible`）。機制：`.ev { visibility:hidden }`、IntersectionObserver 進場加 `.is-visible`、`animation-name` 由 `data-ev` 決定（進場一次不重播、reduced-motion 直接顯示）。
-  - **API**：`<Reveal anim="slideInLeft" delayMs={300}>` 或 `useReveal(ref)` 掛既有元素（配 `className="ev"` + `data-ev` + inline `animationDelay`）。`anim` 支援 `slideInUp/Down/Left/Right`、`fadeIn/Up/Down`（Elementor 核心 **100% 位移**）+ `opalMoveUp/…/opalScaleUp`（主題 100px 版，備用）。
-  - **逐 section 對映（實測 demo）**：Hero section `fadeInDown` + 標題區 `slideInLeft` + 浮水印 `fadeInUp`(900)；Project section `slideInUp`；Pricing 標題 `slideInUp` + 三卡 `slideInUp`(0/300/500)；Gallery 標題 `slideInUp`(200) + 右卡欄 `slideInUp`(400)；WhatWeDo 左 `slideInLeft` + 右影片 `slideInRight`(300)；StoreLocation `slideInUp`；**Footer 無進場**（模板亦無）。
+  - **API**：`<Reveal anim="slideInLeft" delayMs={300} speed="slow">` 或 `useReveal(ref)` 掛既有元素（配 `className="ev"` + `data-ev` + inline `animationDelay`）。`anim` 支援 `slideInUp/Down/Left/Right`、`fadeIn/Up/Down`（Elementor 核心 **100% 位移**）+ `opalMoveUp/…/opalScaleUp`（主題 100px 版，備用）。`speed` 對應 Elementor `animation_duration` 控制項：`normal`=1.25s（預設）、`slow`=2s、`fast`=0.75s（class `.ev-slow`/`.ev-fast`）。
+  - **逐 section 對映（實測 demo）**：**Hero（home-6 逐項對位）＝容器 section `fadeInDown`(normal 1.25s) 整區落下＋標題/副標 `slideInLeft`(slow 2s) 從左滑入＋Start 圓鈕 `fadeIn`(slow, 900) ＋浮水印 `fadeInUp`(slow, 900)**——容器落下與內層左滑**巢狀複合**成斜向動態（非單一由下往上），延遲 900 層錯落；Project section `slideInUp`；Pricing 標題 `slideInUp` + 三卡 `slideInUp`(0/300/500)；Gallery 標題 `slideInUp`(200) + 右卡欄 `slideInUp`(400)；WhatWeDo 左 `slideInLeft` + 右影片 `slideInRight`(300)；StoreLocation `slideInUp`；**Footer 無進場**（模板亦無）。
   - **鐵則**：`.ev` 用 `transform`（fill both 收在 none），**勿套在已佔 transform 的元素**（Embla 軌道、`.project-parallax-img`/`.gallery-bg`/`.wwd-blueprint` 視差、`animate-gallery-card`、hover-scale/rotate）→ 一律包外層 wrapper。`slideInLeft/Right` 的 100% 位移靠 section `overflow-hidden` 裁切避免水平捲軸。
 - **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。**不用 `pin`**：pin 的 `position:fixed`+pin-spacer 在 `transform:scale()` 祖先下量測錯誤，改用 `yPercent` scrub（`scrub:0.5`）位移達到同觀感。目標：GallerySection 全出血背景 `.gallery-bg`（scale 1.12）、WhatWeDo 裝飾 `.wwd-blueprint`。只寫內層 transform，永不碰 `canvasRef`。**⚠ ProjectSection 的照片視差已移除**：視差給每張 `.project-parallax-img` 獨立 transform→GPU 獨立圖層，Embla loop 輪播移動時相鄰圖層在環繞接縫對不齊而露縫（症狀：僅環繞接縫後的照片、移動中露縫、到吸附點才合併）。移除後照片與軌道同層、無縫（`ProjectSection.tsx` 不再呼叫 `useParallax`；`.project-parallax-img` class 保留但無 transform）。
 
@@ -87,6 +89,20 @@ pnpm build
 - 兩者皆拉丁字型，字型堆疊在 `globals.css` `@theme` 定義並**接 CJK fallback**（`--font-sans`＝Golos Text＋CJK；`--font-display`＝Cal Sans＋CJK）：英文逐字走 Cal Sans/Golos，中文 fallback 到中文字型，並存不衝突。`--font-sans` 設定後 body 預設即 Golos Text；`--font-display` 產生 `font-display` utility。
 - **套用方式**：標題 `<h1..h6>` 與英文 eyebrow/`<span>` 加 `font-display` class（`globals.css` 另有 `h1..h6` 基準規則設 Cal Sans/400/capitalize，但 utility 層優先，故實務靠各元件的 `font-display` class 生效）。內文英文無需逐一改（body 預設已 Golos Text）。
 - **標題字級（對照 demo `html`=20px 實測，逐一驗證）**：Hero h1 **100**、Pricing/WhatWeDo/Store h2 **60**、Gallery h2 **75**（原 110，不符模板任何標題、已改對齊 home-three gallery 75/lh80）、Project 卡 h3 36。Hero 大標移除原 `-1px` letter-spacing（模板標題 letter-spacing 0）。
+
+### 英文文案（＝Antra 模板原始 demo 逐字，只英文、中文不動）
+
+各 section 的英文改用**本地模板 demo 匯出檔逐字文案**（來源 `antra-full 2/antra/dummy-data/`：`homepage/home-6.xml`＝Hero/WhatWeDo、`home-3.xml`＝Gallery、`content.xml`＝Pricing/Contact）。金色重點字沿用 CIS 金 `#C9AA79`（只跟隨模板「哪些字是金的」）；模板文案裡的品牌名 **Antra→SAKURA**。
+
+| Section | 英文文案（模板逐字；⟨…⟩＝金字） |
+|---|---|
+| Hero | eyebrow `Trusted Design Partner`；h1 `Find Your ⟨Inspired Interior⟩ Design`；副標 `Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.`；圓鈕 `Start Project` |
+| Pricing | eyebrow `our pricing plans`；h2 `Design your ⟨space, know⟩ the cost`（本就與模板一致，未改） |
+| Gallery | h2 `Interior Design`（eyebrow 為中文「門市案例」不變） |
+| WhatWeDo | eyebrow `What we do`；h2 `SAKURA has ⟨created exceptional⟩ architectural designs.`（Antra→SAKURA）；清單 `Residence And Condo / Modern Kitchen Renovate / Interior House Decoration`、段落 `We specialize in transforming visions…precision.`（本就與模板一致，未改） |
+| Store | eyebrow `get in touch`（未改）；h2 `Have a Project in ⟨Mind? Let’s Make⟩ It Happen`（模板 Contact 頁；彎引號 ’） |
+
+**刻意保留、未動的英文**：ProjectSection 10 個廚房系列卡名（`Basic+`/`AI Kitchen`/`Clever Kitchen`…）與 Hero 6 個風格名（`Modern`/`Scandinavian`…）＝對應旁邊中文的 SAKURA 產品/風格名；品牌專有名詞 `SAKURA`（浮水印）/`SVAGO`/`TEKA`/`Copyright © Taiwan Sakura Corporation…`/`YouTube`；`MarqueeBand` 裝飾字 `Kitchen Product`（模板無對應 marquee 文案）。
 
 **文字排版 token**（size/line-height/letter-spacing/text-transform/字重/字型皆照模板）：
 
@@ -156,7 +172,7 @@ pnpm build
 - **與模板的唯一差**：模板 header 透明疊在 hero 上（hero 由畫面頂 0 起）；本站為**實心金色 sticky header（72px）**，故 hero 由 72px 起——**hero 內部排版與模板 0 誤差**，整體在頁面上比模板低 72px。
 - **滿寬**：`FloatingButtons` 桌面版改為 `fixed` 浮動欄、不再佔用 75px 軌道，主內容因此滿寬。
 - **`FloatingButtons` 圖示**：三顆（門市案例=金底、到府丈量/客服中心=深灰底）圖示改用**官方白色 PNG** `public/floating-icons/{store,measure,service}.png`（原 lucide `MapPin/Ruler/MessageCircle` 已換掉；皆純白，金底/深底皆可見）。桌面 `h-5`、手機 `h-4`。元件已重構為 `BUTTONS` 陣列 map（桌面 `hidden lg:flex` 直欄 + 手機 `flex lg:hidden` 底列共用同資料，`gold` 旗標決定金/深底）。
-- **構成**：全出血深色大圖 + 左對齊金點 eyebrow + 雙色大標題（白/金交錯）+ 副標 + 左下圓形按鈕（`Discover More`）+ 底部金色浮水印（`SAKURA`，對位模板 T725）——**依模板 Home Six「Interior」浮水印實測：金漸層 `linear-gradient(#C9AA79 14.9%, transparent 80.95%)`（金頂→透明底）+ `background-clip:text` + `opacity 0.64`**（比舊版 `gold @0.14` 深約 4.5×，才「跟模板一樣深」）。**文案為英文佔位**（大標 `We Shape / Inspiring Spaces`，兩行兩色），待正式內容替換。
+- **構成**：全出血深色大圖 + 左對齊金點 eyebrow + 雙色大標題（白/金交錯）+ 副標 + 左下圓形按鈕（`Start Project`）+ 底部金色浮水印（`SAKURA`，對位模板 T725）——**依模板 Home Six「Interior」浮水印實測：金漸層 `linear-gradient(#C9AA79 14.9%, transparent 80.95%)`（金頂→透明底）+ `background-clip:text` + `opacity 0.64`**（比舊版 `gold @0.14` 深約 4.5×，才「跟模板一樣深」）。**英文文案＝Antra 模板 Home Six 逐字**（見「英文文案」段）：eyebrow `Trusted Design Partner`、大標 `Find Your ⟨Inspired Interior⟩ Design`（金字 Inspired Interior）、副標 `Transform your vision into reality…sustainability.`。
 - **左側「品牌系列」伸縮抽屜（桌面）**：左緣一個玻璃把手（`ChevronRight` + 直排「品牌系列」，用 `.writing-vertical`），點擊 `open` state 切換。抽屜面板 `w-0 ↔ w-[190px]` 伸縮淡入，列出**品牌系列 8 個中文名**（`SERIES`：巧域／潮派／童樂／君璽／臻美／大廚／鄉村／閣樂廚房；Basic+ / AI kitchen 無中文故略），hover 顯示金色左邊條 + 金字。**「不蓋過主視覺」的做法**：展開時把**內容層（標題/副標，`translateX(200px)`）、左下圓鈕（同 200px）、底部浮水印（`translateX(250px)`）**一起右推、讓出左側空間（皆 `transition 500ms`）。收合時只剩把手在左緣、不佔畫面。**手機不顯示**此抽屜（`hidden lg:flex`），故不觸發位移。
 - **品牌帶（採 Antra Home Four 版型）**：Hero 下方淺色背景（`#f6f6f6`）+ **marquee 輪播**（同模板 `elementor-brand` 動態）。**6 項**（`STYLE_TAGS`），每項 = **左：對應的模板品牌「icon」**（只留圖示、**去掉 SVG 原生的品牌英文字**；`img h-[44px]`、`opacity-70` hover→100）+ **右：中文（粗體 15px）／英文（13px）兩行**（`flex items-center gap-4`，icon 左字右）。**間距／分隔線比照模板源碼**：實測模板 Home Four brand 為 6 欄、item 間距 ~120px、logo 高 58；故每項 `px-14`（左右各 56px → 相鄰內容間距 112px），並依源碼 `elementor.css` `.slick-slide:before`（1px `#ebebeb`）在每項加 `border-r`，色改用 CIS 暖線 `#E3DED7`（避冷灰），分隔線落在兩項間距正中。**每項用不同 icon**（Home Four 6 個 `elementor-brand`，實測依 viewBox 寬度配對、對照使用者 Image #40）：現代風→`5.svg`(ARCHITECT)、輕奢風→`6.svg`(BUILDING圓)、北歐風→`4.svg`(BUILDING2)、工業風→`3.svg`(REAL ESTATE)、美式風→`1.svg`(TREND)、鄉村風→`2.svg`(INTERIOR)。`public/brand-logos/1–6.svg` = 6 個 icon-only SVG，統一 `#3E3A39`：**用瀏覽器 `getBBox` 把每個 wordmark 的 icon 路徑與文字路徑依 x 座標間隙分群、只保留 icon 群、重算 viewBox**（原 wordmark 版已被覆寫）。`icon.svg` 為更早的單一建築圖示（已停用）。**輪播**：`[...STYLE_TAGS, ...STYLE_TAGS]` 重複兩組 + `.animate-marquee`（`marquee` keyframe，40s，`-50%` 無縫循環）+ `group-hover:[animation-play-state:paused]`。高度沿用 `--hero-brand-h`。
 - **Gallery 已移除**：原本 Hero 下方的圖庫展示（大圖 + 縮圖）已拿掉，改由 `ProjectSection`（專案輪播）取代，見下方 Section 2。
@@ -197,7 +213,7 @@ pnpm build
 - **section 高度 = `min-h-[956px]`**（實測模板 956）；內容**非置中**，照模板 `e-con-inner` `padding-top` 推到下半部 —— 內容容器 `lg:pt-[388px]`、`items-start`。實測靜止：副標/卡片頂 y388、大標 y445、段落 y682、箭頭 y788（與模板 0–1px）。左標題區 `lg:w-[479px]`（L51）+ 右卡欄 `flex-1`。內部間距：膠囊 `mb-[26px]`、段落 `mt-[37px]`、箭頭 `mt-[40px]`。**右側卡片靠右**：右卡欄 `flex justify-end`（容器 `lg:pr-[51px]`）內包一層縮到卡片寬度的區塊 → 卡片右緣對齊右版心 1461（右邊距 51、與左緣對稱），左側 530–771 留白露出背景主圖。**箭頭在該區塊內靠左**（不加 `justify`）→ 落在**卡片群左緣 771 的正下方**（卡片下方 40px），非靠右。
   - ⚠ **驗證陷阱**：`.reveal` 用個別 `translate` 屬性做進場，隱藏分頁 transition 卡住停在 `translate:0 56px` → 量測會**整體 +56**；驗證垂直位置要先 `translate:none!important` 清掉再量（見 [[mcp-tab-hidden-raf-io]]）。卡片另有 `animate-gallery-card` 的 `translateX(40px)` 進場，量水平也要結算。
 - **背景底圖**：= 當前 `CASES[active].image`（crossfade）。遮罩 `linear-gradient(90deg, rgba(0,0,0,.82)→.5)` 壓成模板沉穩深調 + 保左側文字可讀。
-- **左：標題區**：**副標膠囊**（`border-white/25`、`rounded-[24px]`、`padding 3/13/3/9`、金點 + `門市案例` 15/ls1/uppercase）+ 大標（`Kitchen Design` **110/100/capitalize/粗體**）+ 段落（隨主圖聯動 `CASES[active].caption` 18/24、寬 378）+ **CTA 按鈕**（見下）。
+- **左：標題區**：**副標膠囊**（`border-white/25`、`rounded-[24px]`、`padding 3/13/3/9`、金點 + `門市案例` 15/ls1/uppercase）+ 大標（`Interior Design`＝模板 Home Three gallery 逐字，**75/80/capitalize**）+ 段落（隨主圖聯動 `CASES[active].caption` 18/24、寬 378）+ **CTA 按鈕**（見下）。
 - **CTA 按鈕 — 依主題原始碼 `antra-elementor-button`**（`elementor.css` `.elementor-price-table__button` 真值）：透明底、`border 1px rgba(159,159,164,.64)`、`rounded-full`、`padding 7/7/7/30`、字 **15px/weight400/capitalize**、`transition .5s`；圖示圈 **40×40** 金底白箭頭（lucide `ArrowRight` `w-5`=20）、**預設 `-rotate-45`**（↗）。**hover**：整顆填金（`bg`+`border`=`#C9AA79`）、圖示 `group-hover/cta:rotate-0`（→）。文字用「查看所有案例」；模板淺底字深、本區深底故**字用白**。⚠ 尺寸取**原始碼**非量網頁（demo root 20px 會放大成 18.75/45，見門市案例區備註）。
 - **右：2 張卡**：`w-[330px] h-[360px] rounded-3xl`（沿用模板卡尺寸）、gap 30；右側留白處露出背景主圖。**卡片高度受限於 956 + y388 起點，故為 360（非早期的 610）**；要更高卡片就得把 section 拉高過模板 956。卡片 hover：陰影加深 `shadow-[0_32px_80px_-8px_rgba(0,0,0,.7)]` + 圖片 `group-hover/card:scale-[1.06]`（`overflow-hidden` 裁切）。
 - **箭頭**：模板位置 —— 卡片**下方左側**（`mt-[40px]`、42×42 圓框、`border-white/25`、透明底、lucide `ArrowLeft/ArrowRight`）控制聯動 `prev/next`。
@@ -209,7 +225,7 @@ pnpm build
 
 - **左欄（依主題原始碼對齊模板）**：
   - **副標膠囊**：`rounded-[24px]` + `border rgba(114,114,114,.18)` + `padding 3/13/3/10` + 金點 + `what we do` 15/ls1/uppercase（實測模板 `.elementor-title-span`；與 Hero eyebrow 同款）。
-  - **雙色大標** `text-[60px] leading-[64px]`（h2 文字目前為佔位「Antra Has Brand Promise Architectural」，模板原文是「Antra has created exceptional architectural designs.」，待定案）。
+  - **雙色大標** `text-[60px] leading-[64px]`（模板 Home Six 逐字「SAKURA has ⟨created exceptional⟩ architectural designs.」，金字 created exceptional；模板原文品牌名 Antra→SAKURA。三行斷點）。
   - **打勾清單**：照模板為**純金 `Check` icon（`w-[19px]`、色 `#C9AA79`、無圓底）**（非先前的金圓底+白勾）；清單字 18/24 `font-normal`（模板 weight 400）。
   - **CTA「櫻花優勢」= antra 標準按鈕**，**與上一個 section（Gallery「查看所有案例」）尺寸一致**：透明底、`border 1px rgba(159,159,164,.64)`、字 **15px**、`padding 7/7/7/30`、`gap-4`、盒高 **56**、金圓 **40** 箭頭預設 `-rotate-45`；hover 整顆填金 `#C9AA79` + 字白 + 箭頭 `rotate-0`。差別僅字色（淺底黑字，`hover:text-white`）。（三顆 antra 按鈕 Gallery/Pricing/WhatWeDo 統一 7/7/7/30/gap-4/高 56。）
 - **右欄影片區**：**16:9 影片區塊**（`aspect-video`，圓角 24px + 陰影 + 黑底）：縮圖 poster（`VIDEO_POSTER`）鋪滿 + 置中播放鈕（`Play`）；**播放鈕依模板 `.elementor-video-popup` 改為半透明白圓 `rgba(255,255,255,0.36)` + `backdrop-blur` + 白三角**（非金），加**脈動光圈**（`animate-ping`，同白）與 hover 放大；影片卡 hover 依比例微放大（`hover:scale-[1.02]`）。
@@ -220,7 +236,7 @@ pnpm build
 
 `StoreLocationSection.tsx`：套 Antra「Contact Us」視覺（淺灰底 `#f6f6f6`、膠囊 eyebrow、雙色大標、白色圓角卡片、金色 `#C9AA79`），並把原本的空佔位地圖與無效搜尋**做成真的能用**：
 
-- **標題版型（依「首頁 Section 說明.pptx」slide 2 門市地圖）**：**分欄標題**——eyebrow `get in touch`（左 424px 欄）+ 大標推到右邊 `Have A Project In ⟨Store Locator⟩ It Happen`（`Store Locator` 金色）。**加十字裝飾線**（與 `PricingSection` 相同：橫線 `left-[-13px] top-[16px] w-[502px] h-px`、直線 `left-[363px] top-[-38px] h-[179px]`、兩端 15px 三角、色 `#e3e3e8`、`hidden lg:block`），座標與 Pricing 一致 → 同位置。
+- **標題版型（依「首頁 Section 說明.pptx」slide 2 門市地圖）**：**分欄標題**——eyebrow `get in touch`（左 424px 欄）+ 大標推到右邊 `Have a Project in ⟨Mind? Let’s Make⟩ It Happen`（模板 Contact 頁逐字；`Mind? Let’s Make` 金色，彎引號 ’）。**加十字裝飾線**（與 `PricingSection` 相同：橫線 `left-[-13px] top-[16px] w-[502px] h-px`、直線 `left-[363px] top-[-38px] h-[179px]`、兩端 15px 三角、色 `#e3e3e8`、`hidden lg:block`），座標與 Pricing 一致 → 同位置。
 - **左欄（寬，~62%）**：**Google Maps JavaScript API 自訂地圖**（`GoogleStoreMap.tsx`），套**極簡淺灰樣式**（`LIGHT_STYLE` style JSON，仿官網 store/location 的 Positron 淺灰風）+ **深色水滴「S」標記**（inline SVG）；選取/篩選門市時 `google.maps.Geocoder` 依地址定位、`panTo` 平移（結果 cache）。
   - **需金鑰**：在專案根目錄建立 `.env`，設定 `VITE_GOOGLE_MAPS_API_KEY=你的金鑰`（`.env` 已加入 `.gitignore` 不會 commit），並在 Google Cloud 啟用 **Maps JavaScript API** 與 **Geocoding API**；金鑰建議以 HTTP referrer 限制網域。改 `.env` 後需**重啟 `pnpm dev`**（Vite 環境變數不熱更新）。
   - **無金鑰/載入失敗**：地圖區直接顯示完整錯誤訊息（依全域規則「錯誤完整顯示在前端」），不靜默空白。
