@@ -1,53 +1,68 @@
 import React from 'react';
 import { useCanvasScale } from './useCanvasScale';
 
-// 右側浮動按鈕三顆：圖示改用官方白色 PNG（public/floating-icons/*.png，皆純白，金底/深底皆可見）。
-// gold=true → 金底(門市案例)；其餘深灰底。桌面與手機共用同一份資料。
-const BUTTONS = [
-  { label: '門市案例', icon: '/floating-icons/store.png', gold: true },
-  { label: '到府丈量', icon: '/floating-icons/measure.png', gold: false },
-  { label: '客服中心', icon: '/floating-icons/service.png', gold: false },
+// 右側固定側邊欄 —— 對齊官網 sakura-kitchenlife.com.tw 的 .l-quick-links（實測）：
+// 純圖示按鈕、圖 58px、p-2(8px)、金頂鈕(CIS 金 #C9AA79) + 灰群組(#737373，官網值) + 白分隔線、底部對齊貼右、無文字。
+// ⚠ 圖示直接引用官網資產（quick-link-{2,3,4}.svg，已實測可載入）；要本地化可下載到 public/floating-icons/。
+// ⚠ 金頂鈕金色＝使用者指定改回本專案 CIS 金 #C9AA79（非官網 #B79258）；灰群組仍用官網值 #737373。
+const ICON = 'https://www.sakura-kitchenlife.com.tw/images';
+
+// 金頂鈕（加盟）：與下方群組間隔 mb-20
+const TOP = { href: 'https://www.sakura-kitchenlife.com.tw/franchising/intro', icon: `${ICON}/quick-link-4.svg`, alt: '加盟門市' };
+// 灰底群組（到府丈量 / 客服），項間白色分隔線（VR 賞屋已移除）
+const GROUP = [
+  { href: 'https://www.sakura-kitchenlife.com.tw/measuring', icon: `${ICON}/quick-link-2.svg`, alt: '到府丈量' },
+  { href: 'https://icare.sakura.com.tw', icon: `${ICON}/quick-link-3.svg`, alt: '客服中心', external: true },
 ];
 
 export function FloatingButtons() {
-  // 與全站同步等比縮放（畫布外的 fixed 層需自行補回 scale）；右側垂直置中故 origin = right center。
-  const scalerRef = useCanvasScale<HTMLDivElement>('right center');
+  // 與全站同步等比縮放（畫布外 fixed 層需自行補回 scale）；底部貼右故 origin = right bottom。
+  const scalerRef = useCanvasScale<HTMLDivElement>('right bottom');
 
   return (
     <>
-      {/* 桌面版 - 右側浮動欄：三層＝定位層(滿高右側條 + flex 垂直置中) → scaler(等比縮放) → 按鈕欄。
+      {/* 定位層：滿高右側條 + 底部對齊(items-end) + pb-[36px]（官網 bottom-9）→ scaler(等比縮放) → 按鈕。
           pointer-events-none 讓空條不擋點擊，內層 pointer-events-auto 收回可點。 */}
-      <div className="hidden lg:flex fixed inset-y-0 right-0 z-50 items-center pointer-events-none">
+      <div className="hidden lg:flex fixed inset-y-0 right-0 z-50 items-end pb-[36px] pointer-events-none">
         <div ref={scalerRef} className="pointer-events-auto">
-          <div className="flex flex-col rounded-l-xl overflow-hidden shadow-[0_12px_40px_-8px_rgba(0,0,0,0.28)]">
-            {BUTTONS.map((b, i) => (
-              <a
-                key={b.label}
-                href="#"
-                className={`w-[75px] h-[80px] flex flex-col items-center justify-center gap-1.5 text-white transition-colors ${
-                  b.gold ? 'bg-[#C9AA79] hover:bg-[#B8965F]' : 'bg-[#3E3A39] hover:bg-[#2E2B2A]'
-                } ${i > 0 ? 'border-t border-white/10' : ''}`}
-              >
-                <img src={b.icon} alt="" className="h-5 w-auto" />
-                <span className="text-[10px] font-medium whitespace-nowrap tracking-[2px]">{b.label}</span>
-              </a>
+          {/* 金頂鈕（加盟）：block p-2 mb-[20px]，圖 58 */}
+          <a
+            href={TOP.href}
+            aria-label={TOP.alt}
+            className="block p-2 mb-[20px] bg-[#C9AA79] transition-opacity hover:opacity-90"
+          >
+            <img src={TOP.icon} alt={TOP.alt} className="w-[58px] h-[58px]" />
+          </a>
+
+          {/* 灰底群組：3 顆，項間白色 h-px 分隔線 */}
+          <div className="bg-[#737373]">
+            {GROUP.map((b, i) => (
+              <React.Fragment key={b.href}>
+                {i > 0 && <div aria-hidden className="w-full h-px bg-white/50" />}
+                <a
+                  href={b.href}
+                  aria-label={b.alt}
+                  {...(b.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="block p-2 transition-opacity hover:opacity-90"
+                >
+                  <img src={b.icon} alt={b.alt} className="w-[58px] h-[58px]" />
+                </a>
+              </React.Fragment>
             ))}
           </div>
         </div>
       </div>
 
-      {/* 手機版 - 底部固定導航 */}
-      <div className="flex lg:hidden fixed bottom-0 left-0 right-0 z-[9999] bg-white border-t border-[#E3DED7]">
-        {BUTTONS.map((b) => (
+      {/* 手機版底列（凍結斷點後 lg:hidden 恆隱藏、不顯示；保留為一致性）：4 顆純圖示 */}
+      <div className="flex lg:hidden fixed bottom-0 left-0 right-0 z-[9999]">
+        {[TOP, ...GROUP].map((b) => (
           <a
-            key={b.label}
-            href="#"
-            className={`flex-1 flex items-center justify-center gap-2 py-3 text-white text-sm font-medium ${
-              b.gold ? 'bg-[#C9AA79]' : 'bg-[#3E3A39]'
-            }`}
+            key={b.href}
+            href={b.href}
+            aria-label={b.alt}
+            className={`flex-1 flex items-center justify-center py-2 ${b === TOP ? 'bg-[#C9AA79]' : 'bg-[#737373]'}`}
           >
-            <img src={b.icon} alt="" className="h-4 w-auto" />
-            <span>{b.label}</span>
+            <img src={b.icon} alt={b.alt} className="w-9 h-9" />
           </a>
         ))}
       </div>
