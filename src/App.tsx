@@ -2,7 +2,7 @@ import React from 'react';
 import { StickyHeader, HEADER_H } from './components/StickyHeader';
 import { HeroSection } from './components/HeroSection';
 import { ProjectSection } from './components/ProjectSection';
-import { PricingSection } from './components/PricingSection';
+import { ServicesSection } from './components/ServicesSection';
 import { GallerySection } from './components/GallerySection';
 import { WhatWeDoSection } from './components/WhatWeDoSection';
 import { StoreLocationSection } from './components/StoreLocationSection';
@@ -29,8 +29,8 @@ export default function App() {
         <Reveal anim="fadeInDown"><HeroSection /></Reveal>
         {/* 專案輪播（取代原本 Hero 內的 Gallery，採 Home Six 版型）— 出場/視差在元件內 */}
         <ProjectSection />
-        {/* 價目表（Antra Pricing 忠實複刻；保留底部跑馬燈）— 三卡 stagger 在元件內 */}
-        <PricingSection />
+        {/* 服務輪播（Antra home-6「Our Services」= antra-services-list style-3 複刻；保留底部跑馬燈） */}
+        <ServicesSection />
         {/* 圖庫輪播（採 Antra Home Three antra-image-carousel 版型）— 出場/視差在元件內 */}
         <GallerySection />
         {/* What we do（採 Antra Home Six 版型：左文字 + 右錯位交疊雙圖 + 視差） */}
