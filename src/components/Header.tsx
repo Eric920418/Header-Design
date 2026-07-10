@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
 
 import { GOLD } from '../theme/cis';
+import { DESIGN_W } from './useCanvasScale';
 
 // 對齊參考站 sakura-kitchenlife.com.tw 的 .l-header / .l-nav__item 實測值
 const HEADER_GRADIENT = 'linear-gradient(90deg, #b79258 20%, #d2b587)';
@@ -41,13 +42,14 @@ const NAV_RIGHT: NavItem[] = [
 ];
 
 // 桌面版單一導覽項（mega 圖片選單 → hover 下拉 → 純連結）
-function DesktopNavItem({ item }: { item: NavItem }) {
+// textCls：前景文字色（背景漸層時白、背景透明時 CIS 金）——由 Header 依 bgVisible 決定後傳入。
+function DesktopNavItem({ item, textCls }: { item: NavItem; textCls: string }) {
   // 圖片式 mega-menu：hover 從 header 下方淡入展開滿寬面板 + 三張品牌大圖
   if (item.mega) {
     return (
       <div className="group">
         {/* 觸發鈕撐滿 bar 高度，讓面板無縫貼合、避免 hover 中斷 */}
-        <button className="flex items-center gap-1 h-[72px] px-3 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap">
+        <button className={`flex items-center gap-1 h-[72px] px-3 text-[15px] ${textCls} transition-colors whitespace-nowrap`}>
           {item.label}
           <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
         </button>
@@ -93,7 +95,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
       <a
         href={item.href}
         {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-        className="px-3 py-2 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap"
+        className={`px-3 py-2 text-[15px] ${textCls} transition-colors whitespace-nowrap`}
       >
         {item.label}
       </a>
@@ -101,7 +103,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
   }
   return (
     <div className="group relative">
-      <button className="flex items-center gap-1 px-3 py-2 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap">
+      <button className={`flex items-center gap-1 px-3 py-2 text-[15px] ${textCls} transition-colors whitespace-nowrap`}>
         {item.label}
         <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
       </button>
@@ -129,17 +131,53 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expanded, setExpanded] = useState<number | null>(null);
 
+  // 頁首背景：往下捲動時淡出變透明；滑鼠碰到 header 時淡回。頁面最頂端（未捲動）維持漸層。
+  const [scrolled, setScrolled] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  useEffect(() => {
+    // 門檻＝hero 上方那個 72px spacer 的螢幕高（＝72×縮放比 innerWidth/DESIGN_W）。
+    // 只有捲過它、hero 已補到 header 正後方才變透明；否則透明 header 會露出後方白色 spacer（醜）。
+    const onScroll = () => setScrolled(window.scrollY > 72 * (window.innerWidth / DESIGN_W));
+    onScroll(); // 初次同步（重新整理時可能已在捲動位置）
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll); // 縮放比變動時重算門檻
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+  // 背景顯示條件：未捲動、或滑鼠正碰著 header；捲動且沒碰 → 透明
+  const bgVisible = !scrolled || hovered;
+  // 前景色：背景漸層時白字（原樣）；背景透明時全轉 CIS 金 #C9AA79（含 nav 文字/箭頭/搜尋圖示，currentColor 連動）。
+  // 註：金字狀態＝滑鼠不在 header 上，故白字的 hover 效果在金字態不會被觸發。
+  const navCls = bgVisible ? 'text-white hover:text-white/80' : 'text-[#C9AA79]';
+  const iconCls = bgVisible ? 'text-white/90 hover:text-white' : 'text-[#C9AA79]';
+  const dividerCls = bgVisible ? 'bg-white/40' : 'bg-[#C9AA79]/40';
+
   const allNav = [...NAV_LEFT, ...NAV_RIGHT];
 
   return (
     <header className="w-full relative z-50" style={{ fontFamily: HEADER_FONT }}>
-      <div style={{ background: HEADER_GRADIENT }}>
+      <div
+        className="relative"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* 背景漸層層：往下捲動淡出變透明、滑鼠碰到 header 淡回（前景 nav/logo 不受影響）。
+            漸層無法用 transition 補間，故獨立成一層用 opacity 過渡。 */}
+        <div
+          aria-hidden
+          className="absolute inset-0 transition-opacity duration-300 ease-out"
+          style={{ background: HEADER_GRADIENT, opacity: bgVisible ? 1 : 0 }}
+        />
+        {/* 前景（nav / logo / 搜尋 / mega 面板）疊在背景層之上 */}
+        <div className="relative">
         <div className="px-5 lg:px-12 h-[72px] flex items-center">
           {/* ── 桌面版：左導覽 | logo | 右導覽 + 搜尋 ── */}
           <nav className="hidden lg:flex items-center w-full">
             <div className="flex-1 flex items-center justify-start gap-1">
               {NAV_LEFT.map((item, i) => (
-                <DesktopNavItem key={i} item={item} />
+                <DesktopNavItem key={i} item={item} textCls={navCls} />
               ))}
             </div>
 
@@ -149,12 +187,12 @@ export function Header() {
 
             <div className="flex-1 flex items-center justify-end gap-1">
               {NAV_RIGHT.map((item, i) => (
-                <DesktopNavItem key={i} item={item} />
+                <DesktopNavItem key={i} item={item} textCls={navCls} />
               ))}
-              <span className="w-px h-5 bg-white/40 mx-2" aria-hidden />
+              <span className={`w-px h-5 mx-2 ${dividerCls}`} aria-hidden />
               <button
                 onClick={() => setOpenSearch((v) => !v)}
-                className="p-2 text-white/90 hover:text-white transition-colors"
+                className={`p-2 transition-colors ${iconCls}`}
                 aria-label="搜尋"
               >
                 {openSearch ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
@@ -202,6 +240,7 @@ export function Header() {
             </div>
           </div>
         )}
+        </div>
       </div>
 
       {/* ── 手機版抽屜（accordion） ── */}
