@@ -276,6 +276,18 @@ final result: passed
 - **內容與素材**：01–06 英文 title／excerpt 完整保留模板 dummy-data；`service-{1..6}.jpg`、`h6-bg-2.jpg` 與兩個 deco SVG 已從 Page 6 原始素材本地化到 `public/services/`，不再依賴 demo 外連；破圖仍 fallback `/kitchen-styles/elegant.jpg`。
 - **跑馬燈**：`MarqueeBand`「Kitchen Product」無限捲動（定義於 `globals.css`）仍是獨立淺灰區塊，原文案、220px 字級、漸層與動畫未更動；以 96px 淺灰間距接在服務區下方。
 
+### Services Design QA（2026-07-17）
+
+- **Source visual truth**：以已購買模板 `/Users/eric/Desktop/Header-Design/antra-full 2/antra/dummy-data/homepage/home-6.xml` 的 Elementor instance、`assets/css/base/elementor.css`，以及原版背景 `public/services/h6-bg-2.jpg`／6 張服務圖／2 個 deco SVG 為唯一基準；直播 demo 網域目前受瀏覽器政策封鎖，未以繞過方式存取。
+- **Implementation evidence**：桌面聚焦成品 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/services-section-implementation-1512.png`；原始背景素材／本機成品對照 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/services-page6-source-vs-implementation.png`。
+- **Desktop 1512×956**：Section 高 `1040px`、外距上 `80px`、padding `125px 30px 129px`；背景 `top center / cover`、黑色 `.76`、blur `29px`。標題 Cal Sans `60/64`、寬 `769px`；三欄 `33.333%`，卡寬約 `450px`、白底、radius/padding `24/10px`、圖片高 `310px`；標題 `28/35`、內文 Golos Text `16/24 #9F9FA4`。
+- **Tablet 1024×768**：Section 高 `856px`、外距 `60px`、padding `100px 30px 60px`；標題 `45/50`、兩欄 `50%`、圖片高 `310px`，偶數卡維持模板上下反轉。
+- **Mobile 390×844**：Section 高 `761px`、外距 `60px`、padding `60px 15px`；標題 `30/35`、單欄 `100%`、圖片高 `250px`，所有卡片皆圖上字下；卡標 `25/30`、內文 `16/24`。
+- **Interaction / regression**：Embla `loop` 與 5000ms autoplay 實測 track transform 有變化；hover 暫停、拖曳與 reduced-motion 保護仍在。`Kitchen Product` marquee 節點存在且 computed animation-name=`marquee`；Header、左側伸縮選單、右側浮動鈕及其他 Sections 未改。
+- **Browser checks**：1512、1024、390 三種寬度均無水平溢出、素材 natural size 正確（服務圖 `1410×1018`）、無 console error。
+- **Comparison history**：before＝淺灰背景、卡片缺白底／24px 外框、圖片使用比例高度且外連；final＝Page 6 原背景＋遮罩、原版白卡／固定圖高／排版、全部素材本地化，無 P0／P1／P2 殘留。
+- **final result: passed**
+
 ## 門市案例（Gallery）— Antra Home Three 版型
 
 `GallerySection.tsx`：對位 Home Three gallery 版型（section 高/位置/膠囊/大標/箭頭照模板實測 + 主題 `heading.php`），**但右側依使用者規則做「背景=主圖 + 2 卡聯動」**（非模板原生的 3 欄 swiper）。字型用模板 Cal Sans、金 `#C9AA79`，內容為 **SAKURA 門市案例**。
