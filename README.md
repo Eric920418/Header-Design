@@ -116,7 +116,7 @@ pnpm build
 |---|---|
 | Hero | eyebrow `Trusted Design Partner`；h1 `Find Your ⟨Inspired Interior⟩ Design`；副標 `Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.`；圓鈕 `Start Project` |
 | Services | eyebrow `Our Services`；h2 `Explore Our ⟨Comprehensive Interior Design⟩ Services`；6 服務卡 title/excerpt＝模板 home-6 dummy-data 佔位（待 SAKURA 本地化） |
-| Gallery | h2 `Interior Design`（eyebrow 為中文「門市案例」不變） |
+| Gallery | eyebrow `our gallery`；h2 `Interior design`；段落 `Lorem ipsum dolor sit amet consectetur. Magna nunc porttitor convallis faucibus laoreet.`（Home Three 原始文字） |
 | WhatWeDo | eyebrow `What we do`；h2 `SAKURA has ⟨created exceptional⟩ architectural designs.`（Antra→SAKURA）；清單 `Residence And Condo / Modern Kitchen Renovate / Interior House Decoration`、段落 `We specialize in transforming visions…precision.`（本就與模板一致，未改） |
 | Store | eyebrow `get in touch`（未改）；h2 `Have a Project in ⟨Mind? Let’s Make⟩ It Happen`（模板 Contact 頁；彎引號 ’） |
 
@@ -126,7 +126,7 @@ pnpm build
 
 | 角色 | 值 |
 |---|---|
-| Section h2 | `text-[60px] leading-[64px]`（Gallery 為 `text-[75px] leading-[80px]`，對齊 Home Three gallery 標題實測 75/80） |
+| Section h2 | `text-[60px] leading-[64px]`（Gallery 依 Home Three 原始 instance：桌面 `110/100`、tablet-extra `76/90`、tablet `42/50`、mobile `40/45`） |
 | 專案卡標題 / 中文副標 / 左上膠囊 | `text-[36px] leading-[44px]` / `text-[20px] leading-[30px]` / `text-[16px]` |
 | 品牌卡標題 / 描述（=模板 Pricing 卡） | `text-[45px] leading-[50px]` / `text-[20px] leading-[30px]` |
 | eyebrow | `text-[15px] tracking-[1px] uppercase` |
@@ -296,11 +296,11 @@ final result: passed
 - **section 高度 = `min-h-[956px]`**（實測模板 956）；內容**非置中**，照模板 `e-con-inner` `padding-top` 推到下半部 —— 內容容器 `lg:pt-[388px]`、`items-start`。實測靜止：副標/卡片頂 y388、大標 y445、段落 y682、箭頭 y788（與模板 0–1px）。左標題區 `lg:w-[479px]`（L51）+ 右卡欄 `flex-1`。內部間距：膠囊 `mb-[26px]`、段落 `mt-[37px]`、箭頭 `mt-[40px]`。**右側卡片靠右**：右卡欄 `flex justify-end`（容器 `lg:pr-[51px]`）內包一層縮到卡片寬度的區塊 → 卡片右緣對齊右版心 1461（右邊距 51、與左緣對稱），左側 530–771 留白露出背景主圖。**箭頭在該區塊內靠左**（不加 `justify`）→ 落在**卡片群左緣 771 的正下方**（卡片下方 40px），非靠右。
   - ⚠ **驗證陷阱**：`.reveal` 用個別 `translate` 屬性做進場，隱藏分頁 transition 卡住停在 `translate:0 56px` → 量測會**整體 +56**；驗證垂直位置要先 `translate:none!important` 清掉再量（見 [[mcp-tab-hidden-raf-io]]）。卡片另有 `animate-gallery-card` 的 `translateX(40px)` 進場，量水平也要結算。
 - **背景底圖**：= 當前 `CASES[active].image`（crossfade）。遮罩 `linear-gradient(90deg, rgba(0,0,0,.82)→.5)` 壓成模板沉穩深調 + 保左側文字可讀。
-- **左：標題區**：**副標膠囊**（`border-white/25`、`rounded-[24px]`、`padding 3/13/3/9`、金點 + `門市案例` 15/ls1/uppercase）+ 大標（`Interior Design`＝模板 Home Three gallery 逐字，**75/80/capitalize**）+ 段落（隨主圖聯動 `CASES[active].caption` 18/24、寬 378）+ **CTA 按鈕**（見下）。
+- **左：標題區**：只更新模板文字，圖片與動畫不動。**副標膠囊**（`border-white/25`、`rounded-[24px]`、`padding 3/13/3/9`、金點 + `our gallery` 15/ls1/uppercase）+ 大標（`Interior design`＝模板 Home Three 逐字；桌面 **110/100**、tablet-extra `76/90`、tablet `42/50`、mobile `40/45`、capitalize）+ 原版段落 `Lorem ipsum dolor sit amet consectetur. Magna nunc porttitor convallis faucibus laoreet.`（白色、18/24、寬 378）+ **CTA 按鈕**（見下）。
 - **CTA 按鈕 — 依主題原始碼 `antra-elementor-button`**（`elementor.css` `.elementor-price-table__button` 真值）：透明底、`border 1px rgba(159,159,164,.64)`、`rounded-full`、`padding 7/7/7/30`、字 **15px/weight400/capitalize**、`transition .5s`；圖示圈 **40×40** 金底白箭頭（lucide `ArrowRight` `w-5`=20）、**預設 `-rotate-45`**（↗）。**hover**：整顆填金（`bg`+`border`=`#C9AA79`）、圖示 `group-hover/cta:rotate-0`（→）。文字用「查看所有案例」；模板淺底字深、本區深底故**字用白**。⚠ 尺寸取**原始碼**非量網頁（demo root 20px 會放大成 18.75/45，見門市案例區備註）。
 - **右：2 張卡**：`w-[330px] h-[360px] rounded-3xl`（沿用模板卡尺寸）、gap 30；右側留白處露出背景主圖。**卡片高度受限於 956 + y388 起點，故為 360（非早期的 610）**；要更高卡片就得把 section 拉高過模板 956。卡片 hover：陰影加深 `shadow-[0_32px_80px_-8px_rgba(0,0,0,.7)]` + 圖片 `group-hover/card:scale-[1.06]`（`overflow-hidden` 裁切）。
 - **箭頭**：模板位置 —— 卡片**下方左側**（`mt-[40px]`、42×42 圓框、`border-white/25`、透明底、lucide `ArrowLeft/ArrowRight`）控制聯動 `prev/next`。
-- **內容 = 3 則門市案例**：`CASES`（`{image, caption}`）；圖片 `public/store-cases/case{1,2,3}.jpg`（來源 `影像/門市案例`）。案例1 文案為正式；案例2/3 文案為**佔位**待替換。放在 `App.tsx` 產品區之後。
+- **內容 = 3 則門市案例**：`CASES` 僅保留圖片 `public/store-cases/case{1,2,3}.jpg`（來源 `影像/門市案例`）；背景與兩張卡的聯動、4 秒自動輪播、滑動及 hover 動畫均未更動。放在 `App.tsx` 產品區之後。
 
 ## What We Do — Antra Home Six 版型
 

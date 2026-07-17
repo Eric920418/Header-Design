@@ -9,10 +9,14 @@ import { GOLD } from '../theme/cis';
 // 門市案例；輪播規則：背景 = 目前主圖(#1)，右邊兩張卡 = 下兩張(#2、#3)，前進時聯動輪替。
 // 圖片來源：影像/門市案例 → public/store-cases/*.jpg
 const CASES = [
-  { image: '/store-cases/case1.jpg', caption: '袁艾菲與老公結婚二周年甜蜜獻禮' },
-  { image: '/store-cases/case2.jpg', caption: '老宅廚房翻新，重拾生活溫度' }, // 佔位文案，待正式替換
-  { image: '/store-cases/case3.jpg', caption: '量身打造，成就理想廚房' }, // 佔位文案，待正式替換
+  { image: '/store-cases/case1.jpg' },
+  { image: '/store-cases/case2.jpg' },
+  { image: '/store-cases/case3.jpg' },
 ];
+
+// Antra Home Three「Our Gallery」原始段落；本區只更新文字，案例圖與輪播動畫不變。
+const GALLERY_DESCRIPTION =
+  'Lorem ipsum dolor sit amet consectetur. Magna nunc porttitor convallis faucibus laoreet.';
 
 export function GallerySection() {
   const len = CASES.length;
@@ -88,21 +92,18 @@ export function GallerySection() {
             <div className="mb-[26px]">
               <span className="inline-flex items-center gap-2 rounded-[24px] border border-white/25 pt-[3px] pr-[13px] pb-[3px] pl-[9px]">
                 <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: GOLD }} />
-                <span className="text-white text-[15px] tracking-[1px] uppercase">門市案例</span>
+                <span className="text-white text-[15px] tracking-[1px] uppercase">our gallery</span>
               </span>
             </div>
 
-            {/* 大標（模板 110/100、capitalize、粗體） */}
-            <h2 className="font-display text-white capitalize text-[75px] leading-[80px]">
-              Interior Design
+            {/* 大標：Home Three 原始響應式字級 desktop 110/100、tablet-extra 76/90、tablet 42、mobile 40/45。 */}
+            <h2 className="font-display text-white capitalize text-[40px] leading-[45px] md:text-[42px] md:leading-[50px] lg:text-[76px] lg:leading-[90px] antra:text-[110px] antra:leading-[100px]">
+              Interior design
             </h2>
 
-            {/* 段落（模板 18/24、寬 378）：隨主圖聯動（當前案例標題） */}
-            <p
-              key={active}
-              className="text-white/75 mt-[37px] w-[378px] max-w-full text-[18px] leading-[24px] animate-gallery-card"
-            >
-              {CASES[active].caption}
+            {/* 段落：Home Three 原始文案、白色、18/24、寬 378。 */}
+            <p className="text-white mt-[37px] w-[378px] max-w-full text-[18px] leading-[24px]">
+              {GALLERY_DESCRIPTION}
             </p>
 
             {/* CTA — 依主題原始碼 antra-elementor-button 真值：透明底/灰框、字 15px、
