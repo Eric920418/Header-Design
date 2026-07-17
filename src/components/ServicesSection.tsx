@@ -10,9 +10,9 @@ import { GOLD } from '../theme/cis';
 const SVC_IMG = '/services';
 const SERVICES = [
   { n: '01', title: 'Residential Interior Design', excerpt: 'Tailored design services for private homes, including room makeovers and complete home transformations.', img: `${SVC_IMG}/service-6.jpg` },
-  { n: '02', title: 'Renovation and Remodeling', excerpt: 'Overhauling existing spaces to modernize and improve functionality and aesthetics.', img: `${SVC_IMG}/service-2.jpg` },
-  { n: '03', title: 'Interior 2D/3D Layouts', excerpt: 'Realistic 3D visualizations to help you envision your space before it is built in real life.', img: `${SVC_IMG}/service-1.jpg` },
-  { n: '04', title: 'Outdoor & Landscape Design', excerpt: 'Extending design services to outdoor spaces such as gardens, patios, and decks.', img: `${SVC_IMG}/service-4.jpg` },
+  { n: '02', title: 'Renovation and Remodeling', excerpt: 'Overhauling existing spaces to modernize and improve functionality and aesthetics.', img: '/services/svago-product.png', logo: '/services/svago-logo-white.png', logoAlt: 'SVago', logoClass: 'h-[30px] w-auto sm:h-[32px] antra:h-[35px]' },
+  { n: '03', title: 'Interior 2D/3D Layouts', excerpt: 'Realistic 3D visualizations to help you envision your space before it is built in real life.', img: '/services/teka-product.png', logo: '/services/teka-logo-white.svg', logoAlt: 'TEKA', logoClass: 'h-[30px] w-auto sm:h-[32px] antra:h-[35px]' },
+  { n: '04', title: 'Outdoor & Landscape Design', excerpt: 'Extending design services to outdoor spaces such as gardens, patios, and decks.', img: '/services/sakura-product.png', logo: '/services/sakura-logo-white.png', logoAlt: 'SAKURA', logoClass: 'h-auto w-[170px] sm:w-[180px] antra:w-[210px]' },
   { n: '05', title: 'Interior Design Consultation', excerpt: 'Providing professional advice on concepts, color schemes & material selection.', img: `${SVC_IMG}/service-3.jpg` },
   { n: '06', title: 'Commercial Interior Design', excerpt: 'Designing functional and attractive interiors for businesses, including offices, retail spaces, and hospitality venues.', img: `${SVC_IMG}/service-5.jpg` },
 ];
@@ -128,9 +128,24 @@ export function ServicesSection() {
 
                         <div className="px-0 pb-[30px] pt-[20px] sm:px-[20px] sm:pb-[35px] sm:pt-[30px]">
                           <div className="flex items-start justify-between">
-                            <h3 className="mr-[30px] flex-1 line-clamp-2 font-display text-[25px] leading-[30px] text-[#1C1C1D] sm:mr-[10px] md:mr-[30px] antra:mr-[80px] antra:text-[28px] antra:leading-[35px]">
-                              {service.title}
-                            </h3>
+                            {service.logo ? (
+                              <h3
+                                aria-label={service.logoAlt ?? service.title}
+                                className="mr-[30px] flex flex-1 items-center sm:mr-[10px] md:mr-[30px] antra:mr-[80px]"
+                              >
+                                {/* 原圖為白色；此處標題區為白底，依原 h3 深色視覺呈現以避免 logo 消失。 */}
+                                <img
+                                  src={service.logo}
+                                  alt=""
+                                  draggable={false}
+                                  className={`max-w-full shrink-0 brightness-0 opacity-[0.89] ${service.logoClass}`}
+                                />
+                              </h3>
+                            ) : (
+                              <h3 className="mr-[30px] flex-1 line-clamp-2 font-display text-[25px] leading-[30px] text-[#1C1C1D] sm:mr-[10px] md:mr-[30px] antra:mr-[80px] antra:text-[28px] antra:leading-[35px]">
+                                {service.title}
+                              </h3>
+                            )}
                             <span className="shrink-0 font-display text-[30px] leading-none text-[#E3E3E8]">
                               {service.n}
                             </span>
