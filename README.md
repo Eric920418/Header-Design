@@ -267,13 +267,14 @@ final result: passed
 
 ## 服務輪播（Our Services）— Antra home-6 `antra-services-list` style-3 複刻
 
-`ServicesSection.tsx`（原 `PricingSection` 已換掉；改為 **Antra 模板 home-6「Our Services」= `antra-services-list` style-3 服務輪播**，照原始碼 `inc/elementor/widgets/service-list.php` + `assets/css/base/elementor.css` 複刻）。金色對齊 **CIS 466c `#C9AA79`**；底部保留 SAKURA 既有跑馬燈 `MarqueeBand`（模板本區無、屬加值）。
+`ServicesSection.tsx`（原 `PricingSection` 已換掉；改為 **Antra 模板 home-6「Our Services」= `antra-services-list` style-3 服務輪播**，照原始碼 `dummy-data/homepage/home-6.xml`、`inc/elementor/widgets/service-list.php` + `assets/css/base/elementor.css` 複刻）。底部 SAKURA 既有跑馬燈 `MarqueeBand` 維持獨立區塊，文案與動畫均未更動。
 
-- **標題列**：subtitle 膠囊 `● Our Services`（左 424 欄）+ 大標 `Explore Our ⟨Comprehensive Interior Design⟩ Services`（60/64 capitalize，右 769；金字＝模板 gold word，色改 CIS）+ 2 個裝飾小箭頭 SVG（絕對定位、桌面）。與輪播間距 `mb-[60px]`（模板 flex_gap row 60）。
-- **服務卡（style-3，照原始碼）**：**交替版式**＝`nth-child(even)` 用 `flex-direction:column-reverse`（奇數卡圖上字下、偶數卡字上圖下；程式以服務原始索引奇偶 `i%2` 綁定，輪播緩衝不改版式）。圖 `rounded-[24px]`+`overflow-hidden`+`aspect-[1410/1018]`、**hover 圖 `scale(1.1)`**、薄暗罩 `bg-black/[0.11]`；caption `padding 30/20/35`：標題 `28/35` 2 行截斷（左）＋**編號 30px 灰 `#e3e3e8`**（右，`justify-between`）；副文 `16/24` 3 行截斷、`mt-[23px] mr-[70px]`（模板 margin 23 70 0 0）。
-- **輪播（模板 data-settings 照抄）**：`embla-carousel-react` `loop` + 3 欄（slide `flex-[0_0_33.333%]` + `container -ml-[30px]`／`slide pl-[30px]` 做 30px gap）、**autoplay 5000ms**（`setInterval scrollNext`，hover `mouseenter` 暫停、`reduced-motion` 不自動播）、可拖曳、無箭頭/點（模板 `navigation:none`）。（⚠ 隱藏分頁 embla transform 凍結，自動捲動/hover 放大須在可見瀏覽器驗證。）
-- **內容 = 模板 6 服務佔位（⚠ 待 SAKURA 本地化）**：01–06＝Residential／Renovation／2D-3D Layouts／Outdoor & Landscape／Consultation／Commercial（title+excerpt 取自模板 dummy-data）。圖＝demo 伺服器 `wp-content/uploads/2025/06/service-{1..6}.jpg`（**外連、已實測可載入**，破圖 fallback `/kitchen-styles/elegant.jpg`）；正式上線請把文案換成 SAKURA 服務、圖下載到 `public/` 本地化。
-- **跑馬燈**：`MarqueeBand`「kitchen product」無限捲動（定義於 `globals.css`），置於本區底部（`mt-24`）。
+- **背景與 Section 尺寸**：使用模板原始 `1920×1040` `public/services/h6-bg-2.jpg`，`cover / top center / no-repeat`，疊加黑色 76% 與 29px backdrop blur。外距手機／平板 60px、桌面 80px；padding 依 Elementor instance：手機 `60/15/60`、平板 `80/30/80`、1024–1199 `100/30/60`、≥1200 `125/30/129`。
+- **標題列**：subtitle 膠囊 `● Our Services` 與大標均為模板白色；桌面左欄 424px、標題寬 769px、`60/64`，手機 `30/35`、寬手機 `45/50`。裝飾改用模板原始 `deco-horizontal.svg`／`deco-vertical.svg`，桌面顯示；標題與輪播桌面間距 60px、窄版 30px。
+- **服務卡（style-3，照原始碼）**：卡片 `#FFFFFF`、radius 24px、padding 10px；圖片手機高 250px、其餘 310px、radius 24px、hover `scale(1.1)`、薄暗罩 `rgba(0,0,0,.11)`。caption 手機 `20/0/30`、其餘 `30/20/35`；標題手機 `25/30`、桌面 `28/35` Cal Sans，內文 Golos Text `16/24 #9F9FA4`，編號 `30px #E3E3E8`。手機全部圖上字下，較寬斷點才套偶數卡 `column-reverse`。
+- **輪播（模板 data-settings 照抄）**：`embla-carousel-react` `loop`，手機 1 欄、平板／1024 兩欄、≥1200 三欄；30px gap、autoplay 5000ms、hover 暫停、`reduced-motion` 不自動播、可拖曳、無箭頭／點（`navigation:none`）。
+- **內容與素材**：01–06 英文 title／excerpt 完整保留模板 dummy-data；`service-{1..6}.jpg`、`h6-bg-2.jpg` 與兩個 deco SVG 已從 Page 6 原始素材本地化到 `public/services/`，不再依賴 demo 外連；破圖仍 fallback `/kitchen-styles/elegant.jpg`。
+- **跑馬燈**：`MarqueeBand`「Kitchen Product」無限捲動（定義於 `globals.css`）仍是獨立淺灰區塊，原文案、220px 字級、漸層與動畫未更動；以 96px 淺灰間距接在服務區下方。
 
 ## 門市案例（Gallery）— Antra Home Three 版型
 
