@@ -20,43 +20,45 @@ export function WhatWeDoSection() {
   // 裝飾藍圖隨捲動輕微位移（GSAP scrub 視差）
   useParallax(sectionRef, { targets: '.wwd-blueprint', fromY: -6, toY: 6 });
   return (
-    // 間距依模板實測（Home 6 兩欄區）：py 120、欄距 90、文欄 600
-    <section ref={sectionRef} className="relative bg-white py-[120px] overflow-hidden">
+    // Home 6 原始 Section：desktop 120/30/115、tablet-extra 100/30、tablet 80/30、mobile 60/15。
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-white px-[15px] py-[60px] md:px-[30px] md:py-[80px] lg:py-[100px] antra:pb-[115px] antra:pt-[120px]"
+    >
       {/* 背景右下半透明建築圖 = 模板 f0420ee 的 h6-bg-3.png（原尺寸 821×520；bg-position 100% 100% / no-repeat）。
           PNG 本身半透明，opacity 用 1（同模板 layer opacity）；掛 .wwd-blueprint 讓既有 useParallax 做輕微視差。 */}
       <img
         src={BLUEPRINT}
         alt=""
         aria-hidden
-        className="wwd-blueprint pointer-events-none select-none absolute bottom-0 right-0 z-0 w-[600px] max-w-[48%]"
+        className="wwd-blueprint pointer-events-none select-none absolute bottom-0 right-0 z-0 w-[821px] max-w-none"
       />
-      <div className="relative z-10 max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
+      <div className="relative z-10 mx-auto grid max-w-[1410px] grid-cols-1 items-center gap-[30px] lg:grid-cols-[51fr_49.5fr] antra:gap-[90px]">
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
-        <Reveal anim="slideInLeft" className="lg:w-[600px] lg:shrink-0">
-          {/* 副標膠囊：模板 lighter 色透明邊框、radius 24、padding 3/13/3/10。 */}
-          <span className="font-display inline-flex items-center gap-2 rounded-[24px] border border-[rgba(159,159,164,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px] mb-5 text-[15px] tracking-[1px] uppercase text-[#1C1C1D]">
-            <span
-              className="inline-block w-2 h-2 rounded-full"
-              style={{ background: GOLD }}
-            />
-            What we do
-          </span>
+        <Reveal anim="slideInLeft" className="min-w-0">
+          {/* Elementor 的 heading widget：subtitle 與 title 是同一組，整組下方 margin 40。 */}
+          <div className="mb-[40px] text-center lg:text-left">
+            <span className="mb-[20px] inline-flex items-center gap-[6px] rounded-[24px] border border-[rgba(114,114,114,0.18)] pb-[3px] pl-[10px] pr-[13px] pt-[3px] font-display text-[12px] uppercase leading-[22px] tracking-[1px] text-[#1C1C1D]">
+              <span
+                className="inline-block h-[6px] w-[6px] rounded-full"
+                style={{ background: GOLD }}
+              />
+              What we do
+            </span>
 
-          {/* 模板 Home Six 逐字：SAKURA has [created exceptional] architectural designs.（Antra→SAKURA；金字重點 created exceptional） */}
-          <h2 className="font-display text-[#1C1C1D] text-[60px] leading-[64px] capitalize">
-            SAKURA has
-            <br />
-            <span style={{ color: GOLD }}>created exceptional</span>
-            <br />
-            architectural designs.
-          </h2>
+            {/* Home Six 逐字；不手動斷行，由模板的 670px heading 寬度自然換行。 */}
+            <h2 className="mx-auto max-w-[670px] font-display text-[30px] capitalize leading-[35px] text-[#1C1C1D] sm:text-[45px] sm:leading-[50px] lg:mx-0 lg:text-[60px] lg:leading-[64px]">
+              SAKURA has <span style={{ color: GOLD }}>created exceptional</span>{' '}
+              architectural designs.
+            </h2>
+          </div>
 
           {/* 打勾清單（含分隔線） */}
-          <ul className="mt-9 border-t border-[#E3E3E8]">
+          <ul className="border-t border-[#E3E3E8]">
             {ITEMS.map((t, i) => (
               <li
                 key={i}
-                className="flex items-center gap-3 py-4 border-b border-[#E3E3E8] text-[#1C1C1D] text-[18px] leading-[24px] font-normal"
+                className="flex items-center gap-[7px] border-b border-[#E3E3E8] py-[16px] font-display text-[18px] font-normal leading-[24px] text-[#1C1C1D]"
               >
                 {/* 打勾：照模板為純金 check icon（~19px、無圓底） */}
                 <Check className="w-[19px] h-[19px] shrink-0" strokeWidth={3} style={{ color: GOLD }} />
@@ -65,7 +67,7 @@ export function WhatWeDoSection() {
             ))}
           </ul>
 
-          <p className="text-[#59585D] mt-7 max-w-md text-[16px] leading-[24px]">
+          <p className="mx-auto mb-[30px] mt-[30px] max-w-[645px] text-center text-[16px] leading-[24px] text-[#59585D] lg:mx-0 lg:mb-[50px] lg:mt-[29px] lg:text-left">
             We specialize in transforming visions into reality. Explore our
             portfolio of innovative architectural and interior design projects
             crafted with precision.
@@ -73,10 +75,10 @@ export function WhatWeDoSection() {
 
           {/* CTA — 依主題原始碼 elementor-button-default（=antra 標準款，elementor.css 9147）：
               透明底、border 1px rgba(159,159,164,.64)、字 15、金圓 40 箭頭預設 -45°；
-              hover 整顆填模板金 + 字白 + 箭頭轉正 rotate(0)。文字保留「櫻花優勢」。 */}
+              hover 整顆填模板金 + 字白 + 箭頭轉正 rotate(0)；中文內容保留「櫻花優勢」。 */}
           <a
             href="#"
-            className="group inline-flex items-center gap-4 mt-8 rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-[#1C1C1D] transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white"
+            className="group mx-auto inline-flex w-fit items-center gap-[8px] rounded-full border border-[rgba(159,159,164,0.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white lg:mx-0"
           >
             <span className="text-[15px]">櫻花優勢</span>
             <span
@@ -89,7 +91,7 @@ export function WhatWeDoSection() {
         </Reveal>
 
         {/* 右：16:9 影片區塊（整塊淡入上升；影片卡自有 hover:scale，故 Reveal 掛在外層不搶 transform） */}
-        <Reveal anim="slideInRight" delayMs={300} className="relative flex-1 w-full">
+        <Reveal anim="slideInRight" delayMs={300} className="relative min-w-0 w-full">
          
           {/* 影片卡：hover 依比例微放大 */}
           <div className="group relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black transition-transform duration-500 hover:scale-[1.02]">

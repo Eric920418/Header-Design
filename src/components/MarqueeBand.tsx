@@ -1,10 +1,10 @@
 import React from 'react';
 
-// 底部跑馬燈（採 Home Two elementor-scrolling）：全出血「KITCHEN PRODUCT」無限捲動。
-// 字身用 background-clip:text + 上淺灰→透明漸層 + line-height 0.9 輕裁切（keyframes 定義於 globals.css）。
+// Services 底部跑馬燈（採 Home Two elementor-scrolling）：全出血「KITCHEN PRODUCT」無限捲動。
+// 與 Services 共用深色背景，字身使用模板金→透明漸層；動畫 keyframes 定義於 globals.css。
 export function MarqueeBand() {
   return (
-    <div className="bg-[#f6f6f6] overflow-hidden select-none" aria-hidden>
+    <div className="overflow-hidden select-none" aria-hidden>
       <div className="flex w-max animate-marquee">
         {[0, 1].map((group) => (
           <div key={group} className="flex shrink-0">
@@ -14,7 +14,7 @@ export function MarqueeBand() {
                 className="block font-display font-normal leading-[0.9] whitespace-nowrap pr-[0.2em] text-[220px]"
                 style={{
                   backgroundImage:
-                    "linear-gradient(rgb(227,227,232) 0%, rgba(159,159,164,0) 90%)",
+                    "linear-gradient(rgb(202,160,92) 0%, rgba(202,160,92,0) 90%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",

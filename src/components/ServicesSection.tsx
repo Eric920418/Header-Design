@@ -45,30 +45,40 @@ export function ServicesSection() {
   }, [emblaApi]);
 
   return (
-    <div>
-      <section
-        aria-labelledby="services-heading"
-        className="relative mt-[60px] overflow-hidden bg-cover bg-top bg-no-repeat px-[15px] pb-[60px] pt-[60px] md:px-[30px] md:py-[80px] lg:pb-[60px] lg:pt-[100px] antra:mt-[80px] antra:pb-[129px] antra:pt-[125px]"
-        style={{ backgroundImage: "url('/services/h6-bg-2.jpg')" }}
-      >
-        {/* Page 6 原生背景設定：黑色 76% overlay + 29px backdrop blur。 */}
-        <div aria-hidden className="absolute inset-0 bg-black/[0.76] backdrop-blur-[29px]" />
+    <section
+      aria-labelledby="services-heading"
+      className="relative overflow-hidden bg-cover bg-top bg-no-repeat px-[15px] pt-[60px] md:px-[30px] md:pt-[80px] lg:pt-[100px] antra:pt-[125px]"
+      style={{
+        backgroundImage: "url('/services/h6-bg-2.jpg')",
+        backdropFilter: 'blur(29px)',
+      }}
+    >
+        {/* Page 6 原生背景：黑色 76% overlay；29px backdrop-filter 掛在 section selector，而非模糊背景圖。 */}
+        <div aria-hidden className="absolute inset-0 bg-black/[0.76]" />
 
         <div className="relative z-10 mx-auto max-w-[1410px]">
           <Reveal anim="slideInUp" className="relative mb-[30px] antra:mb-[60px]">
-            {/* 使用 Page 6 原始裝飾素材，不用近似的 inline SVG。 */}
-            <img
+            {/* Page 6 不是單獨的 15px 圖示：Elementor 用 border 拉出長線，再把原版 SVG 尖端接在線尾。 */}
+            <div
               aria-hidden
-              src="/services/deco-horizontal.svg"
-              alt=""
-              className="absolute left-[474px] top-0 hidden h-[15px] w-[15px] invert opacity-[0.18] antra:block"
-            />
-            <img
+              className="absolute left-0 top-0 hidden h-[15px] w-[502px] border-b border-white/[0.18] antra:block"
+            >
+              <img
+                src="/services/deco-horizontal.svg"
+                alt=""
+                className="absolute bottom-[-1px] right-0 h-[15px] w-[15px] invert opacity-[0.18]"
+              />
+            </div>
+            <div
               aria-hidden
-              src="/services/deco-vertical.svg"
-              alt=""
-              className="absolute left-[347px] top-[126px] hidden h-[15px] w-[15px] invert opacity-[0.18] antra:block"
-            />
+              className="absolute left-[345px] top-0 hidden h-[179px] w-[15px] border-r border-white/[0.18] antra:block"
+            >
+              <img
+                src="/services/deco-vertical.svg"
+                alt=""
+                className="absolute bottom-0 right-[-1px] h-[15px] w-[15px] invert opacity-[0.18]"
+              />
+            </div>
 
             <div className="flex flex-col items-center gap-[15px] text-center sm:gap-[30px] antra:flex-row antra:items-start antra:gap-0 antra:pt-[38px] antra:text-left">
               <div className="antra:w-[424px] antra:shrink-0 antra:pt-[8px]">
@@ -138,12 +148,11 @@ export function ServicesSection() {
             </div>
           </Reveal>
         </div>
-      </section>
 
-      {/* 使用者自訂功能：獨立淺灰 Section，內容與動畫不可隨模板服務區移除。 */}
-      <div className="bg-[#f6f6f6] pt-24">
+      {/* 使用者自訂跑馬燈：視覺與 DOM 都併入 Services，同背景、全出血，文案與動畫不變。 */}
+      <div className="relative z-10 -mx-[15px] pt-24 md:-mx-[30px]">
         <MarqueeBand />
       </div>
-    </div>
+    </section>
   );
 }

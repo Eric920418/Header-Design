@@ -267,23 +267,23 @@ final result: passed
 
 ## 服務輪播（Our Services）— Antra home-6 `antra-services-list` style-3 複刻
 
-`ServicesSection.tsx`（原 `PricingSection` 已換掉；改為 **Antra 模板 home-6「Our Services」= `antra-services-list` style-3 服務輪播**，照原始碼 `dummy-data/homepage/home-6.xml`、`inc/elementor/widgets/service-list.php` + `assets/css/base/elementor.css` 複刻）。底部 SAKURA 既有跑馬燈 `MarqueeBand` 維持獨立區塊，文案與動畫均未更動。
+`ServicesSection.tsx`（原 `PricingSection` 已換掉；改為 **Antra 模板 home-6「Our Services」= `antra-services-list` style-3 服務輪播**，照原始碼 `dummy-data/homepage/home-6.xml`、`inc/elementor/widgets/service-list.php` + `assets/css/base/elementor.css` 複刻）。底部 SAKURA 既有跑馬燈 `MarqueeBand` 已併入同一個 Services `<section>`，文案與動畫均未更動。
 
-- **背景與 Section 尺寸**：使用模板原始 `1920×1040` `public/services/h6-bg-2.jpg`，`cover / top center / no-repeat`，疊加黑色 76% 與 29px backdrop blur。外距手機／平板 60px、桌面 80px；padding 依 Elementor instance：手機 `60/15/60`、平板 `80/30/80`、1024–1199 `100/30/60`、≥1200 `125/30/129`。
-- **標題列**：subtitle 膠囊 `● Our Services` 與大標均為模板白色；桌面左欄 424px、標題寬 769px、`60/64`，手機 `30/35`、寬手機 `45/50`。裝飾改用模板原始 `deco-horizontal.svg`／`deco-vertical.svg`，桌面顯示；標題與輪播桌面間距 60px、窄版 30px。
+- **背景與 Section 尺寸**：使用模板原始 `1920×1040` `public/services/h6-bg-2.jpg`，`cover / top center / no-repeat`，疊加黑色 76%。模板的 `backdrop-filter: blur(29px)` 掛在 Section selector，本機亦照此位置設定，不再把 blur 錯掛到 overlay 而模糊背景圖。依使用者指定移除全部 Section top margin；上／左右 padding 沿用 Elementor：手機 `60/15`、平板 `80/30`、1024–1199 `100/30`、≥1200 `125/30`。跑馬燈已併入 Section，因此原 bottom padding 改由跑馬燈前的 96px 間距承接，Section 本身 bottom padding 為 0，讓跑馬燈貼底。
+- **標題列**：subtitle 膠囊 `● Our Services` 與大標均為模板白色；桌面左欄 424px、標題寬 769px、`60/64`，手機 `30/35`、寬手機 `45/50`。桌面裝飾完整還原 Elementor 結構：水平線 `502px`＋`deco-horizontal.svg` 尖端、垂直線 `179px`＋`deco-vertical.svg` 尖端，線色 `rgba(255,255,255,.18)`；標題與輪播桌面間距 60px、窄版 30px。
 - **服務卡（style-3，照原始碼）**：卡片 `#FFFFFF`、radius 24px、padding 10px；圖片手機高 250px、其餘 310px、radius 24px、hover `scale(1.1)`、薄暗罩 `rgba(0,0,0,.11)`。caption 手機 `20/0/30`、其餘 `30/20/35`；標題手機 `25/30`、桌面 `28/35` Cal Sans，內文 Golos Text `16/24 #9F9FA4`，編號 `30px #E3E3E8`。手機全部圖上字下，較寬斷點才套偶數卡 `column-reverse`。
 - **輪播（模板 data-settings 照抄）**：`embla-carousel-react` `loop`，手機 1 欄、平板／1024 兩欄、≥1200 三欄；30px gap、autoplay 5000ms、hover 暫停、`reduced-motion` 不自動播、可拖曳、無箭頭／點（`navigation:none`）。
 - **內容與素材**：01–06 英文 title／excerpt 完整保留模板 dummy-data；`service-{1..6}.jpg`、`h6-bg-2.jpg` 與兩個 deco SVG 已從 Page 6 原始素材本地化到 `public/services/`，不再依賴 demo 外連；破圖仍 fallback `/kitchen-styles/elegant.jpg`。
-- **跑馬燈**：`MarqueeBand`「Kitchen Product」無限捲動（定義於 `globals.css`）仍是獨立淺灰區塊，原文案、220px 字級、漸層與動畫未更動；以 96px 淺灰間距接在服務區下方。
+- **跑馬燈**：`MarqueeBand`「Kitchen Product」現在位於 Services `<section>` 內，共用 `h6-bg-2.jpg`、黑色 76% overlay 與同一裁切範圍，不再有 `#f6f6f6` 分區。以 96px 間距接在服務卡後，透過負水平 margin 維持全出血，且跑馬燈容器底緣與 Section 底緣相同（bottom gap `0px`）；文字使用模板金 `#CAA05C → transparent`，220px 字級、重複內容與 `animate-marquee` 速度不變。
 
 ### Services Design QA（2026-07-17）
 
 - **Source visual truth**：以已購買模板 `/Users/eric/Desktop/Header-Design/antra-full 2/antra/dummy-data/homepage/home-6.xml` 的 Elementor instance、`assets/css/base/elementor.css`，以及原版背景 `public/services/h6-bg-2.jpg`／6 張服務圖／2 個 deco SVG 為唯一基準；直播 demo 網域目前受瀏覽器政策封鎖，未以繞過方式存取。
 - **Implementation evidence**：桌面聚焦成品 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/services-section-implementation-1512.png`；原始背景素材／本機成品對照 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/services-page6-source-vs-implementation.png`。
-- **Desktop 1512×956**：Section 高 `1040px`、外距上 `80px`、padding `125px 30px 129px`；背景 `top center / cover`、黑色 `.76`、blur `29px`。標題 Cal Sans `60/64`、寬 `769px`；三欄 `33.333%`，卡寬約 `450px`、白底、radius/padding `24/10px`、圖片高 `310px`；標題 `28/35`、內文 Golos Text `16/24 #9F9FA4`。
-- **Tablet 1024×768**：Section 高 `856px`、外距 `60px`、padding `100px 30px 60px`；標題 `45/50`、兩欄 `50%`、圖片高 `310px`，偶數卡維持模板上下反轉。
-- **Mobile 390×844**：Section 高 `761px`、外距 `60px`、padding `60px 15px`；標題 `30/35`、單欄 `100%`、圖片高 `250px`，所有卡片皆圖上字下；卡標 `25/30`、內文 `16/24`。
-- **Interaction / regression**：Embla `loop` 與 5000ms autoplay 實測 track transform 有變化；hover 暫停、拖曳與 reduced-motion 保護仍在。`Kitchen Product` marquee 節點存在且 computed animation-name=`marquee`；Header、左側伸縮選單、右側浮動鈕及其他 Sections 未改。
+- **Desktop 1512×956**：Services 內容原始區塊保持桌面 top/水平 padding `125px 30px`；併入跑馬燈後 Section 實際高度 `1205px`、外距上 `0`、bottom padding `0`。背景 `top center / cover`、黑色 `.76`，selector 保留 blur `29px`。標題 Cal Sans `60/64`、寬 `769px`；三欄 `33.333%`，卡寬約 `450px`、白底、radius/padding `24/10px`、圖片高 `310px`；標題 `28/35`、內文 Golos Text `16/24 #9F9FA4`。
+- **Tablet 1024×768**：外距 `0`、top/水平 padding `100px 30px`、bottom padding `0`；標題 `45/50`、兩欄 `50%`、圖片高 `310px`，偶數卡維持模板上下反轉。
+- **Mobile 390×844**：外距 `0`、top/水平 padding `60px 15px`、bottom padding `0`；標題 `30/35`、單欄 `100%`、圖片高 `250px`，所有卡片皆圖上字下；卡標 `25/30`、內文 `16/24`。
+- **Interaction / regression**：Embla `loop` 與 5000ms autoplay 實測 track transform 有變化；hover 暫停、拖曳與 reduced-motion 保護仍在。`Kitchen Product` marquee 節點存在且 computed animation-name=`marquee`，目前與 Services 為同一個 Section；Header、左側伸縮選單、右側浮動鈕及其他 Sections 未改。
 - **Browser checks**：1512、1024、390 三種寬度均無水平溢出、素材 natural size 正確（服務圖 `1410×1018`）、無 console error。
 - **Comparison history**：before＝淺灰背景、卡片缺白底／24px 外框、圖片使用比例高度且外連；final＝Page 6 原背景＋遮罩、原版白卡／固定圖高／排版、全部素材本地化，無 P0／P1／P2 殘留。
 - **final result: passed**
@@ -304,16 +304,27 @@ final result: passed
 
 ## What We Do — Antra Home Six 版型
 
-`WhatWeDoSection.tsx`：複刻 Home Six 的「What we do」兩欄區（淺色白底、字型用模板 Cal Sans、金色 `#C9AA79`）。
+`WhatWeDoSection.tsx`：複刻 Home Six 的「What we do」兩欄區（淺色白底、顯示字用 Cal Sans、內文用 Golos Text、模板金 `#CAA05C`）。右欄影片為 SAKURA 額外功能，因此保留；其餘文字、欄寬、背景裝飾與響應式間距依 Home 6 instance `f0420ee`。
 
+- **Section / 欄位**：桌面 padding `120px 30px 115px`、tablet-extra `100px 30px`、tablet `80px 30px`、mobile `60px 15px`；內容版心 1410px。桌面以 `51fr / 49.5fr` 還原 51%／49.5% 欄比與 90px gap，1024–1199 gap 30px，窄版單欄。
 - **左欄（依主題原始碼對齊模板）**：
-  - **副標膠囊**：`rounded-[24px]` + `border rgba(114,114,114,.18)` + `padding 3/13/3/10` + 金點 + `what we do` 15/ls1/uppercase（實測模板 `.elementor-title-span`；與 Hero eyebrow 同款）。
-  - **雙色大標** `text-[60px] leading-[64px]`（模板 Home Six 逐字「SAKURA has ⟨created exceptional⟩ architectural designs.」，金字 created exceptional；模板原文品牌名 Antra→SAKURA。三行斷點）。
-  - **打勾清單**：照模板為**純金 `Check` icon（`w-[19px]`、色 `#C9AA79`、無圓底）**（非先前的金圓底+白勾）；清單字 18/24 `font-normal`（模板 weight 400）。
-  - **CTA「櫻花優勢」= antra 標準按鈕**，**與上一個 section（Gallery「查看所有案例」）尺寸一致**：透明底、`border 1px rgba(159,159,164,.64)`、字 **15px**、`padding 7/7/7/30`、`gap-4`、盒高 **56**、金圓 **40** 箭頭預設 `-rotate-45`；hover 整顆填金 `#C9AA79` + 字白 + 箭頭 `rotate-0`。差別僅字色（淺底黑字，`hover:text-white`）。（三顆 antra 按鈕 Gallery/Pricing/WhatWeDo 統一 7/7/7/30/gap-4/高 56。）
-- **右欄影片區**：**16:9 影片區塊**（`aspect-video`，圓角 24px + 陰影 + 黑底）：縮圖 poster（`VIDEO_POSTER`）鋪滿 + 置中播放鈕（`Play`）；**播放鈕依模板 `.elementor-video-popup` 改為半透明白圓 `rgba(255,255,255,0.36)` + `backdrop-blur` + 白三角**（非金），加**脈動光圈**（`animate-ping`，同白）與 hover 放大；影片卡 hover 依比例微放大（`hover:scale-[1.02]`）。
-- **背景右下半透明建築圖 = 模板原圖 `h6-bg-3.png`**（已下載至 `public/decor/h6-bg-3.png`，821×520、PNG 本身半透明的現代建築線稿）：`<img src={BLUEPRINT}>` `absolute bottom-0 right-0 z-0 w-[600px] max-w-[48%] pointer-events-none`（opacity 用 1，同模板 layer；PNG 自帶半透明）；內容容器 `relative z-10` 疊其上；掛 `.wwd-blueprint` 讓 `useParallax` 做輕微視差。對應模板 `f0420ee` 的 `background-position:100% 100% / no-repeat`。
-- 影片來源未定：poster 為佔位、播放鈕 `onClick` 尚未接（待提供 YouTube 連結或影片檔即可接 lightbox/iframe）。文字為佔位。放在 `App.tsx` 圖庫區之後。
+  - **副標膠囊**：Cal Sans `12/22`、tracking 1、uppercase；`rounded-[24px]` + `border rgba(114,114,114,.18)` + `padding 3/13/3/10` + 6px 金點。副標至大標 20px，整個 heading widget 至清單 40px。
+  - **雙色大標**：Cal Sans 400；桌面 `60/64`、寬手機 `45/50`、手機 `30/35`；最大寬 670px，自然換行、不使用手動 `<br>`。文字為「SAKURA has ⟨created exceptional⟩ architectural designs.」，模板原品牌 Antra 僅替換成 SAKURA。
+  - **打勾清單**：純金 `Check` 19px、無圓底；字體已由錯誤的 Golos Text 修正為模板 Cal Sans 400 `18/24`，icon/text gap 7px，每列上下 16px並保留分隔線。
+  - **段落**：Golos Text `16/24 #59585D`、最大寬 645px；桌面 margin `29px 0 50px`，窄版 `30px 0` 並置中。
+  - **CTA**：依「只同步英文、中文內容不動」保留 `櫻花優勢`；外觀精確採 antra `elementor-button-default` 的 `padding 9/9/9/30`、icon gap 8px、字 15px、盒高 60px、金圓 40px，箭頭預設 `-45deg`，hover 填金並轉正。
+- **右欄影片區（刻意保留差異）**：Home 6 原版是 `h6-image-5.jpg`＋`h6-image-4.jpg` 兩張疊圖；本專案依「額外功能與動態不移除」保留 16:9 影片、播放鈕、脈動、hover 與 Reveal。欄位維持模板 49.5% 結構，並依視覺回饋改為與左欄內容垂直置中，避免影片貼上造成下方留白失衡。
+- **背景右下半透明建築圖 = 模板原圖 `h6-bg-3.png`**（`public/decor/h6-bg-3.png`，821×520）：恢復原始 821px 寬、`bottom right / no-repeat / auto` 視覺，PNG 自帶透明度；保留既有 `.wwd-blueprint` 輕微視差。
+- 影片來源未定：poster 為佔位、播放鈕 `onClick` 尚未接（待提供 YouTube 連結或影片檔即可接 lightbox/iframe）。What We Do 英文已改為 Home 6 原文；CTA 中文依內容保留規則維持「櫻花優勢」。放在 `App.tsx` 圖庫區之後。
+
+### What We Do 瀏覽器驗收（2026-07-17）
+
+- **字型載入**：`document.fonts.ready` 後，Cal Sans 60px／18px 與 Golos Text 16px 的 `document.fonts.check()` 均為 `true`，不是只有 CSS family 名稱正確、實際卻落到 fallback。
+- **1512×956**：section padding `120px 30px 115px`、版心 1410px、欄寬 `669.844px / 650.148px`、gap 90px；h2 實算 Cal Sans 400 `60/64`，高度 192px（自然三行）；CTA 內文實算 15px。兩欄 `align-items:center` 後，影片相對 section 的上／下留白為 `257.65px / 252.65px`，視覺已垂直置中且無水平溢位。
+- **1024×768**：section padding `100px 30px`、欄寬 `473.969px / 460.031px`、gap 30px；h2 仍為模板桌面值 `60/64`；無水平溢位。
+- **390×844**：section padding `60px 15px`、單欄且 gap 30px；h2 Cal Sans 400 `30/35`、eyebrow Cal Sans `12/22` + 1px tracking、清單 Cal Sans `18/24`、段落 Golos Text `16/24`、CTA 15px；垂直置中設定不改變單欄順序，無水平溢位。
+- **主控台**：本 section 無 error／warning；僅既有 Google Maps 的 async 載入與舊 Marker API 兩則 warning，屬明確排除、不在本次 What We Do 修改範圍。
+- **來源與限制**：數值以已購模板 `antra/dummy-data/homepage/home-6.xml`、`antra/assets/css/base/elementor.css` 與原始 `h6-bg-3.png` 為準。模板 demo 網域在目前瀏覽器環境被政策阻擋，購買包也沒有這一段的完整頁截圖，所以已完成原始碼數值＋本機實際渲染驗收，但無法宣稱做過來源截圖的逐像素疊圖；若補一張模板該區截圖，可再做最後視覺差分。
 
 ## 門市查詢（Store Locations）— Antra Contact Us 風格 + 可用地圖搜尋
 
