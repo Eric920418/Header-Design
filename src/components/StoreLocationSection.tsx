@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { MapPin, LocateFixed, ChevronDown } from 'lucide-react';
 import { GoogleStoreMap } from './GoogleStoreMap';
 
-// 品牌金 = CIS 466c #C9AA79（單一來源）
+// 全區顏色使用 Antra 模板色盤（單一來源）。
 import { GOLD } from '../theme/cis';
 
 type Store = {
@@ -36,6 +36,8 @@ export function StoreLocationSection() {
   const [selected, setSelected] = useState(STORES[0].id);
   const [region, setRegion] = useState('');
   const [city, setCity] = useState('');
+  // 地圖初始顯示整個台灣（總覽）；使用者點門市卡片後才聚焦到該門市
+  const [focused, setFocused] = useState(false);
 
   // 依「區域 / 城市」下拉篩選（皆未選時顯示全部）
   const filtered = useMemo(
@@ -88,13 +90,13 @@ export function StoreLocationSection() {
 
           <div className="flex flex-col lg:flex-row items-start lg:pt-[46px]">
             <div className="lg:w-[424px] lg:shrink-0 mb-5 lg:mb-0">
-              <span className="font-display inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
+              <span className="font-display inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(159,159,164,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#1C1C1D]">
                 <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
                 get in touch
               </span>
             </div>
             {/* 模板 Contact 頁逐字：Have a Project in [Mind? Let’s Make] It Happen（金字重點 Mind? Let’s Make；彎引號 ’） */}
-            <h2 className="font-display lg:w-[661px] text-[60px] leading-[64px] capitalize text-[#000000]">
+            <h2 className="font-display lg:w-[661px] text-[60px] leading-[64px] capitalize text-[#1C1C1D]">
               Have a Project in{" "}
               <span style={{ color: GOLD }}>
                 Mind?
@@ -110,30 +112,29 @@ export function StoreLocationSection() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* 左：地圖（撐高與右側列表等高） */}
           <div className="w-full lg:w-[62%] lg:shrink-0 flex flex-col">
-            <div className="rounded-3xl overflow-hidden bg-[#f5f5f5] shadow-sm h-[var(--store-map-h)] lg:h-auto lg:flex-1 lg:min-h-[var(--store-map-h)]">
-              <GoogleStoreMap address={visible.address} />
+            <div className="rounded-3xl overflow-hidden bg-[#F6F6F6] shadow-sm h-[var(--store-map-h)] lg:h-auto lg:flex-1 lg:min-h-[var(--store-map-h)]">
+              <GoogleStoreMap address={visible.address} focus={focused} />
             </div>
           </div>
 
           {/* 右：我的位置 + 區域/城市下拉 + 門市列表 */}
           <div className="flex-1">
-            {/* 我的位置標示（左內縮 pl-5，對齊下方下拉選單的文字起點 20px） */}
-            <div className="flex items-center gap-2 mb-4 pl-5 text-[#000000]">
-              <span className="text-[15px]">我的位置</span>
-              <LocateFixed className="w-[22px] h-[22px]" style={{ color: GOLD }} />
-            </div>
+            {/* 我的位置 + 區域/城市下拉：同一排（我的位置固定寬，兩下拉各佔剩餘等寬） */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex shrink-0 items-center gap-2 text-[#1C1C1D]">
+                <span className="text-[15px] whitespace-nowrap">我的位置</span>
+                <LocateFixed className="w-[22px] h-[22px]" style={{ color: GOLD }} />
+              </div>
 
-            {/* 區域 / 城市下拉（並排兩欄） */}
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className="relative">
+              <div className="relative flex-1">
                 <select
                   value={region}
                   onChange={(e) => {
                     setRegion(e.target.value);
                     setCity(''); // 換區域時清空城市
                   }}
-                  className={`w-full h-[52px] appearance-none rounded-full bg-white border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] focus:outline-none focus:border-[#C9AA79] transition-colors cursor-pointer ${
-                    region === '' ? 'text-[#8c877f]' : 'text-[#000000]'
+                  className={`w-full h-[52px] appearance-none rounded-full bg-white border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] focus:outline-none focus:border-[#CAA05C] transition-colors cursor-pointer ${
+                    region === '' ? 'text-[#9F9FA4]' : 'text-[#1C1C1D]'
                   }`}
                 >
                   <option value="">選擇區域</option>
@@ -143,20 +144,20 @@ export function StoreLocationSection() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#3E3A39] pointer-events-none" />
+                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#59585D] pointer-events-none" />
               </div>
 
-              <div className="relative">
+              <div className="relative flex-1">
                 <select
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   aria-disabled={!region}
-                  className={`w-full h-[52px] appearance-none rounded-full border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] focus:outline-none focus:border-[#C9AA79] transition-colors ${
+                  className={`w-full h-[52px] appearance-none rounded-full border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] focus:outline-none focus:border-[#CAA05C] transition-colors ${
                     !region
-                      ? 'bg-[#F4F0EA] text-[#8c877f] cursor-not-allowed pointer-events-none'
+                      ? 'bg-[#F6F6F6] text-[#9F9FA4] cursor-not-allowed pointer-events-none'
                       : city === ''
-                        ? 'bg-white cursor-pointer text-[#8c877f]'
-                        : 'bg-white cursor-pointer text-[#000000]'
+                        ? 'bg-white cursor-pointer text-[#9F9FA4]'
+                        : 'bg-white cursor-pointer text-[#1C1C1D]'
                   }`}
                 >
                   <option value="">選擇城市</option>
@@ -166,14 +167,14 @@ export function StoreLocationSection() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#3E3A39] pointer-events-none" />
+                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#59585D] pointer-events-none" />
               </div>
             </div>
 
             {/* 門市列表卡片 */}
             <div className="space-y-3">
               {filtered.length === 0 ? (
-                <div className="rounded-2xl bg-white border border-[#E3DED7] px-6 py-10 text-center text-[#3E3A39]">
+                <div className="rounded-2xl bg-white border border-[#E3E3E8] px-6 py-10 text-center text-[#59585D]">
                   此區域尚無門市資料。
                 </div>
               ) : (
@@ -182,11 +183,14 @@ export function StoreLocationSection() {
                   return (
                     <button
                       key={store.id}
-                      onClick={() => setSelected(store.id)}
+                      onClick={() => {
+                        setSelected(store.id);
+                        setFocused(true); // 點門市 → 地圖聚焦該門市（街道級）
+                      }}
                       className={`w-full text-left rounded-2xl border transition-colors ${
                         active
-                          ? 'bg-[#C9AA79] border-[#C9AA79] text-white'
-                          : 'bg-white border-[#E3DED7] hover:border-[#C9AA79]/50 text-[#000000]'
+                          ? 'bg-[#CAA05C] border-[#CAA05C] text-white'
+                          : 'bg-white border-[#E3E3E8] hover:border-[#CAA05C]/50 text-[#1C1C1D]'
                       }`}
                     >
                       <div className="px-5 lg:px-6 py-4">
@@ -194,7 +198,7 @@ export function StoreLocationSection() {
                         <div className="flex items-center gap-3">
                           <span
                             className={`text-xs px-2.5 py-1 rounded-full ${
-                              active ? 'bg-white/20 text-white' : 'bg-[#f0f0f0] text-[#3E3A39]'
+                              active ? 'bg-white/20 text-white' : 'bg-[#F6F6F6] text-[#59585D]'
                             }`}
                           >
                             {store.region}
@@ -205,7 +209,7 @@ export function StoreLocationSection() {
                         <div className="mt-2.5 flex items-center justify-between gap-3 text-sm">
                           <span
                             className={`flex items-start gap-1.5 ${
-                              active ? 'text-white/85' : 'text-[#3E3A39]'
+                              active ? 'text-white/85' : 'text-[#59585D]'
                             }`}
                           >
                             <MapPin className="w-[18px] h-[18px] shrink-0 mt-px" />
@@ -213,7 +217,7 @@ export function StoreLocationSection() {
                           </span>
                           <span
                             className={`shrink-0 tracking-wider ${
-                              active ? 'text-white' : 'text-[#C9AA79]'
+                              active ? 'text-white' : 'text-[#CAA05C]'
                             }`}
                           >
                             {store.phone}

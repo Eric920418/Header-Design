@@ -1,6 +1,6 @@
 import React from 'react';
 
-// 右側固定側邊欄 —— 配色/位置沿用官網 .l-quick-links 實測（金頂鈕 CIS 金 #C9AA79 + 灰群組 #737373 +
+// 右側固定側邊欄 —— 功能與位置不變，顏色統一為 Antra 模板金 #CAA05C + 文字灰 #59585D。
 // 白分隔線、底部對齊貼右）；圖示＝使用者提供的品牌 icon（純白去背 PNG，public/floating-icons/），圖下加中文文字標籤。
 // icon 非正方（案例門市 33×30、到府丈量/客服中心 38×40），故用 h-[40px] w-auto 依高度正規化、不塞正方以免變形。
 // ⚠ 頂鈕『案例門市』的連結目前仍是官網『加盟』(franchising)——待提供正確 URL 再換。
@@ -31,13 +31,13 @@ export function FloatingButtons() {
           <a
             href={TOP.href}
             aria-label={TOP.label}
-            className="block p-2 mb-[20px] bg-[#C9AA79] transition-opacity hover:opacity-90"
+            className="block p-2 mb-[20px] bg-[#CAA05C] transition-opacity hover:opacity-90"
           >
             <BtnInner icon={TOP.icon} label={TOP.label} />
           </a>
 
           {/* 灰底群組：項間白色 h-px 分隔線 */}
-          <div className="bg-[#737373]">
+          <div className="bg-[#59585D]">
             {GROUP.map((b, i) => (
               <React.Fragment key={b.href}>
                 {i > 0 && <div aria-hidden className="w-full h-px bg-white/50" />}
@@ -62,7 +62,7 @@ export function FloatingButtons() {
             key={b.href}
             href={b.href}
             aria-label={b.label}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 py-2 ${b === TOP ? 'bg-[#C9AA79]' : 'bg-[#737373]'}`}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 py-2 ${b === TOP ? 'bg-[#CAA05C]' : 'bg-[#59585D]'}`}
           >
             <img src={b.icon} alt="" className="h-9 w-auto" />
             <span className="text-white text-[11px] leading-tight">{b.label}</span>

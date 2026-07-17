@@ -19,93 +19,93 @@
 }
 
 :root {
-  /* ── SAKURA KITCHEN CIS 品牌色（單一來源；JS 端見 src/theme/cis.ts）── */
-  --gold: #c9aa79;          /* PANTONE 466c / Varnished 871c */
-  --gold-strong: #b8965f;   /* 金-壓深（hover / 漸層深端） */
-  --gold-soft: #d8c29a;     /* 金-提亮（漸層淺端） */
-  --ink: #000000;           /* PANTONE Black C */
-  --ink-80: #3e3a39;        /* PANTONE Black C 80% */
-  --brand-red: #f5333f;     /* PANTONE Red 032c */
+  /* ── Antra 模板色盤（單一來源；JS 端見 src/theme/cis.ts）── */
+  --gold: #caa05c;
+  --gold-strong: #caa05c;
+  --gold-soft: #caa05c;
+  --ink: #1c1c1d;
+  --ink-80: #59585d;
+  --brand-red: #caa05c;
 
   --font-size: 16px;
-  --background: #ffffff;
-  --foreground: #000000; /* CIS Black C（原 oklch(0.145)）*/
+  --background: #f6f6f6;
+  --foreground: #59585d;
   --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
-  --destructive: #f5333f; /* CIS Red 032c（原 shadcn #d4183d） */
+  --card-foreground: #59585d;
+  --popover: #ffffff;
+  --popover-foreground: #59585d;
+  --primary: #caa05c;
+  --primary-foreground: #ffffff;
+  --secondary: #1c1c1d;
+  --secondary-foreground: #ffffff;
+  --muted: #e3e3e8;
+  --muted-foreground: #9f9fa4;
+  --accent: #f6f6f6;
+  --accent-foreground: #1c1c1d;
+  --destructive: #caa05c;
   --destructive-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
+  --border: #e3e3e8;
   --input: transparent;
-  --input-background: #f3f3f5;
-  --switch-background: #cbced4;
+  --input-background: #f6f6f6;
+  --switch-background: #9f9fa4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #3e3a39; /* CIS Black 80%（原 oklch(0.708) 中性灰）；全站 outline-ring 焦點框 */
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --ring: #caa05c;
+  --chart-1: #caa05c;
+  --chart-2: #1c1c1d;
+  --chart-3: #59585d;
+  --chart-4: #9f9fa4;
+  --chart-5: #e3e3e8;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #030213;
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #f6f6f6;
+  --sidebar-foreground: #59585d;
+  --sidebar-primary: #caa05c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e3e3e8;
+  --sidebar-accent-foreground: #1c1c1d;
+  --sidebar-border: #e3e3e8;
+  --sidebar-ring: #caa05c;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  --background: #1c1c1d;
+  --foreground: #ffffff;
+  --card: #1c1c1d;
+  --card-foreground: #ffffff;
+  --popover: #1c1c1d;
+  --popover-foreground: #ffffff;
+  --primary: #caa05c;
+  --primary-foreground: #ffffff;
+  --secondary: #59585d;
+  --secondary-foreground: #ffffff;
+  --muted: #59585d;
+  --muted-foreground: #9f9fa4;
+  --accent: #59585d;
+  --accent-foreground: #ffffff;
+  --destructive: #caa05c;
+  --destructive-foreground: #ffffff;
+  --border: #59585d;
+  --input: #59585d;
+  --ring: #caa05c;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+  --chart-1: #caa05c;
+  --chart-2: #ffffff;
+  --chart-3: #9f9fa4;
+  --chart-4: #e3e3e8;
+  --chart-5: #59585d;
+  --sidebar: #1c1c1d;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #caa05c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #59585d;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #59585d;
+  --sidebar-ring: #caa05c;
 }
 
 @theme inline {
-  /* CIS 品牌色 → Tailwind：text-gold / bg-gold / border-gold、bg-ink / text-ink-80、text-brand-red… */
+  /* Antra 模板色 → Tailwind：text-gold / bg-gold / border-gold、bg-ink / text-ink-80… */
   --color-gold: var(--gold);
   --color-gold-strong: var(--gold-strong);
   --color-gold-soft: var(--gold-soft);
@@ -232,6 +232,20 @@ html {
 /* 防止 full-bleed 裝飾與跑馬燈造成水平捲軸。 */
 body {
   overflow-x: hidden;
+}
+
+/* Google Maps 會以 inline style 注入三個不在模板色盤內的灰色；只覆寫外觀，保留所有地圖操作。 */
+.antra-map > div:first-child > div:first-child {
+  background-color: #f6f6f6 !important;
+}
+
+.antra-map .gm-style-cc div[style*="background-color"],
+.antra-map .gmnoscreen div[style*="background-color"] {
+  background-color: #f6f6f6 !important;
+}
+
+.antra-map .gmnoprint div[style*="width: 30px"][style*="height: 1px"] {
+  background-color: #e3e3e8 !important;
 }
 
 /* ── 響應式 CSS 變數 ── */

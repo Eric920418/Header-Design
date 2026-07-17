@@ -1,15 +1,10 @@
 import React from 'react';
 
-// 文字連結（網站地圖、隱私權政策）— 字級 14
 const TEXT_LINKS = [
   { label: '網站地圖', href: '#' },
-  // 隱私權政策 → 由 docx 內文抽出、產生的輕量靜態頁 public/privacy.html
   { label: '隱私權政策', href: '/privacy.html' },
 ];
 
-// icon 連結：數位展板 30×30、YouTube 33×33（白色去背 PNG，暗底顯白）
-// offsetY：兩張 PNG 內容在畫布內的垂直位置不同（YouTube logo 畫在上半、tablet 置中），
-// 掃描非透明邊界得 YT 視覺偏上 6px，故單獨往下推 6px 讓「可見圖案」的中心對齊。
 const ICON_LINKS = [
   { label: '數位展板', href: '#', icon: '/icons/digital-board.png', size: 35, offsetY: 0 },
   { label: 'YouTube', href: '#', icon: '/icons/youtube.png', size: 40, offsetY: 5 },
@@ -17,64 +12,66 @@ const ICON_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="bg-[#f6f6f6]">
-      <div className="relative overflow-hidden">
-        {/* 上半：灰底 + 巨型 SAKURA 浮水印（改用金色字標 PNG；加深金 opacity + z-10 疊在暗色版權列之上、下緣蓋上 footer） */}
-        <div aria-hidden className="relative z-10 pointer-events-none select-none flex justify-center pt-20 translate-y-[8px]">
-          <img
-            src="/footer-sakura.svg"
-            alt=""
-            className="w-[1320px] max-w-full h-auto"
-            style={{ opacity: 0.8 }}
-          />
-        </div>
+    <footer
+      className="relative isolate h-[450px] overflow-hidden bg-[#1C1C1D] bg-cover bg-center text-white lg:h-[760px]"
+      style={{ backgroundImage: "url('/footer-antra-bg.jpg')" }}
+    >
+      <div aria-hidden className="absolute inset-0 -z-10 bg-black/75" />
 
-        {/* 版權列：模板暗色 #3E3A39，滿寬、負 margin 疊在浮水印下緣之上（圖片無文字行框空白，故負 margin 比文字版小） */}
-        <div className="relative -mt-[92px] bg-[#3E3A39] text-white">
-          <div className="relative max-w-[1410px] mx-auto px-[51px] pb-12 pt-30 flex items-center justify-between gap-6">
-            {/* 左：文字連結（字級 14） */}
-            <nav className="flex items-center gap-6 shrink-0">
-              {TEXT_LINKS.map((l) => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  className="text-[15px] text-white hover:text-[#C9AA79] transition-colors"
-                >
-                  {l.label}
-                </a>
-              ))}
-            </nav>
+      {/* 簡化模板上半資訊區：只保留 SAKURA 原有連結與圖示。 */}
+      <div className="relative z-10 h-[220px] bg-[rgba(28,28,29,0.64)]">
+        <div className="mx-auto flex h-full max-w-[1410px] flex-col justify-between px-[15px] py-[42px] md:flex-row md:items-start md:px-[30px] md:py-[70px] lg:px-[51px]">
+          <nav aria-label="頁尾連結" className="flex flex-col items-start gap-4 md:flex-row md:gap-8">
+            {TEXT_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-[16px] leading-6 text-white transition-colors duration-300 hover:text-[#CAA05C]"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
 
-            {/* 中：版權（絕對置中，不受左右欄寬影響） */}
-            <p className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-[14px] text-white/70">
-              Copyright © Taiwan Sakura Corporation. All rights reserved
-            </p>
-
-            {/* 右：icon 30×30 / 33×33 */}
-            <div className="flex items-center gap-6 shrink-0">
-              {ICON_LINKS.map((l) => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  aria-label={l.label}
-                  title={l.label}
-                  className="opacity-85 hover:opacity-100 transition-opacity"
-                >
-                  <img
-                    src={l.icon}
-                    alt={l.label}
-                    style={{
-                      width: l.size,
-                      height: l.size,
-                      transform: l.offsetY ? `translateY(${l.offsetY}px)` : undefined,
-                    }}
-                    className="object-contain"
-                  />
-                </a>
-              ))}
-            </div>
+          <div className="flex items-center gap-7">
+            {ICON_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                aria-label={link.label}
+                title={link.label}
+                className="opacity-85 transition-opacity duration-300 hover:opacity-100"
+              >
+                <img
+                  src={link.icon}
+                  alt={link.label}
+                  style={{
+                    width: link.size,
+                    height: link.size,
+                    transform: link.offsetY ? `translateY(${link.offsetY}px)` : undefined,
+                  }}
+                  className="object-contain"
+                />
+              </a>
+            ))}
           </div>
         </div>
+      </div>
+
+      {/* 模板同位置的獨立版權帶。 */}
+      <div className="relative z-10 flex h-[80px] items-center justify-center border-y border-white/10 bg-[rgba(28,28,29,0.64)] px-[15px] text-center md:px-[30px]">
+        <p className="text-[13px] leading-5 text-white/70 md:text-[14px]">
+          Copyright © Taiwan Sakura Corporation. All rights reserved
+        </p>
+      </div>
+
+      {/* 模板巨型字標沉在 Footer 最底部；保留完整 SAKURA 品牌字標。 */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-[30px] z-0 flex select-none justify-center">
+        <img
+          src="/footer-sakura.svg"
+          alt=""
+          className="h-auto w-[calc(100%-30px)] max-w-[1320px] opacity-30 md:w-[calc(100%-60px)] lg:w-[calc(100%-102px)]"
+        />
       </div>
     </footer>
   );

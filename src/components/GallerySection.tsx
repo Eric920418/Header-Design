@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Reveal, useReveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
 
-// 品牌金 = CIS 466c #C9AA79（單一來源）
+// 全區顏色使用 Antra 模板色盤（單一來源）。
 import { GOLD } from '../theme/cis';
 
 // 門市案例；輪播規則：背景 = 目前主圖(#1)，右邊兩張卡 = 下兩張(#2、#3)，前進時聯動輪替。
@@ -110,7 +110,7 @@ export function GallerySection() {
                 （模板底色淺→字深；本區深底故字用白，其餘尺寸/hover 完全一致。demo 站 root 20px 會放大成 18.75/45，勿量網頁。） */}
             <a
               href="#"
-              className="group/cta inline-flex items-center gap-4 mt-[40px] rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-white capitalize transition-colors duration-500 hover:border-[#C9AA79] hover:bg-[#C9AA79]"
+              className="group/cta inline-flex items-center gap-4 mt-[40px] rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-white capitalize transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C]"
             >
               <span className="text-[15px]">更多設計</span>
               <span

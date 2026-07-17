@@ -58,14 +58,14 @@ function DesktopNavItem({ item }: { item: NavItem }) {
               <div className="grid grid-cols-3 gap-[30px]">
                 {item.mega.map((m, i) => (
                   <a key={i} href={m.href} className="group/card block">
-                    <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#3E3A39]">
+                    <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#1C1C1D]">
                       <img
                         src={m.image}
                         alt={m.label}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                      <span className="absolute bottom-4 left-5 text-white text-lg font-semibold tracking-wide group-hover/card:text-[#C9AA79] transition-colors">
+                      <span className="absolute bottom-4 left-5 text-white text-lg font-semibold tracking-wide group-hover/card:text-[#CAA05C] transition-colors">
                         {m.label}
                       </span>
                     </div>
@@ -75,7 +75,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
               {item.megaCatalog && (
                 <a
                   href="#"
-                  className="mt-6 inline-flex items-center gap-2 text-sm text-[#000000] hover:text-[#C9AA79] transition-colors"
+                  className="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] hover:text-[#CAA05C] transition-colors"
                 >
                   {item.megaCatalog}
                   <span aria-hidden>→</span>
@@ -107,12 +107,12 @@ function DesktopNavItem({ item }: { item: NavItem }) {
       </button>
       {/* 下拉（pt-2 當作無縫橋接，避免游標移動時中斷 hover） */}
       <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 hidden group-hover:block z-50">
-        <ul className="min-w-[190px] rounded-xl bg-white shadow-xl border border-[#E3DED7] py-2">
+        <ul className="min-w-[190px] rounded-xl bg-white shadow-xl border border-[#E3E3E8] py-2">
           {item.children.map((c, i) => (
             <li key={i}>
               <a
                 href="#"
-                className="block px-5 py-2.5 text-sm text-[#3E3A39] hover:text-[#C9AA79] hover:bg-[#F4F0EA] transition-colors whitespace-nowrap"
+                className="block px-5 py-2.5 text-sm text-[#59585D] hover:text-[#CAA05C] hover:bg-[#F6F6F6] transition-colors whitespace-nowrap"
               >
                 {c}
               </a>
@@ -191,12 +191,12 @@ export function Header() {
           <div className="border-t border-white/20">
             <div className="px-5 lg:px-12 py-3">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#3E3A39]" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#59585D]" />
                 <input
                   autoFocus
                   type="text"
                   placeholder="搜尋商品 / 案例 / 門市…"
-                  className="w-full h-12 rounded-full bg-white pl-12 pr-5 text-[#000000] placeholder:text-[#8c877f] focus:outline-none"
+                  className="w-full h-12 rounded-full bg-white pl-12 pr-5 text-[#1C1C1D] placeholder:text-[#9F9FA4] focus:outline-none"
                 />
               </div>
             </div>
@@ -206,8 +206,8 @@ export function Header() {
 
       {/* ── 手機版抽屜（accordion） ── */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white border-t border-[#E3DED7] shadow-lg">
-          <ul className="divide-y divide-[#E3DED7]">
+        <div className="lg:hidden bg-white border-t border-[#E3E3E8] shadow-lg">
+          <ul className="divide-y divide-[#E3E3E8]">
             {allNav.map((item, i) => {
               // mega 項在手機以其品牌名 + 型錄當作可展開子項
               const subs =
@@ -221,7 +221,7 @@ export function Header() {
                   <>
                     <button
                       onClick={() => setExpanded(expanded === i ? null : i)}
-                      className="w-full flex items-center justify-between px-6 py-4 text-left text-[#000000]"
+                      className="w-full flex items-center justify-between px-6 py-4 text-left text-[#1C1C1D]"
                     >
                       <span>{item.label}</span>
                       <ChevronDown
@@ -230,13 +230,13 @@ export function Header() {
                       />
                     </button>
                     {expanded === i && (
-                      <ul className="bg-[#F4F0EA] pb-2">
+                      <ul className="bg-[#F6F6F6] pb-2">
                         {subs.map((c, j) => (
                           <li key={j}>
                             <a
                               href="#"
                               onClick={() => setMobileOpen(false)}
-                              className="block pl-10 pr-6 py-2.5 text-sm text-[#3E3A39] hover:text-[#C9AA79] transition-colors"
+                              className="block pl-10 pr-6 py-2.5 text-sm text-[#59585D] hover:text-[#CAA05C] transition-colors"
                             >
                               {c}
                             </a>
@@ -250,7 +250,7 @@ export function Header() {
                     href={item.href}
                     {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     onClick={() => setMobileOpen(false)}
-                    className="block px-6 py-4 text-[#000000]"
+                    className="block px-6 py-4 text-[#1C1C1D]"
                   >
                     {item.label}
                   </a>

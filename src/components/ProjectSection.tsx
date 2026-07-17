@@ -113,7 +113,7 @@ export function ProjectSection() {
   return (
     <section ref={sectionRef} data-ev="slideInUp" className="ev relative z-10 bg-[#f6f6f6]">
       {/* bg 深色：作為次像素髮絲縫的保險——即使卡間偶有 <1px 縫，透出的是深色(近卡片暗部)而非亮背景，肉眼難察 */}
-      <div className="overflow-hidden cursor-grab active:cursor-grabbing bg-[#2a2a2a]" ref={emblaRef}>
+      <div className="overflow-hidden cursor-grab active:cursor-grabbing bg-[#1C1C1D]" ref={emblaRef}>
         <div className="flex">
           {/* 卡片複製兩份(10→20)：給 Embla loop 足夠緩衝，避免捲動動畫中接縫來不及補齊而露縫 */}
           {[...STYLES, ...STYLES].map((s, i) => (
@@ -152,9 +152,9 @@ export function ProjectSection() {
                   </span>
                 )}
 
-                {/* 底部：英文大標（hover 轉金 #C9AA79）+ 描述（hover 由下淡入浮現） */}
+                {/* 底部：英文大標（hover 轉模板金）+ 描述（hover 由下淡入浮現） */}
                 <div className="absolute inset-x-0 bottom-0 z-[2] px-8 pb-9">
-                  <h3 className="font-display text-white text-[36px] leading-[44px] group-hover:text-[#C9AA79] transition-colors duration-300">
+                  <h3 className="font-display text-white text-[36px] leading-[44px] group-hover:text-[#CAA05C] transition-colors duration-300">
                     {s.en}
                   </h3>
                   {s.desc && (
@@ -170,18 +170,18 @@ export function ProjectSection() {
       </div>
 
       {/* 左右兩側 prev/next 箭頭 — 依主題原始碼 antra swiper button（style.css 13949）：
-          48×48 白圓 + 1px 邊框 + icon 24；hover 金底(#C9AA79)白箭頭。可點觸發 embla scrollPrev/Next。 */}
+          48×48 白圓 + 1px 邊框 + icon 24；hover 模板金底、白箭頭。可點觸發 embla scrollPrev/Next。 */}
       <button
         onClick={() => emblaApi?.scrollPrev()}
         aria-label="上一個"
-        className="absolute left-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#C9AA79] hover:border-[#C9AA79] hover:text-white"
+        className="absolute left-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#CAA05C] hover:border-[#CAA05C] hover:text-white"
       >
         <ArrowLeft className="w-6 h-6" />
       </button>
       <button
         onClick={() => emblaApi?.scrollNext()}
         aria-label="下一個"
-        className="absolute right-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#C9AA79] hover:border-[#C9AA79] hover:text-white"
+        className="absolute right-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#CAA05C] hover:border-[#CAA05C] hover:text-white"
       >
         <ArrowRight className="w-6 h-6" />
       </button>

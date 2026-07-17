@@ -31,7 +31,7 @@ function StyleItem({ item, duplicate = false }: { item: (typeof STYLES)[number];
           draggable={false}
           className="h-[58px] w-auto shrink-0 transition-[filter,opacity] duration-300 group-hover/brands:opacity-50 group-hover/brands:grayscale group-hover/item:!opacity-100 group-hover/item:!grayscale-0"
         />
-        <span className="shrink-0 leading-tight text-[#3E3A39] transition-colors duration-300 group-hover/item:text-[#CAA05C]">
+        <span className="shrink-0 leading-tight text-[#59585D] transition-colors duration-300 group-hover/item:text-[#CAA05C]">
           <span className="block text-[15px] font-bold">{item.zh}</span>
           <span className="block text-[13px] tracking-wide">{item.en}</span>
         </span>

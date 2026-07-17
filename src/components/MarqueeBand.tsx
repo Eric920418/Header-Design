@@ -14,7 +14,7 @@ export function MarqueeBand() {
                 className="block font-display font-normal leading-[0.9] whitespace-nowrap pr-[0.2em] text-[220px]"
                 style={{
                   backgroundImage:
-                    "linear-gradient(rgb(216,216,216) 0%, rgba(153,153,153,0) 90%)",
+                    "linear-gradient(rgb(227,227,232) 0%, rgba(159,159,164,0) 90%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",

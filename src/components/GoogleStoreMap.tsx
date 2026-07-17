@@ -5,29 +5,33 @@ import React, { useEffect, useRef, useState } from 'react';
 // 並在 Google Cloud 啟用「Maps JavaScript API」與「Geocoding API」
 const API_KEY = (import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 
-// 台北市中心當預設中心（金鑰/定位就緒前）
-const DEFAULT_CENTER = { lat: 25.0478, lng: 121.5319 };
+// 初始總覽：整個台灣主島（fitBounds 用邊界 + 概略中心/縮放當尚未量到尺寸前的 fallback）
+const TAIWAN_CENTER = { lat: 23.7, lng: 120.95 };
+const TAIWAN_ZOOM = 7;
+const TAIWAN_BOUNDS = { south: 21.85, west: 119.95, north: 25.35, east: 122.05 };
+// 使用者點選門市後聚焦的街道級縮放
+const STORE_ZOOM = 16;
 
-// 極簡「CIS 暖灰」地圖樣式：各階中性灰改為偏暖（R>G>B）、對齊品牌 CIS 調性；深色元素用 Black80% #3E3A39。
+// 地圖功能不變；可見圖面只使用 Antra 模板的中性色盤。
 const LIGHT_STYLE: any[] = [
-  { elementType: 'geometry', stylers: [{ color: '#f4f0ea' }] },
+  { elementType: 'geometry', stylers: [{ color: '#f6f6f6' }] },
   { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
-  { elementType: 'labels.text.fill', stylers: [{ color: '#8c877f' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#f4f0ea' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#59585d' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#f6f6f6' }] },
   { featureType: 'administrative', elementType: 'geometry', stylers: [{ visibility: 'off' }] },
   { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
   { featureType: 'administrative.neighborhood', stylers: [{ visibility: 'off' }] },
   { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#eae4dc' }] },
-  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#aca69c' }] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#fdfbf8' }] },
-  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#978f86' }] },
-  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#fdfbf8' }] },
-  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#efeae3' }] },
-  { featureType: 'road.local', elementType: 'geometry', stylers: [{ color: '#fdfbf8' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#e3e3e8' }] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#9f9fa4' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#59585d' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#e3e3e8' }] },
+  { featureType: 'road.local', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
   { featureType: 'transit', stylers: [{ visibility: 'off' }] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#e5dfd6' }] },
-  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#b8b1a7' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#e3e3e8' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#9f9fa4' }] },
 ];
 
 // 深色水滴 + 白色「S」標記（仿官網）
@@ -35,7 +39,7 @@ const MARKER_SVG =
   'data:image/svg+xml;charset=UTF-8,' +
   encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="52" viewBox="0 0 40 52">
-      <path d="M20 0C9 0 0 9 0 20c0 14.5 20 32 20 32s20-17.5 20-32C40 9 31 0 20 0z" fill="#3E3A39"/>
+      <path d="M20 0C9 0 0 9 0 20c0 14.5 20 32 20 32s20-17.5 20-32C40 9 31 0 20 0z" fill="#1C1C1D"/>
       <text x="20" y="27" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff" text-anchor="middle">S</text>
     </svg>`
   );
@@ -62,12 +66,14 @@ function loadGoogleMaps(key: string): Promise<any> {
   return mapsPromise;
 }
 
-export function GoogleStoreMap({ address }: { address: string }) {
+export function GoogleStoreMap({ address, focus = false }: { address: string; focus?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const geocodeCache = useRef<Map<string, { lat: number; lng: number }>>(new Map());
-  const centerRef = useRef<{ lat: number; lng: number }>(DEFAULT_CENTER);
+  const centerRef = useRef<{ lat: number; lng: number }>(TAIWAN_CENTER);
+  // focus=false → 顯示整個台灣（總覽）；focus=true → 聚焦選定門市。用 ref 讓非同步回呼讀到最新值。
+  const focusRef = useRef(focus);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const [error, setError] = useState('');
 
@@ -83,8 +89,8 @@ export function GoogleStoreMap({ address }: { address: string }) {
         if (cancelled || !containerRef.current) return;
         if (!mapRef.current) {
           mapRef.current = new maps.Map(containerRef.current, {
-            center: DEFAULT_CENTER,
-            zoom: 16,
+            center: TAIWAN_CENTER,
+            zoom: TAIWAN_ZOOM,
             styles: LIGHT_STYLE,
             disableDefaultUI: true,
             zoomControl: true,
@@ -101,7 +107,13 @@ export function GoogleStoreMap({ address }: { address: string }) {
                   if (!mapRef.current) return;
                   maps.event.trigger(mapRef.current, 'resize');
                   window.dispatchEvent(new Event('resize'));
-                  mapRef.current.setCenter(centerRef.current);
+                  // 尺寸確定後再框：未聚焦 → 框整個台灣；已聚焦 → 回到門市中心+街道級
+                  if (focusRef.current) {
+                    mapRef.current.setCenter(centerRef.current);
+                    mapRef.current.setZoom(STORE_ZOOM);
+                  } else {
+                    fitTaiwan(maps);
+                  }
                 }, 300);
               }
             },
@@ -121,16 +133,29 @@ export function GoogleStoreMap({ address }: { address: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // address 變更 → 重新定位
+  // address / focus 變更 → 重新定位。focus=true 才聚焦門市；focus=false 維持台灣總覽。
   useEffect(() => {
     const maps = (window as any).google?.maps;
-    if (maps && mapRef.current) updateMarker(maps, address);
+    if (!maps || !mapRef.current) return;
+    focusRef.current = focus;
+    updateMarker(maps, address); // 內部依 focusRef 決定是否平移/縮放到門市
+    if (!focus) fitTaiwan(maps); // 取消聚焦 → 回到整個台灣
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address]);
+  }, [address, focus]);
+
+  // 框住整個台灣主島（隨容器尺寸自適應）
+  function fitTaiwan(maps: any) {
+    if (!mapRef.current) return;
+    mapRef.current.fitBounds(
+      new maps.LatLngBounds(
+        new maps.LatLng(TAIWAN_BOUNDS.south, TAIWAN_BOUNDS.west),
+        new maps.LatLng(TAIWAN_BOUNDS.north, TAIWAN_BOUNDS.east)
+      )
+    );
+  }
 
   function placeAt(maps: any, loc: { lat: number; lng: number }) {
     centerRef.current = loc;
-    mapRef.current.panTo(loc);
     if (!markerRef.current) {
       markerRef.current = new maps.Marker({
         map: mapRef.current,
@@ -142,6 +167,11 @@ export function GoogleStoreMap({ address }: { address: string }) {
       });
     }
     markerRef.current.setPosition(loc);
+    // 只有使用者選了門市（focus）才平移+放大到街道級；否則只放 pin、維持台灣總覽
+    if (focusRef.current) {
+      mapRef.current.panTo(loc);
+      mapRef.current.setZoom(STORE_ZOOM);
+    }
   }
 
   function updateMarker(maps: any, addr: string) {
@@ -163,10 +193,10 @@ export function GoogleStoreMap({ address }: { address: string }) {
   }
 
   return (
-    <div className="relative w-full h-full">
+    <div className="antra-map relative w-full h-full">
       <div ref={containerRef} className="w-full h-full" />
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#F4F0EA] p-6 text-center text-sm text-[#F5333F]">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#F6F6F6] p-6 text-center text-sm text-[#CAA05C]">
           {error}
         </div>
       )}

@@ -3,7 +3,7 @@ import { Check, ArrowRight, Play } from 'lucide-react';
 import { Reveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
 
-// 品牌金 = CIS 466c #C9AA79（單一來源）
+// 全區顏色使用 Antra 模板色盤（單一來源）。
 import { GOLD } from '../theme/cis';
 
 const ITEMS = ['Residence And Condo', 'Modern Kitchen Renovate', 'Interior House Decoration'];
@@ -33,8 +33,8 @@ export function WhatWeDoSection() {
       <div className="relative z-10 max-w-[1410px] mx-auto flex flex-col lg:flex-row items-center gap-[90px]">
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
         <Reveal anim="slideInLeft" className="lg:w-[600px] lg:shrink-0">
-          {/* 副標膠囊（照模板：border rgba(114,114,114,.18)、radius 24、padding 3/13/3/10、金點 + 15/ls1/uppercase） */}
-          <span className="font-display inline-flex items-center gap-2 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px] mb-5 text-[15px] tracking-[1px] uppercase text-[#000000]">
+          {/* 副標膠囊：模板 lighter 色透明邊框、radius 24、padding 3/13/3/10。 */}
+          <span className="font-display inline-flex items-center gap-2 rounded-[24px] border border-[rgba(159,159,164,0.18)] pt-[3px] pr-[13px] pb-[3px] pl-[10px] mb-5 text-[15px] tracking-[1px] uppercase text-[#1C1C1D]">
             <span
               className="inline-block w-2 h-2 rounded-full"
               style={{ background: GOLD }}
@@ -43,7 +43,7 @@ export function WhatWeDoSection() {
           </span>
 
           {/* 模板 Home Six 逐字：SAKURA has [created exceptional] architectural designs.（Antra→SAKURA；金字重點 created exceptional） */}
-          <h2 className="font-display text-[#000000] text-[60px] leading-[64px] capitalize">
+          <h2 className="font-display text-[#1C1C1D] text-[60px] leading-[64px] capitalize">
             SAKURA has
             <br />
             <span style={{ color: GOLD }}>created exceptional</span>
@@ -52,11 +52,11 @@ export function WhatWeDoSection() {
           </h2>
 
           {/* 打勾清單（含分隔線） */}
-          <ul className="mt-9 border-t border-[#E3DED7]">
+          <ul className="mt-9 border-t border-[#E3E3E8]">
             {ITEMS.map((t, i) => (
               <li
                 key={i}
-                className="flex items-center gap-3 py-4 border-b border-[#E3DED7] text-[#000000] text-[18px] leading-[24px] font-normal"
+                className="flex items-center gap-3 py-4 border-b border-[#E3E3E8] text-[#1C1C1D] text-[18px] leading-[24px] font-normal"
               >
                 {/* 打勾：照模板為純金 check icon（~19px、無圓底） */}
                 <Check className="w-[19px] h-[19px] shrink-0" strokeWidth={3} style={{ color: GOLD }} />
@@ -65,7 +65,7 @@ export function WhatWeDoSection() {
             ))}
           </ul>
 
-          <p className="text-[#3E3A39] mt-7 max-w-md text-[16px] leading-[24px]">
+          <p className="text-[#59585D] mt-7 max-w-md text-[16px] leading-[24px]">
             We specialize in transforming visions into reality. Explore our
             portfolio of innovative architectural and interior design projects
             crafted with precision.
@@ -73,10 +73,10 @@ export function WhatWeDoSection() {
 
           {/* CTA — 依主題原始碼 elementor-button-default（=antra 標準款，elementor.css 9147）：
               透明底、border 1px rgba(159,159,164,.64)、字 15、金圓 40 箭頭預設 -45°；
-              hover 整顆填金(bg+border=#C9AA79) + 字白 + 箭頭轉正 rotate(0)。文字保留「櫻花優勢」。 */}
+              hover 整顆填模板金 + 字白 + 箭頭轉正 rotate(0)。文字保留「櫻花優勢」。 */}
           <a
             href="#"
-            className="group inline-flex items-center gap-4 mt-8 rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-[#000000] transition-colors duration-500 hover:border-[#C9AA79] hover:bg-[#C9AA79] hover:text-white"
+            className="group inline-flex items-center gap-4 mt-8 rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-[#1C1C1D] transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white"
           >
             <span className="text-[15px]">櫻花優勢</span>
             <span

@@ -50,24 +50,48 @@ pnpm build
   - **鐵則**：`.ev` 用 `transform`（fill both 收在 none），**勿套在已佔 transform 的元素**（Embla 軌道、`.project-parallax-img`/`.gallery-bg`/`.wwd-blueprint` 視差、`animate-gallery-card`、hover-scale/rotate）→ 一律包外層 wrapper。`slideInLeft/Right` 的 100% 位移靠 section `overflow-hidden` 裁切避免水平捲軸。
 - **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。用 `yPercent` scrub（`scrub:0.5`）位移；目標為 GallerySection 全出血背景與 WhatWeDo 裝飾。只寫內層 transform。ProjectSection 照片視差維持移除，避免 Embla loop 的合成接縫。
 
-## 色彩規範（SAKURA KITCHEN CIS）— 全站已對齊
+## 色彩規範（Antra 模板）— 全站唯一色盤
 
-全站品牌色**嚴格對齊官方 CIS**（先前散落的 7 種不一致暖金、`#1c1c1d`/`#272625` 等已收斂）。**單一來源**：`src/theme/cis.ts`（供 inline `style={{}}`）+ `globals.css` 的 CIS tokens（`--gold`… 經 `@theme inline` 暴露為 Tailwind `text-gold`/`bg-ink-80`/`text-brand-red`…）。
+自 2026-07-17 起，模板外觀優先於舊 SAKURA CIS；本節取代 README 後方任何歷史色號敘述。正式色值直接取自付費模板 `antra/dummy-data/elementor.json` 的 Elementor system colors。**單一來源**：`src/theme/cis.ts`（inline style）與 `src/styles/globals.css`（全域／Tailwind tokens），兩邊數值必須一致。
 
-| 角色 | 名稱 | HEX |
+| 模板角色 | HEX | 全站用途 |
 |---|---|---|
-| 主-金 | PANTONE 466c / Varnished 871c | `#C9AA79` |
-| 金-漸層深 / 淺（衍生） | — | `#B8965F` / `#D8C29A`（Header 金屬漸層、hover） |
-| 主-黑 | PANTONE Black C | `#000000`（標題 / 內文） |
-| 輔-深灰 | PANTONE Black C 80% | `#3E3A39`（footer、深色面、次要文字） |
-| 輔-紅 | PANTONE Red 032c | `#F5333F`（強調 / 錯誤，覆蓋原 shadcn `--destructive`） |
-| 主-白 | White | `#FFFFFF` |
+| Primary | `#CAA05C` | 金色重點、hover、focus、互動提示 |
+| Secondary / Accent | `#1C1C1D` | 標題、深色面、Footer、地圖標記 |
+| Text | `#59585D` | 內文、次要按鈕底、圖示 |
+| Lighter | `#9F9FA4` | placeholder、較淡文字 |
+| Border | `#E3E3E8` | 邊框、分隔線、裝飾線 |
+| Background Field | `#F6F6F6` | 頁面與欄位淺底 |
+| Dark | `#000000` | 圖片遮罩及其透明階 |
+| White | `#FFFFFF` | 卡片、反白文字及其透明階 |
 
-- **對齊範圍**：所有金 → `#C9AA79`；深色 → `#000` / `#3E3A39`；紅 → `#F5333F`。深色圖面 scrim 統一為 `rgba(0,0,0,α)`（Black C）。**Header 列漸層**：曾於稽核改為 CIS 衍生 `#B8965F → #D8C29A`，後**依使用者指定改回模板原值 `linear-gradient(90deg, #b79258 20%, #d2b587)`**（`Header.tsx` `HEADER_GRADIENT`）——此為刻意的非-CIS 例外。
-- **消除所有 Tailwind 冷灰**：Tailwind 具名灰（`gray-*`，色相偏藍）computed 出來是 **oklch**，rgb-only 掃描會漏掉——故做了 **oklch-aware 全屬性掃描**（color/bg/border/fill/outline/gradient）。全站冷灰已清零：文字/圖示 `text-gray-400~700` → CIS 深灰 `#3E3A39`；深色底 `bg-gray-900` → `#3E3A39`；淺邊框/分隔線 `border/divide-gray-100~300` → **暖線 `#E3DED7`**；淺底 `bg-gray-50/100` → **暖底 `#F4F0EA`**；`placeholder` / 停用 `select` 的灰 → **暖灰 `#8c877f`**。連全域預設也校正：`--foreground` `oklch(0.145)` → `#000`、`--ring`（`outline-ring` 焦點框）`oklch(0.708)` → `#3E3A39`、`--destructive` → `#F5333F`。
-- **`<select>` placeholder（已修）**：門市查詢的區域/城市 `<select>` 原本用 `disabled` 屬性 → 瀏覽器**強制灰化**「選擇城市」為 `#808080`（CSS `color` 蓋不動）。已改為**不用 `disabled`、改以 CSS 控制未選態**：placeholder 用暖灰 `#8c877f`，城市未選區域時加暖底 `#F4F0EA` + `pointer-events-none`(保留「先選區域」的停用觀感)。`#808080` 已清零 → **全站 0 個非 CIS/非暖中性色**。
-- **支援性中性色**（功能性保留）：section 底 `#f6f6f6`、暖線 `#E3DED7`、暖底 `#F4F0EA`、`white/xx`·`black/xx` 透明階（白/黑即 CIS、其餘為暖/中性淡階）。跑馬燈以 `color: transparent` + 漸層 `background-clip:text` 呈現（刻意技法）。
-- **地圖（`GoogleStoreMap` 的 `LIGHT_STYLE`）**：各階中性灰改為**偏暖灰**（R>G>B，如陸地 `#f4f0ea`、道路 `#fdfbf8`、水域 `#e5dfd6`）對齊 CIS 調性；標記水滴改 `#3E3A39`、錯誤字改 `#F5333F`。
+- **零衍生色政策**：不再使用舊 `#C9AA79`、金屬漸層、暖灰或 shadcn `oklch()` 色票；Header 改為模板 Primary 純色。Alpha 只能建立在上表基色上，例如黑色圖片遮罩、白色玻璃面、Lighter 邊框。
+- **完整範圍**：Header、Hero、自訂側選單、兩個跑馬燈、Project、Services、Gallery、WhatWeDo、門市、Google 地圖、Footer、桌面浮動鈕與手機底列全部套同一色盤；互動、資料、尺寸、版型和動畫未改。
+- **地圖**：地圖功能與初始視野不動，只把 Google Maps style 收斂為模板 Background / Border / White / Text / Lighter，標記使用 Secondary；錯誤訊息使用 Primary，因模板沒有紅色色票。Google Maps 執行期注入的圖磚底、縮放分隔線與版權底也在 `.antra-map` 內以 `!important` 收斂到 Background / Border，不關閉任何控制項。
+- **素材界線**：照片、SAKURA Logo、圖示 PNG/SVG 的來源像素不加濾鏡。這些是內容素材而非 CSS UI 色；強制改色會破壞商標與照片原色，也不屬於模板 CSS 色盤。
+- **驗證**：原始碼 HEX／RGB／OKLCH 掃描通過；瀏覽器在桌面 `1512×956`、手機 `390×844` 並捲過所有 Reveal 區塊後，computed-style 非模板基色均為 0。可見 UI 不得出現上表之外的基色。
+
+### Footer 垂直分層
+
+- Footer 手機／平板維持精簡版 `450px`；桌面為 `760px`。桌面只增加版權帶下方的背景圖／Logo 舞台，上方資訊區 `220px` 與 Copyright 帶 `80px` 完全不增高，既有連結、數位展板與 YouTube 不變。
+- 巨型 SAKURA 字標全斷點都完整放在 Footer 內，使用 `bottom:30px`；桌面版權帶底緣至字標上緣約 `176px`（參考截圖約 `177px`），手機／平板約 `51px`。
+
+#### Footer Design QA（2026-07-17）
+
+- **Source visual truth**：`/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_FaKCmu/截圖 2026-07-17 下午1.30.10.png`
+- **Implementation evidence**：`/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-final-desktop-1512.png`；手機：`footer-after-mobile-390.png`；聚焦對照：`footer-reference-vs-implementation.png`。
+- **Viewport / state**：桌面 `1512×956`、手機 `390×844`；頁面捲至最底、Footer 靜止狀態。
+- **Full-view evidence**：Footer 上方資訊區、Copyright 帶、背景圖留白、巨型字標與固定浮動鈕均在同一畫面核對。桌面版權帶底緣至 Logo 上緣量得 `175.5px`，參考圖約 `177px`；手機量得 `50.6px`，無水平溢出。
+- **Focused comparison evidence**：本次問題只涉及版權帶與 Logo 的垂直關係，因此聚焦裁切足以判定；不需改動字型、圖示或內容欄位。
+- **Fonts / typography**：既有字型、字級、行高、字重與文案未改；Copyright 仍置中。
+- **Spacing / layout rhythm**：首輪發現 `[P2]` Logo 與版權帶重疊 `34.5px`；先建立 `175.5px` 留白，再依驗收把桌面舞台增高至 `760px`、Logo 改為 `bottom:30px`，最終同時保留模板間距與完整字標；上方黑色資訊與版權帶高度均不變。
+- **Colors / tokens**：沿用模板 `#1C1C1D`、白色透明階與 `#CAA05C`，沒有新增色號。
+- **Image quality / assets**：沿用原有背景圖與向量 `footer-sakura.svg`，沒有重新生成、拉伸或改色。
+- **Copy / content**：網站地圖、隱私權政策、Copyright、數位展板、YouTube 均原樣保留。
+- **Browser checks**：桌面與手機均完成實際渲染；手機 `scrollWidth=390`；沒有 console error。僅有既存 Google Maps async／舊 Marker API 警告，與 Footer 無關。
+- **Comparison history**：before＝`gap -34.5px`（重疊，P2）；iteration 1＝`65.5px`（已有留白但仍短於來源）；iteration 2＝`175.5px` 但 Logo 底部裁切 170px（P2）；iteration 3＝桌面 `760px`＋`bottom:30px`，間距維持約 `175.5px` 且 Logo 完整顯示，無 P0／P1／P2 殘留。
+- **final result: passed**
+- **地圖初始視野（`GoogleStoreMap` `focus` prop）**：**初始顯示整個台灣主島**（`fitBounds(TAIWAN_BOUNDS)`，尺寸未定前以 `TAIWAN_CENTER`/`zoom 7` 當 fallback），只放門市 pin、**不鎖定街道級**；使用者**點門市卡片**才 `setFocused(true)` → 地圖 `panTo`+`setZoom(16)` 聚焦該門市（`placeAt` 依 `focusRef` 決定是否平移縮放）。`StoreLocationSection` 以 `focused` state 控制，門市卡片 `onClick` 設 true。
 - **未動**：未渲染的 shadcn `ui/` 色票與 oklch chart tokens。
 - 先前文中「色系沿用原站／不改」之敘述，已由本次 CIS 對齊取代。
 
@@ -155,7 +179,7 @@ pnpm build
 | FloatingButtons | 底部固定導航列 | 底部固定導航列 | 右側 `fixed` 浮動欄（疊在內容上，不佔軌道） |
 | ProjectSection（10 種廚房風格輪播） | embla 拖曳、卡片較窄 | 拖曳捲動 | 拖曳、卡片 378×880、hover 伸縮露出橫式廚房圖 |
 | StoreLocationSection（門市查詢） | 上下堆疊（地圖+搜尋在上、列表在下） | 同左 | 左右並排（左 45% 地圖+搜尋、右列表） |
-| Footer（黑底頁尾） | logo + 版權 + 連結上下堆疊（`pb-28` 避開手機固定列） | 同左 | 一排：左文字連結、右 icon 連結 |
+| Footer（Antra 骨架簡化版） | 450px；連結／icons 上下配置、Logo 避開固定功能列 | 450px；連結與 icons 分列 | 760px；資訊區＋版權帶高度不變，延長下方舞台以完整顯示 Logo |
 
 ## 主視覺（Hero）— Antra Home Six 版型
 
@@ -182,11 +206,34 @@ pnpm build
 #### 品牌輪播 Design QA（2026-07-17）
 
 - **Source visual truth**：Antra Home 4 `https://demo2.themelexus.com/antra/home-4/` 的 Brand widget `61788d0`，並以本地主題 `homepage/home-4.xml`、`brand.php`、`elementor-classes.js` 交叉核對設定與運動方式。
-- **同尺寸對照圖**：模板 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/brand-reference-1512.png`；本站 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/brand-implementation-1512.png`。
-- **版面量測**：section 高度 62px；390／768／880／1024／1200／1367／1512px 均無水平 overflow。1512px 的 6 個 slide 寬 142px，起點為 `30 / 291.9 / 553.9 / 815.9 / 1077.9 / 1339.9`，與模板 `30 / 292 / 554 / 816 / 1078 / 1340` 的差異僅為瀏覽器次像素顯示。
+- **同尺寸對照圖**：模板 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/brand-reference-1512.png`；本站輪播本體 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/brand-implementation-1512.png`；增加外層留白後 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/brand-spacing-section-1512.png`。
+- **版面量測**：輪播 viewport 高度維持 62px；外層 section 手機 86px、768px 以上 94px。390／768／880／1024／1200／1367／1512px 均無水平 overflow。1512px 的 6 個 slide 寬 142px，起點為 `30 / 291.9 / 553.9 / 815.9 / 1077.9 / 1339.9`，與模板 `30 / 292 / 554 / 816 / 1078 / 1340` 的差異僅為瀏覽器次像素顯示。
 - **互動驗證**：可見瀏覽器實測 5000ms 後 transform 從 `translate3d(-2483px,0,0)` 前進到 `translate3d(-2759.91px,0,0)`，確認為一格一格 step carousel；loop、拖曳、hover 暫停與拖曳後停止 autoplay 由 Embla event wiring 保留，無箭頭、無 dots。
 - **刻意差異**：模板每張只有 logo；本站按「內容都不要改」保留中文與英文，因此單張內部視覺不是模板原 logo-only 組成。輪播高度、欄數、viewport padding、slide 寬、120px gap 與運動規則則已對齊。
 - **Console**：本次檢查無 console error；`pnpm build` 通過。
+
+final result: passed
+
+## Footer — Antra Home 6 骨架簡化版
+
+`Footer.tsx` 使用 Antra Home 6 Footer 主體 `6632dbf` 的三段式結構，但依需求刪除模板的訂閱區、地址、電話與多欄選單，只保留原有「網站地圖／隱私權政策」、Copyright、數位展板與 YouTube。
+
+- **模板素材**：使用模板原始 `1920×950` 背景圖，已本地化為 `public/footer-antra-bg.jpg`；外層套用模板同級的 75% 黑色遮罩。
+- **結構高度**：依驗收回饋取消模板 945px 的整段高度；手機／平板為 450px、桌面為 760px。上半資訊區固定 220px、版權帶固定 80px；桌面只增加版權帶下方的背景圖／Logo 舞台，黑色資訊帶不增高。內容最大寬 1410px，桌面左右 51px。
+- **簡化內容**：左側只放網站地圖與隱私權政策，右側只保留數位展板與 YouTube 圖示；中間版權帶逐字保留 `Copyright © Taiwan Sakura Corporation. All rights reserved`。
+- **Logo 下移**：`footer-sakura.svg` 不再壓住版權列，改為 absolute 沉在最底部；桌面最大寬 1320px、全斷點 `bottom:30px`、opacity 30%。桌面版權帶底緣至字標上緣約 175.5px，對齊使用者提供截圖的約 177px，且整張 Logo 完整顯示。
+- **原生 RWD**：手機左右 15px、連結與 icons 垂直分區；平板／桌面改為左右分列。Logo 全斷點使用 `bottom:30px`；手機留下約 50.6px 且避開底部固定浮動列，桌面則藉 760px 高度保留模板間距與完整 Logo。
+
+### Footer Design QA（2026-07-17）
+
+- **Source visual truth**：Antra Home 6 `https://demo2.themelexus.com/antra/home-6/` Footer 主體 `6632dbf`；模板截圖 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-template-home6-1512.png`。
+- **Implementation screenshots**：桌面 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-implementation-compact-1512.png`；手機 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-implementation-compact-390.png`；本站原始高度參考 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-before-1512.png`。
+- **Viewport / state**：1512×956、390×844，Footer 捲入可見區的穩定狀態；Header 與 FloatingButtons 是使用者指定保留的自訂功能，桌面截圖中的覆蓋不列為 Footer 差異。
+- **Full-view comparison**：同一張 1920×950 背景、75% 黑罩、資訊層、獨立版權帶與底部巨型字標保留模板骨架；總高依最新驗收為手機／平板 450px、桌面 760px，且桌面新增高度只屬於版權帶下方 Logo 舞台。模板多欄內容按需求刪除。
+- **Focused comparison**：桌面巨型 SAKURA Logo 維持最大寬 1320px並沉在底部，使用 `bottom:30px` 配合 760px 總高，完整顯示；手機 Logo `360×69.4` 同樣使用 `bottom:30px`，完整顯示在底部浮動列安全區上方。
+- **Fidelity surfaces**：沿用現有字型與原文案；色彩使用模板黑罩／半透明深色資訊層與 SAKURA 金字標；背景與 Logo 都是實際圖片素材，未用 CSS 造假；連結、Copyright、數位展板、YouTube 內容均未改。
+- **Responsive / console**：390px Footer 為 450px、1512px Footer 為 760px，且 `scrollWidth === clientWidth`；桌面與手機皆無 Logo／Copyright 裁切，console 無 error。`pnpm build` 通過。
+- **Comparison history**：第一輪精簡版的 Logo 與版權帶重疊 34.5px，列為 P2；第二輪間距 65.5px，仍短於來源；第三輪間距達 175.5px，但 `bottom:-170px` 造成 Logo 底部裁切；第四輪桌面舞台改為 760px、Logo 改 `bottom:30px`，最終同時保留模板間距與完整字標，上方 220px 資訊區與 80px 版權帶未增高。最終無可執行的 P0/P1/P2。
 
 final result: passed
 

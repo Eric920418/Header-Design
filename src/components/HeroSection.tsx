@@ -35,7 +35,7 @@ export function HeroSection() {
       >
         <Reveal anim="slideInLeft" speed="slow">
           <div className="mb-[20px] flex justify-center antra:justify-start">
-            <span className="inline-flex h-[30px] items-center gap-[10px] rounded-[24px] border border-[rgba(114,114,114,0.18)] py-[3px] pl-[10px] pr-[13px] font-display text-[12px] font-normal uppercase leading-[22px] tracking-[1px] text-white">
+            <span className="inline-flex h-[30px] items-center gap-[10px] rounded-[24px] border border-[rgba(159,159,164,0.18)] py-[3px] pl-[10px] pr-[13px] font-display text-[12px] font-normal uppercase leading-[22px] tracking-[1px] text-white">
               <Circle
                 aria-hidden="true"
                 className="h-[5px] w-[5px] shrink-0 fill-current stroke-0"
@@ -72,7 +72,7 @@ export function HeroSection() {
           anim="fadeIn"
           delayMs={900}
           speed="slow"
-          className="h-full w-full rounded-[100px] border border-[rgba(255,255,255,0.07)] bg-[rgba(92,92,92,0.46)] backdrop-blur-[58px]"
+          className="h-full w-full rounded-[100px] border border-[rgba(255,255,255,0.07)] bg-[rgba(89,88,93,0.46)] backdrop-blur-[58px]"
         >
           <a
             href="#"
@@ -93,7 +93,7 @@ export function HeroSection() {
             aria-hidden="true"
             className="block"
             style={{
-              backgroundImage: 'linear-gradient(180deg, #CAA05C 14.9%, rgba(153,153,153,0) 80.95%)',
+              backgroundImage: 'linear-gradient(180deg, #CAA05C 14.9%, rgba(159,159,164,0) 80.95%)',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               WebkitTextFillColor: 'transparent',

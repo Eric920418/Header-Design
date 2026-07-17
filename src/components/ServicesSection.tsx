@@ -3,7 +3,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { MarqueeBand } from './MarqueeBand';
 import { Reveal } from '../motion/Reveal';
 import { prefersReducedMotion } from '../motion/prefersReducedMotion';
-import { GOLD } from '../theme/cis'; // 品牌金 = CIS 466c #C9AA79（單一來源）
+import { GOLD } from '../theme/cis'; // Antra 模板金（單一來源）
 
 // 模板 home-6「Our Services」= antra-services-list style-3 服務輪播（照原始碼複刻）。
 // ⚠ 6 筆服務內容與圖皆為模板佔位（圖＝demo 伺服器 service-N.jpg，已實測可載入；文案＝模板 dummy-data）。
@@ -68,13 +68,13 @@ export function ServicesSection() {
           <div className="flex items-start pt-[46px]">
             <div className="w-[424px] shrink-0">
               {/* subtitle 膠囊（模板 elementor-title-span，同 Hero eyebrow 款；金點） */}
-              <span className="font-display inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(114,114,114,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#000000]">
+              <span className="font-display inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(159,159,164,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#1C1C1D]">
                 <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
                 Our Services
               </span>
             </div>
             {/* 大標（模板：Explore Our [金]Comprehensive Interior Design[/金] Services；金色→CIS） */}
-            <h2 className="font-display w-[769px] text-[60px] leading-[64px] capitalize text-[#000000]">
+            <h2 className="font-display w-[769px] text-[60px] leading-[64px] capitalize text-[#1C1C1D]">
               Explore Our <span style={{ color: GOLD }}>Comprehensive Interior Design</span> Services
             </h2>
           </div>
@@ -107,7 +107,7 @@ export function ServicesSection() {
                       <div className="pt-[30px] px-[20px] pb-[35px]">
                         {/* content-box：標題左 / 編號右（items-start + justify-between） */}
                         <div className="flex items-start justify-between gap-3">
-                          <h3 className="font-display text-[28px] leading-[35px] text-[#000000] line-clamp-2">
+                          <h3 className="font-display text-[28px] leading-[35px] text-[#1C1C1D] line-clamp-2">
                             {s.title}
                           </h3>
                           {/* 編號：30px 灰（模板 --color-border #e3e3e8） */}
@@ -116,7 +116,7 @@ export function ServicesSection() {
                           </span>
                         </div>
                         {/* 副文：3 行截斷、右縮 70、距標題 23（模板 margin 23px 70px 0 0） */}
-                        <p className="mt-[23px] mr-[70px] text-[#3E3A39] text-[16px] leading-[24px] line-clamp-3">
+                        <p className="mt-[23px] mr-[70px] text-[#59585D] text-[16px] leading-[24px] line-clamp-3">
                           {s.excerpt}
                         </p>
                       </div>
