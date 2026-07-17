@@ -84,7 +84,7 @@ export function HeroStyleMarquee() {
     <section
       aria-label="廚房風格"
       aria-roledescription="carousel"
-      className="group/brands h-[62px] overflow-hidden bg-[#f6f6f6] px-[15px] md:px-[30px]"
+      className="group/brands overflow-hidden bg-[#f6f6f6] px-[15px] py-3 md:px-[30px] md:py-4"
     >
       <div ref={emblaRef} className="h-[62px] overflow-hidden">
         <div className="flex h-[62px] touch-pan-y">
