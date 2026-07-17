@@ -1,5 +1,14 @@
 @custom-variant dark (&:is(.dark *));
 
+/* Antra 模板原生 icon font；What We Do 播放鈕使用 widget 63f4833 的 play-fill glyph。 */
+@font-face {
+  font-family: "antra-icon";
+  src: url("/fonts/antra-icon-1.0.12.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+}
+
 /* ── 原生 RWD 斷點（Tailwind 預設尺度）── */
 @theme {
   --breakpoint-sm: 40rem;
@@ -369,6 +378,97 @@ body {
   animation: gallery-card-in 0.6s ease both;
 }
 
+/* Antra Home 6 `antra-video-popup` widget 63f4833：
+   elementor.css 的 background-blur-filter-yes + radar-animation-yes 原值。 */
+.antra-template-video-popup {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 87px;
+  height: 87px;
+  margin-bottom: 30px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 50%;
+  color: #fff;
+  background: transparent;
+  cursor: pointer;
+}
+.antra-template-video-popup::before {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.36);
+  content: "";
+  opacity: 0.95;
+  transform: translateY(-50%);
+  backdrop-filter: blur(29px);
+}
+.antra-template-video-popup::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: 200%;
+  box-shadow: 0 0 0 1px #fff;
+  content: "";
+  pointer-events: none;
+  animation: antra-lexus-scale 2s infinite;
+}
+.antra-template-video-icon {
+  position: relative;
+  z-index: 99;
+  display: inline-block;
+  color: #fff;
+  font-family: "antra-icon";
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.antra-template-video-icon::before {
+  content: "\e022";
+}
+@keyframes antra-lexus-scale {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .antra-template-video-popup {
+    width: 77px;
+    height: 77px;
+    padding: 0;
+  }
+  .antra-template-video-icon {
+    font-size: 35px;
+  }
+}
+@media (min-width: 1200px) {
+  .antra-template-video-popup {
+    width: 137px;
+    height: 137px;
+    margin-bottom: 8px;
+    padding: 0;
+  }
+  .antra-template-video-icon {
+    font-size: 40px;
+  }
+}
+
 /* 英雄輪播底圖 Ken Burns：緩放大 + 往左平移（使用者要的「背景往左跑」）。
    時長＝單張停留時間、ease-out、fill both（收在終態，張與張切換用 opacity 交叉淡入遮住回跳）。
    scale>1 留出溢出邊，translateX 才不會露出空白。由 HeroSection 對 active 圖做 reflow 重啟（含輪回同一張）。 */
@@ -425,4 +525,5 @@ body {
 /* 減少動態：直接顯示、不動畫 */
 @media (prefers-reduced-motion: reduce) {
   .ev, .ev.is-visible { visibility: visible !important; animation: none !important; }
+  .antra-template-video-popup::after { animation: none !important; opacity: 0; }
 }

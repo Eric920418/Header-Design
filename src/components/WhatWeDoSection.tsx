@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Check, ArrowRight, Play } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { Reveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
 
@@ -100,25 +100,16 @@ export function WhatWeDoSection() {
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
             />
-            <button
-              type="button"
-              aria-label="播放影片"
-              className="absolute inset-0 flex items-center justify-center"
-            >
-              {/* 依模板 .elementor-video-popup：半透明白圓 rgba(255,255,255,0.36) + 白播放三角（非金） */}
-              <span
-                className="relative flex items-center justify-center w-20 h-20 rounded-full text-white shadow-lg backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
-                style={{ background: 'rgba(255,255,255,0.36)' }}
+            <div className="absolute inset-0 flex items-center justify-center">
+              {/* Home 6 widget 63f4833：原生玻璃膠囊、29px blur、lexus-scale 雷達圈與 play-fill 字型圖示。 */}
+              <button
+                type="button"
+                aria-label="播放影片"
+                className="antra-template-video-popup"
               >
-                {/* 脈動光圈（icon 動畫）— 同白色 */}
-                <span
-                  className="absolute inset-0 rounded-full animate-ping opacity-30"
-                  style={{ background: 'rgba(255,255,255,0.36)' }}
-                  aria-hidden
-                />
-                <Play className="relative w-7 h-7 translate-x-0.5" fill="currentColor" />
-              </span>
-            </button>
+                <span className="antra-template-video-icon" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </Reveal>
       </div>
