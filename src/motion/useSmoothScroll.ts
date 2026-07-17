@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * 全站平滑捲動阻尼（Lenis），對映 Antra 模板 config（duration 1.5 + expo ease-out）。
  * 用「原生捲動」模式：Lenis 平滑 window 捲動、不設 wrapper/content transform，
- * 故不碰 ScaleToFit 的 canvas scale，也不破壞 FloatingButtons 的 fixed。
+ * 不破壞 Header 與 FloatingButtons 的 fixed 定位。
  * 只在桌面(>992px)且非 reduced-motion 啟用；跨 992px / 偏好變更時自動啟停。
  */
 export function useSmoothScroll() {

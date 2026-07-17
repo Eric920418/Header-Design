@@ -29,31 +29,26 @@ pnpm build
 
 輸出目錄為 `build/`。
 
-## 全站等比例縮放（Scale-to-Fit）— 最重要的全域機制
+## 全站原生 RWD（已移除 Scale-to-Fit）
 
-**需求**：網站會被放到 100 寸大螢幕展示、也可能在很小的螢幕看，要求**整體一定等比例縮放、絕對不跑版/爆版**。
+整站不再把 1512px 桌面畫布用 `transform: scale()` 壓進小螢幕，而是依真實 viewport 重排。`ScaleToFit.tsx`、`useCanvasScale.ts` 已刪除，`App.tsx` 直接渲染內容；這也避免縮小桌面字造成手機可讀性與點擊區過小。
 
-**做法**：整站以 **1512px 當「設計畫布」**，用一層 `transform: scale(視窗寬 / 1512)` 把整張畫布等比縮放到視窗寬。大螢幕放大填滿、小螢幕整體縮小塞進畫面——**全程同一種版面，只放大/縮小，永不重排、永不橫向溢出**。
-
-- **`src/components/ScaleToFit.tsx`**（外殼）：固定 1512px 寬畫布 + `transform: scale`，`transform-origin: top left`；用 `ResizeObserver` 把外層高度同步為「畫布自然高 × scale」（transform 不改 layout box，否則底部留白）。`useLayoutEffect` 在首次 paint 前套好、無閃爍。`src/App.tsx` 用它包住整個 App。
-- **共用 scale hook `src/components/useCanvasScale.ts`**：單一來源 `DESIGN_W = 1512` + 「`resize` 時 `scale(innerWidth/1512)`」邏輯。`ScaleToFit` 共用 `DESIGN_W`（自有 effect 因還要同步高度）；**畫布外的 fixed 層（StickyHeader / FloatingButtons）用 `useCanvasScale(origin)` 各自補回等比縮放**——因為畫布的 `transform` 會讓內部 `fixed` 相對畫布、無法真正釘視窗，故這兩者必須抽到畫布外、再自行 scale 保持與全站同比例。
-- **設計基準＝1512（＝與模板 1:1 對位點）**：全站在 `DESIGN_W`(=1512) 上量測製作。**任一元素螢幕實際大小 = CSS 值 × (innerWidth/1512)**，只有 `innerWidth=1512` 時 scale=1、與模板 demo「同 px 同尺寸」；窄於 1512 整站等比縮小、寬於則放大。⚠ **DevTools 的 `font-size` 欄位不含祖先 `transform:scale`**——會顯示 CSS 原始值（如 100px），但眼睛看到的是 ×scale 後的大小；想看真實渲染尺寸要看元素 hover 的 `寬×高` 標籤或 `getBoundingClientRect()`。**與模板 demo 目視比對時，兩邊瀏覽器縮放（Cmd/Ctrl 0 歸零）＋視窗寬需一致，否則會誤判「大小不同」**（實測字型/字級本身相同，差異多來自 zoom 或視窗寬）。
-- **`FloatingButtons`（右側浮動鈕）也等比縮放**：三層結構＝定位層（`fixed inset-y-0 right-0` 滿高右側條 + `items-end pb-[36px]` 底部對齊 + `pointer-events-none`）→ scaler（`useCanvasScale('right bottom')`）→ 按鈕欄。`right bottom` origin 使縮放時右下角恆貼視窗右下（對齊官網 `.l-quick-links` 的 `right-0 bottom-9`）；`pointer-events-auto` 收回內層可點。詳見下「右側側邊欄」段。
-- **凍結斷點到桌面版**（`globals.css` 的 `@theme`）：把 Tailwind `--breakpoint-sm~2xl` 設成極小遞增值（`1px`~`5px`），使 `sm:/md:/lg:` 變體**全部無條件恆生效**（編譯出的 utility 不帶 media query）→ 全站在**任何 viewport 都渲染桌面版外觀**（不受真實 viewport 影響）。這是關鍵：否則手機上 media query 會渲染手機版再被縮放，變「縮小的手機版」。
-- **配套**：`HeroSection` 由 `height:100dvh` 改**固定 px**（`dvh`/`vh` 不會被 scale 等比帶動）；`App` 根移除 `min-h-screen`/`pb-14`；`body { overflow-x: hidden }`；still-used 的 `--store-map-h`/`--hero-brand-h` 釘死桌面值。**已清除殘留的死 `dvh` 變數** `--hero-h`/`--hero-ai-font`/`--hero-svg-h`/`--hero-play-size`（`globals.css` 三斷點區塊，rendered code 未引用，是唯一殘留的 viewport 單位）。
-- **副作用**：凍結成桌面後**已無手機版概念**——`FloatingButtons` 的手機底部固定列（`flex lg:hidden`）因 `lg:` 恆生效而 `lg:hidden` **永不顯示**；桌面右側浮欄（`hidden lg:flex`）則**恆顯示並隨全站等比縮放**。所有內容（含文字）在小螢幕一起等比變小（可雙指放大）。
-- **驗證**：拖動視窗寬 / DevTools 模擬 375~3840px，版面完全不重排、無水平捲軸；模擬 605px（scale 0.4）實測仍渲染完整桌面版、`scrollWidth === innerWidth`。
+- **斷點**：`globals.css` 恢復 Tailwind 標準 `sm 640 / md 768 / lg 1024 / xl 1280 / 2xl 1536`，並增加只供模板 Hero 使用的 `antra 1200` 斷點；元件原有 `md:`、`lg:` 規則重新生效。
+- **Header**：`StickyHeader` 是真正的 `position:fixed; width:100%`，不再另套 canvas scale；`App` 保留 72px spacer。
+- **FloatingButtons**：`lg+` 保留右側 fixed 浮動欄；`<lg` 改用原本就存在的手機底部三按鈕列。頁面根在手機保留 65px bottom padding，避免 Footer 被覆蓋。
+- **Hero**：直接對應模板 390／768／1024／1200+ 的原生高度、字級、對齊與座標；1512 仍是桌面像素級比對基準，不再是全站縮放畫布。
+- **其他 sections**：沿用既有 Tailwind 響應式 class 與 CSS 變數；StoreLocation 的資料、地圖、篩選與互動未更動。
 
 ## 捲動動態（Lenis 阻尼 + 出場動畫 + GSAP 視差）— 複刻 Antra 模板
 
 模組集中在 **`src/motion/`**，三種效果皆對映 Antra 模板實測值，且都受 `prefers-reduced-motion` 保護。套件（pnpm）：`lenis`、`gsap`。
 
-- **平滑捲動阻尼（Lenis）** — `src/motion/{useSmoothScroll.ts, ScrollMotionProvider.tsx}`。對映模板 config：`duration: 1.5` + expo ease-out `t=>Math.min(1,1.001-2**(-10*t))`。用 **原生捲動模式**（不設 wrapper/content transform），故不碰 `ScaleToFit` 的 canvas `scale`、也不破壞 `FloatingButtons` 的 `fixed`。只在 **桌面（>992px）且非 reduced-motion** 啟用，跨 992px / 偏好變更自動啟停。GSAP 與 Lenis 共用單一 rAF（`gsap.ticker`），內容高度變動時自建 `ResizeObserver` → `lenis.resize()` + `ScrollTrigger.refresh()`。`ScrollMotionProvider` 掛在 `ScaleToFit` **外層**。
+- **平滑捲動阻尼（Lenis）** — `src/motion/{useSmoothScroll.ts, ScrollMotionProvider.tsx}`。對映模板 config：`duration: 1.5` + expo ease-out `t=>Math.min(1,1.001-2**(-10*t))`。用原生 window 捲動、不設 wrapper/content transform，因此不破壞 Header／FloatingButtons 的 fixed。只在 **桌面（>992px）且非 reduced-motion** 啟用。
 - **出場動畫（IntersectionObserver + CSS，完全比照 Antra 模板）** — `src/motion/Reveal.tsx` + `globals.css` 的 `.ev`。逐 section 用模板實際的 Elementor 進場動畫（keyframe 逐字取自 demo `styleSheets`；`.animated` = `1.25s` / fill `both`；hidden state = `visibility:hidden` 同 `.elementor-invisible`）。機制：`.ev { visibility:hidden }`、IntersectionObserver 進場加 `.is-visible`、`animation-name` 由 `data-ev` 決定（進場一次不重播、reduced-motion 直接顯示）。
   - **API**：`<Reveal anim="slideInLeft" delayMs={300} speed="slow">` 或 `useReveal(ref)` 掛既有元素（配 `className="ev"` + `data-ev` + inline `animationDelay`）。`anim` 支援 `slideInUp/Down/Left/Right`、`fadeIn/Up/Down`（Elementor 核心 **100% 位移**）+ `opalMoveUp/…/opalScaleUp`（主題 100px 版，備用）。`speed` 對應 Elementor `animation_duration` 控制項：`normal`=1.25s（預設）、`slow`=2s、`fast`=0.75s（class `.ev-slow`/`.ev-fast`）。
   - **逐 section 對映（實測 demo）**：**Hero（home-6 逐項對位）＝容器 section `fadeInDown`(normal 1.25s) 整區落下＋標題/副標 `slideInLeft`(slow 2s) 從左滑入＋Start 圓鈕 `fadeIn`(slow, 900) ＋浮水印 `fadeInUp`(slow, 900)**——容器落下與內層左滑**巢狀複合**成斜向動態（非單一由下往上），延遲 900 層錯落；Project section `slideInUp`；Pricing 標題 `slideInUp` + 三卡 `slideInUp`(0/300/500)；Gallery 標題 `slideInUp`(200) + 右卡欄 `slideInUp`(400)；WhatWeDo 左 `slideInLeft` + 右影片 `slideInRight`(300)；StoreLocation `slideInUp`；**Footer 無進場**（模板亦無）。
   - **鐵則**：`.ev` 用 `transform`（fill both 收在 none），**勿套在已佔 transform 的元素**（Embla 軌道、`.project-parallax-img`/`.gallery-bg`/`.wwd-blueprint` 視差、`animate-gallery-card`、hover-scale/rotate）→ 一律包外層 wrapper。`slideInLeft/Right` 的 100% 位移靠 section `overflow-hidden` 裁切避免水平捲軸。
-- **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。**不用 `pin`**：pin 的 `position:fixed`+pin-spacer 在 `transform:scale()` 祖先下量測錯誤，改用 `yPercent` scrub（`scrub:0.5`）位移達到同觀感。目標：GallerySection 全出血背景 `.gallery-bg`（scale 1.12）、WhatWeDo 裝飾 `.wwd-blueprint`。只寫內層 transform，永不碰 `canvasRef`。**⚠ ProjectSection 的照片視差已移除**：視差給每張 `.project-parallax-img` 獨立 transform→GPU 獨立圖層，Embla loop 輪播移動時相鄰圖層在環繞接縫對不齊而露縫（症狀：僅環繞接縫後的照片、移動中露縫、到吸附點才合併）。移除後照片與軌道同層、無縫（`ProjectSection.tsx` 不再呼叫 `useParallax`；`.project-parallax-img` class 保留但無 transform）。
+- **捲動視差（GSAP ScrollTrigger，純 scrub 不 pin）** — `src/motion/useParallax.ts`。用 `yPercent` scrub（`scrub:0.5`）位移；目標為 GallerySection 全出血背景與 WhatWeDo 裝飾。只寫內層 transform。ProjectSection 照片視差維持移除，避免 Embla loop 的合成接縫。
 
 ## 色彩規範（SAKURA KITCHEN CIS）— 全站已對齊
 
@@ -132,20 +127,18 @@ pnpm build
 | Gallery 案例卡 | `basis-[450px]` × `aspect-[45/61]` = 450×610、間距 30 |
 | 卡片圓角 | `rounded-3xl`(24px) |
 
-- 因斷點已凍結（Scale-to-Fit），本次校正把被改到的 className **寫死為單一桌面值**（消掉 `md:/lg:` 階梯）；未實測的細節（專案卡膠囊、門市卡內距等）**維持原樣、不捏造**。
-- Header／Footer／Hero 為自訂設計（SAKURA mockup、使用者提供之設計），不在模板還原範圍；僅版心同步 1410。
+- 桌面精準值仍以 1512px 為比對點；手機／平板由各元件的 `md:/lg:` 規則重排，不再縮小桌面畫布。
+- Header／FloatingButtons／Footer 維持 SAKURA 自訂設計；Hero 已改為 Antra Home 6 原版視覺。StoreLocation 是自訂功能區，不列入模板還原。
 
-## 響應式設計（已凍結為單一桌面版）
+## 響應式設計（原生重排）
 
-> ⚠️ 導入上述 Scale-to-Fit 後，下表的三斷點**已被凍結**：斷點值改為極小值使 `lg:` 恆勝出，全站一律套**桌面版**再等比縮放。以下保留為歷史/元件內 `md:/lg:` 前綴的原始語意參考（前綴未移除，凍結後 `lg:` 自然勝出）。
-
-原採 **三斷點** 策略，透過 CSS Custom Properties + 媒體查詢實現：
+採真實斷點策略，透過 Tailwind responsive utilities 與 CSS Custom Properties 實現：
 
 | 層級 | 範圍 | 策略 |
 |------|------|------|
 | 手機 | <768px | 獨立的較小固定值（CSS 變數默認值） |
 | 平板 | 768px - 1023px | `min()` + `dvh` 流動縮放 |
-| 桌面 | ≥1024px | 原始像素值，視覺零改動 |
+| 桌面 | ≥1024px | 桌面構圖；Hero 在 ≥1200px 切到模板完整左對齊版 |
 
 ### 技術方案
 
@@ -157,7 +150,8 @@ pnpm build
 | 組件 | 手機版 | 平板版 | 桌面版 |
 |------|--------|--------|--------|
 | Header（巨型選單） | logo + 搜尋 + 漢堡；漢堡開 accordion 抽屜 | 同左 | 中央 logo + 左右導覽 + hover 下拉 + 搜尋展開 |
-| HeroSection（主視覺） | 滿版 Hero + 品牌帶，標題縮小 | 滿版 Hero + 品牌帶 | 滿版 Hero + 品牌帶 |
+| HeroSection（主視覺） | Antra 390 置中版 | Antra 768 置中版 | 1024 置中大字；1200+ 原版左對齊 |
+| HeroStyleMarquee | 62px 高、1 欄 step carousel | 768=3 欄、880=4 欄 | 1200=5 欄、1367+=6 欄；gap 120px |
 | FloatingButtons | 底部固定導航列 | 底部固定導航列 | 右側 `fixed` 浮動欄（疊在內容上，不佔軌道） |
 | ProjectSection（10 種廚房風格輪播） | embla 拖曳、卡片較窄 | 拖曳捲動 | 拖曳、卡片 378×880、hover 伸縮露出橫式廚房圖 |
 | StoreLocationSection（門市查詢） | 上下堆疊（地圖+搜尋在上、列表在下） | 同左 | 左右並排（左 45% 地圖+搜尋、右列表） |
@@ -165,18 +159,38 @@ pnpm build
 
 ## 主視覺（Hero）— Antra Home Six 版型
 
-`HeroSection.tsx` 的 Hero 採用 Antra 模板 Home Six 的版型（金色已對齊 **CIS 466c `#C9AA79`**；字型已引入模板 **Cal Sans/Golos Text**，見上「字型系統」）。
+`HeroSection.tsx` 還原 Antra Home 6 的 `ee91316` Hero，使用模板原圖 `public/hero-antra-home-6.jpg` 與模板色票；同時把使用者原有的「品牌系列」左側伸縮抽屜以功能層疊回 Hero。Header、FloatingButtons、StoreLocation 的內容與互動未更動。
 
-- **尺寸/位置零誤差對齊 Home Six（@1512 實測，逐項 0px）**：section 高 **958px**；內容左緣 **30**、eyebrow 上緣 **244**；eyebrow **15px / letter-spacing 1px / uppercase / 白 + 金點**；大標 **100 / 行高 110 / capitalize**（@T300，白+金；Cal Sans/400，已移除原 `-1px` letter-spacing 對齊模板）；副標 **18 / 24 / 字重 500 / 寬 522**（@T550，Golos Text）；左下圓鈕 **120×120 / left 30 / 底 82**（`rgba(92,92,92,.46)` + `1px rgba(255,255,255,.07)`，內含白字）；浮水印 **320px @ left 426 / top 725**（Cal Sans/400）。字型＝模板 **Cal Sans/Golos Text**（見上「字型系統」）、金 → CIS，其餘尺寸/位置照抄。
-- **與模板的唯一差**：模板 header 透明疊在 hero 上（hero 由畫面頂 0 起）；本站為**實心金色 sticky header（72px）**，故 hero 由 72px 起——**hero 內部排版與模板 0 誤差**，整體在頁面上比模板低 72px。
-- **滿寬**：`FloatingButtons` 桌面版改為 `fixed` 浮動欄、不再佔用 75px 軌道，主內容因此滿寬。
-- **`FloatingButtons` 右側側邊欄（對齊官網 `sakura-kitchenlife.com.tw` 的 `.l-quick-links`，實測）**：**3 顆純圖示按鈕**（無文字；VR賞屋已依使用者移除）＝金頂鈕「加盟」(quick-link-4) + 灰底群組「到府丈量／客服」(quick-link-2/3)，群組項間白色 `h-px bg-white/50` 分隔線。尺寸照官網：**圖 `w-[58px] h-[58px]`**、`p-2`(8px)、金頂鈕 `mb-[20px]`、鈕 74×74。**顏色**：金頂鈕＝**CIS 金 `#C9AA79`**（依使用者指定改回，非官網 `#B79258`）、灰群組 `#737373`（官網值）、白分隔線 `white/50`。**圖示直接引用官網資產** `https://www.sakura-kitchenlife.com.tw/images/quick-link-{1..4}.svg`（已實測可載入；要離線化可下載到 `public/floating-icons/`）。連結指向官網對應頁（客服 `icare.sakura.com.tw` 開新分頁）。位置底部貼右（`items-end pb-[36px]`、scaler origin `right bottom`）。手機底列 `flex lg:hidden` 因凍結斷點恆隱藏（保留為一致性）。
-- **構成**：全出血深色大圖 + 左對齊金點 eyebrow + 雙色大標題（白/金交錯）+ 副標 + 左下圓形按鈕（`Start Project`）+ 底部金色浮水印（`SAKURA`，對位模板 T725）——**依模板 Home Six「Interior」浮水印實測：金漸層 `linear-gradient(#C9AA79 14.9%, transparent 80.95%)`（金頂→透明底）+ `background-clip:text` + `opacity 0.64`**（比舊版 `gold @0.14` 深約 4.5×，才「跟模板一樣深」）。**英文文案＝Antra 模板 Home Six 逐字**（見「英文文案」段）：eyebrow `Trusted Design Partner`、大標 `Find Your ⟨Inspired Interior⟩ Design`（金字 Inspired Interior）、副標 `Transform your vision into reality…sustainability.`。
-- **進場動畫（比照模板 home-6 逐項）**：容器 section `fadeInDown`(1.25s) 整區落下＋標題/副標 `slideInLeft`(slow 2s) 從左滑入＋Start 圓鈕 `fadeIn`(slow, 900)＋浮水印 `fadeInUp`(slow, 900)——容器落下與內層左滑巢狀複合成斜向動態（非單一由下往上）。詳見上「出場動畫」段。
-- **英雄輪播（SAKURA 加值，⚠ 模板 home-6 的 hero 本身無輪播——經 dummy-data XML／線上 demo DOM／底圖三重查證，全頁 13 個 Swiper 全在下方其他區塊）**：`SLIDES`（**3 張**，底圖 Unsplash 外連＋各自 eyebrow/大標/副標，皆 SAKURA **佔位**待替換）。**底圖往左跑**＝`@keyframes hero-kenburns`（scale 1.06→1.16 + `translateX 0→-4%`，時長 `SLIDE_MS`=6s、ease-out、fill both；active 圖交叉淡入 `transition-opacity 1s`）；**內文逐張切換**＝各張疊放、active 者 `relative`+`opacity-100 translate-x-0`、其餘 `absolute`+`opacity-0 -translate-x-6`（`transition-all 700`）。**自動輪播** `setInterval` 每 6s 前進、hover 英雄區 `pausedRef` 暫停；右下**指示點**（active 金色長條 30px、可點擊跳張）。**Ken Burns 重啟關鍵**：切張時對 active `<img>` 做 `animation='none'`→讀 `offsetWidth` 強制回流→再設回，否則輪回同一張時 inline animation 字串不變、React 不重播（會停在放大終態）。`reduced-motion`：不輪播、不 Ken Burns，靜態顯示第 0 張。（⚠ 自動化隱藏分頁 transition 被凍結，交叉淡入/往左跑/滑入須在可見瀏覽器驗證。）
-- **左側「品牌系列」伸縮抽屜（桌面）**：左緣一個玻璃把手（`ChevronRight` + 直排「品牌系列」，用 `.writing-vertical`），點擊 `open` state 切換。抽屜面板 `w-0 ↔ w-[190px]` 伸縮淡入，列出**品牌系列 8 個中文名**（`SERIES`：巧域／潮派／童樂／君璽／臻美／大廚／鄉村／閣樂廚房；Basic+ / AI kitchen 無中文故略），hover 顯示金色左邊條 + 金字。**「不蓋過主視覺」的做法**：展開時把**內容層（標題/副標，`translateX(200px)`）、左下圓鈕（同 200px）、底部浮水印（`translateX(250px)`）**一起右推、讓出左側空間（皆 `transition 500ms`）。收合時只剩把手在左緣、不佔畫面。**手機不顯示**此抽屜（`hidden lg:flex`），故不觸發位移。
-- **品牌帶（採 Antra Home Four 版型）**：Hero 下方淺色背景（`#f6f6f6`）+ **marquee 輪播**（同模板 `elementor-brand` 動態）。**6 項**（`STYLE_TAGS`），每項 = **左：對應的模板品牌「icon」**（只留圖示、**去掉 SVG 原生的品牌英文字**；`img h-[44px]`、`opacity-70` hover→100）+ **右：中文（粗體 15px）／英文（13px）兩行**（`flex items-center gap-4`，icon 左字右）。**間距／分隔線比照模板源碼**：實測模板 Home Four brand 為 6 欄、item 間距 ~120px、logo 高 58；故每項 `px-14`（左右各 56px → 相鄰內容間距 112px），並依源碼 `elementor.css` `.slick-slide:before`（1px `#ebebeb`）在每項加 `border-r`，色改用 CIS 暖線 `#E3DED7`（避冷灰），分隔線落在兩項間距正中。**每項用不同 icon**（Home Four 6 個 `elementor-brand`，實測依 viewBox 寬度配對、對照使用者 Image #40）：現代風→`5.svg`(ARCHITECT)、輕奢風→`6.svg`(BUILDING圓)、北歐風→`4.svg`(BUILDING2)、工業風→`3.svg`(REAL ESTATE)、美式風→`1.svg`(TREND)、鄉村風→`2.svg`(INTERIOR)。`public/brand-logos/1–6.svg` = 6 個 icon-only SVG，統一 `#3E3A39`：**用瀏覽器 `getBBox` 把每個 wordmark 的 icon 路徑與文字路徑依 x 座標間隙分群、只保留 icon 群、重算 viewBox**（原 wordmark 版已被覆寫）。`icon.svg` 為更早的單一建築圖示（已停用）。**輪播**：`[...STYLE_TAGS, ...STYLE_TAGS]` 重複兩組 + `.animate-marquee`（`marquee` keyframe，40s，`-50%` 無縫循環）+ `group-hover:[animation-play-state:paused]`。高度沿用 `--hero-brand-h`。
-- **Gallery 已移除**：原本 Hero 下方的圖庫展示（大圖 + 縮圖）已拿掉，改由 `ProjectSection`（專案輪播）取代，見下方 Section 2。
+- **1512px 真值**：section `1512×952`；原圖 `1920×950`、`cover center`；黑色 overlay opacity `0.64`；內容 `left:30 / top:244`。
+- **文字**：eyebrow `12/22`、letter-spacing `1px`、實測寬約 204px，外層用 flex 消除 inline baseline 的 0.5px 偏移；h1 `100/110`、letter-spacing `-1px`、寬 850；副文 `18/24/500`、寬 522。模板主金使用原值 `#CAA05C`，不再套 SAKURA CIS `#C9AA79`。
+- **下半部**：分隔線 `top:691`；Start Project 圓鈕 `120×120 / left:30 / top:750`、`backdrop-filter:blur(58px)`；`Interior` 浮水印以 block line-box 固定為 `320/240 / left:426 / top:719 / opacity:.64`。
+- **模板動態**：Hero `fadeInDown 1.25s`、標題 `slideInLeft 2s`、圓鈕 `fadeIn 2s delay 900ms`、浮水印 `fadeInUp 2s delay 900ms`。`App.tsx` 已移除重複的第二層 Hero 動畫。
+- **原生 RWD 實測值**：390=`587px` 高、title `30/35`、左右 15px；768=`489px` 高、title `50/60`、左右 30px；1024=`719px` 高、title `100/110` 置中；1200+=`952px` 高、完整桌面座標。分隔線、圓鈕與浮水印也各自對應模板斷點（浮水印右距：390=14px、768/1024=29px、桌面=4.83vw）。
+- **自訂功能保留**：桌面左側「品牌系列」把手可展開 190px 選單，展開時沿用原行為把 Hero 文字、圓鈕與浮水印右推；Hero 下方 `HeroStyleMarquee.tsx` 是獨立品牌輪播 section，內容使用指定的六組中英文與 `/brand-logos/*.svg`。
+
+### Hero 下方品牌輪播 — Antra Home 4 `antra-brand`
+
+- **模板真值**：來源 `home-4.xml` Brand container `4c0bad9`／widget `61788d0`。輪播 viewport 左右 padding：手機 15px、其餘 30px；單列高 62px（模板 SVG 58px + link padding 2px）；項間固定 120px。
+- **響應式欄數**：390=1、768=3、880=4、1200=5、1367+=6；slide 寬度使用模板公式 `(viewport - gap × (columns - 1)) / columns`，1512px 時為 142px，起點依序 `30 / 292 / 554 / 816 / 1078 / 1340`。
+- **輪播方式**：由原本 40 秒連續 marquee 改為模板的 step carousel：loop、可拖曳／觸控、500ms 級轉場、每 5000ms 前進一格、hover 暫停、使用者開始拖曳後停止 autoplay；無箭頭、無 dots。`prefers-reduced-motion` 下不自動播放。
+- **內容不改**：仍顯示原六組中文、英文與 logo；因模板原件只放 logo，本站額外文字保留在同一個 62px slide 內，不為追求外觀而刪內容。為了讓 6 個原始項目在桌面也能 loop，DOM 建立三組；後兩組 `aria-hidden` 且不進入 tab order。
+- **外部位置**：依先前需求保持緊貼 Hero，不套用 Home 4 專屬 Hero 的 `margin-top`（該間距隨 Home 4 Slider 高度而變，不適用目前 Home 6 Hero）；carousel 本身的高度、padding、slide 尺寸與 gap 依模板。
+- **仍移除的非模板加料**：三張 Unsplash 輪播、Ken Burns、右下輪播指示器；使用者本輪沒有要求恢復。
+- **建置修正**：修正 `globals.css` 內會提前結束註解的 `*/` 字樣，避免 Tailwind CSS 最佳化階段出現解析警告；不改變任何視覺樣式。
+
+### Hero Design QA（2026-07-17）
+
+- **Source visual truth**：Antra Home 6 `https://demo2.themelexus.com/antra/home-6/`，並以本地主題 `dummy-data/homepage/home-6.xml` 的 section `ee91316` 交叉核對。
+- **Reference screenshot**：`/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/hero-reference-1512.png`。
+- **Implementation screenshots**：桌面 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/hero-rwd-1512.png`；手機 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/hero-rwd-390.png`。
+- **Viewport / state**：390×844、768×844、1024×844、1512×956；動畫完成後的穩定狀態。本站自訂 Header／FloatingButtons／品牌系列抽屜按需求保留，模板差異判定時列為明確例外。
+- **Full-view comparison**：背景原圖、中心裁切、黑色 64% overlay、952px section 高、分隔線、圓鈕與浮水印構圖一致；Hero 本身無 P0/P1/P2 差異。
+- **Focused comparison**：eyebrow `203.9×30 @ 30,244`、h1 `850×220 @ 30,294`、副文 `522×72 @ 30,544`、圓鈕 `120×120 @ 30,750`、浮水印 `1012.8×240 @ 426,719`，皆與原版 computed metrics 一致。
+- **Fidelity surfaces**：Cal Sans/Golos Text、字重/字距/行高、間距、模板金 `#CAA05C`、原圖品質、英文文案均通過；原生 390／768／1024／1512 metrics 已量測並寫入 responsive rules。
+- **Comparison history**：第一輪修正錯圖、錯 overlay、錯高度、錯字距與非模板加料；第二輪修正 eyebrow 寬度與 0.5px baseline、浮水印 line-box；最終同尺寸重新擷取後未發現可執行的 P0/P1/P2。
+- **Console / interaction**：Hero 無 console error；各斷點 `scrollWidth === innerWidth`。桌面品牌系列抽屜實測 `0→190px`、`aria-expanded` 正確切換、展開後 heading `x:30→230`；390px Header 漢堡抽屜可正常開啟。跑馬燈為 12 項（6+6）無縫循環，重複組不進入 tab order。僅觀察到未改動的 Google Maps 載入方式與舊 Marker API 警告。
+
+final result: passed
 
 ## Section 2（專案輪播）— Antra Home Six 精準複刻
 
@@ -246,7 +260,6 @@ pnpm build
 `Header.tsx`：單一金色 bar、**中央 logo**（`public/sakura-logo.png`，白色雙行「SAKURA／KITCHEN」含紅標記，`img h-8`；桌面/手機共用）、左右各一組導覽，自訂 Tailwind 實作（未用 Radix，與全站一致）。
 
 - **背景／字型／字級對齊參考站 `sakura-kitchenlife.com.tw`**（實測 `.l-header`／`.l-nav__item`，常數定義於 `Header.tsx` 頂部）：背景漸層 `linear-gradient(90deg, #B79258 20%, #D2B587)`（`HEADER_GRADIENT`）；字型堆疊 `"Noto Sans TC","PingFang TC","Microsoft JhengHei",微軟正黑體`（`HEADER_FONT`，套在 `<header>` 上向下繼承，**未外連 Google Fonts**、Mac 上 fallback 至 PingFang TC）；導覽字級 `text-[15px]`、weight 400、字色純白。
-- **捲動變透明 + 前景轉金 + hover 復原（`Header.tsx` scrolled/hovered state）**：頁面最頂端（未捲動）顯示金色漸層 + 白字；**往下捲動背景漸層淡出變透明，同時前景 nav 文字/下拉箭頭/搜尋圖示/分隔線全轉 CIS 金 `#C9AA79`**（`navCls`/`iconCls`/`dividerCls`；lucide 圖示走 `currentColor` 自動連動）；**變透明的門檻＝`scrollY > 72×(innerWidth/DESIGN_W)`**（＝hero 上方 72px spacer 的螢幕高），**非** `scrollY>0`——否則 header 一透明、後方那段還沒退場的白色 spacer 會從透明 header 露出（醜白條）。只有捲到 hero 補進 header 正後方才轉透明；`resize` 一併重算門檻。**滑鼠碰到 header → 背景淡回、字轉回白**，離開又透明轉金。做法：漸層抽成獨立層 `absolute inset-0` 用 `opacity` 過渡（`duration-300`；漸層無法用 `transition:background` 補間），條件 `bgVisible = !scrolled || hovered`。因「金字態＝滑鼠不在 header 上」，白字的 hover 效果在金字態不會被觸發。mega 面板是背景層 DOM 子孫，故 hover 到展開的 mega 面板時 `onMouseLeave` 不誤觸發、背景保持顯示。**⚠ 中央 logo 是白色 PNG 圖（非文字），透明態不會變金**，若要 logo 也隨態變色需另備金色 logo 素材或以 mask 上色（會失去紅標記）。
 - **間距對齊參考站**：bar 容器改 `px-5 lg:px-12`（20/48px）且**滿寬**（移除原 `max-w-7xl mx-auto`），對齊參考站左右邊距 48px；搜尋展開列同步 `px-5 lg:px-12`。導覽項文字間距 28px（既有 `px-3`+`gap-1` 已等於 28px，與參考站一致）。bar 高度仍維持 `72px`（未動，因 mega-menu 以 `top-[72px]` 定位）。**注意**：參考站為「logo 靠左＋導覽靠右」的 space-between 版型，本專案為「導覽左半｜中央 logo｜導覽右半」置中版型（README 明載之自訂設計），故僅間距數值對齊，整體佈局結構刻意不同。
 
 - **導覽資料**：`NAV_LEFT` / `NAV_RIGHT` config 陣列，每項 `{ label, children?, href?, external?, mega?, megaCatalog? }`。有 `mega` → 圖片式大選單；有 `children` → 文字下拉；只有 `href` → 連結（`external` 用 `target="_blank"`，如櫻花集團連 sakura.com.tw）。
@@ -254,7 +267,7 @@ pnpm build
 - **廚房產品 → 圖片式 mega-menu（仿 Antra Home 選單）**：hover 從 header 下方**淡入展開滿寬白色面板**（`opacity`+`visibility` 300ms；面板 `absolute left-0 right-0 top-[72px]`，定位參考 `header`，故滿寬）。內含**三張品牌大圖卡**（SAKURA 廚電 / SVAGO / TEKA，`public/products/*.jpg`，來源 `影像/廚房產品`）：`aspect-[4/3]` 圓角 + 底部漸層 + 白字標籤，卡片 hover 圖片放大、標籤轉金；面板底部 `廚房商品型錄 →` 文字連結。觸發鈕撐滿 `h-[72px]` 讓面板無縫貼合、hover 不中斷。手機版則把三品牌 + 型錄當 accordion 子項展開。
 - **手機（`< lg`）**：logo + 🔍 + 漢堡；漢堡開白色抽屜，主項點擊 **accordion 展開**子選單（`useState expanded`），純連結直接點。
 - **搜尋**：🔍 切換 `openSearch`，在 bar 下方展開白色圓角搜尋輸入框（前端介面，功能待接）。
-- **固定頁首（sticky）**：因整站被 `ScaleToFit` 的 `transform: scale()` 包住、頁面用 body 原生捲動，畫布內用 `sticky`/`fixed` 都無法真正釘住視窗頂（transform 祖先讓 `fixed` 相對畫布、`overflow:hidden` 祖先讓 `sticky` 失效）。解法：`StickyHeader.tsx` 把 `<Header>` 抽到 `ScaleToFit` **畫布外**、自成 `position: fixed` 頂層，並用**同一 scale（`innerWidth/1512`）等比縮放**維持比例一致；`App.tsx` 在畫布內容頂端放 `HEADER_H`(72px) spacer 避免被蓋住。子項 href 為佔位 `#`；設計圖「SUKURA」視為 SAKURA 錯字已更正。
+- **固定頁首（sticky）**：`StickyHeader.tsx` 直接以 `position:fixed; inset-inline:0; top:0` 渲染原生滿寬 Header，不再套縮放；`App.tsx` 保留 `HEADER_H`(72px) spacer。手機漢堡／accordion 抽屜與桌面 mega-menu 均保留。
 
 ## 頁尾（Footer）— 巨型 SAKURA 浮水印（灰底）+ 模板暗色版權列
 

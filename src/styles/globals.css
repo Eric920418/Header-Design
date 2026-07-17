@@ -1,15 +1,13 @@
 @custom-variant dark (&:is(.dark *));
 
-/* ── 全站等比例縮放：凍結所有 Tailwind 斷點成極小遞增值 ──
-   讓每個 sm:/md:/lg:/xl:/2xl: 變體「永遠命中」，全站一律渲染桌面版外觀
-   （不受真實 viewport 影響）；再由 ScaleToFit 把 1512px 畫布等比縮放到視窗寬。
-   遞增值讓 lg: 蓋過 md:、桌面值勝出。 */
+/* ── 原生 RWD 斷點（Tailwind 預設尺度）── */
 @theme {
-  --breakpoint-sm: 1px;
-  --breakpoint-md: 2px;
-  --breakpoint-lg: 3px;
-  --breakpoint-xl: 4px;
-  --breakpoint-2xl: 5px;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-antra: 75rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
 
   /* ── Antra 模板字型（單一來源）──
      內文 = Golos Text；標題/eyebrow/顯示字 = Cal Sans（僅 weight 400）。
@@ -217,7 +215,7 @@
 
 /* ── Antra 標題基準（對齊模板 h1..h6）──
    全部標題一律 Cal Sans / weight 400 / capitalize；字級與顏色仍由各元件的
-   text-*/leading-*/color utility 決定。weight 400 生效的前提＝各標題已移除 font-bold/semibold
+   text／leading／color utility 決定。weight 400 生效的前提＝各標題已移除 font-bold/semibold
    （Cal Sans 僅 400，留 bold 會 faux-bold）。 */
 @layer base {
   h1, h2, h3, h4, h5, h6 {
@@ -231,7 +229,7 @@ html {
   font-size: var(--font-size);
 }
 
-/* 等比縮放畫布外，禁止水平溢出（防子像素捨入造成 1px 橫捲） */
+/* 防止 full-bleed 裝飾與跑馬燈造成水平捲軸。 */
 body {
   overflow-x: hidden;
 }
@@ -247,12 +245,12 @@ body {
   --hero-play-border-l: 18px;
   --hero-play-ml: 5px;
   --hero-play-mt: 4px;
-  --hero-brand-h: 88px; /* 釘桌面值（凍結成桌面版，避免手機寬度降級） */
+  --hero-brand-h: 88px;
   --brands-mt: 60px;
   --design-left-h: 280px;
   --design-info-p: 1.5rem;
   --design-border-w: 100%;
-  --store-map-h: 400px; /* 釘桌面值 */
+  --store-map-h: 400px;
   --clip-top: -150px;
 }
 
@@ -266,12 +264,12 @@ body {
     --hero-play-border-l: 24px;
     --hero-play-ml: 6px;
     --hero-play-mt: 6px;
-    --hero-brand-h: 88px; /* 釘桌面值（凍結成桌面版） */
+    --hero-brand-h: 88px;
     --brands-mt: 100px;
     --design-left-h: 380px;
     --design-info-p: 2rem;
     --design-border-w: 280px;
-    --store-map-h: 400px; /* 釘桌面值 */
+    --store-map-h: 400px;
     --clip-top: -250px;
   }
 }
@@ -322,6 +320,24 @@ body {
 }
 .animate-marquee {
   animation: marquee 40s linear infinite;
+}
+
+/* Antra Home 4 `antra-brand` 實測：gap 120px；390/768/880/1200/1367 = 1/3/4/5/6 欄。 */
+.brand-carousel-slide {
+  --brand-columns: 1;
+  flex-basis: calc((100% - (var(--brand-columns) - 1) * 120px) / var(--brand-columns));
+}
+@media (min-width: 768px) {
+  .brand-carousel-slide { --brand-columns: 3; }
+}
+@media (min-width: 880px) {
+  .brand-carousel-slide { --brand-columns: 4; }
+}
+@media (min-width: 1200px) {
+  .brand-carousel-slide { --brand-columns: 5; }
+}
+@media (min-width: 1367px) {
+  .brand-carousel-slide { --brand-columns: 6; }
 }
 
 /* 圖庫輪播卡片切換動畫（Home Three 聯動輪播） */

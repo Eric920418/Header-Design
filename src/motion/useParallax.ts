@@ -20,7 +20,7 @@ type ParallaxOptions = {
 
 /**
  * 對 scopeRef 內符合 targets 的元素掛「隨捲動位移」視差（GSAP ScrollTrigger，純 scrub、不 pin）。
- * 只寫內層元素的 transform，永不碰 ScaleToFit 的 canvas；reduced-motion / ≤992px 時 no-op。
+ * 只寫內層元素的 transform；reduced-motion / ≤992px 時 no-op。
  */
 export function useParallax(
   scopeRef: RefObject<HTMLElement>,
