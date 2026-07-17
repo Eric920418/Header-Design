@@ -8,9 +8,9 @@ import { GOLD } from '../theme/cis';
 // Antra home-6「Our Services」= antra-services-list style-3。
 // 依使用者指示僅保留已替換品牌素材的三張卡片；圖片已本地化，避免 demo 外連失效造成視覺漂移。
 const SERVICES = [
-  { n: '01', title: 'Renovation and Remodeling', excerpt: 'Overhauling existing spaces to modernize and improve functionality and aesthetics.', img: '/services/svago-product.png', logo: '/services/svago-logo-white.png', logoAlt: 'SVago', logoClass: 'h-[28px] w-auto sm:h-[31px] antra:h-[34px]', captionTop: true },
-  { n: '02', title: 'Interior 2D/3D Layouts', excerpt: 'Realistic 3D visualizations to help you envision your space before it is built in real life.', img: '/services/teka-product.png', logo: '/services/teka-logo-white.svg', logoAlt: 'TEKA', logoClass: 'h-[28px] w-auto sm:h-[31px] antra:h-[34px]', captionTop: false },
-  { n: '03', title: 'Outdoor & Landscape Design', excerpt: 'Extending design services to outdoor spaces such as gardens, patios, and decks.', img: '/services/sakura-product.png', logo: '/services/sakura-logo-white.png', logoAlt: 'SAKURA', logoClass: 'h-[28px] w-auto sm:h-[31px] antra:h-[34px]', captionTop: true },
+  { n: '01', title: 'Renovation and Remodeling', excerpt: 'Overhauling existing spaces to modernize and improve functionality and aesthetics.', img: '/services/svago-product.png', logo: '/services/svago-logo-white.png', logoAlt: 'SVago', logoClass: 'h-[31px] w-auto sm:h-[35px] antra:h-[38px]', captionTop: true },
+  { n: '02', title: 'Interior 2D/3D Layouts', excerpt: 'Realistic 3D visualizations to help you envision your space before it is built in real life.', img: '/services/teka-product.png', logo: '/services/teka-logo-white.svg', logoAlt: 'TEKA', logoClass: 'h-[32px] w-auto sm:h-[36px] antra:h-[39px]', captionTop: false },
+  { n: '03', title: 'Outdoor & Landscape Design', excerpt: 'Extending design services to outdoor spaces such as gardens, patios, and decks.', img: '/services/sakura-product.png', logo: '/services/sakura-logo-white.png', logoAlt: 'SAKURA', logoClass: 'h-[24px] w-auto sm:h-[26px] antra:h-[28px]', captionTop: true },
 ];
 const SVC_FALLBACK = '/kitchen-styles/elegant.jpg';
 
