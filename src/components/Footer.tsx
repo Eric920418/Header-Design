@@ -13,7 +13,7 @@ const ICON_LINKS = [
 export function Footer() {
   return (
     <footer
-      className="relative isolate h-[450px] overflow-hidden bg-[#1C1C1D] bg-cover bg-center text-white lg:h-[760px]"
+      className="relative isolate h-[450px] overflow-hidden bg-[#1C1C1D] bg-cover bg-center text-white lg:h-[682px]"
       style={{ backgroundImage: "url('/footer-antra-bg.jpg')" }}
     >
       <div aria-hidden className="absolute inset-0 -z-10 bg-black/75" />
@@ -66,7 +66,7 @@ export function Footer() {
       </div>
 
       {/* 模板巨型字標沉在 Footer 最底部；保留完整 SAKURA 品牌字標。 */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-[30px] z-0 flex select-none justify-center">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-[30px] z-0 flex select-none justify-center lg:bottom-0">
         <img
           src="/footer-sakura.svg"
           alt=""

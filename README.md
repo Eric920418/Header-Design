@@ -73,23 +73,23 @@ pnpm build
 
 ### Footer 垂直分層
 
-- Footer 手機／平板維持精簡版 `450px`；桌面為 `760px`。桌面只增加版權帶下方的背景圖／Logo 舞台，上方資訊區 `220px` 與 Copyright 帶 `80px` 完全不增高，既有連結、數位展板與 YouTube 不變。
-- 巨型 SAKURA 字標全斷點都完整放在 Footer 內，使用 `bottom:30px`；桌面版權帶底緣至字標上緣約 `176px`（參考截圖約 `177px`），手機／平板約 `51px`。
+- Footer 手機／平板維持精簡版 `450px`；桌面為 `682px`。桌面只增加版權帶下方的背景圖／Logo 舞台，上方資訊區 `220px` 與 Copyright 帶 `80px` 完全不增高，既有連結、數位展板與 YouTube 不變。
+- 原 `footer-sakura.svg` 畫布高 428，其中底部 80px 完全透明；已把 SVG `height/viewBox` 收緊為 348，不縮放也不裁任何可見筆畫。桌面使用 `bottom:0` 後，現在是「可見字形」而非 `<img>` 外框貼齊 Footer 底部，版權帶至 Logo 上緣仍約 `176px`。手機／平板保留 `bottom:30px`。
 
 #### Footer Design QA（2026-07-17）
 
-- **Source visual truth**：`/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_FaKCmu/截圖 2026-07-17 下午1.30.10.png`
-- **Implementation evidence**：`/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-final-desktop-1512.png`；手機：`footer-after-mobile-390.png`；聚焦對照：`footer-reference-vs-implementation.png`。
+- **Source visual truth**：模板貼底參考 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_WVSkS0/截圖 2026-07-17 下午2.17.25.png`；修正前空隙 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_8Epxm3/截圖 2026-07-17 下午2.22.00.png`。
+- **Implementation evidence**：桌面實際渲染 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-visible-ink-flush-desktop-1512.png`；模板／成品同圖聚焦對照 `footer-template-vs-visible-flush.png`；手機：`footer-complete-mobile-390.png`。
 - **Viewport / state**：桌面 `1512×956`、手機 `390×844`；頁面捲至最底、Footer 靜止狀態。
-- **Full-view evidence**：Footer 上方資訊區、Copyright 帶、背景圖留白、巨型字標與固定浮動鈕均在同一畫面核對。桌面版權帶底緣至 Logo 上緣量得 `175.5px`，參考圖約 `177px`；手機量得 `50.6px`，無水平溢出。
+- **Full-view evidence**：Footer 上方資訊區、Copyright 帶、背景圖留白、巨型字標與固定浮動鈕均在同一畫面核對。1512px 桌面版權帶底緣至 Logo 上緣量得 `175.1px`，參考圖約 `177px`；Logo 上下都在 Footer 邊界內（`fullyVisible=true`），且 `bottomInset=0` 精準貼底。1024px 同樣 `bottomInset=0`、無水平溢出；390px 手機維持 `bottomInset=30px` 安全距離。
 - **Focused comparison evidence**：本次問題只涉及版權帶與 Logo 的垂直關係，因此聚焦裁切足以判定；不需改動字型、圖示或內容欄位。
 - **Fonts / typography**：既有字型、字級、行高、字重與文案未改；Copyright 仍置中。
-- **Spacing / layout rhythm**：首輪發現 `[P2]` Logo 與版權帶重疊 `34.5px`；先建立 `175.5px` 留白，再依驗收把桌面舞台增高至 `760px`、Logo 改為 `bottom:30px`，最終同時保留模板間距與完整字標；上方黑色資訊與版權帶高度均不變。
+- **Spacing / layout rhythm**：首輪發現 `[P2]` Logo 與版權帶重疊 `34.5px`；最終移除 SVG 底部 80px 透明畫布、桌面舞台設為 `682px`、Logo 使用 `bottom:0`，同時保留模板間距、完整字標與可見筆畫貼底；上方黑色資訊與版權帶高度均不變。
 - **Colors / tokens**：沿用模板 `#1C1C1D`、白色透明階與 `#CAA05C`，沒有新增色號。
 - **Image quality / assets**：沿用原有背景圖與向量 `footer-sakura.svg`，沒有重新生成、拉伸或改色。
 - **Copy / content**：網站地圖、隱私權政策、Copyright、數位展板、YouTube 均原樣保留。
-- **Browser checks**：桌面與手機均完成實際渲染；手機 `scrollWidth=390`；沒有 console error。僅有既存 Google Maps async／舊 Marker API 警告，與 Footer 無關。
-- **Comparison history**：before＝`gap -34.5px`（重疊，P2）；iteration 1＝`65.5px`（已有留白但仍短於來源）；iteration 2＝`175.5px` 但 Logo 底部裁切 170px（P2）；iteration 3＝桌面 `760px`＋`bottom:30px`，間距維持約 `175.5px` 且 Logo 完整顯示，無 P0／P1／P2 殘留。
+- **Browser checks**：1512、1024、390 三種寬度均完成實際渲染；Footer 高度分別為 `682px`、`682px`、`450px`，各斷點無水平溢出且沒有 console error。
+- **Comparison history**：before＝`gap -34.5px`（重疊，P2）；iteration 1＝`65.5px`；iteration 2＝`175.5px` 但 Logo 被裁；iteration 3＝`<img>` 外框貼底但 SVG 內仍有 80px 透明留白（P2）；iteration 4＝收緊 SVG 至 348px、桌面 `682px`＋`bottom:0`，可見筆畫完整且真正貼底，無 P0／P1／P2 殘留。
 - **final result: passed**
 - **地圖初始視野（`GoogleStoreMap` `focus` prop）**：**初始顯示整個台灣主島**（`fitBounds(TAIWAN_BOUNDS)`，尺寸未定前以 `TAIWAN_CENTER`/`zoom 7` 當 fallback），只放門市 pin、**不鎖定街道級**；使用者**點門市卡片**才 `setFocused(true)` → 地圖 `panTo`+`setZoom(16)` 聚焦該門市（`placeAt` 依 `focusRef` 決定是否平移縮放）。`StoreLocationSection` 以 `focused` state 控制，門市卡片 `onClick` 設 true。
 - **未動**：未渲染的 shadcn `ui/` 色票與 oklch chart tokens。
@@ -179,7 +179,7 @@ pnpm build
 | FloatingButtons | 底部固定導航列 | 底部固定導航列 | 右側 `fixed` 浮動欄（疊在內容上，不佔軌道） |
 | ProjectSection（10 種廚房風格輪播） | embla 拖曳、卡片較窄 | 拖曳捲動 | 拖曳、卡片 378×880、hover 伸縮露出橫式廚房圖 |
 | StoreLocationSection（門市查詢） | 上下堆疊（地圖+搜尋在上、列表在下） | 同左 | 左右並排（左 45% 地圖+搜尋、右列表） |
-| Footer（Antra 骨架簡化版） | 450px；連結／icons 上下配置、Logo 避開固定功能列 | 450px；連結與 icons 分列 | 760px；資訊區＋版權帶高度不變，延長下方舞台以完整顯示 Logo |
+| Footer（Antra 骨架簡化版） | 450px；連結／icons 上下配置、Logo 避開固定功能列 | 450px；連結與 icons 分列 | 682px；資訊區＋版權帶高度不變，Logo 可見筆畫完整並貼底 |
 
 ## 主視覺（Hero）— Antra Home Six 版型
 
@@ -219,21 +219,21 @@ final result: passed
 `Footer.tsx` 使用 Antra Home 6 Footer 主體 `6632dbf` 的三段式結構，但依需求刪除模板的訂閱區、地址、電話與多欄選單，只保留原有「網站地圖／隱私權政策」、Copyright、數位展板與 YouTube。
 
 - **模板素材**：使用模板原始 `1920×950` 背景圖，已本地化為 `public/footer-antra-bg.jpg`；外層套用模板同級的 75% 黑色遮罩。
-- **結構高度**：依驗收回饋取消模板 945px 的整段高度；手機／平板為 450px、桌面為 760px。上半資訊區固定 220px、版權帶固定 80px；桌面只增加版權帶下方的背景圖／Logo 舞台，黑色資訊帶不增高。內容最大寬 1410px，桌面左右 51px。
+- **結構高度**：依驗收回饋取消模板 945px 的整段高度；手機／平板為 450px、桌面為 682px。上半資訊區固定 220px、版權帶固定 80px；桌面只增加版權帶下方的背景圖／Logo 舞台，黑色資訊帶不增高。內容最大寬 1410px，桌面左右 51px。
 - **簡化內容**：左側只放網站地圖與隱私權政策，右側只保留數位展板與 YouTube 圖示；中間版權帶逐字保留 `Copyright © Taiwan Sakura Corporation. All rights reserved`。
-- **Logo 下移**：`footer-sakura.svg` 不再壓住版權列，改為 absolute 沉在最底部；桌面最大寬 1320px、全斷點 `bottom:30px`、opacity 30%。桌面版權帶底緣至字標上緣約 175.5px，對齊使用者提供截圖的約 177px，且整張 Logo 完整顯示。
-- **原生 RWD**：手機左右 15px、連結與 icons 垂直分區；平板／桌面改為左右分列。Logo 全斷點使用 `bottom:30px`；手機留下約 50.6px 且避開底部固定浮動列，桌面則藉 760px 高度保留模板間距與完整 Logo。
+- **Logo 下移**：`footer-sakura.svg` 不再壓住版權列，並移除原素材底部 80px 透明畫布（428→348）；桌面最大寬 1320px、`bottom:0`、opacity 30%。桌面版權帶底緣至字標上緣約 175.5px，整張 Logo 可見筆畫完整且下緣貼齊 Footer。
+- **原生 RWD**：手機左右 15px、連結與 icons 垂直分區；平板／桌面改為左右分列。手機／平板 Logo 使用 `bottom:30px` 避開底部固定浮動列；桌面使用 `bottom:0`，藉 682px 高度保留模板間距、完整 Logo 與貼底關係。
 
 ### Footer Design QA（2026-07-17）
 
 - **Source visual truth**：Antra Home 6 `https://demo2.themelexus.com/antra/home-6/` Footer 主體 `6632dbf`；模板截圖 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-template-home6-1512.png`。
-- **Implementation screenshots**：桌面 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-implementation-compact-1512.png`；手機 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-implementation-compact-390.png`；本站原始高度參考 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-before-1512.png`。
+- **Implementation screenshots**：最新桌面 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-visible-ink-flush-desktop-1512.png`；模板／成品同圖聚焦對照 `footer-template-vs-visible-flush.png`；手機 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/footer-complete-mobile-390.png`。
 - **Viewport / state**：1512×956、390×844，Footer 捲入可見區的穩定狀態；Header 與 FloatingButtons 是使用者指定保留的自訂功能，桌面截圖中的覆蓋不列為 Footer 差異。
-- **Full-view comparison**：同一張 1920×950 背景、75% 黑罩、資訊層、獨立版權帶與底部巨型字標保留模板骨架；總高依最新驗收為手機／平板 450px、桌面 760px，且桌面新增高度只屬於版權帶下方 Logo 舞台。模板多欄內容按需求刪除。
-- **Focused comparison**：桌面巨型 SAKURA Logo 維持最大寬 1320px並沉在底部，使用 `bottom:30px` 配合 760px 總高，完整顯示；手機 Logo `360×69.4` 同樣使用 `bottom:30px`，完整顯示在底部浮動列安全區上方。
+- **Full-view comparison**：同一張 1920×950 背景、75% 黑罩、資訊層、獨立版權帶與底部巨型字標保留模板骨架；總高依最新驗收為手機／平板 450px、桌面 682px，且桌面新增高度只屬於版權帶下方 Logo 舞台。模板多欄內容按需求刪除。
+- **Focused comparison**：桌面巨型 SAKURA Logo 維持最大寬 1320px並沉在底部；素材 viewBox 已從 428 收緊至可見字形高 348，使用 `bottom:0` 配合 682px 總高，完整顯示且可見筆畫貼底；手機使用 `bottom:30px`。
 - **Fidelity surfaces**：沿用現有字型與原文案；色彩使用模板黑罩／半透明深色資訊層與 SAKURA 金字標；背景與 Logo 都是實際圖片素材，未用 CSS 造假；連結、Copyright、數位展板、YouTube 內容均未改。
-- **Responsive / console**：390px Footer 為 450px、1512px Footer 為 760px，且 `scrollWidth === clientWidth`；桌面與手機皆無 Logo／Copyright 裁切，console 無 error。`pnpm build` 通過。
-- **Comparison history**：第一輪精簡版的 Logo 與版權帶重疊 34.5px，列為 P2；第二輪間距 65.5px，仍短於來源；第三輪間距達 175.5px，但 `bottom:-170px` 造成 Logo 底部裁切；第四輪桌面舞台改為 760px、Logo 改 `bottom:30px`，最終同時保留模板間距與完整字標，上方 220px 資訊區與 80px 版權帶未增高。最終無可執行的 P0/P1/P2。
+- **Responsive / console**：390px Footer 為 450px、1024／1512px Footer 為 682px，三者皆 `scrollWidth === clientWidth`；1512px 的 Logo 與版權帶間距為 `175.1px`，桌面 `bottomInset=0`、手機 `bottomInset=30px`，皆無 Logo／Copyright 裁切，console 無 error。`pnpm build` 通過。
+- **Comparison history**：第一輪 Logo 與版權帶重疊；第二輪間距不足；第三輪 Logo 被裁；第四輪 `<img>` 外框貼底但 SVG 透明畫布仍留縫；第五輪量到透明區 80/428，收緊素材為 348px 並把桌面調成 682px，最終保留模板間距、完整字標且可見筆畫貼底。上方 220px 資訊區與 80px 版權帶未增高，無可執行的 P0/P1/P2。
 
 final result: passed
 
