@@ -6,15 +6,11 @@ import { prefersReducedMotion } from '../motion/prefersReducedMotion';
 import { GOLD } from '../theme/cis';
 
 // Antra home-6「Our Services」= antra-services-list style-3。
-// 6 筆服務內容與圖片均沿用模板；圖片已本地化，避免 demo 外連失效造成視覺漂移。
-const SVC_IMG = '/services';
+// 依使用者指示僅保留已替換品牌素材的三張卡片；圖片已本地化，避免 demo 外連失效造成視覺漂移。
 const SERVICES = [
-  { n: '01', title: 'Residential Interior Design', excerpt: 'Tailored design services for private homes, including room makeovers and complete home transformations.', img: `${SVC_IMG}/service-6.jpg` },
-  { n: '02', title: 'Renovation and Remodeling', excerpt: 'Overhauling existing spaces to modernize and improve functionality and aesthetics.', img: '/services/svago-product.png', logo: '/services/svago-logo-white.png', logoAlt: 'SVago', logoClass: 'h-[30px] w-auto sm:h-[32px] antra:h-[35px]' },
-  { n: '03', title: 'Interior 2D/3D Layouts', excerpt: 'Realistic 3D visualizations to help you envision your space before it is built in real life.', img: '/services/teka-product.png', logo: '/services/teka-logo-white.svg', logoAlt: 'TEKA', logoClass: 'h-[30px] w-auto sm:h-[32px] antra:h-[35px]' },
-  { n: '04', title: 'Outdoor & Landscape Design', excerpt: 'Extending design services to outdoor spaces such as gardens, patios, and decks.', img: '/services/sakura-product.png', logo: '/services/sakura-logo-white.png', logoAlt: 'SAKURA', logoClass: 'h-auto w-[170px] sm:w-[180px] antra:w-[210px]' },
-  { n: '05', title: 'Interior Design Consultation', excerpt: 'Providing professional advice on concepts, color schemes & material selection.', img: `${SVC_IMG}/service-3.jpg` },
-  { n: '06', title: 'Commercial Interior Design', excerpt: 'Designing functional and attractive interiors for businesses, including offices, retail spaces, and hospitality venues.', img: `${SVC_IMG}/service-5.jpg` },
+  { n: '01', title: 'Renovation and Remodeling', excerpt: 'Overhauling existing spaces to modernize and improve functionality and aesthetics.', img: '/services/svago-product.png', logo: '/services/svago-logo-white.png', logoAlt: 'SVago', logoClass: 'h-[30px] w-auto sm:h-[32px] antra:h-[35px]', captionTop: true },
+  { n: '02', title: 'Interior 2D/3D Layouts', excerpt: 'Realistic 3D visualizations to help you envision your space before it is built in real life.', img: '/services/teka-product.png', logo: '/services/teka-logo-white.svg', logoAlt: 'TEKA', logoClass: 'h-[30px] w-auto sm:h-[32px] antra:h-[35px]', captionTop: false },
+  { n: '03', title: 'Outdoor & Landscape Design', excerpt: 'Extending design services to outdoor spaces such as gardens, patios, and decks.', img: '/services/sakura-product.png', logo: '/services/sakura-logo-white.png', logoAlt: 'SAKURA', logoClass: 'h-auto w-[170px] sm:w-[180px] antra:w-[210px]', captionTop: true },
 ];
 const SVC_FALLBACK = '/kitchen-styles/elegant.jpg';
 
@@ -100,8 +96,8 @@ export function ServicesSection() {
           <Reveal anim="slideInUp">
             <div className="cursor-grab overflow-hidden active:cursor-grabbing" ref={emblaRef}>
               <div className="-ml-[30px] flex">
-                {SERVICES.map((service, index) => {
-                  const captionTop = index % 2 === 1;
+                {SERVICES.map((service) => {
+                  const captionTop = service.captionTop;
 
                   return (
                     <div
@@ -126,7 +122,7 @@ export function ServicesSection() {
                           <span aria-hidden className="absolute inset-0 bg-black/[0.11]" />
                         </div>
 
-                        <div className="px-0 pb-[30px] pt-[20px] sm:px-[20px] sm:pb-[35px] sm:pt-[30px]">
+                        <div className="min-h-[192px] px-0 pb-[30px] pt-[20px] sm:min-h-[177px] sm:px-[20px] sm:pb-[35px] sm:pt-[30px] antra:min-h-[230px]">
                           <div className="flex items-start justify-between">
                             {service.logo ? (
                               <h3
