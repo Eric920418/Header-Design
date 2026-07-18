@@ -35,7 +35,8 @@ pnpm build
 
 - **斷點**：`globals.css` 恢復 Tailwind 標準 `sm 640 / md 768 / lg 1024 / xl 1280 / 2xl 1536`，並增加只供模板 Hero 使用的 `antra 1200` 斷點；元件原有 `md:`、`lg:` 規則重新生效。
 - **Header**：`StickyHeader` 是真正的 `position:fixed; width:100%`，不再另套 canvas scale；`App` 保留 72px spacer。
-- **FloatingButtons**：`lg+` 保留右側 fixed 浮動欄；`<lg` 改用原本就存在的手機底部三按鈕列。頁面根在手機保留 65px bottom padding，避免 Footer 被覆蓋。
+- **FloatingButtons**：全斷點依 SAKURA 官網 quick links 維持右側 fixed 直排；手機底距 70px、`sm+` 底距 36px。手機不再使用底部橫排，因此頁面根不需額外保留 65px bottom padding。
+  - 官網實測規格：手機單顆 `72×72px`（內容 `56×56px`）、`sm+` 單顆 `74×74px`（內容 `58×58px`）、金色 `#B79258`、灰色 `#737373`、金色頂鈕與灰色群組相隔 `20px`、群組使用 `1px` 白色 50% 分隔線；本站保留既有三個文字與目的連結。
 - **Hero**：直接對應模板 390／768／1024／1200+ 的原生高度、字級、對齊與座標；1512 仍是桌面像素級比對基準，不再是全站縮放畫布。
 - **其他 sections**：沿用既有 Tailwind 響應式 class 與 CSS 變數；StoreLocation 的資料、地圖、篩選與互動未更動。
 
@@ -176,7 +177,7 @@ pnpm build
 | Header（巨型選單） | logo + 搜尋 + 漢堡；漢堡開 accordion 抽屜 | 同左 | 中央 logo + 左右導覽 + hover 下拉 + 搜尋展開 |
 | HeroSection（主視覺） | Antra 390 置中版 | Antra 768 置中版 | 1024 置中大字；1200+ 原版左對齊 |
 | HeroStyleMarquee | 62px 輪播本體＋上下 12px、1 欄 step carousel | 768=3 欄、880=4 欄；上下 16px | 1200=5 欄、1367+=6 欄；gap 120px、上下 16px |
-| FloatingButtons | 底部固定導航列 | 底部固定導航列 | 右側 `fixed` 浮動欄（疊在內容上，不佔軌道） |
+| FloatingButtons | 右側 `fixed` 直排（底距 70px） | 右側 `fixed` 直排（底距 36px） | 右側 `fixed` 直排（底距 36px） |
 | ProjectSection（10 種廚房風格輪播） | embla 拖曳、卡片較窄 | 拖曳捲動 | 拖曳、卡片 378×880、hover 伸縮露出橫式廚房圖 |
 | StoreLocationSection（門市查詢） | 上下堆疊（地圖+搜尋在上、列表在下） | 同左 | 左右並排（左 45% 地圖+搜尋、右列表） |
 | Footer（Antra 骨架簡化版） | 450px；連結／icons 上下配置、Logo 避開固定功能列 | 450px；連結與 icons 分列 | 682px；資訊區＋版權帶高度不變，Logo 可見筆畫完整並貼底 |

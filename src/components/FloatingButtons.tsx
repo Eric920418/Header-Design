@@ -1,74 +1,50 @@
 import React from 'react';
 
-// 右側固定側邊欄 —— 功能與位置不變，顏色統一為 Antra 模板金 #CAA05C + 文字灰 #59585D。
-// 白分隔線、底部對齊貼右）；圖示＝使用者提供的品牌 icon（純白去背 PNG，public/floating-icons/），圖下加中文文字標籤。
-// icon 非正方（案例門市 33×30、到府丈量/客服中心 38×40），故用 h-[40px] w-auto 依高度正規化、不塞正方以免變形。
-// ⚠ 頂鈕『案例門市』的連結目前仍是官網『加盟』(franchising)——待提供正確 URL 再換。
-const TOP = { href: 'https://www.sakura-kitchenlife.com.tw/franchising/intro', icon: '/floating-icons/case.png', label: '案例門市' };
-// 灰底群組（到府丈量 / 客服中心），項間白色分隔線
+// 視覺尺寸依 SAKURA 官網 quick links 實測還原；連結、文字與既有三項功能維持本站版本。
+const TOP = {
+  href: 'https://www.sakura-kitchenlife.com.tw/franchising/intro',
+  icon: '/floating-icons/case.png',
+  label: '案例門市',
+};
+
 const GROUP = [
   { href: 'https://www.sakura-kitchenlife.com.tw/measuring', icon: '/floating-icons/measure.png', label: '到府丈量' },
   { href: 'https://icare.sakura.com.tw', icon: '/floating-icons/service.png', label: '客服中心', external: true },
 ];
 
-// 單顆按鈕內容：圖 58 + 下方白字標籤
-function BtnInner({ icon, label }: { icon: string; label: string }) {
+function ButtonContent({ icon, label }: { icon: string; label: string }) {
   return (
-    <span className="flex flex-col items-center gap-1.5">
-      <img src={icon} alt="" className="h-[40px] w-auto" />
-      <span className="text-white text-[13px] leading-tight text-center whitespace-nowrap">{label}</span>
+    <span className="flex h-14 w-14 flex-col items-center justify-center gap-[2px] sm:h-[58px] sm:w-[58px]">
+      <img src={icon} alt="" className="h-[34px] w-auto shrink-0 object-contain" />
+      <span className="whitespace-nowrap text-center text-[13px] leading-[16px] text-white">{label}</span>
     </span>
   );
 }
 
 export function FloatingButtons() {
   return (
-    <>
-      {/* 桌面：原生 fixed 右側欄。 */}
-      <div className="hidden lg:flex fixed inset-y-0 right-0 z-50 items-end pb-[36px] pointer-events-none">
-        <div className="pointer-events-auto">
-          {/* 金頂鈕（案例門市）：block p-2 mb-[20px] */}
-          <a
-            href={TOP.href}
-            aria-label={TOP.label}
-            className="block p-2 mb-[20px] bg-[#CAA05C] transition-opacity hover:opacity-90"
-          >
-            <BtnInner icon={TOP.icon} label={TOP.label} />
-          </a>
+    <div className="pointer-events-none fixed right-0 bottom-[70px] z-20 sm:bottom-9">
+      <div className="pointer-events-auto">
+        <a href={TOP.href} aria-label={TOP.label} className="mb-5 block bg-[#B79258] p-2">
+          <ButtonContent icon={TOP.icon} label={TOP.label} />
+        </a>
 
-          {/* 灰底群組：項間白色 h-px 分隔線 */}
-          <div className="bg-[#59585D]">
-            {GROUP.map((b, i) => (
-              <React.Fragment key={b.href}>
-                {i > 0 && <div aria-hidden className="w-full h-px bg-white/50" />}
-                <a
-                  href={b.href}
-                  aria-label={b.label}
-                  {...(b.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="block p-2 transition-opacity hover:opacity-90"
-                >
-                  <BtnInner icon={b.icon} label={b.label} />
-                </a>
-              </React.Fragment>
-            ))}
-          </div>
+        <div className="bg-[#737373]">
+          {GROUP.map((button, index) => (
+            <React.Fragment key={button.href}>
+              {index > 0 && <div aria-hidden="true" className="h-px w-full bg-white/50" />}
+              <a
+                href={button.href}
+                aria-label={button.label}
+                {...(button.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                className="block p-2"
+              >
+                <ButtonContent icon={button.icon} label={button.label} />
+              </a>
+            </React.Fragment>
+          ))}
         </div>
       </div>
-
-      {/* 手機／平板：底部固定列。 */}
-      <div className="flex lg:hidden fixed bottom-0 left-0 right-0 z-[9999]">
-        {[TOP, ...GROUP].map((b) => (
-          <a
-            key={b.href}
-            href={b.href}
-            aria-label={b.label}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 py-2 ${b === TOP ? 'bg-[#CAA05C]' : 'bg-[#59585D]'}`}
-          >
-            <img src={b.icon} alt="" className="h-9 w-auto" />
-            <span className="text-white text-[11px] leading-tight">{b.label}</span>
-          </a>
-        ))}
-      </div>
-    </>
+    </div>
   );
 }

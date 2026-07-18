@@ -16,7 +16,7 @@ export default function App() {
   return (
     <ScrollMotionProvider>
       <StickyHeader />
-      <div className="bg-white pb-[65px] lg:pb-0">
+      <div className="bg-white">
         {/* 頂端 spacer：避免內容被 fixed Header 蓋住。 */}
         <div style={{ height: HEADER_H }} aria-hidden />
 
