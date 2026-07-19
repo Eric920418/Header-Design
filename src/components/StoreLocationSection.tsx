@@ -57,21 +57,21 @@ export function StoreLocationSection() {
   return (
     // 間距依模板實測：py 120
     <section className="relative bg-[#f6f6f6] py-[60px] overflow-hidden">
-      <div className="max-w-[1410px] mx-auto">
+      <div className="mx-auto w-full max-w-[1512px] pl-5 pr-[88px] sm:pl-8 sm:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
         {/* ── 標題列：eyebrow(左欄) + 大標(右偏) + 十字裝飾線（同 PricingSection，相同座標/位置） ── */}
         <div className="relative mb-[60px]">
           {/* 十字裝飾線（桌面，座標與 PricingSection 一致）：橫線 y16 寬502、直線 x363、兩端箭頭 15px；#e3e3e8 */}
           <div
             aria-hidden
-            className="hidden lg:block absolute left-[-13px] top-[16px] w-[502px] h-px bg-[#e3e3e8]"
+            className="absolute left-[-13px] top-[16px] hidden h-px w-[502px] bg-[#e3e3e8] lg:block"
           />
           <div
             aria-hidden
-            className="hidden lg:block absolute left-[363px] top-[-38px] h-[179px] w-px bg-[#e3e3e8]"
+            className="absolute left-[363px] top-[-38px] hidden h-[179px] w-px bg-[#e3e3e8] lg:block"
           />
           <svg
             aria-hidden
-            className="hidden lg:block absolute left-[474px] top-0 text-[#e3e3e8]"
+            className="absolute left-[474px] top-0 hidden text-[#e3e3e8] lg:block"
             width="15"
             height="15"
             viewBox="0 0 15 15"
@@ -80,7 +80,7 @@ export function StoreLocationSection() {
           </svg>
           <svg
             aria-hidden
-            className="hidden lg:block absolute left-[347px] top-[126px] text-[#e3e3e8]"
+            className="absolute left-[347px] top-[126px] hidden text-[#e3e3e8] lg:block"
             width="15"
             height="15"
             viewBox="0 0 15 15"
@@ -88,15 +88,15 @@ export function StoreLocationSection() {
             <path d="M15 15L11 3L11 0L15 12L15 15Z" fill="currentColor" />
           </svg>
 
-          <div className="flex flex-col lg:flex-row items-start lg:pt-[46px]">
-            <div className="lg:w-[424px] lg:shrink-0 mb-5 lg:mb-0">
+          <div className="grid grid-cols-1 items-start lg:grid-cols-[minmax(260px,424px)_minmax(0,1fr)] lg:pt-[46px]">
+            <div className="mb-5 min-w-0 lg:mb-0">
               <span className="font-display inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(159,159,164,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#1C1C1D]">
                 <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
                 get in touch
               </span>
             </div>
             {/* 模板 Contact 頁逐字：Have a Project in [Mind? Let’s Make] It Happen（金字重點 Mind? Let’s Make；彎引號 ’） */}
-            <h2 className="font-display lg:w-[661px] text-[60px] leading-[64px] capitalize text-[#1C1C1D]">
+            <h2 className="min-w-0 max-w-[661px] font-display text-[42px] leading-[46px] capitalize text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:w-[661px] xl:text-[60px] xl:leading-[64px]">
               Have a Project in{" "}
               <span style={{ color: GOLD }}>
                 Mind?
@@ -109,24 +109,24 @@ export function StoreLocationSection() {
         </div>
 
         {/* ── 內容：地圖（寬，左）+ 門市清單（窄，右） ── */}
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex min-w-0 flex-col gap-8 lg:flex-row">
           {/* 左：地圖（撐高與右側列表等高） */}
-          <div className="w-full lg:w-[62%] lg:shrink-0 flex flex-col">
-            <div className="rounded-3xl overflow-hidden bg-[#F6F6F6] shadow-sm h-[var(--store-map-h)] lg:h-auto lg:flex-1 lg:min-h-[var(--store-map-h)]">
+          <div className="flex w-full min-w-0 flex-col lg:w-[62%] lg:shrink-0">
+            <div className="h-[var(--store-map-h)] overflow-hidden rounded-3xl bg-[#F6F6F6] shadow-sm lg:h-auto lg:min-h-[var(--store-map-h)] lg:flex-1">
               <GoogleStoreMap address={visible.address} focus={focused} />
             </div>
           </div>
 
           {/* 右：我的位置 + 區域/城市下拉 + 門市列表 */}
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             {/* 我的位置 + 區域/城市下拉：同一排（我的位置固定寬，兩下拉各佔剩餘等寬） */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex shrink-0 items-center gap-2 text-[#1C1C1D]">
+            <div className="mb-4 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)] xl:items-center">
+              <div className="flex shrink-0 items-center gap-2 text-[#1C1C1D] sm:col-span-2 xl:col-span-1">
                 <span className="text-[15px] whitespace-nowrap">我的位置</span>
                 <LocateFixed className="w-[22px] h-[22px]" style={{ color: GOLD }} />
               </div>
 
-              <div className="relative flex-1">
+              <div className="relative min-w-0">
                 <select
                   value={region}
                   onChange={(e) => {
@@ -147,7 +147,7 @@ export function StoreLocationSection() {
                 <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#59585D] pointer-events-none" />
               </div>
 
-              <div className="relative flex-1">
+              <div className="relative min-w-0">
                 <select
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
@@ -206,14 +206,14 @@ export function StoreLocationSection() {
                           <span className="text-lg font-medium">{store.name}</span>
                         </div>
                         {/* 第二行：地址（左）+ 電話（右，金色）同一行 */}
-                        <div className="mt-2.5 flex items-center justify-between gap-3 text-sm">
+                        <div className="mt-2.5 flex min-w-0 flex-col items-start gap-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 lg:flex-col lg:items-start lg:justify-start xl:flex-row xl:items-center xl:justify-between">
                           <span
-                            className={`flex items-start gap-1.5 ${
+                            className={`flex min-w-0 items-start gap-1.5 ${
                               active ? 'text-white/85' : 'text-[#59585D]'
                             }`}
                           >
                             <MapPin className="w-[18px] h-[18px] shrink-0 mt-px" />
-                            <span>{store.address}</span>
+                            <span className="min-w-0 break-words">{store.address}</span>
                           </span>
                           <span
                             className={`shrink-0 tracking-wider ${
