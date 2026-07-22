@@ -332,7 +332,7 @@ body {
   display: none;
 }
 
-/* 跑馬燈（採 Home Two elementor-scrolling；內容重複兩組，位移 -50% 無縫循環） */
+/* Services 品牌 Logo 跑馬燈：內容重複兩組，位移 -50% 無縫循環；速度對齊官網 Footer 20s。 */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -342,7 +342,7 @@ body {
   }
 }
 .animate-marquee {
-  animation: marquee 40s linear infinite;
+  animation: marquee 20s linear infinite;
 }
 
 /* Antra Home 4 `antra-brand` 實測：gap 120px；390/768/880/1200/1367 = 1/3/4/5/6 欄。 */
@@ -525,5 +525,6 @@ body {
 /* 減少動態：直接顯示、不動畫 */
 @media (prefers-reduced-motion: reduce) {
   .ev, .ev.is-visible { visibility: visible !important; animation: none !important; }
+  .animate-marquee { animation: none !important; transform: none !important; }
   .antra-template-video-popup::after { animation: none !important; opacity: 0; }
 }

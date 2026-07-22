@@ -65,12 +65,12 @@ export function Footer() {
         </p>
       </div>
 
-      {/* 模板巨型字標沉在 Footer 最底部；保留完整 SAKURA 品牌字標。 */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-[30px] z-0 flex select-none justify-center lg:bottom-0">
+      {/* SAKURA KITCHEN 金色品牌字標：保留原始比例、完整顯示並貼齊 Footer 底部。 */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex select-none justify-center">
         <img
-          src="/footer-sakura.svg"
+          src="/home-2026/footer/sakura-kitchen.png"
           alt=""
-          className="h-auto w-[calc(100%-30px)] max-w-[1320px] opacity-30 md:w-[calc(100%-60px)] lg:w-[calc(100%-102px)]"
+          className="h-auto w-[calc(100%-30px)] max-w-[1410px] object-contain md:w-[calc(100%-60px)] lg:w-[calc(100%-102px)]"
         />
       </div>
     </footer>

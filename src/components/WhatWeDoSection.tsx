@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Check, ArrowRight } from 'lucide-react';
 import { Reveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
@@ -8,15 +8,16 @@ import { GOLD } from '../theme/cis';
 
 const ITEMS = ['Residence And Condo', 'Modern Kitchen Renovate', 'Interior House Decoration'];
 
-// 16:9 影片區塊縮圖（poster）；待接真實影片 / YouTube 後替換
-const VIDEO_POSTER =
-  'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1280&h=720&q=80';
+const YOUTUBE_ID = 'wH374AF9wLI';
+const VIDEO_POSTER = `https://img.youtube.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`;
+const VIDEO_URL = `https://www.youtube.com/watch?v=${YOUTUBE_ID}`;
 
 // 背景右下裝飾圖 = 模板 Home Six 的 h6-bg-3.png（下載至 public/decor；PNG 本身半透明，故不再壓 opacity）
 const BLUEPRINT = '/decor/h6-bg-3.png';
 
 export function WhatWeDoSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [videoState, setVideoState] = useState<'idle' | 'playing' | 'error'>('idle');
   // 裝飾藍圖隨捲動輕微位移（GSAP scrub 視差）
   useParallax(sectionRef, { targets: '.wwd-blueprint', fromY: -6, toY: 6 });
   return (
@@ -43,7 +44,7 @@ export function WhatWeDoSection() {
                 className="inline-block h-[6px] w-[6px] rounded-full"
                 style={{ background: GOLD }}
               />
-              What we do
+              品牌承諾
             </span>
 
             {/* Home Six 逐字；不手動斷行，由模板的 670px heading 寬度自然換行。 */}
@@ -95,21 +96,55 @@ export function WhatWeDoSection() {
          
           {/* 影片卡：hover 依比例微放大 */}
           <div className="group relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black transition-transform duration-500 hover:scale-[1.02]">
-            <img
-              src={VIDEO_POSTER}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* Home 6 widget 63f4833：原生玻璃膠囊、29px blur、lexus-scale 雷達圈與 play-fill 字型圖示。 */}
-              <button
-                type="button"
-                aria-label="播放影片"
-                className="antra-template-video-popup"
-              >
-                <span className="antra-template-video-icon" aria-hidden="true" />
-              </button>
-            </div>
+            {videoState === 'idle' && (
+              <>
+                <img
+                  src={VIDEO_POSTER}
+                  alt="SAKURA 品牌承諾影片縮圖"
+                  onError={() => setVideoState('error')}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {/* Home 6 widget 63f4833：原生玻璃膠囊、29px blur、lexus-scale 雷達圈與 play-fill 字型圖示。 */}
+                  <button
+                    type="button"
+                    aria-label="播放 SAKURA 品牌承諾影片"
+                    className="antra-template-video-popup"
+                    onClick={() => setVideoState('playing')}
+                  >
+                    <span className="antra-template-video-icon" aria-hidden="true" />
+                  </button>
+                </div>
+              </>
+            )}
+
+            {videoState === 'playing' && (
+              <iframe
+                src={`https://www.youtube.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0&playsinline=1`}
+                title="SAKURA 品牌承諾影片"
+                className="absolute inset-0 h-full w-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                onError={() => setVideoState('error')}
+              />
+            )}
+
+            {videoState === 'error' && (
+              <div role="alert" className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[#1C1C1D] px-8 text-center text-white">
+                <p className="max-w-[520px] text-[16px] leading-6">
+                  YouTube 影片載入失敗（影片 ID：{YOUTUBE_ID}）。可能是網路連線、瀏覽器封鎖第三方內容，或 YouTube 服務暫時無法使用。
+                </p>
+                <a
+                  href={VIDEO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full border border-white/50 px-6 py-3 text-[15px] transition-colors hover:border-[#CAA05C] hover:bg-[#CAA05C]"
+                >
+                  前往 YouTube 觀看
+                </a>
+              </div>
+            )}
           </div>
         </Reveal>
       </div>

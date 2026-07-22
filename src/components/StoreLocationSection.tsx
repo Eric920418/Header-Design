@@ -92,7 +92,7 @@ export function StoreLocationSection() {
             <div className="mb-5 min-w-0 lg:mb-0">
               <span className="font-display inline-flex items-center gap-1.5 rounded-[24px] border border-[rgba(159,159,164,0.18)] pt-[7px] pr-[13px] pb-[6px] pl-[9px] text-[12px] tracking-[1px] uppercase text-[#1C1C1D]">
                 <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
-                get in touch
+                門市查詢
               </span>
             </div>
             {/* 模板 Contact 頁逐字：Have a Project in [Mind? Let’s Make] It Happen（金字重點 Mind? Let’s Make；彎引號 ’） */}
@@ -119,12 +119,15 @@ export function StoreLocationSection() {
 
           {/* 右：我的位置 + 區域/城市下拉 + 門市列表 */}
           <div className="min-w-0 flex-1">
-            {/* 我的位置 + 區域/城市下拉：同一排（我的位置固定寬，兩下拉各佔剩餘等寬） */}
-            <div className="mb-4 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)] xl:items-center">
-              <div className="flex shrink-0 items-center gap-2 text-[#1C1C1D] sm:col-span-2 xl:col-span-1">
-                <span className="text-[15px] whitespace-nowrap">我的位置</span>
-                <LocateFixed className="w-[22px] h-[22px]" style={{ color: GOLD }} />
-              </div>
+            {/* 三個篩選控制固定同排、等寬；窄螢幕縮小內距與字級避免爆版。 */}
+            <div className="mb-4 grid min-w-0 grid-cols-3 items-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                className="flex h-[52px] min-w-0 items-center justify-between gap-1 rounded-full border border-[rgba(159,159,164,0.25)] bg-white px-2 text-[13px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-4 sm:text-[15px]"
+              >
+                <span className="whitespace-nowrap">我的位置</span>
+                <LocateFixed className="h-[18px] w-[18px] shrink-0 sm:h-[22px] sm:w-[22px]" style={{ color: GOLD }} />
+              </button>
 
               <div className="relative min-w-0">
                 <select
@@ -133,7 +136,7 @@ export function StoreLocationSection() {
                     setRegion(e.target.value);
                     setCity(''); // 換區域時清空城市
                   }}
-                  className={`w-full h-[52px] appearance-none rounded-full bg-white border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] focus:outline-none focus:border-[#CAA05C] transition-colors cursor-pointer ${
+                  className={`h-[52px] w-full appearance-none rounded-full border border-[rgba(159,159,164,0.25)] bg-white pl-2.5 pr-6 text-[13px] transition-colors cursor-pointer focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-10 sm:text-[15px] ${
                     region === '' ? 'text-[#9F9FA4]' : 'text-[#1C1C1D]'
                   }`}
                 >
@@ -144,7 +147,7 @@ export function StoreLocationSection() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#59585D] pointer-events-none" />
+                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#59585D] sm:right-3.5 sm:h-4 sm:w-4" />
               </div>
 
               <div className="relative min-w-0">
@@ -152,7 +155,7 @@ export function StoreLocationSection() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   aria-disabled={!region}
-                  className={`w-full h-[52px] appearance-none rounded-full border border-[rgba(159,159,164,0.25)] pl-5 pr-10 text-[15px] focus:outline-none focus:border-[#CAA05C] transition-colors ${
+                  className={`h-[52px] w-full appearance-none rounded-full border border-[rgba(159,159,164,0.25)] pl-2.5 pr-6 text-[13px] transition-colors focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-10 sm:text-[15px] ${
                     !region
                       ? 'bg-[#F6F6F6] text-[#9F9FA4] cursor-not-allowed pointer-events-none'
                       : city === ''
@@ -167,7 +170,7 @@ export function StoreLocationSection() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#59585D] pointer-events-none" />
+                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#59585D] sm:right-3.5 sm:h-4 sm:w-4" />
               </div>
             </div>
 

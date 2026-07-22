@@ -7,14 +7,14 @@ import { useParallax } from '../motion/useParallax';
 import { GOLD } from '../theme/cis';
 
 // 門市案例；輪播規則：背景 = 目前主圖(#1)，右邊兩張卡 = 下兩張(#2、#3)，前進時聯動輪替。
-// 圖片來源：影像/門市案例 → public/store-cases/*.jpg
+// 圖片來源：首頁用圖_2026.07.21/影像/門市案例 → public/home-2026/gallery/*.jpg
 const CASES = [
-  { image: '/store-cases/case1.jpg' },
-  { image: '/store-cases/case2.jpg' },
-  { image: '/store-cases/case3.jpg' },
+  { image: '/home-2026/gallery/yuan-aifei.jpg' },
+  { image: '/home-2026/gallery/old-house-kitchen.jpg' },
+  { image: '/home-2026/gallery/custom-kitchen.jpg' },
 ];
 
-// Antra Home Three「Our Gallery」原始段落；本區只更新文字，案例圖與輪播動畫不變。
+// Antra Home Three「Our Gallery」原始段落；文字與既有輪播互動維持不變。
 const GALLERY_DESCRIPTION =
   'Lorem ipsum dolor sit amet consectetur. Magna nunc porttitor convallis faucibus laoreet.';
 
@@ -73,15 +73,6 @@ export function GallerySection() {
           }`}
         />
       ))}
-      {/* 深色遮罩：整體壓深成模板沉穩深調 + 左側再深保文字可讀 */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.62) 45%, rgba(0,0,0,0.5) 100%)',
-        }}
-      />
-
       {/* 內容：左標題區 / 右卡欄各自 slideInUp 進場（stagger 200 / 400，同模板 Home Three） */}
       <div className="relative z-10 w-full">
         {/* 內容非置中：照模板 e-con-inner padding-top 推到下半部（內容從 y≈388 起） */}
@@ -92,7 +83,7 @@ export function GallerySection() {
             <div className="mb-[26px]">
               <span className="inline-flex items-center gap-2 rounded-[24px] border border-white/25 pt-[3px] pr-[13px] pb-[3px] pl-[9px]">
                 <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: GOLD }} />
-                <span className="text-white text-[15px] tracking-[1px] uppercase">our gallery</span>
+                <span className="text-white text-[15px] tracking-[1px] uppercase">門市案例</span>
               </span>
             </div>
 
@@ -128,18 +119,21 @@ export function GallerySection() {
             ref={cardsRef}
             data-ev="slideInUp"
             style={{ animationDelay: '400ms' }}
-            className="ev lg:flex-1 lg:min-w-0 flex justify-end select-none touch-pan-y mt-[53px]"
+            className="ev mt-[53px] flex select-none justify-end touch-pan-y lg:min-w-0 lg:flex-1 lg:mt-[205px] antra:mt-[325px]"
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
-            {/* 內層縮到卡片寬度並右對齊；箭頭在其內靠左 → 對齊卡片群左緣 */}
-            <div>
-            {/* 卡片沿用模板卡尺寸 330×360、圓角 24、gap 30；左側留白露出背景主圖 */}
-            <div key={active} className="flex gap-[30px] animate-gallery-card">
+            {/* 圖說第 6 點：箭頭右移到案例群左側，與兩張縮圖共用同一底線；整組維持靠右。 */}
+            <div className="flex flex-col items-end gap-[30px] lg:flex-row lg:items-end lg:gap-[20px] antra:gap-[40px]">
+            {/* 縮圖改成正方形；桌面 170×170，兩張卡右緣仍對齊 51px 版心。 */}
+            <div key={active} className="order-1 flex gap-[20px] animate-gallery-card lg:order-2 antra:gap-[30px]">
               {cards.map((c, i) => (
                 <div key={i} className="group/card shrink-0">
                   {/* hover：陰影加深 + 圖片微放大（overflow 裁切） */}
-                  <div className="w-[330px] h-[360px] rounded-3xl overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)] transition-shadow duration-500 group-hover/card:shadow-[0_32px_80px_-8px_rgba(0,0,0,0.7)]">
+                  <div
+                    data-gallery-card
+                    className="aspect-square w-[calc((100vw-96px)/2)] max-w-[170px] overflow-hidden rounded-3xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)] transition-shadow duration-500 group-hover/card:shadow-[0_32px_80px_-8px_rgba(0,0,0,0.7)] lg:h-[140px] lg:w-[140px] antra:h-[170px] antra:w-[170px]"
+                  >
                     <img
                       src={c.image}
                       alt=""
@@ -151,8 +145,8 @@ export function GallerySection() {
               ))}
             </div>
 
-            {/* 箭頭：卡片下方、靠卡片群左緣 40px；42×42 圓框、透明底、白 icon */}
-            <div className="flex items-center gap-5 mt-[40px]">
+            {/* 箭頭與卡片下緣對齊；桌面改到卡片左側，行動版仍在卡片下方靠右。 */}
+            <div data-gallery-controls className="order-2 flex items-center justify-end gap-5 lg:order-1">
               <button
                 onClick={prev}
                 aria-label="上一張"

@@ -1,27 +1,31 @@
 import React from 'react';
 
-// Services 底部跑馬燈（採 Home Two elementor-scrolling）：全出血「KITCHEN PRODUCT」無限捲動。
-// 與 Services 共用深色背景，字身使用模板金→透明漸層；動畫 keyframes 定義於 globals.css。
+const BRAND_LOGOS = [
+  { name: 'SAKURA', src: '/home-2026/logos/sakura.svg' },
+  { name: 'TLK Kitchens', src: '/home-2026/logos/tlk.svg' },
+  { name: 'TEKA', src: '/home-2026/logos/teka.svg' },
+  { name: 'SVAGO', src: '/home-2026/logos/svago.svg' },
+  { name: 'SAKURA Home', src: '/home-2026/logos/sakura-home.png' },
+];
+
+// Services 底部品牌 Logo 跑馬燈：尺寸、順序、間距與 20s 速度對齊 SAKURA 官網 Footer。
 export function MarqueeBand() {
   return (
-    <div className="overflow-hidden select-none" aria-hidden>
+    <div className="overflow-hidden select-none py-[40px]" role="region" aria-label="集團品牌">
       <div className="flex w-max animate-marquee">
         {[0, 1].map((group) => (
-          <div key={group} className="flex shrink-0">
-            {Array.from({ length: 4 }).map((_, i) => (
+          <div key={group} className="flex shrink-0" aria-hidden={group === 1 || undefined}>
+            {BRAND_LOGOS.map((logo) => (
               <span
-                key={i}
-                className="block font-display font-normal leading-[0.9] whitespace-nowrap pr-[0.2em] text-[220px]"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(rgb(202,160,92) 0%, rgba(202,160,92,0) 90%)",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  color: "transparent",
-                }}
+                key={logo.name}
+                className="mx-[70px] inline-flex h-[50px] w-[170px] shrink-0 items-center justify-center"
               >
-                Kitchen Product
+                <img
+                  src={logo.src}
+                  alt={group === 0 ? logo.name : ''}
+                  draggable={false}
+                  className="max-h-[50px] w-[170px] object-contain"
+                />
               </span>
             ))}
           </div>

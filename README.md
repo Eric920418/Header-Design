@@ -29,6 +29,44 @@ pnpm build
 
 輸出目錄為 `build/`。
 
+## 2026-07-21 首頁素材與版面更新（最新狀態）
+
+本節是目前首頁的最新實作真值；如與下方 2026-07-17 的歷史 Design QA 記錄衝突，以本節為準。新素材統一放在 `public/home-2026/`，不在執行時引用 Downloads 路徑。
+
+- **Header mega-menu**：白色面板繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題改為官方 Logo，每個使用 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊，型錄箭頭使用 Lucide `ArrowRight`。桌面支援 hover 與鍵盤 focus-within 展開；手機 Accordion 仍保留品牌文字。
+- **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖、1 秒交叉淡入；`prefers-reduced-motion` 停在第一張。移除黑色 overlay，h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行，避免 768–1023px 被裁切。原有左側「品牌系列」伸縮選單、文字、Start Project、分隔線與進場動畫保留。
+- **Section eyebrow**：Services／Gallery／WhatWeDo／Store 依序改為「廚房產品／門市案例／品牌承諾／門市查詢」，膠囊尺寸、金點、邊框與動畫不變。
+- **廚房產品卡**：順序與編號改為 `01 SAKURA → 02 SVAGO → 03 TEKA`；正式品牌拼字為 `SVAGO`。卡片尺寸、Logo 光學等大、Embla 輪播與 hover 不變。
+- **Services 底部 Logo 跑馬燈**：取代舊的 `Kitchen Product` 巨型文字，順序為 SAKURA／TLK／TEKA／SVAGO／SAKURA Home；每格 Logo `170×50px`、左右 margin 各 `70px`、兩組無縫重複、`20s linear infinite`。尺寸與速度來自 SAKURA 官網 Footer 實測，背景仍併入 Services 深色 Section；容器具名為「集團品牌」，減少動態模式停止動畫。Hero 下方 `HeroStyleMarquee` 不變。
+- **品牌承諾影片**：使用 YouTube `wH374AF9wLI`；初始顯示對應縮圖與模板正圓播放鈕，點擊後在原 16:9 卡片內切換為 autoplay iframe。縮圖或 iframe 載入失敗時，前端顯示完整錯誤理由、影片 ID 與 YouTube 備援連結。
+- **Footer**：底部巨型 `footer-sakura.svg` 改為使用者提供的 `public/home-2026/footer/sakura-kitchen.png`；保留原始金色與比例、不降低透明度，所有斷點都水平置中並貼齊 Footer 底部。Footer 高度、背景、Copyright 與連結不變。
+- **門市案例第 6 點**：背景改用 `yuan-aifei.jpg`，右側兩張卡依序使用 `old-house-kitchen.jpg` 與 `custom-kitchen.jpg`；完全移除深色漸層遮罩。桌面兩張卡改為 `170×170px` 正方形並靠右，箭頭移到卡片左側，箭頭與兩張卡片底緣對齊；輪播、拖曳、四秒自動播放、hover 與進場動畫維持不變。
+
+依專案文件規範，Design QA 結果繼續記錄在本 `README.md`，不另建第二份 Markdown 文件。
+
+### 2026-07-21 Design QA
+
+- **真值來源**：首頁素材來自 `首頁用圖_2026.07.21`；Logo 跑馬燈以 SAKURA 官網 Footer 為視覺基準。官網實測為五個 `170×50px` Logo 框、單側 `70px` 間距、`20s linear infinite`。
+- **四斷點**：在 `390 / 768 / 1024 / 1512px` 驗證，所有尺寸皆為 `scrollWidth === innerWidth`，無水平爆版；Footer Logo 各斷點底部 inset 均為 `0px`，寬度依序為 `360 / 708 / 922 / 1410px`。
+- **Header / Hero**：1512px mega-menu 內版心實測 `1200px`，三個品牌 Logo 均為 `170×50px` 且左緣與各欄產品圖一致。Hero 有三張輪播圖、5 秒換圖與 1 秒淡入；沒有遮罩節點。QA 初次發現 768px 標題單行造成右側裁切，已改為固定於 `Inspired` 後換行，複查通過。
+- **內容與互動**：四個中文 eyebrow 已存在；產品卡為 `01 SAKURA → 02 SVAGO → 03 TEKA`。影片初始縮圖及正圓播放鈕正常，點擊後建立 `wH374AF9wLI` autoplay iframe，`allowFullScreen` 與播放權限完整；失敗狀態在卡片內保留完整原因及 YouTube 連結。
+- **Footer / 跑馬燈**：官網與本機皆以 `1280×720` 擷取並合併比對；Logo 視覺框、間距與移動節奏一致，本機沿用 Services 深色背景。Footer 新金色 Logo 原色、比例完整、各斷點置中貼底。
+- **視覺證據**：集中於 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/`，包含 `home-2026-hero-{390,768,1024,1512}.png`、`home-2026-mega-1512.png`、`home-2026-logo-marquee-768.png`、`home-2026-video-playing-768.png`、`home-2026-footer-768.png` 與 `logo-marquee-comparison-1280.png`。
+- **Console**：無本次功能造成的 error。僅保留地圖既有的兩項 warning：Google Maps 建議 `loading=async`，以及傳統 `google.maps.Marker` deprecation；地圖屬明確不動範圍。
+- **結論**：首頁素材更新範圍通過；門市案例第 6 點於後續迭代依 `IMG_1251.PNG` 補齊，驗收記錄見下方最新 Gallery Design QA。
+
+### 2026-07-21 Gallery 第 6 點 Design QA
+
+- **來源真值**：`/Users/eric/Downloads/IMG_1251.PNG`；紅框與紅字為尺寸／位置註記，不屬於成品視覺。
+- **實作證據**：1512px 桌面版兩張卡實測均為 `170×170px`，x=`1129 / 1329`，右側保留約 51px 版心；箭頭群 x=`947`、寬 `104px`。箭頭與卡片 bottom 均為同一畫面座標 `618px`，對齊誤差 `0px`；遮罩節點為 `0`。
+- **響應式**：`390 / 768 / 1024 / 1512px` 的 `scrollWidth === innerWidth`。390px 卡片為 `147×147px`，768px 為 `170×170px`，1024px 為 `140×140px` 且自 1024px 起箭頭移到卡片左側、底緣一致。
+- **圖片與互動**：初始背景為 `yuan-aifei.jpg`，右卡為 `old-house-kitchen.jpg / custom-kitchen.jpg`；圖片均使用原始 JPEG、`object-cover`、無遮罩。實際點擊「下一張」後背景與兩張卡同步切換，拖曳、四秒 autoplay、hover 與 Reveal 動畫保留。
+- **五項 fidelity**：字型、字級、行高與文案未改；間距與下緣依紅色標註線重排；模板金、按鈕邊框及白字色票未改；三張案例圖皆為提供的原始素材；「門市案例／Interior design／Lorem ipsum／更多設計」內容維持既有版本。
+- **合併比對**：來源標註與成品焦點圖位於 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/gallery-comparison-final.png`；完整成品為同目錄 `gallery-locked-initial-1512.png`。初次合併比對未發現 P0／P1／P2 差異，無需第二輪修正。
+- **Console**：沒有本次 Gallery 造成的 error；只有明確不動範圍內既有 Google Maps `loading=async` 與 Marker deprecation warnings。
+- **文件規則**：依專案規範不新增 `design-qa.md`，本段是唯一 QA 文件位置。
+- **final result: passed**
+
 ## 全站原生 RWD（已移除 Scale-to-Fit）
 
 整站不再把 1512px 桌面畫布用 `transform: scale()` 壓進小螢幕，而是依真實 viewport 重排。`ScaleToFit.tsx`、`useCanvasScale.ts` 已刪除，`App.tsx` 直接渲染內容；這也避免縮小桌面字造成手機可讀性與點擊區過小。
@@ -343,7 +381,7 @@ final result: passed
 - **左欄（寬，~62%）**：**Google Maps JavaScript API 自訂地圖**（`GoogleStoreMap.tsx`），套**極簡淺灰樣式**（`LIGHT_STYLE` style JSON，仿官網 store/location 的 Positron 淺灰風）+ **深色水滴「S」標記**（inline SVG）；選取/篩選門市時 `google.maps.Geocoder` 依地址定位、`panTo` 平移（結果 cache）。
   - **需金鑰**：在專案根目錄建立 `.env`，設定 `VITE_GOOGLE_MAPS_API_KEY=你的金鑰`（`.env` 已加入 `.gitignore` 不會 commit），並在 Google Cloud 啟用 **Maps JavaScript API** 與 **Geocoding API**；金鑰建議以 HTTP referrer 限制網域。改 `.env` 後需**重啟 `pnpm dev`**（Vite 環境變數不熱更新）。
   - **無金鑰/載入失敗**：地圖區直接顯示完整錯誤訊息（依全域規則「錯誤完整顯示在前端」），不靜默空白。
-- **右欄（窄）**：`我的位置`（`LocateFixed` 金色準星）+ **`選擇區域` / `選擇城市` 兩個下拉**（`appearance-none` + 疊自訂 `ChevronDown`）；下方門市列表卡片——第一行區域灰底 pill + 店名，第二行 `MapPin` 地址（左）+ **金色電話（右靠同行）**，字級 14；選中 → 金色底白字。
+- **右欄（窄）**：`我的位置` 改成與 **`選擇區域` / `選擇城市`** 相同的 52px 高白底圓角按鈕；三個控制固定使用等寬三欄同排，窄螢幕縮小內距、字級與圖示避免爆版。位置按鈕保留 `LocateFixed` 金色準星，兩個下拉維持 `appearance-none` + 疊自訂 `ChevronDown`。下方門市列表卡片——第一行區域灰底 pill + 店名，第二行 `MapPin` 地址（左）+ **金色電話（右靠同行）**，字級 14；選中 → 金色底白字。
 - **級聯篩選**：`region` / `city` 兩個 state 驅動；選區域自動清空城市、城市下拉未選區域時 disabled（`REGIONS` 提供五大區→縣市對照）。`filtered = STORES.filter(區域符合 && 城市符合)`；選取門市若被濾掉自動退回第一筆可見門市；該區無資料顯示「此區域尚無門市資料」。
 - **門市資料**：pptx 真實資料共 5 間（承德 / 石牌 / 民權 / 中山南京 / 八德，皆北部/臺北市，含真地址電話）；其他區暫無資料，補上即可用。
 

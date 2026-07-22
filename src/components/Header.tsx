@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Menu, X, ChevronDown } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, ArrowRight } from 'lucide-react';
 
 import { GOLD } from '../theme/cis';
 
@@ -7,7 +7,7 @@ import { GOLD } from '../theme/cis';
 const HEADER_GRADIENT = 'linear-gradient(90deg, #b79258 20%, #d2b587)';
 const HEADER_FONT = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", 微軟正黑體';
 
-type MegaCard = { label: string; image: string; href?: string };
+type MegaCard = { label: string; image: string; logo: string; href?: string };
 type NavItem = {
   label: string;
   children?: string[];
@@ -23,9 +23,9 @@ const NAV_LEFT: NavItem[] = [
     label: '廚房產品',
     // hover 展開滿寬 mega-menu：三張品牌產品大圖
     mega: [
-      { label: 'SAKURA 廚電', image: '/products/sakura.jpg', href: '#' },
-      { label: 'SVAGO', image: '/products/svago.jpg', href: '#' },
-      { label: 'TEKA', image: '/products/teka.jpg', href: '#' },
+      { label: 'SAKURA 廚電', image: '/products/sakura.jpg', logo: '/home-2026/logos/sakura.svg', href: '#' },
+      { label: 'SVAGO', image: '/products/svago.jpg', logo: '/home-2026/logos/svago.svg', href: '#' },
+      { label: 'TEKA', image: '/products/teka.jpg', logo: '/home-2026/logos/teka.svg', href: '#' },
     ],
     megaCatalog: '廚房商品型錄',
   },
@@ -47,27 +47,30 @@ function DesktopNavItem({ item }: { item: NavItem }) {
     return (
       <div className="group">
         {/* 觸發鈕撐滿 bar 高度，讓面板無縫貼合、避免 hover 中斷 */}
-        <button className="flex items-center gap-1 h-[72px] px-3 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap">
+        <button type="button" className="flex items-center gap-1 h-[72px] px-3 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap">
           {item.label}
           <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
         </button>
         {/* 面板：絕對定位於 header（滿寬），淡入展開（opacity+visibility，300ms，仿模板） */}
-        <div className="absolute left-0 right-0 top-[72px] z-40 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-300">
+        <div className="absolute left-0 right-0 top-[72px] z-40 invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-300">
           <div className="bg-white shadow-2xl border-t border-black/5">
-            <div className="max-w-[1410px] mx-auto py-8">
+            <div className="mx-auto max-w-[1200px] px-[30px] py-8 xl:px-0">
               <div className="grid grid-cols-3 gap-[30px]">
                 {item.mega.map((m, i) => (
                   <a key={i} href={m.href} className="group/card block">
+                    <div className="mb-4 flex h-[50px] items-center justify-start">
+                      <img
+                        src={m.logo}
+                        alt={m.label}
+                        className="h-[50px] w-[170px] object-contain object-left brightness-0"
+                      />
+                    </div>
                     <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#1C1C1D]">
                       <img
                         src={m.image}
                         alt={m.label}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                      <span className="absolute bottom-4 left-5 text-white text-lg font-semibold tracking-wide group-hover/card:text-[#CAA05C] transition-colors">
-                        {m.label}
-                      </span>
                     </div>
                   </a>
                 ))}
@@ -78,7 +81,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
                   className="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] hover:text-[#CAA05C] transition-colors"
                 >
                   {item.megaCatalog}
-                  <span aria-hidden>→</span>
+                  <ArrowRight aria-hidden className="h-4 w-4" />
                 </a>
               )}
             </div>

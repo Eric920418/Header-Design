@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronRight, Circle } from 'lucide-react';
 import { Reveal, useReveal } from '../motion/Reveal';
+import { prefersReducedMotion } from '../motion/prefersReducedMotion';
 
 const TEMPLATE_GOLD = '#CAA05C';
-const HERO_IMAGE = '/hero-antra-home-6.jpg';
+const HERO_SLIDES = [
+  '/home-2026/hero/ai-kitchen.jpg',
+  '/home-2026/hero/clever-kitchen.jpg',
+  '/home-2026/hero/basic-plus.jpg',
+];
 
 // 使用者原有的自訂功能；疊在模板 Hero 上，不屬於模板外觀替換範圍。
 const SERIES = ['巧域廚房', '潮派廚房', '童樂廚房', '君璽廚房', '臻美廚房', '大廚廚房', '鄉村廚房', '閣樂廚房'];
@@ -11,8 +16,17 @@ const SERIES = ['巧域廚房', '潮派廚房', '童樂廚房', '君璽廚房', 
 /** Antra Home 6 Hero（ee91316）＋既有品牌系列側抽屜。 */
 export function HeroSection() {
   const [seriesOpen, setSeriesOpen] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
   const heroRef = useReveal<HTMLElement>();
   const desktopShift = seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0';
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const timer = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % HERO_SLIDES.length);
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   return (
     <section
@@ -21,13 +35,17 @@ export function HeroSection() {
       className="ev relative h-[587px] w-full overflow-hidden bg-black md:h-[489px] lg:h-[719px] antra:h-[952px]"
       aria-labelledby="hero-title"
     >
-      <img
-        src={HERO_IMAGE}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
-      <div aria-hidden="true" className="absolute inset-0 bg-black/[0.64]" />
+      {HERO_SLIDES.map((image, index) => (
+        <img
+          key={image}
+          src={image}
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ${
+            index === activeSlide ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ))}
 
       {/* 模板原生斷點：390 / 768 / 1024 置中，1200px 起回到桌面左對齊。 */}
       <div
@@ -50,8 +68,8 @@ export function HeroSection() {
             className="m-0 w-full font-display text-[30px] font-normal capitalize leading-[35px] tracking-[-1px] text-white md:text-[50px] md:leading-[60px] lg:text-[100px] lg:leading-[110px] antra:w-[850px]"
           >
             Find Your <span style={{ color: TEMPLATE_GOLD }}>Inspired</span>
-            <br className="md:hidden lg:block" />
-            <span style={{ color: TEMPLATE_GOLD }}>Interior</span> Design
+            <br />
+            <span style={{ color: TEMPLATE_GOLD }}>Kitchen</span> Design
           </h1>
 
           <p className="mx-auto mt-[30px] w-full font-sans text-[18px] font-medium leading-[24px] text-white antra:mx-0 antra:w-[522px]">
@@ -100,7 +118,7 @@ export function HeroSection() {
               color: 'transparent',
             }}
           >
-            Interior
+            Kitchen
           </span>
         </Reveal>
       </div>

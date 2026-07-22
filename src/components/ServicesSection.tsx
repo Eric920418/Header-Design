@@ -8,9 +8,9 @@ import { GOLD } from '../theme/cis';
 // Antra home-6「Our Services」= antra-services-list style-3。
 // 依使用者指示僅保留已替換品牌素材的三張卡片；圖片已本地化，避免 demo 外連失效造成視覺漂移。
 const SERVICES = [
-  { n: '01', title: 'Renovation and Remodeling', excerpt: 'Overhauling existing spaces to modernize and improve functionality and aesthetics.', img: '/services/svago-product.png', logo: '/services/svago-logo-white.png', logoAlt: 'SVago', logoClass: 'h-[31px] w-auto sm:h-[35px] antra:h-[38px]', captionTop: true },
-  { n: '02', title: 'Interior 2D/3D Layouts', excerpt: 'Realistic 3D visualizations to help you envision your space before it is built in real life.', img: '/services/teka-product.png', logo: '/services/teka-logo-white.svg', logoAlt: 'TEKA', logoClass: 'h-[32px] w-auto sm:h-[36px] antra:h-[39px]', captionTop: false },
-  { n: '03', title: 'Outdoor & Landscape Design', excerpt: 'Extending design services to outdoor spaces such as gardens, patios, and decks.', img: '/services/sakura-product.png', logo: '/services/sakura-logo-white.png', logoAlt: 'SAKURA', logoClass: 'h-[24px] w-auto sm:h-[26px] antra:h-[28px]', captionTop: true },
+  { n: '01', title: 'Outdoor & Landscape Design', excerpt: 'Extending design services to outdoor spaces such as gardens, patios, and decks.', img: '/services/sakura-product.png', logo: '/services/sakura-logo-white.png', logoAlt: 'SAKURA', logoClass: 'h-[24px] w-auto sm:h-[26px] antra:h-[28px]', captionTop: true },
+  { n: '02', title: 'Renovation and Remodeling', excerpt: 'Overhauling existing spaces to modernize and improve functionality and aesthetics.', img: '/services/svago-product.png', logo: '/services/svago-logo-white.png', logoAlt: 'SVAGO', logoClass: 'h-[31px] w-auto sm:h-[35px] antra:h-[38px]', captionTop: true },
+  { n: '03', title: 'Interior 2D/3D Layouts', excerpt: 'Realistic 3D visualizations to help you envision your space before it is built in real life.', img: '/services/teka-product.png', logo: '/services/teka-logo-white.svg', logoAlt: 'TEKA', logoClass: 'h-[32px] w-auto sm:h-[36px] antra:h-[39px]', captionTop: false },
 ];
 const SVC_FALLBACK = '/kitchen-styles/elegant.jpg';
 
@@ -80,7 +80,7 @@ export function ServicesSection() {
               <div className="antra:w-[424px] antra:shrink-0 antra:pt-[8px]">
                 <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-white/[0.18] pb-[6px] pl-[9px] pr-[13px] pt-[7px] font-display text-[12px] uppercase leading-[14px] tracking-[1px] text-white">
                   <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
-                  Our Services
+                  廚房產品
                 </span>
               </div>
 
@@ -160,7 +160,7 @@ export function ServicesSection() {
           </Reveal>
         </div>
 
-      {/* 使用者自訂跑馬燈：視覺與 DOM 都併入 Services，同背景、全出血，文案與動畫不變。 */}
+      {/* 品牌 Logo 跑馬燈：視覺與 DOM 都併入 Services，同背景、全出血。 */}
       <div className="relative z-10 -mx-[15px] pt-24 md:-mx-[30px]">
         <MarqueeBand />
       </div>
