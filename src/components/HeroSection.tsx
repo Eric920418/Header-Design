@@ -35,7 +35,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative h-[587px] w-full overflow-hidden bg-[#9F9FA4] md:h-[489px] lg:h-[719px] antra:h-[952px]"
+      className="hero-template-section relative w-full overflow-hidden bg-[#9F9FA4]"
       aria-labelledby="hero-title"
     >
       {/* 保留三張圖的預載，不讓下一張進場時才開始下載。 */}
@@ -91,12 +91,12 @@ export function HeroSection() {
         }}
       />
 
-      {/* 模板原生斷點：390 / 768 / 1024 置中，1200px 起回到桌面左對齊。 */}
+      {/* Elementor 原生五段 RWD：上層內容使用 1584px 置中版心。 */}
       <div
-        className={`absolute left-[15px] right-[15px] top-[80px] z-10 text-center transition-transform duration-500 md:left-[30px] md:right-[30px] md:top-[100px] antra:right-auto antra:top-[244px] antra:w-[850px] antra:text-left ${desktopShift}`}
+        className={`hero-template-top z-10 transition-transform duration-500 ${desktopShift}`}
       >
         <Reveal anim="slideInLeft" speed="slow">
-          <div className="mb-[20px] flex justify-center antra:justify-start">
+          <div className="hero-template-eyebrow-row mb-[20px] flex justify-center">
             <span className="inline-flex h-[30px] items-center gap-[10px] rounded-[24px] border border-[rgba(159,159,164,0.18)] py-[3px] pl-[10px] pr-[13px] font-display text-[12px] font-normal uppercase leading-[22px] tracking-[1px] text-white">
               <Circle
                 aria-hidden="true"
@@ -109,14 +109,14 @@ export function HeroSection() {
 
           <h1
             id="hero-title"
-            className="m-0 w-full font-display text-[30px] font-normal capitalize leading-[35px] tracking-[-1px] text-white md:text-[50px] md:leading-[60px] lg:text-[100px] lg:leading-[110px] antra:w-[850px]"
+            className="hero-template-title m-0 font-display font-normal capitalize tracking-[-1px] text-white"
           >
             Find Your <span style={{ color: TEMPLATE_GOLD }}>Inspired</span>
             <br />
             <span style={{ color: TEMPLATE_GOLD }}>Kitchen</span> Design
           </h1>
 
-          <p className="mx-auto mt-[30px] w-full font-sans text-[18px] font-medium leading-[24px] text-white antra:mx-0 antra:w-[522px]">
+          <p className="hero-template-description mt-[30px] font-sans text-[18px] font-medium leading-[24px] text-white">
             Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.
           </p>
         </Reveal>
@@ -124,49 +124,51 @@ export function HeroSection() {
 
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-[356px] z-10 h-px bg-white/25 md:top-[318px] lg:top-[478px] antra:top-[691px]"
+        className="hero-template-divider absolute inset-x-0 z-10 h-px bg-white/25"
       />
 
       <div
-        className={`absolute left-1/2 top-[387px] z-20 h-[120px] w-[120px] -translate-x-1/2 transition-transform duration-500 md:left-[30px] md:top-[349px] md:translate-x-0 lg:top-[539px] antra:top-[750px] ${desktopShift}`}
+        className={`hero-template-bottom z-20 transition-transform duration-500 ${desktopShift}`}
       >
-        <Reveal
-          anim="fadeIn"
-          delayMs={900}
-          speed="slow"
-          className="h-full w-full rounded-[200px] backdrop-blur-[58px]"
-        >
-          <a
-            href="#"
-            className="hero-start-project flex h-full w-full items-center justify-center rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center font-display text-[18px] font-normal leading-[24px] text-white transition-colors duration-300 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        <div className="hero-template-cta h-[120px] w-[120px] shrink-0">
+          <Reveal
+            anim="fadeIn"
+            delayMs={900}
+            speed="slow"
+            className="h-full w-full rounded-[200px] backdrop-blur-[58px]"
           >
-            <span className="relative z-[1]">
-              Start
-              <br />
-              Project
-            </span>
-          </a>
-        </Reveal>
-      </div>
+            <a
+              href="#"
+              className="hero-start-project flex h-full w-full items-center justify-center rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center font-display text-[18px] font-normal leading-[24px] text-white transition-colors duration-300 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            >
+              <span className="relative z-[1]">
+                Start
+                <br />
+                Project
+              </span>
+            </a>
+          </Reveal>
+        </div>
 
-      <div
-        className={`pointer-events-none absolute right-[14px] top-[507px] z-10 select-none whitespace-nowrap text-right font-display text-[90px] font-normal leading-[120px] opacity-[0.64] transition-transform duration-500 md:right-[29px] md:top-[349px] md:text-[150px] lg:top-[539px] lg:text-[200px] lg:leading-[155px] antra:right-[4.83vw] antra:top-[719px] antra:text-[320px] antra:leading-[240px] ${desktopShift}`}
-      >
-        <Reveal anim="fadeInUp" delayMs={900} speed="slow">
-          <span
-            aria-hidden="true"
-            className="block"
-            style={{
-              backgroundImage: 'linear-gradient(180deg, #CAA05C 14.9%, rgba(159,159,164,0) 80.95%)',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              color: 'transparent',
-            }}
-          >
-            Kitchen
-          </span>
-        </Reveal>
+        <div className="hero-template-watermark-slot pointer-events-none">
+          <div className="hero-template-watermark select-none whitespace-nowrap text-right font-display font-normal opacity-[0.64]">
+            <Reveal anim="fadeInUp" delayMs={900} speed="slow">
+              <span
+                aria-hidden="true"
+                className="block"
+                style={{
+                  backgroundImage: 'linear-gradient(180deg, #CAA05C 14.9%, rgba(159,159,164,0) 80.95%)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  color: 'transparent',
+                }}
+              >
+                Kitchen
+              </span>
+            </Reveal>
+          </div>
+        </div>
       </div>
 
       {/* 既有桌面品牌系列側抽屜：改為 viewport fixed，捲離 Hero 後仍固定在左側中線。

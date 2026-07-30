@@ -29,11 +29,24 @@ pnpm build
 
 輸出目錄為 `build/`。
 
+## 2026-07-30 Antra 原生 RWD 寬螢幕修正（最新真值）
+
+本節取代 README 內較早的「Hero 1200+ 單一桌面版」說明。網站仍不使用 `transform: scale()` 或 CSS `zoom`；100 吋是物理尺寸，不是 CSS 條件，提案現場應維持瀏覽器 zoom 100%，再由實際 CSS viewport 套用原生 RWD。
+
+- **根因**：舊 Hero 在所有寬螢幕都固定 `left:30px`，但 Antra Home 6 的上半內容使用 `1584px` 置中版心、下半 CTA／浮水印使用 `1585px` 置中版心。1512px 時兩者剛好都接近 30px，故 14 吋 MacBook 看不出問題；1920px 以上模板會開始置中，舊實作卻繼續黏左。
+- **Hero 版心**：上層 `.hero-template-top` 為 `max-width:1584px`，下層 `.hero-template-bottom` 為 `max-width:1585px`；手機寬度為 `viewport - 30px`，768px 以上為 `viewport - 60px`，超過最大寬後自動水平置中。標題與 Start Project 實測 x 座標為 1512=`30`、1920=`168`、2560=`488`、3840=`1128`。
+- **Kitchen 浮水印**：1201px 以上沿用模板下半 Flex 結構：120px CTA 後接 `88.7%` 浮水印欄，文字以 `right:-1px` 貼齊，不再使用 `right:4.83vw`。因本站文字是 `Kitchen`、模板是 `Interior`，左緣會因字寬不同，但兩者右緣與版心結構一致。
+- **原生區間**：模板啟用 Elementor `767 / 880 / 1024 / 1200 / 1366px` 斷點；Hero 實際高度為 `≤767:587px`、`768–880:489px`、`881–1024:719px`、`1025–1200:858px`、`≥1201:952px`。標題、分隔線、CTA、描述與浮水印同步使用相同區間，不再混用 1024 與 1200 的半套桌面值。
+- **全站容器稽核**：4K viewport 下 Services／品牌承諾／Footer 仍為 `1410px` 置中（x=1215），門市查詢為 `1512px` 置中（x=1164），門市案例與 Project 輪播維持 full-bleed。沒有為 4K 放大固定字級或卡片，避免違反模板原本的留白比例。
+- **溢出檢查**：390、768、1025、1512、1920、2560、3840px 均為 `scrollWidth === innerWidth`；逐元素掃描亦無未被合法 overflow 容器裁切的越界節點。Header mega-menu、品牌系列抽屜、右側浮動按鈕與地圖不參與版心縮放。
+- **互動回歸**：1512px 品牌系列抽屜展開後標題 x=`30→230`；Header 廚房產品 mega-menu 維持滿版面板與 1200px 內容版心；右側浮動按鈕在頁尾停於 viewport top=`112px`，與 60px Header 保留 52px。
+- **視覺證據**：`/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/hero-rwd-local-1920.png`、`hero-rwd-local-3840.png`、`hero-rwd-template-1920.png`。
+
 ## 2026-07-21 首頁素材與版面更新（最新狀態）
 
 本節是目前首頁的最新實作真值；如與下方 2026-07-17 的歷史 Design QA 記錄衝突，以本節為準。新素材統一放在 `public/home-2026/`，不在執行時引用 Downloads 路徑。
 
-- **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框仍為 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，但 Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色廚房產品 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題使用官方 Logo，每個為 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊。桌面支援 hover 與鍵盤 focus-within 展開；一般下拉選單的觸發區與 Header 同為 `60px` 高，左側第一項沿左緣、右側項目沿右緣展開，避免 `190px` 選單被 viewport 裁切。新增「設計案例 → 品牌系列」第二層滿寬 mega-menu：左側保留四個原選項，右側以 `5×2` 卡片顯示首頁現有十大系列、正式中英文及圖片；整塊維持同一個 hover/focus 區域，移入圖片不會閃退，卡片連回首頁 `#kitchen-series`。十大系列資料集中於 `src/data/kitchenStyles.ts`，與 `ProjectSection` 共用，避免 Header 與正文不同步。手機 Accordion 維持原本單層操作。
+- **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框仍為 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，但 Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色廚房產品 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題使用官方 Logo，每個為 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊。桌面支援 hover 與鍵盤 focus-within 展開；一般下拉選單的觸發區與 Header 同為 `60px` 高，左側第一項沿左緣、右側項目沿右緣展開，避免 `190px` 選單被 viewport 裁切。新增「設計案例 → 品牌系列」第二層滿寬 mega-menu：左側保留四個原選項，右側以 `5×2` 卡片顯示首頁現有十大系列、正式中英文及圖片；「品牌系列」使用不跳頁的 submenu button，整塊維持同一個 hover/focus 區域，移入圖片不會閃退，圖片卡與「查看全部」才連回首頁 `#kitchen-series`。十大系列資料集中於 `src/data/kitchenStyles.ts`，與 `ProjectSection` 共用，避免 Header 與正文不同步。手機 Accordion 維持原本單層操作。
 - **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖；圖片轉場改為 Antra Page 1 Slider Revolution 原始 `slidingoverlaydown / double` 規格：總長 `2000ms`、第一份新圖片 `1333ms`、第二份新圖片延遲 `333ms` 並於 `2000ms` 完成，easing 對應 `power2.inOut`。首次進場三層為模板灰 `#9F9FA4`＋套 `rgba(16,8,1,.46)` 暫時遮罩的新圖＋原色新圖；後續換圖依模板實際週期改為保留上一張完整圖片作底層，再以暗色新圖與原色新圖由上往下覆蓋，過程不再重新露出灰底。最後原色圖片完整覆蓋，不加入整張常駐黑色遮罩；另在圖片轉場之上加入僅覆蓋 Hero 底部 `58%` 的透明至黑色漸層（中段 `rgba(0,0,0,.42)`、底部 `rgba(0,0,0,.86)`），強化 `Kitchen` 浮水印對比但不壓暗上半部主圖。Hero 根節點不再套整區 `fadeInDown`；`prefers-reduced-motion` 停在第一張、隱藏遮罩圖片層並直接顯示原色圖片。h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行。桌面左側「品牌系列」伸縮選單改為 viewport fixed，捲離 Hero 後仍固定在左側中線；手機維持隱藏。Start Project 的 120px 玻璃圓尺寸不變，未 hover 時增加 2 秒金色雷達水波，hover 後停止並隱藏。
 - **Section eyebrow**：Services／Gallery／WhatWeDo／Store 依序改為「廚房產品／門市案例／品牌承諾／門市查詢」，膠囊尺寸、金點、邊框與動畫不變。
 - **廚房產品卡**：順序與編號改為 `01 SAKURA → 02 SVAGO → 03 TEKA`；正式品牌拼字為 `SVAGO`。卡片尺寸、Logo 光學等大、Embla 輪播與 hover 不變。
@@ -71,11 +84,11 @@ pnpm build
 
 整站不再把 1512px 桌面畫布用 `transform: scale()` 壓進小螢幕，而是依真實 viewport 重排。`ScaleToFit.tsx`、`useCanvasScale.ts` 已刪除，`App.tsx` 直接渲染內容；這也避免縮小桌面字造成手機可讀性與點擊區過小。
 
-- **斷點**：`globals.css` 恢復 Tailwind 標準 `sm 640 / md 768 / lg 1024 / xl 1280 / 2xl 1536`，並增加只供模板 Hero 使用的 `antra 1200` 斷點；元件原有 `md:`、`lg:` 規則重新生效。
+- **斷點**：Tailwind utilities 繼續使用既有 `sm / md / lg / antra / xl / 2xl`，Hero 的精準幾何則由 `globals.css` 另以 Elementor 原生 `767 / 880 / 1024 / 1200 / 1366px` 區間控制，避免 named breakpoint 無法表達 `881–1024` 與 `1025–1200` 的模板差異。
 - **Header**：`StickyHeader` 是真正的 `position:fixed; width:100%`，不再另套 canvas scale；`App` 保留與官網相同的 60px spacer。
 - **FloatingButtons**：全斷點依 SAKURA 官網 quick links 維持右側 fixed 直排；頁首時仍為手機底距 70px、`sm+` 底距 36px。新增捲動進度連動：由頁首到頁尾以 `requestAnimationFrame` 線性增加負向 `translateY`，頁尾時整列頂端停在 viewport `112px`，與 60px fixed Header 保留 52px 安全距離。位移會依 viewport 高度與按鈕列實際高度重新計算，短螢幕不會硬撞 Header；`prefers-reduced-motion` 時維持原本固定位置、不做捲動位移。
   - 官網實測規格：手機單顆 `72×72px`（內容 `56×56px`）、`sm+` 單顆 `74×74px`（內容 `58×58px`）、金色 `#B79258`、灰色 `#737373`、金色頂鈕與灰色群組相隔 `20px`、群組使用 `1px` 白色 50% 分隔線；本站保留既有三個文字與目的連結。
-- **Hero**：直接對應模板 390／768／1024／1200+ 的原生高度、字級、對齊與座標；1512 仍是桌面像素級比對基準，不再是全站縮放畫布。
+- **Hero**：直接對應模板五段原生高度、字級、對齊與座標；1201px 以上再進入 1584／1585px 置中版心。1512 仍是既有桌面比對點，1920／2560／3840 同樣納入正式驗收。
 - **其他 sections**：沿用既有 Tailwind 響應式 class 與 CSS 變數；StoreLocation 的資料、地圖、篩選與互動未更動。
 
 ## 捲動動態（Lenis 阻尼 + 出場動畫 + GSAP 視差）— 複刻 Antra 模板
@@ -199,9 +212,11 @@ pnpm build
 
 | 層級 | 範圍 | 策略 |
 |------|------|------|
-| 手機 | <768px | 獨立的較小固定值（CSS 變數默認值） |
-| 平板 | 768px - 1023px | `min()` + `dvh` 流動縮放 |
-| 桌面 | ≥1024px | 桌面構圖；Hero 在 ≥1200px 切到模板完整左對齊版 |
+| 手機 | ≤767px | 模板 mobile portrait 固定值 |
+| 行動橫式 | 768px - 880px | 模板 mobile-extra 固定值 |
+| 平板 | 881px - 1024px | 模板 tablet 固定值 |
+| 平板橫式 | 1025px - 1200px | 模板 tablet-extra 固定值 |
+| 桌面 | ≥1201px | 952px Hero；1584／1585px 版心，寬螢幕自動置中 |
 
 ### 技術方案
 
@@ -213,7 +228,7 @@ pnpm build
 | 組件 | 手機版 | 平板版 | 桌面版 |
 |------|--------|--------|--------|
 | Header（巨型選單） | logo + 搜尋 + 漢堡；漢堡開 accordion 抽屜 | 同左 | 中央 logo + 左右導覽 + hover 下拉 + 搜尋展開 |
-| HeroSection（主視覺） | Antra 390 置中版 | Antra 768 置中版 | 1024 置中大字；1200+ 原版左對齊 |
+| HeroSection（主視覺） | Antra 390 置中版 | 768–880 置中；881–1024 置中大字 | 1025–1200 平板橫式；1201+ 置中版心桌面版 |
 | HeroStyleMarquee | 62px 輪播本體＋上下 12px、1 欄 step carousel | 768=3 欄、880=4 欄；上下 16px | 1200=5 欄、1367+=6 欄；gap 120px、上下 16px |
 | FloatingButtons | 右側 `fixed` 直排，頁首底距 70px；隨捲動上移 | 右側 `fixed` 直排，頁首底距 36px；隨捲動上移 | 同左，頁尾頂端停於 112px，不碰 60px Header |
 | ProjectSection（10 種廚房風格輪播） | embla 拖曳、卡片較窄 | 拖曳捲動 | 拖曳、卡片 378×880、hover 伸縮露出橫式廚房圖 |
@@ -228,7 +243,7 @@ pnpm build
 - **文字**：eyebrow `12/22`、letter-spacing `1px`、實測寬約 204px，外層用 flex 消除 inline baseline 的 0.5px 偏移；h1 `100/110`、letter-spacing `-1px`、寬 850；副文 `18/24/500`、寬 522。模板主金使用原值 `#CAA05C`，不再套 SAKURA CIS `#C9AA79`。
 - **下半部**：分隔線 `top:691`；Start Project 圓鈕依 Home 6 實頁在 `390 / 1024 / 1512px` 逐一量測，三個斷點均為 `120×120`（1024px 因 Elementor 欄寬運算顯示 `118.64px`）、桌面 `left:30 / top:750`、背景 `#5C5C5C75`、邊框 `#FFFFFF12`、外層圓角 `200px`、內層圓角 `100px`、`backdrop-filter:blur(58px)`；文字為 Cal Sans `18/24 / 400 / #FFFFFF`，hover 為 `#CAA05C`。本次確認原尺寸正確，修正的是原先偏黑的錯誤背景值與內外圓層級；`Kitchen` 浮水印以 block line-box 固定為 `320/240 / left:426 / top:719 / opacity:.64`。
 - **模板動態**：Hero 根節點原有的 Home 6 `fadeInDown` 已由 Page 1 背景 `slidingoverlaydown / double` 取代，避免整個文字與控制項也跟著圖片簾幕位移；內層仍保留標題 `slideInLeft 2s`、圓鈕 `fadeIn 2s delay 900ms`、浮水印 `fadeInUp 2s delay 900ms`。Page 1 真值取自 Slider Revolution `SR7_1_1`：`d=2000 / sd=1333.333 / power2.inOut / south / double`。
-- **原生 RWD 實測值**：390=`587px` 高、title `30/35`、左右 15px；768=`489px` 高、title `50/60`、左右 30px；1024=`719px` 高、title `100/110` 置中；1200+=`952px` 高、完整桌面座標。分隔線、圓鈕與浮水印也各自對應模板斷點（浮水印右距：390=14px、768/1024=29px、桌面=4.83vw）。
+- **原生 RWD 實測值**：≤767=`587px` 高、title `30/35`；768–880=`489px` 高、title `50/60`；881–1024=`719px` 高、title `100/110` 置中；1025–1200=`858px` 高、title `100/110` 左對齊；≥1201=`952px` 高並進入 1584／1585px 置中版心。桌面浮水印不再以 `4.83vw` 定位，而是放回模板下半 `88.7%` Flex 欄。
 - **自訂功能保留**：桌面左側「品牌系列」把手改為 `fixed left:0 top:50% translateY(-50%) z-index:40`，捲動到其他 Section 仍固定在 viewport 左側；可展開 190px 選單，展開時把手同步右移並沿用原行為把 Hero 文字、圓鈕與浮水印右推。手機版維持隱藏。Hero 下方 `HeroStyleMarquee.tsx` 是獨立品牌輪播 Section。
 
 ### Hero 下方品牌輪播 — Antra Home 4 `antra-brand`

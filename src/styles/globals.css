@@ -243,6 +243,204 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Antra Home 6 Hero 原生版心與五段 RWD ──
+   Elementor 啟用 mobile / mobile-extra / tablet / tablet-extra / laptop：
+   767 / 880 / 1024 / 1200 / 1366。Hero 真正發生版型變化的區間為
+   767、880、1024、1200；1201px 起維持 952px 桌面構圖。
+   上層 1584px、下層 1585px 都使用「viewport - 60px」寬度再置中，
+   因此 1512px 是 x=30，1920px 自動成為 x=168，而非永遠黏左 30px。 */
+.hero-template-section {
+  height: 587px;
+}
+
+.hero-template-top,
+.hero-template-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: calc(100% - 30px);
+}
+
+.hero-template-top {
+  top: 80px;
+  max-width: 1584px;
+  text-align: center;
+}
+
+.hero-template-title {
+  width: 100%;
+  font-size: 30px;
+  line-height: 35px;
+}
+
+.hero-template-description {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.hero-template-divider {
+  top: 356px;
+}
+
+.hero-template-bottom {
+  top: 387px;
+  display: flex;
+  max-width: 1585px;
+}
+
+.hero-template-cta {
+  margin-inline: auto;
+}
+
+.hero-template-watermark-slot {
+  position: absolute;
+  inset: 120px 0 auto;
+  height: 120px;
+}
+
+.hero-template-watermark {
+  position: absolute;
+  top: 0;
+  right: -1px;
+  font-size: 90px;
+  line-height: 120px;
+}
+
+@media (min-width: 768px) {
+  .hero-template-top,
+  .hero-template-bottom {
+    width: calc(100% - 60px);
+  }
+
+  .hero-template-section {
+    height: 489px;
+  }
+
+  .hero-template-top {
+    top: 100px;
+  }
+
+  .hero-template-title {
+    font-size: 50px;
+    line-height: 60px;
+  }
+
+  .hero-template-divider {
+    top: 318px;
+  }
+
+  .hero-template-bottom {
+    top: 349px;
+  }
+
+  .hero-template-cta {
+    margin-inline: 0;
+  }
+
+  .hero-template-watermark-slot {
+    inset: 0;
+  }
+
+  .hero-template-watermark {
+    font-size: 150px;
+    line-height: 120px;
+  }
+}
+
+@media (min-width: 881px) {
+  .hero-template-section {
+    height: 719px;
+  }
+
+  .hero-template-title {
+    font-size: 100px;
+    line-height: 110px;
+  }
+
+  .hero-template-divider {
+    top: 478px;
+  }
+
+  .hero-template-bottom {
+    top: 539px;
+  }
+
+  .hero-template-watermark {
+    font-size: 200px;
+    line-height: 155px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hero-template-section {
+    height: 858px;
+  }
+
+  .hero-template-top {
+    top: 150px;
+    text-align: left;
+  }
+
+  .hero-template-eyebrow-row {
+    justify-content: flex-start;
+  }
+
+  .hero-template-title {
+    width: 850px;
+  }
+
+  .hero-template-description {
+    width: 522px;
+    margin-inline: 0;
+  }
+
+  .hero-template-divider {
+    top: 597px;
+  }
+
+  .hero-template-bottom {
+    top: 656px;
+  }
+
+  .hero-template-watermark {
+    top: -31px;
+    font-size: 250px;
+    line-height: 188px;
+  }
+}
+
+@media (min-width: 1201px) {
+  .hero-template-section {
+    height: 952px;
+  }
+
+  .hero-template-top {
+    top: 244px;
+  }
+
+  .hero-template-divider {
+    top: 691px;
+  }
+
+  .hero-template-bottom {
+    top: 750px;
+  }
+
+  .hero-template-watermark-slot {
+    position: relative;
+    inset: auto;
+    width: 88.7%;
+    height: 120px;
+  }
+
+  .hero-template-watermark {
+    font-size: 320px;
+    line-height: 240px;
+  }
+}
+
 /* Google Maps 會以 inline style 注入三個不在模板色盤內的灰色；只覆寫外觀，保留所有地圖操作。 */
 .antra-map > div:first-child > div:first-child {
   background-color: #f6f6f6 !important;

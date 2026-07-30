@@ -139,14 +139,23 @@ function DesktopNavItem({
 
             return (
               <li key={i} className={opensSeriesMega ? 'group/series' : undefined}>
-                <a
-                  href={opensSeriesMega ? '#kitchen-series' : '#'}
-                  aria-haspopup={opensSeriesMega ? 'true' : undefined}
-                  className="flex items-center justify-between gap-4 px-5 py-2.5 text-sm text-[#59585D] transition-colors whitespace-nowrap hover:bg-[#F6F6F6] hover:text-[#CAA05C]"
-                >
-                  {c}
-                  {opensSeriesMega && <ArrowRight aria-hidden className="h-4 w-4" />}
-                </a>
+                {opensSeriesMega ? (
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    className="flex w-full items-center justify-between gap-4 px-5 py-2.5 text-left text-sm text-[#59585D] transition-colors whitespace-nowrap hover:bg-[#F6F6F6] hover:text-[#CAA05C] focus:bg-[#F6F6F6] focus:text-[#CAA05C] focus:outline-none"
+                  >
+                    {c}
+                    <ArrowRight aria-hidden className="h-4 w-4" />
+                  </button>
+                ) : (
+                  <a
+                    href="#"
+                    className="flex items-center justify-between gap-4 px-5 py-2.5 text-sm text-[#59585D] transition-colors whitespace-nowrap hover:bg-[#F6F6F6] hover:text-[#CAA05C]"
+                  >
+                    {c}
+                  </a>
+                )}
 
                 {opensSeriesMega && (
                   <div className="pointer-events-none invisible fixed inset-x-0 top-[60px] z-[60] opacity-0 transition-[opacity,visibility] duration-300 group-hover/series:pointer-events-auto group-hover/series:visible group-hover/series:opacity-100 group-focus-within/series:pointer-events-auto group-focus-within/series:visible group-focus-within/series:opacity-100">
