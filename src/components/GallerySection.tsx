@@ -31,10 +31,10 @@ export function GallerySection() {
   const next = useCallback(() => setActive((a) => (a + 1) % len), [len]);
   const prev = useCallback(() => setActive((a) => (a - 1 + len) % len), [len]);
 
-  // 自動播放（每 4s，滑鼠移入暫停）
+  // 自動播放（依最新需求由每 4s 加快為 3.2s，滑鼠移入暫停）
   useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => setActive((a) => (a + 1) % len), 4000);
+    const id = setInterval(() => setActive((a) => (a + 1) % len), 3200);
     return () => clearInterval(id);
   }, [paused, len]);
 

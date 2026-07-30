@@ -30,7 +30,7 @@ export function ServicesSection() {
     if (!prefersReducedMotion()) {
       timer = setInterval(() => {
         if (!pausedRef.current) emblaApi.scrollNext();
-      }, 5000);
+      }, 4000);
     }
 
     return () => {

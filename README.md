@@ -33,11 +33,11 @@ pnpm build
 
 本節是目前首頁的最新實作真值；如與下方 2026-07-17 的歷史 Design QA 記錄衝突，以本節為準。新素材統一放在 `public/home-2026/`，不在執行時引用 Downloads 路徑。
 
-- **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框仍為 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，但 Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題改成官方 Logo，每個使用 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊，型錄箭頭使用 Lucide `ArrowRight`。桌面支援 hover 與鍵盤 focus-within 展開；手機 Accordion 仍保留品牌文字。
-- **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖；圖片轉場改為 Antra Page 1 Slider Revolution 原始 `slidingoverlaydown / double` 規格：總長 `2000ms`、第一份新圖片 `1333ms`、第二份新圖片延遲 `333ms` 並於 `2000ms` 完成，easing 對應 `power2.inOut`。首次進場三層為模板灰 `#9F9FA4`＋套 `rgba(16,8,1,.46)` 暫時遮罩的新圖＋原色新圖；後續換圖依模板實際週期改為保留上一張完整圖片作底層，再以暗色新圖與原色新圖由上往下覆蓋，過程不再重新露出灰底。最後原色圖片完整覆蓋，不加入整張常駐黑色遮罩；另在圖片轉場之上加入僅覆蓋 Hero 底部 `58%` 的透明至黑色漸層（中段 `rgba(0,0,0,.42)`、底部 `rgba(0,0,0,.86)`），強化 `Kitchen` 浮水印對比但不壓暗上半部主圖。Hero 根節點不再套整區 `fadeInDown`；`prefers-reduced-motion` 停在第一張、隱藏遮罩圖片層並直接顯示原色圖片。h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行，避免 768–1023px 被裁切。原有左側「品牌系列」伸縮選單、文字、Start Project、分隔線與內層進場動畫保留；Start Project 的 120px 玻璃圓尺寸不變，未 hover 時增加與內容 CTA 相同的 2 秒金色雷達水波，hover 後水波停止並隱藏。
+- **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框仍為 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，但 Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色廚房產品 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題使用官方 Logo，每個為 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊。桌面支援 hover 與鍵盤 focus-within 展開；一般下拉選單的觸發區與 Header 同為 `60px` 高，左側第一項沿左緣、右側項目沿右緣展開，避免 `190px` 選單被 viewport 裁切。新增「設計案例 → 品牌系列」第二層滿寬 mega-menu：左側保留四個原選項，右側以 `5×2` 卡片顯示首頁現有十大系列、正式中英文及圖片；整塊維持同一個 hover/focus 區域，移入圖片不會閃退，卡片連回首頁 `#kitchen-series`。十大系列資料集中於 `src/data/kitchenStyles.ts`，與 `ProjectSection` 共用，避免 Header 與正文不同步。手機 Accordion 維持原本單層操作。
+- **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖；圖片轉場改為 Antra Page 1 Slider Revolution 原始 `slidingoverlaydown / double` 規格：總長 `2000ms`、第一份新圖片 `1333ms`、第二份新圖片延遲 `333ms` 並於 `2000ms` 完成，easing 對應 `power2.inOut`。首次進場三層為模板灰 `#9F9FA4`＋套 `rgba(16,8,1,.46)` 暫時遮罩的新圖＋原色新圖；後續換圖依模板實際週期改為保留上一張完整圖片作底層，再以暗色新圖與原色新圖由上往下覆蓋，過程不再重新露出灰底。最後原色圖片完整覆蓋，不加入整張常駐黑色遮罩；另在圖片轉場之上加入僅覆蓋 Hero 底部 `58%` 的透明至黑色漸層（中段 `rgba(0,0,0,.42)`、底部 `rgba(0,0,0,.86)`），強化 `Kitchen` 浮水印對比但不壓暗上半部主圖。Hero 根節點不再套整區 `fadeInDown`；`prefers-reduced-motion` 停在第一張、隱藏遮罩圖片層並直接顯示原色圖片。h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行。桌面左側「品牌系列」伸縮選單改為 viewport fixed，捲離 Hero 後仍固定在左側中線；手機維持隱藏。Start Project 的 120px 玻璃圓尺寸不變，未 hover 時增加 2 秒金色雷達水波，hover 後停止並隱藏。
 - **Section eyebrow**：Services／Gallery／WhatWeDo／Store 依序改為「廚房產品／門市案例／品牌承諾／門市查詢」，膠囊尺寸、金點、邊框與動畫不變。
 - **廚房產品卡**：順序與編號改為 `01 SAKURA → 02 SVAGO → 03 TEKA`；正式品牌拼字為 `SVAGO`。卡片尺寸、Logo 光學等大、Embla 輪播與 hover 不變。
-- **Services 底部 Logo 跑馬燈**：取代舊的 `Kitchen Product` 巨型文字，順序為 SAKURA／TLK／TEKA／SVAGO／SAKURA Home；每格 Logo `170×50px`、左右 margin 各 `70px`、兩組無縫重複、`20s linear infinite`。尺寸與速度來自 SAKURA 官網 Footer 實測，背景仍併入 Services 深色 Section；容器具名為「集團品牌」，減少動態模式停止動畫。Hero 下方 `HeroStyleMarquee` 不變。
+- **Services 底部 Logo 跑馬燈**：取代舊的 `Kitchen Product` 巨型文字，順序為 SAKURA／TLK／TEKA／SVAGO／SAKURA Home；每格 Logo `170×50px`、左右 margin 各 `70px`、兩組無縫重複。尺寸與間距沿用 SAKURA 官網 Footer，速度依最新需求由官網基準 `20s` 加快為 `16s linear infinite`；背景仍併入 Services 深色 Section，減少動態模式停止動畫。
 - **品牌承諾影片**：使用 YouTube `wH374AF9wLI`；初始顯示對應縮圖與模板正圓播放鈕，點擊後在原 16:9 卡片內切換為 autoplay iframe。縮圖或 iframe 載入失敗時，前端顯示完整錯誤理由、影片 ID 與 YouTube 備援連結。
 - **Footer**：底部巨型 `footer-sakura.svg` 改為使用者提供的 `public/home-2026/footer/sakura-kitchen.png`；保留原始金色與比例、不降低透明度，所有斷點都水平置中並貼齊 Footer 底部。依最新回饋將總高調整為手機／平板 `390px`、桌面 `600px`；連結與圖示列的 top padding 增加 12px（手機 48px、桌面 60px），整排稍微下移。背景、Copyright 與連結內容不變。
 - **門市案例第 6 點**：背景改用 `yuan-aifei.jpg`，右側兩張卡依序使用 `old-house-kitchen.jpg` 與 `custom-kitchen.jpg`；完全移除深色漸層遮罩。右側兩張正方形縮圖維持靠右，尺寸為 1024px `140×140px`、1200px `230×230px`、1280px `280×280px`、1440px 以上 `295×295px`；依尺寸同步上移右欄，避免固定 956px Section 裁掉卡片底部。箭頭位於縮圖左側的剩餘空間水平置中，1280px 暫時收斂控制欄 gap 以保留完整安全距離。每張縮圖本身是可操作按鈕，點擊後直接切換為背景主案例；拖曳、四秒自動播放、hover 與進場動畫維持不變。
@@ -46,7 +46,7 @@ pnpm build
 
 ### 2026-07-21 Design QA
 
-- **真值來源**：首頁素材來自 `首頁用圖_2026.07.21`；Logo 跑馬燈以 SAKURA 官網 Footer 為視覺基準。官網實測為五個 `170×50px` Logo 框、單側 `70px` 間距、`20s linear infinite`。
+- **真值來源**：首頁素材來自 `首頁用圖_2026.07.21`；Logo 跑馬燈以 SAKURA 官網 Footer 為尺寸與間距基準。官網實測為五個 `170×50px` Logo 框、單側 `70px` 間距、`20s linear infinite`；本站依最新速度需求覆寫為 `16s`。
 - **四斷點**：在 `390 / 768 / 1024 / 1512px` 驗證，所有尺寸皆為 `scrollWidth === innerWidth`，無水平爆版；Footer Logo 各斷點底部 inset 均為 `0px`，寬度依序為 `360 / 708 / 922 / 1410px`。
 - **Header / Hero**：1512px mega-menu 內版心實測 `1200px`，三個品牌 Logo 均為 `170×50px` 且左緣與各欄產品圖一致。Hero 有三張輪播圖、5 秒換圖與 Page 1 的 2 秒三層轉場。首次進場逐幀為「只有灰底 → 上方暗圖／下方灰底 → 上方原圖／中段暗圖／下方灰底 → 完整原圖」；另行等待模板自動換到下一張後確認，後續週期的底層是上一張圖片，不會再次出現灰底。因此本站 `ai-kitchen.jpg → clever-kitchen.jpg` 也保留舊圖在底層，再建立暗色新圖與原色新圖重播，遮罩實測為 `rgba(16,8,1,.46)`；本機在換圖前、換圖開始、雙層交疊及完成四個時間點逐幀複查，底部始終是上一張圖片或已覆蓋的新圖片，沒有灰色閃屏，最終也沒有常駐遮罩。`390 / 768 / 1024 / 1512px` 均為 `scrollWidth === innerWidth`，沒有 Vite error overlay。QA 初次發現 768px 標題單行造成右側裁切，已改為固定於 `Inspired` 後換行，複查通過。
 - **內容與互動**：四個中文 eyebrow 已存在；產品卡為 `01 SAKURA → 02 SVAGO → 03 TEKA`。影片初始縮圖及正圓播放鈕正常，點擊後建立 `wH374AF9wLI` autoplay iframe，`allowFullScreen` 與播放權限完整；失敗狀態在卡片內保留完整原因及 YouTube 連結。
@@ -60,7 +60,7 @@ pnpm build
 - **來源真值**：`/Users/eric/Downloads/IMG_1251.PNG`；紅框與紅字為尺寸／位置註記，不屬於成品視覺。
 - **實作證據**：瀏覽器在 1512px 實測曾顯示 `280×280px`，原因是 Tailwind 產物中 arbitrary `min-[1440px]` 規則被 named `xl` 規則反向覆蓋；同一問題也讓 1440px 的 margin 與 gap 未生效。現已移除這三組互相衝突的 responsive utilities，改由 `globals.css` 依 1024／1200／1280／1440px 順序明確定義 `.gallery-case-card / row / layout`。依兩輪視覺回饋，1440px 以上由 340px、310px 收斂為真正生效的 `295×295px`、`margin-top:260px`、gap 30px。箭頭在左側彈性控制欄內水平置中；縮圖使用原生 `<button>`，具中文 `aria-label` 與鍵盤 focus ring，點擊會以該縮圖的 `caseIndex` 更新主背景。
 - **響應式**：390px 卡片仍依可用寬度為約 `147×147px`，768px 上限為 `220×220px`，1024px 為 `140×140px`，1200px 為 `230×230px`，1280px 為 `280×280px`，1440px 以上為 `295×295px`；行動版箭頭位於縮圖下方置中，1024px 起進入左控制欄。
-- **圖片與互動**：初始背景為 `yuan-aifei.jpg`，右卡為 `old-house-kitchen.jpg / custom-kitchen.jpg`；圖片均使用原始 JPEG、`object-cover`、無遮罩。實際點擊「下一張」後背景與兩張卡同步切換，拖曳、四秒 autoplay、hover 與 Reveal 動畫保留。
+- **圖片與互動**：初始背景為 `yuan-aifei.jpg`，右卡為 `old-house-kitchen.jpg / custom-kitchen.jpg`；圖片均使用原始 JPEG、`object-cover`、無遮罩。實際點擊「下一張」後背景與兩張卡同步切換，拖曳、`3.2s` autoplay、hover 與 Reveal 動畫保留。
 - **五項 fidelity**：字型、字級、行高與文案未改；間距與下緣依紅色標註線重排；模板金、按鈕邊框及白字色票未改；三張案例圖皆為提供的原始素材；「門市案例／Interior design／Lorem ipsum／更多設計」內容維持既有版本。
 - **合併比對**：來源標註與成品焦點圖位於 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/gallery-comparison-final.png`；完整成品為同目錄 `gallery-locked-initial-1512.png`。初次合併比對未發現 P0／P1／P2 差異，無需第二輪修正。
 - **Console**：沒有本次 Gallery 造成的 error；只有明確不動範圍內既有 Google Maps `loading=async` 與 Marker deprecation warnings。
@@ -73,7 +73,7 @@ pnpm build
 
 - **斷點**：`globals.css` 恢復 Tailwind 標準 `sm 640 / md 768 / lg 1024 / xl 1280 / 2xl 1536`，並增加只供模板 Hero 使用的 `antra 1200` 斷點；元件原有 `md:`、`lg:` 規則重新生效。
 - **Header**：`StickyHeader` 是真正的 `position:fixed; width:100%`，不再另套 canvas scale；`App` 保留與官網相同的 60px spacer。
-- **FloatingButtons**：全斷點依 SAKURA 官網 quick links 維持右側 fixed 直排；手機底距 70px、`sm+` 底距 36px。手機不再使用底部橫排，因此頁面根不需額外保留 65px bottom padding。
+- **FloatingButtons**：全斷點依 SAKURA 官網 quick links 維持右側 fixed 直排；頁首時仍為手機底距 70px、`sm+` 底距 36px。新增捲動進度連動：由頁首到頁尾以 `requestAnimationFrame` 線性增加負向 `translateY`，頁尾時整列頂端停在 viewport `112px`，與 60px fixed Header 保留 52px 安全距離。位移會依 viewport 高度與按鈕列實際高度重新計算，短螢幕不會硬撞 Header；`prefers-reduced-motion` 時維持原本固定位置、不做捲動位移。
   - 官網實測規格：手機單顆 `72×72px`（內容 `56×56px`）、`sm+` 單顆 `74×74px`（內容 `58×58px`）、金色 `#B79258`、灰色 `#737373`、金色頂鈕與灰色群組相隔 `20px`、群組使用 `1px` 白色 50% 分隔線；本站保留既有三個文字與目的連結。
 - **Hero**：直接對應模板 390／768／1024／1200+ 的原生高度、字級、對齊與座標；1512 仍是桌面像素級比對基準，不再是全站縮放畫布。
 - **其他 sections**：沿用既有 Tailwind 響應式 class 與 CSS 變數；StoreLocation 的資料、地圖、篩選與互動未更動。
@@ -215,7 +215,7 @@ pnpm build
 | Header（巨型選單） | logo + 搜尋 + 漢堡；漢堡開 accordion 抽屜 | 同左 | 中央 logo + 左右導覽 + hover 下拉 + 搜尋展開 |
 | HeroSection（主視覺） | Antra 390 置中版 | Antra 768 置中版 | 1024 置中大字；1200+ 原版左對齊 |
 | HeroStyleMarquee | 62px 輪播本體＋上下 12px、1 欄 step carousel | 768=3 欄、880=4 欄；上下 16px | 1200=5 欄、1367+=6 欄；gap 120px、上下 16px |
-| FloatingButtons | 右側 `fixed` 直排（底距 70px） | 右側 `fixed` 直排（底距 36px） | 右側 `fixed` 直排（底距 36px） |
+| FloatingButtons | 右側 `fixed` 直排，頁首底距 70px；隨捲動上移 | 右側 `fixed` 直排，頁首底距 36px；隨捲動上移 | 同左，頁尾頂端停於 112px，不碰 60px Header |
 | ProjectSection（10 種廚房風格輪播） | embla 拖曳、卡片較窄 | 拖曳捲動 | 拖曳、卡片 378×880、hover 伸縮露出橫式廚房圖 |
 | StoreLocationSection（門市查詢） | 上下堆疊；篩選器兩欄、標籤獨立一列 | 上下堆疊 | `lg`（1024px）起維持原本左右並排；1024–1279px 內部欄位允許重排 |
 | Footer（Antra 骨架簡化版） | 390px；連結／icons 上下配置，資訊列下移 | 390px；連結與 icons 分列，資訊列下移 | 600px；資訊區 220px＋版權帶 70px，Logo 完整並貼底 |
@@ -229,13 +229,13 @@ pnpm build
 - **下半部**：分隔線 `top:691`；Start Project 圓鈕依 Home 6 實頁在 `390 / 1024 / 1512px` 逐一量測，三個斷點均為 `120×120`（1024px 因 Elementor 欄寬運算顯示 `118.64px`）、桌面 `left:30 / top:750`、背景 `#5C5C5C75`、邊框 `#FFFFFF12`、外層圓角 `200px`、內層圓角 `100px`、`backdrop-filter:blur(58px)`；文字為 Cal Sans `18/24 / 400 / #FFFFFF`，hover 為 `#CAA05C`。本次確認原尺寸正確，修正的是原先偏黑的錯誤背景值與內外圓層級；`Kitchen` 浮水印以 block line-box 固定為 `320/240 / left:426 / top:719 / opacity:.64`。
 - **模板動態**：Hero 根節點原有的 Home 6 `fadeInDown` 已由 Page 1 背景 `slidingoverlaydown / double` 取代，避免整個文字與控制項也跟著圖片簾幕位移；內層仍保留標題 `slideInLeft 2s`、圓鈕 `fadeIn 2s delay 900ms`、浮水印 `fadeInUp 2s delay 900ms`。Page 1 真值取自 Slider Revolution `SR7_1_1`：`d=2000 / sd=1333.333 / power2.inOut / south / double`。
 - **原生 RWD 實測值**：390=`587px` 高、title `30/35`、左右 15px；768=`489px` 高、title `50/60`、左右 30px；1024=`719px` 高、title `100/110` 置中；1200+=`952px` 高、完整桌面座標。分隔線、圓鈕與浮水印也各自對應模板斷點（浮水印右距：390=14px、768/1024=29px、桌面=4.83vw）。
-- **自訂功能保留**：桌面左側「品牌系列」把手可展開 190px 選單，展開時沿用原行為把 Hero 文字、圓鈕與浮水印右推；Hero 下方 `HeroStyleMarquee.tsx` 是獨立品牌輪播 section，內容使用指定的六組中英文與 `/brand-logos/*.svg`。
+- **自訂功能保留**：桌面左側「品牌系列」把手改為 `fixed left:0 top:50% translateY(-50%) z-index:40`，捲動到其他 Section 仍固定在 viewport 左側；可展開 190px 選單，展開時把手同步右移並沿用原行為把 Hero 文字、圓鈕與浮水印右推。手機版維持隱藏。Hero 下方 `HeroStyleMarquee.tsx` 是獨立品牌輪播 Section。
 
 ### Hero 下方品牌輪播 — Antra Home 4 `antra-brand`
 
 - **模板真值**：來源 `home-4.xml` Brand container `4c0bad9`／widget `61788d0`。輪播 viewport 左右 padding：手機 15px、其餘 30px；單列高 62px（模板 SVG 58px + link padding 2px）；項間固定 120px。
 - **響應式欄數**：390=1、768=3、880=4、1200=5、1367+=6；slide 寬度使用模板公式 `(viewport - gap × (columns - 1)) / columns`，1512px 時為 142px，起點依序 `30 / 292 / 554 / 816 / 1078 / 1340`。
-- **輪播方式**：由原本 40 秒連續 marquee 改為模板的 step carousel：loop、可拖曳／觸控、500ms 級轉場、每 5000ms 反向後退一格（`scrollPrev`）、hover 暫停、使用者開始拖曳後停止 autoplay；無箭頭、無 dots。只反轉自動輪播方向，資料順序與手動拖曳方向不變。`prefers-reduced-motion` 下不自動播放。
+- **輪播方式**：由原本 40 秒連續 marquee 改為模板的 step carousel：loop、可拖曳／觸控、500ms 級轉場；依最新需求由每 5000ms 加快為每 **4000ms** 反向後退一格（`scrollPrev`），hover 暫停、使用者開始拖曳後停止 autoplay；無箭頭、無 dots。hover 小預覽內的十張圖片亦由 1400ms 加快為 **1100ms**。`prefers-reduced-motion` 下不自動播放。
 - **Hover 圖片預覽**：桌面 Hover 或鍵盤 Focus 任一風格項目時，使用 React portal 在該項目上方顯示 `240×156px` 小型深色圓角視窗，因此不受輪播 viewport 的 `overflow-hidden` 裁切，並可跨越區塊邊界浮在 Hero 底部。視窗從目前項目對應索引開始，每 `1400ms` 依序淡換 `public/kitchen-styles/` 現有十張圖片；滑出、失焦、捲動或縮放即關閉。圖片視窗不接收 pointer event，不影響原本拖曳；風格卡目前皆為 `href="#"` 假連結，因此攔截其預設跳頂行為，避免鍵盤或點擊預覽時頁面突然回到頂部。`prefers-reduced-motion` 時停在初始圖片。
 - **內容不改**：仍顯示原六組中文、英文與 logo；因模板原件只放 logo，本站額外文字保留在同一個 62px slide 內，不為追求外觀而刪內容。為了讓 6 個原始項目在桌面也能 loop，DOM 建立三組；後兩組 `aria-hidden` 且不進入 tab order。
 - **外部位置**：依先前需求保持緊貼 Hero，不套用 Home 4 專屬 Hero 的 `margin-top`（該間距隨 Home 4 Slider 高度而變，不適用目前 Home 6 Hero）；carousel 本身的高度、padding、slide 尺寸與 gap 依模板。
@@ -248,7 +248,7 @@ pnpm build
 - **Source visual truth**：Antra Home 4 `https://demo2.themelexus.com/antra/home-4/` 的 Brand widget `61788d0`，並以本地主題 `homepage/home-4.xml`、`brand.php`、`elementor-classes.js` 交叉核對設定與運動方式。
 - **同尺寸對照圖**：模板 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/brand-reference-1512.png`；本站輪播本體 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/brand-implementation-1512.png`；增加外層留白後 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/brand-spacing-section-1512.png`。
 - **版面量測**：輪播 viewport 高度維持 62px；外層 section 手機 86px、768px 以上 94px。390／768／880／1024／1200／1367／1512px 均無水平 overflow。1512px 的 6 個 slide 寬 142px，起點為 `30 / 291.9 / 553.9 / 815.9 / 1077.9 / 1339.9`，與模板 `30 / 292 / 554 / 816 / 1078 / 1340` 的差異僅為瀏覽器次像素顯示。
-- **互動驗證**：原始實測為每 5000ms 呼叫 `scrollNext` 前進一格；依最新需求改為每 5000ms 呼叫 `scrollPrev`，自動輪播方向反轉但仍維持一格一格 step carousel。loop、拖曳、hover 暫停與拖曳後停止 autoplay 由 Embla event wiring 保留，無箭頭、無 dots。
+- **互動驗證**：原始實測為每 5000ms 呼叫 `scrollNext` 前進一格；本站先依需求反轉為 `scrollPrev`，最新再加快為每 **4000ms**，仍維持一格一格 step carousel。loop、拖曳、hover 暫停與拖曳後停止 autoplay 由 Embla event wiring 保留，無箭頭、無 dots。
 - **刻意差異**：模板每張只有 logo；本站按「內容都不要改」保留中文與英文，因此單張內部視覺不是模板原 logo-only 組成。輪播高度、欄數、viewport padding、slide 寬、120px gap 與運動規則則已對齊。
 - **Console**：本次檢查無 console error；`pnpm build` 通過。
 
@@ -300,7 +300,7 @@ final result: passed
 - **卡片**：378×880 直式、底部黑色漸層 scrim；**左上膠囊放中文名（`font-bold` 加粗）、底部放英文大標**（`STYLES` 依對照表：英文 `X Kitchen`、中文膠囊 `AI廚房/巧域廚房…`、每筆 `desc`；Basic+ 無中文膠囊）。
 - **hover 效果**：滑到卡片時卡片變寬（378→567）+ **英文標題轉金 `#C9AA79`** + **底部由下淡入浮現該風格描述**（`s.desc`，如「極致收納 在廚房」；`max-h-0 opacity-0 → group-hover:max-h-20 opacity-100`，`transition-all 500ms`）。
 - **hover 伸縮**：卡片寬度 `×1.5`（`378→567px`，固定高度只變寬），橫式廚房圖靜態裁成直切片、hover 變寬露出更多；EN 標題 hover 轉金（`#C9AA79`）。
-- **捲動 + 自動輪播（一格一格步進 / 吸附模式）**：`embla-carousel-react`（`loop:true` + `align:'start'`，**刻意不用 `dragFree`**）。自動輪播：`setInterval` 每 3.5s `emblaApi.scrollNext()`，走一格、停一下（使用者要的步進感）。**露縫關鍵＝曾用的 `dragFree`**：它讓 `scrollNext` 變慣性滑動、在 `loop` 環繞重定位時對不齊而露縫；改吸附模式後每次精準走一格、於乾淨卡邊界重定位，不露縫。滑鼠移入暫停（`mouseenter`→`pausedRef`），移出 **延遲 560ms 恢復**（`resumeTimer`；讓 hover 卡片 500ms 展開/收回動畫期間輪播停住，避免寬度變動期間移動使迴圈總長過期露縫）。仍可手動拖曳（吸附到格）；**拖曳時（`pointerDown`）以 `dragging` state 暫停 hover 變寬**，否則卡片一碰就展開會把拖曳打斷。（試過 `embla-carousel-auto-scroll` 連續捲動版，使用者不要、已移除。）
+- **捲動 + 自動輪播（一格一格步進 / 吸附模式）**：`embla-carousel-react`（`loop:true` + `align:'start'`，**刻意不用 `dragFree`**）。自動輪播依最新需求由每 3.5s 加快為每 **2.8s** `emblaApi.scrollNext()`，仍維持走一格、停一下的步進感。**露縫關鍵＝曾用的 `dragFree`**：它讓 `scrollNext` 變慣性滑動、在 `loop` 環繞重定位時對不齊而露縫；改吸附模式後每次精準走一格、於乾淨卡邊界重定位，不露縫。滑鼠移入暫停，移出延遲 560ms 恢復；仍可手動拖曳。
 - **移動中「卡間縫隙」殘留防治（次像素）**：實測相鄰卡**排版間隙全 0.00**，故任何殘縫屬**分數像素 transform 合成的髮絲縫**。兩層保險：①`<article>` `w-[calc(100%+2px)] -ml-px`（左右各多蓋 1px、量得重疊 2px，接縫兩側恆被卡片蓋住；卡槽 `.group` 仍 378、不影響 Embla 迴圈總長 10×378=3780）；②輪播 viewport `bg-[#2a2a2a]`（殘縫透出深色而非亮背景，難察）。（自動化隱藏分頁 rAF 不跑、無法重現移動動畫，須在可見瀏覽器驗證。）
 - **左右兩側方向箭頭**（源自主題 `style.css` `.antra-swiper-wrapper .elementor-swiper-button` 的 48×48）：`w-12 h-12`(**48×48**) + lucide 箭頭 `w-6`(**24**)、**半透明磨砂**（`bg-white/10 backdrop-blur-md` + `border-white/30` + 白 icon，透出後方廚房照，非實心白）；`absolute left/right-[30px] top-1/2 -translate-y-1/2 z-20`（垂直置中、貼左右邊 30）；**hover 金底 `#C9AA79` + 金邊 + 白箭頭**。因 Embla 的 prev/next 表示索引方向而非軌道視覺方向，依最新驗收把 handler 互換：左箭頭呼叫 `scrollNext()`、右箭頭呼叫 `scrollPrev()`，並將 aria-label 改為「向左瀏覽／向右瀏覽」。
 - **卡片標題層級**：依最新需求對調雙語位置，左上膠囊改顯示英文系列名，底部 36px 大標改顯示中文名稱；圖片、描述及 hover 動畫不變。`Basic+` 的中英文資料相同，因此上下均維持 `Basic+`。
@@ -314,7 +314,7 @@ final result: passed
 - **背景與 Section 尺寸**：使用模板原始 `1920×1040` `public/services/h6-bg-2.jpg`，`cover / top center / no-repeat`，疊加黑色 76%。模板的 `backdrop-filter: blur(29px)` 掛在 Section selector，本機亦照此位置設定，不再把 blur 錯掛到 overlay 而模糊背景圖。依使用者指定移除全部 Section top margin；上／左右 padding 沿用 Elementor：手機 `60/15`、平板 `80/30`、1024–1199 `100/30`、≥1200 `125/30`。跑馬燈已併入 Section，因此原 bottom padding 改由跑馬燈前的 96px 間距承接，Section 本身 bottom padding 為 0，讓跑馬燈貼底。
 - **標題列**：subtitle 膠囊 `● Our Services` 與大標均為模板白色；桌面左欄 424px、標題寬 769px、`60/64`，手機 `30/35`、寬手機 `45/50`。桌面裝飾完整還原 Elementor 結構：水平線 `502px`＋`deco-horizontal.svg` 尖端、垂直線 `179px`＋`deco-vertical.svg` 尖端，線色 `rgba(255,255,255,.18)`；標題與輪播桌面間距 60px、窄版 30px。
 - **服務卡（style-3，照原始碼）**：卡片 `#FFFFFF`、radius 24px、padding 10px；圖片手機高 250px、其餘 310px、radius 24px、hover `scale(1.1)`、薄暗罩 `rgba(0,0,0,.11)`。caption 手機 `20/0/30`、其餘 `30/20/35`；標題手機 `25/30`、桌面 `28/35` Cal Sans，內文 Golos Text `16/24 #9F9FA4`，編號 `30px #E3E3E8`。手機全部圖上字下，較寬斷點才套偶數卡 `column-reverse`。
-- **輪播（模板 data-settings 照抄）**：`embla-carousel-react` `loop`，手機 1 欄、平板／1024 兩欄、≥1200 三欄；30px gap、autoplay 5000ms、hover 暫停、`reduced-motion` 不自動播、可拖曳、無箭頭／點（`navigation:none`）。依使用者指示，資料僅保留 SVago、TEKA、SAKURA 三張並重新編號 `01–03`；原本未改的三張已移除，輪播行為不變。
+- **輪播（模板 data-settings 為基礎）**：`embla-carousel-react` `loop`，手機 1 欄、平板／1024 兩欄、≥1200 三欄；30px gap，autoplay 依最新需求由 5000ms 加快為 **4000ms**，hover 暫停、`reduced-motion` 不自動播、可拖曳、無箭頭／點。資料僅保留 SAKURA、SVAGO、TEKA 三張並編號 `01–03`。
 - **內容與素材**：僅保留三個已指定品牌的卡片；原模板英文 excerpt 維持不變。品牌標題與產品圖皆本地化至 `public/services/`，破圖仍 fallback `/kitchen-styles/elegant.jpg`。寬版三張卡的圖片位置依最新驗收改為「上／下／上」：01 SAKURA 圖上字下、02 SVAGO 字上圖下、03 TEKA 圖上字下；手機仍統一圖上字下。
 - **跑馬燈**：`MarqueeBand`「Kitchen Product」現在位於 Services `<section>` 內，共用 `h6-bg-2.jpg`、黑色 76% overlay 與同一裁切範圍，不再有 `#f6f6f6` 分區。以 96px 間距接在服務卡後，透過負水平 margin 維持全出血，且跑馬燈容器底緣與 Section 底緣相同（bottom gap `0px`）；文字使用模板金 `#CAA05C → transparent`，220px 字級、重複內容與 `animate-marquee` 速度不變。
 
@@ -325,7 +325,7 @@ final result: passed
 - **Desktop 1512×956**：Services 內容原始區塊保持桌面 top/水平 padding `125px 30px`；併入跑馬燈後 Section 實際高度 `1205px`、外距上 `0`、bottom padding `0`。背景 `top center / cover`、黑色 `.76`，selector 保留 blur `29px`。標題 Cal Sans `60/64`、寬 `769px`；三欄 `33.333%`，卡寬約 `450px`、白底、radius/padding `24/10px`、圖片高 `310px`；標題 `28/35`、內文 Golos Text `16/24 #9F9FA4`。
 - **Tablet 1024×768**：外距 `0`、top/水平 padding `100px 30px`、bottom padding `0`；標題 `45/50`、兩欄 `50%`、圖片高 `310px`，偶數卡維持模板上下反轉。
 - **Mobile 390×844**：外距 `0`、top/水平 padding `60px 15px`、bottom padding `0`；標題 `30/35`、單欄 `100%`、圖片高 `250px`，所有卡片皆圖上字下；卡標 `25/30`、內文 `16/24`。
-- **Interaction / regression**：Embla `loop` 與 5000ms autoplay 在三張資料下仍有效；1024px 實測 track x 由 `0` 移至 `-361.22px`。hover 暫停、拖曳與 reduced-motion 保護仍在。`Kitchen Product` marquee 節點存在且 computed animation-name=`marquee`，目前與 Services 為同一個 Section；Header、左側伸縮選單、右側浮動鈕及其他 Sections 未改。
+- **Interaction / regression**：Embla `loop` 與最新 4000ms autoplay 在三張資料下仍有效；hover 暫停、拖曳與 reduced-motion 保護仍在。品牌 Logo marquee 的 computed animation-name=`marquee`、完整循環 16s，且仍與 Services 為同一個 Section。
 - **Browser checks**：1512、1024、390 三種寬度均無水平溢出、素材 natural size 正確、無 console error。logo 改為光學等大後，1512px 的渲染面積為 SVago `136.06×38=5170px²`、TEKA `132.59×39=5171px²`、SAKURA `172.66×28=4835px²`；390px 分別為 `111×31=3441px²`、`108.80×32=3482px²`、`148×24=3552px²`，差異均在約 ±7% 內且比例未變形。其新主圖分別在 1512px 為 `430×310`、390px 為 `340×250`。桌機／手機均確認只渲染這三張品牌卡。三張主圖均以 `object-cover` 正確填滿卡片。
 - **等高驗證**：前三張卡在 1512px 均為 `560px`（caption `230px`）、1024px 均為 `507px`（caption `177px`）、390px 均為 `462px`（caption `192px`）；三斷點皆無水平溢出且 console error 為 0。
 - **品牌標題素材**：第 01 卡使用者提供的 `public/services/svago-logo-white.png`（SVago，`111×31`）與 `public/services/svago-product.png`（`1300×945`）；第 02 卡使用 `public/services/teka-logo-white.svg`（TEKA 向量 logo，viewBox `170×50`）與 `public/services/teka-product.png`（`977×945`）；第 03 卡為 SAKURA logo 與抽油煙機主圖。三張來源皆為白色透明圖，因此在白底 caption 中統一轉為原 h3 的深色。由於三者的橫長比例不同，改採**光學等大**而非機械等高：SVago `31/35/38px`、TEKA `32/36/39px`、SAKURA `24/26/28px`（mobile/tablet/desktop，高度與寬度自動），三者在同一斷點的視覺面積接近且完全不拉伸。
@@ -337,7 +337,7 @@ final result: passed
 
 `GallerySection.tsx`：對位 Home Three gallery 版型（section 高/位置/膠囊/大標/箭頭照模板實測 + 主題 `heading.php`），**但右側依使用者規則做「背景=主圖 + 2 卡聯動」**（非模板原生的 3 欄 swiper）。字型用模板 Cal Sans、金 `#C9AA79`，內容為 **SAKURA 門市案例**。
 
-- **輪播規則（使用者指定）**：**全出血背景 = 目前主圖(#active)**，右邊固定**只 2 張卡** = 下兩張(#active+1、#active+2)；前進時背景與兩卡一起輪替（背景交叉淡入 + `useParallax('.gallery-bg')` scale 1.12、卡片/段落 `animate-gallery-card` 滑入）。`useState(active)` 驅動、autoplay 4s（滑入暫停）、指標拖曳。
+- **輪播規則（使用者指定）**：**全出血背景 = 目前主圖(#active)**，右邊固定**只 2 張卡** = 下兩張(#active+1、#active+2)；前進時背景與兩卡一起輪替（背景交叉淡入 + `useParallax('.gallery-bg')` scale 1.12、卡片/段落 `animate-gallery-card` 滑入）。`useState(active)` 驅動，autoplay 依最新需求由 4s 加快為 **3.2s**（滑入暫停），支援指標拖曳。
 - **section 高度 = `min-h-[956px]`**（實測模板 956）；內容**非置中**，照模板 `e-con-inner` `padding-top` 推到下半部。左標題區 `lg:w-[479px]`（L51）+ 右卡欄 `flex-1`。內部間距：膠囊 `mb-[26px]`、段落 `mt-[37px]`、CTA `mt-[40px]`。右欄改為兩欄 Grid：「左側彈性控制欄／右側固定縮圖欄」，因此縮圖右緣仍對齊 51px 版心，箭頭則在左側剩餘空間水平置中。
   - ⚠ **驗證陷阱**：`.reveal` 用個別 `translate` 屬性做進場，隱藏分頁 transition 卡住停在 `translate:0 56px` → 量測會**整體 +56**；驗證垂直位置要先 `translate:none!important` 清掉再量（見 [[mcp-tab-hidden-raf-io]]）。卡片另有 `animate-gallery-card` 的 `translateX(40px)` 進場，量水平也要結算。
 - **背景底圖**：= 當前 `CASES[active].image`（crossfade）。遮罩 `linear-gradient(90deg, rgba(0,0,0,.82)→.5)` 壓成模板沉穩深調 + 保左側文字可讀。
@@ -385,7 +385,7 @@ final result: passed
   - **需金鑰**：在專案根目錄建立 `.env`，設定 `VITE_GOOGLE_MAPS_API_KEY=你的金鑰`（`.env` 已加入 `.gitignore` 不會 commit），並在 Google Cloud 啟用 **Maps JavaScript API** 與 **Geocoding API**；金鑰建議以 HTTP referrer 限制網域。改 `.env` 後需**重啟 `pnpm dev`**（Vite 環境變數不熱更新）。
   - **無金鑰/載入失敗**：地圖區直接顯示完整錯誤訊息（依全域規則「錯誤完整顯示在前端」），不靜默空白。
 - **右欄（窄）**：`我的位置` 改成與 **`選擇區域` / `選擇城市`** 相同的 52px 高白底圓角按鈕；三個控制固定使用等寬三欄同排，窄螢幕縮小內距、字級與圖示避免爆版。位置按鈕保留 `LocateFixed` 金色準星，兩個下拉維持 `appearance-none` + 疊自訂 `ChevronDown`。下方改為固定四列的機場 split-flap 門市資訊板：每列維持固定高度，第一行區域 pill + 店名，第二行 `MapPin` 地址 + 金色電話；選中仍為金底白字。
-- **機場翻牌輪換**：目前 5 間真實門市中固定顯示 4 間，第 5 間作為候補；每 `2.8s` 隨機選一列，以 `760ms` 3D `rotateX` 上下翻牌換入候補。依最新視覺回饋移除卡片中央鉸鏈分隔線，只保留乾淨卡面與翻牌立體感。畫面同時不出現重複門市，已選取並控制地圖的門市不會被自動換走；每次只翻一列，避免整欄同時跳動。hover 或鍵盤 focus 進入資訊板即暫停，離開後恢復；`prefers-reduced-motion` 時完全停用自動輪換與 3D 動畫。未來 `STORES` 增加資料後會自動從完整篩選結果挑候補，不需改動畫程式。
+- **機場翻牌輪換**：目前 5 間真實門市中固定顯示 4 間，第 5 間作為候補；翻牌等待間隔依最新需求由 `2.8s` 加快為 **`2.2s`**，翻動本身仍使用 `760ms` 3D `rotateX`。卡面不加中央分隔線；畫面同時不出現重複門市，已選取並控制地圖的門市不會被自動換走。hover 或鍵盤 focus 進入資訊板即暫停；`prefers-reduced-motion` 完全停用輪換。
 - **級聯篩選**：`region` / `city` 兩個 state 驅動；選區域自動清空城市、城市下拉未選區域時 disabled（`REGIONS` 提供五大區→縣市對照）。`filtered = STORES.filter(區域符合 && 城市符合)`；選取門市若被濾掉自動退回第一筆可見門市；該區無資料顯示「此區域尚無門市資料」。
 - **門市資料**：pptx 真實資料共 5 間（承德 / 石牌 / 民權 / 中山南京 / 八德，皆北部/臺北市，含真地址電話）；其他區暫無資料，補上即可用。
 

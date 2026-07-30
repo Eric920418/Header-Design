@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, Menu, X, ChevronDown, ArrowRight } from 'lucide-react';
 
 import { GOLD } from '../theme/cis';
+import { KITCHEN_STYLES } from '../data/kitchenStyles';
 
 // 對齊參考站 sakura-kitchenlife.com.tw 的 .l-header / .l-nav__item 實測值
 const HEADER_GRADIENT = 'linear-gradient(90deg, #b79258 20%, #d2b587)';
@@ -15,10 +16,17 @@ type NavItem = {
   external?: boolean;
   mega?: MegaCard[]; // 圖片式 mega-menu（hover 滿寬淡入展開，仿模板）
   megaCatalog?: string; // mega 面板底部型錄文字連結
+  seriesMega?: boolean; // 「設計案例 > 品牌系列」第二層滿寬圖片選單
 };
 
+type DropdownAlign = 'start' | 'center' | 'end';
+
 const NAV_LEFT: NavItem[] = [
-  { label: '設計案例', children: ['品牌系列', '設計靈感', '廚房小百科', '品牌系列型錄'] },
+  {
+    label: '設計案例',
+    children: ['品牌系列', '設計靈感', '廚房小百科', '品牌系列型錄'],
+    seriesMega: true,
+  },
   {
     label: '廚房產品',
     // hover 展開滿寬 mega-menu：三張品牌產品大圖
@@ -41,7 +49,13 @@ const NAV_RIGHT: NavItem[] = [
 ];
 
 // 桌面版單一導覽項（mega 圖片選單 → hover 下拉 → 純連結）
-function DesktopNavItem({ item }: { item: NavItem }) {
+function DesktopNavItem({
+  item,
+  dropdownAlign = 'center',
+}: {
+  item: NavItem;
+  dropdownAlign?: DropdownAlign;
+}) {
   // 圖片式 mega-menu：hover 從 header 下方淡入展開滿寬面板 + 三張品牌大圖
   if (item.mega) {
     return (
@@ -91,6 +105,13 @@ function DesktopNavItem({ item }: { item: NavItem }) {
     );
   }
 
+  const dropdownPosition =
+    dropdownAlign === 'start'
+      ? 'left-0'
+      : dropdownAlign === 'end'
+        ? 'right-0'
+        : 'left-1/2 -translate-x-1/2';
+
   if (!item.children) {
     return (
       <a
@@ -103,24 +124,110 @@ function DesktopNavItem({ item }: { item: NavItem }) {
     );
   }
   return (
-    <div className="group relative">
-      <button className="flex items-center gap-0.5 whitespace-nowrap px-1 py-2 text-[15px] leading-[15px] text-white transition-colors hover:text-white/80 xl:gap-1 xl:px-3">
+    <div className="group relative flex h-[60px] items-center">
+      <button className="flex h-[60px] items-center gap-0.5 whitespace-nowrap px-1 text-[15px] leading-[15px] text-white transition-colors hover:text-white/80 xl:gap-1 xl:px-3">
         {item.label}
         <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180 xl:h-3.5 xl:w-3.5" />
       </button>
-      {/* 下拉（pt-2 當作無縫橋接，避免游標移動時中斷 hover） */}
-      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 hidden group-hover:block z-50">
+      {/* 第一個左側項目沿左緣、右側項目沿右緣展開，避免 190px 面板超出 viewport。 */}
+      <div
+        className={`pointer-events-none invisible absolute top-full z-50 pt-2 opacity-0 transition-[opacity,visibility] duration-200 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 ${dropdownPosition}`}
+      >
         <ul className="min-w-[190px] rounded-xl bg-white shadow-xl border border-[#E3E3E8] py-2">
-          {item.children.map((c, i) => (
-            <li key={i}>
-              <a
-                href="#"
-                className="block px-5 py-2.5 text-sm text-[#59585D] hover:text-[#CAA05C] hover:bg-[#F6F6F6] transition-colors whitespace-nowrap"
-              >
-                {c}
-              </a>
-            </li>
-          ))}
+          {item.children.map((c, i) => {
+            const opensSeriesMega = item.seriesMega && i === 0;
+
+            return (
+              <li key={i} className={opensSeriesMega ? 'group/series' : undefined}>
+                <a
+                  href={opensSeriesMega ? '#kitchen-series' : '#'}
+                  aria-haspopup={opensSeriesMega ? 'true' : undefined}
+                  className="flex items-center justify-between gap-4 px-5 py-2.5 text-sm text-[#59585D] transition-colors whitespace-nowrap hover:bg-[#F6F6F6] hover:text-[#CAA05C]"
+                >
+                  {c}
+                  {opensSeriesMega && <ArrowRight aria-hidden className="h-4 w-4" />}
+                </a>
+
+                {opensSeriesMega && (
+                  <div className="pointer-events-none invisible fixed inset-x-0 top-[60px] z-[60] opacity-0 transition-[opacity,visibility] duration-300 group-hover/series:pointer-events-auto group-hover/series:visible group-hover/series:opacity-100 group-focus-within/series:pointer-events-auto group-focus-within/series:visible group-focus-within/series:opacity-100">
+                    <div className="border-t border-black/5 bg-white shadow-2xl">
+                      <div className="mx-auto flex max-w-[1512px] gap-6 px-5 py-7 xl:gap-[30px] xl:px-12">
+                        <nav aria-label="設計案例子選單" className="w-[190px] shrink-0">
+                          <p className="mb-3 px-5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#9F9FA4]">
+                            Design Cases
+                          </p>
+                          <ul className="overflow-hidden rounded-xl border border-[#E3E3E8] bg-white py-2">
+                            {item.children.map((seriesChild, seriesIndex) => (
+                              <li key={seriesChild}>
+                                <a
+                                  href={seriesIndex === 0 ? '#kitchen-series' : '#'}
+                                  className={`flex items-center justify-between gap-3 px-5 py-2.5 text-sm transition-colors ${
+                                    seriesIndex === 0
+                                      ? 'bg-[#F6F6F6] text-[#CAA05C]'
+                                      : 'text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]'
+                                  }`}
+                                >
+                                  {seriesChild}
+                                  {seriesIndex === 0 && <ArrowRight aria-hidden className="h-4 w-4" />}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </nav>
+
+                        <div className="min-w-0 flex-1">
+                          <div className="mb-3 flex items-end justify-between">
+                            <div>
+                              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#9F9FA4]">
+                                Kitchen Series
+                              </p>
+                              <h2 className="mt-1 font-display text-[24px] leading-[30px] text-[#1C1C1D]">
+                                十大廚房系列
+                              </h2>
+                            </div>
+                            <a
+                              href="#kitchen-series"
+                              className="inline-flex items-center gap-2 text-sm text-[#59585D] transition-colors hover:text-[#CAA05C]"
+                            >
+                              查看全部
+                              <ArrowRight aria-hidden className="h-4 w-4" />
+                            </a>
+                          </div>
+
+                          <div className="grid grid-cols-5 gap-3 xl:gap-4">
+                            {KITCHEN_STYLES.map((style) => (
+                              <a
+                                key={style.en}
+                                href="#kitchen-series"
+                                aria-label={`${style.zh} ${style.en}`}
+                                className="group/card relative aspect-[16/10] overflow-hidden rounded-xl bg-[#1C1C1D]"
+                              >
+                                <img
+                                  src={style.image}
+                                  alt=""
+                                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
+                                />
+                                <span
+                                  aria-hidden
+                                  className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent"
+                                />
+                                <span className="absolute inset-x-0 bottom-0 p-3 text-white">
+                                  <span className="block text-[15px] font-medium leading-5">{style.zh}</span>
+                                  <span className="mt-0.5 block truncate text-[11px] leading-4 text-white/70">
+                                    {style.en}
+                                  </span>
+                                </span>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>
@@ -142,7 +249,11 @@ export function Header() {
           <nav className="hidden w-full items-center lg:flex">
             <div className="flex-1 flex items-center justify-start gap-1">
               {NAV_LEFT.map((item, i) => (
-                <DesktopNavItem key={i} item={item} />
+                <DesktopNavItem
+                  key={i}
+                  item={item}
+                  dropdownAlign={i === 0 ? 'start' : 'center'}
+                />
               ))}
             </div>
 
@@ -156,7 +267,7 @@ export function Header() {
 
             <div className="flex-1 flex items-center justify-end gap-1">
               {NAV_RIGHT.map((item, i) => (
-                <DesktopNavItem key={i} item={item} />
+                <DesktopNavItem key={i} item={item} dropdownAlign="end" />
               ))}
               <span className="w-px h-5 bg-white/40 mx-2" aria-hidden />
               <button

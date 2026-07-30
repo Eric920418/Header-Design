@@ -169,10 +169,9 @@ export function HeroSection() {
         </Reveal>
       </div>
 
-      {/* 既有桌面品牌系列側抽屜：功能保留，關閉時不影響模板基準外觀。
-          把手鈕垂直中心固定在 top-[15%]（容器改 block、高度=按鈕高，-translate-y-1/2 只吃按鈕高，不被面板撐高）；
-          面板改 absolute top-0 與把手鈕「頂端對齊、向下展開」——不再置中撐高容器，避免展開時面板頂被 hero 上緣切掉。 */}
-      <div className="absolute left-0 top-[15%] z-30 hidden -translate-y-1/2 lg:block">
+      {/* 既有桌面品牌系列側抽屜：改為 viewport fixed，捲離 Hero 後仍固定在左側中線。
+          面板與把手維持頂端對齊；展開時把手向右移 190px、繼續貼住面板右緣。 */}
+      <div className="fixed left-0 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
         <div className="relative">
           {/* 面板：absolute 不撐高容器；寬 0↔190 滑出，頂端對齊把手鈕、向下展開 */}
           <div

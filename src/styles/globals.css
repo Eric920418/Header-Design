@@ -332,7 +332,8 @@ body {
   display: none;
 }
 
-/* Services 品牌 Logo 跑馬燈：內容重複兩組，位移 -50% 無縫循環；速度對齊官網 Footer 20s。 */
+/* Services 品牌 Logo 跑馬燈：內容重複兩組，位移 -50% 無縫循環；
+   依最新需求由官網基準 20s 加快為 16s。 */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -342,7 +343,7 @@ body {
   }
 }
 .animate-marquee {
-  animation: marquee 20s linear infinite;
+  animation: marquee 16s linear infinite;
 }
 
 @keyframes style-preview-image-in {

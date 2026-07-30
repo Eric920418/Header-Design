@@ -2,70 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useReveal } from '../motion/Reveal';
-
-// 10 種廚房風格（依對照表：英文標題 / 中文膠囊 / hover 描述；Basic+ 無中文）
-const STYLES = [
-  {
-    en: "Basic+",
-    zh: "Basic+",
-    desc: "Basic+廚房系列 以生活的基本為出發",
-    image: "/kitchen-styles/basic-plus.jpg",
-  },
-  {
-    en: "AI Kitchen",
-    zh: "AI廚房",
-    desc: "突破未來格局 開啟廚房智高點",
-    image: "/kitchen-styles/ai-kitchen.jpg",
-  },
-  {
-    en: "Clever Kitchen",
-    zh: "巧域廚房",
-    desc: "極致收納 在廚房",
-    image: "/kitchen-styles/clever.jpg",
-  },
-  {
-    en: "Loft Chic Kitchen",
-    zh: "潮派廚房",
-    desc: "品味浪漫 在廚房",
-    image: "/kitchen-styles/loft-chic.jpg",
-  },
-  {
-    en: "Joyful Kitchen",
-    zh: "童樂廚房",
-    desc: "幸福享樂 在廚房",
-    image: "/kitchen-styles/joyful.jpg",
-  },
-  {
-    en: "Premium Kitchen",
-    zh: "君璽廚房",
-    desc: "成就不凡 在廚房",
-    image: "/kitchen-styles/premium.jpg",
-  },
-  {
-    en: "Elegant Kitchen",
-    zh: "臻美廚房",
-    desc: "臻萃美緻 在廚房",
-    image: "/kitchen-styles/elegant.jpg",
-  },
-  {
-    en: "Chef Kitchen",
-    zh: "大廚廚房",
-    desc: "心滿藝足 在廚房",
-    image: "/kitchen-styles/chef.jpg",
-  },
-  {
-    en: "Country Kitchen",
-    zh: "鄉村廚房",
-    desc: "鄉村慢活 在廚房",
-    image: "/kitchen-styles/country.jpg",
-  },
-  {
-    en: "Harmony Kitchen",
-    zh: "閣樂廚房",
-    desc: "天倫團聚 在廚房",
-    image: "/kitchen-styles/harmony.jpg",
-  },
-];
+import { KITCHEN_STYLES } from '../data/kitchenStyles';
 
 export function ProjectSection() {
   // 一格一格步進輪播：吸附(snap)模式——刻意「不用 dragFree」。
@@ -88,10 +25,10 @@ export function ProjectSection() {
     emblaApi.on('pointerDown', onDown);
     emblaApi.on('pointerUp', onUp);
 
-    // 自動輪播：每 3.5s 前進一格（步進感）；滑鼠移入暫停。
+    // 自動輪播：依最新需求由每 3.5s 加快為 2.8s 前進一格；滑鼠移入暫停。
     const root = emblaApi.rootNode();
     const tick = () => { if (!pausedRef.current) emblaApi.scrollNext(); };
-    const timer = setInterval(tick, 3500);
+    const timer = setInterval(tick, 2800);
     // 延遲 560ms 恢復：hover 卡片的 500ms 展開/收回動畫期間輪播保持停住，
     // 避免「寬度還在變、輪播就移動」導致迴圈總長過期而露縫。
     let resumeTimer: ReturnType<typeof setTimeout> | undefined;
@@ -111,12 +48,12 @@ export function ProjectSection() {
   }, [emblaApi]);
 
   return (
-    <section ref={sectionRef} data-ev="slideInUp" className="ev relative z-10 bg-[#f6f6f6]">
+    <section id="kitchen-series" ref={sectionRef} data-ev="slideInUp" className="ev relative z-10 bg-[#f6f6f6]">
       {/* bg 深色：作為次像素髮絲縫的保險——即使卡間偶有 <1px 縫，透出的是深色(近卡片暗部)而非亮背景，肉眼難察 */}
       <div className="overflow-hidden cursor-grab active:cursor-grabbing bg-[#1C1C1D]" ref={emblaRef}>
         <div className="flex">
           {/* 卡片複製兩份(10→20)：給 Embla loop 足夠緩衝，避免捲動動畫中接縫來不及補齊而露縫 */}
-          {[...STYLES, ...STYLES].map((s, i) => (
+          {[...KITCHEN_STYLES, ...KITCHEN_STYLES].map((s, i) => (
             <div
               key={i}
               className={`group shrink-0 transition-[width] duration-500 ease-out

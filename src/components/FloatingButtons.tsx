@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { prefersReducedMotion } from '../motion/prefersReducedMotion';
 
 // 視覺尺寸依 SAKURA 官網 quick links 實測還原；連結、文字與既有三項功能維持本站版本。
 const TOP = {
@@ -22,8 +23,58 @@ function ButtonContent({ icon, label }: { icon: string; label: string }) {
 }
 
 export function FloatingButtons() {
+  const railRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    let frame = 0;
+
+    const updatePosition = () => {
+      frame = 0;
+
+      if (prefersReducedMotion()) {
+        rail.style.transform = 'translate3d(0, 0, 0)';
+        return;
+      }
+
+      const page = document.documentElement;
+      const maxScroll = Math.max(1, page.scrollHeight - window.innerHeight);
+      const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      const bottom = Number.parseFloat(window.getComputedStyle(rail).bottom) || 0;
+      const restingTop = window.innerHeight - bottom - rail.offsetHeight;
+      const safeTop = 112; // 60px fixed Header + 52px breathing room.
+      const maximumLift = Math.max(0, restingTop - safeTop);
+      const lift = maximumLift * progress;
+
+      rail.style.transform = `translate3d(0, -${lift.toFixed(2)}px, 0)`;
+    };
+
+    const requestUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updatePosition);
+    };
+
+    const resizeObserver = new ResizeObserver(requestUpdate);
+    resizeObserver.observe(rail);
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+    requestUpdate();
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+    };
+  }, []);
+
   return (
-    <div className="pointer-events-none fixed right-0 bottom-[70px] z-20 sm:bottom-9">
+    <div
+      ref={railRef}
+      className="pointer-events-none fixed right-0 bottom-[70px] z-20 will-change-transform sm:bottom-9"
+    >
       <div className="pointer-events-auto">
         <a href={TOP.href} aria-label={TOP.label} className="mb-5 block bg-[#B79258] p-2">
           <ButtonContent icon={TOP.icon} label={TOP.label} />

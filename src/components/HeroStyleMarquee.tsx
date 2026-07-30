@@ -79,7 +79,8 @@ function StyleItem({
 
 /**
  * Hero 下方風格品牌輪播。
- * 尺寸與運動對應 Antra Home 4 `antra-brand`：62px、gap 120、loop、500ms step、5s autoplay。
+ * 尺寸與運動對應 Antra Home 4 `antra-brand`：62px、gap 120、loop、500ms step；
+ * autoplay 依最新需求由 5s 加快為 4s。
  */
 export function HeroStyleMarquee() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -111,7 +112,7 @@ export function HeroStyleMarquee() {
     if (!preview || prefersReducedMotion()) return;
     const timer = window.setInterval(() => {
       setPreviewImageIndex((current) => (current + 1) % PREVIEW_IMAGES.length);
-    }, 1400);
+    }, 1100);
     return () => window.clearInterval(timer);
   }, [preview]);
 
@@ -142,7 +143,7 @@ export function HeroStyleMarquee() {
       ? undefined
       : window.setInterval(() => {
           if (!pausedRef.current && !interactedRef.current) emblaApi.scrollPrev();
-        }, 5000);
+        }, 4000);
 
     return () => {
       if (timer) window.clearInterval(timer);

@@ -8,7 +8,8 @@ const BRAND_LOGOS = [
   { name: 'SAKURA Home', src: '/home-2026/logos/sakura-home.png' },
 ];
 
-// Services 底部品牌 Logo 跑馬燈：尺寸、順序、間距與 20s 速度對齊 SAKURA 官網 Footer。
+// Services 底部品牌 Logo 跑馬燈：尺寸、順序、間距沿用官網，
+// 完整循環依最新需求由 20s 加快為 16s。
 export function MarqueeBand() {
   return (
     <div className="overflow-hidden select-none py-[40px]" role="region" aria-label="集團品牌">

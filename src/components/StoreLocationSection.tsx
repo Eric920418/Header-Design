@@ -34,7 +34,7 @@ const REGIONS: Record<string, string[]> = {
 };
 
 const STORE_BOARD_ROWS = 4;
-const STORE_FLIP_INTERVAL = 2800;
+const STORE_FLIP_INTERVAL = 2200;
 const STORE_FLIP_DURATION = 760;
 
 function StoreBoardFace({
