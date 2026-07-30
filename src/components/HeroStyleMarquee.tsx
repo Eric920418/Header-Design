@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import useEmblaCarousel from 'embla-carousel-react';
 import { prefersReducedMotion } from '../motion/prefersReducedMotion';
 
@@ -11,7 +12,38 @@ const STYLES = [
   { zh: '鄉村風', en: 'Country', logo: '/brand-logos/2.svg' },
 ];
 
-function StyleItem({ item, duplicate = false }: { item: (typeof STYLES)[number]; duplicate?: boolean }) {
+const PREVIEW_IMAGES = [
+  '/kitchen-styles/basic-plus.jpg',
+  '/kitchen-styles/ai-kitchen.jpg',
+  '/kitchen-styles/clever.jpg',
+  '/kitchen-styles/loft-chic.jpg',
+  '/kitchen-styles/joyful.jpg',
+  '/kitchen-styles/premium.jpg',
+  '/kitchen-styles/elegant.jpg',
+  '/kitchen-styles/chef.jpg',
+  '/kitchen-styles/country.jpg',
+  '/kitchen-styles/harmony.jpg',
+];
+
+type PreviewState = {
+  left: number;
+  top: number;
+  title: string;
+};
+
+function StyleItem({
+  item,
+  itemIndex,
+  duplicate = false,
+  onPreview,
+  onPreviewEnd,
+}: {
+  item: (typeof STYLES)[number];
+  itemIndex: number;
+  duplicate?: boolean;
+  onPreview: (anchor: HTMLAnchorElement, itemIndex: number, title: string) => void;
+  onPreviewEnd: () => void;
+}) {
   return (
     <div
       role="group"
@@ -23,6 +55,11 @@ function StyleItem({ item, duplicate = false }: { item: (typeof STYLES)[number];
         href="#"
         title={item.zh}
         tabIndex={duplicate ? -1 : undefined}
+        onClick={(event) => event.preventDefault()}
+        onMouseEnter={(event) => onPreview(event.currentTarget, itemIndex, item.zh)}
+        onMouseLeave={onPreviewEnd}
+        onFocus={(event) => onPreview(event.currentTarget, itemIndex, item.zh)}
+        onBlur={onPreviewEnd}
         className="flex h-[62px] shrink-0 items-center justify-center gap-4 p-[2px]"
       >
         <img
@@ -53,6 +90,41 @@ export function HeroStyleMarquee() {
   });
   const pausedRef = useRef(false);
   const interactedRef = useRef(false);
+  const [preview, setPreview] = useState<PreviewState | null>(null);
+  const [previewImageIndex, setPreviewImageIndex] = useState(0);
+
+  const showPreview = (anchor: HTMLAnchorElement, itemIndex: number, title: string) => {
+    const rect = anchor.getBoundingClientRect();
+    const halfWidth = 120;
+    setPreviewImageIndex(itemIndex % PREVIEW_IMAGES.length);
+    setPreview({
+      left: Math.min(
+        window.innerWidth - halfWidth - 12,
+        Math.max(halfWidth + 12, rect.left + rect.width / 2),
+      ),
+      top: Math.max(12, rect.top - 166),
+      title,
+    });
+  };
+
+  useEffect(() => {
+    if (!preview || prefersReducedMotion()) return;
+    const timer = window.setInterval(() => {
+      setPreviewImageIndex((current) => (current + 1) % PREVIEW_IMAGES.length);
+    }, 1400);
+    return () => window.clearInterval(timer);
+  }, [preview]);
+
+  useEffect(() => {
+    if (!preview) return;
+    const closePreview = () => setPreview(null);
+    window.addEventListener('scroll', closePreview, true);
+    window.addEventListener('resize', closePreview);
+    return () => {
+      window.removeEventListener('scroll', closePreview, true);
+      window.removeEventListener('resize', closePreview);
+    };
+  }, [preview]);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -69,7 +141,7 @@ export function HeroStyleMarquee() {
     const timer = prefersReducedMotion()
       ? undefined
       : window.setInterval(() => {
-          if (!pausedRef.current && !interactedRef.current) emblaApi.scrollNext();
+          if (!pausedRef.current && !interactedRef.current) emblaApi.scrollPrev();
         }, 5000);
 
     return () => {
@@ -89,16 +161,41 @@ export function HeroStyleMarquee() {
       <div ref={emblaRef} className="h-[62px] overflow-hidden">
         <div className="flex h-[62px] touch-pan-y">
           {[0, 1, 2].flatMap((setIndex) =>
-            STYLES.map((item) => (
+            STYLES.map((item, itemIndex) => (
               <StyleItem
                 key={`${setIndex}-${item.en}`}
                 item={item}
+                itemIndex={itemIndex}
                 duplicate={setIndex > 0}
+                onPreview={showPreview}
+                onPreviewEnd={() => setPreview(null)}
               />
             )),
           )}
         </div>
       </div>
+
+      {preview && createPortal(
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed z-40 hidden w-[240px] overflow-hidden rounded-[14px] border border-white/30 bg-[#1C1C1D] p-1 shadow-[0_18px_45px_rgba(0,0,0,0.38)] md:block"
+          style={{
+            left: preview.left,
+            top: preview.top,
+            transform: 'translateX(-50%)',
+          }}
+        >
+          <div className="h-[148px] overflow-hidden rounded-[10px]">
+            <img
+              key={PREVIEW_IMAGES[previewImageIndex]}
+              src={PREVIEW_IMAGES[previewImageIndex]}
+              alt={preview.title}
+              className="style-preview-image h-full w-full object-cover"
+            />
+          </div>
+        </div>,
+        document.body,
+      )}
     </section>
   );
 }

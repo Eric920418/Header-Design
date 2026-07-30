@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronRight, Circle } from 'lucide-react';
-import { Reveal, useReveal } from '../motion/Reveal';
+import { Reveal } from '../motion/Reveal';
 import { prefersReducedMotion } from '../motion/prefersReducedMotion';
 
 const TEMPLATE_GOLD = '#CAA05C';
@@ -16,36 +16,80 @@ const SERIES = ['巧域廚房', '潮派廚房', '童樂廚房', '君璽廚房', 
 /** Antra Home 6 Hero（ee91316）＋既有品牌系列側抽屜。 */
 export function HeroSection() {
   const [seriesOpen, setSeriesOpen] = useState(false);
-  const [activeSlide, setActiveSlide] = useState(0);
-  const heroRef = useReveal<HTMLElement>();
+  const [{ activeSlide, previousSlide }, setSlideState] = useState<{
+    activeSlide: number;
+    previousSlide: number | null;
+  }>({ activeSlide: 0, previousSlide: null });
   const desktopShift = seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0';
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
     const timer = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % HERO_SLIDES.length);
+      setSlideState(({ activeSlide: current }) => ({
+        activeSlide: (current + 1) % HERO_SLIDES.length,
+        previousSlide: current,
+      }));
     }, 5000);
     return () => window.clearInterval(timer);
   }, []);
 
   return (
     <section
-      ref={heroRef}
-      data-ev="fadeInDown"
-      className="ev relative h-[587px] w-full overflow-hidden bg-black md:h-[489px] lg:h-[719px] antra:h-[952px]"
+      className="relative h-[587px] w-full overflow-hidden bg-[#9F9FA4] md:h-[489px] lg:h-[719px] antra:h-[952px]"
       aria-labelledby="hero-title"
     >
-      {HERO_SLIDES.map((image, index) => (
-        <img
-          key={image}
-          src={image}
-          alt=""
-          aria-hidden="true"
-          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ${
-            index === activeSlide ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
-      ))}
+      {/* 保留三張圖的預載，不讓下一張進場時才開始下載。 */}
+      <div className="hidden" aria-hidden="true">
+        {HERO_SLIDES.map((image) => <img key={image} src={image} alt="" />)}
+      </div>
+
+      {/* Antra Page 1 Slider Revolution `slidingoverlaydown / double`：
+          首次載入最底層是模板灰，後續換圖則保留上一張完整圖片；
+          第一份新圖片帶暫時性深色遮罩先向下展開，
+          第二份原色圖片延遲 333ms 再覆蓋，於總長 2000ms 完成。
+          key 跟著 activeSlide 更新，首次載入與每次輪播換圖都會重播。 */}
+      <div
+        key={`hero-page1-slide-${activeSlide}`}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        {previousSlide === null ? (
+          <span className="absolute inset-0 bg-[#9F9FA4]" />
+        ) : (
+          <img
+            src={HERO_SLIDES[previousSlide]}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        )}
+
+        <span className="hero-page1-image-layer hero-page1-image-layer-masked">
+          <img
+            src={HERO_SLIDES[activeSlide]}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <span className="absolute inset-0 bg-[rgba(16,8,1,0.46)]" />
+        </span>
+
+        <span className="hero-page1-image-layer hero-page1-image-layer-final">
+          <img
+            src={HERO_SLIDES[activeSlide]}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        </span>
+      </div>
+
+      {/* 只壓暗 Hero 下半部，增加 Kitchen 浮水印對比；
+          位於圖片轉場之上、所有文字與互動內容之下。 */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%]"
+        style={{
+          background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.42) 42%, rgba(0,0,0,0.86) 100%)',
+        }}
+      />
 
       {/* 模板原生斷點：390 / 768 / 1024 置中，1200px 起回到桌面左對齊。 */}
       <div
@@ -80,7 +124,7 @@ export function HeroSection() {
 
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-[356px] h-px bg-white/25 md:top-[318px] lg:top-[478px] antra:top-[691px]"
+        className="absolute inset-x-0 top-[356px] z-10 h-px bg-white/25 md:top-[318px] lg:top-[478px] antra:top-[691px]"
       />
 
       <div
@@ -90,11 +134,11 @@ export function HeroSection() {
           anim="fadeIn"
           delayMs={900}
           speed="slow"
-          className="h-full w-full rounded-[100px] border border-[rgba(255,255,255,0.07)] bg-[rgba(89,88,93,0.46)] backdrop-blur-[58px]"
+          className="h-full w-full rounded-[200px] backdrop-blur-[58px]"
         >
           <a
             href="#"
-            className="flex h-full w-full items-center justify-center rounded-[100px] text-center font-display text-[18px] font-normal leading-[24px] text-white transition-colors duration-300 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            className="flex h-full w-full items-center justify-center rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center font-display text-[18px] font-normal leading-[24px] text-white transition-colors duration-300 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
             Start
             <br />

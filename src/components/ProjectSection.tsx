@@ -145,17 +145,17 @@ export function ProjectSection() {
                   }}
                 />
 
-                {/* 左上膠囊：中文名（粗體；無中文則不顯示） */}
-                {s.zh && (
+                {/* 左上膠囊：英文系列名。 */}
+                {s.en && (
                   <span className="absolute top-8 left-8 z-[2] inline-block rounded-full border border-white/50 text-white text-[16px] font-bold px-4 py-1.5 backdrop-blur-sm">
-                    {s.zh}
+                    {s.en}
                   </span>
                 )}
 
-                {/* 底部：英文大標（hover 轉模板金）+ 描述（hover 由下淡入浮現） */}
+                {/* 底部：中文大標（hover 轉模板金）+ 描述（hover 由下淡入浮現） */}
                 <div className="absolute inset-x-0 bottom-0 z-[2] px-8 pb-9">
                   <h3 className="font-display text-white text-[36px] leading-[44px] group-hover:text-[#CAA05C] transition-colors duration-300">
-                    {s.en}
+                    {s.zh}
                   </h3>
                   {s.desc && (
                     <p className="text-white/90 text-[16px] leading-[24px] max-h-0 opacity-0 overflow-hidden group-hover:max-h-20 group-hover:opacity-100 group-hover:mt-2.5 transition-all duration-500 ease-out">
@@ -169,18 +169,19 @@ export function ProjectSection() {
         </div>
       </div>
 
-      {/* 左右兩側 prev/next 箭頭 — 依主題原始碼 antra swiper button（style.css 13949）：
-          48×48 白圓 + 1px 邊框 + icon 24；hover 模板金底、白箭頭。可點觸發 embla scrollPrev/Next。 */}
+      {/* 左右兩側方向箭頭 — 依主題原始碼 antra swiper button（style.css 13949）：
+          48×48 白圓 + 1px 邊框 + icon 24；hover 模板金底、白箭頭。
+          Embla 的 prev/next 指的是索引而非軌道視覺方向，因此依箭頭視覺互換呼叫。 */}
       <button
-        onClick={() => emblaApi?.scrollPrev()}
-        aria-label="上一個"
+        onClick={() => emblaApi?.scrollNext()}
+        aria-label="向左瀏覽"
         className="absolute left-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#CAA05C] hover:border-[#CAA05C] hover:text-white"
       >
         <ArrowLeft className="w-6 h-6" />
       </button>
       <button
-        onClick={() => emblaApi?.scrollNext()}
-        aria-label="下一個"
+        onClick={() => emblaApi?.scrollPrev()}
+        aria-label="向右瀏覽"
         className="absolute right-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#CAA05C] hover:border-[#CAA05C] hover:text-white"
       >
         <ArrowRight className="w-6 h-6" />

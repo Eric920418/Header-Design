@@ -1,8 +1,8 @@
 import React from 'react';
 import { Header } from './Header';
 
-// 頁首高度（Header bar `h-[72px]`）；App 內容頂端要留同高 spacer 避免被固定頁首蓋住。
-export const HEADER_H = 72;
+// 頁首高度（對齊 SAKURA 官網固定 Header 的 60px）；App 內容頂端要留同高 spacer。
+export const HEADER_H = 60;
 
 /** 原生 RWD fixed 頁首；不再套用 1512px 畫布縮放。 */
 export function StickyHeader() {

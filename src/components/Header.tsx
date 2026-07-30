@@ -30,7 +30,7 @@ const NAV_LEFT: NavItem[] = [
     megaCatalog: '廚房商品型錄',
   },
   { label: '門市與服務', children: ['服務流程', '案例門市', '到府丈量', '客服中心'] },
-  { label: '優惠活動', children: ['優惠活動', '最新消息', '媒體影音'] },
+  { label: '優惠消息', children: ['優惠活動', '最新消息', '媒體影音'] },
 ];
 
 const NAV_RIGHT: NavItem[] = [
@@ -47,12 +47,12 @@ function DesktopNavItem({ item }: { item: NavItem }) {
     return (
       <div className="group">
         {/* 觸發鈕撐滿 bar 高度，讓面板無縫貼合、避免 hover 中斷 */}
-        <button type="button" className="flex items-center gap-1 h-[72px] px-3 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap">
+        <button type="button" className="flex h-[60px] items-center gap-0.5 whitespace-nowrap px-1 text-[15px] leading-[15px] text-white transition-colors hover:text-white/80 xl:gap-1 xl:px-3">
           {item.label}
-          <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
+          <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180 xl:h-3.5 xl:w-3.5" />
         </button>
         {/* 面板：絕對定位於 header（滿寬），淡入展開（opacity+visibility，300ms，仿模板） */}
-        <div className="absolute left-0 right-0 top-[72px] z-40 invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-300">
+        <div className="absolute left-0 right-0 top-[60px] z-40 invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-300">
           <div className="bg-white shadow-2xl border-t border-black/5">
             <div className="mx-auto max-w-[1200px] px-[30px] py-8 xl:px-0">
               <div className="grid grid-cols-3 gap-[30px]">
@@ -96,7 +96,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
       <a
         href={item.href}
         {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-        className="px-3 py-2 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap"
+        className="whitespace-nowrap px-1 py-2 text-[15px] leading-[15px] text-white transition-colors hover:text-white/80 xl:px-3"
       >
         {item.label}
       </a>
@@ -104,9 +104,9 @@ function DesktopNavItem({ item }: { item: NavItem }) {
   }
   return (
     <div className="group relative">
-      <button className="flex items-center gap-1 px-3 py-2 text-[15px] text-white hover:text-white/80 transition-colors whitespace-nowrap">
+      <button className="flex items-center gap-0.5 whitespace-nowrap px-1 py-2 text-[15px] leading-[15px] text-white transition-colors hover:text-white/80 xl:gap-1 xl:px-3">
         {item.label}
-        <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
+        <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180 xl:h-3.5 xl:w-3.5" />
       </button>
       {/* 下拉（pt-2 當作無縫橋接，避免游標移動時中斷 hover） */}
       <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 hidden group-hover:block z-50">
@@ -137,17 +137,21 @@ export function Header() {
   return (
     <header className="w-full relative z-50" style={{ fontFamily: HEADER_FONT }}>
       <div style={{ background: HEADER_GRADIENT }}>
-        <div className="px-5 lg:px-12 h-[72px] flex items-center">
+        <div className="flex h-[60px] items-center px-5 xl:px-12">
           {/* ── 桌面版：左導覽 | logo | 右導覽 + 搜尋 ── */}
-          <nav className="hidden lg:flex items-center w-full">
+          <nav className="hidden w-full items-center lg:flex">
             <div className="flex-1 flex items-center justify-start gap-1">
               {NAV_LEFT.map((item, i) => (
                 <DesktopNavItem key={i} item={item} />
               ))}
             </div>
 
-            <a href="#" className="shrink-0 px-6">
-              <img src="/sakura-logo.png" alt="SAKURA KITCHEN" className="h-11" />
+            <a href="#" className="shrink-0 px-3 xl:px-6">
+              <img
+                src="/home-2026/footer/sakura-kitchen.png"
+                alt="SAKURA KITCHEN"
+                className="h-auto w-[160px] object-contain brightness-0 invert xl:w-[260px]"
+              />
             </a>
 
             <div className="flex-1 flex items-center justify-end gap-1">
@@ -166,9 +170,13 @@ export function Header() {
           </nav>
 
           {/* ── 手機版 bar：logo + 搜尋 + 漢堡 ── */}
-          <div className="flex lg:hidden items-center justify-between w-full">
+          <div className="flex w-full items-center justify-between lg:hidden">
             <a href="#">
-              <img src="/sakura-logo.png" alt="SAKURA KITCHEN" className="h-11" />
+              <img
+                src="/home-2026/footer/sakura-kitchen.png"
+                alt="SAKURA KITCHEN"
+                className="h-auto w-[184px] object-contain brightness-0 invert"
+              />
             </a>
             <div className="flex items-center gap-1">
               <button
@@ -209,7 +217,7 @@ export function Header() {
 
       {/* ── 手機版抽屜（accordion） ── */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white border-t border-[#E3E3E8] shadow-lg">
+        <div className="border-t border-[#E3E3E8] bg-white shadow-lg lg:hidden">
           <ul className="divide-y divide-[#E3E3E8]">
             {allNav.map((item, i) => {
               // mega 項在手機以其品牌名 + 型錄當作可展開子項
