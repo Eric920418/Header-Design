@@ -13,14 +13,14 @@ const ICON_LINKS = [
 export function Footer() {
   return (
     <footer
-      className="relative isolate h-[420px] overflow-hidden bg-[#1C1C1D] bg-cover bg-center text-white lg:h-[650px]"
+      className="relative isolate h-[390px] overflow-hidden bg-[#1C1C1D] bg-cover bg-center text-white lg:h-[600px]"
       style={{ backgroundImage: "url('/footer-antra-bg.jpg')" }}
     >
       <div aria-hidden className="absolute inset-0 -z-10 bg-black/75" />
 
       {/* 簡化模板上半資訊區：只保留 SAKURA 原有連結與圖示。 */}
       <div className="relative z-10 h-[220px] bg-[rgba(28,28,29,0.64)]">
-        <div className="mx-auto flex h-full max-w-[1410px] flex-col justify-between px-[15px] py-[36px] md:flex-row md:items-start md:px-[30px] md:py-[48px] lg:px-[51px]">
+        <div className="mx-auto flex h-full max-w-[1410px] flex-col justify-between px-[15px] pb-[24px] pt-[48px] md:flex-row md:items-start md:px-[30px] md:pb-[24px] md:pt-[60px] lg:px-[51px]">
           <nav aria-label="頁尾連結" className="flex flex-col items-start gap-4 md:flex-row md:gap-8">
             {TEXT_LINKS.map((link) => (
               <a

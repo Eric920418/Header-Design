@@ -154,7 +154,7 @@ export function ProjectSection() {
 
                 {/* 底部：中文大標（hover 轉模板金）+ 描述（hover 由下淡入浮現） */}
                 <div className="absolute inset-x-0 bottom-0 z-[2] px-8 pb-9">
-                  <h3 className="font-display text-white text-[36px] leading-[44px] group-hover:text-[#CAA05C] transition-colors duration-300">
+                  <h3 className="w-fit font-display text-white text-[36px] leading-[44px] transition-colors duration-300 hover:text-[#CAA05C]">
                     {s.zh}
                   </h3>
                   {s.desc && (

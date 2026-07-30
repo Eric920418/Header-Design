@@ -150,7 +150,7 @@ export function Header() {
               <img
                 src="/home-2026/footer/sakura-kitchen.png"
                 alt="SAKURA KITCHEN"
-                className="h-auto w-[160px] object-contain brightness-0 invert xl:w-[260px]"
+                className="h-auto w-[160px] origin-center scale-125 object-contain brightness-0 invert xl:w-[260px]"
               />
             </a>
 
@@ -175,7 +175,7 @@ export function Header() {
               <img
                 src="/home-2026/footer/sakura-kitchen.png"
                 alt="SAKURA KITCHEN"
-                className="h-auto w-[184px] object-contain brightness-0 invert"
+                className="h-auto w-[184px] origin-left scale-125 object-contain brightness-0 invert"
               />
             </a>
             <div className="flex items-center gap-1">

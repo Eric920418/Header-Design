@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, LocateFixed, ChevronDown } from 'lucide-react';
 import { GoogleStoreMap } from './GoogleStoreMap';
+import { prefersReducedMotion } from '../motion/prefersReducedMotion';
 
 // 全區顏色使用 Antra 模板色盤（單一來源）。
 import { GOLD } from '../theme/cis';
@@ -32,10 +33,72 @@ const REGIONS: Record<string, string[]> = {
   離島: ['金門縣', '連江縣'],
 };
 
+const STORE_BOARD_ROWS = 4;
+const STORE_FLIP_INTERVAL = 2800;
+const STORE_FLIP_DURATION = 760;
+
+function StoreBoardFace({
+  store,
+  active,
+  className = '',
+}: {
+  store: Store;
+  active: boolean;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`store-board-face rounded-2xl border ${
+        active
+          ? 'border-[#CAA05C] bg-[#CAA05C] text-white'
+          : 'border-[#E3E3E8] bg-white text-[#1C1C1D]'
+      } ${className}`}
+    >
+      <div className="flex h-full flex-col justify-center px-5 py-3 lg:px-6">
+        <div className="flex items-center gap-3">
+          <span
+            className={`rounded-full px-2.5 py-1 text-xs ${
+              active ? 'bg-white/20 text-white' : 'bg-[#F6F6F6] text-[#59585D]'
+            }`}
+          >
+            {store.region}
+          </span>
+          <span className="text-lg font-medium">{store.name}</span>
+        </div>
+
+        <div className="mt-2.5 flex min-w-0 flex-col items-start gap-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 lg:flex-col lg:items-start lg:justify-start xl:flex-row xl:items-center xl:justify-between">
+          <span
+            className={`flex min-w-0 items-start gap-1.5 ${
+              active ? 'text-white/85' : 'text-[#59585D]'
+            }`}
+          >
+            <MapPin className="mt-px h-[18px] w-[18px] shrink-0" />
+            <span className="min-w-0 break-words">{store.address}</span>
+          </span>
+          <span
+            className={`shrink-0 tracking-wider ${
+              active ? 'text-white' : 'text-[#CAA05C]'
+            }`}
+          >
+            {store.phone}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function StoreLocationSection() {
   const [selected, setSelected] = useState(STORES[0].id);
   const [region, setRegion] = useState('');
   const [city, setCity] = useState('');
+  const [displayedIds, setDisplayedIds] = useState(
+    STORES.slice(0, STORE_BOARD_ROWS).map((store) => store.id)
+  );
+  const [flipState, setFlipState] = useState<{ slot: number; previousId: number } | null>(null);
+  const [boardPaused, setBoardPaused] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const flipTimeoutRef = useRef<number | null>(null);
   // 地圖初始顯示整個台灣（總覽）；使用者點門市卡片後才聚焦到該門市
   const [focused, setFocused] = useState(false);
 
@@ -47,6 +110,74 @@ export function StoreLocationSection() {
       ),
     [region, city]
   );
+
+  const filteredKey = filtered.map((store) => store.id).join(',');
+
+  // 篩選條件改變時重建資訊板；只顯示固定列數，其餘門市成為翻牌候補。
+  useEffect(() => {
+    setDisplayedIds(filtered.slice(0, STORE_BOARD_ROWS).map((store) => store.id));
+    setFlipState(null);
+  }, [filteredKey]);
+
+  // 尊重系統的減少動態設定；設定變更時即時停止／恢復自動翻牌。
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduceMotion(prefersReducedMotion());
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (flipTimeoutRef.current !== null) {
+        window.clearTimeout(flipTimeoutRef.current);
+      }
+    },
+    []
+  );
+
+  // 機場翻牌：每次只隨機替換一列，候補不與目前四列重複；
+  // 使用者已選取的門市保留在板上，避免地圖目標突然消失。
+  useEffect(() => {
+    if (
+      boardPaused ||
+      reduceMotion ||
+      flipState !== null ||
+      filtered.length <= STORE_BOARD_ROWS ||
+      displayedIds.length === 0
+    ) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      const candidates = filtered.filter((store) => !displayedIds.includes(store.id));
+      const replaceableSlots = displayedIds
+        .map((id, index) => ({ id, index }))
+        .filter(({ id }) => id !== selected);
+
+      if (candidates.length === 0 || replaceableSlots.length === 0) return;
+
+      const target =
+        replaceableSlots[Math.floor(Math.random() * replaceableSlots.length)];
+      const replacement = candidates[Math.floor(Math.random() * candidates.length)];
+
+      setFlipState({ slot: target.index, previousId: target.id });
+      setDisplayedIds((current) =>
+        current.map((id, index) => (index === target.index ? replacement.id : id))
+      );
+
+      if (flipTimeoutRef.current !== null) {
+        window.clearTimeout(flipTimeoutRef.current);
+      }
+      flipTimeoutRef.current = window.setTimeout(() => {
+        setFlipState(null);
+        flipTimeoutRef.current = null;
+      }, STORE_FLIP_DURATION);
+    }, STORE_FLIP_INTERVAL);
+
+    return () => window.clearTimeout(timer);
+  }, [boardPaused, displayedIds, filtered, flipState, reduceMotion, selected]);
 
   // 顯示中的門市：選取的若被篩掉，退回第一個可見門市（地圖永遠有目標）
   const visible =
@@ -174,59 +305,58 @@ export function StoreLocationSection() {
               </div>
             </div>
 
-            {/* 門市列表卡片 */}
-            <div className="space-y-3">
+            {/* 門市資訊板：固定四列，候補門市逐列以機場翻牌方式隨機輪換。 */}
+            <div
+              className="space-y-3"
+              onMouseEnter={() => setBoardPaused(true)}
+              onMouseLeave={() => setBoardPaused(false)}
+              onFocusCapture={() => setBoardPaused(true)}
+              onBlurCapture={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                  setBoardPaused(false);
+                }
+              }}
+            >
               {filtered.length === 0 ? (
                 <div className="rounded-2xl bg-white border border-[#E3E3E8] px-6 py-10 text-center text-[#59585D]">
                   此區域尚無門市資料。
                 </div>
               ) : (
-                filtered.map((store) => {
+                displayedIds.map((storeId, index) => {
+                  const store = filtered.find((item) => item.id === storeId);
+                  if (!store) return null;
+
                   const active = store.id === visible.id;
+                  const previousStore =
+                    flipState?.slot === index
+                      ? STORES.find((item) => item.id === flipState.previousId)
+                      : undefined;
+
                   return (
                     <button
-                      key={store.id}
+                      key={index}
+                      type="button"
+                      aria-label={`查看${store.name}：${store.address}`}
                       onClick={() => {
                         setSelected(store.id);
                         setFocused(true); // 點門市 → 地圖聚焦該門市（街道級）
                       }}
-                      className={`w-full text-left rounded-2xl border transition-colors ${
-                        active
-                          ? 'bg-[#CAA05C] border-[#CAA05C] text-white'
-                          : 'bg-white border-[#E3E3E8] hover:border-[#CAA05C]/50 text-[#1C1C1D]'
-                      }`}
+                      className="store-board-slot relative h-[112px] w-full rounded-2xl text-left outline-none sm:h-[94px] lg:h-[118px] xl:h-[94px]"
                     >
-                      <div className="px-5 lg:px-6 py-4">
-                        {/* 第一行：區域灰底標籤 + 店名 */}
-                        <div className="flex items-center gap-3">
-                          <span
-                            className={`text-xs px-2.5 py-1 rounded-full ${
-                              active ? 'bg-white/20 text-white' : 'bg-[#F6F6F6] text-[#59585D]'
-                            }`}
-                          >
-                            {store.region}
-                          </span>
-                          <span className="text-lg font-medium">{store.name}</span>
-                        </div>
-                        {/* 第二行：地址（左）+ 電話（右，金色）同一行 */}
-                        <div className="mt-2.5 flex min-w-0 flex-col items-start gap-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 lg:flex-col lg:items-start lg:justify-start xl:flex-row xl:items-center xl:justify-between">
-                          <span
-                            className={`flex min-w-0 items-start gap-1.5 ${
-                              active ? 'text-white/85' : 'text-[#59585D]'
-                            }`}
-                          >
-                            <MapPin className="w-[18px] h-[18px] shrink-0 mt-px" />
-                            <span className="min-w-0 break-words">{store.address}</span>
-                          </span>
-                          <span
-                            className={`shrink-0 tracking-wider ${
-                              active ? 'text-white' : 'text-[#CAA05C]'
-                            }`}
-                          >
-                            {store.phone}
-                          </span>
-                        </div>
-                      </div>
+                      <StoreBoardFace
+                        store={store}
+                        active={active}
+                        className={
+                          previousStore ? 'store-board-face-in' : 'transition-colors'
+                        }
+                      />
+                      {previousStore && (
+                        <StoreBoardFace
+                          store={previousStore}
+                          active={previousStore.id === visible.id}
+                          className="store-board-face-out absolute inset-0"
+                        />
+                      )}
                     </button>
                   );
                 })

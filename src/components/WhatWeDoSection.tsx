@@ -34,7 +34,7 @@ export function WhatWeDoSection() {
         aria-hidden
         className="wwd-blueprint pointer-events-none select-none absolute bottom-0 right-0 z-0 w-[821px] max-w-none"
       />
-      <div className="relative z-10 mx-auto grid max-w-[1410px] grid-cols-1 items-center gap-[30px] lg:grid-cols-[51fr_49.5fr] antra:gap-[90px]">
+      <div className="relative z-10 mx-auto grid max-w-[1410px] grid-cols-1 items-center gap-[30px] lg:grid-cols-[44fr_56fr] antra:gap-[70px]">
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
         <Reveal anim="slideInLeft" className="min-w-0">
           {/* Elementor 的 heading widget：subtitle 與 title 是同一組，整組下方 margin 40。 */}
@@ -79,11 +79,11 @@ export function WhatWeDoSection() {
               hover 整顆填模板金 + 字白 + 箭頭轉正 rotate(0)；中文內容保留「櫻花優勢」。 */}
           <a
             href="#"
-            className="group mx-auto inline-flex w-fit items-center gap-[8px] rounded-full border border-[rgba(159,159,164,0.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white lg:mx-0"
+            className="site-content-cta group mx-auto inline-flex h-[60px] w-fit shrink-0 items-center gap-[8px] whitespace-nowrap rounded-full border border-[rgba(159,159,164,0.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white lg:mx-0"
           >
-            <span className="text-[15px]">櫻花優勢</span>
+            <span className="text-[15px] leading-[22px]">櫻花優勢</span>
             <span
-              className="inline-flex items-center justify-center w-[40px] h-[40px] rounded-full text-white transition-transform duration-500 -rotate-45 group-hover:rotate-0"
+              className="site-cta-icon inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full text-white transition-transform duration-500 -rotate-45 group-hover:rotate-0"
               style={{ background: GOLD }}
             >
               <ArrowRight className="w-5 h-5" />

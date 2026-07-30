@@ -52,7 +52,10 @@ export function GallerySection() {
   };
 
   // 右邊兩張卡 = 主圖之後的兩張（聯動輪替）：背景=#active、卡片=#active+1、#active+2
-  const cards = [CASES[(active + 1) % len], CASES[(active + 2) % len]];
+  const cards = [1, 2].map((offset) => {
+    const caseIndex = (active + offset) % len;
+    return { ...CASES[caseIndex], caseIndex };
+  });
 
   return (
     // 全出血底圖(=當前主圖) + 右 2 卡；section 高度對位模板 956
@@ -102,11 +105,11 @@ export function GallerySection() {
                 （模板底色淺→字深；本區深底故字用白，其餘尺寸/hover 完全一致。demo 站 root 20px 會放大成 18.75/45，勿量網頁。） */}
             <a
               href="#"
-              className="group/cta inline-flex items-center gap-4 mt-[40px] rounded-full border border-[rgba(159,159,164,0.64)] pl-[30px] pr-[7px] py-[7px] text-white capitalize transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C]"
+              className="site-content-cta group/cta mt-[40px] inline-flex h-[60px] shrink-0 items-center gap-[8px] whitespace-nowrap rounded-full border border-[rgba(159,159,164,0.64)] py-[9px] pl-[30px] pr-[9px] text-white capitalize transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C]"
             >
-              <span className="text-[15px]">更多設計</span>
+              <span className="text-[15px] leading-[22px]">更多設計</span>
               <span
-                className="inline-flex items-center justify-center w-[40px] h-[40px] rounded-full text-white transition-transform duration-500 -rotate-45 group-hover/cta:rotate-0"
+                className="site-cta-icon inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full text-white transition-transform duration-500 -rotate-45 group-hover/cta:rotate-0"
                 style={{ background: GOLD }}
               >
                 <ArrowRight className="w-5 h-5" />
@@ -119,20 +122,26 @@ export function GallerySection() {
             ref={cardsRef}
             data-ev="slideInUp"
             style={{ animationDelay: '400ms' }}
-            className="ev mt-[53px] flex select-none justify-end touch-pan-y lg:min-w-0 lg:flex-1 lg:mt-[205px] antra:mt-[325px]"
+            className="gallery-case-row ev flex select-none justify-end touch-pan-y lg:min-w-0 lg:flex-1"
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
-            {/* 圖說第 6 點：箭頭右移到案例群左側，與兩張縮圖共用同一底線；整組維持靠右。 */}
-            <div className="flex flex-col items-end gap-[30px] lg:flex-row lg:items-end lg:gap-[20px] antra:gap-[40px]">
-            {/* 縮圖改成正方形；桌面 170×170，兩張卡右緣仍對齊 51px 版心。 */}
-            <div key={active} className="order-1 flex gap-[20px] animate-gallery-card lg:order-2 antra:gap-[30px]">
-              {cards.map((c, i) => (
-                <div key={i} className="group/card shrink-0">
+            {/* 左側控制區 + 右側縮圖區：箭頭在剩餘空間水平置中，縮圖維持靠右。 */}
+            <div className="gallery-case-layout flex w-full flex-col items-center lg:grid lg:grid-cols-[minmax(104px,1fr)_auto] lg:items-end">
+            {/* 縮圖放大；點擊任一張即可直接切換成背景主案例。 */}
+            <div key={active} className="order-1 flex gap-[20px] animate-gallery-card lg:order-2 lg:col-start-2 antra:gap-[30px]">
+              {cards.map((c) => (
+                <button
+                  key={c.caseIndex}
+                  type="button"
+                  onClick={() => setActive(c.caseIndex)}
+                  aria-label={`切換至門市案例 ${c.caseIndex + 1}`}
+                  className="group/card shrink-0 rounded-3xl text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                >
                   {/* hover：陰影加深 + 圖片微放大（overflow 裁切） */}
                   <div
                     data-gallery-card
-                    className="aspect-square w-[calc((100vw-96px)/2)] max-w-[170px] overflow-hidden rounded-3xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)] transition-shadow duration-500 group-hover/card:shadow-[0_32px_80px_-8px_rgba(0,0,0,0.7)] lg:h-[140px] lg:w-[140px] antra:h-[170px] antra:w-[170px]"
+                    className="gallery-case-card aspect-square overflow-hidden rounded-3xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)] transition-shadow duration-500 group-hover/card:shadow-[0_32px_80px_-8px_rgba(0,0,0,0.7)]"
                   >
                     <img
                       src={c.image}
@@ -141,29 +150,31 @@ export function GallerySection() {
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-[1.06]"
                     />
                   </div>
-                </div>
+                </button>
               ))}
             </div>
 
-            {/* 箭頭與卡片下緣對齊；桌面改到卡片左側，行動版仍在卡片下方靠右。 */}
-            <div data-gallery-controls className="order-2 flex items-center justify-end gap-5 lg:order-1">
-              <button
-                onClick={prev}
-                aria-label="上一張"
-                className="w-[42px] h-[42px] rounded-full border border-white/25 bg-transparent text-white/90 flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors"
-              >
-                <ArrowLeft className="w-[18px] h-[18px]" />
-              </button>
-              <button
-                onClick={next}
-                aria-label="下一張"
-                className="w-[42px] h-[42px] rounded-full border border-white/25 bg-transparent text-white/90 flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors"
-              >
-                <ArrowRight className="w-[18px] h-[18px]" />
-              </button>
-            </div>
             </div>
           </div>
+        </div>
+
+        {/* 箭頭必須是 Section 內容層的直接子元素，不能留在右側 Grid 裡；
+            否則 absolute left:50% 會以 Grid 為參考而壓到第一張卡片後面。 */}
+        <div data-gallery-controls className="gallery-case-controls mt-[30px] flex items-center justify-center gap-5 lg:mt-0">
+          <button
+            onClick={prev}
+            aria-label="上一張"
+            className="w-[42px] h-[42px] rounded-full border border-white/25 bg-black/20 text-white flex items-center justify-center backdrop-blur-sm hover:border-white hover:bg-black/35 transition-colors"
+          >
+            <ArrowLeft className="w-[18px] h-[18px]" />
+          </button>
+          <button
+            onClick={next}
+            aria-label="下一張"
+            className="w-[42px] h-[42px] rounded-full border border-white/25 bg-black/20 text-white flex items-center justify-center backdrop-blur-sm hover:border-white hover:bg-black/35 transition-colors"
+          >
+            <ArrowRight className="w-[18px] h-[18px]" />
+          </button>
         </div>
       </div>
     </section>

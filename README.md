@@ -33,14 +33,14 @@ pnpm build
 
 本節是目前首頁的最新實作真值；如與下方 2026-07-17 的歷史 Design QA 記錄衝突，以本節為準。新素材統一放在 `public/home-2026/`，不在執行時引用 Downloads 路徑。
 
-- **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；≥1280px 寬 `260px`（對齊官網實測）、1024–1279px 寬 `160px`、<1024px 寬 `184px`。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。Header 高度依官網實測統一為 `60px`；正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題改為官方 Logo，每個使用 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊，型錄箭頭使用 Lucide `ArrowRight`。桌面支援 hover 與鍵盤 focus-within 展開；手機 Accordion 仍保留品牌文字。
-- **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖；圖片轉場改為 Antra Page 1 Slider Revolution 原始 `slidingoverlaydown / double` 規格：總長 `2000ms`、第一份新圖片 `1333ms`、第二份新圖片延遲 `333ms` 並於 `2000ms` 完成，easing 對應 `power2.inOut`。首次進場三層為模板灰 `#9F9FA4`＋套 `rgba(16,8,1,.46)` 暫時遮罩的新圖＋原色新圖；後續換圖依模板實際週期改為保留上一張完整圖片作底層，再以暗色新圖與原色新圖由上往下覆蓋，過程不再重新露出灰底。最後原色圖片完整覆蓋，不加入整張常駐黑色遮罩；另在圖片轉場之上加入僅覆蓋 Hero 底部 `58%` 的透明至黑色漸層（中段 `rgba(0,0,0,.42)`、底部 `rgba(0,0,0,.86)`），強化 `Kitchen` 浮水印對比但不壓暗上半部主圖。Hero 根節點不再套整區 `fadeInDown`；`prefers-reduced-motion` 停在第一張、隱藏遮罩圖片層並直接顯示原色圖片。h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行，避免 768–1023px 被裁切。原有左側「品牌系列」伸縮選單、文字、Start Project、分隔線與內層進場動畫保留。
+- **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框仍為 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，但 Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題改成官方 Logo，每個使用 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊，型錄箭頭使用 Lucide `ArrowRight`。桌面支援 hover 與鍵盤 focus-within 展開；手機 Accordion 仍保留品牌文字。
+- **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖；圖片轉場改為 Antra Page 1 Slider Revolution 原始 `slidingoverlaydown / double` 規格：總長 `2000ms`、第一份新圖片 `1333ms`、第二份新圖片延遲 `333ms` 並於 `2000ms` 完成，easing 對應 `power2.inOut`。首次進場三層為模板灰 `#9F9FA4`＋套 `rgba(16,8,1,.46)` 暫時遮罩的新圖＋原色新圖；後續換圖依模板實際週期改為保留上一張完整圖片作底層，再以暗色新圖與原色新圖由上往下覆蓋，過程不再重新露出灰底。最後原色圖片完整覆蓋，不加入整張常駐黑色遮罩；另在圖片轉場之上加入僅覆蓋 Hero 底部 `58%` 的透明至黑色漸層（中段 `rgba(0,0,0,.42)`、底部 `rgba(0,0,0,.86)`），強化 `Kitchen` 浮水印對比但不壓暗上半部主圖。Hero 根節點不再套整區 `fadeInDown`；`prefers-reduced-motion` 停在第一張、隱藏遮罩圖片層並直接顯示原色圖片。h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行，避免 768–1023px 被裁切。原有左側「品牌系列」伸縮選單、文字、Start Project、分隔線與內層進場動畫保留；Start Project 的 120px 玻璃圓尺寸不變，未 hover 時增加與內容 CTA 相同的 2 秒金色雷達水波，hover 後水波停止並隱藏。
 - **Section eyebrow**：Services／Gallery／WhatWeDo／Store 依序改為「廚房產品／門市案例／品牌承諾／門市查詢」，膠囊尺寸、金點、邊框與動畫不變。
 - **廚房產品卡**：順序與編號改為 `01 SAKURA → 02 SVAGO → 03 TEKA`；正式品牌拼字為 `SVAGO`。卡片尺寸、Logo 光學等大、Embla 輪播與 hover 不變。
 - **Services 底部 Logo 跑馬燈**：取代舊的 `Kitchen Product` 巨型文字，順序為 SAKURA／TLK／TEKA／SVAGO／SAKURA Home；每格 Logo `170×50px`、左右 margin 各 `70px`、兩組無縫重複、`20s linear infinite`。尺寸與速度來自 SAKURA 官網 Footer 實測，背景仍併入 Services 深色 Section；容器具名為「集團品牌」，減少動態模式停止動畫。Hero 下方 `HeroStyleMarquee` 不變。
 - **品牌承諾影片**：使用 YouTube `wH374AF9wLI`；初始顯示對應縮圖與模板正圓播放鈕，點擊後在原 16:9 卡片內切換為 autoplay iframe。縮圖或 iframe 載入失敗時，前端顯示完整錯誤理由、影片 ID 與 YouTube 備援連結。
-- **Footer**：底部巨型 `footer-sakura.svg` 改為使用者提供的 `public/home-2026/footer/sakura-kitchen.png`；保留原始金色與比例、不降低透明度，所有斷點都水平置中並貼齊 Footer 底部。Footer 高度、背景、Copyright 與連結不變。
-- **門市案例第 6 點**：背景改用 `yuan-aifei.jpg`，右側兩張卡依序使用 `old-house-kitchen.jpg` 與 `custom-kitchen.jpg`；完全移除深色漸層遮罩。桌面兩張卡改為 `170×170px` 正方形並靠右，箭頭移到卡片左側，箭頭與兩張卡片底緣對齊；輪播、拖曳、四秒自動播放、hover 與進場動畫維持不變。
+- **Footer**：底部巨型 `footer-sakura.svg` 改為使用者提供的 `public/home-2026/footer/sakura-kitchen.png`；保留原始金色與比例、不降低透明度，所有斷點都水平置中並貼齊 Footer 底部。依最新回饋將總高調整為手機／平板 `390px`、桌面 `600px`；連結與圖示列的 top padding 增加 12px（手機 48px、桌面 60px），整排稍微下移。背景、Copyright 與連結內容不變。
+- **門市案例第 6 點**：背景改用 `yuan-aifei.jpg`，右側兩張卡依序使用 `old-house-kitchen.jpg` 與 `custom-kitchen.jpg`；完全移除深色漸層遮罩。右側兩張正方形縮圖維持靠右，尺寸為 1024px `140×140px`、1200px `230×230px`、1280px `280×280px`、1440px 以上 `295×295px`；依尺寸同步上移右欄，避免固定 956px Section 裁掉卡片底部。箭頭位於縮圖左側的剩餘空間水平置中，1280px 暫時收斂控制欄 gap 以保留完整安全距離。每張縮圖本身是可操作按鈕，點擊後直接切換為背景主案例；拖曳、四秒自動播放、hover 與進場動畫維持不變。
 
 依專案文件規範，Design QA 結果繼續記錄在本 `README.md`，不另建第二份 Markdown 文件。
 
@@ -58,8 +58,8 @@ pnpm build
 ### 2026-07-21 Gallery 第 6 點 Design QA
 
 - **來源真值**：`/Users/eric/Downloads/IMG_1251.PNG`；紅框與紅字為尺寸／位置註記，不屬於成品視覺。
-- **實作證據**：1512px 桌面版兩張卡實測均為 `170×170px`，x=`1129 / 1329`，右側保留約 51px 版心；箭頭群 x=`947`、寬 `104px`。箭頭與卡片 bottom 均為同一畫面座標 `618px`，對齊誤差 `0px`；遮罩節點為 `0`。
-- **響應式**：`390 / 768 / 1024 / 1512px` 的 `scrollWidth === innerWidth`。390px 卡片為 `147×147px`，768px 為 `170×170px`，1024px 為 `140×140px` 且自 1024px 起箭頭移到卡片左側、底緣一致。
+- **實作證據**：瀏覽器在 1512px 實測曾顯示 `280×280px`，原因是 Tailwind 產物中 arbitrary `min-[1440px]` 規則被 named `xl` 規則反向覆蓋；同一問題也讓 1440px 的 margin 與 gap 未生效。現已移除這三組互相衝突的 responsive utilities，改由 `globals.css` 依 1024／1200／1280／1440px 順序明確定義 `.gallery-case-card / row / layout`。依兩輪視覺回饋，1440px 以上由 340px、310px 收斂為真正生效的 `295×295px`、`margin-top:260px`、gap 30px。箭頭在左側彈性控制欄內水平置中；縮圖使用原生 `<button>`，具中文 `aria-label` 與鍵盤 focus ring，點擊會以該縮圖的 `caseIndex` 更新主背景。
+- **響應式**：390px 卡片仍依可用寬度為約 `147×147px`，768px 上限為 `220×220px`，1024px 為 `140×140px`，1200px 為 `230×230px`，1280px 為 `280×280px`，1440px 以上為 `295×295px`；行動版箭頭位於縮圖下方置中，1024px 起進入左控制欄。
 - **圖片與互動**：初始背景為 `yuan-aifei.jpg`，右卡為 `old-house-kitchen.jpg / custom-kitchen.jpg`；圖片均使用原始 JPEG、`object-cover`、無遮罩。實際點擊「下一張」後背景與兩張卡同步切換，拖曳、四秒 autoplay、hover 與 Reveal 動畫保留。
 - **五項 fidelity**：字型、字級、行高與文案未改；間距與下緣依紅色標註線重排；模板金、按鈕邊框及白字色票未改；三張案例圖皆為提供的原始素材；「門市案例／Interior design／Lorem ipsum／更多設計」內容維持既有版本。
 - **合併比對**：來源標註與成品焦點圖位於 `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/gallery-comparison-final.png`；完整成品為同目錄 `gallery-locked-initial-1512.png`。初次合併比對未發現 P0／P1／P2 差異，無需第二輪修正。
@@ -184,8 +184,8 @@ pnpm build
 | 標題區 → 內容距 | `mb-[60px]` |
 | eyebrow | `text-[15px]`、`mb-5`(20px) |
 | 卡片 grid 間距 | `gap-[30px]`；三欄卡寬自然 = (1410−60)/3 = **450** |
-| 兩欄 section | 欄距 `gap-[90px]`、文欄 `w-[600px]`、媒體欄 flex-1(≈720) |
-| CTA 膠囊按鈕 | 總高 **65**：`pl-[30px] pr-[9px] py-[8px]`(8+47+8+邊框2=65)、字 `text-[19px]`、內圓 `w-[47px] h-[47px]` |
+| 兩欄 section | 預設模板基準為 `gap-[90px]`；品牌承諾區依最新需求改為文字／影片 `44% / 56%`、桌面 gap 70px，讓影片明顯大於文字欄 |
+| 內容型 CTA 膠囊按鈕 | 全站統一鎖定總高 **60px**：`pl-[30px] pr-[9px] py-[9px]`、文字 `15/22px`、gap 8px、內圓 `40×40px`；按鈕與內圓均禁止 flex shrink，窄欄時不縮放、不換行。金色內圓在未 hover 時沿用影片播放鍵的 `2s` 雷達水波；hover 整顆 CTA 後水波立即停止並隱藏 |
 | 專案卡（project-style-4） | 378×880、hover 567、標題 `text-[36px]` |
 | Gallery 案例卡 | `basis-[450px]` × `aspect-[45/61]` = 450×610、間距 30 |
 | 卡片圓角 | `rounded-3xl`(24px) |
@@ -218,7 +218,7 @@ pnpm build
 | FloatingButtons | 右側 `fixed` 直排（底距 70px） | 右側 `fixed` 直排（底距 36px） | 右側 `fixed` 直排（底距 36px） |
 | ProjectSection（10 種廚房風格輪播） | embla 拖曳、卡片較窄 | 拖曳捲動 | 拖曳、卡片 378×880、hover 伸縮露出橫式廚房圖 |
 | StoreLocationSection（門市查詢） | 上下堆疊；篩選器兩欄、標籤獨立一列 | 上下堆疊 | `lg`（1024px）起維持原本左右並排；1024–1279px 內部欄位允許重排 |
-| Footer（Antra 骨架簡化版） | 450px；連結／icons 上下配置、Logo 避開固定功能列 | 450px；連結與 icons 分列 | 682px；資訊區＋版權帶高度不變，Logo 可見筆畫完整並貼底 |
+| Footer（Antra 骨架簡化版） | 390px；連結／icons 上下配置，資訊列下移 | 390px；連結與 icons 分列，資訊列下移 | 600px；資訊區 220px＋版權帶 70px，Logo 完整並貼底 |
 
 ## 主視覺（Hero）— Antra Home Six 版型
 
@@ -259,10 +259,10 @@ final result: passed
 `Footer.tsx` 使用 Antra Home 6 Footer 主體 `6632dbf` 的三段式結構，但依需求刪除模板的訂閱區、地址、電話與多欄選單，只保留原有「網站地圖／隱私權政策」、Copyright、數位展板與 YouTube。
 
 - **模板素材**：使用模板原始 `1920×950` 背景圖，已本地化為 `public/footer-antra-bg.jpg`；外層套用模板同級的 75% 黑色遮罩。
-- **結構高度**：依驗收回饋取消模板 945px 的整段高度；手機／平板為 450px、桌面為 682px。上半資訊區固定 220px、版權帶固定 80px；桌面只增加版權帶下方的背景圖／Logo 舞台，黑色資訊帶不增高。內容最大寬 1410px，桌面左右 51px。
+- **結構高度（最新）**：依驗收回饋進一步由手機／平板 420px、桌面 650px 收斂為 **390px / 600px**。上半資訊區維持 220px、版權帶維持 70px，縮減的是版權帶下方的背景／Logo 舞台；內容最大寬 1410px，桌面左右 51px。
 - **簡化內容**：左側只放網站地圖與隱私權政策，右側只保留數位展板與 YouTube 圖示；中間版權帶逐字保留 `Copyright © Taiwan Sakura Corporation. All rights reserved`。
-- **Logo 下移**：`footer-sakura.svg` 不再壓住版權列，並移除原素材底部 80px 透明畫布（428→348）；桌面最大寬 1320px、`bottom:0`、opacity 30%。桌面版權帶底緣至字標上緣約 175.5px，整張 Logo 可見筆畫完整且下緣貼齊 Footer。
-- **原生 RWD**：手機左右 15px、連結與 icons 垂直分區；平板／桌面改為左右分列。手機／平板 Logo 使用 `bottom:30px` 避開底部固定浮動列；桌面使用 `bottom:0`，藉 682px 高度保留模板間距、完整 Logo 與貼底關係。
+- **資訊列下移**：上半區高度不變，內層由手機 `py:36px`、桌面 `py:48px` 改為手機 `pt:48px / pb:24px`、桌面 `pt:60px / pb:24px`；網站地圖、隱私權政策、數位展板與 YouTube 整排往下 12px，但不增加 Footer 總高。
+- **Logo 貼底**：目前使用 `public/home-2026/footer/sakura-kitchen.png` 原始金色 PNG，維持原比例、水平置中與 `bottom:0`；總高縮減不改 Logo 寬度或底部定位。
 
 ### Footer Design QA（2026-07-17）
 
@@ -304,6 +304,7 @@ final result: passed
 - **移動中「卡間縫隙」殘留防治（次像素）**：實測相鄰卡**排版間隙全 0.00**，故任何殘縫屬**分數像素 transform 合成的髮絲縫**。兩層保險：①`<article>` `w-[calc(100%+2px)] -ml-px`（左右各多蓋 1px、量得重疊 2px，接縫兩側恆被卡片蓋住；卡槽 `.group` 仍 378、不影響 Embla 迴圈總長 10×378=3780）；②輪播 viewport `bg-[#2a2a2a]`（殘縫透出深色而非亮背景，難察）。（自動化隱藏分頁 rAF 不跑、無法重現移動動畫，須在可見瀏覽器驗證。）
 - **左右兩側方向箭頭**（源自主題 `style.css` `.antra-swiper-wrapper .elementor-swiper-button` 的 48×48）：`w-12 h-12`(**48×48**) + lucide 箭頭 `w-6`(**24**)、**半透明磨砂**（`bg-white/10 backdrop-blur-md` + `border-white/30` + 白 icon，透出後方廚房照，非實心白）；`absolute left/right-[30px] top-1/2 -translate-y-1/2 z-20`（垂直置中、貼左右邊 30）；**hover 金底 `#C9AA79` + 金邊 + 白箭頭**。因 Embla 的 prev/next 表示索引方向而非軌道視覺方向，依最新驗收把 handler 互換：左箭頭呼叫 `scrollNext()`、右箭頭呼叫 `scrollPrev()`，並將 aria-label 改為「向左瀏覽／向右瀏覽」。
 - **卡片標題層級**：依最新需求對調雙語位置，左上膠囊改顯示英文系列名，底部 36px 大標改顯示中文名稱；圖片、描述及 hover 動畫不變。`Basic+` 的中英文資料相同，因此上下均維持 `Basic+`。
+- **雙層 Hover**：整張卡片 Hover 只觸發卡寬展開及描述淡入，不再連帶改變標題顏色；只有游標直接進入底部中文 `h3` 的實際文字寬度時，標題才由白色轉為模板金 `#CAA05C`。左上英文膠囊與描述維持原色。
 - **內容 = 10 種廚房風格**（真圖）：Basic+ / AI kitchen（僅英文）、Clever 巧域廚房 / Loft Chic 潮派廚房 / Joyful 童樂廚房 / premium 君璽廚房 / Elegant 臻美廚房 / Chef 大廚廚房 / Country 鄉村廚房 / Harmony 閣樂廚房。圖片放在 `public/kitchen-styles/*.jpg`（來源 `Downloads/首頁用圖/品牌系列x10`；Clever 已縮圖）。**渲染時複製兩份 `[...STYLES, ...STYLES]`＝20 張**，給 Embla loop 足夠緩衝、避免捲動動畫中接縫來不及補齊而露縫。
 
 ## 服務輪播（Our Services）— Antra home-6 `antra-services-list` style-3 複刻
@@ -314,7 +315,7 @@ final result: passed
 - **標題列**：subtitle 膠囊 `● Our Services` 與大標均為模板白色；桌面左欄 424px、標題寬 769px、`60/64`，手機 `30/35`、寬手機 `45/50`。桌面裝飾完整還原 Elementor 結構：水平線 `502px`＋`deco-horizontal.svg` 尖端、垂直線 `179px`＋`deco-vertical.svg` 尖端，線色 `rgba(255,255,255,.18)`；標題與輪播桌面間距 60px、窄版 30px。
 - **服務卡（style-3，照原始碼）**：卡片 `#FFFFFF`、radius 24px、padding 10px；圖片手機高 250px、其餘 310px、radius 24px、hover `scale(1.1)`、薄暗罩 `rgba(0,0,0,.11)`。caption 手機 `20/0/30`、其餘 `30/20/35`；標題手機 `25/30`、桌面 `28/35` Cal Sans，內文 Golos Text `16/24 #9F9FA4`，編號 `30px #E3E3E8`。手機全部圖上字下，較寬斷點才套偶數卡 `column-reverse`。
 - **輪播（模板 data-settings 照抄）**：`embla-carousel-react` `loop`，手機 1 欄、平板／1024 兩欄、≥1200 三欄；30px gap、autoplay 5000ms、hover 暫停、`reduced-motion` 不自動播、可拖曳、無箭頭／點（`navigation:none`）。依使用者指示，資料僅保留 SVago、TEKA、SAKURA 三張並重新編號 `01–03`；原本未改的三張已移除，輪播行為不變。
-- **內容與素材**：僅保留三個已指定品牌的卡片；原模板英文 excerpt 維持不變。品牌標題與產品圖皆本地化至 `public/services/`，破圖仍 fallback `/kitchen-styles/elegant.jpg`。為保留原先交錯版型，SVago／SAKURA 在寬版維持 caption 在圖上，TEKA 維持 caption 在圖下；手機皆為圖上字下。
+- **內容與素材**：僅保留三個已指定品牌的卡片；原模板英文 excerpt 維持不變。品牌標題與產品圖皆本地化至 `public/services/`，破圖仍 fallback `/kitchen-styles/elegant.jpg`。寬版三張卡的圖片位置依最新驗收改為「上／下／上」：01 SAKURA 圖上字下、02 SVAGO 字上圖下、03 TEKA 圖上字下；手機仍統一圖上字下。
 - **跑馬燈**：`MarqueeBand`「Kitchen Product」現在位於 Services `<section>` 內，共用 `h6-bg-2.jpg`、黑色 76% overlay 與同一裁切範圍，不再有 `#f6f6f6` 分區。以 96px 間距接在服務卡後，透過負水平 margin 維持全出血，且跑馬燈容器底緣與 Section 底緣相同（bottom gap `0px`）；文字使用模板金 `#CAA05C → transparent`，220px 字級、重複內容與 `animate-marquee` 速度不變。
 
 ### Services Design QA（2026-07-17）
@@ -328,7 +329,7 @@ final result: passed
 - **Browser checks**：1512、1024、390 三種寬度均無水平溢出、素材 natural size 正確、無 console error。logo 改為光學等大後，1512px 的渲染面積為 SVago `136.06×38=5170px²`、TEKA `132.59×39=5171px²`、SAKURA `172.66×28=4835px²`；390px 分別為 `111×31=3441px²`、`108.80×32=3482px²`、`148×24=3552px²`，差異均在約 ±7% 內且比例未變形。其新主圖分別在 1512px 為 `430×310`、390px 為 `340×250`。桌機／手機均確認只渲染這三張品牌卡。三張主圖均以 `object-cover` 正確填滿卡片。
 - **等高驗證**：前三張卡在 1512px 均為 `560px`（caption `230px`）、1024px 均為 `507px`（caption `177px`）、390px 均為 `462px`（caption `192px`）；三斷點皆無水平溢出且 console error 為 0。
 - **品牌標題素材**：第 01 卡使用者提供的 `public/services/svago-logo-white.png`（SVago，`111×31`）與 `public/services/svago-product.png`（`1300×945`）；第 02 卡使用 `public/services/teka-logo-white.svg`（TEKA 向量 logo，viewBox `170×50`）與 `public/services/teka-product.png`（`977×945`）；第 03 卡為 SAKURA logo 與抽油煙機主圖。三張來源皆為白色透明圖，因此在白底 caption 中統一轉為原 h3 的深色。由於三者的橫長比例不同，改採**光學等大**而非機械等高：SVago `31/35/38px`、TEKA `32/36/39px`、SAKURA `24/26/28px`（mobile/tablet/desktop，高度與寬度自動），三者在同一斷點的視覺面積接近且完全不拉伸。
-- **卡片等高**：因文字標題最多兩行、品牌 logo 僅一行，caption 依實測最大內容高度設共同最小高——mobile `192px`、768–1199 `177px`、≥1200 `230px`；三張品牌卡在同一斷點維持相同整張高度，產品圖固定高度與 Embla 輪播不變。寬版圖文位置維持既有交錯（SVago／SAKURA caption 在圖上、TEKA 在圖下）。
+- **卡片等高**：因文字標題最多兩行、品牌 logo 僅一行，caption 依實測最大內容高度設共同最小高——mobile `192px`、768–1199 `177px`、≥1200 `230px`；三張品牌卡在同一斷點維持相同整張高度，產品圖固定高度與 Embla 輪播不變。寬版圖文交錯更新為圖片「上／下／上」。
 - **Comparison history**：before＝淺灰背景、卡片缺白底／24px 外框、圖片使用比例高度且外連；final＝Page 6 原背景＋遮罩、原版白卡／固定圖高／排版、全部素材本地化，無 P0／P1／P2 殘留。
 - **final result: passed**
 
@@ -337,13 +338,13 @@ final result: passed
 `GallerySection.tsx`：對位 Home Three gallery 版型（section 高/位置/膠囊/大標/箭頭照模板實測 + 主題 `heading.php`），**但右側依使用者規則做「背景=主圖 + 2 卡聯動」**（非模板原生的 3 欄 swiper）。字型用模板 Cal Sans、金 `#C9AA79`，內容為 **SAKURA 門市案例**。
 
 - **輪播規則（使用者指定）**：**全出血背景 = 目前主圖(#active)**，右邊固定**只 2 張卡** = 下兩張(#active+1、#active+2)；前進時背景與兩卡一起輪替（背景交叉淡入 + `useParallax('.gallery-bg')` scale 1.12、卡片/段落 `animate-gallery-card` 滑入）。`useState(active)` 驅動、autoplay 4s（滑入暫停）、指標拖曳。
-- **section 高度 = `min-h-[956px]`**（實測模板 956）；內容**非置中**，照模板 `e-con-inner` `padding-top` 推到下半部 —— 內容容器 `lg:pt-[388px]`、`items-start`。實測靜止：副標/卡片頂 y388、大標 y445、段落 y682、箭頭 y788（與模板 0–1px）。左標題區 `lg:w-[479px]`（L51）+ 右卡欄 `flex-1`。內部間距：膠囊 `mb-[26px]`、段落 `mt-[37px]`、箭頭 `mt-[40px]`。**右側卡片靠右**：右卡欄 `flex justify-end`（容器 `lg:pr-[51px]`）內包一層縮到卡片寬度的區塊 → 卡片右緣對齊右版心 1461（右邊距 51、與左緣對稱），左側 530–771 留白露出背景主圖。**箭頭在該區塊內靠左**（不加 `justify`）→ 落在**卡片群左緣 771 的正下方**（卡片下方 40px），非靠右。
+- **section 高度 = `min-h-[956px]`**（實測模板 956）；內容**非置中**，照模板 `e-con-inner` `padding-top` 推到下半部。左標題區 `lg:w-[479px]`（L51）+ 右卡欄 `flex-1`。內部間距：膠囊 `mb-[26px]`、段落 `mt-[37px]`、CTA `mt-[40px]`。右欄改為兩欄 Grid：「左側彈性控制欄／右側固定縮圖欄」，因此縮圖右緣仍對齊 51px 版心，箭頭則在左側剩餘空間水平置中。
   - ⚠ **驗證陷阱**：`.reveal` 用個別 `translate` 屬性做進場，隱藏分頁 transition 卡住停在 `translate:0 56px` → 量測會**整體 +56**；驗證垂直位置要先 `translate:none!important` 清掉再量（見 [[mcp-tab-hidden-raf-io]]）。卡片另有 `animate-gallery-card` 的 `translateX(40px)` 進場，量水平也要結算。
 - **背景底圖**：= 當前 `CASES[active].image`（crossfade）。遮罩 `linear-gradient(90deg, rgba(0,0,0,.82)→.5)` 壓成模板沉穩深調 + 保左側文字可讀。
 - **左：標題區**：只更新模板文字，圖片與動畫不動。**副標膠囊**（`border-white/25`、`rounded-[24px]`、`padding 3/13/3/9`、金點 + `our gallery` 15/ls1/uppercase）+ 大標（`Interior design`＝模板 Home Three 逐字；桌面 **110/100**、tablet-extra `76/90`、tablet `42/50`、mobile `40/45`、capitalize）+ 原版段落 `Lorem ipsum dolor sit amet consectetur. Magna nunc porttitor convallis faucibus laoreet.`（白色、18/24、寬 378）+ **CTA 按鈕**（見下）。
-- **CTA 按鈕 — 依主題原始碼 `antra-elementor-button`**（`elementor.css` `.elementor-price-table__button` 真值）：透明底、`border 1px rgba(159,159,164,.64)`、`rounded-full`、`padding 7/7/7/30`、字 **15px/weight400/capitalize**、`transition .5s`；圖示圈 **40×40** 金底白箭頭（lucide `ArrowRight` `w-5`=20）、**預設 `-rotate-45`**（↗）。**hover**：整顆填金（`bg`+`border`=`#C9AA79`）、圖示 `group-hover/cta:rotate-0`（→）。文字用「查看所有案例」；模板淺底字深、本區深底故**字用白**。⚠ 尺寸取**原始碼**非量網頁（demo root 20px 會放大成 18.75/45，見門市案例區備註）。
-- **右：2 張卡**：`w-[330px] h-[360px] rounded-3xl`（沿用模板卡尺寸）、gap 30；右側留白處露出背景主圖。**卡片高度受限於 956 + y388 起點，故為 360（非早期的 610）**；要更高卡片就得把 section 拉高過模板 956。卡片 hover：陰影加深 `shadow-[0_32px_80px_-8px_rgba(0,0,0,.7)]` + 圖片 `group-hover/card:scale-[1.06]`（`overflow-hidden` 裁切）。
-- **箭頭**：模板位置 —— 卡片**下方左側**（`mt-[40px]`、42×42 圓框、`border-white/25`、透明底、lucide `ArrowLeft/ArrowRight`）控制聯動 `prev/next`。
+- **CTA 按鈕**：與品牌承諾區統一鎖定為全站內容型 CTA 規格：總高 **60px**、`padding 9/9/9/30`、文字 **15/22px**、icon gap 8px、圖示圈 **40×40px**；按鈕與內圓均禁止 flex shrink，欄位改寬時不縮放、不換行。未 hover 時金圓外層以 `antra-lexus-scale 2s infinite` 產生雷達水波；hover 整顆 CTA 後停止並隱藏水波，原本填金／箭頭轉正效果不變。
+- **右：2 張縮圖**：正方形、`rounded-3xl`，1024／1200／1280／1440+ 依序為 `140 / 230 / 280 / 295px`，桌面卡間 gap 30；右欄 `margin-top` 依序調整為 `205 / 315 / 275 / 260px`，讓各尺寸的卡片底部都落在固定 Section 內。卡片 hover 維持陰影加深與圖片 `scale(1.06)`。每張縮圖改為按鈕，點擊即把該案例設為 active，背景和另外兩張縮圖同步輪替。
+- **箭頭**：42×42 圓框、`border-white/25`、lucide `ArrowLeft/ArrowRight`。先前雖設 `left:50%`，但箭頭 DOM 仍在右側 Grid 內，Grid 成為 absolute containing block，導致 1512px 實際中心落在 x≈996 並壓到第一張卡片後方；現已把控制群移成 Section 全寬內容層的直接子元素，桌面使用 `position:absolute; left:50%; transform:translateX(-50%); z-index:30`，真正以整個 Section 為參考。為避免亮色案例圖讓透明按鈕視覺消失，增加輕量 `bg-black/20` 與 backdrop blur。`top` 依 1024／1200／1280+ 設為 `691 / 891 / 901px`，讓 42px 箭頭底緣與卡片底線一致；縮圖明確放在 Grid 第 2 欄。行動版維持正常流、位於縮圖下方置中，仍控制聯動 `prev/next`。
 - **內容 = 3 則門市案例**：`CASES` 僅保留圖片 `public/store-cases/case{1,2,3}.jpg`（來源 `影像/門市案例`）；背景與兩張卡的聯動、4 秒自動輪播、滑動及 hover 動畫均未更動。放在 `App.tsx` 產品區之後。
 
 ## What We Do — Antra Home Six 版型
@@ -356,8 +357,8 @@ final result: passed
   - **雙色大標**：Cal Sans 400；桌面 `60/64`、寬手機 `45/50`、手機 `30/35`；最大寬 670px，自然換行、不使用手動 `<br>`。文字為「SAKURA has ⟨created exceptional⟩ architectural designs.」，模板原品牌 Antra 僅替換成 SAKURA。
   - **打勾清單**：純金 `Check` 19px、無圓底；字體已由錯誤的 Golos Text 修正為模板 Cal Sans 400 `18/24`，icon/text gap 7px，每列上下 16px並保留分隔線。
   - **段落**：Golos Text `16/24 #59585D`、最大寬 645px；桌面 margin `29px 0 50px`，窄版 `30px 0` 並置中。
-  - **CTA**：依「只同步英文、中文內容不動」保留 `櫻花優勢`；外觀精確採 antra `elementor-button-default` 的 `padding 9/9/9/30`、icon gap 8px、字 15px、盒高 60px、金圓 40px，箭頭預設 `-45deg`，hover 填金並轉正。
-- **右欄影片區（刻意保留差異）**：Home 6 原版是 `h6-image-5.jpg`＋`h6-image-4.jpg` 兩張疊圖；本專案依「額外功能與動態不移除」保留 16:9 影片、hover 與 Reveal。欄位維持模板 49.5% 結構，並依視覺回饋改為與左欄內容垂直置中，避免影片貼上造成下方留白失衡。
+  - **CTA**：依「只同步英文、中文內容不動」保留 `櫻花優勢`；全站內容型 CTA 統一鎖定 `height:60px`、`padding 9/9/9/30`、icon gap 8px、文字 `15/22px`、金圓 40px，並增加 `shrink-0` 與 `whitespace-nowrap`，確保左右欄比例改變不會縮小按鈕。金圓在未 hover 時使用與影片播放鍵相同的 2 秒雷達水波；hover 後水波消失、按鈕填金且箭頭轉正。
+- **右欄影片區（刻意保留差異）**：Home 6 原版是 `h6-image-5.jpg`＋`h6-image-4.jpg` 兩張疊圖；本專案依「額外功能與動態不移除」保留 16:9 影片、hover 與 Reveal。依最新視覺需求，桌面 Grid 從左／右 `51 / 49.5`、gap 90px 改為 `44 / 56`、gap 70px；1512px 版心下文字欄約 590px、影片欄約 750px，影片明顯放大而左欄縮小。兩欄仍 `items-center` 垂直置中。
   - **播放鈕＝模板 icon／效果 + 使用者指定正圓**：改用模板原生 `antra-icon-play-fill`（資產 `public/fonts/antra-icon-1.0.12.woff2`），不再用 Lucide `Play`。外型依使用者覆寫成正圓：桌面 `137×137`、768–1199 `77×77`、窄版 `87×87`；icon 分別為 40px／35px／40px，保留原本的 bottom margin。
   - **玻璃／雷達動畫**：wrapper 與 `::before` 均為 `1px rgba(255,255,255,.11)`、radius 50%；`::before` 為白色 36%、opacity .95、`backdrop-filter: blur(29px)`；`::after` 為 1px 白色雷達圈，使用模板 `lexus-scale` 的 2 秒無限動畫（scale `1→1.3`、opacity `1→0`）。移除原本錯誤的 `animate-ping` 與 hover 放大。
 - **背景右下半透明建築圖 = 模板原圖 `h6-bg-3.png`**（`public/decor/h6-bg-3.png`，821×520）：恢復原始 821px 寬、`bottom right / no-repeat / auto` 視覺，PNG 自帶透明度；保留既有 `.wwd-blueprint` 輕微視差。
@@ -366,7 +367,7 @@ final result: passed
 ### What We Do 瀏覽器驗收（2026-07-17）
 
 - **字型載入**：`document.fonts.ready` 後，Cal Sans 60px／18px 與 Golos Text 16px 的 `document.fonts.check()` 均為 `true`，不是只有 CSS family 名稱正確、實際卻落到 fallback。
-- **1512×956**：section padding `120px 30px 115px`、版心 1410px、欄寬 `669.844px / 650.148px`、gap 90px；h2 實算 Cal Sans 400 `60/64`，高度 192px（自然三行）；CTA 內文實算 15px。兩欄 `align-items:center` 後，影片相對 section 的上／下留白為 `257.65px / 252.65px`，視覺已垂直置中且無水平溢位。
+- **1512px 最新欄寬**：section padding 維持 `120px 30px 115px`、版心 1410px；Grid 更新後扣除 70px gap 的可分配寬度為 1340px，文字／影片理論欄寬約 `589.6 / 750.4px`。h2 仍為 Cal Sans 400 `60/64`，CTA 15px；兩欄 `items-center`、影片 16:9 與 Section 高度不變。
 - **播放鈕實測**：依使用者指定，1512px 為正圓 `137×137`、icon 40px、margin-bottom 8px；1024px 為正圓 `77×77`、icon 35px；390px 為正圓 `87×87`、icon 40px。三斷點均無水平溢位；`antra-icon` 字型載入成功，`::after` transform 取樣有持續變化，確認雷達動畫不是只有宣告但未執行。
 - **1024×768**：section padding `100px 30px`、欄寬 `473.969px / 460.031px`、gap 30px；h2 仍為模板桌面值 `60/64`；無水平溢位。
 - **390×844**：section padding `60px 15px`、單欄且 gap 30px；h2 Cal Sans 400 `30/35`、eyebrow Cal Sans `12/22` + 1px tracking、清單 Cal Sans `18/24`、段落 Golos Text `16/24`、CTA 15px；垂直置中設定不改變單欄順序，無水平溢位。
@@ -383,13 +384,14 @@ final result: passed
 - **左欄（寬，~62%）**：**Google Maps JavaScript API 自訂地圖**（`GoogleStoreMap.tsx`），套**極簡淺灰樣式**（`LIGHT_STYLE` style JSON，仿官網 store/location 的 Positron 淺灰風）+ **深色水滴「S」標記**（inline SVG）；選取/篩選門市時 `google.maps.Geocoder` 依地址定位、`panTo` 平移（結果 cache）。
   - **需金鑰**：在專案根目錄建立 `.env`，設定 `VITE_GOOGLE_MAPS_API_KEY=你的金鑰`（`.env` 已加入 `.gitignore` 不會 commit），並在 Google Cloud 啟用 **Maps JavaScript API** 與 **Geocoding API**；金鑰建議以 HTTP referrer 限制網域。改 `.env` 後需**重啟 `pnpm dev`**（Vite 環境變數不熱更新）。
   - **無金鑰/載入失敗**：地圖區直接顯示完整錯誤訊息（依全域規則「錯誤完整顯示在前端」），不靜默空白。
-- **右欄（窄）**：`我的位置` 改成與 **`選擇區域` / `選擇城市`** 相同的 52px 高白底圓角按鈕；三個控制固定使用等寬三欄同排，窄螢幕縮小內距、字級與圖示避免爆版。位置按鈕保留 `LocateFixed` 金色準星，兩個下拉維持 `appearance-none` + 疊自訂 `ChevronDown`。下方門市列表卡片——第一行區域灰底 pill + 店名，第二行 `MapPin` 地址（左）+ **金色電話（右靠同行）**，字級 14；選中 → 金色底白字。
+- **右欄（窄）**：`我的位置` 改成與 **`選擇區域` / `選擇城市`** 相同的 52px 高白底圓角按鈕；三個控制固定使用等寬三欄同排，窄螢幕縮小內距、字級與圖示避免爆版。位置按鈕保留 `LocateFixed` 金色準星，兩個下拉維持 `appearance-none` + 疊自訂 `ChevronDown`。下方改為固定四列的機場 split-flap 門市資訊板：每列維持固定高度，第一行區域 pill + 店名，第二行 `MapPin` 地址 + 金色電話；選中仍為金底白字。
+- **機場翻牌輪換**：目前 5 間真實門市中固定顯示 4 間，第 5 間作為候補；每 `2.8s` 隨機選一列，以 `760ms` 3D `rotateX` 上下翻牌換入候補。依最新視覺回饋移除卡片中央鉸鏈分隔線，只保留乾淨卡面與翻牌立體感。畫面同時不出現重複門市，已選取並控制地圖的門市不會被自動換走；每次只翻一列，避免整欄同時跳動。hover 或鍵盤 focus 進入資訊板即暫停，離開後恢復；`prefers-reduced-motion` 時完全停用自動輪換與 3D 動畫。未來 `STORES` 增加資料後會自動從完整篩選結果挑候補，不需改動畫程式。
 - **級聯篩選**：`region` / `city` 兩個 state 驅動；選區域自動清空城市、城市下拉未選區域時 disabled（`REGIONS` 提供五大區→縣市對照）。`filtered = STORES.filter(區域符合 && 城市符合)`；選取門市若被濾掉自動退回第一筆可見門市；該區無資料顯示「此區域尚無門市資料」。
 - **門市資料**：pptx 真實資料共 5 間（承德 / 石牌 / 民權 / 中山南京 / 八德，皆北部/臺北市，含真地址電話）；其他區暫無資料，補上即可用。
 
 ## Header — SAKURA 巨型選單（mega-menu）
 
-`Header.tsx`：單一金色 bar、**橫式中央 logo**（與 Footer 共用 `public/home-2026/footer/sakura-kitchen.png`；Header 內以 `brightness-0 invert` 轉白以維持金底對比，≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，高度依原比例自動計算）、左右各一組導覽，自訂 Tailwind 實作（未用 Radix，與全站一致）。官網在 1512px 實測 Header `60px`、Logo `260×20.55px`、導覽 `15/15/400`；本站同步這些數值。完整桌面導覽維持自 `lg / 1024px` 顯示；1024–1279px 只使用緊湊 item padding 與較小中央 Logo 確保八個入口正常同排，不再縮小字級。
+`Header.tsx`：單一金色 bar、**橫式中央 logo**（與 Footer 共用 `public/home-2026/footer/sakura-kitchen.png`；Header 內以 `brightness-0 invert` 轉白以維持金底對比）。Logo 版面框維持 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，另以 transform `scale(1.25)` 放大視覺尺寸，不影響 Flex 佔位與 60px Header 高度。左右各一組導覽，自訂 Tailwind 實作（未用 Radix，與全站一致）。完整桌面導覽維持自 `lg / 1024px` 顯示；1024–1279px 只使用緊湊 item padding與較小中央 Logo 版面框，確保八個入口正常同排，不再縮小字級。
 
 - **背景／字型／字級對齊參考站 `sakura-kitchenlife.com.tw`**（實測 `.l-header`／`.l-nav__item`，常數定義於 `Header.tsx` 頂部）：背景漸層 `linear-gradient(90deg, #B79258 20%, #D2B587)`（`HEADER_GRADIENT`）；字型堆疊 `"Noto Sans TC","PingFang TC","Microsoft JhengHei",微軟正黑體`（`HEADER_FONT`，套在 `<header>` 上向下繼承，**未外連 Google Fonts**、Mac 上 fallback 至 PingFang TC）；導覽字級 `text-[15px]`、weight 400、字色純白。
 - **間距對齊參考站**：bar 容器使用 `px-5 xl:px-12`（20/48px）且**滿寬**，對齊參考站在 1024／1512px 的左右邊距 20／48px；搜尋展開列維持同一安全留白。≥1280px 導覽項使用 `px-3`＋`gap-1`，1024–1279px 僅壓成 `px-1`＋`gap-0.5`。bar 高度、mega-menu 起點與 App spacer 已同步由 `72px` 改為官網的 `60px`。**注意**：參考站為「logo 靠左＋導覽靠右」的 space-between 版型，本專案依既有需求保留「導覽左半｜中央 logo｜導覽右半」結構，故只同步尺寸而不改導覽資訊架構。

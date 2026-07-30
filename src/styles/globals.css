@@ -359,6 +359,85 @@ body {
   animation: style-preview-image-in 320ms ease-out both;
 }
 
+/* Gallery 右側案例縮圖：
+   不混用 Tailwind named breakpoint 與 min-[1440px]，避免 xl 規則在產物排序中
+   反向覆蓋 1440px 規則。尺寸、整組垂直位置與控制欄 gap 在此依序定義。 */
+.gallery-case-row {
+  margin-top: 53px;
+}
+.gallery-case-layout {
+  gap: 30px;
+}
+.gallery-case-controls {
+  width: 100%;
+}
+.gallery-case-card {
+  width: min(220px, calc((100vw - 96px) / 2));
+  height: min(220px, calc((100vw - 96px) / 2));
+}
+@media (min-width: 1024px) {
+  .gallery-case-row {
+    margin-top: 205px;
+  }
+  .gallery-case-layout {
+    gap: 20px;
+  }
+  .gallery-case-controls {
+    position: absolute;
+    top: 691px;
+    left: 50%;
+    z-index: 30;
+    width: auto;
+    transform: translateX(-50%);
+  }
+  .gallery-case-card {
+    width: 140px;
+    height: 140px;
+  }
+}
+@media (min-width: 1200px) {
+  .gallery-case-row {
+    margin-top: 315px;
+  }
+  .gallery-case-card {
+    width: 230px;
+    height: 230px;
+  }
+  .gallery-case-controls {
+    top: 891px;
+  }
+}
+@media (min-width: 1280px) {
+  .gallery-case-row {
+    margin-top: 275px;
+  }
+  .gallery-case-layout {
+    gap: 5px;
+  }
+  .gallery-case-card {
+    width: 280px;
+    height: 280px;
+  }
+  .gallery-case-controls {
+    top: 901px;
+  }
+}
+@media (min-width: 1440px) {
+  .gallery-case-row {
+    margin-top: 260px;
+  }
+  .gallery-case-layout {
+    gap: 30px;
+  }
+  .gallery-case-card {
+    width: 295px;
+    height: 295px;
+  }
+  .gallery-case-controls {
+    top: 901px;
+  }
+}
+
 /* Antra Home 4 `antra-brand` 實測：gap 120px；390/768/880/1200/1367 = 1/3/4/5/6 欄。 */
 .brand-carousel-slide {
   --brand-columns: 1;
@@ -461,6 +540,107 @@ body {
     transform: scale(1.3);
   }
 }
+
+/* 全站內容型 CTA 的金色箭頭圓：沿用影片播放鍵的雷達擴散語言。
+   僅在 CTA 尚未 hover 時播放；整顆按鈕 hover 後隱藏水波，保留既有填金與箭頭轉正。 */
+.site-cta-icon {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+}
+.site-cta-icon::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(202, 160, 92, 0.9);
+  content: "";
+  pointer-events: none;
+  animation: antra-lexus-scale 2s infinite;
+}
+.site-content-cta:hover .site-cta-icon::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* Hero 的 Start Project 是整顆圓形 CTA，因此水波直接由按鈕外框向外擴散。
+   尺寸與玻璃背景維持原值；hover 後僅關閉水波。 */
+.hero-start-project {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+}
+.hero-start-project::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(202, 160, 92, 0.9);
+  content: "";
+  pointer-events: none;
+  animation: antra-lexus-scale 2s infinite;
+}
+.hero-start-project:hover::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* 門市資訊板：固定列高避免地圖／Section 在換店時跳動。
+   舊卡由上半面向內翻走，新卡從下半面翻回；卡面維持乾淨，不加中央分隔線。 */
+.store-board-slot {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.store-board-slot:focus-visible {
+  box-shadow: 0 0 0 2px #f6f6f6, 0 0 0 4px #caa05c;
+}
+.store-board-slot:hover .store-board-face:not(.store-board-face-out) {
+  border-color: rgba(202, 160, 92, 0.5);
+}
+.store-board-face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+}
+.store-board-face-out {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  animation: store-board-flip-out 760ms cubic-bezier(0.55, 0.06, 0.68, 0.19) both;
+}
+.store-board-face-in {
+  z-index: 1;
+  animation: store-board-flip-in 760ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes store-board-flip-out {
+  0%, 42% {
+    opacity: 1;
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+  68%, 100% {
+    opacity: 0;
+    transform: rotateX(-90deg);
+    filter: brightness(0.68);
+  }
+}
+@keyframes store-board-flip-in {
+  0%, 48% {
+    opacity: 0;
+    transform: rotateX(90deg);
+    filter: brightness(0.72);
+  }
+  76%, 100% {
+    opacity: 1;
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1199px) {
   .antra-template-video-popup {
     width: 77px;
@@ -577,4 +757,8 @@ body {
   .hero-page1-image-layer { clip-path: inset(0) !important; animation: none !important; }
   .hero-page1-image-layer-masked { display: none !important; }
   .antra-template-video-popup::after { animation: none !important; opacity: 0; }
+  .site-cta-icon::after { animation: none !important; opacity: 0; }
+  .hero-start-project::after { animation: none !important; opacity: 0; }
+  .store-board-face { animation: none !important; filter: none !important; transform: none !important; }
+  .store-board-face-out { display: none !important; }
 }

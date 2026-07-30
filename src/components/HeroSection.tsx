@@ -138,11 +138,13 @@ export function HeroSection() {
         >
           <a
             href="#"
-            className="flex h-full w-full items-center justify-center rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center font-display text-[18px] font-normal leading-[24px] text-white transition-colors duration-300 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            className="hero-start-project flex h-full w-full items-center justify-center rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center font-display text-[18px] font-normal leading-[24px] text-white transition-colors duration-300 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
-            Start
-            <br />
-            Project
+            <span className="relative z-[1]">
+              Start
+              <br />
+              Project
+            </span>
           </a>
         </Reveal>
       </div>
