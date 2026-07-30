@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useReveal } from '../motion/Reveal';
+import { prefersReducedMotion } from '../motion/prefersReducedMotion';
 import { KITCHEN_STYLES } from '../data/kitchenStyles';
 
 export function ProjectSection() {
@@ -28,7 +29,7 @@ export function ProjectSection() {
     // 自動輪播：依最新需求由每 3.5s 加快為 2.8s 前進一格；滑鼠移入暫停。
     const root = emblaApi.rootNode();
     const tick = () => { if (!pausedRef.current) emblaApi.scrollNext(); };
-    const timer = setInterval(tick, 2800);
+    const timer = prefersReducedMotion() ? undefined : setInterval(tick, 2800);
     // 延遲 560ms 恢復：hover 卡片的 500ms 展開/收回動畫期間輪播保持停住，
     // 避免「寬度還在變、輪播就移動」導致迴圈總長過期而露縫。
     let resumeTimer: ReturnType<typeof setTimeout> | undefined;
@@ -38,7 +39,7 @@ export function ProjectSection() {
     root.addEventListener('mouseleave', resume);
 
     return () => {
-      clearInterval(timer);
+      if (timer) clearInterval(timer);
       if (resumeTimer) clearTimeout(resumeTimer);
       emblaApi.off('pointerDown', onDown);
       emblaApi.off('pointerUp', onUp);
@@ -112,7 +113,7 @@ export function ProjectSection() {
       <button
         onClick={() => emblaApi?.scrollNext()}
         aria-label="向左瀏覽"
-        className="absolute left-[30px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#CAA05C] hover:border-[#CAA05C] hover:text-white"
+        className="absolute left-[30px] lg:left-[60px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white flex items-center justify-center transition-colors duration-300 hover:bg-[#CAA05C] hover:border-[#CAA05C] hover:text-white"
       >
         <ArrowLeft className="w-6 h-6" />
       </button>

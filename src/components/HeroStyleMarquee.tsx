@@ -159,20 +159,24 @@ export function HeroStyleMarquee() {
       aria-roledescription="carousel"
       className="group/brands overflow-hidden bg-[#f6f6f6] px-[15px] py-3 md:px-[30px] md:py-4"
     >
-      <div ref={emblaRef} className="h-[62px] overflow-hidden">
-        <div className="flex h-[62px] touch-pan-y">
-          {[0, 1, 2].flatMap((setIndex) =>
-            STYLES.map((item, itemIndex) => (
-              <StyleItem
-                key={`${setIndex}-${item.en}`}
-                item={item}
-                itemIndex={itemIndex}
-                duplicate={setIndex > 0}
-                onPreview={showPreview}
-                onPreviewEnd={() => setPreview(null)}
-              />
-            )),
-          )}
+      {/* Home 4 的 Brand 外層是 full-width，實際輪播內容則停在 1770px 置中版心。
+          小於版心時仍沿用 section 的 15/30px 安全邊距，故 1512px 現有構圖完全不位移。 */}
+      <div className="mx-auto w-full max-w-[1770px]">
+        <div ref={emblaRef} className="h-[62px] overflow-hidden">
+          <div className="flex h-[62px] touch-pan-y">
+            {[0, 1, 2].flatMap((setIndex) =>
+              STYLES.map((item, itemIndex) => (
+                <StyleItem
+                  key={`${setIndex}-${item.en}`}
+                  item={item}
+                  itemIndex={itemIndex}
+                  duplicate={setIndex > 0}
+                  onPreview={showPreview}
+                  onPreviewEnd={() => setPreview(null)}
+                />
+              )),
+            )}
+          </div>
         </div>
       </div>
 

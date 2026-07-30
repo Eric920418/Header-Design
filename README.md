@@ -42,6 +42,16 @@ pnpm build
 - **互動回歸**：1512px 品牌系列抽屜展開後標題 x=`30→230`；Header 廚房產品 mega-menu 維持滿版面板與 1200px 內容版心；右側浮動按鈕在頁尾停於 viewport top=`112px`，與 60px Header 保留 52px。
 - **視覺證據**：`/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/hero-rwd-local-1920.png`、`hero-rwd-local-3840.png`、`hero-rwd-template-1920.png`。
 
+### 2026-07-30 Hero 下方品牌輪播 RWD（逐 Section 驗收 1）
+
+- **來源真值**：已購 Antra `home-4.xml` 的 Brand 容器。Section 本身維持 full-width 與 `15/30px` 安全邊距，輪播 viewport 新增 `max-width:1770px` 置中內框；不把 Hero 的 1584px 版心誤套到此區。
+- **鎖定差異**：反向步進、4 秒自動播放、滑鼠移入暫停、拖曳後停止自動播放、十張 Hover 預覽、預覽浮在 Hero 上方、雙層文字 Hover、62px 高度與 120px gap 全部維持 `95fd118` 行為。
+- **斷點規則**：`390 / 768 / 880 / 1200 / 1367px` 依序顯示 `1 / 3 / 4 / 5 / 6` 欄；小於 1770px 版心時的尺寸與位置完全不變。寬螢幕只增加兩側留白，不再把單格隨 viewport 無限制拉寬。
+- **修正前基準**：1512px viewport 為 `1452px`、單格 `142px`；3840px viewport 被錯誤拉到 `3780px`、單格 `530px`。修正後 1512px 仍為 `1452px / 142px`，3840px 收斂為 `1770px / 195px` 並水平置中。
+- **QA 結果**：`390 / 767 / 768 / 880 / 881 / 1024 / 1025 / 1200 / 1201 / 1366 / 1367 / 1512 / 1920 / 2560 / 3840px` 全數通過。1512px 修改前後 PNG 的 SHA-256 完全相同，證明既有構圖 0 位移；1920／2560／3840px 內框分別為 `x=75 / 395 / 1035`、寬度均為 `1770px`、單格約 `195px`。
+- **互動回歸**：反向自動播放有前進、Hover 可暫停、240×158px 預覽正常顯示並輪換圖片、拖曳後不再自動播放；`prefers-reduced-motion` 同時停止主輪播與預覽換圖。所有斷點均為 `scrollWidth === clientWidth`，合法超出項目都有輪播裁切祖先，無 Vite overlay、console error 或 page error。
+- **視覺證據**：同目錄 `brand-marquee-before-{1512,3840}.png` 與 `brand-marquee-after-{1512,3840}.png`。
+
 ## 2026-07-21 首頁素材與版面更新（最新狀態）
 
 本節是目前首頁的最新實作真值；如與下方 2026-07-17 的歷史 Design QA 記錄衝突，以本節為準。新素材統一放在 `public/home-2026/`，不在執行時引用 Downloads 路徑。
@@ -312,15 +322,23 @@ final result: passed
 
 - **取代**了原本 `HeroSection` 內的 Gallery（大圖 + 縮圖展示）；放在 `App.tsx` 的 Hero 之後。
 - **無標題區**：模板此 widget 只有卡片（無 heading）。**箭頭為額外加上**（模板此 instance 沒開，但使用者要求）。
-- **卡片**：378×880 直式、底部黑色漸層 scrim；**左上膠囊放中文名（`font-bold` 加粗）、底部放英文大標**（`STYLES` 依對照表：英文 `X Kitchen`、中文膠囊 `AI廚房/巧域廚房…`、每筆 `desc`；Basic+ 無中文膠囊）。
-- **hover 效果**：滑到卡片時卡片變寬（378→567）+ **英文標題轉金 `#C9AA79`** + **底部由下淡入浮現該風格描述**（`s.desc`，如「極致收納 在廚房」；`max-h-0 opacity-0 → group-hover:max-h-20 opacity-100`，`transition-all 500ms`）。
-- **hover 伸縮**：卡片寬度 `×1.5`（`378→567px`，固定高度只變寬），橫式廚房圖靜態裁成直切片、hover 變寬露出更多；EN 標題 hover 轉金（`#C9AA79`）。
-- **捲動 + 自動輪播（一格一格步進 / 吸附模式）**：`embla-carousel-react`（`loop:true` + `align:'start'`，**刻意不用 `dragFree`**）。自動輪播依最新需求由每 3.5s 加快為每 **2.8s** `emblaApi.scrollNext()`，仍維持走一格、停一下的步進感。**露縫關鍵＝曾用的 `dragFree`**：它讓 `scrollNext` 變慣性滑動、在 `loop` 環繞重定位時對不齊而露縫；改吸附模式後每次精準走一格、於乾淨卡邊界重定位，不露縫。滑鼠移入暫停，移出延遲 560ms 恢復；仍可手動拖曳。
-- **移動中「卡間縫隙」殘留防治（次像素）**：實測相鄰卡**排版間隙全 0.00**，故任何殘縫屬**分數像素 transform 合成的髮絲縫**。兩層保險：①`<article>` `w-[calc(100%+2px)] -ml-px`（左右各多蓋 1px、量得重疊 2px，接縫兩側恆被卡片蓋住；卡槽 `.group` 仍 378、不影響 Embla 迴圈總長 10×378=3780）；②輪播 viewport `bg-[#2a2a2a]`（殘縫透出深色而非亮背景，難察）。（自動化隱藏分頁 rAF 不跑、無法重現移動動畫，須在可見瀏覽器驗證。）
-- **左右兩側方向箭頭**（源自主題 `style.css` `.antra-swiper-wrapper .elementor-swiper-button` 的 48×48）：`w-12 h-12`(**48×48**) + lucide 箭頭 `w-6`(**24**)、**半透明磨砂**（`bg-white/10 backdrop-blur-md` + `border-white/30` + 白 icon，透出後方廚房照，非實心白）；`absolute left/right-[30px] top-1/2 -translate-y-1/2 z-20`（垂直置中、貼左右邊 30）；**hover 金底 `#C9AA79` + 金邊 + 白箭頭**。因 Embla 的 prev/next 表示索引方向而非軌道視覺方向，依最新驗收把 handler 互換：左箭頭呼叫 `scrollNext()`、右箭頭呼叫 `scrollPrev()`，並將 aria-label 改為「向左瀏覽／向右瀏覽」。
+- **卡片**：378×880 直式、底部黑色漸層 scrim；依目前核准版本，**左上膠囊放英文系列名、底部放中文大標**，每筆保留中文 `desc`；`Basic+` 上下品牌名相同。
+- **hover 效果**：滑到整張卡片時卡片變寬（378→567）並由下淡入該風格描述（`max-h-0 opacity-0 → group-hover:max-h-20 opacity-100`，`transition-all 500ms`）；整卡 Hover 不改標題色。
+- **hover 伸縮**：卡片寬度 `×1.5`（`378→567px`，固定高度只變寬），橫式廚房圖靜態裁成直切片、Hover 變寬露出更多；只有游標直接移到中文標題文字時才轉模板金 `#CAA05C`。
+- **捲動 + 自動輪播（一格一格步進 / 吸附模式）**：`embla-carousel-react`（`loop:true` + `align:'start'`，**刻意不用 `dragFree`**）。自動輪播依最新需求由每 3.5s 加快為每 **2.8s** `emblaApi.scrollNext()`，仍維持走一格、停一下的步進感；使用者啟用 `prefers-reduced-motion` 時停止自動輪播。**露縫關鍵＝曾用的 `dragFree`**：它讓 `scrollNext` 變慣性滑動、在 `loop` 環繞重定位時對不齊而露縫；改吸附模式後每次精準走一格、於乾淨卡邊界重定位，不露縫。滑鼠移入暫停，移出延遲 560ms 恢復；仍可手動拖曳。
+- **移動中「卡間縫隙」殘留防治（次像素）**：實測相鄰卡**排版間隙全 0.00**，故任何殘縫屬**分數像素 transform 合成的髮絲縫**。兩層保險：①`<article>` `w-[calc(100%+2px)] -ml-px`（左右各多蓋 1px、量得重疊 2px，接縫兩側恆被卡片蓋住；卡槽 `.group` 仍 378、不影響 Embla 迴圈總長 10×378=3780）；②輪播 viewport `bg-[#1C1C1D]`（殘縫透出深色而非亮背景，難察）。
+- **左右兩側方向箭頭**（源自主題 `style.css` `.antra-swiper-wrapper .elementor-swiper-button` 的 48×48）：`w-12 h-12`(**48×48**) + lucide 箭頭 `w-6`(**24**)、**半透明磨砂**（`bg-white/10 backdrop-blur-md` + `border-white/30` + 白 icon，透出後方廚房照，非實心白）；垂直置中，手機／平板左右各 30px，桌面左箭頭改為 60px，避開固定 40px「品牌系列」把手並保留 20px 安全距離，右箭頭仍為 30px；**hover 金底 `#C9AA79` + 金邊 + 白箭頭**。因 Embla 的 prev/next 表示索引方向而非軌道視覺方向，依最新驗收把 handler 互換：左箭頭呼叫 `scrollNext()`、右箭頭呼叫 `scrollPrev()`，並將 aria-label 改為「向左瀏覽／向右瀏覽」。
 - **卡片標題層級**：依最新需求對調雙語位置，左上膠囊改顯示英文系列名，底部 36px 大標改顯示中文名稱；圖片、描述及 hover 動畫不變。`Basic+` 的中英文資料相同，因此上下均維持 `Basic+`。
 - **雙層 Hover**：整張卡片 Hover 只觸發卡寬展開及描述淡入，不再連帶改變標題顏色；只有游標直接進入底部中文 `h3` 的實際文字寬度時，標題才由白色轉為模板金 `#CAA05C`。左上英文膠囊與描述維持原色。
 - **內容 = 10 種廚房風格**（真圖）：Basic+ / AI kitchen（僅英文）、Clever 巧域廚房 / Loft Chic 潮派廚房 / Joyful 童樂廚房 / premium 君璽廚房 / Elegant 臻美廚房 / Chef 大廚廚房 / Country 鄉村廚房 / Harmony 閣樂廚房。圖片放在 `public/kitchen-styles/*.jpg`（來源 `Downloads/首頁用圖/品牌系列x10`；Clever 已縮圖）。**渲染時複製兩份 `[...STYLES, ...STYLES]`＝20 張**，給 Embla loop 足夠緩衝、避免捲動動畫中接縫來不及補齊而露縫。
+
+### ProjectSection RWD QA（2026-07-30）
+
+- **尺寸鎖定**：15 個寬度 `390、767、768、880、881、1024、1025、1200、1201、1366、1367、1512、1920、2560、3840px` 全數實測。卡片槽在三段分別維持 `280×480`、`340×640`、`378×880px`；1920／2560／3840px 只增加可見卡片數，不放大卡片。
+- **Full-bleed / 接縫**：所有寬度 Section 與輪播 viewport 均為 `x=0 / width=viewport`；20 張卡的內容框固定比卡槽寬 2px，相鄰內容量得 `-2px` 重疊。每個斷點皆 `document.scrollWidth === clientWidth`，圖片 0 張破圖，Vite overlay／console／page error 皆為 0。
+- **互動**：正常模式 2.8 秒自動前進一格；Hover 展開桌面實測 `378→567px`，整卡 Hover 時中文仍為白色，直接 Hover 中文文字才變 `rgb(202,160,92)`；Hover 停留超過一個播放週期軌道不移動。左右箭頭皆能驅動相反方向，左箭頭桌面位置由 30px 修正為 60px，消除與固定品牌把手的 10px 覆蓋。
+- **減少動態**：原實作在 `prefers-reduced-motion: reduce` 仍會自動位移，已改為不建立 autoplay timer；手動拖曳與方向箭頭保留。
+- **證據**：1512px `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/project-rwd-after-1512.png`；3840px `/Users/eric/.codex/visualizations/2026/07/17/019f6e20-caa2-7f73-96fb-e7e6ebd3d13d/project-rwd-after-3840.png`。
 
 ## 服務輪播（Our Services）— Antra home-6 `antra-services-list` style-3 複刻
 
