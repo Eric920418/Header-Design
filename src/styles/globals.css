@@ -530,18 +530,39 @@ body {
   display: none;
 }
 
-/* Services 品牌 Logo 跑馬燈：內容重複兩組，位移 -50% 無縫循環；
-   依最新需求由官網基準 20s 加快為 16s。 */
+/* Services 品牌 Logo 跑馬燈：內容重複四組，位移一組(-25%)無縫循環；
+   四組可完整覆蓋 4K viewport，位移距離仍是 1550px，故 16s 速度不變。 */
 @keyframes marquee {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
 }
 .animate-marquee {
   animation: marquee 16s linear infinite;
+}
+
+/* Services 卡片等高：不用混合 named / arbitrary breakpoint utilities，
+   避免 Tailwind 將 sm 規則排在 min-[1201px] 後方而覆蓋桌面值。 */
+.services-card-caption {
+  min-height: 192px;
+}
+@media (min-width: 640px) and (max-width: 767px) {
+  .services-card-caption {
+    min-height: 177px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1200px) {
+  .services-card-caption {
+    min-height: 196px;
+  }
+}
+@media (min-width: 1201px) {
+  .services-card-caption {
+    min-height: 230px;
+  }
 }
 
 @keyframes style-preview-image-in {
@@ -558,82 +579,137 @@ body {
   animation: style-preview-image-in 320ms ease-out both;
 }
 
-/* Gallery 右側案例縮圖：
-   不混用 Tailwind named breakpoint 與 min-[1440px]，避免 xl 規則在產物排序中
-   反向覆蓋 1440px 規則。尺寸、整組垂直位置與控制欄 gap 在此依序定義。 */
+/* Gallery 是 full-bleed 客製區，不套 1410px 版心。
+   390–1024 依 Home 3 tablet 規則堆疊；1025–1512 將 top / 卡片 / 下移量連續插值；
+   1512 精確回到已確認的 x=51、295px、controls y=901，超寬畫面不再放大卡片。 */
+.gallery-section {
+  --gallery-inline: 15px;
+  --gallery-content-top: 120px;
+  --gallery-row-offset: 0px;
+  --gallery-card-size: min(220px, calc((100vw - 50px) / 2));
+  --gallery-layout-gap: 30px;
+}
+.gallery-main-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: stretch;
+  padding: var(--gallery-content-top) var(--gallery-inline) 0;
+}
+.gallery-heading-column {
+  width: 100%;
+  padding-right: 0;
+  text-align: center;
+}
+.gallery-heading-title {
+  font-size: 40px;
+  line-height: 45px;
+}
+.gallery-description {
+  margin-right: auto;
+  margin-left: auto;
+}
 .gallery-case-row {
-  margin-top: 53px;
+  width: 100%;
+  min-width: 0;
+  margin-top: var(--gallery-row-offset);
 }
 .gallery-case-layout {
-  gap: 30px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gallery-layout-gap);
+}
+.gallery-card-pair {
+  order: 1;
+  display: flex;
+  gap: 20px;
 }
 .gallery-case-controls {
   width: 100%;
 }
 .gallery-case-card {
-  width: min(220px, calc((100vw - 96px) / 2));
-  height: min(220px, calc((100vw - 96px) / 2));
+  width: var(--gallery-card-size);
+  height: var(--gallery-card-size);
 }
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
+  .gallery-section {
+    --gallery-inline: 30px;
+    --gallery-content-top: 140px;
+  }
+  .gallery-heading-title {
+    font-size: 42px;
+    line-height: 50px;
+  }
+}
+@media (min-width: 1025px) {
+  .gallery-section {
+    --gallery-inline: clamp(30px, calc(30px + (100vw - 1025px) * 0.043121), 51px);
+    --gallery-content-top: clamp(200px, calc(200px + (100vw - 1025px) * 0.386037), 388px);
+    --gallery-row-offset: clamp(0px, calc((100vw - 1025px) * 0.626506), 260px);
+    --gallery-card-size: clamp(140px, calc(140px + (100vw - 1025px) * 0.514286), 230px);
+  }
+  .gallery-main-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .gallery-heading-column {
+    width: 479px;
+    flex-shrink: 0;
+    padding-right: 16px;
+    text-align: left;
+  }
+  .gallery-heading-title {
+    font-size: 76px;
+    line-height: 90px;
+  }
+  .gallery-description {
+    margin-right: 0;
+    margin-left: 0;
+  }
   .gallery-case-row {
-    margin-top: 205px;
+    flex: 1 1 0%;
   }
   .gallery-case-layout {
-    gap: 20px;
+    display: grid;
+    grid-template-columns: minmax(104px, 1fr) auto;
+    align-items: end;
+  }
+  .gallery-card-pair {
+    order: 2;
+    grid-column-start: 2;
   }
   .gallery-case-controls {
     position: absolute;
-    top: 691px;
+    top: calc(
+      var(--gallery-content-top) + var(--gallery-row-offset) + var(--gallery-card-size) - 42px
+    );
     left: 50%;
     z-index: 30;
     width: auto;
     transform: translateX(-50%);
   }
-  .gallery-case-card {
-    width: 140px;
-    height: 140px;
-  }
 }
 @media (min-width: 1200px) {
-  .gallery-case-row {
-    margin-top: 315px;
+  .gallery-section {
+    --gallery-card-size: clamp(230px, calc(230px + (100vw - 1200px) * 0.625), 280px);
   }
-  .gallery-case-card {
-    width: 230px;
-    height: 230px;
-  }
-  .gallery-case-controls {
-    top: 891px;
+  .gallery-card-pair {
+    gap: 30px;
   }
 }
 @media (min-width: 1280px) {
-  .gallery-case-row {
-    margin-top: 275px;
-  }
-  .gallery-case-layout {
-    gap: 5px;
-  }
-  .gallery-case-card {
-    width: 280px;
-    height: 280px;
-  }
-  .gallery-case-controls {
-    top: 901px;
+  .gallery-section {
+    --gallery-card-size: clamp(280px, calc(280px + (100vw - 1280px) * 0.09375), 295px);
+    --gallery-layout-gap: clamp(5px, calc(5px + (100vw - 1280px) * 0.287356), 30px);
   }
 }
-@media (min-width: 1440px) {
-  .gallery-case-row {
-    margin-top: 260px;
-  }
-  .gallery-case-layout {
-    gap: 30px;
-  }
-  .gallery-case-card {
-    width: 295px;
-    height: 295px;
-  }
-  .gallery-case-controls {
-    top: 901px;
+@media (min-width: 1201px) {
+  .gallery-heading-title {
+    font-size: 110px;
+    line-height: 100px;
   }
 }
 
@@ -668,6 +744,82 @@ body {
 }
 .animate-gallery-card {
   animation: gallery-card-in 0.6s ease both;
+}
+
+/* What We Do / Home 6 原生 Elementor 區間。
+   這裡不用 Tailwind 的 lg/antra，因模板的 mobile-extra 結束於 880px，
+   tablet/tablet-extra/desktop 則分別在 1024/1200/1201px 切換。 */
+.what-we-do-section {
+  padding: 60px 15px;
+}
+.what-we-do-layout {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 30px;
+}
+.what-we-do-heading,
+.what-we-do-description {
+  text-align: center;
+}
+.what-we-do-title {
+  font-size: 30px;
+  line-height: 35px;
+}
+.what-we-do-description {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.what-we-do-cta-row {
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .what-we-do-section {
+    padding: 80px 30px;
+  }
+  .what-we-do-title {
+    font-size: 45px;
+    line-height: 50px;
+  }
+}
+
+@media (min-width: 881px) {
+  .what-we-do-layout {
+    grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+    gap: 30px;
+  }
+  .what-we-do-heading,
+  .what-we-do-description {
+    text-align: left;
+  }
+  .what-we-do-title {
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 60px;
+    line-height: 64px;
+  }
+  .what-we-do-description {
+    margin: 29px 0 50px;
+  }
+  .what-we-do-cta-row {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 1025px) {
+  .what-we-do-section {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+}
+
+@media (min-width: 1201px) {
+  .what-we-do-section {
+    padding-top: 120px;
+    padding-bottom: 115px;
+  }
+  .what-we-do-layout {
+    gap: 70px;
+  }
 }
 
 /* Antra Home 6 `antra-video-popup` widget 63f4833：
@@ -786,6 +938,30 @@ body {
 
 /* 門市資訊板：固定列高避免地圖／Section 在換店時跳動。
    舊卡由上半面向內翻走，新卡從下半面翻回；卡面維持乾淨，不加中央分隔線。 */
+/* 1024–1199px 仍需維持地圖／列表水平排列，因此右欄只有約 305–372px。
+   只在這段收斂控制項內距，不改三等欄、52px 高度或 1512px 已確認尺寸。 */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .store-location-filters .store-location-locate {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;
+  }
+  .store-location-filters .store-location-locate svg {
+    width: 18px;
+    height: 18px;
+  }
+  .store-location-filters .store-location-select {
+    padding-left: 10px;
+    padding-right: 26px;
+    font-size: 13px;
+  }
+  .store-location-filters .store-location-select-chevron {
+    right: 8px;
+    width: 14px;
+    height: 14px;
+  }
+}
+
 .store-board-slot {
   perspective: 1000px;
   transform-style: preserve-3d;
@@ -958,6 +1134,9 @@ body {
   .antra-template-video-popup::after { animation: none !important; opacity: 0; }
   .site-cta-icon::after { animation: none !important; opacity: 0; }
   .hero-start-project::after { animation: none !important; opacity: 0; }
+  .gallery-bg,
+  .gallery-case-card img { transition: none !important; }
+  .animate-gallery-card { animation: none !important; }
   .store-board-face { animation: none !important; filter: none !important; transform: none !important; }
   .store-board-face-out { display: none !important; }
 }

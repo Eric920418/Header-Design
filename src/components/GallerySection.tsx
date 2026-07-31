@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Reveal, useReveal } from '../motion/Reveal';
 import { useParallax } from '../motion/useParallax';
+import { prefersReducedMotion } from '../motion/prefersReducedMotion';
 
 // 全區顏色使用 Antra 模板色盤（單一來源）。
 import { GOLD } from '../theme/cis';
@@ -25,18 +26,28 @@ export function GallerySection() {
   useParallax(sectionRef, { targets: '.gallery-bg', fromY: -8, toY: 8, scale: 1.12 });
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
   // 右卡欄進場：slideInUp 延 400（有拖曳 handler，故用 hook 不用 <Reveal> 包裹）
   const cardsRef = useReveal<HTMLDivElement>();
 
   const next = useCallback(() => setActive((a) => (a + 1) % len), [len]);
   const prev = useCallback(() => setActive((a) => (a - 1 + len) % len), [len]);
 
+  // 跟全站其他自動動態一致：系統切換「減少動態」時立即停止／恢復自動輪播。
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduceMotion(prefersReducedMotion());
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
   // 自動播放（依最新需求由每 4s 加快為 3.2s，滑鼠移入暫停）
   useEffect(() => {
-    if (paused) return;
+    if (paused || reduceMotion) return;
     const id = setInterval(() => setActive((a) => (a + 1) % len), 3200);
     return () => clearInterval(id);
-  }, [paused, len]);
+  }, [paused, reduceMotion, len]);
 
   // 拖曳/滑動切換
   const dragX = useRef<number | null>(null);
@@ -61,9 +72,16 @@ export function GallerySection() {
     // 全出血底圖(=當前主圖) + 右 2 卡；section 高度對位模板 956
     <section
       ref={sectionRef}
-      className="relative overflow-hidden min-h-[956px]"
+      aria-labelledby="gallery-heading"
+      className="gallery-section relative min-h-[956px] overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setPaused(false);
+        }
+      }}
     >
       {/* 背景 = 目前主圖(#active)，交叉淡入 */}
       {CASES.map((c, i) => (
@@ -77,11 +95,11 @@ export function GallerySection() {
         />
       ))}
       {/* 內容：左標題區 / 右卡欄各自 slideInUp 進場（stagger 200 / 400，同模板 Home Three） */}
-      <div className="relative z-10 w-full">
+      <div className="gallery-content-shell relative z-10 w-full">
         {/* 內容非置中：照模板 e-con-inner padding-top 推到下半部（內容從 y≈388 起） */}
-        <div className="flex flex-col lg:flex-row lg:items-start gap-12 lg:gap-0 pt-[120px] lg:pt-[388px] pl-[51px] lg:pr-[51px]">
+        <div className="gallery-main-layout">
           {/* 左：標題區 slideInUp 延 200（照模板 L51/w479；膠囊 → 大標 → 段落 + CTA） */}
-          <Reveal anim="slideInUp" delayMs={200} className="lg:w-[479px] lg:shrink-0 pr-4">
+          <Reveal anim="slideInUp" delayMs={200} className="gallery-heading-column">
             {/* 副標膠囊（照模板 .elementor-title-span：border white/25、radius 24、padding 3/13/3/9、金點 + 15/ls1/uppercase） */}
             <div className="mb-[26px]">
               <span className="inline-flex items-center gap-2 rounded-[24px] border border-white/25 pt-[3px] pr-[13px] pb-[3px] pl-[9px]">
@@ -91,12 +109,12 @@ export function GallerySection() {
             </div>
 
             {/* 大標：Home Three 原始響應式字級 desktop 110/100、tablet-extra 76/90、tablet 42、mobile 40/45。 */}
-            <h2 className="font-display text-white capitalize text-[40px] leading-[45px] md:text-[42px] md:leading-[50px] lg:text-[76px] lg:leading-[90px] antra:text-[110px] antra:leading-[100px]">
+            <h2 id="gallery-heading" className="gallery-heading-title font-display capitalize text-white">
               Interior design
             </h2>
 
             {/* 段落：Home Three 原始文案、白色、18/24、寬 378。 */}
-            <p className="text-white mt-[37px] w-[378px] max-w-full text-[18px] leading-[24px]">
+            <p className="gallery-description mt-[37px] w-[378px] max-w-full text-[18px] leading-[24px] text-white">
               {GALLERY_DESCRIPTION}
             </p>
 
@@ -122,14 +140,17 @@ export function GallerySection() {
             ref={cardsRef}
             data-ev="slideInUp"
             style={{ animationDelay: '400ms' }}
-            className="gallery-case-row ev flex select-none justify-end touch-pan-y lg:min-w-0 lg:flex-1"
+            className="gallery-case-row ev flex select-none justify-end touch-pan-y"
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
+            onPointerCancel={() => {
+              dragX.current = null;
+            }}
           >
             {/* 左側控制區 + 右側縮圖區：箭頭在剩餘空間水平置中，縮圖維持靠右。 */}
-            <div className="gallery-case-layout flex w-full flex-col items-center lg:grid lg:grid-cols-[minmax(104px,1fr)_auto] lg:items-end">
+            <div className="gallery-case-layout">
             {/* 縮圖放大；點擊任一張即可直接切換成背景主案例。 */}
-            <div key={active} className="order-1 flex gap-[20px] animate-gallery-card lg:order-2 lg:col-start-2 antra:gap-[30px]">
+            <div key={active} className="gallery-card-pair animate-gallery-card">
               {cards.map((c) => (
                 <button
                   key={c.caseIndex}

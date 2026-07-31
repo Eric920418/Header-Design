@@ -24,7 +24,8 @@ export function WhatWeDoSection() {
     // Home 6 原始 Section：desktop 120/30/115、tablet-extra 100/30、tablet 80/30、mobile 60/15。
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-white px-[15px] py-[60px] md:px-[30px] md:py-[80px] lg:py-[100px] antra:pb-[115px] antra:pt-[120px]"
+      aria-labelledby="what-we-do-heading"
+      className="what-we-do-section relative overflow-hidden bg-white"
     >
       {/* 背景右下半透明建築圖 = 模板 f0420ee 的 h6-bg-3.png（原尺寸 821×520；bg-position 100% 100% / no-repeat）。
           PNG 本身半透明，opacity 用 1（同模板 layer opacity）；掛 .wwd-blueprint 讓既有 useParallax 做輕微視差。 */}
@@ -34,11 +35,11 @@ export function WhatWeDoSection() {
         aria-hidden
         className="wwd-blueprint pointer-events-none select-none absolute bottom-0 right-0 z-0 w-[821px] max-w-none"
       />
-      <div className="relative z-10 mx-auto grid max-w-[1410px] grid-cols-1 items-center gap-[30px] lg:grid-cols-[44fr_56fr] antra:gap-[70px]">
+      <div className="what-we-do-layout relative z-10 mx-auto grid max-w-[1410px] items-center">
         {/* 左：文字（整欄淡入上升，內部清單再逐項 stagger — 仿 Elementor 巢狀進場） */}
-        <Reveal anim="slideInLeft" className="min-w-0">
+        <Reveal anim="slideInLeft" className="what-we-do-copy min-w-0">
           {/* Elementor 的 heading widget：subtitle 與 title 是同一組，整組下方 margin 40。 */}
-          <div className="mb-[40px] text-center lg:text-left">
+          <div className="what-we-do-heading mb-[40px]">
             <span className="mb-[20px] inline-flex items-center gap-[6px] rounded-[24px] border border-[rgba(114,114,114,0.18)] pb-[3px] pl-[10px] pr-[13px] pt-[3px] font-display text-[12px] uppercase leading-[22px] tracking-[1px] text-[#1C1C1D]">
               <span
                 className="inline-block h-[6px] w-[6px] rounded-full"
@@ -48,7 +49,10 @@ export function WhatWeDoSection() {
             </span>
 
             {/* Home Six 逐字；不手動斷行，由模板的 670px heading 寬度自然換行。 */}
-            <h2 className="mx-auto max-w-[670px] font-display text-[30px] capitalize leading-[35px] text-[#1C1C1D] sm:text-[45px] sm:leading-[50px] lg:mx-0 lg:text-[60px] lg:leading-[64px]">
+            <h2
+              id="what-we-do-heading"
+              className="what-we-do-title mx-auto max-w-[670px] font-display capitalize text-[#1C1C1D]"
+            >
               SAKURA has <span style={{ color: GOLD }}>created exceptional</span>{' '}
               architectural designs.
             </h2>
@@ -68,7 +72,7 @@ export function WhatWeDoSection() {
             ))}
           </ul>
 
-          <p className="mx-auto mb-[30px] mt-[30px] max-w-[645px] text-center text-[16px] leading-[24px] text-[#59585D] lg:mx-0 lg:mb-[50px] lg:mt-[29px] lg:text-left">
+          <p className="what-we-do-description mx-auto max-w-[645px] text-[16px] leading-[24px] text-[#59585D]">
             We specialize in transforming visions into reality. Explore our
             portfolio of innovative architectural and interior design projects
             crafted with precision.
@@ -77,18 +81,20 @@ export function WhatWeDoSection() {
           {/* CTA — 依主題原始碼 elementor-button-default（=antra 標準款，elementor.css 9147）：
               透明底、border 1px rgba(159,159,164,.64)、字 15、金圓 40 箭頭預設 -45°；
               hover 整顆填模板金 + 字白 + 箭頭轉正 rotate(0)；中文內容保留「櫻花優勢」。 */}
-          <a
-            href="#"
-            className="site-content-cta group mx-auto inline-flex h-[60px] w-fit shrink-0 items-center gap-[8px] whitespace-nowrap rounded-full border border-[rgba(159,159,164,0.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white lg:mx-0"
-          >
-            <span className="text-[15px] leading-[22px]">櫻花優勢</span>
-            <span
-              className="site-cta-icon inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full text-white transition-transform duration-500 -rotate-45 group-hover:rotate-0"
-              style={{ background: GOLD }}
+          <div className="what-we-do-cta-row flex">
+            <a
+              href="#"
+              className="site-content-cta group inline-flex h-[60px] w-fit shrink-0 items-center gap-[8px] whitespace-nowrap rounded-full border border-[rgba(159,159,164,0.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors duration-500 hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white"
             >
-              <ArrowRight className="w-5 h-5" />
-            </span>
-          </a>
+              <span className="text-[15px] leading-[22px]">櫻花優勢</span>
+              <span
+                className="site-cta-icon inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full text-white transition-transform duration-500 -rotate-45 group-hover:rotate-0"
+                style={{ background: GOLD }}
+              >
+                <ArrowRight className="w-5 h-5" />
+              </span>
+            </a>
+          </div>
         </Reveal>
 
         {/* 右：16:9 影片區塊（整塊淡入上升；影片卡自有 hover:scale，故 Reveal 掛在外層不搶 transform） */}

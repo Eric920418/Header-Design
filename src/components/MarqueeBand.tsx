@@ -14,8 +14,8 @@ export function MarqueeBand() {
   return (
     <div className="overflow-hidden select-none py-[40px]" role="region" aria-label="集團品牌">
       <div className="flex w-max animate-marquee">
-        {[0, 1].map((group) => (
-          <div key={group} className="flex shrink-0" aria-hidden={group === 1 || undefined}>
+        {[0, 1, 2, 3].map((group) => (
+          <div key={group} className="flex shrink-0" aria-hidden={group > 0 || undefined}>
             {BRAND_LOGOS.map((logo) => (
               <span
                 key={logo.name}

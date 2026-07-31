@@ -187,7 +187,10 @@ export function StoreLocationSection() {
 
   return (
     // 間距依模板實測：py 120
-    <section className="relative bg-[#f6f6f6] py-[60px] overflow-hidden">
+    <section
+      aria-labelledby="store-location-heading"
+      className="store-location-section relative overflow-hidden bg-[#f6f6f6] py-[60px]"
+    >
       <div className="mx-auto w-full max-w-[1512px] pl-5 pr-[88px] sm:pl-8 sm:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
         {/* ── 標題列：eyebrow(左欄) + 大標(右偏) + 十字裝飾線（同 PricingSection，相同座標/位置） ── */}
         <div className="relative mb-[60px]">
@@ -227,7 +230,10 @@ export function StoreLocationSection() {
               </span>
             </div>
             {/* 模板 Contact 頁逐字：Have a Project in [Mind? Let’s Make] It Happen（金字重點 Mind? Let’s Make；彎引號 ’） */}
-            <h2 className="min-w-0 max-w-[661px] font-display text-[42px] leading-[46px] capitalize text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:w-[661px] xl:text-[60px] xl:leading-[64px]">
+            <h2
+              id="store-location-heading"
+              className="min-w-0 max-w-[661px] font-display text-[42px] leading-[46px] capitalize text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:w-[661px] xl:text-[60px] xl:leading-[64px]"
+            >
               Have a Project in{" "}
               <span style={{ color: GOLD }}>
                 Mind?
@@ -251,10 +257,10 @@ export function StoreLocationSection() {
           {/* 右：我的位置 + 區域/城市下拉 + 門市列表 */}
           <div className="min-w-0 flex-1">
             {/* 三個篩選控制固定同排、等寬；窄螢幕縮小內距與字級避免爆版。 */}
-            <div className="mb-4 grid min-w-0 grid-cols-3 items-center gap-2 sm:gap-3">
+            <div className="store-location-filters mb-4 grid min-w-0 grid-cols-3 items-center gap-2 sm:gap-3">
               <button
                 type="button"
-                className="flex h-[52px] min-w-0 items-center justify-between gap-1 rounded-full border border-[rgba(159,159,164,0.25)] bg-white px-2 text-[13px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-4 sm:text-[15px]"
+                className="store-location-locate flex h-[52px] min-w-0 items-center justify-between gap-1 rounded-full border border-[rgba(159,159,164,0.25)] bg-white px-2 text-[13px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-4 sm:text-[15px]"
               >
                 <span className="whitespace-nowrap">我的位置</span>
                 <LocateFixed className="h-[18px] w-[18px] shrink-0 sm:h-[22px] sm:w-[22px]" style={{ color: GOLD }} />
@@ -267,7 +273,7 @@ export function StoreLocationSection() {
                     setRegion(e.target.value);
                     setCity(''); // 換區域時清空城市
                   }}
-                  className={`h-[52px] w-full appearance-none rounded-full border border-[rgba(159,159,164,0.25)] bg-white pl-2.5 pr-6 text-[13px] transition-colors cursor-pointer focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-10 sm:text-[15px] ${
+                  className={`store-location-select h-[52px] w-full appearance-none rounded-full border border-[rgba(159,159,164,0.25)] bg-white pl-2.5 pr-6 text-[13px] transition-colors cursor-pointer focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-10 sm:text-[15px] ${
                     region === '' ? 'text-[#9F9FA4]' : 'text-[#1C1C1D]'
                   }`}
                 >
@@ -278,7 +284,7 @@ export function StoreLocationSection() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#59585D] sm:right-3.5 sm:h-4 sm:w-4" />
+                <ChevronDown className="store-location-select-chevron pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#59585D] sm:right-3.5 sm:h-4 sm:w-4" />
               </div>
 
               <div className="relative min-w-0">
@@ -286,7 +292,7 @@ export function StoreLocationSection() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   aria-disabled={!region}
-                  className={`h-[52px] w-full appearance-none rounded-full border border-[rgba(159,159,164,0.25)] pl-2.5 pr-6 text-[13px] transition-colors focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-10 sm:text-[15px] ${
+                  className={`store-location-select h-[52px] w-full appearance-none rounded-full border border-[rgba(159,159,164,0.25)] pl-2.5 pr-6 text-[13px] transition-colors focus:border-[#CAA05C] focus:outline-none sm:pl-5 sm:pr-10 sm:text-[15px] ${
                     !region
                       ? 'bg-[#F6F6F6] text-[#9F9FA4] cursor-not-allowed pointer-events-none'
                       : city === ''
@@ -301,7 +307,7 @@ export function StoreLocationSection() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#59585D] sm:right-3.5 sm:h-4 sm:w-4" />
+                <ChevronDown className="store-location-select-chevron pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#59585D] sm:right-3.5 sm:h-4 sm:w-4" />
               </div>
             </div>
 

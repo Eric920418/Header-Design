@@ -43,7 +43,7 @@ export function ServicesSection() {
   return (
     <section
       aria-labelledby="services-heading"
-      className="relative overflow-hidden bg-cover bg-top bg-no-repeat px-[15px] pt-[60px] md:px-[30px] md:pt-[80px] lg:pt-[100px] antra:pt-[125px]"
+      className="relative overflow-hidden bg-cover bg-top bg-no-repeat px-[15px] pt-[60px] min-[768px]:px-[30px] min-[768px]:pt-[80px] min-[1025px]:pt-[100px] min-[1201px]:pt-[125px]"
       style={{
         backgroundImage: "url('/services/h6-bg-2.jpg')",
         backdropFilter: 'blur(29px)',
@@ -53,11 +53,11 @@ export function ServicesSection() {
         <div aria-hidden className="absolute inset-0 bg-black/[0.76]" />
 
         <div className="relative z-10 mx-auto max-w-[1410px]">
-          <Reveal anim="slideInUp" className="relative mb-[30px] antra:mb-[60px]">
+          <Reveal anim="slideInUp" className="relative mx-auto mb-[30px] max-w-[1083px] min-[768px]:mb-[60px]">
             {/* Page 6 不是單獨的 15px 圖示：Elementor 用 border 拉出長線，再把原版 SVG 尖端接在線尾。 */}
             <div
               aria-hidden
-              className="absolute left-0 top-0 hidden h-[15px] w-[502px] border-b border-white/[0.18] antra:block"
+              className="absolute left-0 top-0 hidden h-[15px] w-[502px] border-b border-white/[0.18] min-[881px]:block"
             >
               <img
                 src="/services/deco-horizontal.svg"
@@ -67,7 +67,7 @@ export function ServicesSection() {
             </div>
             <div
               aria-hidden
-              className="absolute left-[345px] top-0 hidden h-[179px] w-[15px] border-r border-white/[0.18] antra:block"
+              className="absolute left-[345px] top-0 hidden h-[179px] w-[15px] border-r border-white/[0.18] min-[881px]:block"
             >
               <img
                 src="/services/deco-vertical.svg"
@@ -76,8 +76,8 @@ export function ServicesSection() {
               />
             </div>
 
-            <div className="flex flex-col items-center gap-[15px] text-center sm:gap-[30px] antra:flex-row antra:items-start antra:gap-0 antra:pt-[38px] antra:text-left">
-              <div className="antra:w-[424px] antra:shrink-0 antra:pt-[8px]">
+            <div className="flex flex-col items-center gap-[15px] text-center min-[768px]:gap-[30px] min-[768px]:pt-[38px] min-[881px]:flex-row min-[881px]:items-start min-[881px]:gap-0 min-[881px]:text-left">
+              <div className="min-[881px]:w-[30%] min-[881px]:shrink-0 min-[881px]:pt-[8px]">
                 <span className="inline-flex items-center gap-1.5 rounded-[24px] border border-white/[0.18] pb-[6px] pl-[9px] pr-[13px] pt-[7px] font-display text-[12px] uppercase leading-[14px] tracking-[1px] text-white">
                   <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
                   廚房產品
@@ -86,7 +86,7 @@ export function ServicesSection() {
 
               <h2
                 id="services-heading"
-                className="max-w-[769px] font-display text-[30px] capitalize leading-[35px] text-white sm:text-[45px] sm:leading-[50px] antra:w-[769px] antra:text-[60px] antra:leading-[64px]"
+                className="w-full max-w-[769px] font-display text-[30px] capitalize leading-[35px] text-white min-[768px]:text-[45px] min-[768px]:leading-[50px] min-[881px]:w-[70%] min-[881px]:text-[60px] min-[881px]:leading-[64px]"
               >
                 Explore Our <span style={{ color: GOLD }}>Comprehensive Interior Design</span> Services
               </h2>
@@ -102,10 +102,10 @@ export function ServicesSection() {
                   return (
                     <div
                       key={service.n}
-                      className="min-w-0 flex-[0_0_100%] pl-[30px] md:flex-[0_0_50%] antra:flex-[0_0_33.333%]"
+                      className="min-w-0 flex-[0_0_100%] pl-[30px] min-[768px]:flex-[0_0_50%] min-[1201px]:flex-[0_0_33.333%]"
                     >
                       <article
-                        className={`group/svc flex flex-col overflow-hidden rounded-[24px] bg-white p-[10px] ${captionTop ? 'sm:flex-col-reverse' : ''}`}
+                        className={`group/svc flex flex-col overflow-hidden rounded-[24px] bg-white p-[10px] ${captionTop ? 'min-[569px]:flex-col-reverse' : ''}`}
                       >
                         <div className="relative h-[250px] overflow-hidden rounded-[24px] md:h-[310px]">
                           <img
@@ -122,12 +122,12 @@ export function ServicesSection() {
                           <span aria-hidden className="absolute inset-0 bg-black/[0.11]" />
                         </div>
 
-                        <div className="min-h-[192px] px-0 pb-[30px] pt-[20px] sm:min-h-[177px] sm:px-[20px] sm:pb-[35px] sm:pt-[30px] antra:min-h-[230px]">
+                        <div className="services-card-caption px-0 pb-[30px] pt-[20px] min-[768px]:px-[20px] min-[768px]:pb-[35px] min-[768px]:pt-[30px]">
                           <div className="flex items-start justify-between">
                             {service.logo ? (
                               <h3
                                 aria-label={service.logoAlt ?? service.title}
-                                className="mr-[30px] flex flex-1 items-center sm:mr-[10px] md:mr-[30px] antra:mr-[80px]"
+                                className="mr-[30px] flex flex-1 items-center min-[768px]:mr-[10px] min-[881px]:mr-[30px] min-[1201px]:mr-[80px]"
                               >
                                 {/* 原圖為白色；此處標題區為白底，依原 h3 深色視覺呈現以避免 logo 消失。 */}
                                 <img
@@ -147,7 +147,7 @@ export function ServicesSection() {
                             </span>
                           </div>
 
-                          <p className="mt-[10px] line-clamp-3 text-[16px] leading-[24px] text-[#9F9FA4] antra:mr-[70px] antra:mt-[23px]">
+                          <p className="mt-[10px] line-clamp-3 text-[16px] leading-[24px] text-[#9F9FA4] min-[768px]:mr-[70px] min-[768px]:mt-[23px]">
                             {service.excerpt}
                           </p>
                         </div>
