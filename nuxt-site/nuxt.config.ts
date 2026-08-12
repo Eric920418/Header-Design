@@ -43,4 +43,9 @@ export default defineNuxtConfig({
     typeCheck: true,
     strict: true,
   },
+  nitro: {
+    // Nuxt 位於 workspace 子目錄；Vercel 的 Build Output API 必須落在 Repository 根目錄。
+    // 否則 Nitro 會寫進 nuxt-site/.vercel/output，Vercel 只看到根目錄舊 Vite 的 dist 預設。
+    output: process.env.VERCEL ? { dir: '../.vercel/output' } : undefined,
+  },
 })

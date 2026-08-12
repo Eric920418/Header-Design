@@ -615,3 +615,12 @@ final result: passed
 - **影片錯誤介面**：載入中顯示可理解狀態；iframe error 或 12 秒逾時會在原影片區顯示「影片載入失敗」、影片 ID、可能原因及「前往 YouTube 觀看」連結，不會只留下空白或黑框。實測觸發 `american_urban` 錯誤後，備援連結正確指向 `https://www.youtube.com/watch?v=lbSOIDpM5Ic`。
 - **Projects Details 輪播**：`InternalMediaRelatedCarousel` 沿用 Antra 專案卡片幾何：三欄、30px 間距、圖片比例 `.8333333333`、24px 圓角、分類框、`30/34px` 標題與 Hover `scale(1.05)`；三卡都可切換正式媒體內頁，目前頁使用 `aria-current`，Embla track 本身不套 Reveal transform。
 - **動畫／RWD QA**：Breadcrumb、Meta／標題、影片外框、內文、分類 Tab 與輪播外框分別使用 `opalMoveUp／opalScaleUp`；390、768、1024、1512、1920、2560、3840px 均為 `scrollWidth === clientWidth`。1512px 實測 Breadcrumb 185px、Header／影片 1410px、內文 930px、播放鍵 96px；390px 影片為 360×202.5px 完整 16:9。1920／2560／3840px 影片維持 1410px，不會隨螢幕無限放大。`prefers-reduced-motion` 實測六個 Reveal 節點全部立即可見、動畫為 `none`，播放鍵水波亦停止。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 只有 Tailwind CSS v4 既有 sourcemap warning。
+
+## Vercel Nuxt SSR 部署修正（2026-08-12）
+
+- **症狀**：Vercel 的 Nuxt Client、SSR 與 Nitro `vercel` preset 全數建置成功，也已產生 `.vercel/output/functions/__fallback.func`，但最後仍以 `No Output Directory named "dist" found` 判定失敗。
+- **背景條件**：此 Vercel Project 建立於 React/Vite 階段，Dashboard Framework Preset 仍為 Vite；因此 Vercel 沒有在根目錄找到有效的 Nuxt Build Output API 時，會退回舊 Framework 的 `dist` 規則。
+- **第一個假設被否定**：`vercel.json` 的 `"outputDirectory": null` 雖符合 schema，Vercel CLI 仍會合併專案的舊 Vite 預設並尋找 `dist`，實測無法消除本次錯誤，因此未保留這個無效設定。
+- **確認後的根因**：Nuxt 位於 pnpm workspace 的 `nuxt-site/`，Nitro `vercel` preset 實際把完整 Build Output API 寫到 `nuxt-site/.vercel/output`；Vercel 從 Repository 根目錄建置，只檢查根目錄 `.vercel/output`，沒有接到子目錄內的 SSR function 與 routes，最後才退回舊 Vite 的 `dist` 規則。
+- **修正**：`nuxt-site/nuxt.config.ts` 在 `VERCEL` 環境下將 Nitro `output.dir` 指到 `../.vercel/output`，使 `config.json`、`static/` 與 `functions/__fallback.func` 一起落在 Repository 根目錄。保留本機預設 `.output`，不影響 `pnpm build`／`pnpm preview`。根目錄 `vercel.json` 保留官方 schema、`framework: nuxtjs`、`pnpm install --frozen-lockfile` 與 `pnpm build`，不把輸出錯誤指向 `.vercel/output/static`，避免丟失 SSR。
+- **驗收**：以已連結 Project 的 `vercel project inspect` 確認 Dashboard 原 Framework Preset 確實仍為 Vite。修正後執行 `NUXT_IGNORE_LOCK=1 vercel build --yes`，Nitro 在 Repository 根目錄產生 `.vercel/output/config.json`、`static/` 與 `functions/__fallback.func`，Vercel CLI 回傳 `status: ok`、`outputDirRelative: .vercel/output` 與 `Build completed successfully`，不再要求 `dist`。本機 `pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 亦通過；只保留 Tailwind CSS v4 既有 sourcemap warning。
