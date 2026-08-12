@@ -1,16 +1,16 @@
 
-# SAKURA Kitchen - Header Design
+# SAKURA Kitchen — Nuxt 3 品牌網站
 
-SAKURA 廚房品牌網站，基於 Figma 設計稿實作。
+SAKURA 廚房品牌網站。2026-08-11 起正式執行版本遷移至 Nuxt 3；原 React/Vite 原始碼暫時保留為像素與互動比對基準，不再由根目錄指令或部署執行。
 
 原始設計稿：https://www.figma.com/design/TTt0ua7aR3ayd8zsIkTBPa/Header-Design
 
-## 技術棧
+## 技術棧（2026-08-11）
 
-- React 18
-- Vite
+- Nuxt 3／Vue 3／TypeScript
 - Tailwind CSS v4（使用 `@tailwindcss/vite` 插件）
-- Lucide React 圖標庫
+- Lucide Vue、Embla Carousel、GSAP、Lenis
+- SSR／Nuxt 檔案路由；正式應用位於 `nuxt-site/`
 
 ## 啟動方式
 
@@ -19,7 +19,7 @@ pnpm install
 pnpm dev
 ```
 
-開發伺服器預設在 `http://localhost:3000`。
+根目錄指令會轉交 `nuxt-site/`，開發伺服器預設在 `http://localhost:3000`。
 
 ## 構建
 
@@ -27,7 +27,47 @@ pnpm dev
 pnpm build
 ```
 
-輸出目錄為 `build/`。
+正式輸出為 Nuxt Nitro `.output/`。可另執行 `pnpm typecheck` 驗證 Vue／TypeScript。
+
+## 2026-08-11 Nuxt 3 遷移與 3.0 門市服務
+
+- Nuxt 3 成為唯一正式執行版本；Vercel framework 已由 Vite 切換為 Nuxt。
+- 遷移範圍鎖定為既有首頁、隱私權政策、共用 Header／Footer／浮動按鈕，以及新建 3.1 服務流程與 3.2 案例門市。
+- 根目錄 `public/` 是唯一靜態素材來源，Nuxt 透過 `dir.public` 直接使用，避免複製同一批首頁素材。
+- 舊 React `src/` 保留作遷移 QA；不得把 Nuxt 的新功能回寫成兩套長期維護版本。
+- 共用 Nuxt 殼層已建立：固定 Header、桌面／手機導覽、兩種 Mega Menu、Footer、右側浮動按鈕與 reduced-motion 基礎均改為 Vue 元件。
+- 首頁遷移已開始：Hero 三層換圖、左側品牌系列、Hero 風格反向輪播與十大系列 Embla 輪播均保留既有速度、方向、Hover 與 reduced-motion 行為。
+- Services 三品牌卡與 Logo 跑馬燈、full-bleed 門市案例、品牌承諾影片與共用 CTA 已轉為 Vue，既有素材、輪播速度與 CTA 尺寸不變。
+- 首頁 Vue 組裝完成；門市查詢保留三個同排篩選、Google Maps 錯誤前端顯示、門市選取聚焦與 2.2 秒翻牌資料輪替。
+- Nuxt 子專案依 Nuxt 3.21.10 的實際 builder 固定使用 Vite 7.3.6，避免 Tailwind 外掛與 Nuxt builder 被解析成兩套互斥型別；首頁自動輪播計時器只在瀏覽器端建立，SSR 不會遺留伺服器計時器。
+- 3.0 正式圖片已由開版素材包整理至 `public/section-3/`：三張門市封面與 case10／case56／case35 共 27 張案例圖；已排除 macOS AppleDouble 隱藏檔，執行期不引用 Downloads 或 ZIP 路徑。
+- 3.0 內容資料已型別化為服務步驟、FAQ 群組、案例摘要／詳情、門市聯絡與案例規格；FAQ 15 題逐字採用開版 DOCX，案例只建立簡報明確提供的三筆資料，缺少文章、規格或連結的 case56／case35 不虛構欄位。
+- `/service-process` 已依 3.1 最新開版要求重做為 SSR 內頁；視覺真值直接取自已購模板 `antra-full 2/antra/dummy-data/content.xml` 的 Elementor `_elementor_data`、`assets/css/base/elementor.css` 與 Antra video/process PHP、JS，不再使用自行發想的內頁版型。Breadcrumb Hero 精確沿用模板 `360.1875px` 桌面高度、`#100801/.64` 遮罩、`138/97px` 間距、`80/76.19px` 標題與原始 `breadcrumb-df.jpg`；平板、手機分別沿用 `80/80`、`80/60px` 設定。
+- 服務流程不是合成截圖：八個步驟、標題、說明、箭頭與互動均為獨立 Vue／HTML 元素，程式結構直接移植自 `/Users/eric/Desktop/SPA/frontend/app/pages/services.vue` 的 `flow-row / flow-step / step-title / step-desc`；八個 132×132 透明 icon 亦直接採用 SPA `frontend/public/service-*.png` 正式素材，不再使用從 PPT 裁切的 `step-01～08.png`，舊裁圖已移除。桌面維持 4×2、灰色方向箭頭、標題底線與金色 `＋`，並恢復原碼的 icon Hover「影片待上架」及 3／5／6／8 點擊切換說明；PPT／DOCX 逐字內容仍為顯示真值。影片改用 Antra Home 09 的 `h9-banner-3.jpg` 原始 1410×640 比例與模板 `background-blur-filter-yes`／`radar-animation-yes` 正圓播放鈕，播放、逾時、錯誤原因及 YouTube 備援連結仍完整顯示在前端。
+- FAQ 直接複刻模板 `83319f9` 區塊：1410px 版心、`100/130px` 外距、30/66.666% 標題欄、Popular Queries 膠囊、水平／垂直裝飾線、`60/64px` 標題、`28/34px` 題目、`22px` 摘要上下距、右緣無圓框 `＋／－` 與 `40px` 答案內距；依 PPT 移除模板右側 FAQ 圖文欄，Accordion 展開至全寬。四類 15 題逐字採用 DOCX，第一題依模板預設展開，原生 button 保留鍵盤及 `aria-expanded`／關聯 panel 操作。
+- `/gallery` 依 3.2 PPT 與 Antra Virtual Tours 原始元件重製：Breadcrumb Hero 與 3.1 共用模板 `breadcrumb-df.jpg`、`#100801/.64` 遮罩及 `80/76.19px` 桌面標題；內容不再使用自行設計的大標、說明段落或 Select 面板。篩選改為「全部／北部／中部／南部／東部／離島」與所屬 23 縣市兩層水平按鈕，狀態同步至 `region`／`city` URL query，切換區域會清除舊縣市，且使用路由歷史紀錄讓瀏覽器上一頁可回到前一個篩選。首期只上線素材完整的安康、承德、松竹三店；PPT 的 53 家是歷史估算，舊官網 2026-08-11 公開 API 已為 63 筆，兩者均不拿來填補未提供的正式內容。
+- 3.2 門市卡直接移植 Antra Virtual Tours 幾何：桌機／平板／手機 3／2／1 欄、圖片 350／300px、24px 圓角、0.5 秒 `scale(1.05)` Hover、標題桌機 `28/34px`／手機 24px；移除會誤導為環景功能的 360 icon。卡片顯示正式門市名、地址及獨立「預約門市」按鈕，圖片／店名才進入本機 `case10`、`case56`、`case35`，不會發生巢狀連結誤觸；單頁三筆資料不顯示假分頁。圖片錯誤會在原圖片框完整顯示原因，空區域使用簡潔的 Antra 分隔線狀態且不虛構案例。
+- 3.2 QA（2026-08-11）：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；390／768／1024／1512／1920／2560／3840px 實測依序為 1／2／2／3／3／3／3 欄，390px 圖片高 300px、其餘 350px，所有尺寸 `scrollWidth === clientWidth`。預設 3 筆、北部 2 筆、新北市 1 筆、中部 1 筆、南部 0 筆與空狀態皆正確；瀏覽器上一頁可從新北市回到北部，直接重新整理 query、3.1 服務流程及三筆案例內頁均無 Nuxt 錯誤。Hover、鍵盤 Focus、獨立預約連結、圖片失敗訊息、無 360 icon 與無假分頁亦完成瀏覽器驗收。
+- `/gallery/case10`、`case56`、`case35` 共用 SSR 資料模板，提供觸控圖片輪播、縮圖、前後案例與案例推薦；case10 顯示已提供的規格和門市連結，另外兩筆缺少的資料直接隱藏。留言區只做前端驗證並明示未連接後台、資料未送出。
+- `/privacy` 已接管原隱私權政策內容並套用共用 Nuxt 殼層；全站 `error.vue` 對 404 與執行錯誤顯示可理解訊息、重試與返回首頁操作，不向前端暴露伺服器堆疊。預設 SEO site name、title 與各 3.0 頁面 metadata 已加入。
+- Production preview 首次 SSR 驗收發現 client-only Reveal directive 造成 `getSSRProps` 500；Reveal 已改為通用 Nuxt plugin，伺服器註冊空 SSR props、瀏覽器端再掛 IntersectionObserver，兼顧 SSR 與既有進場動畫。
+- 開發模式進一步定位 hydration mismatch 為 `components/home/LogoMarquee.vue` 的 Nuxt 自動匯入名稱應為 `HomeLogoMarquee`；呼叫端已修正，避免伺服器 comment 與客戶端未解析元件不一致。
+- Nuxt 3.21 的設定型別仍指向 Vite 6、實際 builder 為 Vite 7；Tailwind plugin 只在 `nuxt.config.ts` 的外掛陣列邊界做 package-identity 型別轉接，不把 `any` 擴散到應用元件或資料型別。
+- QA 後補強 FAQ 的 Enter／Space 明確鍵盤事件；案例列表與案例詳情已修正文檔標題層級，每頁只保留一個語意 `h1`，不以視覺正常掩蓋 SEO／無障礙結構問題。
+- 新內頁內容版心新增單側 86px 右側浮動列安全欄，左側基準線不位移；首頁既有浮動列位置與互動完全不動，但 3.0 與隱私權頁面的標題、FAQ、卡片及文章不再被右側按鈕遮住。未知案例 404 同時移除 Nitro 已棄用的長 `statusMessage` 用法。
+- Nuxt 主樣式的兩個 `@import` 均移到所有 style rules 之前，確保瀏覽器與 Tailwind 產物都不會因 CSS import 順序而忽略既有 React 基準樣式。
+- 根目錄新增 `/node_modules/` ignore；舊 Repository 雖曾追蹤套件快取，本次已只還原其工作樹差異，不把 pnpm 重建造成的 17 萬行第三方套件雜訊混入 Nuxt 遷移交付。
+
+### 2026-08-11 Nuxt 遷移 QA
+
+- `pnpm typecheck` 與 `pnpm build` 通過；正式輸出為 Nuxt 3.21.10／Nitro 2.13.4／Vue 3.5.41／Vite 7.3.6。
+- Production preview 直接重新整理 `/`、`/privacy`、`/service-process`、`/gallery`、`/gallery/case10`、`case56`、`case35` 均回應 200 並含 Nuxt SSR payload；未知案例回應 404，前端顯示共用錯誤頁。
+- 首頁在 `390、767、768、880、881、1024、1025、1200、1201、1366、1367、1512、1920、2560、3840px` 全數 `scrollWidth === clientWidth`，Hero 高度依序符合既定五段 `587／489／719／858／952px`。
+- 3.0、案例內頁與隱私權在 `390、768、1024、1512、1920、3840px` 全數無水平爆版、無破圖且每頁只有一個 `h1`；右側浮動列與主要標題 bounding box 無交疊。
+- FAQ 共 15 題；3.1 最新模板對齊後改為第一題預設展開，滑鼠、Enter 與 Space 切換通過。區域／縣市空狀態與重設、案例箭頭、留言驗證屬 3.2 既有紀錄，本輪未修改。
+- 最終 production browser tab 無 hydration mismatch、console error 或 warning。
+- 首頁 GSAP ScrollTrigger 視差已補回 Nuxt client plugin：Gallery 背景維持 `-8→8 yPercent` 與 `scale(1.12)`，品牌承諾藍圖維持 `-6→6 yPercent`，兩者 `scrub:0.5`；只在桌面 >992px 啟用，route 完成時重建，reduced-motion 完全停用。Production browser 實測捲動前後兩個 transform 均有連續變化，Console 為空。
+- `page:finish` hook 明確回傳 `void`，不把 `requestAnimationFrame` 的數值 handle 誤當 Nuxt HookResult。
 
 ## 2026-07-30 Antra 原生 RWD 寬螢幕修正（最新真值）
 
@@ -446,3 +486,132 @@ final result: passed
 3. **平板（768x1024 iPad）**：佈局合理、字體可讀、間距適當
 4. **手機（390x844 iPhone 14）**：佈局不溢出、文字可讀
 5. **斷點跳變**：拖動瀏覽器寬度在 768px 和 1024px 附近確認過渡平滑
+
+## Nuxt 3 — 3.2 案例門市內頁（2026-08-11）
+
+`nuxt-site/pages/gallery/[slug].vue` 已依開版 PPT 第四頁，改用 Antra `Single Post 01 / 02` 與 Home 03 元素組成，不再沿用先前自行設計的巨型「案例分享」Hero、深色規格卡及圓角換頁卡。
+
+- **路由**：`/gallery/case10`、`/gallery/case56`、`/gallery/case35` 共用資料驅動模板；未知 slug 回傳 Nuxt 404。Header、Footer、右側浮動按鈕及 `/gallery` 列表頁均未修改。
+- **Breadcrumb Hero**：使用 `/section-3/service-process/breadcrumb-df.jpg`，只顯示「首頁 / 案例門市」；依 Antra Single Blog 原始 Elementor 數值重建，不再使用自訂垂直置中。桌面 padding 為 `207px 30px 139px`、1025–1200px 為 `160px 30px 100px`、768–1024px 為 `120px 30px 80px`、手機為 `100px 15px 60px`；遮罩固定為 `#100801 / 64%`。頁面只有文章標題一個 `h1`。
+- **Antra 版心**：1512px viewport 實測 rail `1410px @ x=51`、文章欄 `929.89px`、Sidebar `409.11px`、欄距 `71px`；首圖 `929.89×520px`、標題 `50/54px`。1920／2560／3840px 維持相同內容尺寸置中，不隨螢幕無限制放大。
+- **RWD**：1024px 以下轉為單欄；390px 為 360px 內容寬、左右各 15px，首圖 360×202.5px、標題 `25/30px`。實測 390、767、768、1024、1512、1920、2560、3840px 均為 `scrollWidth === clientWidth`；767px 保持 `25/30px`，768px 正確切回模板桌面字級。
+- **圖片輪播**：Embla 主圖循環、縮圖 tab、左右箭頭、拖曳與鍵盤 Focus 均保留；圖片錯誤會在原框完整顯示圖片說明及來源路徑，不會靜默破圖。單欄區間 `≤1024px` 的控制組保留 76px 右側安全距離，避免共用懸浮列遮住「下一張」按鈕；懸浮列本身不改。
+- **文章資料**：`StoreCaseDetail.article` 改為 `CaseArticleBlock[]`，以標題、段落、單圖／雙圖和正式連結組成。三篇文字逐項核對 SAKURA 官方案例 case10、case56、case35；圖片使用 `public/section-3/cases/` 已提供素材。
+- **資料誠信**：case10 顯示 PPT 指定完整規格與安康店聯絡資料；case56、case35 只顯示官方或既有素材可驗證欄位，缺少的營業時間、LINE、電話不補造。
+- **Sidebar / 地圖**：全站同尺寸 60px CTA 與水波箭頭、分隔列規格、門市資訊、LINE／電話／地圖連結；地圖改為免 API Key 的 Google Maps Embed，固定保留外部 Google Maps 備援，12 秒未完成載入會在前端顯示完整錯誤。
+- **文章下半部**：Antra 細線「上則案例／下則案例」、無假圖示與假評論的文字空狀態、24px 圓角姓名／Email／網站／評論欄位、同意欄位驗證，以及 PPT 指定的 Home 03 三欄「更多案例」。Home 03 保留 30%／70% 標題列、兩側標準卡與中央 560px 高的深色漸層覆蓋卡；評論驗證成功只顯示「尚未連接後台，內容未送出且未儲存」，不執行資料寫入。
+- **PPT 第四頁回查修正**：移除文章標題上方自行加入的城市／門市 kicker；規格依 PPT 固定為設計風格、設計顏色、設計系列、設計形式、設計尺寸、廚房坪數、廚具預算、檯面材質、設計師；case10 的括號、連字號、營業時間、電話及地址顯示格式逐字對齊簡報。這次不再以版心尺寸通過取代結構驗收。
+- **SEO**：每個案例使用獨立 title、官方文章首段 description、首圖 OG image、article OG type 與 canonical；未知案例不輸出假內容。
+- **QA**：三頁皆為 HTTP 200、無 console error、所有本地案例圖片正常；輪播下一張會同步更新 `aria-selected`；空表單完整顯示四項錯誤，合法表單顯示未儲存提示；未知案例為 HTTP 404。`pnpm typecheck` 通過，`NUXT_IGNORE_LOCK=1 pnpm build` 通過；build 僅有 Tailwind v4 既有 sourcemap warning。
+
+## Nuxt 3 — 4.0 優惠消息總覽（2026-08-11）
+
+`nuxt-site/pages/news/index.vue` 已依開版 PPT 第五頁建立 `/news` 優惠消息總覽；4.1 優惠活動列表／內頁、4.2 最新消息列表／內頁及 4.3 媒體影音列表已於後續階段獨立建立。
+
+- **模板來源**：頁面文章區逐項對照已購 Antra 的 `template-parts/posts-grid/item-post-list.php` 與 `style.css` Blog Listview 規則；第一篇使用 Featured Post，後八篇使用水平 Listview，沒有另創卡片外觀。
+- **內頁 Hero**：沿用 3.1、3.2 的 Antra Breadcrumb Hero，標題「優惠消息」、麵包屑「首頁 / 優惠消息」，共用相同背景、`#100801 / 64%` 遮罩、字級、高度與斷點。
+- **文章資料**：`nuxt-site/data/news.ts` 收錄 PPT 指定九篇，分為優惠活動、最新消息、媒體影音；依 ISO 日期新到舊排序，同為 `2026-02-09` 的兩篇影音依 PPT 順序保留。每筆保存正式站內路徑供分類頁與內頁使用，但依 PPT 範圍，4.0 總覽卡片本身仍不渲染成連結。
+- **Recent Posts**：依 PPT 固定顯示 2026 加盟說明會、美式都會 11 坪大廚房、普發一萬加碼活動、高雄品牌館四筆；保留在 Antra 原生右側 Sidebar，搜尋框刪除，並搭配 Categories 與 Popular Tags，所有尚未建立的分類／標籤均不提供假互動。
+- **卡片規格**：1410px 置中版心；Featured 圖片比例 `1.7884615385`、標題 `40/44px`；水平列圖片寬 45.2%、比例 `1.4482758621`、內容左距 50px、標題 `30/34px`；圖片圓角 24px、hover `scale(1.08)`、0.5 秒。`≤1024px` 內容距縮為 30px，`≤568px` 改為圖片在上、內容在下，Featured 標題 `30/35px`。
+- **總覽互動規則**：九張總覽文章卡片內沒有 `<a>`、`button`、`role=button` 或額外 `tabindex`，不會用游標、鍵盤 Focus 或假按鈕誤導使用者。Header 的「優惠消息」可前往 `/news`；桌面保留原 Hover 下拉，手機加入「優惠消息總覽」。4.1 已完成後由 Header 獨立連到 `/news/activities`，尚未製作的 4.2／4.3 維持 disabled。
+- **素材與錯誤**：九張封面整理於 `public/section-4/news/`，大圖限制在 1800px 以控制體積；`InternalNewsImage` 在載入失敗時會於原圖框完整顯示錯誤、替代文字與素材路徑，不顯示破圖圖示。
+- **RWD 實測**：390、568、768、1024、1512、1920、2560、3840px 均為 `scrollWidth === clientWidth`。568px（含）九篇皆為上下排列，768px 起除 Featured 外恢復水平列；1512px 起版心固定 1410px，1920／2560／3840px 不再放大。九篇順序、四筆 Recent Posts、零互動卡片及 `prefers-reduced-motion` 均通過自動化檢查。
+- **QA**：`pnpm typecheck` 通過；`NUXT_IGNORE_LOCK=1 pnpm build` 通過，僅出現 Tailwind CSS v4 既有 sourcemap warning。八個 viewport 均無 console error、page error、請求失敗或圖片錯誤；`/news` 可 SSR 直接載入，title 為「優惠消息｜SAKURA 整體廚房」。
+
+### PPT 第五頁結構回查修正（2026-08-11）
+
+- 先前把 Recent Posts 誤解成列表上方的 1410px 橫向整排，並因此移除右側 Sidebar；這與 PPT 第五頁的紅框標註及 Blog Listview 參考圖不符，現已刪除該橫排。
+- 桌面恢復 Antra 原生雙欄：1410px 版心內為 930px 文章欄、409px Sidebar、71px 欄距；1024px 使用 634px／300px／30px。`≤1023px` 依模板原始 CSS 隱藏 Sidebar，文章改為單欄。
+- 右側依 PPT 順序保留「優惠消息」標籤、Categories、Recent Posts；搜尋框刪除。標籤與分類目前為不可點擊文字，避免在 4.1／4.2／4.3 尚未製作時產生假連結；Recent Posts 沿用 PPT 指定四筆資料。
+- 第一篇 930px Featured Post 圖片仍保留，因 PPT 最終示意圖明確包含此模板元素；移除的是列表上方額外新增的 Recent Posts 橫條，不是 Featured Post。
+- 修正後實測 390／1024／1512／1920／3840px 均無水平溢位、console error 或素材請求失敗；1512px 為 `930 + 71 + 409px`，1024px 為 `634 + 30 + 300px`，橫向 Recent Posts 節點數為 0，Sidebar 三區標題與九篇文章均完整存在。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 通過，仍只有 Tailwind CSS v4 既有 sourcemap warning。
+- 依 PPT 右欄最下方參考圖補回模板原生 `Popular Tags`，順序為 Architecture、Building、Construction、Design、Furniture、Interior、Kitchen、Living Room、Planning；沿用 14px 字級、1px 淺灰邊框、100px 膠囊圓角及原生換行間距。標籤目前為不可點擊文字，避免建立未規劃的 tag 路由。
+
+## Nuxt 3 — 4.1 優惠活動列表（2026-08-11）
+
+`nuxt-site/pages/news/activities/index.vue` 已依開版 PPT 第六頁建立 `/news/activities`。本頁採 Antra `Blog-Gridview`，不沿用 4.0 總覽的 Blog Listview 或右側 Sidebar；三個正式活動內頁完成後，卡片已接到對應路由。
+
+- **Hero／麵包屑**：共用 4.0 內頁 Hero 的背景、64% 遮罩、高度、字體與斷點；標題為「優惠活動」，麵包屑依 PPT 顯示「首頁 / 優惠消息」，「優惠消息」可返回 `/news`。
+- **三篇正式資料**：只顯示響應政府普發一萬加碼活動、2025 年免費廚房健檢季、廚房升級送好水三篇，沿用 `nuxt-site/data/news.ts` 的正式日期、標題、第一段摘要與 `public/section-4/news/` 素材，順序為 2025-11-01、2025-05-01、2025-04-01。
+- **Antra Gridview 規格**：1410px 版心、桌面三欄、30px 欄距、50px 列距；圖片比例 `1.40625`、24px 圓角、hover `scale(1.1)`／0.5 秒；分類膠囊位於圖片 `top/left 20px`；標題 `30/34px` 最多兩行、摘要 `16/24px` 最多三行、內容寬度 90%。
+- **RWD**：`≤1024px` 改為兩欄且內容寬度 100%，`≤767px` 改為單欄、左右 15px、標題 `22/28px`；`prefers-reduced-motion` 停止圖片放大與 fixed 背景。
+- **導覽狀態**：Header 桌面下拉與手機 Accordion 的「優惠活動」已接到 `/news/activities`；「最新消息」「媒體影音」仍為 disabled，沒有 `#` 假連結。
+- **互動範圍**：三張卡片現在都是可鍵盤操作的 NuxtLink，依序連到 `2025_ro_water_sp`、`2025KC`、`2025B2C_Q2SP`；仍未建立搜尋、篩選或假分頁。
+- **QA**：開發站 1280×720 實測為三個 `386.664px` 欄位、三篇順序與日期正確、Sidebar 節點 0、Header `/news/activities` 連結存在、圖片錯誤提示 0，且 `scrollWidth === clientWidth`；CSS 斷點依模板鎖定 1024px 兩欄與 767px 單欄。
+
+## Nuxt 3 — 4.1 優惠活動內頁（2026-08-12 回查）
+
+`nuxt-site/pages/news/activities/[slug].vue` 已依開版 PPT 第七頁與 Antra `Blog Single Post 1`、`Projects Details` 元素建立三個資料驅動 SSR 內頁：
+
+- `/news/activities/2025_ro_water_sp`
+- `/news/activities/2025KC`
+- `/news/activities/2025B2C_Q2SP`
+
+- **PPT 結構**：共用 Header 後顯示「首頁 / 優惠消息 / 優惠活動」Breadcrumb；文章區依序為分類／日期 Meta、文章標題、主圖、正式內文、Projects Details 分類 Tab 與三篇優惠活動輪播，最後接共用 Footer。沒有自行加入 PPT 未指定的 Sidebar、搜尋、留言、社群分享、前後文章卡或輪播區標題。
+- **Antra 原始碼對照**：內頁 DOM 依 `content-single.php` 的 `single-content → entry-header → post-thumbnail → entry-content` 順序重建，Meta 依 `inc/template-functions.php` 的 `entry-meta-top / categories-link / posted-on` 結構；尺寸直接對照 `style.css`。Breadcrumb 僅保留 PPT 內頁使用的 185px 影像帶，不沿用列表頁的大標題 Hero。
+- **Antra Single Post 規格**：標題與主圖使用 1410px 置中版心，主圖保留 24px 圓角與下方 30px；內文使用模板原生 930px 置中欄、`16/24px` 內文、`40/44px` `h4` 區段標題與 30px 段距。手機文章標題改為 `25/30px`、內文 `h4` 為 `30/33px`、左右 15px。
+- **圖片完整顯示修正**：Antra 原始 Single Post 會把主圖強制裁成 `1.7893401015:1`，但本案三張正式主圖均約為 4:3，直接套用會切掉甲方素材上下內容。依本案素材完整性要求，優惠活動內頁主圖改為依原始比例自然撐高並使用 `object-fit: contain`；內文單圖／雙圖同樣維持自然高度。列表卡片及 Projects Details 輪播仍保留模板的固定比例與裁切行為，不受此修正影響。
+- **內文流回查**：主圖以下改為 Antra `content.xml` 與 WordPress `entry-content` 的單一內容流，不再把每段包成自訂 Section。段落固定 `16/24px` 與 30px 下距；章節改用模板 `h4` 的桌面 `40/44px`、手機 `30/33px`，上距 60／45px；清單恢復一般文字粗細與原生圓點，不再使用金色圓點、500 字重或額外 Section 留白。內文圖片仍依模板 `.row / .column-item` 邏輯維持桌面雙欄、手機單欄。
+- **正式內容**：三篇文字逐段核對櫻花官網正式頁面，不把內文做成一張長截圖。第一篇保留兩組活動、指定機型登錄連結與注意事項；第二篇保留健檢範圍、六大品牌識別、日期、電話、預約與 LINE；第三篇保留活動期間、滿額贈品、兩張圖文說明及門市查詢連結。
+- **素材**：主圖沿用 `public/section-4/news/` 正式列表素材；第二篇三張、第三篇兩張內文圖由甲方素材包整理至 `public/section-4/news/activities/`，最長邊限制 1800px。所有圖片均透過 `InternalNewsImage` 顯示，載入失敗時會在原位置呈現錯誤原因、圖片說明與路徑。
+- **Projects Details 分類 Tab**：依 PPT 母版補回四個圓角 Tab 與各自圖示；「優惠活動」為金色啟用狀態並可返回 4.1 列表，尚未建立的「最新消息」「媒體影音」「廚房裝修指南」顯示為 `aria-disabled`，不使用 `#` 或不存在的假路由。
+- **Projects Details 輪播**：`InternalActivityRelatedCarousel` 改用 Antra `template-parts/project/block/style-default.php` 與 project style 1 的結構：三欄、圖片比例 `0.8333333333`、24px 圓角、圖片上分類框、`30/34px` 標題、分類／年份資訊與 hover `scale(1.05)`。依 PPT 移除額外英文標題、中文大標、視覺分隔線及桌面箭頭，保留拖曳、鍵盤 Focus、目前頁 `aria-current`，三張卡均連至正式本機文章。
+- **路由修正**：為避免 Nuxt 將 `/news/activities/:slug` 錯誤解析回列表，列表由同層 `activities.vue` 改為標準巢狀 `activities/index.vue`；三個內頁可直接重新整理，未知 slug 回傳共用 404 並完整顯示「不存在或尚未公開」。
+- **PPT 回查修正／QA**：第二輪以 PPT 第七頁嵌入的 `Blog Single Post 1`、`Projects Details` 畫面逐區比對，移除第一版自行加入的 Related 標題、箭頭、白底分區、注意事項框與 CTA 膠囊。1512×956 實測 Breadcrumb 高度 185px、文章 1410／930px 雙版心、Project 三卡完整，三個內頁皆為一個 `h1`、四個分類 Tab、三張輪播卡、圖片錯誤提示 0，且 `scrollWidth === clientWidth`；390×844 實測主圖、標題與內文為單欄且無水平爆版。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過，build 只保留 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 3.x／4.x Antra 原生進場動畫（2026-08-12）
+
+- **根因與核心修正**：舊版 `v-reveal` 只會加入 `is-visible`，沒有解析指令傳入的 `anim`、`delay` 或 `duration`，新頁面即使宣告動畫名稱也不會得到 Antra 的 hidden state 與 keyframe。`nuxt-site/plugins/reveal.ts` 現在於 SSR 與 Client 同步輸出 `.ev`、`data-ev`、delay 與速度 class，支援 `opalMoveUp／Down／Left／Right／opalScaleUp`，並相容首頁既有 `slideIn*／fadeIn*`。
+- **觸發規則**：IntersectionObserver 使用 `threshold: 0.01` 與底部 `-10%` root margin，元素進入接近 Elementor Waypoint 的位置後只播放一次；路由重新進入會建立新的 observer。元件卸載會解除 observer，快速捲動或上一頁不會留下永久隱藏內容。
+- **速度與無障礙**：預設 `normal=1.25s`、`fast=0.75s`、`slow=2s`；指定 delay 以毫秒輸出，未指定時保留元素原有 delay。`prefers-reduced-motion: reduce` 時不建立 observer，CSS 強制 `visibility:visible` 與 `animation:none`。瀏覽器以強制 reduced-motion 模式在 390／768／1024／1512／1920／3840px 實測 `/service-process`：15 個 Reveal 節點全部可見、animated=0，六個寬度皆無水平溢位。
+- **3.1 服務流程**：Breadcrumb、段落、八步流程、品牌影片與 FAQ 分別使用模板的 Up／Left／Right／Scale 動畫；流程每列依 `0／100／200／300ms` 階梯延遲。FAQ Accordion 的展開收合與播放鈕水波未修改。
+- **3.2 案例門市**：列表篩選、數量、結果格線與空狀態使用 `opalMoveUp`，region／city query 改變後 keyed grid 會重新播放。三個案例內頁補齊標題、輪播外框、非 sticky 的 Sidebar 內容、文章圖文、前後案例、評論及更多案例動畫；Embla track、sticky 容器、地圖、CTA 水波與表單狀態沒有套 transform 動畫。
+- **4.0／4.1 優惠消息**：`/news` 的 Featured／Listview 文章與四個 Sidebar widgets 採 Up／Left，文章延遲最高 240ms；`/news/activities` 三卡為 `0／100／200ms`。三個活動內頁的 Meta／標題、自然比例主圖、文章流、分類 Tab 與 Projects Details 外框使用 Up／Scale，沒有碰 Embla track 或恢復圖片裁切。
+- **十頁實機 QA**：已逐頁檢查 `/service-process`、`/gallery`、三個 `/gallery/:slug`、`/news`、`/news/activities` 與三個 `/news/activities/:slug`。每頁由頂部一路捲到底後，`.ev:not(.is-visible)` 均為 0；所有觸發元素的 computed `animation-name` 與 `data-ev` 一致，duration 僅為 0.75／1.25／2 秒，十頁皆 `scrollWidth === clientWidth`。
+- **首頁回歸**：首頁仍保留 `slideInLeft／slideInRight／slideInUp／fadeIn／fadeInUp`；Hero 實測仍為 `slideInLeft + 2s`，未被新頁的 Opal 設定覆寫。隱私權頁未加入 Reveal。
+- **建置結果**：`pnpm typecheck` 通過；因 3002 開發伺服器持續供預覽使用，production build 以 `NUXT_IGNORE_LOCK=1 pnpm build` 通過。輸出只有 Tailwind CSS v4 既有的 sourcemap warning，沒有新增編譯或型別錯誤。
+
+## Nuxt 3 — 4.2 最新消息列表（2026-08-12）
+
+`nuxt-site/pages/news/latest/index.vue` 已依開版 PPT 第八頁建立 `/news/latest`；PPT 左側 Sitemap 標示的 4.2.1–4.2.3 內頁亦已於第九頁階段完成。
+
+- **PPT 結構真值**：頁面使用 Antra 母版 `Blog-Gridview`，不是 4.0 的 Blog Listview／Sidebar，也不沿用舊官網 Latest News 的首篇橫幅。Hero 標題為「最新消息」，Breadcrumb 完整顯示「首頁 / 優惠消息 / 最新消息」，其後直接進入三欄文章格線。
+- **Antra 原始碼對照**：卡片依已購模板 `template-parts/posts-grid/item-post-style-1.php` 與 `style.css` 的 `.blog-style-grid .post-style-1` 重建：圖片比例 `1.40625`、24px 圓角、分類膠囊位於 `top/left 20px`、圖片 Hover `scale(1.1)`／0.5 秒、標題 `30/34px` 最多兩行、摘要 `16/24px` 最多三行、內容寬 90%。
+- **三篇正式資料**：依 PPT 固定為 2026 加盟說明會（2026-06-15）、高雄品牌館（2025-10-01）、2025 台北加盟展（2025-02-03），順序由新到舊。摘要改採 PPT 指定的官網「各篇第一段內文」：第一篇「歡迎您加盟櫻花整體廚房，一起創造美好生活！」、第二篇完整高雄品牌館第一段、第三篇「SAKURA KITCHEN 來了！」，不再沿用總覽卡片的自寫濃縮內容。
+- **連結誠信**：三張卡片現已使用 `NuxtLink` 接到正式的 4.2.1–4.2.3 站內路由，保留模板圖片 Hover、鍵盤 Focus 與可理解的連結語意，不使用 `#` 或不存在的假路由。
+- **導覽同步**：桌面 Header Hover 下拉與手機 Accordion 的「最新消息」已由 disabled 改連 `/news/latest`；優惠活動內頁底部的分類 Tab 也同步啟用「最新消息」。4.3 媒體影音仍維持 disabled。
+- **動畫**：Breadcrumb 與三張文章卡使用共用 Antra `opalMoveUp`，卡片依 `0／100／200ms` 延遲；reduced-motion 實測 4 個 Reveal 節點全部可見且 animation-name 全為 none。
+- **RWD／QA**：390px 為一欄，768／1024px 為兩欄，1512／1920／2560／3840px 為固定 1410px 版心三欄；七個寬度均 `scrollWidth === clientWidth`、三張圖片無錯誤、Header 最新消息連結存在。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過，build 只有 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 4.2 最新消息內頁（2026-08-12）
+
+`nuxt-site/pages/news/latest/[slug].vue` 已依開版 PPT 第九頁完成三筆 SSR 詳細頁：`/news/latest/2026-franchise-seminar`、`/news/latest/kaohsiung_opening`、`/news/latest/2025-franchise-exhibition`。共同使用型別化的 `nuxt-site/data/latestArticles.ts`，未知 slug 由 Nuxt 404 在前端完整顯示錯誤。
+
+- **PPT／模板結構**：採 Antra `Single Post 01` 的 185px 小型 Breadcrumb、1410px 標題與首圖、930px 文章欄；內文圖片採 `Single Post 02` 的 1290px breakout 與 24px 圓角，並依 PPT 插入 `Projects Details` 式單張／雙欄圖片段落。頁尾保留四個分類 Tab 與 Home 03 三欄同分類文章輪播，不加入 PPT 未要求的 Sidebar、分享、評論或前後篇卡片。
+- **正式內容與素材**：2026 加盟說明會只呈現可驗證的官方導語、報名入口與素材包提供的台北／台中／高雄場次圖，不自行補寫招商宣稱；高雄品牌館及 2025 加盟展逐段使用官方文章內容。十二張正式圖片整理至 `public/section-4/news/latest/`，文章主圖與內文圖皆以自然比例完整顯示，不使用固定高度裁切；圖片失敗時由共用 `InternalNewsImage` 在原位置顯示完整原因與素材路徑。
+- **動畫與互動**：Breadcrumb、Meta／標題與文章段落使用 `opalMoveUp`，首圖及 Projects Details 圖片外層使用 `opalScaleUp`；真正負責 1290px 水平定位的內層不套 Reveal transform，避免動畫覆蓋 `translateX(-50%)` 造成水平爆版。底部 Embla track 不套 Reveal，只動畫其純外層，保留拖曳、循環、Hover 與 Focus。
+- **RWD／QA**：390／768／1024／1512／1920／2560／3840px 實測均 `scrollWidth === clientWidth`；桌機維持 1410／930／1290px 三層版心，手機皆為 15px 安全邊距且雙圖自動單欄。三頁正式圖片均載入成功、無前端錯誤提示；`prefers-reduced-motion` 下 14 個 Reveal 節點皆 `animation-name:none`、`opacity:1`，內容立即顯示。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過，build 僅有 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 4.3 媒體影音列表（2026-08-12）
+
+`nuxt-site/pages/news/video/index.vue` 已依開版 PPT 第十頁建立 `/news/video`；第十一頁的三個正式詳細頁完成後，列表三卡已接到對應站內路由，但列表本身仍不放播放控制，避免混淆「開啟文章」與「播放影片」。
+
+- **PPT／模板真值**：採 Antra `Blog-Gridview` 母版，Hero 顯示「媒體影音」及完整「首頁 / 優惠消息 / 媒體影音」Breadcrumb；內容區只有三欄文章格線，不加入 4.0 才有的 Sidebar、搜尋、標籤、Recent Posts 或假分頁。
+- **三篇正式資料**：依 PPT 順序顯示「美式都會11坪大廚房」、「侘寂色感 x 高效收納」及「經商企業主首選」；分類、日期、標題與第一段摘要沿用 `nuxt-site/data/news.ts`。封面使用素材包提供並已整理至 `public/section-4/news/video-*.jpg` 的三張正式圖片，載入失敗時仍由共用 `InternalNewsImage` 在原位置完整顯示原因與素材路徑。
+- **Antra 幾何／動畫**：1410px 版心、30px 欄距、桌機單卡 450px、圖片比例 `1.40625`、24px 圓角、30/34px 標題、圖片 Hover `scale(1.1)` 與 0.5 秒過渡皆沿用 Blog Gridview。三卡使用 `opalMoveUp` 並依序延遲 0／100／200ms；系統 reduced-motion 時立即顯示且停用位移與 Hover 放大。
+- **導覽與 RWD QA**：Header 桌面 Hover 下拉、手機 Accordion，以及 4.1／4.2 內頁底部分類 Tab 均已接到 `/news/video`。390px 一欄、768／1024px 兩欄、1512／1920／2560／3840px 固定 1410px 三欄；七個寬度均 `scrollWidth === clientWidth`，三張圖片與文字無錯誤。三卡現為可鍵盤操作的 NuxtLink，依序進入 `american_urban`、`wabisabi`、`business`；四個 Reveal 節點在 reduced-motion 下皆為 `animation-name:none`、`opacity:1`。
+
+## Nuxt 3 — 4.3 媒體影音內頁（2026-08-12）
+
+`nuxt-site/pages/news/video/[slug].vue` 已依開版 PPT 第十一頁完成三筆資料驅動 SSR 詳細頁：
+
+- `/news/video/american_urban`
+- `/news/video/wabisabi`
+- `/news/video/business`
+
+- **PPT／Antra 結構**：使用 `Single Post 01` 的 185px 小型 Breadcrumb、文章 Meta 與 `50/54px` 標題；主影片改用 PPT 指定的 Home One Video Popup 元素，接著為 930px 正式內文、Projects Details 四分類 Tab 及三篇媒體影音輪播。未加入 PPT 沒有的 Sidebar、搜尋、分享、留言、前後篇卡或額外區段標題。
+- **正式影片來源**：三支 YouTube ID 不是依縮圖猜測，而是逐篇由櫻花官網播放按鈕核對，依序為 `lbSOIDpM5Ic`、`Fv_B1sN2z6I`、`ZRHA-9Rm_vg`。初始狀態保留正式封面與模板正圓 96px 水波播放鍵；點擊後才在原本 16:9 區域載入 `youtube-nocookie.com` iframe，啟用 autoplay、playsinline 與 fullscreen。
+- **正式文章內容**：三篇段落與裝修案例連結整理在 `nuxt-site/data/mediaVideos.ts`，逐篇核對官網 `/news/video/american_urban`、`wabisabi`、`business`；沒有自行補寫設計宣稱。Unknown slug 由 Nuxt 404 完整顯示「不存在或尚未公開」。
+- **影片錯誤介面**：載入中顯示可理解狀態；iframe error 或 12 秒逾時會在原影片區顯示「影片載入失敗」、影片 ID、可能原因及「前往 YouTube 觀看」連結，不會只留下空白或黑框。實測觸發 `american_urban` 錯誤後，備援連結正確指向 `https://www.youtube.com/watch?v=lbSOIDpM5Ic`。
+- **Projects Details 輪播**：`InternalMediaRelatedCarousel` 沿用 Antra 專案卡片幾何：三欄、30px 間距、圖片比例 `.8333333333`、24px 圓角、分類框、`30/34px` 標題與 Hover `scale(1.05)`；三卡都可切換正式媒體內頁，目前頁使用 `aria-current`，Embla track 本身不套 Reveal transform。
+- **動畫／RWD QA**：Breadcrumb、Meta／標題、影片外框、內文、分類 Tab 與輪播外框分別使用 `opalMoveUp／opalScaleUp`；390、768、1024、1512、1920、2560、3840px 均為 `scrollWidth === clientWidth`。1512px 實測 Breadcrumb 185px、Header／影片 1410px、內文 930px、播放鍵 96px；390px 影片為 360×202.5px 完整 16:9。1920／2560／3840px 影片維持 1410px，不會隨螢幕無限放大。`prefers-reduced-motion` 實測六個 Reveal 節點全部立即可見、動畫為 `none`，播放鍵水波亦停止。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 只有 Tailwind CSS v4 既有 sourcemap warning。

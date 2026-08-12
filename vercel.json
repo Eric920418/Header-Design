@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm run build",
-  "outputDirectory": "build",
-  "framework": "vite"
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build",
+  "framework": "nuxtjs"
 }

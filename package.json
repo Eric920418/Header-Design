@@ -56,7 +56,10 @@
         "vite": "6.3.5"
     },
     "scripts": {
-        "dev": "vite",
-        "build": "vite build"
-    }
+        "dev": "pnpm --dir nuxt-site dev",
+        "build": "pnpm --dir nuxt-site build",
+        "preview": "pnpm --dir nuxt-site preview",
+        "typecheck": "pnpm --dir nuxt-site typecheck"
+    },
+    "packageManager": "pnpm@10.17.1"
 }

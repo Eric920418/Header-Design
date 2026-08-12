@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import "../../../src/styles/globals.css";
+@source "../../**/*.{vue,ts}";
+
+.internal-rail-safe {
+  padding-right: 86px;
+}
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body,
+#__nuxt {
+  min-height: 100%;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid #caa05c;
+  outline-offset: 3px;
+}
+
+.page-shell {
+  min-height: calc(100vh - 60px);
+  background: #f6f6f6;
+}
+
+.page-container {
+  width: min(1410px, calc(100% - 30px));
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .page-container {
+    width: min(1410px, calc(100% - 60px));
+  }
+}

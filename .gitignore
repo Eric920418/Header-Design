@@ -4,3 +4,9 @@
 .env.*.local
 .vercel
 .gstack/
+/node_modules/
+
+# Nuxt 3 產物
+nuxt-site/.nuxt/
+nuxt-site/.output/
+nuxt-site/node_modules/
