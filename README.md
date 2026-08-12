@@ -624,3 +624,10 @@ final result: passed
 - **確認後的根因**：Nuxt 位於 pnpm workspace 的 `nuxt-site/`，Nitro `vercel` preset 實際把完整 Build Output API 寫到 `nuxt-site/.vercel/output`；Vercel 從 Repository 根目錄建置，只檢查根目錄 `.vercel/output`，沒有接到子目錄內的 SSR function 與 routes，最後才退回舊 Vite 的 `dist` 規則。
 - **修正**：`nuxt-site/nuxt.config.ts` 在 `VERCEL` 環境下將 Nitro `output.dir` 指到 `../.vercel/output`，使 `config.json`、`static/` 與 `functions/__fallback.func` 一起落在 Repository 根目錄。保留本機預設 `.output`，不影響 `pnpm build`／`pnpm preview`。根目錄 `vercel.json` 保留官方 schema、`framework: nuxtjs`、`pnpm install --frozen-lockfile` 與 `pnpm build`，不把輸出錯誤指向 `.vercel/output/static`，避免丟失 SSR。
 - **驗收**：以已連結 Project 的 `vercel project inspect` 確認 Dashboard 原 Framework Preset 確實仍為 Vite。修正後執行 `NUXT_IGNORE_LOCK=1 vercel build --yes`，Nitro 在 Repository 根目錄產生 `.vercel/output/config.json`、`static/` 與 `functions/__fallback.func`，Vercel CLI 回傳 `status: ok`、`outputDirRelative: .vercel/output` 與 `Build completed successfully`，不再要求 `dist`。本機 `pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 亦通過；只保留 Tailwind CSS v4 既有 sourcemap warning。
+
+## Header 下拉選單收合修正（2026-08-12）
+
+- **症狀**：桌面 Header Hover 開啟「門市與服務」後，曾點擊過「服務流程」或選單按鈕時，滑鼠離開仍可能維持展開。
+- **根因**：原本以 `group-focus-within` 和 Hover 同時控制下拉；滑鼠點擊留下的 DOM Focus 會持續符合 `:focus-within`，讓 Hover 已結束的選單仍被強制顯示。
+- **修正**：Header 現在辨識鍵盤與指標輸入。滑鼠裝置由 `hover` 單獨控制，離開項目立即收合；只有使用 Tab／方向鍵時，`focus-within` 才能維持展開，鍵盤無障礙操作不被犧牲。
+- **影響範圍**：同一規則套用「設計案例」「廚房產品」「門市與服務」「優惠消息」及右側導覽下拉；手機 Accordion、Header 高度與既有視覺不變。

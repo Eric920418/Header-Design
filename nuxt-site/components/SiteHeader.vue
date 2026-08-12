@@ -55,21 +55,36 @@ const rightNav: NavItem[] = [
 const mobileOpen = ref(false)
 const searchOpen = ref(false)
 const expanded = ref<number | null>(null)
+const keyboardNavigation = ref(false)
 const allNav = computed(() => [...leftNav, ...rightNav])
 const route = useRoute()
 watch(() => route.fullPath, () => {
   mobileOpen.value = false
   searchOpen.value = false
+  keyboardNavigation.value = false
 })
+
+function handleHeaderKeydown(event: KeyboardEvent) {
+  if (event.key === 'Tab' || event.key.startsWith('Arrow')) keyboardNavigation.value = true
+}
+
+function handleHeaderPointerDown() {
+  keyboardNavigation.value = false
+}
 </script>
 
 <template>
-  <header class="fixed inset-x-0 top-0 z-[100] h-[60px] font-sans">
+  <header
+    class="fixed inset-x-0 top-0 z-[100] h-[60px] font-sans"
+    :class="{ 'header-keyboard-navigation': keyboardNavigation }"
+    @keydown.capture="handleHeaderKeydown"
+    @pointerdown.capture="handleHeaderPointerDown"
+  >
     <div class="h-full bg-[linear-gradient(90deg,#b79258_20%,#d2b587)]">
       <div class="flex h-[60px] items-center px-5 xl:px-12">
         <nav aria-label="主要導覽" class="hidden w-full items-center lg:flex">
           <div class="flex flex-1 items-center justify-start gap-1">
-            <div v-for="item in leftNav" :key="item.label" class="group relative flex h-[60px] items-center">
+            <div v-for="item in leftNav" :key="item.label" class="desktop-nav-item group relative flex h-[60px] items-center">
               <div v-if="item.children && item.to" class="flex h-[60px] items-center whitespace-nowrap px-1 text-[15px] leading-[15px] text-white xl:px-3">
                 <NuxtLink :to="item.to" class="flex h-full items-center">{{ item.label }}</NuxtLink>
                 <button type="button" :aria-label="`展開${item.label}選單`" class="flex h-full items-center pl-1">
@@ -82,7 +97,7 @@ watch(() => route.fullPath, () => {
               </button>
               <NuxtLink v-else :to="item.to || '#'" class="px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</NuxtLink>
 
-              <div v-if="item.mega" class="invisible fixed inset-x-0 top-[60px] z-50 border-t border-black/5 bg-white opacity-0 shadow-2xl transition-all duration-300 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div v-if="item.mega" class="desktop-nav-dropdown pointer-events-none invisible fixed inset-x-0 top-[60px] z-50 border-t border-black/5 bg-white opacity-0 shadow-2xl transition-all duration-300">
                 <div class="mx-auto max-w-[1200px] px-[30px] py-8 xl:px-0">
                   <div class="grid grid-cols-3 gap-[30px]">
                     <NuxtLink v-for="card in item.mega" :key="card.label" to="#" class="group/card block">
@@ -100,7 +115,7 @@ watch(() => route.fullPath, () => {
                 </div>
               </div>
 
-              <div v-else-if="item.children" class="pointer-events-none invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100">
+              <div v-else-if="item.children" class="desktop-nav-dropdown pointer-events-none invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all">
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li v-for="(child, childIndex) in item.children" :key="child.label" class="group/series">
                     <span v-if="child.disabled" aria-disabled="true" class="flex cursor-not-allowed items-center justify-between px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
@@ -138,11 +153,11 @@ watch(() => route.fullPath, () => {
           </NuxtLink>
 
           <div class="flex flex-1 items-center justify-end gap-1">
-            <div v-for="item in rightNav" :key="item.label" class="group relative flex h-[60px] items-center">
+            <div v-for="item in rightNav" :key="item.label" class="desktop-nav-item group relative flex h-[60px] items-center">
               <button v-if="item.children" type="button" class="flex h-[60px] items-center gap-1 whitespace-nowrap px-1 text-[15px] text-white xl:px-3">{{ item.label }} <ChevronDown class="h-3.5 w-3.5" /></button>
               <a v-else-if="item.to?.startsWith('http')" :href="item.to" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</a>
               <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</NuxtLink>
-              <div v-if="item.children" class="pointer-events-none invisible absolute right-0 top-full z-50 pt-2 opacity-0 transition-all group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
+              <div v-if="item.children" class="desktop-nav-dropdown pointer-events-none invisible absolute right-0 top-full z-50 pt-2 opacity-0 transition-all">
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li v-for="child in item.children" :key="child.label"><NuxtLink :to="child.to" class="block whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</NuxtLink></li>
                 </ul>
@@ -186,3 +201,20 @@ watch(() => route.fullPath, () => {
     </div>
   </header>
 </template>
+
+<style scoped>
+/* Only keyboard focus may keep a menu open after the pointer leaves. */
+.header-keyboard-navigation .desktop-nav-item:focus-within > .desktop-nav-dropdown {
+  pointer-events: auto;
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .desktop-nav-item:hover > .desktop-nav-dropdown {
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+</style>
