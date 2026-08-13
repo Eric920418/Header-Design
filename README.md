@@ -1,6 +1,22 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 5.3 關於我們（2026-08-13）
+
+- 正式路由：`/about/introduce`；Header「品牌承諾」、5.1 與 5.2 頁面導覽均已接上，不再顯示為停用項目。
+- 版型依 `2026.08.13_5.0品牌承諾_櫻花整體廚房頁面開版.pptx` 第五頁重製，使用 Antra Service 01、Home 03 About Us、四區塊 About Us 與 Gallery 01 的原生結構、1410／1770px 版心與 Opal 進場動畫。
+- 內容包含 1978、1992、2016、2020 四個官方品牌紀事；桌面可從 Service 01 清單切換主圖與內容，後續保留 Home 03 四欄品牌紀事。
+- 5.3 Banner 用於 Antra `banner-process` 的一張主背景＋四欄透明分隔切換；六張官方品牌辨識圖依序為品牌銘板、靜音緩衝抽屜邊蓋、不鏽鋼桶身沖印、座式緩衝滑軌蓋沖印、鉸鍊邊蓋、門板前緣封邊壓印。
+- 所有 5.3 素材整理於唯一正式靜態目錄 `public/section-5/about-us/`，不直接引用 Downloads；圖片載入失敗會在原容器完整顯示檔案路徑與錯誤狀態。
+- RWD：桌面維持模板雙欄／四欄／六欄，1024px 改 2／3 欄，767px 以下改單欄或雙欄；reduced-motion 下取消位移與過渡。
+- QA：`pnpm typecheck` 與 `pnpm build` 通過；本機 SSR 驗證四筆品牌記事、四個品牌承諾區塊、六個辨識項目均存在，所有圖片載入完成且 `scrollWidth === clientWidth`。
+- 2026-08-13 二次校正：刪除所有無來源的補寫文案，改為 PPT 第五頁與官方品牌介紹可核對的原文；Hero 改回 Service 01 深色背景，品牌承諾改為 Antra `banner-process` 原始 Hover 換圖／四欄展開結構，Gallery 01 補回 50% 黑色遮罩、中央圖示與 `scale(1.2)`。
+- 2026-08-13 Banner Process 狀態修正：撤除 01 的程式常駐 active，四欄預設全部收合；桌面以 Antra 原生 CSS Hover、鍵盤 Focus 展開，離開後恢復收合。四欄均保留相同的內容佔位高度，沒有說明段落的 04 也會與 01–03 貼齊同一底線，不再向下溢出舞台；背景維持 PPT 指定的單張 Banner，不自行加入四張切換圖。
+- 2026-08-13 PPT 第五頁完整文字複核：Service 01 四個英文示例問題已全部撤除，改為 1978 成立台灣櫻花、1992 發展系統廚具、2016 導入 AR 3D、2020 產線整合與新廠啟用的甲方指定文案；四筆年份長文、四欄品牌承諾及六項專屬品牌辨識均逐項核對。簡報轉檔混入的「樱／厨房」統一校正為台灣官網正體字「櫻／廚房」，辨識名稱依 PPT 修正為「鉸鏈邊蓋」與「門板前緣邊壓印」。
+- 2026-08-13 Service 01 展開結構修正：依 Antra `service-accordion` Layout 2 將每筆品牌紀事長文放回對應年份列內，1978 預設展開，切換 1992／2016／2020 時只展開該列並同步左圖；不再把單一答案錯放在整組列表底下。左側圖片覆蓋文字依甲方要求只顯示年份，不重複顯示事件標題。
+- 同次互動驗收修正共用 Reveal 指令的 VNode style 合併：不再於 directive `created` 階段把已正規化的 style 強制改成陣列，避免年份切換時 Vue 嘗試寫入 `CSSStyleDeclaration[0]` 而拋出前端錯誤；動畫 delay 仍由 SSR props 與實際 DOM 同步保留。
+- 依甲方畫面回饋移除品牌紀事卡片上方整排「ABOUT US／櫻花整體廚房紀事」標題，只保留四張年份紀事卡片；Section 改用 `aria-label` 維持可理解的無障礙區塊名稱，且同步清除標題造成的多餘留白。
+
 SAKURA 廚房品牌網站。2026-08-11 起正式執行版本遷移至 Nuxt 3；原 React/Vite 原始碼暫時保留為像素與互動比對基準，不再由根目錄指令或部署執行。
 
 原始設計稿：https://www.figma.com/design/TTt0ua7aR3ayd8zsIkTBPa/Header-Design
@@ -631,3 +647,34 @@ final result: passed
 - **根因**：原本以 `group-focus-within` 和 Hover 同時控制下拉；滑鼠點擊留下的 DOM Focus 會持續符合 `:focus-within`，讓 Hover 已結束的選單仍被強制顯示。
 - **修正**：Header 現在辨識鍵盤與指標輸入。滑鼠裝置由 `hover` 單獨控制，離開項目立即收合；只有使用 Tab／方向鍵時，`focus-within` 才能維持展開，鍵盤無障礙操作不被犧牲。
 - **影響範圍**：同一規則套用「設計案例」「廚房產品」「門市與服務」「優惠消息」及右側導覽下拉；手機 Accordion、Header 高度與既有視覺不變。
+
+## 案例門市列表導頁修正（2026-08-13）
+
+- `/gallery` 三張門市卡的金色「預約門市」按鈕改為進入各自案例內頁，分別對應 `/gallery/case10`、`/gallery/case56`、`/gallery/case35`。
+- 卡片圖片、店名與按鈕現在具有一致的站內目的地；案例內頁 Sidebar 的真正「到店預約」CTA 仍保留官方預約網址，不受列表導頁調整影響。
+
+## Nuxt 3 — 5.1 品牌優勢（2026-08-13）
+
+`nuxt-site/pages/about/advantage.vue` 已建立正式 SSR 路由 `/about/advantage`。甲方於 2026-08-13 確認第三頁「步驟三（引用甲方資訊提案）」才是最終結構真值，因此第二頁／早期 Home 09 組版不再作為驗收基準；現行版本逐段對照第三頁紅框標註、已購 Antra Home 08、Home 01、Gallery 01、FAQs Elementor 原始資料重製，沒有使用簡報截圖，也沒有建立 5.3 假頁。
+
+- **導覽**：Header「品牌承諾 → 品牌優勢」與首頁「櫻花優勢」CTA 皆進入 `/about/advantage`；5.2 完成後「集團品牌館」已接到 `/about/exhibition`，尚未製作的「關於我們」維持 `aria-disabled` 不可操作狀態。
+- **Hero（第三頁修正）**：撤除錯用的 Home 09 影片 Hero，改為 Home 08 原生兩欄首屏：1770px 版心、左側 `Find Your Inspired Interior Design`、右側局部廚房圖與摘要，並以負 300px 位移銜接大型正式 Banner。品牌優勢／集團品牌館／關於我們三個頁面節點依第三頁放在首屏；已完成的前兩頁可導向，尚未製作的 5.3 維持不可操作。
+- **家庭型態**：`Industrial Elegance Condo` 與官方品牌介紹下方依序呈現 Single／Couple／Children／Core Family／Extended Family 五卡；桌機為五欄，1366／1024／880／568px 以下逐級收斂，Embla 每 4 秒循環、Hover 暫停，reduced-motion 停止自動播放。
+- **三項優勢（第三頁修正）**：撤除第二頁推導出的左圖切換式互動；改採第三頁指定的 Home 01 圖文節奏，保留英文大標，01 Digitization、02 Safety、03 Professional 依序使用左文右圖的寬版列、正式圖片與 Opal 延遲進場。
+- **門市形象與 FAQ**：保留 `Description. Architecture Process For Exceptional Results` 及三民店／河南店不對稱雙圖；第三頁的紅字「刪除」是要求移除 FAQ 右側示意卡，因此 FAQ 維持全寬，不重新加回聊天卡。FAQ 保留 `Quick And Clear Answers To Your Key Questions`，依正式 DOCX 呈現三組 12 題，第一題預設展開、一次只展開一題，`＋／－` 固定右對齊。
+- **素材與錯誤**：Banner、家庭 5 張、優勢 3 張、門市 2 張共 11 張素材集中於 `public/section-5/brand-advantage/`。共用圖片元件在原容器顯示完整錯誤、替代文字與素材路徑，Hero Banner 另有全區塊錯誤介面。
+- **動畫 SSR 修正**：共用 `v-reveal` 現在在 Vue `created` 階段同步 Client VNode 的 `.ev`、`data-ev`、delay 與 duration，消除 SSR `getSSRProps` 造成的 hydration class mismatch；5.1 與回歸檢查的 3.1 均無 hydration warning，既有動畫方向與時序不變。
+- **RWD／QA**：390、768、1024、1512、1920、2560、3840px 均為 `scrollWidth === clientWidth`，每個尺寸皆有 5 個家庭卡、3 個優勢按鈕、12 題 FAQ、錯誤區塊 0。捲到底後 11 張正式素材皆成功載入；優勢圖片切換、FAQ單題展開、Header／首頁連結與 3.1 FAQ 回歸正常。
+- **建置**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 通過；production build 只保留 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 5.2 集團品牌館（2026-08-13）
+
+`nuxt-site/pages/about/exhibition.vue` 已依正式品牌承諾 PPT 第四頁建立 SSR 路由 `/about/exhibition`。第一次實作只套用相近的模板視覺 token，卻以自訂 Hero、三張資訊卡與深色注意事項重新組版，並不符合使用者要求，已判定不合格並撤除。現行版本逐段回到 Antra Home 09、Single Post 02、Projects 01 與 Home 06 的原始 DOM／CSS 結構；沒有把簡報畫面當成圖片，也沒有建立 5.3 假頁。
+
+- **導覽與 Hero**：Header「品牌承諾 → 集團品牌館」在桌面與手機均已接到 `/about/exhibition`；Hero 使用正式 `Exhibition_Banner_Asset_01`，依 Home 09 的 1410px／24px 圓角影像舞台與左下 60/58px 英文大標重建，保留 `Creative Projects That Define Our Style`。PPT 第四頁右下玻璃元件明確標示為「輪播跳轉 → 品牌優勢／集團品牌館／關於我們」，先前誤做的影片彈窗已撤除；現行玻璃導覽顯示三頁節點，5.1、5.2 可導向，尚未完成的 5.3 維持不可操作。
+- **正式內容**：依 PPT 第四頁逐字呈現「享受、交流、體驗」、六感體驗與現代美術館空間敘述；台北館、台中館、高雄館使用各自正式圖片、地址及週一至週五 8:30–17:30 營業時間。館別詳情補上 PPT 指定的「注意事項」標題，四點參觀須知逐字保存建設公司預約範圍、客服電話、門市服務、維修限制與全預約制資訊；官方頁面目前另有不同拆分方式，但不覆蓋 PPT 的四點版本。
+- **注意事項結構修正**：完整放大檢查 PPT 第四頁紅線後，確認注意事項不是館別 Sidebar 的內容，而是指定放入 Single Post 02 最下方 `Exploring Design Styles` 複製文字區塊。現已移除底部錯誤重複的「透過鏡面…」段落，改成全寬「注意事項」與四點正式文案；館別 Projects 01 只保留各館圖片、地址及營業時間，結構與 PPT 一致。四點內容逐字校正 `SAKURA KITCHEN與TLK`、客服電話與標點，且不依賴 Reveal 才能存在於 DOM。
+- **Antra 版型**：Hero 下改為 Single Post 02 的 930px `single-content / entry-content` 文章欄與 1290px `image-content` breakout 雙圖；`Understanding The Fundamentals` 使用原生 40/44px 文章標題。三館不再渲染成三張自訂卡片，改用 Projects 01 的三個 100px 圓角篩選控制與單一 `project-block / project-transition / project-text-box` 詳情區；館別切換時同步更新正式照片、地址、營業時間及四點注意事項。`Gallery Of Inspiring Interior Designs` 保留 Home 06 的 30/70 標題列，最後接 Single Post 02 的 `Exploring Design Styles` 文字區；大型英文標題維持模板原文。
+- **素材與錯誤**：六張正式素材整理至 `public/section-5/brand-pavilion/`，最長邊限制為 2800px 或 1800px，避免原始 6720／8256／7295px 圖片直接拖慢首屏。所有圖片經共用 `InternalBrandImage` 呈現；錯誤時在原容器顯示「品牌頁面圖片載入失敗」、替代文字及素材路徑。
+- **RWD／QA**：390px 為單欄、768px 三館為兩欄、1024px 起為三欄；1512／1920／2560／3840px Hero 固定 1410px 置中，不隨超寬螢幕無限制放大。390、768、1024、1512、1920、2560、3840px 實測皆 `scrollWidth === clientWidth`、錯誤提示 0，六張正式圖片均成功載入，Hero 目前頁標示正確。
+- **建置**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 通過；production build 只有 Tailwind CSS v4 既有 sourcemap warning，沒有新增型別或 SSR 錯誤。

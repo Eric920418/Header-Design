@@ -1,4 +1,4 @@
-import type { DirectiveBinding } from 'vue'
+import type { DirectiveBinding, VNode } from 'vue'
 
 type RevealAnimation =
   | 'opalMoveUp'
@@ -86,6 +86,24 @@ export default defineNuxtPlugin((nuxtApp) => {
         'data-ev': validAnimation(options.anim),
         ...(delay !== undefined ? { style: { animationDelay: `${delay}ms` } } : {}),
       }
+    },
+    created(
+      element: HTMLElement,
+      binding: DirectiveBinding<RevealOptions | RevealAnimation | undefined>,
+      vnode: VNode,
+    ) {
+      const options = optionsFrom(binding)
+      const delay = normalizedDelay(options.delay)
+      const speedClass = durationClass(options.duration)
+      const props = vnode.props ?? (vnode.props = {})
+
+      props.class = [props.class, 'ev', speedClass].filter(Boolean)
+      props['data-ev'] = validAnimation(options.anim ?? element.dataset.ev)
+      if (delay !== undefined && props.style && typeof props.style === 'object' && !Array.isArray(props.style)) {
+        props.style = { ...props.style, animationDelay: `${delay}ms` }
+      }
+
+      prepareElement(element, binding)
     },
     mounted(
       element: HTMLElement,

@@ -1,27 +1,36 @@
 <script setup lang="ts">
 import { faqGroups } from '~/data/service'
+import type { FaqGroup } from '~/types/content'
 
-const openId = ref<string | null>('service-0')
+const props = withDefaults(defineProps<{
+  groups?: FaqGroup[]
+  sectionId?: string
+}>(), {
+  groups: () => faqGroups,
+  sectionId: 'faq-title',
+})
+
+const openId = ref<string | null>(props.groups[0] ? `${props.groups[0].id}-0` : null)
 const toggle = (id: string) => openId.value = openId.value === id ? null : id
 </script>
 
 <template>
-  <section aria-labelledby="faq-title" class="antra-faq-section">
+  <section :aria-labelledby="sectionId" class="antra-faq-section">
     <div class="antra-faq-rail">
       <header class="antra-faq-heading">
-        <div v-reveal="{ anim: 'opalMoveRight' }" class="antra-faq-heading__aside">
+        <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="antra-faq-heading__aside ev">
           <span class="antra-faq-pill"><span aria-hidden="true" />Popular Queries</span>
           <span class="antra-faq-deco antra-faq-deco--horizontal" aria-hidden="true" />
           <span class="antra-faq-deco antra-faq-deco--vertical" aria-hidden="true" />
         </div>
-        <h2 id="faq-title" v-reveal="{ anim: 'opalMoveLeft' }" class="antra-faq-title">
+        <h2 :id="sectionId" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="antra-faq-title ev">
           Quick And Clear <span>Answers<br />To Your Key</span> Questions
         </h2>
       </header>
 
-      <div class="antra-faq-list" v-reveal="{ anim: 'opalMoveRight' }">
-        <section v-for="group in faqGroups" :key="group.id" :aria-labelledby="`faq-${group.id}`" class="antra-faq-group">
-          <h3 :id="`faq-${group.id}`" class="antra-faq-group__title">{{ group.title }}</h3>
+      <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="antra-faq-list ev">
+        <section v-for="group in groups" :key="group.id" :aria-labelledby="`${sectionId}-${group.id}`" class="antra-faq-group">
+          <h3 :id="`${sectionId}-${group.id}`" class="antra-faq-group__title">{{ group.title }}</h3>
           <div>
             <article v-for="(item, index) in group.items" :key="item.question" class="antra-faq-item">
               <h4>

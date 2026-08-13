@@ -23,7 +23,7 @@ const imageFailed = ref(false)
         <h2>{{ item.storeName }}</h2>
       </NuxtLink>
       <address>{{ item.address }}</address>
-      <a :href="item.reservationUrl" target="_blank" rel="noopener noreferrer" class="antra-store-card__reservation">預約門市</a>
+      <NuxtLink :to="`/gallery/${item.slug}`" class="antra-store-card__reservation">預約門市</NuxtLink>
     </div>
   </article>
 </template>

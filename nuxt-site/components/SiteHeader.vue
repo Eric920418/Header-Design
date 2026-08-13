@@ -46,7 +46,7 @@ const leftNav: NavItem[] = [
 ]
 
 const rightNav: NavItem[] = [
-  { label: '品牌承諾', children: [{ label: '品牌優勢', to: '/#brand-promise' }, { label: '集團品牌館', to: '#' }, { label: '關於我們', to: '#' }] },
+  { label: '品牌承諾', children: [{ label: '品牌優勢', to: '/about/advantage' }, { label: '集團品牌館', to: '/about/exhibition' }, { label: '關於我們', to: '/about/introduce' }] },
   { label: '我要加盟', children: [{ label: '加盟介紹', to: '#' }, { label: '加盟優勢', to: '#' }, { label: '加盟金與流程', to: '#' }, { label: '加盟Q&A', to: '#' }] },
   { label: '建商專區', to: '#' },
   { label: '櫻花集團', to: 'https://www.sakura.com.tw/' },
@@ -159,7 +159,10 @@ function handleHeaderPointerDown() {
               <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</NuxtLink>
               <div v-if="item.children" class="desktop-nav-dropdown pointer-events-none invisible absolute right-0 top-full z-50 pt-2 opacity-0 transition-all">
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
-                  <li v-for="child in item.children" :key="child.label"><NuxtLink :to="child.to" class="block whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</NuxtLink></li>
+                  <li v-for="child in item.children" :key="child.label">
+                    <span v-if="child.disabled" aria-disabled="true" class="block cursor-not-allowed whitespace-nowrap px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
+                    <NuxtLink v-else :to="child.to" class="block whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</NuxtLink>
+                  </li>
                 </ul>
               </div>
             </div>

@@ -18,6 +18,54 @@ export interface FaqGroup {
   items: FaqItem[]
 }
 
+export interface BrandFamily {
+  id: string
+  title: string
+  englishTitle: string
+  image: string
+}
+
+export interface BrandAdvantageBenefit {
+  id: string
+  number: string
+  englishTitle: string
+  title: string
+  description: string
+  image: string
+}
+
+export interface BrandPavilion {
+  id: 'taipei' | 'taichung' | 'kaohsiung'
+  name: string
+  address: string
+  hours: string
+  image: string
+  alt: string
+}
+
+export interface BrandHistoryItem {
+  year: '1978' | '1992' | '2016' | '2020'
+  templateQuestion: string
+  summary: string
+  description: string
+  image: string
+  icon: string
+}
+
+export interface BrandValueItem {
+  id: string
+  eyebrow: string
+  title: string
+  description: string
+  image: string
+}
+
+export interface BrandIdentityItem {
+  id: string
+  title: string
+  image: string
+}
+
 export interface StoreContact {
   name: string
   hours?: string
