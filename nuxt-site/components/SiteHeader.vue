@@ -14,7 +14,7 @@ const leftNav: NavItem[] = [
       { label: '品牌系列' },
       { label: '設計靈感', to: '/design-inspiration' },
       { label: '廚房裝修指南', to: '/knowledge' },
-      { label: '品牌系列型錄', disabled: true },
+      { label: '品牌系列型錄', to: '/catalogues/kitchenware-catalog' },
     ],
   },
   {
@@ -116,8 +116,13 @@ function handleHeaderPointerDown() {
               </div>
 
               <div v-else-if="item.children" class="desktop-nav-dropdown pointer-events-none invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all">
-                <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
-                  <li v-for="(child, childIndex) in item.children" :key="child.label" class="group/series">
+                <ul class="isolate min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
+                  <li
+                    v-for="(child, childIndex) in item.children"
+                    :key="child.label"
+                    class="group/series"
+                    :class="childIndex === 0 ? 'peer/series' : 'relative z-[70] bg-white peer-hover/series:opacity-0 peer-focus-within/series:opacity-0'"
+                  >
                     <button v-if="item.seriesMega && childIndex === 0" type="button" aria-haspopup="true" class="flex w-full items-center justify-between gap-4 whitespace-nowrap px-5 py-2.5 text-left text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
                       {{ child.label }} <ArrowRight class="h-4 w-4" />
                     </button>

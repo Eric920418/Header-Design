@@ -113,6 +113,7 @@ pnpm build
 本節是目前首頁的最新實作真值；如與下方 2026-07-17 的歷史 Design QA 記錄衝突，以本節為準。新素材統一放在 `public/home-2026/`，不在執行時引用 Downloads 路徑。
 
 - **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框仍為 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，但 Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色廚房產品 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題使用官方 Logo，每個為 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊。桌面支援 hover 與鍵盤 focus-within 展開；一般下拉選單的觸發區與 Header 同為 `60px` 高，左側第一項沿左緣、右側項目沿右緣展開，避免 `190px` 選單被 viewport 裁切。新增「設計案例 → 品牌系列」第二層滿寬 mega-menu：左側保留四個原選項，右側以 `5×2` 卡片顯示首頁現有十大系列、正式中英文及圖片；「品牌系列」使用不跳頁的 submenu button，整塊維持同一個 hover/focus 區域，移入圖片不會閃退，圖片卡與「查看全部」才連回首頁 `#kitchen-series`。十大系列資料集中於 `src/data/kitchenStyles.ts`，與 `ProjectSection` 共用，避免 Header 與正文不同步。手機 Accordion 維持原本單層操作。
+- **Header 二層 Hover 命中修正（2026-08-14）**：Nuxt 版「設計案例 → 品牌系列」維持現有滿寬面板、卡片尺寸、顏色與淡入動畫；面板開啟時，原下拉選單其餘三列以較高但透明的命中層保留原座標。游標移回「設計靈感／廚房裝修指南／品牌系列型錄」時會先退出品牌面板，再恢復原列的顯示與點擊，不再被滿寬面板永久攔截；鍵盤 `focus-within` 亦採相同行為。
 - **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖；圖片轉場改為 Antra Page 1 Slider Revolution 原始 `slidingoverlaydown / double` 規格：總長 `2000ms`、第一份新圖片 `1333ms`、第二份新圖片延遲 `333ms` 並於 `2000ms` 完成，easing 對應 `power2.inOut`。首次進場三層為模板灰 `#9F9FA4`＋套 `rgba(16,8,1,.46)` 暫時遮罩的新圖＋原色新圖；後續換圖依模板實際週期改為保留上一張完整圖片作底層，再以暗色新圖與原色新圖由上往下覆蓋，過程不再重新露出灰底。最後原色圖片完整覆蓋，不加入整張常駐黑色遮罩；另在圖片轉場之上加入僅覆蓋 Hero 底部 `58%` 的透明至黑色漸層（中段 `rgba(0,0,0,.42)`、底部 `rgba(0,0,0,.86)`），強化 `Kitchen` 浮水印對比但不壓暗上半部主圖。Hero 根節點不再套整區 `fadeInDown`；`prefers-reduced-motion` 停在第一張、隱藏遮罩圖片層並直接顯示原色圖片。h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行。桌面左側「品牌系列」伸縮選單改為 viewport fixed，捲離 Hero 後仍固定在左側中線；手機維持隱藏。Start Project 的 120px 玻璃圓尺寸不變，未 hover 時增加 2 秒金色雷達水波，hover 後停止並隱藏。
 - **Section eyebrow**：Services／Gallery／WhatWeDo／Store 依序改為「廚房產品／門市案例／品牌承諾／門市查詢」，膠囊尺寸、金點、邊框與動畫不變。
 - **廚房產品卡**：順序與編號改為 `01 SAKURA → 02 SVAGO → 03 TEKA`；正式品牌拼字為 `SVAGO`。卡片尺寸、Logo 光學等大、Embla 輪播與 hover 不變。
@@ -732,4 +733,12 @@ final result: passed
 - **第七頁內容**：逐段呈現中島廚房適用性、三項優點、餐桌三大設計重點與延伸閱讀；主圖、內文圖使用甲方正式素材。PPT 指定的 Home One 影片區使用官網可驗證的 YouTube ID `ervCQo-l2T4`，保留模板大字覆蓋、正圓水波播放鍵、載入中、12 秒逾時、完整錯誤原因及 YouTube 備援連結。
 - **內容誠信**：兩頁的標題、日期、段落與連結皆由素材包及櫻花官網文章核對；PPT 中殘留的模板 `NOV 1, 2025` 未覆蓋正式 `OCT 8, 2024`／`NOV 8, 2023`。頁面不使用 `v-html` 或文章截圖，圖片失敗由 `InternalGuideImage` 在原位置顯示用途、完整路徑及錯誤狀態。
 - **實機 QA**：1512×956 實測兩頁 Breadcrumb 為 185px、Meta／標題與內文皆使用 930px 置中欄，Reveal 完成後主圖寬 930px；390×844 內容欄為 360px、標題 30px，頁面皆 `scrollWidth === clientWidth`。完整捲動後圖片錯誤 0、Reveal 隱藏節點 0、四個分類 Tab 與三張推薦卡存在；`/knowledge` 已確認三篇卡片全部連到站內正式路由。第七頁播放鍵實測會建立 `youtube-nocookie.com/embed/ervCQo-l2T4` iframe。
+- **建置**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 僅有 Tailwind CSS v4 既有 sourcemap warning，沒有新增型別、SSR 或打包錯誤。
+
+## Nuxt 3 — 1.4 品牌系列型錄列表頁（2026-08-14）
+
+- **正式路由與範圍**：新增 SSR 路由 `/catalogues/kitchenware-catalog`，Header「設計案例 → 品牌系列型錄」同步啟用。PPT 第八頁右側參考畫面雖帶有 MUJI Basic+ 與 Clever，但左側網站架構紅框明確指定 `x6項`；本頁只上線 iPremium、Joyful、Premium、Harmony、Loft Chic、Elegant 六項，不把示意資料誤納入正式範圍。
+- **Projects 01 模板**：依已購 Antra `Projects 01` 原始 Elementor 設定重建 100／130px Section 間距、1410px 版心、3／2／1 欄、30px 欄距、24px 圓角、5:6 圖片舞台、30/34px 標題及 0.5 秒圖片 Hover。PPT 標示「刪除」的篩選列與沒有實際資料需求的分頁均不渲染；中央 View 圓鈕依 PPT「右側加箭頭」改成右下玻璃圓形箭頭，鍵盤 Focus 與觸控手機同樣可辨識。
+- **正式資料與下載**：六張封面取自甲方 1.4 素材包並整理至 `public/section-1/catalogues/`；標題、描述與 PDF 下載網址逐筆核對 PPT 指定的甲方公開型錄 API。卡片直接另頁開啟正式 PDF，不建立假的 1.4.1 文章內頁；圖片錯誤時在原卡片完整顯示型錄名稱、素材路徑與錯誤原因。
+- **RWD／QA**：1512px 實測為三欄、768px 為兩欄、390px 為單欄；六張正式封面全部載入、Reveal 完成後隱藏節點 0、`scrollWidth === clientWidth`，頁面不存在 PPT 指定刪除的篩選列與假分頁。手機六個右下箭頭保持可見，桌面則由 Hover／Focus 顯示；Header 桌面與手機導覽皆存在正式站內入口。
 - **建置**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 僅有 Tailwind CSS v4 既有 sourcemap warning，沒有新增型別、SSR 或打包錯誤。
