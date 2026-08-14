@@ -2,7 +2,7 @@
 import { ArrowRight, ChevronDown, Menu, Search, X } from 'lucide-vue-next'
 import { KITCHEN_STYLES } from '~/data/kitchenStyles'
 
-type NavChild = { label: string; to: string; external?: boolean; disabled?: boolean }
+type NavChild = { label: string; to?: string; external?: boolean; disabled?: boolean }
 type MegaCard = { label: string; image: string; logo: string }
 type NavItem = { label: string; to?: string; children?: NavChild[]; mega?: MegaCard[]; seriesMega?: boolean }
 
@@ -11,10 +11,10 @@ const leftNav: NavItem[] = [
     label: '設計案例',
     seriesMega: true,
     children: [
-      { label: '品牌系列', to: '/#kitchen-series' },
-      { label: '設計靈感', to: '/#kitchen-series' },
-      { label: '廚房小百科', to: '#' },
-      { label: '品牌系列型錄', to: '#' },
+      { label: '品牌系列' },
+      { label: '設計靈感', to: '/design-inspiration' },
+      { label: '廚房裝修指南', to: '/knowledge' },
+      { label: '品牌系列型錄', disabled: true },
     ],
   },
   {
@@ -118,11 +118,13 @@ function handleHeaderPointerDown() {
               <div v-else-if="item.children" class="desktop-nav-dropdown pointer-events-none invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all">
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li v-for="(child, childIndex) in item.children" :key="child.label" class="group/series">
-                    <span v-if="child.disabled" aria-disabled="true" class="flex cursor-not-allowed items-center justify-between px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
+                    <button v-if="item.seriesMega && childIndex === 0" type="button" aria-haspopup="true" class="flex w-full items-center justify-between gap-4 whitespace-nowrap px-5 py-2.5 text-left text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
+                      {{ child.label }} <ArrowRight class="h-4 w-4" />
+                    </button>
+                    <span v-else-if="child.disabled" aria-disabled="true" class="flex cursor-not-allowed items-center justify-between px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
                     <a v-else-if="child.external" :href="child.to" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</a>
-                    <NuxtLink v-else :to="child.to" class="flex items-center justify-between gap-4 whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
+                    <NuxtLink v-else :to="child.to || '/'" class="flex items-center justify-between gap-4 whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
                       {{ child.label }}
-                      <ArrowRight v-if="item.seriesMega && childIndex === 0" class="h-4 w-4" />
                     </NuxtLink>
 
                     <div v-if="item.seriesMega && childIndex === 0" class="pointer-events-none invisible fixed inset-x-0 top-[60px] z-[60] opacity-0 transition-all duration-300 group-hover/series:pointer-events-auto group-hover/series:visible group-hover/series:opacity-100 group-focus-within/series:pointer-events-auto group-focus-within/series:visible group-focus-within/series:opacity-100">
@@ -130,14 +132,22 @@ function handleHeaderPointerDown() {
                         <div class="mx-auto max-w-[1512px] px-5 py-7 xl:px-12">
                           <div class="mb-3 flex items-end justify-between">
                             <div><p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Kitchen Series</p><h2 class="mt-1 font-display text-[24px] leading-[30px] text-[#1C1C1D]">十大廚房系列</h2></div>
-                            <NuxtLink to="/#kitchen-series" class="inline-flex items-center gap-2 text-sm text-[#59585D] hover:text-[#CAA05C]">查看全部 <ArrowRight class="h-4 w-4" /></NuxtLink>
+                            <p class="text-xs text-[#9F9FA4]">目前開放 AI Kitchen</p>
                           </div>
                           <div class="grid grid-cols-5 gap-3 xl:gap-4">
-                            <NuxtLink v-for="style in KITCHEN_STYLES" :key="style.en" to="/#kitchen-series" class="group/card relative aspect-[16/10] overflow-hidden rounded-xl bg-[#1C1C1D]">
-                              <img :src="style.image" alt="" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
-                              <span class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-                              <span class="absolute inset-x-0 bottom-0 p-3 text-white"><span class="block text-[15px]">{{ style.zh }}</span><span class="block truncate text-[11px] text-white/70">{{ style.en }}</span></span>
-                            </NuxtLink>
+                            <template v-for="style in KITCHEN_STYLES" :key="style.slug">
+                              <NuxtLink v-if="style.available && style.route" :to="style.route" class="group/card relative aspect-[16/10] overflow-hidden rounded-xl bg-[#1C1C1D]">
+                                <img :src="style.image" :alt="style.zh" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
+                                <span class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+                                <span class="absolute inset-x-0 bottom-0 p-3 text-white"><span class="block text-[15px]">{{ style.zh }}</span><span class="block truncate text-[11px] text-white/70">{{ style.en }}</span></span>
+                              </NuxtLink>
+                              <div v-else aria-disabled="true" class="relative aspect-[16/10] cursor-not-allowed overflow-hidden rounded-xl bg-[#1C1C1D] opacity-55">
+                                <img :src="style.image" :alt="style.zh" class="absolute inset-0 h-full w-full object-cover grayscale" />
+                                <span class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+                                <span class="absolute right-2 top-2 rounded-full border border-white/30 px-2 py-0.5 text-[9px] text-white/70">尚未開放</span>
+                                <span class="absolute inset-x-0 bottom-0 p-3 text-white"><span class="block text-[15px]">{{ style.zh }}</span><span class="block truncate text-[11px] text-white/70">{{ style.en }}</span></span>
+                              </div>
+                            </template>
                           </div>
                         </div>
                       </div>
@@ -161,7 +171,7 @@ function handleHeaderPointerDown() {
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li v-for="child in item.children" :key="child.label">
                     <span v-if="child.disabled" aria-disabled="true" class="block cursor-not-allowed whitespace-nowrap px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
-                    <NuxtLink v-else :to="child.to" class="block whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</NuxtLink>
+                    <NuxtLink v-else :to="child.to || '/'" class="block whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</NuxtLink>
                   </li>
                 </ul>
               </div>
@@ -185,10 +195,21 @@ function handleHeaderPointerDown() {
         <div v-if="expanded === index" class="bg-white/5 px-8 py-2">
           <template v-if="item.children">
             <NuxtLink v-if="item.to" :to="item.to" class="block py-3 text-sm text-[#CAA05C]">{{ item.label }}總覽</NuxtLink>
-            <template v-for="child in item.children" :key="child.label">
+            <template v-if="item.seriesMega">
+              <p class="pb-2 pt-3 text-xs uppercase tracking-[.16em] text-[#CAA05C]">品牌系列</p>
+              <template v-for="style in KITCHEN_STYLES" :key="style.slug">
+                <NuxtLink v-if="style.available && style.route" :to="style.route" class="flex items-center justify-between py-3 text-sm text-white">
+                  <span>{{ style.zh }}</span><span class="text-xs text-white/55">{{ style.en }}</span>
+                </NuxtLink>
+                <span v-else aria-disabled="true" class="flex cursor-not-allowed items-center justify-between py-3 text-sm text-white/35">
+                  <span>{{ style.zh }}</span><span class="text-xs">尚未開放</span>
+                </span>
+              </template>
+            </template>
+            <template v-for="child in item.seriesMega ? item.children.slice(1) : item.children" :key="child.label">
               <span v-if="child.disabled" aria-disabled="true" class="block py-3 text-sm text-white/40">{{ child.label }}</span>
               <a v-else-if="child.external" :href="child.to" target="_blank" rel="noopener noreferrer" class="block py-3 text-sm text-white/80">{{ child.label }}</a>
-              <NuxtLink v-else :to="child.to" class="block py-3 text-sm text-white/80">{{ child.label }}</NuxtLink>
+              <NuxtLink v-else :to="child.to || '/'" class="block py-3 text-sm text-white/80">{{ child.label }}</NuxtLink>
             </template>
           </template>
           <template v-else><a v-for="card in item.mega" :key="card.label" href="#" class="block py-3 text-sm text-white/80">{{ card.label }}</a><a href="#" class="block py-3 text-sm text-[#CAA05C]">廚房商品型錄</a></template>

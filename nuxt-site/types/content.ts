@@ -121,6 +121,38 @@ export interface StoreCaseDetail extends StoreCaseSummary {
   article?: CaseArticleBlock[]
 }
 
+export type DesignInspirationForm = '一字型' | 'L型' | 'ㄇ字型' | '中島' | '其他'
+
+export type DesignInspirationStyle = '鄉村風' | '美式古典風' | '工業風' | '日式簡約風' | '北歐風' | '現代風'
+
+export interface DesignFilterOption<T extends string = string> {
+  label: string
+  value: '' | T
+}
+
+export interface DesignInspirationCase {
+  slug: StoreCaseSummary['slug']
+  title: string
+  storeName: string
+  cover: string
+  coverAlt: string
+  form: DesignInspirationForm
+  style: DesignInspirationStyle
+  detailRoute: string
+}
+
+export interface KitchenGuideArticle {
+  id: 'systemcabinet' | 'kitchen-outlet-planning' | 'kitchen-island-table'
+  publishedAt: string
+  displayDate: string
+  categoryLabel: string
+  title: string
+  excerpt: string
+  cover: string
+  legacyUrl: string
+  detailRoute?: string
+}
+
 export type NewsCategory = 'activities' | 'latest' | 'video'
 
 export interface NewsArticleSummary {

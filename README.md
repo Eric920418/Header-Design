@@ -570,7 +570,7 @@ final result: passed
 - **內文流回查**：主圖以下改為 Antra `content.xml` 與 WordPress `entry-content` 的單一內容流，不再把每段包成自訂 Section。段落固定 `16/24px` 與 30px 下距；章節改用模板 `h4` 的桌面 `40/44px`、手機 `30/33px`，上距 60／45px；清單恢復一般文字粗細與原生圓點，不再使用金色圓點、500 字重或額外 Section 留白。內文圖片仍依模板 `.row / .column-item` 邏輯維持桌面雙欄、手機單欄。
 - **正式內容**：三篇文字逐段核對櫻花官網正式頁面，不把內文做成一張長截圖。第一篇保留兩組活動、指定機型登錄連結與注意事項；第二篇保留健檢範圍、六大品牌識別、日期、電話、預約與 LINE；第三篇保留活動期間、滿額贈品、兩張圖文說明及門市查詢連結。
 - **素材**：主圖沿用 `public/section-4/news/` 正式列表素材；第二篇三張、第三篇兩張內文圖由甲方素材包整理至 `public/section-4/news/activities/`，最長邊限制 1800px。所有圖片均透過 `InternalNewsImage` 顯示，載入失敗時會在原位置呈現錯誤原因、圖片說明與路徑。
-- **Projects Details 分類 Tab**：依 PPT 母版補回四個圓角 Tab 與各自圖示；「優惠活動」為金色啟用狀態並可返回 4.1 列表，尚未建立的「最新消息」「媒體影音」「廚房裝修指南」顯示為 `aria-disabled`，不使用 `#` 或不存在的假路由。
+- **Projects Details 分類 Tab**：依 PPT 母版補回四個圓角 Tab 與各自圖示；「優惠活動」為金色啟用狀態並可返回 4.1 列表。後續完成的「最新消息」「媒體影音」「廚房裝修指南」皆已接上正式列表路由，不使用 `#` 或不存在的假路由。
 - **Projects Details 輪播**：`InternalActivityRelatedCarousel` 改用 Antra `template-parts/project/block/style-default.php` 與 project style 1 的結構：三欄、圖片比例 `0.8333333333`、24px 圓角、圖片上分類框、`30/34px` 標題、分類／年份資訊與 hover `scale(1.05)`。依 PPT 移除額外英文標題、中文大標、視覺分隔線及桌面箭頭，保留拖曳、鍵盤 Focus、目前頁 `aria-current`，三張卡均連至正式本機文章。
 - **路由修正**：為避免 Nuxt 將 `/news/activities/:slug` 錯誤解析回列表，列表由同層 `activities.vue` 改為標準巢狀 `activities/index.vue`；三個內頁可直接重新整理，未知 slug 回傳共用 404 並完整顯示「不存在或尚未公開」。
 - **PPT 回查修正／QA**：第二輪以 PPT 第七頁嵌入的 `Blog Single Post 1`、`Projects Details` 畫面逐區比對，移除第一版自行加入的 Related 標題、箭頭、白底分區、注意事項框與 CTA 膠囊。1512×956 實測 Breadcrumb 高度 185px、文章 1410／930px 雙版心、Project 三卡完整，三個內頁皆為一個 `h1`、四個分類 Tab、三張輪播卡、圖片錯誤提示 0，且 `scrollWidth === clientWidth`；390×844 實測主圖、標題與內文為單欄且無水平爆版。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過，build 只保留 Tailwind CSS v4 既有 sourcemap warning。
@@ -678,3 +678,58 @@ final result: passed
 - **素材與錯誤**：六張正式素材整理至 `public/section-5/brand-pavilion/`，最長邊限制為 2800px 或 1800px，避免原始 6720／8256／7295px 圖片直接拖慢首屏。所有圖片經共用 `InternalBrandImage` 呈現；錯誤時在原容器顯示「品牌頁面圖片載入失敗」、替代文字及素材路徑。
 - **RWD／QA**：390px 為單欄、768px 三館為兩欄、1024px 起為三欄；1512／1920／2560／3840px Hero 固定 1410px 置中，不隨超寬螢幕無限制放大。390、768、1024、1512、1920、2560、3840px 實測皆 `scrollWidth === clientWidth`、錯誤提示 0，六張正式圖片均成功載入，Hero 目前頁標示正確。
 - **建置**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 通過；production build 只有 Tailwind CSS v4 既有 sourcemap warning，沒有新增型別或 SSR 錯誤。
+
+## Nuxt 3 — 1.1 品牌系列 AI Kitchen（2026-08-14）
+
+`nuxt-site/pages/home-style/aikitchen.vue` 建立正式 SSR 路由 `/home-style/aikitchen`。本輪範圍只包含 AI Kitchen；其餘九個品牌系列保留於 Header Mega Menu 並以 `aria-disabled` 明確標示尚未開放，不建立假頁、假連結或不存在的品牌系列總覽。
+
+- **PPT／Antra 結構**：以正式 `2026.08.14_1.0設計案例_櫻花整體廚房頁面開版.pptx` 第二頁為結構真值，逐段對照已購 Antra Home 09、Home 08、Gallery 01、Home 01 與 Home 03 原始 Elementor DOM／CSS；沒有使用簡報截圖當作頁面區塊。
+- **Hero**：使用正式 AI Kitchen 01–03 圖，保留 `Find Your Inspired Interior Design`、Start Project 圓形 CTA、水波、影片小卡與大型 `Interior` 裝飾字；三層換圖沿用 Page 1 的灰底／遮罩圖／原色圖結構，每 5 秒換圖、2 秒完成錯時由上而下揭露，reduced-motion 時停在第一張。
+- **正式文案與四套系**：使用官方 AI Kitchen 開場三段文案，以及 i Fun、i Chef、i Loft Chic、i Premium 的完整標題、說明與廚電配備。四套系不是一般 2×2 卡片，而是 PPT 指定的左右四影像窗與中央四項選單；桌面 Hover／Focus、手機點擊切換，影像與內容使用 Home 08 的 0.8 秒展開／淡入。
+- **Gallery／廚電／案例**：六款門板 D0751、D0754、D0750、D0718、D0032、D0720 使用櫻花官網 340×340 獨立原圖；六款推薦廚電使用官方透明底原圖，依 Home 01 的 6／5／4／3／2 欄規則與 4 秒循環呈現。Home 03 推薦案例使用 PPT 內嵌的三張原始高解析照片，只保留正式案例標題並連到櫻花官方案例頁，不保留模板假分類或英文假文案。
+- **資料與導覽**：新增 `KitchenSeriesPageData`、`KitchenSuite`、`KitchenFinish`、`KitchenEquipment`、`KitchenCase` 型別與 AI Kitchen 唯一註冊資料。`KitchenStyle` 增加 `slug／route／available`，AI Kitchen 指向 `/home-style/aikitchen`，官方名稱「閤樂廚房」已校正；Header「品牌系列」只作 Mega Menu 觸發器並移除不成立的「查看全部」。
+- **素材與錯誤**：11 張正式系列圖、6 張門板、6 張廚電與 3 張案例圖集中於 `public/section-1/brand-series/ai-kitchen/`。頁面圖片全部透過共用錯誤元件在原容器顯示名稱、路徑與完整載入錯誤，不留下破圖圖示。
+- **QA**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 只保留 Tailwind CSS v4 既有 sourcemap warning。390／768／1024／1512／1920／2560／3840px 實測皆 `scrollWidth === clientWidth`，正式圖片載入失敗 0、前端錯誤區塊 0；斷點依序呈現 2／3／3／6／6／6／6 欄門板、1／2／2／3／3／3／3 欄案例，1410px 版心在超寬螢幕不再放大。1512px 已驗證 i Chef 切換會同步更新四個圖片窗、完整說明及廚電配備；390px 重新載入並捲至套系區後仍維持預設 i Fun，不會被觸控裝置的假 Hover 誤切換。Header 桌面 Mega Menu 與手機 Accordion 均只有 AI Kitchen 可進入，九個系列皆為 `aria-disabled`，不存在「查看全部」假連結。Hero 三層來源會在 5 秒後切換，遮罩層 1.333 秒、原色層 1.667 秒加 0.333 秒延遲，共同構成 2 秒轉場；影片 Dialog、關閉操作與所有 Reveal 均正常。正式路由回傳 HTTP 200，未知 `/home-style/not-created` 回傳 Nuxt 404。
+- **Home 03 推薦案例校正**：初版誤把 `Recommended Cases` 與 `Take A Look At Our Latest Blog & Articles.` 套進置中標題共用元件，未還原 Home 03。現已改回原始 30／70 標題列：左側膠囊、金色圓點、水平／垂直裝飾線，右側 60/64px 大標並將 `Our Latest Blog` 標為模板金色。三案依 `post-style-3` 重製為 560px 舞台，中央案例使用直式滿版圖片、底部漸層與白字覆蓋，左右案例維持 1.40625 圖片比例、30/34px 標題及三行官方中文摘要；PPT 標示刪除的假分類與模板英文摘要沒有加回。1024px 以下解除中央特殊卡，回復一致的 2／1 欄內容流。
+
+## Nuxt 3 — 1.2 設計靈感列表頁（2026-08-14）
+
+- **正式路由與來源**：新增 SSR 路由 `/design-inspiration`，以正式 `2026.08.14_1.0設計案例_櫻花整體廚房頁面開版.pptx` 第三頁與已購 Antra `Projects 01` 為唯一版型真值；沒有把 AI Kitchen 的 Home 09 或既有案例門市卡片挪來替代。因 `/gallery` 已屬 3.2 案例門市，1.2 使用獨立路由避免覆蓋，Header「設計案例 → 設計靈感」同步接上。
+- **Projects 01 原生結構**：依 `dummy-data/content.xml` 的 Projects 01 Elementor 設定與 `inc/elementor/widgets/project.php`、`assets/css/base/elementor.css` 重建：Section 桌面 `100px 30px 130px`、1410px 版心、每頁 9 筆、3／2／1 欄、30px gap、圖片 `aspect-ratio:.833333`、24px 圓角、30/34px 標題、80px 玻璃 View 圓鈕、hover `scale(1.05)`／0.5 秒、40px 篩選下距及 41px 分頁上距。
+- **篩選與狀態**：只實作 PPT 指定的「設計型式／設計風格」兩個下拉篩選，使用 AND 條件；Filter 按鈕沿用 Antra `btn-slip-effect` 的膠囊、金色圓形箭頭與旋轉 Hover。`form／style／page` 同步 URL query，支援重新整理、上一頁與無效 query 正規化；無結果時在前端顯示完整空狀態，不引入 PPT 未要求的家庭組成、預算或設計師篩選。
+- **三筆正式案例**：首期依 PPT 顯示 case10 一字型／工業風、case56 一字型／北歐風、case35 中島／現代風，並連至既有 `/gallery/case10`、`case56`、`case35` 的 3.2.1 內頁。case35 詳細頁仍保留正式規格「L型＋中島」，列表僅以「中島」作篩選分類。三張列表圖直接取自 PPT 第三頁內嵌原始照片，整理於 `public/section-1/design-inspiration/`，圖片失敗由共用案例圖片元件在原容器完整顯示路徑與錯誤。
+- **RWD、動畫與分頁**：桌面 3 欄、1023px 以下 2 欄、767px 以下 1 欄；Hero 沿用 Antra 內頁 Breadcrumb 的 360px／80px 標題系統。卡片使用 `opalMoveUp` 並將延遲限制於 240ms，reduced-motion 時立即顯示且停用圖片縮放。數字分頁是真實 9 筆分頁狀態，目前三筆只顯示有效的第 1 頁，不製造不存在的第 2 頁。
+- **篩選回歸修正**：雙層篩選與瀏覽器返回會重新建立案例卡片；共用 `v-reveal` 已將 VNode class 正規化為空白分隔字串，避免動態節點產生 `design-project-card,ev` 逗號 class，同時讓 SSR／Client 維持相同的動畫 class、延遲與 `data-ev`，不改首頁既有效果。
+- **本機 QA**：已在 390／768／1024／1512／1920／3840px 驗證 1／2／3 欄、5:6 圖片比例、1410px 最大版心與 `scrollWidth === clientWidth`；雙層篩選、URL query、瀏覽器返回、無結果重設、case10 內頁連結、圖片錯誤數及 Console 均通過。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 完成（使用 ignore lock 僅因本機 3002 開發伺服器正在執行）。
+- **篩選列視覺校正**：保留 Projects 01 的 24px 標籤、58px Select、20px gap 與原生 Filter CTA，但解除兩個欄位固定 300px 造成的右側大片死白；桌面／平板改為等寬填滿 CTA 以外的版心，手機仍維持上下堆疊與滿寬選單。
+- **Select 圓角校正**：Projects Widget 的局部 CSS 雖只指定白底與透明邊框，實際畫面會繼承 Antra 主題全域表單圓角；初版誤用 `border-radius:0` 覆蓋該效果，現已還原為 100px 膠囊 Select，與 PPT 提供的模板截圖一致。
+- **版心置中校正**：共用 `internal-rail-safe` 原本把右側懸浮列所需的 86px 全部留在右側，使 1.2 篩選列與卡片視覺中心左偏 43px；本頁改為左右各 43px，在不縮減既有可用寬度、不碰懸浮列的前提下讓內容軸線回到 viewport 正中心。767px 以下懸浮列不占用內容空間，維持 0 安全內距。
+
+## Nuxt 3 — 1.3 廚房裝修指南列表頁（2026-08-14）
+
+- **正式路由與命名**：新增 SSR 路由 `/knowledge`，對齊 PPT 第四頁資訊來源所指向的櫻花官網正式列表路徑；Header「設計案例」內原本停用的「廚房小百科」依最新 PPT 名稱改為「廚房裝修指南」並接上新頁。4.x 三種文章內頁底部原本停用的「廚房裝修指南」分類 Tab 也同步啟用，不建立 `#` 或不存在的假路由。
+- **PPT／Home 02 真值**：頁面使用既有 Antra 內頁 Breadcrumb Hero，顯示「廚房裝修指南」及「首頁 / 廚房裝修指南」。內容區逐項對照已購 Antra `Home 2` 的 `antra-post-grid` 原始 Elementor XML、`post-style-1`／`post-style-2` PHP 與 `elementor.css`：1083px 的 30／70 標題列、`Straight From The Newsroom` 膠囊、`Take A Look At Our Latest Blog & Articles.` 60/64px 大標、49／51.3 比例雙欄、60px gap、24px 圓角與圖片 Hover `scale(1.1)` 均保留。
+- **最新文章重複邏輯**：依 PPT 截圖與 Home 02 原始兩個 Post Grid Widget，最新文章「廚房系統櫃材質」會同時出現在左側大卡及右側三篇列表第一筆；這不是資料重複錯誤。1024px 以下隱藏左側大卡並保留右側三篇，因此手機／平板不會漏掉最新文章。
+- **三篇正式資料**：依 PPT 指定來源收錄「廚房系統櫃材質」、「廚房插座規劃」、「中島廚房餐桌」三篇，日期分別為 `2025-05-09`、`2024-10-08`、`2023-11-08`；摘要逐字使用各篇官網第一段，不自行補寫裝修宣稱。內頁尚未建立前，卡片沿用 Home 02 可點擊行為並進入 PPT 指定的既有櫻花官方文章，避免導向 404 假頁。
+- **素材與錯誤介面**：三張正式主視覺取自甲方素材包並整理至 `public/section-1/kitchen-guide/`；4000px 系統櫃圖縮至 2400px、移除 metadata 並以 JPEG 86 品質輸出，視覺內容與比例不變。`InternalGuideImage` 會在原容器完整顯示「廚房裝修指南圖片載入失敗」、替代文字及素材路徑，不留下破圖圖示。
+- **RWD／浮動列安全**：桌面內容最大 1410px 並維持視窗正中央，左右各保留 46px 對稱內距，1280px 實測文章右緣不與 74px 右側浮動列重疊；1366px 以下 gap 收斂為 30px、左圖高度 440px，1024px 以下改為單欄三篇，767px 以下圖片在上、內容在下。1280px 實測 `scrollWidth === clientWidth`、三篇列表與一張精選卡均存在、圖片錯誤 0；Reveal 捲入後均為 `is-visible`。
+- **動畫與建置**：Breadcrumb、標題左右兩欄與文章兩欄使用既有 `opalMoveUp／Left／Right`，不把 Reveal 套在圖片本身；reduced-motion 由全站指令立即顯示內容並停用圖片縮放。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 只有 Tailwind CSS v4 既有 sourcemap warning，沒有新增型別、SSR 或打包錯誤。
+
+## Nuxt 3 — 1.3.1 廚房裝修指南內頁（2026-08-14）
+
+- **正式路由與 PPT 結構**：新增 SSR 路由 `/knowledge/design/systemcabinet`，依正式開版 PPT 第五頁組合 Antra `Single Post 01` 的 185px Breadcrumb、文章 Meta／50px 標題，以及 `Projects Details` 的 930px 內容流、40/44px 章節標題、24px 圓角圖片與底部分類 Tab。列表頁「廚房系統櫃材質」的大卡和右側第一筆已改走站內路由，其餘兩篇未開版文章仍連正式官網，不建立假內頁。
+- **日期判讀**：PPT 第五頁的母版縮圖仍殘留 `NOV 1, 2025`，但同份 PPT 第四頁與櫻花官網文章皆為 `2025-05-09`；頁面保留 Single Post 的日期幾何，內容採可驗證的 `MAY 9, 2025`，不把模板占位資料當正式文章資訊。
+- **正式內文與語意表格**：文章逐段使用官網「廚房系統櫃材質重要嗎」、「五大板材比較」、「七步驟挑選」與三筆案例內容，資料拆為型別化重點、步驟、表格列與案例區塊，沒有使用 `v-html` 或整頁截圖。PPT 明確標示「表格區塊（官網不是圖片）」，因此五種板材以真正的 `table／thead／tbody／th` 重建；手機可鍵盤聚焦並水平滑動查看完整六欄內容。
+- **圖片與錯誤**：主圖沿用列表正式素材；三張案例原圖整理至 `public/section-1/kitchen-guide/system-cabinet/`，全部保持自然比例、不以固定高度裁切。載入失敗時由 `InternalGuideImage` 在原位置顯示圖片用途、完整素材路徑與錯誤狀態。
+- **分類與推薦**：內文末端依 PPT 保留優惠活動、最新消息、媒體影音、廚房裝修指南四個 Projects Details 膠囊 Tab；最下方使用 Antra Home 03 專案卡幾何顯示三個分類的第一篇正式文章，Embla track 不套 Reveal transform，保留拖曳、Hover 與鍵盤 Focus。
+- **動畫／RWD／QA**：Meta／標題與段落群使用 `opalMoveUp`，主圖與三張案例圖只動畫純外層 `opalScaleUp`。1512×956 實測 Breadcrumb 185px、文章／首圖／內文皆為 930px 置中，首圖為 930×523px 自然 16:9；比較表為 6 欄 4 列、930px 完整顯示。390×844 實測內容欄 360px、頁面 `scrollWidth === clientWidth === 390`，表格只在自身 360px 容器內提供 900px 水平滑動並顯示操作提示，三張案例圖錯誤 0、四個分類 Tab 與三張推薦卡皆存在，捲到底後 Reveal 隱藏節點 0、Console error 0。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 通過；production build 僅保留 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 1.3.2／1.3.3 廚房裝修指南內頁（2026-08-14）
+
+- **正式路由**：依 PPT 第六、七頁新增 `/knowledge/design/kitchen-outlet-planning` 與 `/knowledge/design/knowledge31`，並將 `/knowledge` 列表剩餘兩篇卡片改為站內 NuxtLink；未知 slug 由 Nuxt 404 完整顯示，不建立其他不存在的裝修文章。
+- **模板母版**：兩頁共用 Antra `Single Post 01` 的 185px Breadcrumb、單一「廚房裝修指南」分類膠囊、正式日期、50/54px 標題與 930px 文章欄；內文依 `Projects Details` 使用 40/44px 章節標題、25/30px 子標、24px 圓角自然比例圖片、Projects Details 四分類 Tab，以及最下方三分類第一篇 Home 03 輪播。
+- **第六頁內容**：逐段呈現官方廚房插座文章的規劃三步驟、安裝三注意事項、三筆正式案例與延伸閱讀；主圖與三張案例圖取自甲方素材包，案例標題保留官方 case50／case31／case48 連結。4,500px 原圖在不改比例下縮至 2,400px、JPEG 86 品質，避免文章頁載入 5.1MB 原檔。
+- **第七頁內容**：逐段呈現中島廚房適用性、三項優點、餐桌三大設計重點與延伸閱讀；主圖、內文圖使用甲方正式素材。PPT 指定的 Home One 影片區使用官網可驗證的 YouTube ID `ervCQo-l2T4`，保留模板大字覆蓋、正圓水波播放鍵、載入中、12 秒逾時、完整錯誤原因及 YouTube 備援連結。
+- **內容誠信**：兩頁的標題、日期、段落與連結皆由素材包及櫻花官網文章核對；PPT 中殘留的模板 `NOV 1, 2025` 未覆蓋正式 `OCT 8, 2024`／`NOV 8, 2023`。頁面不使用 `v-html` 或文章截圖，圖片失敗由 `InternalGuideImage` 在原位置顯示用途、完整路徑及錯誤狀態。
+- **實機 QA**：1512×956 實測兩頁 Breadcrumb 為 185px、Meta／標題與內文皆使用 930px 置中欄，Reveal 完成後主圖寬 930px；390×844 內容欄為 360px、標題 30px，頁面皆 `scrollWidth === clientWidth`。完整捲動後圖片錯誤 0、Reveal 隱藏節點 0、四個分類 Tab 與三張推薦卡存在；`/knowledge` 已確認三篇卡片全部連到站內正式路由。第七頁播放鍵實測會建立 `youtube-nocookie.com/embed/ervCQo-l2T4` iframe。
+- **建置**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 僅有 Tailwind CSS v4 既有 sourcemap warning，沒有新增型別、SSR 或打包錯誤。

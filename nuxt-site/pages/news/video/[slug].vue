@@ -77,7 +77,7 @@ useHead({
             <NuxtLink to="/news/activities"><Camera aria-hidden="true" />優惠活動</NuxtLink>
             <NuxtLink to="/news/latest"><Images aria-hidden="true" />最新消息</NuxtLink>
             <NuxtLink to="/news/video" aria-current="page"><PlaySquare aria-hidden="true" />媒體影音</NuxtLink>
-            <span aria-disabled="true" title="廚房裝修指南列表尚未建置"><PanelsTopLeft aria-hidden="true" />廚房裝修指南</span>
+            <NuxtLink to="/knowledge"><PanelsTopLeft aria-hidden="true" />廚房裝修指南</NuxtLink>
           </nav>
         </div>
       </div>
