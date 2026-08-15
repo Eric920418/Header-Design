@@ -1,6 +1,29 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 6.2.2 建商專區型錄（2026-08-15）
+
+- 新增正式 SSR 路由 `/builders/catalogues`，依 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第七頁實作；沿用 Antra Projects 01 的 360px 麵包屑 Hero、1410px 版心、3／2／1 欄型錄卡、24px 圓角與 Projects hover 節奏，並依 PPT 指示刪除篩選列。
+- 第七頁指定的資訊來源短網址實際導向甲方既有 `/catalogues/kitchenware-catalog`；因此本頁保留六本正式品牌系列型錄及公開 PDF，但新增獨立的 2026 建商專區型錄卡，避免把「品牌系列型錄」與「建商專區型錄」硬塞在同一個導覽語意下。
+- 2026 建商型錄封面直接取自 PPT 第七頁內嵌的 1241×1654 正式原圖，整理至 `public/section-6/builders/catalogues/developer-catalogue-2026.jpg`；Hover／Focus 採 Poliform 圖冊參考的深色覆蓋、預覽文字與右側箭頭，點擊後用原生 Dialog 顯示完整封面預覽。
+- PPT 沒有附建商型錄 PDF，因此頁面明確顯示「正式 PDF 待甲方提供」，Dialog 也說明沒有建立假下載；六本既有品牌型錄仍另開甲方正式 PDF。Header「建商專區型錄」及 6.2.1 的兩個產品型錄入口均改接 `/builders/catalogues`，一般「品牌系列型錄」維持原 `/catalogues/kitchenware-catalog`。
+- 手機保留右側共用快捷列，型錄 Hover 操作改為常駐顯示並向左保留 78px 安全距離；Dialog 使用高於快捷列的原生 top layer，支援關閉鈕、原生 `cancel`／Escape 與點擊遮罩關閉。所有圖片失敗會在原卡片完整顯示素材資訊，reduced-motion 下停用縮放與位移。
+- 首輪 1280px QA 發現共用 Header 在 `xl` 斷點同時放大 Logo、導覽內距與外框內距，造成 Logo 壓到「品牌承諾」；完整桌面間距改由 1440px 才啟用，1024–1439px 維持既有 160px Logo 框與緊湊導覽，未改 60px 高度、字級或下拉互動。型錄 Dialog 另明確設為 viewport 置中，開啟時焦點直接落在關閉鈕，移除瀏覽器加在整個可捲動 panel 外的金色焦點框，同時保留關閉鈕的可見焦點環。
+- 最終 Design QA：PPT／Antra 結構與 1280×720 production preview、Poliform Hover 參考與實作卡片均已合併成同一張比較圖檢查；390×844 實測 `scrollWidth === clientWidth`、右側快捷列保留且操作區不重疊。七張封面 naturalWidth 均有效、六個 PDF 皆為 `_blank`＋`noopener noreferrer`、Dialog 關閉鈕／Escape／焦點、Header 與 6.2.1 串接均通過，Console error 0，最終結果 passed。
+
+## 6.2.1 SAKURA KITCHEN 介紹頁（2026-08-15）
+
+- 新增正式路由 `/builders/sakura-kitchen`，依 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第六頁與其中的 Antra Virtual Tours 參考頁重製；原 `/builders` 頁移至 `pages/builders/index.vue` 以建立正確父子路由，Header「建商專區」同步補上首頁、SAKURA KITCHEN 與型錄三項下拉導覽。
+- 2026-08-15 依畫面回饋重新逐項拆解第六頁：前版雖使用正式圖片，但把 Antra Virtual Tours 的 Hero 比例、右下玻璃導覽卡與低矮全景區塊改成自訂版型，並把產品型錄錯放進 Hero，判定不符合模板後已撤除。現行 Hero 直接沿用專案既有 Home 09 的 1410px／`2.203125:1`／24px 圓角舞台，右下玻璃導覽卡保留 PPT 指定的左圖右文模板結構，並連到本頁品牌優勢；立即預約維持左下圓形入口。
+- Hero、品牌優勢橫幅與六張品牌系列圖直接取自 PPT 第六頁內嵌的正式原圖；玻璃導覽卡依模板改為真實 HTML／CSS 元件，保留模板英文標題 `Project Excellence` 與英文連結 `Our Projects`，中段說明換成 PPT 指定的「源自於全台數百萬戶家庭生活研究與觀察」。文字可選取、整張可點擊並導向正式品牌優勢頁 `/about/advantage`。先前誤把 `Project Excellence` 參考圖當成正式網頁素材的作法已撤除，網站不再載入帶字卡片截圖。
+- 文案採用 PPT 指定的 700 萬用戶數據、45 萬套設計模組、AI 科技應用與家庭生活研究內容；品牌系列名稱使用 Libre Baskerville，Nuxt Google Fonts 載入設定已補齊 400／700 字重。
+- 品牌系列已依 PPT 素材與標示恢復為 `iChef`、`iFun`、`Loft Chic`、`iPremium`、`原色系列 01`、`原色系列 02`，順序、圖片與命名逐一對應；系列名改回 Virtual Tours 卡片中央覆蓋位置，不再使用錯誤的 AI Kitchen／Premium／Elegant 名稱或左下角自創排版。
+- Hero 與頁尾「立即預約」均導向 `/builders#appointment`，完成跨頁定位到 6.2-S1 預約表單；PPT 指定的唯一「產品型錄」入口移回低矮全景圖中央並以新分頁開啟正式 6.2.2 `/builders/catalogues`，Hero 不再重複放型錄入口。
+- RWD：桌面使用 1410px 單一模板版心、全景維持 `4:1` 低矮比例與三欄品牌圖；1024px 以下 Hero 改為 1.72:1、品牌圖兩欄，767px 以下改單欄並分離玻璃卡與預約圓鈕。所有圖片失敗會在原容器完整顯示檔案、用途與部署檢查提示，reduced-motion 下取消位移與 Hover transform。
+- 首輪瀏覽器驗收發現 `builders.vue` 與 `builders/sakura-kitchen.vue` 路由衝突，已改為 `builders/index.vue` 後重新建置；品牌專有名詞 `iFun`／`iPremium` 另覆寫全域標題 capitalize，保留 PPT 指定大小寫。
+- 390×844 首屏實測程式版玻璃卡片位於 x=35–305、右側快捷列始於 x=318，左圖與右文兩個抽樣點均命中整張連結而非快捷列；桌機與手機點擊均完整導向 `/about/advantage`。手機 `scrollWidth === clientWidth === 390`，卡片文字可選取，Hero 三張圖片皆正常載入。
+- 最終 Design QA：把 542×228 模板卡片參考與 1280×720 production preview 的程式元件裁切合併至同一張 1084×228 比較圖，逐項檢查圓角、玻璃底、左圖右文比例、英文 `Project Excellence`／中文 PPT 說明／英文 `Our Projects` 層級與縮圖裁切；桌機卡片實測 414.8×174.5 CSS px，手機為 270×113.6 CSS px。整張點擊、桌機／手機 `/about/advantage` 跳轉、快捷列安全距離、溢位、素材 naturalWidth 及重新載入的 console error 均通過，最終結果 passed；完整 QA 紀錄維持於 `/private/tmp/sakura-kitchen-redesign-qa.txt`，未新增第二份 `.md`。
+
 ## 5.3 關於我們（2026-08-13）
 
 - 正式路由：`/about/introduce`；Header「品牌承諾」、5.1 與 5.2 頁面導覽均已接上，不再顯示為停用項目。
@@ -112,7 +135,7 @@ pnpm build
 
 本節是目前首頁的最新實作真值；如與下方 2026-07-17 的歷史 Design QA 記錄衝突，以本節為準。新素材統一放在 `public/home-2026/`，不在執行時引用 Downloads 路徑。
 
-- **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框仍為 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，但 Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色廚房產品 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題使用官方 Logo，每個為 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊。桌面支援 hover 與鍵盤 focus-within 展開；一般下拉選單的觸發區與 Header 同為 `60px` 高，左側第一項沿左緣、右側項目沿右緣展開，避免 `190px` 選單被 viewport 裁切。新增「設計案例 → 品牌系列」第二層滿寬 mega-menu：左側保留四個原選項，右側以 `5×2` 卡片顯示首頁現有十大系列、正式中英文及圖片；「品牌系列」使用不跳頁的 submenu button，整塊維持同一個 hover/focus 區域，移入圖片不會閃退，圖片卡與「查看全部」才連回首頁 `#kitchen-series`。十大系列資料集中於 `src/data/kitchenStyles.ts`，與 `ProjectSection` 共用，避免 Header 與正文不同步。手機 Accordion 維持原本單層操作。
+- **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框為 ≥1440px `260px`、1024–1439px `160px`、<1024px `184px`，Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1439px 使用緊湊 item 與外框內距，≥1440px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色廚房產品 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題使用官方 Logo，每個為 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊。桌面支援 hover 與鍵盤 focus-within 展開；一般下拉選單的觸發區與 Header 同為 `60px` 高，左側第一項沿左緣、右側項目沿右緣展開，避免 `190px` 選單被 viewport 裁切。新增「設計案例 → 品牌系列」第二層滿寬 mega-menu：左側保留四個原選項，右側以 `5×2` 卡片顯示首頁現有十大系列、正式中英文及圖片；「品牌系列」使用不跳頁的 submenu button，整塊維持同一個 hover/focus 區域，移入圖片不會閃退，圖片卡與「查看全部」才連回首頁 `#kitchen-series`。十大系列資料集中於 `src/data/kitchenStyles.ts`，與 `ProjectSection` 共用，避免 Header 與正文不同步。手機 Accordion 維持原本單層操作。
 - **Header 二層 Hover intent 修正（2026-08-14）**：Nuxt 版「設計案例 → 品牌系列」維持現有滿寬面板、卡片尺寸、顏色與 300ms 淡入動畫，不再用高層級透明列覆蓋品牌面板。游標短暫經過「品牌系列」前往「設計靈感／廚房裝修指南／品牌系列型錄」時不開啟面板，三列可直接點擊；刻意停留 180ms 才開啟品牌面板，移入十大系列卡片後保持可操作。鍵盤 focus 立即開啟，不套 hover 延遲。
 - **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖；圖片轉場改為 Antra Page 1 Slider Revolution 原始 `slidingoverlaydown / double` 規格：總長 `2000ms`、第一份新圖片 `1333ms`、第二份新圖片延遲 `333ms` 並於 `2000ms` 完成，easing 對應 `power2.inOut`。首次進場三層為模板灰 `#9F9FA4`＋套 `rgba(16,8,1,.46)` 暫時遮罩的新圖＋原色新圖；後續換圖依模板實際週期改為保留上一張完整圖片作底層，再以暗色新圖與原色新圖由上往下覆蓋，過程不再重新露出灰底。最後原色圖片完整覆蓋，不加入整張常駐黑色遮罩；另在圖片轉場之上加入僅覆蓋 Hero 底部 `58%` 的透明至黑色漸層（中段 `rgba(0,0,0,.42)`、底部 `rgba(0,0,0,.86)`），強化 `Kitchen` 浮水印對比但不壓暗上半部主圖。Hero 根節點不再套整區 `fadeInDown`；`prefers-reduced-motion` 停在第一張、隱藏遮罩圖片層並直接顯示原色圖片。h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行。桌面左側「品牌系列」伸縮選單改為 viewport fixed，捲離 Hero 後仍固定在左側中線；手機維持隱藏。Start Project 的 120px 玻璃圓尺寸不變，未 hover 時增加 2 秒金色雷達水波，hover 後停止並隱藏。
 - **Section eyebrow**：Services／Gallery／WhatWeDo／Store 依序改為「廚房產品／門市案例／品牌承諾／門市查詢」，膠囊尺寸、金點、邊框與動畫不變。

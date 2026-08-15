@@ -60,7 +60,15 @@ const rightNav: NavItem[] = [
       { label: '加盟申請表', to: '/franchising/form' },
     ],
   },
-  { label: '建商專區', to: '/builders' },
+  {
+    label: '建商專區',
+    to: '/builders',
+    children: [
+      { label: '建商專區首頁', to: '/builders' },
+      { label: 'SAKURA KITCHEN', to: '/builders/sakura-kitchen' },
+      { label: '建商專區型錄', to: '/builders/catalogues' },
+    ],
+  },
   { label: '櫻花集團', to: 'https://www.sakura.com.tw/' },
 ]
 
@@ -131,21 +139,21 @@ function handleHeaderPointerDown() {
     @pointerdown.capture="handleHeaderPointerDown"
   >
     <div class="h-full bg-[linear-gradient(90deg,#b79258_20%,#d2b587)]">
-      <div class="flex h-[60px] items-center px-5 xl:px-12">
+      <div class="flex h-[60px] items-center px-5 min-[1440px]:px-12">
         <nav aria-label="主要導覽" class="hidden w-full items-center lg:flex">
           <div class="flex flex-1 items-center justify-start gap-1">
             <div v-for="item in leftNav" :key="item.label" class="desktop-nav-item group relative flex h-[60px] items-center">
-              <div v-if="item.children && item.to" class="flex h-[60px] items-center whitespace-nowrap px-1 text-[15px] leading-[15px] text-white xl:px-3">
+              <div v-if="item.children && item.to" class="flex h-[60px] items-center whitespace-nowrap px-1 text-[15px] leading-[15px] text-white min-[1440px]:px-3">
                 <NuxtLink :to="item.to" class="flex h-full items-center">{{ item.label }}</NuxtLink>
                 <button type="button" :aria-label="`展開${item.label}選單`" class="flex h-full items-center pl-1">
                   <ChevronDown class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
                 </button>
               </div>
-              <button v-else-if="item.children || item.mega" type="button" class="flex h-[60px] items-center gap-1 whitespace-nowrap px-1 text-[15px] leading-[15px] text-white xl:px-3">
+              <button v-else-if="item.children || item.mega" type="button" class="flex h-[60px] items-center gap-1 whitespace-nowrap px-1 text-[15px] leading-[15px] text-white min-[1440px]:px-3">
                 {{ item.label }}
                 <ChevronDown class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
               </button>
-              <NuxtLink v-else :to="item.to || '#'" class="px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</NuxtLink>
+              <NuxtLink v-else :to="item.to || '#'" class="px-1 py-2 text-[15px] text-white min-[1440px]:px-3">{{ item.label }}</NuxtLink>
 
               <div v-if="item.mega" class="desktop-nav-dropdown pointer-events-none invisible fixed inset-x-0 top-[60px] z-50 border-t border-black/5 bg-white opacity-0 shadow-2xl transition-all duration-300">
                 <div class="mx-auto max-w-[1200px] px-[30px] py-8 xl:px-0">
@@ -220,21 +228,21 @@ function handleHeaderPointerDown() {
             </div>
           </div>
 
-          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="flex w-[160px] shrink-0 items-center justify-center xl:w-[260px]">
+          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="flex w-[160px] shrink-0 items-center justify-center min-[1440px]:w-[260px]">
             <img src="/home-2026/footer/sakura-kitchen.png" alt="SAKURA Kitchen" class="h-auto w-full scale-125 object-contain brightness-0 invert" />
           </NuxtLink>
 
           <div class="flex flex-1 items-center justify-end gap-1">
             <div v-for="item in rightNav" :key="item.label" class="desktop-nav-item group relative flex h-[60px] items-center">
-              <div v-if="item.children && item.to" class="flex h-[60px] items-center whitespace-nowrap px-1 text-[15px] leading-[15px] text-white xl:px-3">
+              <div v-if="item.children && item.to" class="flex h-[60px] items-center whitespace-nowrap px-1 text-[15px] leading-[15px] text-white min-[1440px]:px-3">
                 <NuxtLink :to="item.to" class="flex h-full items-center">{{ item.label }}</NuxtLink>
                 <button type="button" :aria-label="`展開${item.label}選單`" class="flex h-full items-center pl-1">
                   <ChevronDown class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
                 </button>
               </div>
-              <button v-else-if="item.children" type="button" class="flex h-[60px] items-center gap-1 whitespace-nowrap px-1 text-[15px] text-white xl:px-3">{{ item.label }} <ChevronDown class="h-3.5 w-3.5" /></button>
-              <a v-else-if="item.to?.startsWith('http')" :href="item.to" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</a>
-              <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</NuxtLink>
+              <button v-else-if="item.children" type="button" class="flex h-[60px] items-center gap-1 whitespace-nowrap px-1 text-[15px] text-white min-[1440px]:px-3">{{ item.label }} <ChevronDown class="h-3.5 w-3.5" /></button>
+              <a v-else-if="item.to?.startsWith('http')" :href="item.to" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-1 py-2 text-[15px] text-white min-[1440px]:px-3">{{ item.label }}</a>
+              <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap px-1 py-2 text-[15px] text-white min-[1440px]:px-3">{{ item.label }}</NuxtLink>
               <div v-if="item.children" class="desktop-nav-dropdown pointer-events-none invisible absolute right-0 top-full z-50 pt-2 opacity-0 transition-all">
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li v-for="child in item.children" :key="child.label">
