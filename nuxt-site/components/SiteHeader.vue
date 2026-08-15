@@ -47,8 +47,20 @@ const leftNav: NavItem[] = [
 
 const rightNav: NavItem[] = [
   { label: '品牌承諾', children: [{ label: '品牌優勢', to: '/about/advantage' }, { label: '集團品牌館', to: '/about/exhibition' }, { label: '關於我們', to: '/about/introduce' }] },
-  { label: '我要加盟', children: [{ label: '加盟介紹', to: '#' }, { label: '加盟優勢', to: '#' }, { label: '加盟金與流程', to: '#' }, { label: '加盟Q&A', to: '#' }] },
-  { label: '建商專區', to: '#' },
+  {
+    label: '我要加盟',
+    to: '/franchising/intro',
+    children: [
+      { label: '加盟介紹', to: '/franchising/intro#introduction' },
+      { label: '加盟優勢', to: '/franchising/intro#advantages' },
+      { label: '加盟金與流程', to: '/franchising/intro#franchise-process' },
+      { label: '加盟Q&A', to: '/franchising/intro#franchise-faq' },
+      { label: '招商訊息', to: '/franchising/intro#franchise-news' },
+      { label: '加盟資料下載', to: '/franchising/download' },
+      { label: '加盟申請表', to: '/franchising/form' },
+    ],
+  },
+  { label: '建商專區', to: '/builders' },
   { label: '櫻花集團', to: 'https://www.sakura.com.tw/' },
 ]
 
@@ -56,13 +68,51 @@ const mobileOpen = ref(false)
 const searchOpen = ref(false)
 const expanded = ref<number | null>(null)
 const keyboardNavigation = ref(false)
+const seriesMegaOpen = ref(false)
+const SERIES_MEGA_OPEN_DELAY_MS = 180
+let seriesMegaOpenTimer: ReturnType<typeof setTimeout> | null = null
 const allNav = computed(() => [...leftNav, ...rightNav])
 const route = useRoute()
 watch(() => route.fullPath, () => {
   mobileOpen.value = false
   searchOpen.value = false
   keyboardNavigation.value = false
+  closeSeriesMega()
 })
+
+function clearSeriesMegaOpenTimer() {
+  if (seriesMegaOpenTimer === null) return
+  clearTimeout(seriesMegaOpenTimer)
+  seriesMegaOpenTimer = null
+}
+
+function scheduleSeriesMegaOpen() {
+  clearSeriesMegaOpenTimer()
+  seriesMegaOpen.value = false
+  seriesMegaOpenTimer = setTimeout(() => {
+    seriesMegaOpen.value = true
+    seriesMegaOpenTimer = null
+  }, SERIES_MEGA_OPEN_DELAY_MS)
+}
+
+function openSeriesMegaFromKeyboard() {
+  clearSeriesMegaOpenTimer()
+  seriesMegaOpen.value = true
+}
+
+function closeSeriesMega() {
+  clearSeriesMegaOpenTimer()
+  seriesMegaOpen.value = false
+}
+
+function handleSeriesMegaFocusOut(event: FocusEvent) {
+  const currentTarget = event.currentTarget
+  const nextTarget = event.relatedTarget
+  if (currentTarget instanceof HTMLElement && nextTarget instanceof Node && currentTarget.contains(nextTarget)) return
+  closeSeriesMega()
+}
+
+onBeforeUnmount(clearSeriesMegaOpenTimer)
 
 function handleHeaderKeydown(event: KeyboardEvent) {
   if (event.key === 'Tab' || event.key.startsWith('Arrow')) keyboardNavigation.value = true
@@ -116,12 +166,15 @@ function handleHeaderPointerDown() {
               </div>
 
               <div v-else-if="item.children" class="desktop-nav-dropdown pointer-events-none invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all">
-                <ul class="isolate min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
+                <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li
                     v-for="(child, childIndex) in item.children"
                     :key="child.label"
                     class="group/series"
-                    :class="childIndex === 0 ? 'peer/series' : 'relative z-[70] bg-white peer-hover/series:opacity-0 peer-focus-within/series:opacity-0'"
+                    @pointerenter="item.seriesMega && childIndex === 0 && scheduleSeriesMegaOpen()"
+                    @pointerleave="item.seriesMega && childIndex === 0 && closeSeriesMega()"
+                    @focusin="item.seriesMega && childIndex === 0 && openSeriesMegaFromKeyboard()"
+                    @focusout="item.seriesMega && childIndex === 0 && handleSeriesMegaFocusOut($event)"
                   >
                     <button v-if="item.seriesMega && childIndex === 0" type="button" aria-haspopup="true" class="flex w-full items-center justify-between gap-4 whitespace-nowrap px-5 py-2.5 text-left text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
                       {{ child.label }} <ArrowRight class="h-4 w-4" />
@@ -132,7 +185,11 @@ function handleHeaderPointerDown() {
                       {{ child.label }}
                     </NuxtLink>
 
-                    <div v-if="item.seriesMega && childIndex === 0" class="pointer-events-none invisible fixed inset-x-0 top-[60px] z-[60] opacity-0 transition-all duration-300 group-hover/series:pointer-events-auto group-hover/series:visible group-hover/series:opacity-100 group-focus-within/series:pointer-events-auto group-focus-within/series:visible group-focus-within/series:opacity-100">
+                    <div
+                      v-if="item.seriesMega && childIndex === 0"
+                      class="fixed inset-x-0 top-[60px] z-[60] transition-all duration-300"
+                      :class="seriesMegaOpen ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'"
+                    >
                       <div class="border-t border-black/5 bg-white shadow-2xl">
                         <div class="mx-auto max-w-[1512px] px-5 py-7 xl:px-12">
                           <div class="mb-3 flex items-end justify-between">
@@ -169,7 +226,13 @@ function handleHeaderPointerDown() {
 
           <div class="flex flex-1 items-center justify-end gap-1">
             <div v-for="item in rightNav" :key="item.label" class="desktop-nav-item group relative flex h-[60px] items-center">
-              <button v-if="item.children" type="button" class="flex h-[60px] items-center gap-1 whitespace-nowrap px-1 text-[15px] text-white xl:px-3">{{ item.label }} <ChevronDown class="h-3.5 w-3.5" /></button>
+              <div v-if="item.children && item.to" class="flex h-[60px] items-center whitespace-nowrap px-1 text-[15px] leading-[15px] text-white xl:px-3">
+                <NuxtLink :to="item.to" class="flex h-full items-center">{{ item.label }}</NuxtLink>
+                <button type="button" :aria-label="`展開${item.label}選單`" class="flex h-full items-center pl-1">
+                  <ChevronDown class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
+                </button>
+              </div>
+              <button v-else-if="item.children" type="button" class="flex h-[60px] items-center gap-1 whitespace-nowrap px-1 text-[15px] text-white xl:px-3">{{ item.label }} <ChevronDown class="h-3.5 w-3.5" /></button>
               <a v-else-if="item.to?.startsWith('http')" :href="item.to" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</a>
               <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap px-1 py-2 text-[15px] text-white xl:px-3">{{ item.label }}</NuxtLink>
               <div v-if="item.children" class="desktop-nav-dropdown pointer-events-none invisible absolute right-0 top-full z-50 pt-2 opacity-0 transition-all">

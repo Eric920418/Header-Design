@@ -113,7 +113,7 @@ pnpm build
 本節是目前首頁的最新實作真值；如與下方 2026-07-17 的歷史 Design QA 記錄衝突，以本節為準。新素材統一放在 `public/home-2026/`，不在執行時引用 Downloads 路徑。
 
 - **Header Logo / mega-menu**：導覽列 Logo 改用 Footer 同一份橫式 `public/home-2026/footer/sakura-kitchen.png`，保持原始比例；Flex 版面框仍為 ≥1280px `260px`、1024–1279px `160px`、<1024px `184px`，但 Logo 圖片以 `scale(1.25)` 視覺放大為約 `325 / 200 / 230px`。縮放不參與 Flex 尺寸計算，因此不擠壓左右導覽，也不改變固定 `60px` Header 高度；手機以左側為縮放原點避免貼出畫面。因素材金色與 Header 金色漸層對比不足，僅在 Header 以 CSS 轉為白色，Footer 原始金色不受影響。正常桌面導覽自 `1024px` 顯示，所有桌面寬度均使用 `15px / 15px / 400`，1024–1279px 只縮小 item 左右 padding，≥1280px 使用官網完整間距；只有 <1024px 使用搜尋＋漢堡 Accordion。白色廚房產品 mega-menu 繼續滿寬，產品內容收進 `max-width:1200px`；SAKURA／SVAGO／TEKA 三個文字標題使用官方 Logo，每個為 `170×50px` 顯示框並與產品圖、「廚房商品型錄」左緣對齊。桌面支援 hover 與鍵盤 focus-within 展開；一般下拉選單的觸發區與 Header 同為 `60px` 高，左側第一項沿左緣、右側項目沿右緣展開，避免 `190px` 選單被 viewport 裁切。新增「設計案例 → 品牌系列」第二層滿寬 mega-menu：左側保留四個原選項，右側以 `5×2` 卡片顯示首頁現有十大系列、正式中英文及圖片；「品牌系列」使用不跳頁的 submenu button，整塊維持同一個 hover/focus 區域，移入圖片不會閃退，圖片卡與「查看全部」才連回首頁 `#kitchen-series`。十大系列資料集中於 `src/data/kitchenStyles.ts`，與 `ProjectSection` 共用，避免 Header 與正文不同步。手機 Accordion 維持原本單層操作。
-- **Header 二層 Hover 命中修正（2026-08-14）**：Nuxt 版「設計案例 → 品牌系列」維持現有滿寬面板、卡片尺寸、顏色與淡入動畫；面板開啟時，原下拉選單其餘三列以較高但透明的命中層保留原座標。游標移回「設計靈感／廚房裝修指南／品牌系列型錄」時會先退出品牌面板，再恢復原列的顯示與點擊，不再被滿寬面板永久攔截；鍵盤 `focus-within` 亦採相同行為。
+- **Header 二層 Hover intent 修正（2026-08-14）**：Nuxt 版「設計案例 → 品牌系列」維持現有滿寬面板、卡片尺寸、顏色與 300ms 淡入動畫，不再用高層級透明列覆蓋品牌面板。游標短暫經過「品牌系列」前往「設計靈感／廚房裝修指南／品牌系列型錄」時不開啟面板，三列可直接點擊；刻意停留 180ms 才開啟品牌面板，移入十大系列卡片後保持可操作。鍵盤 focus 立即開啟，不套 hover 延遲。
 - **Hero**：使用 `ai-kitchen.jpg → clever-kitchen.jpg → basic-plus.jpg`，每 5 秒換圖；圖片轉場改為 Antra Page 1 Slider Revolution 原始 `slidingoverlaydown / double` 規格：總長 `2000ms`、第一份新圖片 `1333ms`、第二份新圖片延遲 `333ms` 並於 `2000ms` 完成，easing 對應 `power2.inOut`。首次進場三層為模板灰 `#9F9FA4`＋套 `rgba(16,8,1,.46)` 暫時遮罩的新圖＋原色新圖；後續換圖依模板實際週期改為保留上一張完整圖片作底層，再以暗色新圖與原色新圖由上往下覆蓋，過程不再重新露出灰底。最後原色圖片完整覆蓋，不加入整張常駐黑色遮罩；另在圖片轉場之上加入僅覆蓋 Hero 底部 `58%` 的透明至黑色漸層（中段 `rgba(0,0,0,.42)`、底部 `rgba(0,0,0,.86)`），強化 `Kitchen` 浮水印對比但不壓暗上半部主圖。Hero 根節點不再套整區 `fadeInDown`；`prefers-reduced-motion` 停在第一張、隱藏遮罩圖片層並直接顯示原色圖片。h1 與底部巨型字的 `Interior` 均改為 `Kitchen`；h1 在所有斷點固定於 `Inspired` 後換行。桌面左側「品牌系列」伸縮選單改為 viewport fixed，捲離 Hero 後仍固定在左側中線；手機維持隱藏。Start Project 的 120px 玻璃圓尺寸不變，未 hover 時增加 2 秒金色雷達水波，hover 後停止並隱藏。
 - **Section eyebrow**：Services／Gallery／WhatWeDo／Store 依序改為「廚房產品／門市案例／品牌承諾／門市查詢」，膠囊尺寸、金點、邊框與動畫不變。
 - **廚房產品卡**：順序與編號改為 `01 SAKURA → 02 SVAGO → 03 TEKA`；正式品牌拼字為 `SVAGO`。卡片尺寸、Logo 光學等大、Embla 輪播與 hover 不變。
@@ -742,3 +742,37 @@ final result: passed
 - **正式資料與下載**：六張封面取自甲方 1.4 素材包並整理至 `public/section-1/catalogues/`；標題、描述與 PDF 下載網址逐筆核對 PPT 指定的甲方公開型錄 API。卡片直接另頁開啟正式 PDF，不建立假的 1.4.1 文章內頁；圖片錯誤時在原卡片完整顯示型錄名稱、素材路徑與錯誤原因。
 - **RWD／QA**：1512px 實測為三欄、768px 為兩欄、390px 為單欄；六張正式封面全部載入、Reveal 完成後隱藏節點 0、`scrollWidth === clientWidth`，頁面不存在 PPT 指定刪除的篩選列與假分頁。手機六個右下箭頭保持可見，桌面則由 Hover／Focus 顯示；Header 桌面與手機導覽皆存在正式站內入口。
 - **建置**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 僅有 Tailwind CSS v4 既有 sourcemap warning，沒有新增型別、SSR 或打包錯誤。
+
+## Nuxt 3 — 6.1 我要加盟 Landing Page（2026-08-14）
+
+- **正式路由與 PPT 真值**：SSR 路由 `/franchising/intro` 以 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第 2 頁為開版範圍；PPT 紅框、註解及整頁截圖只用於核對，不當成前端素材。Hero pill 固定為「我要加盟」，英文大標依母版維持兩行 `Find Your Inspired / Interior Design`。
+- **Antra 原始骨架**：頁面直接使用 `home-5.xml` 的 `15c08dc / 729c843 / df512f3 / 158f4e8 / 836324d`、`home-1.xml` 的 `1bcdd25 / ef444c3`、Footer 1 的 `8ca2535` 與 Service Detail 的 `7179c4a` 原始容器比例、padding、字級、欄比及 Widget 輪廓；不再保留 2026-08-14 截圖仿製版的近似卡片與錯誤 QA 紀錄。
+- **原始素材與正式內容**：從模板 XML 指向的原始來源補入 `footer-demo1.png`、`h1-bg01-1.png`、`h1-bg02.png`、`h1-bg05.png`、`h5-bg1.png`、`h5-bg02.png`、`h6-bg-3.png`；甲方照片、兩位店經理、六大加盟優勢、五組品牌行銷、`story-strip.png` 與 `franchise-overview.png` 均取自 PPT 正式素材。圖片及 YouTube 影片載入失敗時會在原位置完整顯示原因與備援操作。
+- **互動與導覽**：Header「我要加盟」及五個子項已接正式路由／Section anchor。主要 CTA 開啟正式加盟表單，簡章 CTA 開啟正式 PDF；影片具 loading／timeout／error 狀態，FAQ 使用原生 button 與 `aria-expanded`。Home 01 專案 Carousel 保留母版無可見導覽鈕的外觀，觸控可橫滑、焦點狀態可用左右方向鍵瀏覽。
+- **Design QA（2026-08-15）**：Hero、About、Advantages、Projects、Newsletter、Process、FAQ、News 均將 PPT 母版與 production preview 置於同一張比較圖逐區檢查。桌機 1280px 實測 `scrollWidth === innerWidth`、Reveal 隱藏節點 0、FAQ 切換正常、Console 0 error；Carousel 右鍵一次移動 `736px`，第 4、5 張素材完成 lazy-load。`pnpm --dir nuxt-site typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 均通過；build 僅有 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 6.1.1 加盟資料下載（2026-08-15）
+
+- **正式路由與規格真值**：新增 SSR 路由 `/franchising/download`，依 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第 3 頁紅框，將 6.1.1 實作為獨立的「加盟資料下載（PDF）」頁；該頁沒有指定另一套 Antra 模板，因此沿用網站既有內頁 Hero、1410px 版心、Cal Sans 字體、品牌金色與 Header／Footer，不把 6.1 長篇 Landing Page 或後續 6.1.2 申請表混進本頁。
+- **正式 PDF 與預覽**：使用甲方素材包 `PDF/6.1_我要加盟/franchising_info.pdf` 原檔，保留 2 頁、8.0MB PDF；兩張 WebP 預覽由該 PDF 直接渲染，對應簡報第三頁中的雙面六折頁，不使用截圖拼湊或假內容。頁面提供線上預覽與同源下載，Header「我要加盟」下新增正式入口，6.1 Landing Page 的簡章 CTA 也改接此站內路由。
+- **錯誤與操作**：頁面載入時先以 HEAD 檢查 PDF，檔案不存在或回傳非 2xx 時，會在 CTA 下完整顯示 HTTP 錯誤、檔案路徑與重新檢查按鈕；兩張預覽沿用加盟專區圖片錯誤元件，在原容器顯示替代文字與素材路徑。桌面保留右側懸浮列 86px 安全距離，1023px 以下解除；手機 CTA 改為滿寬單欄。
+- **QA 與建置**：production preview 於 1280×720 實測 `scrollWidth === innerWidth`、兩張預覽完整載入、圖片錯誤 0、PDF 錯誤 0、Reveal 隱藏節點 0、Console error 0；新路由與 PDF 均回傳 HTTP 200，PDF `Content-Type` 為 `application/pdf`、`Content-Length` 為 `8403011`。`pnpm --dir nuxt-site typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 均通過，build 只保留 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 6.1.2 加盟申請表單（2026-08-15）
+
+- **正式路由與 PPT 真值**：新增 SSR 路由 `/franchising/form`，逐段依 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第 4 頁的最終「引用甲方資訊提案」實作；頁首採首頁既有 Header，其下增加黑色加盟次導覽，四個 Section 連回 6.1 Landing Page，右側提供 6.1.1 資料下載與本頁目前狀態。PPT 指定刪除的 Single Post 02 頂部 Hero 圖沒有加回。
+- **Single Post 02 表單骨架**：內容使用 930px `single-content` 版心、置中標題、前三欄並排輸入、圓角 58px 欄位、完整寬度加盟意向區與 Antra 膠囊送出鈕；不是把舊官網截圖貼進頁面。欄位逐項核對甲方現行 `/franchising/form`：姓名、Email、電話、加盟經驗、四級創業預算、開店地區、五級創業時間及個資同意，共八項必填。
+- **驗證與資料安全**：姓名、Email、電話、Radio、Select、地區與個資同意皆有前端驗證、`aria-invalid`、明確錯誤與首個錯誤自動聚焦；不使用 localStorage、Session Storage 或資料庫。`NUXT_PUBLIC_FRANCHISE_APPLICATION_ENDPOINT` 未設定時，送出會完整顯示設定錯誤，明確告知資料未傳送、未儲存並提供甲方現行官方申請表；設定正式端點後才會 POST，並具送出中、成功及包含 HTTP 狀態／端點的完整失敗狀態。所有技術錯誤直接展開顯示，不藏在摺疊區塊；未取得正式 site key 前不偽造 reCAPTCHA。
+- **導覽串接**：Header「我要加盟」新增「加盟申請表」，6.1 Landing Page 三個申請 CTA 全部改走站內 `/franchising/form`；6.1.1 與表單頁互相可達。現行甲方外部表單只作後台尚未串接時的明確備援，不再作為站內主要 CTA。
+- **手機表單安全區**：390px 實測發現全站右側快捷列會遮住表單選項與送出狀態，因此只在 `/franchising/form` 的 767px 以下隱藏快捷列；桌面版與其他頁維持原有三顆浮動按鈕，不改共用樣式與行為。
+- **Design QA（2026-08-15）**：將 PPT 指定的 Antra Single Post 02、甲方現行表單截圖與 production preview 放入同一張比較板檢查。1280×720 與 390×844 實測皆 `scrollWidth === clientWidth`、單一 `h1`、Reveal 隱藏節點 0；桌面保留快捷列，手機快捷列為 `display:none` 且 360px 表單卡完整可用。空白送出顯示 8 項必填錯誤並聚焦姓名；完整假資料送出顯示可見的 `ConfigurationError`，沒有傳送個資。正式路由回應 HTTP 200、Console error 0、`pnpm --dir nuxt-site typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 均通過，build 只保留 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 6.2 建商專區／6.2-S1 預約表單（2026-08-15）
+
+- **正式路由與範圍**：新增 SSR 路由 `/builders`，依 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第 5 頁實作完整 6.2 建商專區 Landing Page；6.2-S1 是頁面最下方 `#appointment` 預約 Section，而不是脫離內容脈絡的獨立空白表單頁。Header「建商專區」從 `#` 改接正式路由，Hero「專人聯繫」直接捲到表單。
+- **PPT／Antra 骨架**：Hero 與大圖依 Antra Home 05，團隊四欄依 Home 07，合作 Logo 區依 Home 01，預約區依 Contact Us；保留 `Find Your Inspired / Interior Design`、`Have A Project In Mind? Let’s Make It Happen`、1410／1770px 版心、Cal Sans、品牌金色及既有 Header／Footer。團隊區使用官方 Antra Home 07 四張人物原圖，但所有姓名與職稱均顯示 `Coming Soon`，避免把模板假資料冒充櫻花人員。
+- **正式建商內容與素材**：Hero、聯絡區廚房圖、SAKURA KITCHEN Logo 與九組合作建設 Logo 直接取自 PPT 內嵌原始檔，整理於 `public/section-6/builders/`；畫面以真實 HTML 呈現 45 萬+ 設計模組、AI 智能工廠、管理平台、HOME in O.N.E.、專業銷講／監工／驗收與一鍵登錄終身服務，不把舊官網整頁截圖貼進前端。所有圖片載入失敗時會在原容器顯示用途、完整素材路徑與錯誤。
+- **6.2-S1 欄位與資料安全**：表單依 PPT 為聯絡人、聯絡電話、建設公司、電子信箱與備註；前三項必填，Email 留白允許、填寫時驗證格式。空白送出會顯示逐欄錯誤並聚焦第一欄；`NUXT_PUBLIC_BUILDER_APPOINTMENT_ENDPOINT` 未設定時完整顯示 `ConfigurationError`，明確保證資料沒有傳送或儲存。設定正式端點後才 POST，並保留送出中、成功及包含 HTTP 狀態／端點的完整失敗訊息；沒有 localStorage、Session Storage、假 reCAPTCHA 或假成功。
+- **RWD 與浮動列**：桌面為四人／三能力／五 Logo 欄，平板依序折為 2／3／3 欄，手機為 1／1／2 欄；Hero 與 Contact 改單欄，所有重要表單控制項保持滿寬。767px 以下在 `/builders` 隱藏右側快捷列並解除桌面用的 86px `internal-rail-safe`，避免快捷列已消失後內容仍被錯誤壓窄；其他頁及桌面行為不變。
+- **Design QA（2026-08-15）**：PPT 第 5 頁最終提案、1280×720 Hero／Contact production preview 已合併比較；頁面 Section 順序、深淺背景節奏、Antra 大標與素材用途一致。桌機與 390×844 手機皆 `scrollWidth === clientWidth`、單一 `h1`、圖片錯誤 0、Console error 0；Hero CTA 點擊後 `#appointment` 精準停在 60px Header 下。手機快捷列為 `display:none`，內容安全內距已解除，團隊卡／Logo／表單寬度分別 330／164.5／330px。空白送出顯示 3 個必填錯誤並聚焦聯絡人；完整假資料送出顯示可見的 `NUXT_PUBLIC_BUILDER_APPOINTMENT_ENDPOINT` 設定錯誤，沒有傳送個資。九個正式建商 Logo 全部載入，`pnpm --dir nuxt-site typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 均通過；build 僅保留 Tailwind CSS v4 既有 sourcemap warning。
+- **預約 CTA 一致性修正（2026-08-15）**：6.2-S1「立即預約」移除獨有的黑底、18px gap、黑色箭頭與向上位移 Hover，改用全站內容型 CTA 真值：60px 高、`30 / 9 / 9px` 內距、灰色 64% 細框、15/22px 字級、40px 金色圓箭頭、初始 `-45deg` 與既有 2 秒雷達水波；Hover／鍵盤 Focus 後整顆填金、文字反白且箭頭轉正。手機維持內容寬度，不再把按鈕拉成滿欄。

@@ -32,6 +32,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       googleMapsApiKey: '',
+      franchiseApplicationEndpoint: '',
+      builderAppointmentEndpoint: '',
     },
   },
   vite: {
