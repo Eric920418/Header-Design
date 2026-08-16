@@ -1,6 +1,116 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2.4 廚房商品型錄／產品保養 Tips（2026-08-16）
+
+- 新增正式 SSR 路由 `/catalogues/catalog`，依 `2026.08.15_2.0廚房產品_櫻花整體廚房頁面開版.pptx` 第六頁製作；沿用 PPT 指定的 Antra `Projects 01` 360px 麵包屑 Hero、1410px 版心、桌面 3 欄／平板 2 欄／手機 1 欄型錄卡與 Hover 右側金色圓形箭頭，並依紅字要求刪除篩選列。2026-08-16 依使用者回饋再以母版同畫面檢查，撤除自行加入的 Hover `PDF Catalogue／查看型錄` 文字，並縮小中文 Hero、卡片標題與說明的視覺比例，避免內容置換後仍套用過大的英文尺寸。
+- 五本型錄依 PPT 與甲方現行資料整理為櫻花整體廚房、五金收納／水槽／龍頭／把手、櫻花石英石、SAKURA 全產品、SVAGO／TEKA 進口廚電；封面直接使用 PPT 第六頁內嵌正式原圖，卡片另開甲方正式 PDF。PPT 左側舊文字與同頁封面／甲方 2026 資料存在年份差異，因此畫面採同頁最新封面與甲方目前下載網址，不把舊年份錯配到新版封面。
+- 新增同頁「廚房產品保養」互動區，結構依 PPT 指定的 Antra FAQ 元件：三個分類下拉為瓦斯爐／IH 感應爐、除油煙機、烘碗機／洗碗機；左側問題可展開，右側依問題切換正式圖解與資訊卡。預設狀態依 PPT 使用「除油煙機 → 如何選購除油煙機？」。回饋修正版把先前過度自訂的巨型左標題／對半雙欄改回母版的不對稱節奏：左側小型 eyebrow、中段主標、右側短說明，問答與圖解約 70／30 分欄。
+- 2026-08-16 依使用者圈選的 FAQ 母版細節再修正：前一版把母版三個膠囊下拉誤判成扁平頁籤，右側又只保留長圖，屬於結構性誤讀。現行改為三個白色膠囊原生下拉選單，各自列出該分類的問題；左側問答改用母版簡潔的加號／減號，右側固定為「4:5 圖片預覽＋白色箭頭＋題目＋摘要」資訊卡。沒有專屬圖片的問題沿用同分類第一張正式保養圖，圖片可另開完整原圖，避免為了匹配卡片比例把長圖內容永久裁掉。
+- 三個下拉的收合狀態固定顯示分類名稱，不會把第一題誤顯示成欄位標籤；選取問題後會更新左側展開題目與右側資訊卡，再自動回到分類名稱，避免三欄都變成長問題造成版面失衡。
+- 右側模板原圖的白色箭頭落在深色照片上，但甲方正式保養圖多為白底資訊圖；為避免箭頭消失，現行保留白色箭頭並加半透明深色圓形承托，Hover 轉品牌金色。這是針對內容替換後的必要對比修正，不更換正式圖解。
+- 依使用者截圖與實作同畫面比較後，FAQ 桌面版再把 eyebrow 欄由 170px 校正為 270px，使主標起點貼近母版；內容由約 70／30 改為「左側彈性問答＋70px 間距＋260px 右卡」，右側不再過寬，4:5 圖片與下方文字比例回到母版。此輪視為前一版 P2 版面比例漂移的修正。
+- 同畫面第二輪發現右側資訊卡仍錯誤地從問答列起點才開始，較母版低約一個下拉列高度；現行把「三個下拉＋問答」包在左欄，右側資訊卡從下拉列頂端同步開始，圖片下方標題與摘要因此能在首個 FAQ viewport 內完整露出。
+- FAQ 問題、步驟與注意事項取自素材包 `FAQ 內容/2.4_廚房商品型錄/廚房產品: 保養tips.docx`；六張圖解取自 `影像/2.0_廚房產品/2.4_產品保養/`，沒有以截圖頁面、假 icon、CSS 圖形或自創保養圖片代替。圖片失敗會在原位置完整顯示錯誤標題、替代文字、素材路徑與修正提示。
+- Header 桌機 mega-menu 與手機 Accordion 的「廚房商品型錄」已接到 `/catalogues/catalog`；2.1.1、2.1.1.1、2.1.1.1.1 三層頁尾 CTA 由 disabled 改為真實 Nuxt 連結，預覽卡也改用 2.4 正式商品型錄，不再誤用 1.4 品牌系列型錄。
+- 本頁不建立執行期 API；依使用者先前決定，以 2026-08-16 甲方資料快照與正式 PDF 連結完成前端，日後再由 API 替換資料來源，不影響現有版型與互動。
+
+### 2.4 Design QA
+
+- **來源真值與狀態**：PPT 第六頁完整畫面為 `/private/tmp/sakura-product-ppt.0ty3uG/rendered/slide-6.png`（1258×889）；PPT 內嵌的 Antra `Projects 01`＋FAQ 母版為 `/private/tmp/sakura-slide6.9dW8eP/source/ppt/media/image37.png`（977×2477）。實作真值為 production preview `/catalogues/catalog`，初始狀態固定為「除油煙機／Q1 如何選購除油煙機？」。
+- **瀏覽器畫面與規格**：最終 FAQ 以 1280×720 CSS viewport、DPR 2 擷取 `/private/tmp/sakura-catalog-faq-layout-final.png`；手機以 390×844 CSS viewport 實測，`scrollWidth === 390`、右側資訊卡位於問答後方且無重疊。使用者圈選參考圖先縮放至同寬，再與瀏覽器實作合併為 `/private/tmp/sakura-faq-user-final-comparison.png`；最終修正另以量測確認下拉列與右卡 `top` 同為 `225.1875px`，不以分開觀看冒充同畫面比較。
+- **全局與細節比較**：使用者回饋後重新判定首輪結論過度寬鬆：雖然 Hero、灰底型錄區、三欄卡片、白底 FAQ 與頁尾順序正確，但 72px 左側保養標題、50／50 問答分欄、黑色無圖解卡與 Hover 額外文案均非母版指定，屬 P1 視覺結構漂移。修正版保留 PPT 明確要求刪除的 Filter、五本正式封面與三類保養頁籤，只調整母版幾何與層級，不把正式內容換回建築照片或英文 FAQ。
+- **字體、間距與色彩**：標題使用專案既有 Cal Sans／中文字型 fallback；桌面採 68px Hero、56px 保養標題、24px 卡片標題與 19px FAQ 問題。最終 FAQ Header 採 `270px／主標／300px` 三段，主標實測起點 `x=377px`；內容為 `804px` 問答、`70px` 間距、`260px` 右卡，實測右卡 `x=947px`，貼近參考圖比例。`#F6F6F6`、白底、`#1C1C1D`、`#59585D` 與 `#CAA05C` 映射既有 Antra token；手機仍保留右側固定快捷列安全距。
+- **圖片、內容與圖示**：五張封面 naturalWidth 分別為 1168、1241、776、774、758；預設保養圖解為 1000×2199，捲到可視區後 `complete=true`。標題、五類型錄、三類保養分類、四至五個問題與七步清潔內容均與 PPT／Word 素材一致；箭頭與展開符號使用既有 Lucide，沒有 CSS 圖形、手繪 SVG、假封面或頁面截圖冒充元件。
+- **互動、響應式與錯誤**：三個原生下拉均可鍵盤操作，收合後顯示分類名；實際在第三欄選擇第 4 題後，左側 Q04 `aria-expanded=true`、右側標題更新為「使用烘碗機的好處有哪些？」且圖片連結保留，三欄再回到分類名稱。加號／減號使用 Lucide，右卡箭頭深色承托在白底圖解上仍清楚可見；桌面與手機水平溢位為 0，瀏覽器 console 為空，圖片錯誤 fallback 仍完整呈現。
+- **比較歷程與可接受差異**：第二輪修正巨型標題、50／50 分欄、黑卡與額外 Hover 文案；第三輪依圈選圖把假頁籤改成膠囊下拉、問答箭頭改為加減號、補回右側圖片／箭頭／標題／摘要卡；同畫面比較再發現主標起點與右卡寬度為 P2 比例漂移，已校正至 270px Header 起始欄及 260px 右卡；下一輪發現右卡比下拉列低一層，已重組為左右雙欄並讓兩者頂端完全對齊。最終沒有剩餘可執行的 P0／P1／P2。參考照片改成 PPT 指定保養圖解、英文文案改成正式中文 FAQ，屬指定內容替換；來源無手機稿，因此手機不聲稱像素級相同。
+- **建置結果**：`pnpm typecheck`、`pnpm build` 與 `git diff --check` 均通過；build 僅有專案既有的 Tailwind sourcemap warning。五個正式 PDF 連結以 HEAD 驗證皆回傳 `application/pdf`。
+- **final result: passed**
+
+## 2.1.1.1.1 SAKURA 廚電各產品頁（2026-08-16）
+
+- 新增資料驅動的正式 SSR 詳情路由 `/products/sakura/range-hood/near-suction/[product]`，目前完整支援 R7600、R7615、R7653、DR7396、DR7397、R7302A、R7301A 七個型號；上一層七張商品卡全部改為真實 Nuxt 連結，未知型號由 Nuxt 404 在前端完整顯示錯誤，不建立空白或假詳情頁。
+- 依 `2026.08.15_2.0廚房產品_櫻花整體廚房頁面開版.pptx` 第五頁指定的 Antra `Shop > Single Product` 母版製作：沿用不放大型頁名的短版深色麵包屑、左側大商品圖、右側品牌／名稱／型號／特色／售價／產品資料、底部縮圖列、四張 Related Products 與 Home 07 型錄 CTA；五層麵包屑換成 PPT 指定的 SAKURA 資訊，產品名稱是頁面唯一 H1。
+- 商品名稱、型號、售價、特色、詳細規格、使用手冊、RoHS 與可用商品型錄均取自甲方現行商品資料；正式商品圖下載成獨立本機素材放在 `public/section-2/products/sakura/range-hood/near-suction/details/`，畫面 UI、規格表與互動仍由 Vue／HTML／CSS 實作，沒有把甲方網頁截圖貼進前端。
+- 相簿縮圖與左右切換均使用真實商品圖片；「詳細規格」使用原生 Dialog 顯示各型號完整雙欄資料表，附件另開正式 PDF；Related Products 固定顯示四張同系列商品並可循環切換，每張可直接進入對應詳情頁。
+- 依 PPT 紅字要求刪除 Single Product 母版的商品上一筆／下一筆導覽與 Newsletter；因甲方資料未提供購物流程，本頁也不捏造購物車、數量、庫存、評分或評論。API 仍依使用者決定延後，現階段使用 2026-08-16 甲方資料快照，而不是自創文案。
+- 底部維持全站黑色膠囊＋金色圓箭頭的「廚房商品型錄下載」CTA，現已接到正式 `/catalogues/catalog`；預覽卡同步改成 2.4 商品型錄資料。
+
+### 2.1.1.1.1 Design QA
+
+- **來源真值與狀態**：來源為 PPT 第五頁的 Antra `Shop > Single Product` 內嵌母版 `/private/tmp/antra-single-product-top.png`（1430×1220）與甲方 R7600 商品資料；production preview 以 `/products/sakura/range-hood/near-suction/r7600` 初始狀態為主要比對，其餘六個型號使用相同模板與各自正式資料。來源只提供桌面稿，不捏造手機像素級真值。
+- **同畫面證據**：1280×720 CSS viewport、DPR 2；Browser 輸出的實作畫面為 1280×720，來源裁切／縮放成同尺寸後與最終首屏合併於 `/private/tmp/sakura-single-product-final-comparison.png`。商品主體另以相同 1135×570 內容區合併於 `/private/tmp/sakura-single-product-focus-comparison.png`，用來檢查標題、圖片尺度、雙欄比例、特色、售價與箭頭，而不是只看縮小的整頁圖。
+- **比較歷程**：第一輪發現詳情頁誤沿用前幾頁 360px 大標 Hero，與第五頁母版的短版麵包屑不一致，判定為 P1 首屏比例漂移；已撤掉大型頁名、把 Hero 改為實測 200px，並把產品名稱升為唯一 H1。第二輪同尺寸比較確認 Header 下方為短版五層麵包屑、商品雙欄緊接其後，先前差異已消失，未再發現可執行的 P0／P1／P2。
+- **字體、間距與色彩**：產品名稱沿用全站 Cal Sans／中文 fallback，桌面 62px 上限，型號、區塊小標、特色與售價層級與母版一致；1410px 版心、左大圖右資訊、26px 圖片圓角、分隔線與 30px 關聯商品欄距均沿用既有 Antra 節奏。`#1C1C1D`、`#59585D`、`#F6F6F6`、白色與品牌金 `#CAA05C` 對應母版深灰／淺灰／金色 token，disabled CTA 仍有可見狀態與原因。
+- **圖片、圖示與文案**：R7600 三張商品圖實測 naturalWidth 800 且 `complete=true`；其餘正式圖為 800px 主尺寸，R7301A 長邊壓至 1600px，沒有破圖、截圖 UI、假商品圖、CSS 圖形或手繪 SVG。箭頭、下載與關閉圖示全用既有 Lucide；商品名稱、六項特色、R7600XL／$18,000、12 列規格與三個附件均與甲方資料一致。
+- **互動與可用性**：相簿第二張點擊後主圖切成 `r7600-2.png`、計數更新為 `02 / 03` 且只有一個 `aria-pressed=true`；規格 Dialog 實測開啟、12 列資料與關閉鈕正常。Related Products 實測四張真連結，點 R7615 後路由、型號、$15,700、六項特色與兩張縮圖同步更新；上一層 R7600 商品卡也能回到正式詳情頁。頁面沒有 Newsletter、Reviews、購物車或數量輸入。
+- **版面、路由與錯誤**：1280px 實測五層麵包屑、`scrollWidth === clientWidth`、水平溢位 0、Browser console 空白；七個正式型號皆回傳 HTTP 200，未知型號回傳 404 並由 Nuxt 顯示完整錯誤。CSS 另含 1023px 雙欄／關聯商品兩欄、767px 商品單欄／規格表直排與 reduced-motion 規則；因來源沒有手機稿，手機僅做結構與規則驗證，不聲稱像素級相同。
+- **建置結果**：修正後 `pnpm typecheck`、`pnpm build` 與 `git diff --check` 均通過；build 僅有專案既有的 Tailwind sourcemap warning。
+- **final result: passed**
+
+## 2.1.1.1 SAKURA 廚電系列列表頁（2026-08-15）
+
+- 新增正式 SSR 路由 `/products/sakura/range-hood/near-suction`，依 `2026.08.15_2.0廚房產品_櫻花整體廚房頁面開版.pptx` 第四頁製作；層級固定為「SAKURA 廚電產品 → 除油煙機系列 → 近吸系列」，Hero H1 仍使用 PPT 指定的「SAKURA 廚電產品」，麵包屑完整保留四層。
+- 主商品區使用第四頁指定的 Antra `Pages > Shop > Single Product` Related Products 結構，並依紅字標註改成桌面四欄；平板兩欄、手機單欄。商品卡是 Vue／HTML／CSS 元件，只有商品主體圖片取自 PPT 內嵌的甲方正式畫面，沒有把整頁截圖貼進前端。
+- 依 PPT 甲方資料建立七項近吸產品：R7600／$18,000、R7615／$15,700、R7653／$20,700、DR7396／$26,300、DR7397／$26,300、R7302A／$18,300、R7301A／$18,300；商品名稱、型號、價格與排列順序均照來源畫面，圖片整理為七張 720×540 PNG。
+- 第四頁指定「產品超過 8 項才顯示箭頭」，本系列只有 7 項，因此不顯示載入箭頭；同時不加入 PPT 未要求的搜尋、篩選、假分頁或假載入更多。七張商品卡現已接到 2.1.1.1.1 對應的正式詳情路由。
+- 中段依 `Home 01` 形式串接除油煙機八個同層系列名稱與產品數量，保留無框、疏朗灰階、連續橫向動畫與 Hover 暫停；不拿甲方資料截圖中的 UI 元件充當模板，也不重複 2.1 的十三項頂層分類。
+- 底部依 `Home 07` 使用兩本型錄預覽與全站黑色膠囊＋金色圓箭頭 CTA；現已改用 2.4 正式商品型錄預覽並接到 `/catalogues/catalog`。
+- `/products/sakura/range-hood` 的「近吸系列」卡片已成為正式 Nuxt 連結並支援鍵盤 focus；其餘七個尚未要求的系列仍不偽裝成可點擊入口。API 依使用者決定延後，現階段採 PPT 甲方資料快照。
+
+### 2.1.1.1 Design QA
+
+- **來源與狀態**：來源視覺真值為 PPT 第四頁指定的 Antra `Pages > Shop > Single Product` 畫面（PPT 內嵌 `image22.png`，815×2475）及甲方近吸系列資料畫面（PPT 內嵌 `image19.png`，2560×1364）；實作為 production preview `/products/sakura/range-hood/near-suction`。兩者均以桌面四欄、商品列表初始狀態比較，PPT 沒有提供手機視覺真值，所以手機只驗證 2／1 欄程式規則，不捏造像素級對照結論。
+- **同畫面比較證據**：已把來源 `Related Products` 四欄區與本機 1280×720 商品區裁成相同 1160px 內容寬度，放進 `/private/tmp/near-suction-template-comparison.png` 同畫面上下比較；另保存首屏、第一列、第二列、同層系列與型錄 CTA 的 1280×720 瀏覽器畫面。來源卡片與實作均為四欄、20px 圓角圖片面、圖片下方資訊與無多餘邊框；來源的英文家具／評分星號改為 PPT 指定的甲方商品名稱、型號與建議售價，屬必要資料替換，不是設計漂移。
+- **字體與層級**：Hero 保留全站 Cal Sans／中文 fallback、大標 80px 與置中麵包屑；商品區標題採同系列頁既有 60／64px 層級。卡片名稱 20／27px、型號 16／22px、價格 17px 粗體，在四欄下 DR7396、R7302A、R7301A 的長名稱正常換兩行，第二列型號與價格仍對齊，沒有截字或擠壓。
+- **間距、色彩與素材**：實測 1280px 四欄為 `261px × 4`、欄距 30px，內容左右安全距 73px；灰底、白色圖片面、`#1C1C1D` 標題、`#59585D` 內文、`#CAA05C` Hover 沿用 Antra token。七張商品圖均為 720×540、`complete=true`、naturalWidth 720，第二列重裁後沒有殘留甲方畫面的商品文字或價格；未用 CSS 圖形、假商品圖或整頁截圖充當元件。
+- **互動與可用性**：從 `/products/sakura/range-hood` 實際點擊「查看近吸系列的 7 個產品」可抵達新頁；商品 Hover 實測圖片 `scale(1.045)` 且名稱轉金色，同層系列列 Hover 後 animation-play-state 為 `paused`。七張商品卡均已接到正式詳情頁；型錄 CTA 現已接到 `/catalogues/catalog`，頁面無搜尋、篩選、載入更多或商品假連結。
+- **版面與錯誤**：1280px 實測 7 張商品卡、8 個同層系列、4 欄網格與四層麵包屑完整；`document.scrollWidth === document.clientWidth === 1280`，沒有水平爆版。瀏覽器 console 為空，所有圖片載入成功；CSS 包含 1023px 兩欄、767px 單欄、手機 Hero／安全距與 reduced-motion 規則。
+- **比較歷程**：首輪素材檢查發現最初的商品裁圖帶到甲方畫面的價格文字，已把第一列改為 430×310、第二列改為 430×250 的商品主體區重新裁切，再統一整理成 720×540；修正後瀏覽器第二列畫面與七張 natural size 檢查均無殘字。第二輪同畫面比較未發現可執行的 P0／P1／P2 差異，沒有再以主觀偏好改動模板結構。
+- **建置結果**：`pnpm typecheck` 與 `pnpm build` 均通過；build 只有專案既有的 Tailwind sourcemap warning。
+- **final result: passed**
+
+## 2.1.1 SAKURA 廚電產品列表頁（2026-08-15）
+
+- 新增正式 SSR 路由 `/products/sakura/range-hood`，依 `2026.08.15_2.0廚房產品_櫻花整體廚房頁面開版.pptx` 第三頁實作；資訊層級明確定義為「2.1 商品分類 → 2.1.1 除油煙機系列」，不是再複製一張 2.1 分類頁。
+- 版面沿用第三頁指定的 Antra Blog／Gallery 01 Hero、Related Products 三欄卡、Home 01 分類列與 Home 07 型錄推薦段落；H1 使用 PPT 指定的「SAKURA 廚電產品」，主內容標題使用範例分類「除油煙機系列」。
+- 依 PPT 內嵌甲方資料畫面建立 8 個正式系列與數量：近吸 7、歐化 9、隱藏 7、流線 3、深罩 1、斜背 4、輕巧 1、配備 8。八張卡片商品主體均自 PPT 內嵌正式畫面裁出並整理為獨立 720×540 PNG；畫面 UI、文字、卡片、Hover 與 RWD 仍以 Vue／HTML／CSS 實作。
+- 2.1 的「除油煙機」分類卡已接到 `/products/sakura/range-hood`，桌機 Hover／鍵盤 Focus 顯示圓形箭頭，手機固定顯示操作提示；其餘分類對應的 2.1.1 頁面尚未要求，因此不建立假路由。
+- 「近吸系列」已接到新完成的 `/products/sakura/range-hood/near-suction`；其餘同層系列等待後續簡報頁與正式資料，不先建立空頁。
+- 依 PPT 規則，產品超過 8 項才顯示載入箭頭；本頁剛好 8 項，所以不製作假載入更多。搜尋與篩選同樣依簡報排除。
+- 第三頁底部指定的「廚房商品型錄下載」現已接到正式 `/catalogues/catalog`，CTA 保留全站黑色膠囊＋金色圓箭頭樣式，不再誤連到語意不同的品牌系列型錄。
+- 使用者已確認 API 可延後，因此未設定 API 不再視為前端錯誤或顯示介接提示；只有日後真的設定端點、且端點失敗或回傳空資料時，2.1 才顯示完整錯誤與 fallback 原因。
+- 依 2026-08-15 畫面回饋修正中段 Home 01：撤除沒有簡報依據的 `Product Categories` 左標、右側 36px 大標與三張分類統計方框。PPT 第三頁要求的是 Home 01 品牌 Logo 列的元件與動畫形式，因此改成置中的「SAKURA 廚電產品」小標，以及由 2.1 正式資料產生的 13 個系列名稱／商品識別橫向輪播；未建立的分類仍不偽裝成可點擊連結。
+- 第二次視覺校正撤除 Logo 列中泛白且沒有簡報依據的商品縮圖；PPT 標註要求串接的是「系列產品名稱」，所以每項改為 Home 01 原版的文字識別鎖定：系列名稱為主字、所屬的 SAKURA 廚電商品／熱水器／淨水設備為小字。桌面固定約六項同時可見，灰階對比依模板 Logo 列調整，不再套用讓文字發白的整體透明度；保留連續橫向動畫及 Hover 暫停，沒有卡片、邊框、假 icon 或灰白圖片方塊。
+
+### 2.1.1 Design QA
+
+- **模板對照**：已將 PPT 第三頁內嵌的 Antra Blog／Gallery 01 首屏與本機 1280×720 production preview 並排比對；360px 深色 Hero、置中 H1／麵包屑、內容留白、三欄圓角卡片及右側共用快捷列的結構一致。中段另把 PPT 的 Home 01 原版與最終文字識別版放進 `/private/tmp/sakura-home01-typography-comparison.png` 同畫面比較，確認桌面同時呈現六項、置中小標及相同的疏朗灰階節奏；已移除自創分類方框與商品縮圖，避免把「名稱串接」誤做成圖片牆。比較圖皆屬暫存 QA 證據，不另建立專案 Markdown 文件。
+- **資料與圖片**：瀏覽器實測 8 張系列卡完整渲染，名稱、順序與產品數量均與 PPT 甲方畫面一致；8 張系列圖皆為 720×540、`complete=true`，沒有破圖或整頁截圖冒充網頁元件。
+- **導覽與狀態**：從 `/products/sakura` 的「除油煙機」卡片實際點擊可進入 `/products/sakura/range-hood`；頁面沒有假搜尋、假篩選或假載入更多。「廚房商品型錄下載」現已接到 `/catalogues/catalog`。
+- **執行品質**：1280px 實測 `document.scrollWidth === document.clientWidth`、console 為空、所有前端圖片載入成功；CSS 另包含 1023px 兩欄、767px 單欄與 reduced-motion 規則。`pnpm typecheck`、`pnpm build` 均通過，build 只有專案既有的 Tailwind sourcemap warning。
+- **final result: passed**
+
+## 2.1 SAKURA 廚電商品列表頁（2026-08-15）
+
+- 新增正式 SSR 路由 `/products/sakura`，依 `2026.08.15_2.0廚房產品_櫻花整體廚房頁面開版.pptx` 第二頁製作；沿用 Antra Virtual Tours 的 360px 麵包屑 Hero、Home 02 左文右圖介紹區、1410px 版心、3／2／1 欄商品卡與 24px 圓角節奏。PPT 有指定的頁面大標與麵包屑使用「SAKURA 廚電產品」，介紹區則保留模板英文 `Trusted Experience` 與 `Behind Every Statistic Pulses A Human Story`。
+- 商品資料依 PPT 內嵌的甲方正式分類畫面建立 13 個可核對分類：6 個 SAKURA 廚電商品、2 個熱水器、5 個淨水設備；卡片商品圖取自 PPT 內嵌來源圖的單一商品主體，頁面結構、文字與互動仍是 Vue／HTML／CSS，沒有把完整頁面截圖當成網頁。
+- 新增唯讀商品資料介接設定 `NUXT_PUBLIC_SAKURA_PRODUCT_ENDPOINT`。依使用者決定，甲方尚未提供 API 端點時先安靜使用 PPT 分類快照，不顯示錯誤或介接提示；日後若真的設定端點且回傳失敗、空資料或格式錯誤，才完整顯示錯誤、端點、fallback 原因與重新讀取操作。
+- Header 桌機與手機版的「廚房產品 → SAKURA 廚電」已接到 `/products/sakura`；SVAGO、TEKA 仍維持明確的「尚未開放」狀態，廚房商品型錄則已接到正式 `/catalogues/catalog`，沒有 `#` 假連結。
+- 本頁刻意不加入搜尋、篩選、假分頁、假載入更多與假 360° 控制，因 PPT 明列原合約沒有搜尋／篩選。2.1.1 第一個正式系列頁「除油煙機系列」已完成並接上；其餘分類等對應 PPT 頁面與正式資料提供後再延伸，不先建立空白或假路由。
+- 型別驗證第一輪已攔截 API fallback label 的 `unknown` 窄化與 retry handler 的事件簽章問題；兩處均已改成明確的字串快照與無參數 UI handler，避免把資料解析器或 AsyncData 執行選項直接暴露給按鈕事件。
+- 首輪瀏覽器 QA 發現 Nuxt 對 `components/internal/` 會自動加上 `Internal` 前綴；頁面原先使用未加前綴的元件名稱，造成介紹圖與商品圖容器存在但圖片節點沒有渲染。現已改為 `InternalProductCategoryImage`，並納入後續建置與影像 naturalWidth 檢查。
+- 導覽 DOM 檢查另發現用動態 `<component>` 指向 `NuxtLink` 會被 SSR 留成無效的 `<nuxtlink>` 自訂標籤，視覺存在但實際不能導航。桌機 mega menu 已改成編譯期明確的 `NuxtLink v-if`／disabled `div v-else`，避免「看起來能點、實際沒 href」的假互動。
+
+### 2.1 Design QA
+
+- **模板對照**：已把 PPT 第二頁內嵌的 Antra Virtual Tours 原始頁與本機 1280×720 首屏放進同一張並排比對圖；Hero 高度、背景遮罩、置中大標／麵包屑、Home 02 左文右圖、膠囊、金色標題片段、圓角與三欄卡片節奏一致。比較圖位於 `/private/tmp/sakura-product-template-comparison.png`，屬暫存 QA 證據，不另建立專案 Markdown 文件。
+- **資料與素材**：瀏覽器實測 13 張分類卡完整渲染；介紹圖 naturalWidth 為 977，13 張商品圖 naturalWidth 均為 720，所有 `complete=true` 且沒有圖片 error fallback。PPT 分類順序與數量為 6＋2＋5，未加入 PPT 明確排除的搜尋／篩選。
+- **導覽與 SSR**：頁面回傳正式 SEO title；Header 內有 1 個真實 `/products/sakura` anchor、無殘留 `<nuxtlink>` 自訂元素。乾淨新分頁的 console 為空，沒有 hydration mismatch、runtime error 或 Vite overlay。
+- **版面**：1280px 實測 `document.scrollWidth === document.clientWidth`，無水平爆版；頁面高度 3774px，固定 Header、右側 FloatingButtons 與 Footer 皆正常。CSS 已包含 1023px 兩欄與 767px 單欄／手機 Hero、safe rail、狀態卡重排及 reduced-motion 規則。
+- **建置結果**：`pnpm typecheck` 與 `pnpm build` 均通過；build 僅保留專案既有的 Tailwind sourcemap warning，沒有本頁新增的 compile error。
+- **final result: passed**
+
 ## 6.2.2 建商專區型錄（2026-08-15）
 
 - 新增正式 SSR 路由 `/builders/catalogues`，依 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第七頁實作；沿用 Antra Projects 01 的 360px 麵包屑 Hero、1410px 版心、3／2／1 欄型錄卡、24px 圓角與 Projects hover 節奏，並依 PPT 指示刪除篩選列。

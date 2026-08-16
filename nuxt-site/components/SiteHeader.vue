@@ -3,7 +3,7 @@ import { ArrowRight, ChevronDown, Menu, Search, X } from 'lucide-vue-next'
 import { KITCHEN_STYLES } from '~/data/kitchenStyles'
 
 type NavChild = { label: string; to?: string; external?: boolean; disabled?: boolean }
-type MegaCard = { label: string; image: string; logo: string }
+type MegaCard = { label: string; image: string; logo: string; to?: string }
 type NavItem = { label: string; to?: string; children?: NavChild[]; mega?: MegaCard[]; seriesMega?: boolean }
 
 const leftNav: NavItem[] = [
@@ -20,7 +20,7 @@ const leftNav: NavItem[] = [
   {
     label: '廚房產品',
     mega: [
-      { label: 'SAKURA 廚電', image: '/products/sakura.jpg', logo: '/home-2026/logos/sakura.svg' },
+      { label: 'SAKURA 廚電', image: '/products/sakura.jpg', logo: '/home-2026/logos/sakura.svg', to: '/products/sakura' },
       { label: 'SVAGO', image: '/products/svago.jpg', logo: '/home-2026/logos/svago.svg' },
       { label: 'TEKA', image: '/products/teka.jpg', logo: '/home-2026/logos/teka.svg' },
     ],
@@ -158,16 +158,26 @@ function handleHeaderPointerDown() {
               <div v-if="item.mega" class="desktop-nav-dropdown pointer-events-none invisible fixed inset-x-0 top-[60px] z-50 border-t border-black/5 bg-white opacity-0 shadow-2xl transition-all duration-300">
                 <div class="mx-auto max-w-[1200px] px-[30px] py-8 xl:px-0">
                   <div class="grid grid-cols-3 gap-[30px]">
-                    <NuxtLink v-for="card in item.mega" :key="card.label" to="#" class="group/card block">
-                      <div class="mb-4 flex h-[50px] items-center">
-                        <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
+                    <template v-for="card in item.mega" :key="card.label">
+                      <NuxtLink v-if="card.to" :to="card.to" class="group/card block">
+                        <div class="mb-4 flex h-[50px] items-center">
+                          <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
+                        </div>
+                        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
+                          <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
+                        </div>
+                      </NuxtLink>
+                      <div v-else aria-disabled="true" class="group/card block cursor-not-allowed opacity-55">
+                        <div class="mb-4 flex h-[50px] items-center">
+                          <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
+                        </div>
+                        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
+                          <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover" />
+                        </div>
                       </div>
-                      <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
-                        <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
-                      </div>
-                    </NuxtLink>
+                    </template>
                   </div>
-                  <NuxtLink to="#" class="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] transition-colors hover:text-[#CAA05C]">
+                  <NuxtLink to="/catalogues/catalog" class="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] transition-colors hover:text-[#CAA05C]">
                     廚房商品型錄 <ArrowRight class="h-4 w-4" />
                   </NuxtLink>
                 </div>
@@ -288,7 +298,13 @@ function handleHeaderPointerDown() {
               <NuxtLink v-else :to="child.to || '/'" class="block py-3 text-sm text-white/80">{{ child.label }}</NuxtLink>
             </template>
           </template>
-          <template v-else><a v-for="card in item.mega" :key="card.label" href="#" class="block py-3 text-sm text-white/80">{{ card.label }}</a><a href="#" class="block py-3 text-sm text-[#CAA05C]">廚房商品型錄</a></template>
+          <template v-else>
+            <template v-for="card in item.mega" :key="card.label">
+              <NuxtLink v-if="card.to" :to="card.to" class="block py-3 text-sm text-white/80">{{ card.label }}</NuxtLink>
+              <span v-else aria-disabled="true" class="block cursor-not-allowed py-3 text-sm text-white/35">{{ card.label }}・尚未開放</span>
+            </template>
+            <NuxtLink to="/catalogues/catalog" class="block py-3 text-sm text-[#CAA05C]">廚房商品型錄</NuxtLink>
+          </template>
         </div>
       </div>
     </div>

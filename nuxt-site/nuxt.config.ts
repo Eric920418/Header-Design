@@ -34,6 +34,7 @@ export default defineNuxtConfig({
       googleMapsApiKey: '',
       franchiseApplicationEndpoint: '',
       builderAppointmentEndpoint: '',
+      sakuraProductEndpoint: '',
     },
   },
   vite: {
