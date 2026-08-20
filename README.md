@@ -795,6 +795,9 @@ final result: passed
 
 `nuxt-site/pages/about/advantage.vue` 已建立正式 SSR 路由 `/about/advantage`。甲方於 2026-08-13 確認第三頁「步驟三（引用甲方資訊提案）」才是最終結構真值，因此第二頁／早期 Home 09 組版不再作為驗收基準；現行版本逐段對照第三頁紅框標註、已購 Antra Home 08、Home 01、Gallery 01、FAQs Elementor 原始資料重製，沒有使用簡報截圖，也沒有建立 5.3 假頁。
 
+- **2026-08-20 新版調整 PPT 第二頁**：依 `2026.08.15_5.0品牌承諾_調整.pptx` 的紅線標註校正 5.1，不拿整頁參考截圖當網頁素材。Hero 三個導覽序號改為 PPT 指定的 `。`，導覽統一 `Noto Sans TC 16px`；五種家庭中文標籤改為 `Noto Sans TC 18px`、英文標籤加入正式 `Bodoni Moda 20px`；兩處中文段落標題改為 `Noto Serif TC 25px`；河南店標籤更新為簡報指定的「櫻花廚藝生活館_河南店」並使用 `Noto Sans TC 16px`。門市與 FAQ 間距縮短 40px，FAQ 維持母版全寬三組 12 題、問題 `Noto Sans TC 20px`，並增加展開答案上方內距，修正簡報指出的內文上緣壓迫；同時啟用既有右側快捷列安全欄，避免固定的案例門市／到府丈量／客服中心蓋住 FAQ 加減號。
+- **2026-08-20 5.1 Design QA**：來源真值為 PPT 第二頁內嵌的 2880×16040 原頁截圖與頁面紅線標註；以 1440×900 同尺寸擷取 FAQ 並和來源放入 `/private/tmp/sakura-brand-ppt.IaJdHi/faq-comparison-board.png` 同畫面檢查。桌機實測三組 12 題、單題展開、滑鼠與 Enter 切換、`Bodoni Moda` 載入、圖片錯誤 0、水平溢位 0；390×844 實測 `scrollWidth === 390`，FAQ rail 為 x=15–375、操作內容為 x=15–303、快捷列為 x=318–390，互不重疊。型別檢查與 production build 均通過；建置只保留 Tailwind v4 既有 sourcemap warning。最終無剩餘可執行的 P0／P1／P2，右側安全欄屬避免固定工具列遮擋操作的必要差異。
+
 - **導覽**：Header「品牌承諾 → 品牌優勢」與首頁「櫻花優勢」CTA 皆進入 `/about/advantage`；5.2 完成後「集團品牌館」已接到 `/about/exhibition`，尚未製作的「關於我們」維持 `aria-disabled` 不可操作狀態。
 - **Hero（第三頁修正）**：撤除錯用的 Home 09 影片 Hero，改為 Home 08 原生兩欄首屏：1770px 版心、左側 `Find Your Inspired Interior Design`、右側局部廚房圖與摘要，並以負 300px 位移銜接大型正式 Banner。品牌優勢／集團品牌館／關於我們三個頁面節點依第三頁放在首屏；已完成的前兩頁可導向，尚未製作的 5.3 維持不可操作。
 - **家庭型態**：`Industrial Elegance Condo` 與官方品牌介紹下方依序呈現 Single／Couple／Children／Core Family／Extended Family 五卡；桌機為五欄，1366／1024／880／568px 以下逐級收斂，Embla 每 4 秒循環、Hover 暫停，reduced-motion 停止自動播放。

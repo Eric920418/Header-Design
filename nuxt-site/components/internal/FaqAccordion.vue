@@ -221,7 +221,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
 .antra-faq-panel p {
   width: min(100%, 832px);
   margin: 0;
-  padding: 8px 40px 32px;
+  padding: 12px 40px 32px;
   color: #59585d;
   font-family: var(--font-cjk-sans);
   font-size: 15px;
@@ -252,7 +252,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
   .antra-faq-number { margin-right: 14px; font-size: 14px; line-height: 30px; }
   .antra-faq-button { align-items: flex-start; gap: 16px; }
   .antra-faq-symbol { padding-top: 5px; }
-  .antra-faq-panel p { padding: 8px 0 26px 44px; }
+  .antra-faq-panel p { padding: 12px 0 26px 44px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -6,9 +6,9 @@
           <span class="brand-h8-pill"><i aria-hidden="true" />品牌優勢</span>
           <h1 id="brand-h8-title">Find Your<br /><span>Inspired<br />Interior</span> Design</h1>
           <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
-            <NuxtLink to="/about/advantage" aria-current="page"><b>01</b><span>品牌優勢</span></NuxtLink>
-            <NuxtLink to="/about/exhibition"><b>02</b><span>集團品牌館</span></NuxtLink>
-            <NuxtLink to="/about/introduce"><b>03</b><span>關於我們</span></NuxtLink>
+            <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
+            <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span>集團品牌館</span></NuxtLink>
+            <NuxtLink to="/about/introduce"><b aria-hidden="true">。</b><span>關於我們</span></NuxtLink>
           </nav>
         </div>
 
@@ -47,8 +47,9 @@
 .brand-h8-nav { display: flex; max-width: 570px; border-top: 1px solid #d2d1cf; }
 .brand-h8-nav > * { display: flex; min-width: 0; flex: 1; align-items: baseline; gap: 8px; padding: 16px 8px 0 0; color: #9f9fa4; text-decoration: none; }
 .brand-h8-nav > * + * { padding-left: 16px; border-left: 1px solid #d2d1cf; }
-.brand-h8-nav b { color: #caa05c; font-family: var(--font-ui); font-size: 13px; font-weight: 400; }
-.brand-h8-nav span { font-size: 14px; line-height: 20px; }
+.brand-h8-nav b,
+.brand-h8-nav span { font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 400; line-height: 22px; }
+.brand-h8-nav b { color: #caa05c; }
 .brand-h8-nav a[aria-current="page"] span { color: #1c1c1d; }
 .brand-h8-nav > span[aria-disabled="true"] { opacity: .55; }
 .brand-h8-aside { display: flex; min-width: 0; flex-direction: column; align-items: flex-end; gap: 30px; }

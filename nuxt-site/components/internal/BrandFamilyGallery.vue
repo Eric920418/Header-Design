@@ -35,8 +35,8 @@ onBeforeUnmount(() => timer && clearInterval(timer))
 .brand-family-track { display: flex; margin-left: -18px; touch-action: pan-y pinch-zoom; }
 .brand-family-slide { min-width: 0; flex: 0 0 20%; padding-left: 18px; }
 .brand-family-image { aspect-ratio: .7 / 1; border-radius: 24px; }
-.brand-family-slide h3 { margin: 18px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 28px; }
-.brand-family-slide p { margin: 3px 0 0; color: #9f9fa4; font-size: 13px; line-height: 20px; }
+.brand-family-slide h3 { margin: 18px 0 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 18px; font-weight: 400; line-height: 26px; }
+.brand-family-slide p { margin: 3px 0 0; color: #9f9fa4; font-family: var(--font-editorial); font-size: 20px; line-height: 28px; }
 
 @media (max-width: 1366px) { .brand-family-slide { flex-basis: 25%; } }
 @media (max-width: 1024px) { .brand-family-slide { flex-basis: 33.3333%; } }
@@ -44,7 +44,8 @@ onBeforeUnmount(() => timer && clearInterval(timer))
 @media (max-width: 568px) {
   .brand-family-slide { flex-basis: 82%; }
   .brand-family-image { height: 400px; aspect-ratio: auto; }
-  .brand-family-slide h3 { font-size: 20px; line-height: 26px; }
+  .brand-family-slide h3 { font-size: 18px; line-height: 26px; }
+  .brand-family-slide p { font-size: 18px; line-height: 26px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

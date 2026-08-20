@@ -21,7 +21,7 @@
         </figure>
         <figure class="brand-store-gallery-side">
           <InternalBrandImage src="/section-5/brand-advantage/store-henan.jpg" alt="櫻花整體廚房河南店" class="brand-store-image" />
-          <figcaption>河南店</figcaption>
+          <figcaption>櫻花廚藝生活館_河南店</figcaption>
         </figure>
       </div>
     </div>
@@ -29,7 +29,7 @@
 </template>
 
 <style scoped>
-.brand-store-section { overflow: hidden; padding: 100px 30px 120px; background: #fff; }
+.brand-store-section { overflow: hidden; padding: 100px 30px 80px; background: #fff; }
 .brand-store-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-store-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
 .brand-store-heading-aside { position: relative; min-height: 250px; padding-top: 65px; }
@@ -41,14 +41,14 @@
 .brand-store-heading-copy { padding-top: 60px; }
 .brand-store-heading h2 { width: min(850px, 100%); margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .brand-store-heading h2 span { color: #caa05c; }
-.brand-store-heading h3 { margin: 35px 0 12px; color: #1c1c1d; font-size: 22px; font-weight: 500; line-height: 32px; }
+.brand-store-heading h3 { margin: 35px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .brand-store-heading p { width: min(850px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-store-gallery { display: grid; grid-template-columns: 754fr 386fr; gap: 30px; }
 .brand-store-gallery figure { margin: 0; }
 .brand-store-image { width: 100%; aspect-ratio: var(--store-ratio); border-radius: 24px; }
 .brand-store-gallery-main { --store-ratio: 754 / 440; }
 .brand-store-gallery-side { --store-ratio: 386 / 440; }
-.brand-store-gallery figcaption { margin-top: 15px; color: #59585d; font-size: 14px; line-height: 20px; }
+.brand-store-gallery figcaption { margin-top: 15px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; }
 
 @media (max-width: 1024px) {
   .brand-store-section { padding-block: 80px; }
@@ -65,7 +65,7 @@
   .brand-store-heading-copy { padding-top: 20px; }
   .brand-store-heading h2 { font-size: 30px; line-height: 35px; }
   .brand-store-heading h2 br { display: none; }
-  .brand-store-heading h3 { margin-top: 25px; font-size: 20px; line-height: 28px; }
+  .brand-store-heading h3 { margin-top: 25px; font-size: 22px; line-height: 32px; }
   .brand-store-heading p { font-size: 15px; line-height: 24px; text-align: left; }
   .brand-store-gallery { grid-template-columns: 1fr; gap: 28px; }
 }

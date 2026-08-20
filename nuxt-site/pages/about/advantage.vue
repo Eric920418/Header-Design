@@ -27,7 +27,7 @@ useSeoMeta({
 
     <InternalBrandBenefits />
     <InternalBrandStoreSection />
-    <InternalFaqAccordion :groups="brandAdvantageFaqGroups" section-id="brand-advantage-faq-title" />
+    <InternalFaqAccordion :groups="brandAdvantageFaqGroups" section-id="brand-advantage-faq-title" safe-rail />
   </main>
 </template>
 
@@ -37,7 +37,7 @@ useSeoMeta({
 .brand-family-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-family-heading { margin-bottom: 50px; }
 .brand-family-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
-.brand-family-heading h3 { margin: 24px 0 12px; color: #1c1c1d; font-size: 22px; font-weight: 500; line-height: 32px; }
+.brand-family-heading h3 { margin: 24px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .brand-family-heading p { width: min(1050px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
 
 @media (max-width: 1024px) {
@@ -49,7 +49,7 @@ useSeoMeta({
   .brand-family-section { padding: 30px 15px 40px; }
   .brand-family-heading { margin-bottom: 35px; text-align: center; }
   .brand-family-heading h2 { font-size: 30px; line-height: 35px; }
-  .brand-family-heading h3 { margin-top: 20px; font-size: 20px; line-height: 28px; }
+  .brand-family-heading h3 { margin-top: 20px; font-size: 22px; line-height: 32px; }
   .brand-family-heading p { font-size: 15px; line-height: 24px; text-align: left; }
 }
 </style>
