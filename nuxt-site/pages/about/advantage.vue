@@ -15,7 +15,7 @@ useSeoMeta({
     <InternalBrandAdvantageHero />
 
     <section class="brand-family-section" aria-labelledby="brand-family-title">
-      <div class="brand-family-rail">
+      <div class="brand-family-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-family-heading ev">
           <h2 id="brand-family-title">Industrial Elegance Condo</h2>
           <h3>打造符合每個家庭的理想廚房</h3>
@@ -36,7 +36,7 @@ useSeoMeta({
 .brand-family-section { overflow: hidden; padding: 100px 30px 95px; background: #f6f6f6; }
 .brand-family-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-family-heading { margin-bottom: 50px; }
-.brand-family-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
+.brand-family-heading h2 { scroll-margin-top: 100px; margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
 .brand-family-heading h3 { margin: 24px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .brand-family-heading p { width: min(1050px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
 
@@ -47,6 +47,7 @@ useSeoMeta({
 
 @media (max-width: 767px) {
   .brand-family-section { padding: 30px 15px 40px; }
+  .brand-family-rail.internal-rail-safe { padding-right: 72px; }
   .brand-family-heading { margin-bottom: 35px; text-align: center; }
   .brand-family-heading h2 { font-size: 30px; line-height: 35px; }
   .brand-family-heading h3 { margin-top: 20px; font-size: 22px; line-height: 32px; }

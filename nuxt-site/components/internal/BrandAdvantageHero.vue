@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { ArrowDown } from 'lucide-vue-next'
+</script>
+
 <template>
   <section class="brand-h8-hero" aria-labelledby="brand-h8-title">
     <div class="brand-h8-intro">
@@ -10,6 +14,9 @@
             <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span>集團品牌館</span></NuxtLink>
             <NuxtLink to="/about/introduce"><b aria-hidden="true">。</b><span>關於我們</span></NuxtLink>
           </nav>
+          <a href="#brand-family-title" class="brand-h8-scroll" aria-label="向下查看品牌優勢內容">
+            <ArrowDown aria-hidden="true" />
+          </a>
         </div>
 
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="brand-h8-aside ev" style="animation-delay:120ms">
@@ -52,6 +59,9 @@
 .brand-h8-nav b { color: #caa05c; }
 .brand-h8-nav a[aria-current="page"] span { color: #1c1c1d; }
 .brand-h8-nav > span[aria-disabled="true"] { opacity: .55; }
+.brand-h8-scroll { display: inline-flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin-top: 38px; border: 1px solid rgb(202 160 92 / 35%); border-radius: 50%; background: #caa05c; color: #fff; box-shadow: 0 14px 30px rgb(28 28 29 / 12%); transition: transform .35s ease, box-shadow .35s ease; }
+.brand-h8-scroll svg { width: 18px; height: 18px; stroke-width: 1.8; }
+.brand-h8-scroll:hover { transform: translateY(4px); box-shadow: 0 8px 18px rgb(28 28 29 / 16%); }
 .brand-h8-aside { display: flex; min-width: 0; flex-direction: column; align-items: flex-end; gap: 30px; }
 .brand-h8-aside__image { width: min(510px, 100%); height: 267px; border-radius: 28px; }
 .brand-h8-aside__image :deep(img) { object-position: 62% 45%; }
@@ -70,6 +80,7 @@
   .brand-h8-copy { text-align: center; }
   .brand-h8-copy h1 { margin-inline: auto; font-size: 60px; line-height: 60px; }
   .brand-h8-nav { margin-inline: auto; text-align: left; }
+  .brand-h8-scroll { margin-inline: auto; }
   .brand-h8-aside { align-items: center; }
   .brand-h8-aside p { text-align: center; }
   .brand-h8-stage { width: calc(100% - 60px); margin-top: 60px; }

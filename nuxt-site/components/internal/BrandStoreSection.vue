@@ -1,6 +1,6 @@
 <template>
   <section class="brand-store-section" aria-labelledby="brand-store-title">
-    <div class="brand-store-rail">
+    <div class="brand-store-rail internal-rail-safe">
       <header class="brand-store-heading">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-store-heading-aside ev">
           <span class="brand-store-pill"><span aria-hidden="true" />Popular Queries</span>
@@ -29,7 +29,7 @@
 </template>
 
 <style scoped>
-.brand-store-section { overflow: hidden; padding: 100px 30px 80px; background: #fff; }
+.brand-store-section { overflow: hidden; padding: 100px 30px 80px; background: #f6f6f6; }
 .brand-store-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-store-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
 .brand-store-heading-aside { position: relative; min-height: 250px; padding-top: 65px; }
@@ -59,6 +59,7 @@
 
 @media (max-width: 767px) {
   .brand-store-section { padding: 60px 15px; }
+  .brand-store-rail.internal-rail-safe { padding-right: 72px; }
   .brand-store-heading { grid-template-columns: 1fr; margin-bottom: 35px; text-align: center; }
   .brand-store-heading-aside { min-height: auto; padding: 0; }
   .brand-store-deco { display: none; }

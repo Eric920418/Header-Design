@@ -4,28 +4,37 @@ import { brandBenefits } from '~/data/brandAdvantage'
 
 <template>
   <section class="brand-benefits" aria-labelledby="brand-benefits-title">
-    <div class="brand-benefits-rail">
+    <div class="brand-benefits-rail internal-rail-safe">
       <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-benefits-heading ev">
-        <span class="brand-benefits-pill"><i aria-hidden="true" />Our Advantages</span>
-        <h2 id="brand-benefits-title">Take A Look At <span>Our Ideal<br />Kitchen</span> Advantages</h2>
+        <h2 id="brand-benefits-title">Take A Look At <span>Our Latest<br />Blog</span> &amp; Articles.</h2>
         <p>櫻花整體廚房擁有近百家門市，第一線接觸消費者的設計師皆受過專業的產品力及設計力之培訓、及廚藝大學之認證，提供給消費者最符合其需求的廚房規劃。</p>
       </header>
 
-      <div class="brand-benefits-list">
+      <div class="brand-benefit-grid">
         <article
           v-for="(benefit, index) in brandBenefits"
           :key="benefit.id"
           v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }"
           data-ev="opalMoveUp"
-          class="brand-benefit-row ev"
+          class="brand-benefit-card ev"
           :style="{ animationDelay: `${index * 100}ms` }"
         >
+          <InternalBrandImage :src="benefit.image" :alt="`${benefit.number} ${benefit.title}`" class="brand-benefit-image" />
           <div class="brand-benefit-copy">
             <div class="brand-benefit-eyebrow"><strong>{{ benefit.number }}</strong><span>{{ benefit.englishTitle }}</span></div>
             <h3>{{ benefit.title }}</h3>
             <p>{{ benefit.description }}</p>
           </div>
-          <InternalBrandImage :src="benefit.image" :alt="`${benefit.number} ${benefit.title}`" class="brand-benefit-image" />
+
+          <div class="brand-benefit-overlay" aria-hidden="true">
+            <InternalBrandImage :src="benefit.image" alt="" class="brand-benefit-overlay__image" />
+            <div class="brand-benefit-overlay__copy">
+              <div class="brand-benefit-overlay__eyebrow"><strong>{{ benefit.number }}</strong><span>{{ benefit.englishTitle }}</span></div>
+              <h3>{{ benefit.title }}</h3>
+              <p>{{ benefit.description }}</p>
+              <span class="brand-benefit-overlay__number">{{ benefit.number }}</span>
+            </div>
+          </div>
         </article>
       </div>
     </div>
@@ -33,45 +42,57 @@ import { brandBenefits } from '~/data/brandAdvantage'
 </template>
 
 <style scoped>
-.brand-benefits { overflow: hidden; padding: 100px 30px 120px; background: #fff; }
+.brand-benefits { overflow: hidden; padding: 100px 30px 120px; background: #f6f6f6; }
 .brand-benefits-rail { width: min(1410px, 100%); margin-inline: auto; }
-.brand-benefits-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 75px; }
-.brand-benefits-pill { display: inline-flex; width: fit-content; height: fit-content; align-items: center; gap: 7px; padding: 7px 13px 7px 10px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 24px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
-.brand-benefits-pill i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
-.brand-benefits-heading h2 { max-width: 830px; margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.brand-benefits-heading { width: min(900px, 100%); margin: 0 auto 60px; text-align: center; }
+.brand-benefits-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .brand-benefits-heading h2 span { color: #caa05c; }
-.brand-benefits-heading > p { grid-column: 2; max-width: 830px; margin: 24px 0 0; color: #59585d; font-size: 16px; line-height: 26px; }
-.brand-benefits-list { display: grid; gap: 90px; }
-.brand-benefit-row { display: grid; grid-template-columns: minmax(0, 45%) minmax(0, 55%); align-items: center; gap: 70px; }
-.brand-benefit-copy { padding-left: 30px; }
-.brand-benefit-eyebrow { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; }
-.brand-benefit-eyebrow strong { color: #e3e3e8; font-family: var(--font-ui); font-size: 72px; font-weight: 400; line-height: 72px; }
-.brand-benefit-eyebrow span { color: #caa05c; font-family: var(--font-ui); font-size: 15px; line-height: 22px; text-transform: uppercase; }
-.brand-benefit-copy h3 { margin: 0 0 18px; color: #1c1c1d; font-family: var(--font-display); font-size: 34px; font-weight: 400; line-height: 40px; }
-.brand-benefit-copy p { max-width: 520px; margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
+.brand-benefits-heading > p { max-width: 830px; margin: 24px auto 0; color: #59585d; font-size: 16px; line-height: 26px; }
+.brand-benefit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
+.brand-benefit-card { position: relative; min-width: 0; min-height: 610px; overflow: visible; }
 .brand-benefit-image { width: 100%; aspect-ratio: 1.3461538462 / 1; border-radius: 24px; }
+.brand-benefit-copy { padding: 20px 4px 0; }
+.brand-benefit-eyebrow { display: flex; align-items: baseline; gap: 7px; margin-bottom: 12px; color: #1c1c1d; font-family: var(--font-ui); }
+.brand-benefit-eyebrow strong { color: #caa05c; font-size: 18px; font-weight: 600; line-height: 24px; }
+.brand-benefit-eyebrow span { font-size: 15px; font-weight: 600; line-height: 22px; }
+.brand-benefit-copy h3 { margin: 0 0 14px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
+.brand-benefit-copy p { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.brand-benefit-overlay { position: absolute; inset: 0; overflow: hidden; border-radius: 28px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 10%); opacity: 0; transform: translateY(100%); transition: opacity .45s ease, transform .55s cubic-bezier(.22, 1, .36, 1); }
+.brand-benefit-overlay__image { width: calc(100% - 32px); margin: 16px; aspect-ratio: 1.48 / 1; border-radius: 20px; }
+.brand-benefit-overlay__copy { position: relative; min-height: 260px; padding: 18px 28px 34px; }
+.brand-benefit-overlay__eyebrow { display: flex; align-items: baseline; gap: 5px; color: #1c1c1d; font-family: var(--font-ui); font-size: 20px; font-weight: 600; line-height: 28px; }
+.brand-benefit-overlay__eyebrow strong { color: #caa05c; }
+.brand-benefit-overlay__copy h3 { margin: 14px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
+.brand-benefit-overlay__copy p { position: relative; z-index: 1; margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.brand-benefit-overlay__number { position: absolute; right: 20px; bottom: -18px; color: #e3e3e8; font-family: var(--font-ui); font-size: 112px; font-weight: 400; line-height: 1; }
+
+@media (hover: hover) and (pointer: fine) {
+  .brand-benefit-card:hover .brand-benefit-overlay { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-benefit-overlay { transition: none; }
+}
 
 @media (max-width: 1200px) {
-  .brand-benefit-row { gap: 45px; }
-  .brand-benefit-copy { padding-left: 0; }
+  .brand-benefit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 1024px) {
   .brand-benefits { padding-block: 80px; }
   .brand-benefits-heading h2 { font-size: 48px; line-height: 52px; }
-  .brand-benefits-list { gap: 60px; }
-  .brand-benefit-row { grid-template-columns: 1fr; gap: 30px; }
-  .brand-benefit-copy p { max-width: none; }
+  .brand-benefit-overlay { display: none; }
 }
 
 @media (max-width: 767px) {
   .brand-benefits { padding: 60px 15px; }
-  .brand-benefits-heading { display: block; margin-bottom: 45px; text-align: center; }
-  .brand-benefits-heading h2 { margin-top: 20px; font-size: 30px; line-height: 35px; }
-  .brand-benefits-heading h2 br { display: none; }
+  .brand-benefits-rail.internal-rail-safe { padding-right: 72px; }
+  .brand-benefits-heading { margin-bottom: 45px; }
+  .brand-benefits-heading h2 { font-size: 30px; line-height: 35px; }
   .brand-benefits-heading > p { font-size: 15px; line-height: 24px; text-align: left; }
-  .brand-benefit-eyebrow strong { font-size: 56px; line-height: 56px; }
-  .brand-benefit-copy h3 { font-size: 28px; line-height: 34px; }
+  .brand-benefit-grid { grid-template-columns: 1fr; gap: 45px; }
+  .brand-benefit-card { min-height: auto; }
+  .brand-benefit-copy h3 { font-size: 22px; line-height: 32px; }
   .brand-benefit-copy p { font-size: 15px; line-height: 24px; }
 }
 </style>
