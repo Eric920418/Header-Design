@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight, Database, RefreshCw } from 'lucide-vue-next'
+import { ArrowUpRight, Circle, Database, RefreshCw } from 'lucide-vue-next'
 import { SAKURA_PRODUCT_GROUPS } from '~/data/sakuraProducts'
 import type { SakuraProductCategory, SakuraProductGroup } from '~/data/sakuraProducts'
 
@@ -55,14 +55,14 @@ const {
   error: productSourceError,
   status: productSourceStatus,
   refresh: refreshProducts,
-} = await useAsyncData<SakuraProductGroup[] | null>(
+} = await useAsyncData<SakuraProductGroup[]>(
   'sakura-product-categories',
   async () => {
-    if (!productEndpoint) return null
+    if (!productEndpoint) return []
     const payload = await $fetch<unknown>(productEndpoint)
     return parseProductGroups(payload)
   },
-  { default: () => null },
+  { default: () => [] },
 )
 
 const productGroups = computed(() => remoteGroups.value?.length ? remoteGroups.value : SAKURA_PRODUCT_GROUPS)
@@ -109,7 +109,10 @@ useSeoMeta({
     <section class="sakura-product-story" aria-labelledby="sakura-product-story-title">
       <div class="sakura-product-story__rail internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-story__copy">
-          <p class="sakura-product-story__eyebrow">Trusted Experience</p>
+          <p class="sakura-product-story__eyebrow">
+            <Circle aria-hidden="true" />
+            Kitchen Appliance
+          </p>
           <h2 id="sakura-product-story-title">
             Behind <span>Every Statistic Pulses</span> A Human Story
           </h2>
@@ -192,7 +195,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 68% / cover no-repeat fixed;
 }
 
 .sakura-product-hero__overlay {
@@ -224,10 +227,9 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: var(--font-ui);
-  font-size: 13px;
-  line-height: 16px;
-  text-transform: uppercase;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 22px;
 }
 
 .sakura-product-hero__trail a { color: inherit; transition: color .3s ease; }
@@ -262,10 +264,20 @@ useSeoMeta({
   padding: 7px 12px;
   color: #59585d;
   background: #fff;
-  font-family: var(--font-ui);
+  gap: 7px;
+  font-family: var(--font-cjk-sans);
   font-size: 12px;
   line-height: 14px;
   text-transform: uppercase;
+}
+
+.sakura-product-story__eyebrow svg {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  color: #caa05c;
+  fill: currentcolor;
+  stroke: none;
 }
 
 .sakura-product-story h2 {
@@ -279,7 +291,7 @@ useSeoMeta({
 }
 
 .sakura-product-story h2 span { color: #caa05c; }
-.sakura-product-story__copy > p:last-child { max-width: 610px; margin: 0; font-size: 16px; line-height: 24px; }
+.sakura-product-story__copy > p:last-child { max-width: 610px; margin: 0; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; }
 
 .sakura-product-story__image {
   min-width: 0;
@@ -367,8 +379,9 @@ useSeoMeta({
   display: block;
   margin-bottom: 8px;
   color: #9f9fa4;
-  font-size: 12px;
-  line-height: 16px;
+  font-family: var(--font-cjk-sans);
+  font-size: 13px;
+  line-height: 19px;
   letter-spacing: .12em;
   text-transform: uppercase;
 }
@@ -376,8 +389,8 @@ useSeoMeta({
 .sakura-product-card__text h3 {
   margin: 0;
   color: #1c1c1d;
-  font-family: var(--font-display);
-  font-size: 28px;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
   font-weight: 400;
   line-height: 34px;
   transition: color .3s ease;
@@ -403,7 +416,7 @@ useSeoMeta({
 @media (max-width: 767px) {
   .sakura-product-hero { min-height: 288px; background-attachment: scroll; }
   .sakura-product-hero__inner { width: calc(100% - 30px); padding: 80px 0 60px; }
-  .sakura-product-hero h1 { margin-bottom: 25px; font-size: 48px; line-height: 52px; }
+  .sakura-product-hero h1 { margin-bottom: 25px; font-size: clamp(34px, 10.7vw, 42px); line-height: 48px; white-space: nowrap; }
   .sakura-product-story { padding: 60px 15px 50px; }
   .sakura-product-story__rail.internal-rail-safe,
   .sakura-product-source__rail.internal-rail-safe,
@@ -418,7 +431,7 @@ useSeoMeta({
   .sakura-product-grid { grid-template-columns: 1fr; gap: 38px; }
   .sakura-product-card__image { border-radius: 18px; }
   .sakura-product-card__arrow { right: 16px; bottom: 16px; width: 52px; height: 52px; opacity: 1; transform: none; }
-  .sakura-product-card__text h3 { font-size: 26px; line-height: 31px; }
+  .sakura-product-card__text h3 { font-size: 25px; line-height: 31px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

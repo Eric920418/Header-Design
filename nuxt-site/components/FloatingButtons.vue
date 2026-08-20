@@ -9,7 +9,7 @@ const rail = ref<HTMLElement | null>(null)
 const offset = ref(0)
 const reduced = useReducedMotion()
 const route = useRoute()
-const isFocusedMobileForm = computed(() => ['/franchising/form', '/builders', '/about/exhibition', '/about/introduce'].includes(route.path) || route.path.startsWith('/gallery/') || route.path.startsWith('/news'))
+const isFocusedMobileForm = computed(() => ['/franchising/form', '/builders', '/about/exhibition', '/about/introduce'].includes(route.path) || route.path.startsWith('/gallery/') || route.path.startsWith('/news') || route.path.startsWith('/products'))
 let frame = 0
 
 const update = () => {
