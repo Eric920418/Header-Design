@@ -94,7 +94,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   border: 1px solid rgb(255 255 255 / 46%);
   border-radius: 100px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 14px;
   text-transform: uppercase;
@@ -115,7 +115,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   margin: 0 0 14px;
   overflow: hidden;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 30px;
   font-weight: 400;
   line-height: 34px;

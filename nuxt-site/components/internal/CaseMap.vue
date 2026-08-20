@@ -84,7 +84,7 @@ onBeforeUnmount(() => { if (timer) clearTimeout(timer) })
 }
 
 .case-map__error { gap: 10px; }
-.case-map__error strong { color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 20px; font-weight: 400; }
+.case-map__error strong { color: #1c1c1d; font-family: var(--font-ui); font-size: 20px; font-weight: 400; }
 .case-map__error p { font-size: 14px; line-height: 22px; }
 
 .case-map__fallback {

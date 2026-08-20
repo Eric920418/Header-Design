@@ -180,7 +180,7 @@ onMounted(verifyBrochure)
   padding: 8px 16px;
   border: 1px solid rgb(255 255 255 / 28%);
   border-radius: 100px;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 12px;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -192,7 +192,7 @@ onMounted(verifyBrochure)
 .download-hero h1 {
   margin: 28px 0 30px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(58px, 7vw, 96px);
   font-weight: 400;
   line-height: .98;
@@ -223,7 +223,7 @@ onMounted(verifyBrochure)
 
 .download-document__heading h2 {
   margin: 28px 0 0;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(52px, 5.4vw, 78px);
   font-weight: 400;
   line-height: 1.02;
@@ -242,7 +242,7 @@ onMounted(verifyBrochure)
 
 .download-document__meta div { padding-top: 16px; border-top: 1px solid #d0d0d5; }
 .download-document__meta dt { margin-bottom: 7px; color: #9f9fa4; font-size: 12px; letter-spacing: .12em; }
-.download-document__meta dd { margin: 0; font-family: "Cal Sans", sans-serif; font-size: 22px; }
+.download-document__meta dd { margin: 0; font-family: var(--font-ui); font-size: 22px; }
 
 .download-document__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; }
 .download-action {
@@ -278,8 +278,8 @@ onMounted(verifyBrochure)
 .download-preview { display: grid; gap: 52px; padding-top: 72px; }
 .download-preview__sheet { overflow: hidden; aspect-ratio: 2.1132867133; border: 1px solid #e3e3e8; border-radius: 24px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 10%); }
 .download-preview__caption { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 22px 4px 0; }
-.download-preview__caption span { color: #9f9fa4; font-family: "Cal Sans", sans-serif; font-size: 12px; letter-spacing: .13em; }
-.download-preview__caption strong { font-family: "Cal Sans", sans-serif; font-size: 24px; font-weight: 400; }
+.download-preview__caption span { color: #9f9fa4; font-family: var(--font-ui); font-size: 12px; letter-spacing: .13em; }
+.download-preview__caption strong { font-family: var(--font-ui); font-size: 24px; font-weight: 400; }
 
 .download-document__back { display: flex; justify-content: center; padding-top: 72px; }
 .download-document__back a { display: inline-flex; align-items: center; gap: 10px; color: #59585d; font-size: 14px; transition: color .25s ease; }

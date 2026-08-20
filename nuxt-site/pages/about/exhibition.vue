@@ -106,7 +106,7 @@ useSeoMeta({
 .entry-content { overflow: visible; }
 .entry-content p { margin: 0 0 30px; color: #59585d; font-size: 16px; line-height: 24px; }
 .pavilion-lead { padding-top: 10px; }
-.pavilion-copy-block h2 { margin: 0 0 23px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
+.pavilion-copy-block h2 { margin: 0 0 23px; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
 .pavilion-copy-block h3 { margin: 0 0 13px; color: #caa05c; font-size: 19px; font-weight: 500; line-height: 27px; }
 .pavilion-copy-block--last { padding-top: 50px; }
 .pavilion-copy-block--last p { margin-bottom: 0; }
@@ -119,9 +119,9 @@ useSeoMeta({
 
 .pavilion-gallery { position: relative; left: 50%; width: 100vw; max-width: 1290px; padding: 52px 0 0; transform: translateX(-50%); }
 .pavilion-gallery-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; margin-bottom: 38px; }
-.pavilion-gallery-kicker { display: inline-flex; width: fit-content; align-items: center; gap: 7px; padding: 7px 14px; border: 1px solid #7272722e; border-radius: 24px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 12px; line-height: 14px; text-transform: uppercase; }
+.pavilion-gallery-kicker { display: inline-flex; width: fit-content; align-items: center; gap: 7px; padding: 7px 14px; border: 1px solid #7272722e; border-radius: 24px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; text-transform: uppercase; }
 .pavilion-gallery-kicker i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
-.pavilion-gallery-heading h2 { margin: 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.pavilion-gallery-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .pavilion-gallery-heading h2 span { color: #caa05c; }
 .pavilion-filter { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-bottom: 30px; }
 .pavilion-filter button { min-height: 46px; padding: 9px 18px; border: 1px solid #e3e3e8; border-radius: 100px; color: #59585d; background: #fff; font-size: 15px; line-height: 24px; text-align: left; cursor: pointer; transition: color .3s ease, border-color .3s ease, background .3s ease; }
@@ -138,7 +138,7 @@ useSeoMeta({
 .project-block:hover .project-transition::after { background: rgb(0 0 0 / 25%); }
 .project-block:hover .project-image :deep(img) { transform: scale(1.05); }
 .project-text-box { min-width: 0; padding: 3px 0 0; }
-.project-text-box h3 { margin: 0 0 18px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 30px; font-weight: 400; line-height: 34px; }
+.project-text-box h3 { margin: 0 0 18px; color: #1c1c1d; font-family: var(--font-display); font-size: 30px; font-weight: 400; line-height: 34px; }
 .project-text-box dl { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 0 0 22px; }
 .project-text-box dl div { border-top: 1px solid #e3e3e8; padding-top: 12px; }
 .project-text-box dt { display: flex; align-items: center; gap: 7px; color: #1c1c1d; font-size: 13px; font-weight: 500; line-height: 20px; }
@@ -147,7 +147,7 @@ useSeoMeta({
 .pavilion-copy-block .pavilion-notes-title { margin: 0 0 8px; color: #1c1c1d; font-size: 20px; font-weight: 600; line-height: 28px; }
 .pavilion-notes { margin: 0; padding: 0; list-style: none; }
 .pavilion-notes li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid #e3e3e8; }
-.pavilion-notes span { color: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 14px; line-height: 24px; }
+.pavilion-notes span { color: #caa05c; font-family: var(--font-ui); font-size: 14px; line-height: 24px; }
 .pavilion-notes p { margin: 0; color: #1c1c1d; font-size: 14px; font-weight: 500; line-height: 24px; }
 
 @media (min-width: 768px) and (max-width: 1410px) {

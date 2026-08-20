@@ -256,8 +256,8 @@ const submit = async () => {
   box-shadow: 0 18px 70px rgb(28 28 29 / 8%);
 }
 
-.application-form__header > span { color: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
-.application-form__header h2 { margin: 10px 0 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 40px; font-weight: 400; line-height: 48px; }
+.application-form__header > span { color: #caa05c; font-family: var(--font-ui); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.application-form__header h2 { margin: 10px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 48px; }
 .application-form__header p { margin: 9px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
 
 .application-form__service {
@@ -309,7 +309,7 @@ const submit = async () => {
 .application-form small { display: block; margin-top: 6px; color: #a74335; font-size: 13px; line-height: 20px; }
 
 .application-form__intent { display: grid; gap: 24px; margin: 42px 0 0; padding: 40px 0 0; border: 0; border-top: 1px solid #e3e3e8; }
-.application-form__intent legend { display: block; width: 100%; padding: 0 0 22px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 24px; font-weight: 400; line-height: 30px; }
+.application-form__intent legend { display: block; width: 100%; padding: 0 0 22px; color: #1c1c1d; font-family: var(--font-ui); font-size: 24px; font-weight: 400; line-height: 30px; }
 .application-form__radios { display: flex; flex-wrap: wrap; gap: 12px; }
 .application-form__radios label { position: relative; }
 .application-form__radios input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }

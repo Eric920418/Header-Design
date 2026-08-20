@@ -213,7 +213,7 @@ useSeoMeta({
 .sakura-product-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 80px;
   font-weight: 400;
   line-height: .9523809524;
@@ -224,7 +224,7 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 16px;
   text-transform: uppercase;
@@ -262,7 +262,7 @@ useSeoMeta({
   padding: 7px 12px;
   color: #59585d;
   background: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 12px;
   line-height: 14px;
   text-transform: uppercase;
@@ -272,7 +272,7 @@ useSeoMeta({
   max-width: 620px;
   margin: 0 0 25px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(44px, 4.2vw, 64px);
   font-weight: 400;
   line-height: .98;
@@ -304,7 +304,7 @@ useSeoMeta({
 }
 
 .sakura-product-source__rail > svg { width: 28px; height: 28px; color: #caa05c; }
-.sakura-product-source h2 { margin: 0 0 5px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 20px; font-weight: 400; line-height: 24px; }
+.sakura-product-source h2 { margin: 0 0 5px; color: #1c1c1d; font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 24px; }
 .sakura-product-source p { margin: 0; font-size: 14px; line-height: 21px; overflow-wrap: anywhere; }
 .sakura-product-source button {
   display: inline-flex;
@@ -376,7 +376,7 @@ useSeoMeta({
 .sakura-product-card__text h3 {
   margin: 0;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 400;
   line-height: 34px;

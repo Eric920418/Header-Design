@@ -71,7 +71,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
 }
 
 .antra-latest-breadcrumb__overlay {
@@ -92,10 +92,10 @@ useSeoMeta({
 .antra-latest-breadcrumb h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 80px;
+  font-family: var(--font-cjk-serif);
+  font-size: 60px;
   font-weight: 400;
-  line-height: .9523809524;
+  line-height: 64px;
 }
 
 .antra-latest-breadcrumb__trail {
@@ -104,10 +104,10 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 13px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
   font-weight: 400;
-  line-height: 14px;
+  line-height: 20px;
   text-transform: uppercase;
 }
 
@@ -178,7 +178,7 @@ useSeoMeta({
   border-radius: 100px;
   color: #fff;
   background: #caa05c;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-cjk-serif);
   font-size: 14px;
   line-height: 14px;
 }
@@ -195,6 +195,7 @@ useSeoMeta({
   position: relative;
   padding-right: 13px;
   color: #9f9fa4;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
@@ -218,10 +219,10 @@ useSeoMeta({
   margin: 0 0 19px;
   overflow: hidden;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 30px;
+  font-family: var(--font-cjk-serif);
+  font-size: 18px;
   font-weight: 400;
-  line-height: 34px;
+  line-height: 24px;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -231,10 +232,11 @@ useSeoMeta({
   margin: 0;
   overflow: hidden;
   color: #59585d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 22px;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
 }
 
 @media (max-width: 1024px) {
@@ -267,8 +269,8 @@ useSeoMeta({
   .antra-latest-grid { grid-template-columns: minmax(0, 1fr); }
 
   .antra-latest-post h2 {
-    font-size: 22px;
-    line-height: 28px;
+    font-size: 18px;
+    line-height: 24px;
   }
 }
 

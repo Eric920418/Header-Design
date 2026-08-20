@@ -58,7 +58,7 @@ const submit = () => {
 
 <style scoped>
 .comment-preview-form { margin-top: 52px; }
-.comment-preview-form h3 { color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 40px; font-weight: 400; line-height: 48px; }
+.comment-preview-form h3 { color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 48px; }
 .comment-preview-form__lead { margin-top: 12px; color: #59585d; font-size: 15px; line-height: 24px; }
 .comment-preview-form form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 20px; margin-top: 31px; }
 .comment-preview-form label { display: block; min-width: 0; color: #1c1c1d; font-size: 14px; line-height: 22px; }

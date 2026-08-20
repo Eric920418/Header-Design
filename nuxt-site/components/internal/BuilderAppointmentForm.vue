@@ -187,8 +187,8 @@ const submit = async () => {
 
 <style scoped>
 .builder-form { padding: 52px 54px 58px; border-radius: 24px; background: #fff; box-shadow: 0 18px 70px rgb(28 28 29 / 8%); }
-.builder-form__header > span { color: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
-.builder-form__header h3 { margin: 10px 0 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 40px; font-weight: 400; line-height: 48px; }
+.builder-form__header > span { color: #caa05c; font-family: var(--font-ui); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.builder-form__header h3 { margin: 10px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 48px; }
 .builder-form__header p { margin: 9px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
 .builder-form__service { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 13px; margin-top: 26px; padding: 17px 19px; border: 1px solid #e8c891; border-radius: 18px; color: #59585d; background: #fff9ed; }
 .builder-form__service > svg { width: 22px; height: 22px; color: #a97628; }

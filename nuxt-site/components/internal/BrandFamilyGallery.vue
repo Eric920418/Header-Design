@@ -35,7 +35,7 @@ onBeforeUnmount(() => timer && clearInterval(timer))
 .brand-family-track { display: flex; margin-left: -18px; touch-action: pan-y pinch-zoom; }
 .brand-family-slide { min-width: 0; flex: 0 0 20%; padding-left: 18px; }
 .brand-family-image { aspect-ratio: .7 / 1; border-radius: 24px; }
-.brand-family-slide h3 { margin: 18px 0 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 22px; font-weight: 400; line-height: 28px; }
+.brand-family-slide h3 { margin: 18px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 28px; }
 .brand-family-slide p { margin: 3px 0 0; color: #9f9fa4; font-size: 13px; line-height: 20px; }
 
 @media (max-width: 1366px) { .brand-family-slide { flex-basis: 25%; } }

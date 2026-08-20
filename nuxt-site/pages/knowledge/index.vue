@@ -108,7 +108,7 @@ useSeoMeta({
 .kitchen-guide-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 80px;
   font-weight: 400;
   line-height: .9523809524;
@@ -119,7 +119,7 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 14px;
   text-transform: uppercase;
@@ -164,7 +164,7 @@ useSeoMeta({
   border: 1px solid rgba(159, 159, 164, .25);
   border-radius: 24px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 12px;
   line-height: 14px;
   letter-spacing: .04em;
@@ -202,7 +202,7 @@ useSeoMeta({
   margin: 0;
   padding-left: 72px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 60px;
   font-weight: 400;
   line-height: 64px;
@@ -260,7 +260,7 @@ useSeoMeta({
 .kitchen-guide-list-item h3 {
   margin: 0;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-weight: 400;
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Camera, Images, PanelsTopLeft, PlaySquare } from 'lucide-vue-next'
+import { Camera, Images, PlaySquare } from 'lucide-vue-next'
 import { latestArticleDetails } from '~/data/latestArticles'
 import { newsArticles } from '~/data/news'
 
@@ -13,6 +13,11 @@ if (!detail || !article) {
 }
 
 const latestArticles = newsArticles.filter(entry => entry.category === 'latest')
+const isFranchiseSeminar = detail.id === 'franchise-seminar-2026'
+const isKaohsiungBrandHall = detail.id === 'kaohsiung-brand-hall'
+const franchiseRegistrationUrl = isFranchiseSeminar
+  ? detail.sections[1]?.links?.[0]?.url ?? ''
+  : ''
 
 useSeoMeta({
   title: `${article.title}｜SAKURA 整體廚房`,
@@ -30,7 +35,13 @@ useHead({
 </script>
 
 <template>
-  <main class="latest-detail-page">
+  <main
+    class="latest-detail-page"
+    :class="{
+      'latest-detail-page--franchise-seminar': isFranchiseSeminar,
+      'latest-detail-page--kaohsiung-brand-hall': isKaohsiungBrandHall,
+    }"
+  >
     <section class="latest-detail-breadcrumb" aria-label="最新消息麵包屑">
       <div class="latest-detail-breadcrumb__overlay" aria-hidden="true" />
       <nav aria-label="麵包屑" class="latest-detail-breadcrumb__trail" v-reveal="{ anim: 'opalMoveUp' }">
@@ -66,14 +77,58 @@ useHead({
             v-for="(section, sectionIndex) in detail.sections"
             :key="section.heading ?? `section-${sectionIndex}`"
           >
-            <section class="latest-detail-section" v-reveal="{ anim: 'opalMoveUp' }">
+            <section
+              class="latest-detail-section"
+              :class="{
+                'latest-detail-section--franchise-register': isFranchiseSeminar && sectionIndex === 1,
+                'latest-detail-section--franchise-session': isFranchiseSeminar && sectionIndex >= 2,
+                'latest-detail-section--two-column': isKaohsiungBrandHall && sectionIndex === 1,
+              }"
+              v-reveal="{ anim: 'opalMoveUp' }"
+            >
               <h4 v-if="section.heading">{{ section.heading }}</h4>
               <p v-for="paragraph in section.paragraphs" :key="paragraph">{{ paragraph }}</p>
               <ul v-if="section.bullets?.length">
                 <li v-for="bullet in section.bullets" :key="bullet">{{ bullet }}</li>
               </ul>
 
-              <div v-if="section.links?.length" class="latest-detail-links">
+              <div
+                v-if="section.images?.length && isFranchiseSeminar && sectionIndex === 1"
+                class="latest-detail-media-reveal"
+                v-reveal="{ anim: 'opalScaleUp', delay: 100 }"
+              >
+                <div class="latest-detail-media">
+                  <figure v-for="image in section.images" :key="image.src">
+                    <InternalNewsImage :src="image.src" :alt="image.alt" />
+                  </figure>
+                </div>
+              </div>
+
+              <p
+                v-if="section.links?.length && isFranchiseSeminar && sectionIndex === 1"
+                class="latest-detail-franchise-link"
+              >
+                <span>報名連結</span>
+                <a
+                  :href="franchiseRegistrationUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ franchiseRegistrationUrl }}
+                </a>
+                <a
+                  :href="franchiseRegistrationUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  （立即點我報名）
+                </a>
+              </p>
+
+              <div
+                v-else-if="section.links?.length"
+                class="latest-detail-links"
+              >
                 <a
                   v-for="link in section.links"
                   :key="link.url"
@@ -86,7 +141,7 @@ useHead({
               </div>
 
               <div
-                v-if="section.images?.length"
+                v-if="section.images?.length && !(isFranchiseSeminar && sectionIndex === 1)"
                 class="latest-detail-media-reveal"
                 v-reveal="{ anim: 'opalScaleUp', delay: 100 }"
               >
@@ -106,7 +161,6 @@ useHead({
             <NuxtLink to="/news/activities"><Camera aria-hidden="true" />優惠活動</NuxtLink>
             <NuxtLink to="/news/latest" aria-current="page"><Images aria-hidden="true" />最新消息</NuxtLink>
             <NuxtLink to="/news/video"><PlaySquare aria-hidden="true" />媒體影音</NuxtLink>
-            <NuxtLink to="/knowledge"><PanelsTopLeft aria-hidden="true" />廚房裝修指南</NuxtLink>
           </nav>
         </div>
       </div>
@@ -128,7 +182,7 @@ useHead({
   padding: 30px;
   place-items: center;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-5/brand-pavilion/pavilion-taichung.jpg') center 88% / cover no-repeat;
 }
 
 .latest-detail-breadcrumb__overlay {
@@ -147,9 +201,10 @@ useHead({
   gap: 10px;
   width: min(1410px, 100%);
   margin-inline: auto;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 13px;
-  line-height: 14px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: .04em;
   text-transform: uppercase;
 }
 
@@ -160,16 +215,17 @@ useHead({
 
 .latest-detail-header,
 .latest-detail-cover {
-  width: min(1410px, 100%);
+  width: min(930px, 100%);
   margin-inline: auto;
 }
 
-.latest-detail-header { margin-bottom: 30px; }
+.latest-detail-header { margin-bottom: 40px; }
 
 .latest-detail-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  gap: 15px;
   margin-bottom: 13px;
 }
 
@@ -184,7 +240,7 @@ useHead({
   border-radius: 100px;
   color: #fff;
   background: #caa05c;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   line-height: 14px;
   transition: color .3s ease, background-color .3s ease;
@@ -212,6 +268,7 @@ useHead({
 
 .latest-detail-meta time {
   color: #9f9fa4;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   line-height: 24px;
   text-transform: uppercase;
@@ -221,10 +278,10 @@ useHead({
   max-width: 1050px;
   margin: 0;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 50px;
+  font-family: var(--font-cjk-serif);
+  font-size: 38px;
   font-weight: 400;
-  line-height: 54px;
+  line-height: 46px;
 }
 
 .latest-detail-cover {
@@ -249,17 +306,18 @@ useHead({
 .latest-detail-section h4 {
   margin: 60px 0 32px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 40px;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
   font-weight: 400;
-  line-height: 44px;
+  line-height: 32px;
 }
 
 .latest-detail-section p {
   margin: 0 0 30px;
   color: #59585d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 26px;
 }
 
 .latest-detail-section ul {
@@ -272,8 +330,9 @@ useHead({
   margin-bottom: 8px;
   padding-left: 3px;
   color: #59585d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 26px;
 }
 
 .latest-detail-section li:last-child { margin-bottom: 0; }
@@ -287,8 +346,9 @@ useHead({
 
 .latest-detail-links a {
   color: #1c1c1d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 26px;
   text-decoration: underline;
   text-decoration-color: #caa05c;
   text-underline-offset: 4px;
@@ -301,13 +361,10 @@ useHead({
 .latest-detail-media-reveal { width: 100%; }
 
 .latest-detail-media {
-  position: relative;
-  left: 50%;
   display: grid;
-  width: min(1290px, calc(100vw - 60px));
+  width: 100%;
   gap: 30px;
   margin: 35px 0 30px;
-  transform: translateX(-50%);
 }
 
 .latest-detail-media--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -326,6 +383,72 @@ useHead({
 }
 
 .latest-detail-media :deep(.antra-news-image img) { object-fit: contain; }
+
+.latest-detail-section--franchise-register .latest-detail-media,
+.latest-detail-section--franchise-session .latest-detail-media {
+  width: min(500px, 100%);
+  margin-inline: auto;
+}
+
+.latest-detail-section--franchise-register .latest-detail-media {
+  margin-top: 35px;
+  margin-bottom: 14px;
+}
+
+.latest-detail-section--franchise-register .latest-detail-media figure,
+.latest-detail-section--franchise-session .latest-detail-media figure {
+  border-radius: 0;
+}
+
+.latest-detail-section .latest-detail-franchise-link {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 8px;
+  margin: 0 0 30px;
+  color: #1c1c1d;
+  font-family: var(--font-cjk-serif);
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+}
+
+.latest-detail-franchise-link a {
+  color: #caa05c;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color .3s ease;
+}
+
+.latest-detail-franchise-link a:hover,
+.latest-detail-franchise-link a:focus-visible { color: #1c1c1d; }
+
+.latest-detail-section--franchise-session h4 {
+  margin: 40px 0 14px;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+}
+
+.latest-detail-section--franchise-session .latest-detail-media { margin-block: 0 30px; }
+
+.latest-detail-section--two-column {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  grid-template-areas: "media copy";
+  align-items: center;
+  gap: 40px;
+  margin: 35px 0 40px;
+}
+
+.latest-detail-section--two-column > p {
+  grid-area: copy;
+  margin: 0;
+}
+
+.latest-detail-section--two-column > .latest-detail-media-reveal { grid-area: media; }
+.latest-detail-section--two-column .latest-detail-media { margin: 0; }
 
 .latest-detail-categories {
   display: flex;
@@ -347,6 +470,7 @@ useHead({
   border-radius: 24px;
   color: #59585d;
   background: transparent;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
@@ -379,24 +503,36 @@ useHead({
   .latest-detail-article { padding: 60px 15px 0; }
   .latest-detail-header { margin-bottom: 30px; }
 
-  .latest-detail-header h1 { font-size: 25px; line-height: 30px; }
+  .latest-detail-header h1 { font-size: 25px; line-height: 32px; }
   .latest-detail-meta .categories-link a { min-height: 28px; padding: 7px 12px; font-size: 13px; }
   .latest-detail-cover { border-radius: 18px; }
 
   .latest-detail-section h4 {
     margin: 45px 0 24px;
-    font-size: 30px;
-    line-height: 33px;
+    font-size: 25px;
+    line-height: 32px;
   }
 
   .latest-detail-media {
-    width: calc(100vw - 30px);
     grid-template-columns: minmax(0, 1fr);
     gap: 15px;
     margin-top: 28px;
   }
 
   .latest-detail-media figure { border-radius: 18px; }
+
+  .latest-detail-section--franchise-register .latest-detail-media figure,
+  .latest-detail-section--franchise-session .latest-detail-media figure { border-radius: 0; }
+
+  .latest-detail-section--two-column {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "media"
+      "copy";
+    gap: 22px;
+    margin: 28px 0 35px;
+  }
+
   .latest-detail-categories { margin-top: 50px; padding-bottom: 45px; }
 }
 
@@ -404,6 +540,7 @@ useHead({
   .latest-detail-breadcrumb { background-attachment: scroll; }
   .latest-detail-breadcrumb__trail a,
   .latest-detail-meta .categories-link a,
+  .latest-detail-franchise-link a,
   .latest-detail-links a,
   .latest-detail-categories a { transition: none; }
 }

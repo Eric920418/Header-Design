@@ -83,11 +83,11 @@ useSeoMeta({
 
 .franchise-application__rail { width: min(930px, 100%); margin-inline: auto; }
 .franchise-application__header { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.franchise-application__pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #59585d; font-family: "Cal Sans", sans-serif; font-size: 11px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
+.franchise-application__pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #59585d; font-family: var(--font-ui); font-size: 11px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
 .franchise-application__pill i { width: 7px; height: 7px; border-radius: 50%; background: #caa05c; }
 .franchise-application__pill svg { width: 14px; height: 14px; }
 
-.franchise-application__header h1 { margin: 28px 0 0; font-family: "Cal Sans", sans-serif; font-size: 64px; font-weight: 400; line-height: 68px; letter-spacing: -.025em; }
+.franchise-application__header h1 { margin: 28px 0 0; font-family: var(--font-display); font-size: 64px; font-weight: 400; line-height: 68px; letter-spacing: -.025em; }
 .franchise-application__header p { max-width: 620px; margin: 18px 0 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .franchise-application__download { display: inline-flex; min-height: 52px; align-items: center; justify-content: center; gap: 11px; margin-top: 30px; padding: 13px 23px; border: 1px solid #caa05c; border-radius: 999px; color: #fff; background: #caa05c; font-size: 14px; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
 .franchise-application__download:hover,

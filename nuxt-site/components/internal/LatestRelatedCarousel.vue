@@ -27,9 +27,8 @@ const [viewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 24 }
               <span class="latest-related__category">{{ article.categoryLabel }}</span>
             </div>
             <div class="latest-related__text-box">
+              <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
               <h3>{{ article.title }}</h3>
-              <span class="latest-related__location">{{ article.categoryLabel }}</span>
-              <time :datetime="article.publishedAt">{{ article.publishedAt.slice(0, 4) }}</time>
             </div>
           </NuxtLink>
         </article>
@@ -49,14 +48,14 @@ const [viewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 24 }
 
 .latest-related__track {
   display: flex;
-  margin-left: -30px;
+  margin-left: -40px;
   touch-action: pan-y pinch-zoom;
 }
 
 .latest-related__slide {
   min-width: 0;
   flex: 0 0 33.333333%;
-  padding-left: 30px;
+  padding-left: 40px;
 }
 
 .latest-related__card { display: block; color: inherit; }
@@ -67,18 +66,8 @@ const [viewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 24 }
   border-radius: 24px;
 }
 
-.latest-related__transition::after {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  border-radius: inherit;
-  background: rgba(0,0,0,.15);
-  content: "";
-  transition: background-color .5s ease;
-}
-
 .latest-related__media {
-  aspect-ratio: .8333333333;
+  aspect-ratio: 1.40625;
   background: #e3e3e8;
 }
 
@@ -86,45 +75,47 @@ const [viewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 24 }
 
 .latest-related__category {
   position: absolute;
-  top: 31px;
-  left: 30px;
+  top: 20px;
+  left: 20px;
   z-index: 2;
   display: inline-flex;
   min-height: 30px;
   align-items: center;
   padding: 8px 15px;
-  border: 1px solid rgba(255,255,255,.46);
   border-radius: 100px;
   color: #fff;
-  background: transparent;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 13px;
+  background: #caa05c;
+  font-family: var(--font-cjk-serif);
+  font-size: 14px;
   line-height: 14px;
-  text-transform: uppercase;
 }
 
-.latest-related__card:hover :deep(.antra-news-image img) { transform: scale(1.05); }
-.latest-related__card:hover .latest-related__transition::after { background: rgba(0,0,0,.25); }
+.latest-related__card:hover :deep(.antra-news-image img) { transform: scale(1.1); }
 
-.latest-related__text-box { padding-top: 23px; }
+.latest-related__text-box {
+  width: 90%;
+  padding-top: 19px;
+}
 
-.latest-related__location,
 .latest-related__card time {
   display: block;
-  color: #59585d;
-  font-size: 16px;
+  margin-bottom: 3px;
+  color: #9f9fa4;
+  font-family: var(--font-cjk-sans);
+  font-size: 14px;
+  font-weight: 500;
   line-height: 24px;
 }
 
 .latest-related__card h3 {
   display: -webkit-box;
-  margin: 0 0 14px;
+  margin: 0;
   overflow: hidden;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 30px;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
   font-weight: 400;
-  line-height: 34px;
+  line-height: 32px;
   transition: color .3s ease;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -154,11 +145,11 @@ const [viewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 24 }
   .latest-related__slide { flex-basis: 88%; padding-left: 15px; }
   .latest-related__transition { border-radius: 18px; }
   .latest-related__category { top: 20px; left: 15px; }
-  .latest-related__card h3 { font-size: 26px; line-height: 26px; }
+  .latest-related__text-box { width: 100%; }
+  .latest-related__card h3 { font-size: 22px; line-height: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .latest-related__transition::after,
   .latest-related__card h3 { transition: none; }
 
   .latest-related__card:hover :deep(.antra-news-image img) { transform: none; }

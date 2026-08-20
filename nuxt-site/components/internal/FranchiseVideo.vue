@@ -82,7 +82,7 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
 .franchise-video__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(0 0 0 / 70%), rgb(0 0 0 / 7%) 72%); }
 .franchise-video__label { position: absolute; bottom: 38px; left: 40px; z-index: 2; color: #fff; }
 .franchise-video__label span { display: block; margin-bottom: 7px; color: #caa05c; font-size: 12px; line-height: 14px; letter-spacing: .16em; text-transform: uppercase; }
-.franchise-video__label strong { display: block; font-family: "Cal Sans", sans-serif; font-size: 32px; font-weight: 400; line-height: 36px; }
+.franchise-video__label strong { display: block; font-family: var(--font-ui); font-size: 32px; font-weight: 400; line-height: 36px; }
 
 .franchise-video__play {
   position: absolute;
@@ -112,7 +112,7 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
 .franchise-video__loading { flex-direction: column; gap: 14px; }
 .franchise-video__loading > span { width: 42px; height: 42px; border: 2px solid rgb(255 255 255 / 28%); border-top-color: #caa05c; border-radius: 50%; animation: franchise-video-spin .8s linear infinite; }
 .franchise-video__error { flex-direction: column; padding: 30px; text-align: center; }
-.franchise-video__error strong { font-family: "Cal Sans", sans-serif; font-size: 27px; font-weight: 400; }
+.franchise-video__error strong { font-family: var(--font-ui); font-size: 27px; font-weight: 400; }
 .franchise-video__error p { max-width: 560px; margin: 12px 0 0; color: rgb(255 255 255 / 70%); font-size: 15px; line-height: 24px; }
 .franchise-video__error a { margin-top: 22px; padding: 10px 20px; border: 1px solid #caa05c; border-radius: 999px; color: #caa05c; font-size: 14px; }
 

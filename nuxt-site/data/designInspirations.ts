@@ -33,7 +33,7 @@ export const DESIGN_INSPIRATION_CASES: DesignInspirationCase[] = [
     coverAlt: '袁艾菲夫妻與工業風一字型整體廚房',
     form: '一字型',
     style: '工業風',
-    detailRoute: '/gallery/case10',
+    detailRoute: '/gallery/case10?from=inspiration',
   },
   {
     slug: 'case56',
@@ -43,7 +43,7 @@ export const DESIGN_INSPIRATION_CASES: DesignInspirationCase[] = [
     coverAlt: '明亮北歐風一字型整體廚房與設計師',
     form: '一字型',
     style: '北歐風',
-    detailRoute: '/gallery/case56',
+    detailRoute: '/gallery/case56?from=inspiration',
   },
   {
     slug: 'case35',
@@ -53,6 +53,6 @@ export const DESIGN_INSPIRATION_CASES: DesignInspirationCase[] = [
     coverAlt: '現代風中島整體廚房與設計師',
     form: '中島',
     style: '現代風',
-    detailRoute: '/gallery/case35',
+    detailRoute: '/gallery/case35?from=inspiration',
   },
 ]

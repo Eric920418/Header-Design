@@ -6,12 +6,16 @@ const props = withDefaults(defineProps<{
   item: StoreCaseDetail
   featured?: boolean
   revealDelay?: number
+  source?: 'inspiration'
 }>(), {
   featured: false,
   revealDelay: 0,
 })
 
 const excerpt = computed(() => props.item.article?.[0]?.paragraphs[0] ?? '')
+const detailRoute = computed(() => props.source === 'inspiration'
+  ? { path: `/gallery/${props.item.slug}`, query: { from: 'inspiration' } }
+  : `/gallery/${props.item.slug}`)
 </script>
 
 <template>
@@ -21,11 +25,11 @@ const excerpt = computed(() => props.item.article?.[0]?.paragraphs[0] ?? '')
     v-reveal="{ anim: 'opalMoveUp', delay: revealDelay }"
   >
     <div class="case-recommendation-card__media">
-      <NuxtLink :to="`/gallery/${item.slug}`" class="case-recommendation-card__image-link">
+      <NuxtLink :to="detailRoute" class="case-recommendation-card__image-link">
         <InternalCaseImage :src="item.images[0]!" :alt="`${item.title}案例照片`" class="case-recommendation-card__image" />
       </NuxtLink>
       <a
-        :href="item.reservationUrl"
+        :href="item.contact?.lineUrl ?? item.reservationUrl"
         target="_blank"
         rel="noopener noreferrer"
         class="case-recommendation-card__booking"
@@ -37,7 +41,7 @@ const excerpt = computed(() => props.item.article?.[0]?.paragraphs[0] ?? '')
         <span>{{ item.storeName }}</span>
         <span>設計師 {{ item.designer }}</span>
       </div>
-      <h3><NuxtLink :to="`/gallery/${item.slug}`">{{ item.title }}</NuxtLink></h3>
+      <h3><NuxtLink :to="detailRoute">{{ item.title }}</NuxtLink></h3>
       <p class="case-recommendation-card__location"><MapPin aria-hidden="true" />{{ item.city }}</p>
       <p v-if="excerpt" class="case-recommendation-card__excerpt">{{ excerpt }}</p>
     </div>
@@ -50,11 +54,11 @@ const excerpt = computed(() => props.item.article?.[0]?.paragraphs[0] ?? '')
 .case-recommendation-card__image-link { display: block; overflow: hidden; border-radius: 24px; }
 .case-recommendation-card__image { width: 100%; aspect-ratio: 1.40625; transition: transform .5s ease; }
 .case-recommendation-card:hover .case-recommendation-card__image { transform: scale(1.05); }
-.case-recommendation-card__booking { position: absolute; z-index: 2; top: 20px; left: 20px; padding: 7px 13px; border-radius: 24px; color: #1c1c1d; background: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 12px; line-height: 14px; transition: color .3s ease, background-color .3s ease; }
+.case-recommendation-card__booking { position: absolute; z-index: 2; top: 20px; left: 20px; padding: 7px 13px; border-radius: 24px; color: #fff; background: #caa05c; font-family: var(--font-ui); font-size: 12px; line-height: 14px; transition: color .3s ease, background-color .3s ease; }
 .case-recommendation-card__booking:hover { color: #fff; background: #1c1c1d; }
 .case-recommendation-card__body { padding-top: 21px; }
 .case-recommendation-card__meta { display: flex; justify-content: space-between; gap: 16px; color: #9f9fa4; font-size: 13px; line-height: 20px; }
-.case-recommendation-card h3 { margin-top: 8px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 30px; font-weight: 400; line-height: 34px; }
+.case-recommendation-card h3 { display: -webkit-box; min-height: 62px; margin-top: 8px; overflow: hidden; color: #1c1c1d; font-family: var(--font-display); font-size: 25px; font-weight: 400; line-height: 31px; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .case-recommendation-card h3 a { transition: color .3s ease; }
 .case-recommendation-card h3 a:hover { color: #caa05c; }
 .case-recommendation-card__location { display: flex; align-items: flex-start; gap: 8px; margin-top: 13px; color: #59585d; font-size: 14px; line-height: 22px; }
@@ -73,6 +77,7 @@ const excerpt = computed(() => props.item.article?.[0]?.paragraphs[0] ?? '')
 .case-recommendation-card--featured .case-recommendation-card__location { color: #fff; }
 .case-recommendation-card--featured h3,
 .case-recommendation-card--featured h3 a { color: #fff; }
+.case-recommendation-card--featured h3 { min-height: 0; }
 .case-recommendation-card--featured .case-recommendation-card__excerpt { display: none; }
 
 @media (max-width: 1366px) and (min-width: 1025px) {

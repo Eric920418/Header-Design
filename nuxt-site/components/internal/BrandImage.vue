@@ -57,7 +57,7 @@ function handleError() {
   background: #f6f6f6;
   text-align: center;
 }
-.brand-image-error strong { color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 18px; font-weight: 400; }
+.brand-image-error strong { color: #1c1c1d; font-family: var(--font-ui); font-size: 18px; font-weight: 400; }
 .brand-image-error span,
 .brand-image-error code { max-width: 100%; overflow-wrap: anywhere; font-size: 13px; line-height: 20px; }
 </style>

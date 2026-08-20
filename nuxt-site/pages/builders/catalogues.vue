@@ -190,7 +190,7 @@ useSeoMeta({
 .builder-catalogue-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 80px;
   font-weight: 400;
   line-height: .9523809524;
@@ -201,7 +201,7 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 16px;
   text-transform: uppercase;
@@ -285,7 +285,7 @@ useSeoMeta({
   align-items: center;
   gap: 12px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 15px;
   line-height: 20px;
   opacity: 0;
@@ -319,7 +319,7 @@ useSeoMeta({
   min-height: 34px;
   margin-bottom: 14px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 30px;
   font-weight: 400;
   line-height: 34px;
@@ -412,7 +412,7 @@ useSeoMeta({
 
 .builder-catalogue-dialog__copy h2 {
   margin: 14px 0 0;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 52px;
   font-weight: 400;
   line-height: 56px;

@@ -33,13 +33,13 @@
 .brand-store-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-store-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
 .brand-store-heading-aside { position: relative; min-height: 250px; padding-top: 65px; }
-.brand-store-pill { display: inline-flex; align-items: center; gap: 5px; padding: 8px 14px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 26px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
+.brand-store-pill { display: inline-flex; align-items: center; gap: 5px; padding: 8px 14px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 26px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
 .brand-store-pill > span { width: 5px; height: 5px; border-radius: 50%; background: #caa05c; }
 .brand-store-deco { position: absolute; display: block; border-color: #e3e3e8; }
 .brand-store-deco-horizontal { top: 117px; left: 30px; width: 300px; border-bottom: 1px solid #e3e3e8; }
 .brand-store-deco-vertical { top: 48px; right: 61px; height: 200px; border-right: 1px solid #e3e3e8; }
 .brand-store-heading-copy { padding-top: 60px; }
-.brand-store-heading h2 { width: min(850px, 100%); margin: 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.brand-store-heading h2 { width: min(850px, 100%); margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .brand-store-heading h2 span { color: #caa05c; }
 .brand-store-heading h3 { margin: 35px 0 12px; color: #1c1c1d; font-size: 22px; font-weight: 500; line-height: 32px; }
 .brand-store-heading p { width: min(850px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }

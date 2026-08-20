@@ -36,7 +36,7 @@ useSeoMeta({
 .brand-family-section { overflow: hidden; padding: 100px 30px 95px; background: #f6f6f6; }
 .brand-family-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-family-heading { margin-bottom: 50px; }
-.brand-family-heading h2 { margin: 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
+.brand-family-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
 .brand-family-heading h3 { margin: 24px 0 12px; color: #1c1c1d; font-size: 22px; font-weight: 500; line-height: 32px; }
 .brand-family-heading p { width: min(1050px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
 

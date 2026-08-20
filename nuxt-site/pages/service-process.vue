@@ -24,7 +24,7 @@ useSeoMeta({
         <header class="antra-service-intro__heading">
           <div aria-hidden="true" />
           <div v-reveal="{ anim: 'opalMoveLeft' }">
-            <h2 id="service-intro-title">為消費者打造<span>夢想中的<br />理想廚房</span></h2>
+            <h2 id="service-intro-title">Description <span>Architecture<br />Process</span> For Exceptional Results.</h2>
             <p>堅持用專業的服務，依照您的需求提供設計，希望以更完整、更貼心的服務，讓您最滿意。</p>
           </div>
         </header>
@@ -43,7 +43,7 @@ useSeoMeta({
       </div>
     </section>
 
-    <InternalFaqAccordion />
+    <InternalFaqAccordion safe-rail />
   </main>
 </template>
 
@@ -53,7 +53,7 @@ useSeoMeta({
   isolation: isolate;
   min-height: 360px;
   overflow: hidden;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-5/brand-pavilion/pavilion-taichung.jpg') center 88% / cover no-repeat;
   color: #fff;
 }
 
@@ -75,9 +75,9 @@ useSeoMeta({
 .antra-breadcrumb h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-cjk-serif);
   font-size: 80px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: .9523809524;
 }
 
@@ -86,10 +86,10 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 13px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
   font-weight: 400;
-  line-height: 14px;
+  line-height: 22px;
   text-transform: uppercase;
 }
 
@@ -113,14 +113,14 @@ useSeoMeta({
 }
 
 .antra-service-intro__heading > div:last-child {
-  padding: 60px 0;
+  padding: 42px 0 30px;
 }
 
 .antra-service-intro h2 {
-  width: min(769px, 100%);
-  margin: 0 0 30px;
+  width: min(920px, 100%);
+  margin: 0 0 20px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 60px;
   font-weight: 400;
   line-height: 64px;
@@ -132,8 +132,9 @@ useSeoMeta({
   width: min(766px, 100%);
   margin: 0;
   color: #59585d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 25px;
 }
 
 .antra-service-video {
@@ -147,8 +148,15 @@ useSeoMeta({
   margin-inline: auto;
 }
 
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .antra-service-intro h2 {
+    font-size: 50px;
+    line-height: 56px;
+  }
+}
+
 @media (max-width: 1024px) {
-  .antra-breadcrumb { min-height: 285px; background-attachment: scroll; }
+  .antra-breadcrumb { min-height: 285px; }
   .antra-breadcrumb__inner { padding-block: 80px; }
   .antra-service-intro { padding-block: 80px; }
   .antra-service-intro__heading > div:last-child { padding: 40px 0; }
@@ -161,6 +169,10 @@ useSeoMeta({
   .antra-breadcrumb__inner { width: calc(100% - 30px); padding: 80px 0 60px; }
   .antra-breadcrumb h1 { margin-bottom: 15px; font-size: 30px; line-height: 35px; }
   .antra-service-intro { padding: 60px 15px; }
+  .antra-service-intro__rail {
+    box-sizing: border-box;
+    padding-right: 72px;
+  }
   .antra-service-intro__heading { grid-template-columns: 1fr; text-align: center; }
   .antra-service-intro__heading > div:first-child { display: none; }
   .antra-service-intro__heading > div:last-child { padding: 0 0 30px; }
@@ -168,7 +180,4 @@ useSeoMeta({
   .antra-service-video { padding: 0 15px 60px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .antra-breadcrumb { background-attachment: scroll; }
-}
 </style>

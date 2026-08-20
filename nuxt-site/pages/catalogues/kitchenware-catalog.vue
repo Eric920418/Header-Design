@@ -93,7 +93,7 @@ useSeoMeta({
 .catalogue-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 80px;
   font-weight: 400;
   line-height: .9523809524;
@@ -104,7 +104,7 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 14px;
   text-transform: uppercase;
@@ -200,7 +200,7 @@ useSeoMeta({
   min-height: 68px;
   margin-bottom: 14px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 30px;
   font-weight: 400;
   line-height: 34px;

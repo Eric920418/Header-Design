@@ -23,21 +23,21 @@ export const latestArticleDetails: LatestArticleDetail[] = [
         }],
       },
       {
-        heading: '台北說明會場次',
+        heading: '【台北加盟說明會場次】',
         images: [{
           src: '/section-4/news/latest/franchise-seminar-2026-taipei.png',
           alt: '2026 櫻花整體廚房台北加盟說明會場次表',
         }],
       },
       {
-        heading: '台中說明會場次',
+        heading: '【台中加盟說明會場次】',
         images: [{
           src: '/section-4/news/latest/franchise-seminar-2026-taichung.png',
           alt: '2026 櫻花整體廚房台中加盟說明會場次表',
         }],
       },
       {
-        heading: '高雄說明會場次',
+        heading: '【高雄加盟說明會場次】',
         images: [{
           src: '/section-4/news/latest/franchise-seminar-2026-kaohsiung.png',
           alt: '2026 櫻花整體廚房高雄加盟說明會場次表',
@@ -57,15 +57,17 @@ export const latestArticleDetails: LatestArticleDetail[] = [
         paragraphs: [
           '台灣廚衛產業領導品牌台灣櫻花，於9/30日正式啟用南台灣最重要據點高雄品牌館。此舉不僅是櫻花深耕南台灣市場的重要策略佈局，更將集團繼台北、台中之後已成功推展的「HOME in O.N.E」全方位整合策略，以更成熟、更完整的樣貌呈現給南台灣的建築及設計業界夥伴，為在地市場帶來前所未有的美好居家生活體驗。',
         ],
+      },
+      {
+        paragraphs: [
+          '櫻花集團董事長張永杰表示，隨著市場快速變化，消費者對「家的期待」已從產品性能延伸至設計美感，並進一步走向智能科技整合。櫻花提出的「HOME in O.N.E」理念，正是回應此趨勢的整體解決方案，旨在打造一個從規劃、設計、施工到交屋，串聯建築方需求到住戶端體驗的一站式完整旅程。',
+        ],
         images: [{
           src: '/section-4/news/latest/kaohsiung-brand-hall-01.jpg',
           alt: '櫻花集團高雄品牌館開幕活動現場',
         }],
       },
       {
-        paragraphs: [
-          '櫻花集團董事長張永杰表示，隨著市場快速變化，消費者對「家的期待」已從產品性能延伸至設計美感，並進一步走向智能科技整合。櫻花提出的「HOME in O.N.E」理念，正是回應此趨勢的整體解決方案，旨在打造一個從規劃、設計、施工到交屋，串聯建築方需求到住戶端體驗的一站式完整旅程。',
-        ],
         images: [{
           src: '/section-4/news/latest/kaohsiung-brand-hall-02.jpg',
           alt: '櫻花集團高雄品牌館 HOME in O.N.E 展示空間',

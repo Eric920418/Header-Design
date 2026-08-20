@@ -167,7 +167,7 @@ useHead({
   justify-content: center;
   gap: 10px;
   margin-inline: auto;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 14px;
   text-transform: uppercase;
@@ -210,7 +210,7 @@ useHead({
   border-radius: 100px;
   color: #fff;
   background: #caa05c;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 14px;
   line-height: 14px;
   transition: background-color .3s ease;
@@ -243,7 +243,7 @@ useHead({
 .knowledge-article__header h1 {
   margin: 0;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 50px;
   font-weight: 400;
   line-height: 54px;
@@ -270,7 +270,7 @@ useHead({
 .knowledge-copy-block h2 {
   margin: 0 0 30px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 40px;
   font-weight: 400;
   line-height: 44px;
@@ -279,7 +279,7 @@ useHead({
 .knowledge-copy-block h3 {
   margin: 31px 0 12px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 25px;
   font-weight: 400;
   line-height: 30px;

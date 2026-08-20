@@ -1,10 +1,19 @@
+<script setup lang="ts">
+const route = useRoute()
+const fromDesignInspiration = computed(() => route.query.from === 'inspiration')
+const parentLabel = computed(() => fromDesignInspiration.value ? '設計靈感' : '案例門市')
+const parentRoute = computed(() => fromDesignInspiration.value ? '/design-inspiration' : '/gallery')
+</script>
+
 <template>
   <section class="case-breadcrumb-hero" aria-label="案例門市麵包屑">
     <div class="case-breadcrumb-hero__overlay" aria-hidden="true" />
     <nav aria-label="麵包屑" class="case-breadcrumb-hero__trail" v-reveal="{ anim: 'opalMoveUp' }">
       <NuxtLink to="/">首頁</NuxtLink>
       <span aria-hidden="true">/</span>
-      <NuxtLink to="/gallery" aria-current="page">案例門市</NuxtLink>
+      <NuxtLink :to="parentRoute">{{ parentLabel }}</NuxtLink>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">門市案例</span>
     </nav>
   </section>
 </template>
@@ -15,7 +24,7 @@
   isolation: isolate;
   overflow: hidden;
   padding: 207px 30px 139px;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
   color: #fff;
 }
 
@@ -34,9 +43,9 @@
   gap: 10px;
   width: min(1410px, 100%);
   margin-inline: auto;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 13px;
-  line-height: 14px;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 20px;
   text-transform: uppercase;
 }
 

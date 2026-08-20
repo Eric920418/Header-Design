@@ -220,10 +220,10 @@ const scrollMarketing = (direction: -1 | 1) => {
 .source-rail-wide { width: min(1770px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
 .source-rail { width: min(1410px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
 
-.source-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
+.source-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
 .source-pill i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: #caa05c; }
 .source-pill--dark { border-color: rgb(255 255 255 / 24%); color: #fff; }
-.source-round-link { display: inline-flex; min-height: 52px; width: max-content; align-items: center; justify-content: center; gap: 11px; padding: 13px 21px; border: 1px solid rgb(255 255 255 / 22%); border-radius: 999px; color: #fff; font-family: "Cal Sans", sans-serif; font-size: 14px; line-height: 20px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
+.source-round-link { display: inline-flex; min-height: 52px; width: max-content; align-items: center; justify-content: center; gap: 11px; padding: 13px 21px; border: 1px solid rgb(255 255 255 / 22%); border-radius: 999px; color: #fff; font-family: var(--font-ui); font-size: 14px; line-height: 20px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .source-round-link svg { width: 18px; height: 18px; }
 .source-round-link:hover { transform: translateY(-2px); }
 .source-round-link--gold { border-color: #caa05c; color: #1c1c1d; background: #caa05c; }
@@ -236,7 +236,7 @@ const scrollMarketing = (direction: -1 | 1) => {
 .franchise-hero__overlay { position: absolute; z-index: -1; inset: 0; background: rgb(16 8 1 / 72%); }
 .franchise-hero__inner { padding: 158px 30px 0; }
 .franchise-hero__grid { display: grid; grid-template-columns: 64% 36%; align-items: start; }
-.franchise-hero h1 { max-width: 960px; margin: 20px 0 0; color: #fff; font-family: "Cal Sans", sans-serif; font-size: clamp(76px, 7.28vw, 110px); font-weight: 400; line-height: 1; letter-spacing: -1px; }
+.franchise-hero h1 { max-width: 960px; margin: 20px 0 0; color: #fff; font-family: var(--font-display); font-size: clamp(76px, 7.28vw, 110px); font-weight: 400; line-height: 1; letter-spacing: -1px; }
 .franchise-hero h1 span { color: #caa05c; }
 .franchise-hero__aside { width: min(454px, 100%); margin: 89px 0 0 6px; }
 .franchise-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-size: 20px; line-height: 24px; }
@@ -259,7 +259,7 @@ const scrollMarketing = (direction: -1 | 1) => {
 .franchise-projects h2,
 .franchise-newsletter h2,
 .franchise-process h2,
-.franchise-news h2 { margin: 0; font-family: "Cal Sans", sans-serif; font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
+.franchise-news h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .franchise-about h2 { max-width: 822px; margin-bottom: 50px; }
 .franchise-about h2 span,
 .franchise-advantages h2 span,
@@ -276,7 +276,7 @@ const scrollMarketing = (direction: -1 | 1) => {
 .franchise-testimonial__person > :deep(.franchise-image) { width: 54px; height: 54px; flex: none; border-radius: 50%; }
 .franchise-testimonial__person strong,
 .franchise-testimonial__person span { display: block; }
-.franchise-testimonial__person strong { font-family: "Cal Sans", sans-serif; font-size: 16px; font-weight: 400; }
+.franchise-testimonial__person strong { font-family: var(--font-ui); font-size: 16px; font-weight: 400; }
 .franchise-testimonial__person span { margin-top: 4px; color: #9f9fa4; font-size: 12px; }
 .franchise-story-strip { height: auto; margin: 0 0 0; padding: 0 0 88px; background: url('/section-6/franchise/antra-original/h5-bg1.png') bottom left / auto no-repeat; }
 .franchise-story-strip > :deep(.franchise-image) { aspect-ratio: 964 / 272; background: transparent; }
@@ -286,14 +286,14 @@ const scrollMarketing = (direction: -1 | 1) => {
 .franchise-advantages__intro { position: sticky; top: 92px; align-self: start; padding: 15px 58px 0 0; }
 .franchise-advantages__intro h2 { margin-top: 28px; }
 .franchise-advantages__intro p { max-width: 360px; margin: 24px 0 0; color: #59585d; font-size: 16px; line-height: 25px; }
-.franchise-advantages__intro > strong { display: block; margin-top: 55px; color: rgb(159 159 164 / 18%); font-family: "Cal Sans", sans-serif; font-size: 116px; font-weight: 400; line-height: 1; }
+.franchise-advantages__intro > strong { display: block; margin-top: 55px; color: rgb(159 159 164 / 18%); font-family: var(--font-ui); font-size: 116px; font-weight: 400; line-height: 1; }
 .franchise-post-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 30px; }
 .franchise-post__media { position: relative; aspect-ratio: 1.52 / 1; overflow: hidden; border-radius: 18px; }
 .franchise-post__media > span { position: absolute; top: 16px; left: 16px; padding: 7px 13px; border-radius: 999px; color: #fff; background: #caa05c; font-size: 11px; }
 .franchise-post:hover .franchise-post__media :deep(img) { transform: scale(1.045); }
 .franchise-post__content { padding-top: 18px; }
 .franchise-post__content > span { color: #caa05c; font-size: 12px; line-height: 20px; }
-.franchise-post h3 { margin: 6px 0 0; font-family: "Cal Sans", sans-serif; font-size: 28px; font-weight: 400; line-height: 34px; }
+.franchise-post h3 { margin: 6px 0 0; font-family: var(--font-display); font-size: 28px; font-weight: 400; line-height: 34px; }
 .franchise-post p { margin: 15px 0 18px; color: #59585d; font-size: 14px; line-height: 23px; }
 .franchise-post__icons { height: 62px; padding-top: 12px; border-top: 1px solid #e3e3e8; background: transparent; }
 .franchise-post__icons :deep(img) { object-position: left center; }
@@ -312,8 +312,8 @@ const scrollMarketing = (direction: -1 | 1) => {
 .project-block > :deep(.franchise-image) { aspect-ratio: 1.45 / 1; border-radius: 18px; }
 .project-block:hover :deep(img) { transform: scale(1.04); }
 .project-block__content { position: relative; min-height: 138px; padding: 22px 62px 25px 22px; }
-.project-block__content h3 { margin: 0; font-family: "Cal Sans", sans-serif; font-size: 24px; font-weight: 400; line-height: 30px; }
-.project-block__content span { position: absolute; top: 25px; right: 22px; color: #e3e3e8; font-family: "Cal Sans", sans-serif; font-size: 18px; }
+.project-block__content h3 { margin: 0; font-family: var(--font-display); font-size: 24px; font-weight: 400; line-height: 30px; }
+.project-block__content span { position: absolute; top: 25px; right: 22px; color: #e3e3e8; font-family: var(--font-ui); font-size: 18px; }
 
 .franchise-newsletter { position: relative; isolation: isolate; overflow: hidden; padding: 126px 30px 135px; text-align: center; background: #f6f6f6; }
 .franchise-newsletter::before,
@@ -342,17 +342,17 @@ const scrollMarketing = (direction: -1 | 1) => {
 .franchise-faq__promo > div span,
 .franchise-faq__promo > div strong { display: block; }
 .franchise-faq__promo > div span { color: rgb(255 255 255 / 70%); font-size: 12px; letter-spacing: 1px; }
-.franchise-faq__promo > div strong { margin-top: 8px; font-family: "Cal Sans", sans-serif; font-size: 27px; font-weight: 400; }
-.franchise-faq__promo > a { position: absolute; z-index: 1; bottom: 38px; left: 38px; display: inline-flex; width: 118px; height: 118px; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border-radius: 50%; color: #fff; background: rgb(255 255 255 / 22%); backdrop-filter: blur(16px); font-family: "Cal Sans", sans-serif; font-size: 14px; }
+.franchise-faq__promo > div strong { margin-top: 8px; font-family: var(--font-ui); font-size: 27px; font-weight: 400; }
+.franchise-faq__promo > a { position: absolute; z-index: 1; bottom: 38px; left: 38px; display: inline-flex; width: 118px; height: 118px; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border-radius: 50%; color: #fff; background: rgb(255 255 255 / 22%); backdrop-filter: blur(16px); font-family: var(--font-ui); font-size: 14px; }
 .franchise-faq__promo > a svg { width: 20px; }
 .franchise-faq__content { padding-top: 8px; }
 .franchise-faq__content > p { max-width: 760px; margin: 0 0 24px; color: #59585d; font-size: 16px; line-height: 25px; }
-.franchise-faq__content h2 { margin: 0 0 30px; font-family: "Cal Sans", sans-serif; font-size: 42px; font-weight: 400; line-height: 48px; }
+.franchise-faq__content h2 { margin: 0 0 30px; font-family: var(--font-display); font-size: 42px; font-weight: 400; line-height: 48px; }
 .franchise-faq__item { border-top: 1px solid rgb(159 159 164 / 48%); }
 .franchise-faq__item:last-child { border-bottom: 1px solid rgb(159 159 164 / 48%); }
 .franchise-faq__item h3 { margin: 0; }
 .franchise-faq__item button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 25px; padding: 23px 0 26px; text-align: left; }
-.franchise-faq__item button > span { font-family: "Cal Sans", sans-serif; font-size: 26px; line-height: 30px; }
+.franchise-faq__item button > span { font-family: var(--font-ui); font-size: 26px; line-height: 30px; }
 .franchise-faq__item button > svg { width: 20px; flex: none; transition: color .3s ease, transform .3s ease; }
 .franchise-faq__item button > svg.is-open { color: #caa05c; transform: rotate(45deg); }
 .franchise-faq__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s ease; }
@@ -365,7 +365,7 @@ const scrollMarketing = (direction: -1 | 1) => {
 .franchise-news__list { margin-top: 60px; border-top: 1px solid #e3e3e8; }
 .franchise-news-row { display: grid; grid-template-columns: 14px 1fr 46px; gap: 18px; align-items: center; min-height: 84px; border-bottom: 1px solid #e3e3e8; }
 .franchise-news-row > i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
-.franchise-news-row h3 { margin: 0; font-family: "Cal Sans", sans-serif; font-size: 25px; font-weight: 400; line-height: 31px; transition: color .3s ease; }
+.franchise-news-row h3 { margin: 0; font-family: var(--font-display); font-size: 25px; font-weight: 400; line-height: 31px; transition: color .3s ease; }
 .franchise-news-row > svg { width: 38px; height: 38px; padding: 10px; border: 1px solid #e3e3e8; border-radius: 50%; transition: border-color .3s ease, transform .3s ease; }
 .franchise-news-row:hover h3 { color: #a57b38; }
 .franchise-news-row:hover > svg { border-color: #caa05c; transform: translateX(3px); }

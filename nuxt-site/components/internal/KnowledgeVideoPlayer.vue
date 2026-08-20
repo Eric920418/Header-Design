@@ -108,7 +108,7 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
   display: flex;
   flex-direction: column;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 44px;
   line-height: 44px;
 }
@@ -173,7 +173,7 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
 }
 
 .knowledge-video-player__error { flex-direction: column; padding: 30px; text-align: center; }
-.knowledge-video-player__error strong { font-family: "Cal Sans", sans-serif; font-size: 28px; font-weight: 400; }
+.knowledge-video-player__error strong { font-family: var(--font-ui); font-size: 28px; font-weight: 400; }
 .knowledge-video-player__error p { max-width: 540px; margin: 12px 0 0; color: rgb(255 255 255 / 72%); font-size: 15px; line-height: 24px; }
 .knowledge-video-player__error a { margin-top: 22px; padding: 10px 20px; border: 1px solid #caa05c; border-radius: 100px; color: #caa05c; font-size: 14px; }
 

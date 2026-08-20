@@ -59,7 +59,8 @@ const toggle = (step: (typeof serviceSteps)[number]) => {
 <style scoped>
 .service-flow-block {
   width: 100%;
-  margin-top: 84px;
+  margin-top: 0;
+  font-family: var(--font-cjk-sans);
 }
 
 .service-flow-block__heading {
@@ -70,11 +71,11 @@ const toggle = (step: (typeof serviceSteps)[number]) => {
 .service-flow-block__heading h2 {
   margin: 0;
   color: #59585d;
-  font-family: "Golos Text", sans-serif;
-  font-size: 30px;
+  font-family: var(--font-cjk-serif);
+  font-size: 38px;
   font-weight: 500;
-  line-height: 38px;
-  letter-spacing: .12em;
+  line-height: 50px;
+  letter-spacing: .08em;
 }
 
 .service-flow-block__heading > span {
@@ -170,7 +171,7 @@ const toggle = (step: (typeof serviceSteps)[number]) => {
   padding: 0 2px 5px;
   border-bottom: 4px solid #59585d;
   color: #1c1c1d;
-  font-family: "Golos Text", sans-serif;
+  font-family: var(--font-cjk-sans);
   font-size: 23px;
   font-weight: 700;
   line-height: 29px;
@@ -198,6 +199,7 @@ const toggle = (step: (typeof serviceSteps)[number]) => {
 .service-flow__description {
   margin: 12px 0 0;
   color: #1c1c1d;
+  font-family: var(--font-cjk-sans);
   font-size: 17px;
   font-weight: 400;
   line-height: 24px;
@@ -234,7 +236,7 @@ const toggle = (step: (typeof serviceSteps)[number]) => {
 }
 
 @media (max-width: 880px) {
-  .service-flow-block { margin-top: 64px; }
+  .service-flow-block { margin-top: 0; }
   .service-flow-block__heading { margin-bottom: 40px; }
 
   .service-flow {
@@ -247,7 +249,7 @@ const toggle = (step: (typeof serviceSteps)[number]) => {
 }
 
 @media (max-width: 560px) {
-  .service-flow-block { margin-top: 46px; }
+  .service-flow-block { margin-top: 0; }
   .service-flow-block__heading { margin-bottom: 36px; }
 
   .service-flow-block__heading h2 {

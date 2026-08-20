@@ -40,14 +40,14 @@
 .brand-h8-intro { padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #f6f6f6 50% 100%); }
 .brand-h8-intro__rail { display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
-.brand-h8-pill { display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px 7px 10px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 24px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 12px; line-height: 14px; letter-spacing: 1px; }
+.brand-h8-pill { display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px 7px 10px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 24px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; }
 .brand-h8-pill i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
-.brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 100px; font-weight: 400; line-height: 100px; letter-spacing: -.01em; text-transform: capitalize; }
+.brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: 100px; font-weight: 400; line-height: 100px; letter-spacing: -.01em; text-transform: capitalize; }
 .brand-h8-copy h1 span { color: #caa05c; }
 .brand-h8-nav { display: flex; max-width: 570px; border-top: 1px solid #d2d1cf; }
 .brand-h8-nav > * { display: flex; min-width: 0; flex: 1; align-items: baseline; gap: 8px; padding: 16px 8px 0 0; color: #9f9fa4; text-decoration: none; }
 .brand-h8-nav > * + * { padding-left: 16px; border-left: 1px solid #d2d1cf; }
-.brand-h8-nav b { color: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 13px; font-weight: 400; }
+.brand-h8-nav b { color: #caa05c; font-family: var(--font-ui); font-size: 13px; font-weight: 400; }
 .brand-h8-nav span { font-size: 14px; line-height: 20px; }
 .brand-h8-nav a[aria-current="page"] span { color: #1c1c1d; }
 .brand-h8-nav > span[aria-disabled="true"] { opacity: .55; }

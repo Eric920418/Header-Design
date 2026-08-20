@@ -137,7 +137,7 @@ useSeoMeta({
 .antra-gallery-breadcrumb h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 80px;
   font-weight: 400;
   line-height: .9523809524;
@@ -148,7 +148,7 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 400;
   line-height: 14px;
@@ -189,7 +189,7 @@ useSeoMeta({
 
 .antra-store-filter__label {
   color: #9f9fa4;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 16px;
   line-height: 24px;
 }
@@ -261,7 +261,7 @@ useSeoMeta({
 .antra-store-empty h2 {
   margin: 0;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 400;
   line-height: 34px;

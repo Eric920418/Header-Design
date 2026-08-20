@@ -22,8 +22,8 @@
 .about-us-breadcrumb__image :deep(img) { object-position: center; }
 .about-us-breadcrumb__overlay { position: absolute; z-index: -1; inset: 0; background: rgb(16 8 1 / 64%); }
 .about-us-breadcrumb__inner { width: min(1410px, calc(100% - 60px)); margin-inline: auto; padding: 138px 0 97px; text-align: center; }
-.about-us-breadcrumb h1 { margin: 0 0 35px; color: #fff; font-family: "Cal Sans", sans-serif; font-size: 80px; font-weight: 400; line-height: .9523809524; }
-.about-us-breadcrumb__trail { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: "Cal Sans", sans-serif; font-size: 13px; line-height: 14px; text-transform: uppercase; }
+.about-us-breadcrumb h1 { margin: 0 0 35px; color: #fff; font-family: var(--font-display); font-size: 80px; font-weight: 400; line-height: .9523809524; }
+.about-us-breadcrumb__trail { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-ui); font-size: 13px; line-height: 14px; text-transform: uppercase; }
 .about-us-breadcrumb__trail a { color: #fff; transition: color .3s ease; }
 .about-us-breadcrumb__trail a:hover { color: #caa05c; }
 

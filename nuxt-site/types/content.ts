@@ -119,6 +119,7 @@ export interface StoreCaseDetail extends StoreCaseSummary {
   meta?: CaseMeta
   contact?: StoreContact
   article?: CaseArticleBlock[]
+  reviews?: string[]
 }
 
 export type DesignInspirationForm = '一字型' | 'L型' | 'ㄇ字型' | '中島' | '其他'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Camera, Images, PlaySquare, PanelsTopLeft } from 'lucide-vue-next'
+import { Camera, Images, PlaySquare } from 'lucide-vue-next'
 import { activityArticleDetails } from '~/data/activityArticles'
 import { newsArticles } from '~/data/news'
 
@@ -100,7 +100,6 @@ useHead({
             <NuxtLink to="/news/activities" aria-current="page"><Camera aria-hidden="true" />優惠活動</NuxtLink>
             <NuxtLink to="/news/latest"><Images aria-hidden="true" />最新消息</NuxtLink>
             <NuxtLink to="/news/video"><PlaySquare aria-hidden="true" />媒體影音</NuxtLink>
-            <NuxtLink to="/knowledge"><PanelsTopLeft aria-hidden="true" />廚房裝修指南</NuxtLink>
           </nav>
         </div>
       </div>
@@ -125,7 +124,7 @@ useHead({
   padding: 30px;
   place-items: center;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
 }
 
 .activity-detail-breadcrumb__overlay {
@@ -143,9 +142,10 @@ useHead({
   gap: 10px;
   width: min(1410px, 100%);
   margin-inline: auto;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 13px;
-  line-height: 14px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: .04em;
   text-transform: uppercase;
 }
 
@@ -160,17 +160,17 @@ useHead({
 
 .activity-detail-header,
 .activity-detail-cover {
-  width: min(1410px, 100%);
+  width: min(930px, 100%);
   margin-inline: auto;
 }
 
-.activity-detail-header { margin-bottom: 30px; }
+.activity-detail-header { margin-bottom: 40px; }
 
 .activity-detail-meta {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0;
+  gap: 15px;
   margin-bottom: 13px;
 }
 
@@ -189,7 +189,7 @@ useHead({
   border-radius: 100px;
   color: #fff;
   background: #caa05c;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   line-height: 14px;
   transition: color .3s ease, background-color .3s ease;
@@ -217,6 +217,7 @@ useHead({
 
 .activity-detail-meta time {
   color: #9f9fa4;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   line-height: 24px;
   text-transform: uppercase;
@@ -226,10 +227,10 @@ useHead({
   max-width: 1050px;
   margin: 0;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 50px;
+  font-family: var(--font-cjk-serif);
+  font-size: 38px;
   font-weight: 400;
-  line-height: 54px;
+  line-height: 46px;
 }
 
 .activity-detail-cover {
@@ -259,17 +260,18 @@ useHead({
 .activity-detail-body h4 {
   margin: 60px 0 32px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 40px;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
   font-weight: 400;
-  line-height: 44px;
+  line-height: 32px;
 }
 
 .activity-detail-body p {
   margin: 0 0 30px;
   color: #59585d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 26px;
 }
 
 .activity-detail-body ul {
@@ -282,8 +284,9 @@ useHead({
   margin-bottom: 8px;
   padding-left: 3px;
   color: #59585d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 26px;
 }
 
 .activity-detail-body li:last-child { margin-bottom: 0; }
@@ -297,8 +300,9 @@ useHead({
 
 .activity-detail-links a {
   color: #1c1c1d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 26px;
   text-decoration: underline;
   text-decoration-color: #caa05c;
   text-underline-offset: 4px;
@@ -347,6 +351,7 @@ useHead({
   border-radius: 24px;
   color: #59585d;
   background: transparent;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
@@ -354,10 +359,19 @@ useHead({
 
 .activity-detail-categories :deep(svg) { width: 15px; height: 15px; }
 
-.activity-detail-categories a {
+.activity-detail-categories a[aria-current="page"] {
   border-color: #caa05c;
   color: #fff;
   background: #caa05c;
+}
+
+.activity-detail-categories a:not([aria-current="page"]) {
+  transition: color .3s ease, border-color .3s ease;
+}
+
+.activity-detail-categories a:not([aria-current="page"]):hover {
+  border-color: #caa05c;
+  color: #caa05c;
 }
 
 .activity-detail-categories span[aria-disabled="true"] { cursor: not-allowed; opacity: .55; }
@@ -383,7 +397,7 @@ useHead({
 
   .activity-detail-header h1 {
     font-size: 25px;
-    line-height: 30px;
+    line-height: 32px;
   }
 
   .activity-detail-meta .categories-link a { min-height: 28px; padding: 7px 12px; font-size: 13px; }
@@ -391,8 +405,8 @@ useHead({
 
   .activity-detail-body h4 {
     margin: 45px 0 24px;
-    font-size: 30px;
-    line-height: 33px;
+    font-size: 25px;
+    line-height: 32px;
   }
 
   .activity-detail-media { gap: 15px; margin-top: 28px; }

@@ -20,6 +20,7 @@ const mapSearchUrl = (address: string) =>
 const case10Images = caseImages('case10', 3, 10)
 const case56Images = caseImages('case56', 3, 12)
 const case35Images = caseImages('case35', 3, 11)
+const case10Review = '新家使用櫻花系統廚具，我們還自費換購洗碗機。接待的紀先生專業又親切，來安裝時跟技師合作無間很迅速就完成！完工後也很熱心回答各種疑問，還會溫馨提醒該注意的眉角，值得五星好評'
 
 export const storeCases: StoreCaseDetail[] = [
   {
@@ -53,6 +54,7 @@ export const storeCases: StoreCaseDetail[] = [
       lineUrl: 'https://lin.ee/2px4nRA',
       mapUrl: 'https://pse.is/9edmvk',
     },
+    reviews: [case10Review, case10Review, case10Review],
     article: [
       {
         paragraphs: [
@@ -66,16 +68,12 @@ export const storeCases: StoreCaseDetail[] = [
         paragraphs: [
           '將隔間牆拆除，打造開放式廚房，而為了讓整體的簡約摩登風格更到位，從事多年廚房設計的陳彥君設計師挑選獨家櫻花石英石黑色檯面、不鏽鋼美背的中島為核心，搭配深灰、霧面陶烤門板，再搭佐黑銀色系質感的櫻花三機配備，讓整體氛圍一氣呵成。',
         ],
-        images: [case10Images[3]!],
-        imageLayout: 'single',
       },
       {
         title: '動線、檯面高度與收納 創造化繁為簡的廚藝生活',
         paragraphs: [
           '廚房以中島為核心，透過口字形動線規劃，讓檯面兩側擁有流暢走道，滿足料理過程中進出廚房的彈性需求；且順著室內結構，於牆邊空間規劃30cm邊櫃，做為小家電、咖啡機及沖泡飲品的空間。此外，更貼心考量人體工學，訂製符合老魚身高的工作檯、中島高度，讓愛做菜的他不必辛苦彎腰駝背。',
         ],
-        images: [case10Images[4]!, case10Images[5]!],
-        imageLayout: 'pair',
       },
       {
         title: '客製化的廚房設計 櫻花廚藝深深打動消費者的心',
@@ -105,20 +103,26 @@ export const storeCases: StoreCaseDetail[] = [
     reservationUrl: 'https://pse.is/95cq3r',
     images: case56Images,
     meta: {
-      kitchenArea: '2–4坪',
-      form: '一字型',
-      budget: '35萬以上',
       style: '北歐風',
-      household: '夫妻二人',
+      color: '單色系(非白色)',
+      series: '其他',
+      form: '一字型',
+      size: '400CM以上',
+      kitchenArea: '2-4坪',
+      budget: '35萬以上',
+      countertop: '櫻花石',
       designer: '陳冠瑋',
     },
     contact: {
       name: '櫻花整體廚房 承德店',
-      phone: '02-2883-9919',
-      address: '111 臺北市士林區承德路四段238號',
-      reservationUrl: 'https://pse.is/95cq3r',
-      mapUrl: mapSearchUrl('臺北市士林區承德路四段238號'),
+      hours: '週一～週六 10:30~21:00',
+      phone: '02- 2883 9919',
+      address: '111臺北市士林區後港里承德路四段238號',
+      reservationUrl: 'https://lin.ee/50meLfG',
+      lineUrl: 'https://lin.ee/50meLfG',
+      mapUrl: mapSearchUrl('臺北市士林區後港里承德路四段238號'),
     },
+    reviews: [case10Review, case10Review, case10Review],
     article: [
       {
         paragraphs: [
@@ -132,41 +136,30 @@ export const storeCases: StoreCaseDetail[] = [
         paragraphs: [
           '屋主夫妻回憶當時的老宅廚房，設備老舊又封閉，煮菜熱氣油煙都悶在裡面，亦沒有充足的備料和收納空間。重新改為一字型廚房，釋放隔間加入中島設計，並依照需求及使用，將格局、動線、收納配置進行優化，翻新一次到位，打造合適夫妻兩人生活的烹飪環境，無論是日常下廚或是好友聚會使用都十分順手。',
         ],
-        images: [case56Images[3]!],
-        imageLayout: 'single',
       },
       {
         title: '完美結合奶茶色居家 廚房搭佐淺灰色質感門板',
         paragraphs: [
           '因為開放式廚房凸顯視覺風格的重要，整體廚房的顏色材質必須與居家風格相互搭配！夫妻倆為了貫徹理想中的簡約北歐風調性，選擇淺灰色的絲絨觸感門板，霧面設計不僅擁有清新質感，再搭配上白色中島與黑色的結合式把手，在簡約中創造溫暖愜意的氛圍。',
         ],
-        images: [case56Images[4]!],
-        imageLayout: 'single',
       },
       {
         title: '貼心加深中島檯面 為居家時光甜蜜增溫',
         paragraphs: [
           '中島是開放式廚房的靈魂，更是這對夫妻生活中的核心場域。為了讓中島滿足多功能使用，陳冠瑋設計師特別加深檯面寬度，增添水槽與雙向收納櫃，實現清潔與實用的完美結合，省下打掃清理的心力，讓夫妻每天下班回到家，都能在此用餐料理，分享生活為彼此打氣，成為家中最溫馨甜蜜的地方！',
         ],
-        images: [case56Images[5]!, case56Images[6]!],
-        imageLayout: 'pair',
       },
       {
         title: '抽屜收納規劃 分層分類讓食器取用一目瞭然',
         paragraphs: [
           '完美化解收納不足的問題，不僅在中島下方規劃收納，料理檯下也依據不同廚房用品加入SAKURA靜音緩衝抽屜設計，將餐具食器、碗盤鍋具分類收納，讓廚房整潔有序，收納取用效率大大提升，側邊更因應零食、調味料瓶罐的收納，特別規劃側拉籃地櫃及拉籃高櫃，避免調味品堆積在檯面上的窘境，真正實現輕鬆流暢的廚房體驗。',
         ],
-        images: [case56Images[7]!],
-        imageLayout: 'single',
       },
       {
         title: '廚電符合生活烹飪情境 相伴夫妻精彩生活',
         paragraphs: [
           '為了能符合夫妻倆的日常多種烹飪習慣，選用svago橫式雙口IH感應爐，讓大火煎炒或是慢燉細煮，都能滿足不同火候的需求。而針對開放式廚房最惱人的油煙問題，陳冠瑋設計師為屋主建議挑選高效能的SAKURA歐化渦輪變頻除油煙機，吸力強勁且運行安靜，能快速排出油煙，讓廚房始終保持清新舒適的空氣環境，提供夫妻在忙碌的都市生活中，依然能隨時享受愜意的烹飪時光。',
-          '廚房電器：SAKURA DR7786B歐化渦輪變頻除油煙機、SVAGO VEG2380W 橫式雙口IH感應爐。',
         ],
-        images: [case56Images[8]!, case56Images[9]!],
-        imageLayout: 'pair',
         links: [
           { label: 'DR7786B歐化渦輪變頻除油煙機', url: 'https://www.sakura.com.tw/Product/Content/7989' },
           { label: 'VEG2380W 橫式雙口IH感應爐', url: 'https://www.svago-kitchens.com.tw/Product/View/81845' },
@@ -181,24 +174,31 @@ export const storeCases: StoreCaseDetail[] = [
     designer: '沈志剛',
     region: '中部',
     city: '臺中市',
-    address: '406 臺中市北屯區松竹路一段763號',
+    address: '406臺中市北屯區軍功里松竹路一段763號',
     cover: '/section-3/store-songzhu.jpg',
-    reservationUrl: 'https://pse.is/95cq3r',
+    reservationUrl: 'https://lin.ee/xIPto4o',
     images: case35Images,
     meta: {
-      kitchenArea: '4坪以上',
-      form: 'L型＋中島',
-      budget: '35萬以上',
       style: '現代風',
-      household: '單身',
+      color: '石紋色',
+      series: '潮派廚房',
+      form: 'L型+中島',
+      size: '400CM以上',
+      kitchenArea: '4坪以上',
+      budget: '35萬以上',
+      countertop: '櫻花石',
       designer: '沈志剛',
     },
     contact: {
       name: '櫻花整體廚房 松竹店',
-      address: '406 臺中市北屯區松竹路一段763號',
-      reservationUrl: 'https://pse.is/95cq3r',
-      mapUrl: mapSearchUrl('臺中市北屯區松竹路一段763號'),
+      hours: '週一～週六 09:30~21:00',
+      phone: '04-2239 7068',
+      address: '406臺中市北屯區軍功里松竹路一段763號',
+      reservationUrl: 'https://lin.ee/xIPto4o',
+      lineUrl: 'https://lin.ee/xIPto4o',
+      mapUrl: mapSearchUrl('臺中市北屯區軍功里松竹路一段763號'),
     },
+    reviews: [case10Review, case10Review, case10Review],
     article: [
       {
         paragraphs: [
@@ -213,8 +213,6 @@ export const storeCases: StoreCaseDetail[] = [
         paragraphs: [
           '性格爽朗的男屋主在規劃透天新居廚房時，腦海中浮現的是電影和美劇裡重複出現的水泥質感的大器廚房。對於風格有明確想法但卻不知道如何化為現實，多虧了櫻花整體廚房替屋主完美設計運用搭配清水模＆泥灰岩的風格搭配，將屋主腦內的畫面完美呈現出來。因應喜歡灰白色調、帶有個性的廚房設計，店經理沈志剛挑選清水模門板作為廚房主調，擬真紋理與略帶凹凸的觸感非常合男屋主需求，大面積使用上也不會單調。門板紋理也不會過深造成卡油污，且具有耐磨、耐刮特性、易清潔保養，簡單清水擦拭就能隨時保持廚房整潔。原本男屋主想在中島下鋪貼鏡面，但經過櫻花整體廚房專業建議改為泥灰岩板材，除油煙機底板也運用同樣材質做跳色設計，展現灰階色變化，是讓男屋主最滿意的地方。',
         ],
-        images: [case35Images[3]!],
-        imageLayout: 'single',
       },
       {
         title: '專屬訂製多功能中島，廚房升級為社交場域',
@@ -222,8 +220,6 @@ export const storeCases: StoreCaseDetail[] = [
           '屋主舊宅是開放式廚房但沒有配置中島，這次在規劃時就是要一圓中島夢！對於男屋主來說擁有中島廚房是希望能打造與朋友聚會的社交場域。依照需求訂製110公分高的廚房中島，符合屋主身高備料洗滌不彎腰，高於一般標準的中島更顯氣派，寬闊尺度獨家櫻花石英石檯面暖白基底帶著閃石質感極佳外，克服造型切角，一路由檯面延伸到中島立面，整體質感瞬間提升。中島對於屋主來說是家裡最重要的社交場域，除了視覺氣派之外，機能配置上也要讓朋友感受賓至如歸。超寬敞的中島鑲嵌大尺寸不鏽鋼水槽能滿足泡茶、洗水果等生活需求。中島配置收納抽屜，方便收納輕食用的碗盤；外側可擺放放茶葉、茶具。',
           '機能與美型兼具的中島對屋主來說是比起客廳是更舒適的社交場域不論是週末廣邀好友來家裡開料理趴，或是想靜靜地與親友談天品茶，都能全然滿足。另外，中島內側除了鑲嵌烤箱更在側邊設定了插座迴路，想要簡單輕食料理、自己吃個小火鍋都非常方便。',
         ],
-        images: [case35Images[4]!, case35Images[5]!],
-        imageLayout: 'pair',
       },
       {
         title: '順手收納藏於無形，齊備廚房電器滿足各種需求',
@@ -231,8 +227,6 @@ export const storeCases: StoreCaseDetail[] = [
           '作為一個氣派舒適的社交場域，在機能配置上當然不能馬虎！對於下廚沒有太多概念的屋主，多虧了櫻花整體廚房專業建議，首先針對屋主過去開放式廚房的使用經驗，特別挑選歐化除油煙機，不僅外型簡約俐落、抽油煙效率強大，同時維持高效吸淨油煙，大幅改善開放式廚房擔心的油煙問題。另外，二口雙炫火玻璃檯面爐質感精緻，煲湯與煎煮雙管齊下，讓屋主朋友都躍躍欲試想試用新落成的絕美廚房。',
           '廚房的機能還不僅如此，電器櫃整合烤箱與微波爐，並預留上方大空間與下方抽屜櫃，可以收納廚房備品與大型鍋具，將收納分門別類，整體美觀節省空間。另外，烹飪區爐檯下方的不繡鋼圍籃地櫃設計，透氣性佳，是聚會使用的大型鍋具及餐盤的收納幫手。狹長側拉籃收放各式瓶罐醬料，讓整體檯面乾淨不凌亂，貼心的收納設計給屋主滿滿的驚喜。為了應付朋友聚會後大量的杯具與碗盤，聽從店經理建議選配櫻花全平面玻璃觸控落地式烘碗機，能讓洗好的碗盤殺菌烘乾，同時也是另一個帶機能性的碗盤收納空間。',
         ],
-        images: [case35Images[6]!, case35Images[7]!],
-        imageLayout: 'pair',
       },
       {
         title: '廚具領導品牌，讓屋主使用安心有保障',

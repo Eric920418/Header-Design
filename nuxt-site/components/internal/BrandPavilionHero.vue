@@ -27,13 +27,13 @@
 .pavilion-single-hero__image { position: absolute; inset: 0; width: 100%; height: 100%; }
 .pavilion-single-hero__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(16 8 1 / 58%) 0%, rgb(16 8 1 / 12%) 61%, rgb(16 8 1 / 28%) 100%); }
 .pavilion-single-hero__copy { position: absolute; left: 30px; bottom: 54px; width: min(665px, 55%); }
-.pavilion-single-hero__copy small { display: block; margin-bottom: 20px; color: rgb(255 255 255 / 75%); font-family: "Cal Sans", sans-serif; font-size: 11px; line-height: 16px; letter-spacing: .12em; text-transform: uppercase; }
-.pavilion-single-hero__copy h1 { margin: 0; font-family: "Cal Sans", sans-serif; font-size: 60px; font-weight: 400; line-height: 58px; text-transform: capitalize; }
+.pavilion-single-hero__copy small { display: block; margin-bottom: 20px; color: rgb(255 255 255 / 75%); font-family: var(--font-ui); font-size: 11px; line-height: 16px; letter-spacing: .12em; text-transform: uppercase; }
+.pavilion-single-hero__copy h1 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 58px; text-transform: capitalize; }
 .pavilion-single-hero__copy h1 span { color: #caa05c; }
 .pavilion-single-hero__pages { position: absolute; right: 30px; bottom: 30px; display: grid; width: 380px; max-width: calc(100% - 60px); grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; border: 1px solid rgb(255 255 255 / 16%); border-radius: 18px; background: rgb(255 255 255 / 30%); backdrop-filter: blur(58px); }
 .pavilion-single-hero__pages > * { display: grid; min-width: 0; gap: 2px; padding: 14px 12px; color: rgb(255 255 255 / 72%); text-decoration: none; transition: background .3s ease, color .3s ease; }
 .pavilion-single-hero__pages > * + * { border-left: 1px solid rgb(255 255 255 / 16%); }
-.pavilion-single-hero__pages b { color: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; }
+.pavilion-single-hero__pages b { color: #caa05c; font-family: var(--font-ui); font-size: 12px; font-weight: 400; line-height: 16px; }
 .pavilion-single-hero__pages span { overflow: hidden; font-size: 13px; line-height: 19px; text-overflow: ellipsis; white-space: nowrap; }
 .pavilion-single-hero__pages a:hover,
 .pavilion-single-hero__pages a[aria-current="page"] { color: #fff; background: rgb(28 28 29 / 32%); }

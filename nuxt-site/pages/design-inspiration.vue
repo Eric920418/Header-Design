@@ -224,7 +224,7 @@ useSeoMeta({
 .design-projects-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 80px;
   font-weight: 400;
   line-height: .9523809524;
@@ -235,7 +235,7 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 14px;
   text-transform: uppercase;
@@ -276,7 +276,7 @@ useSeoMeta({
 
 .design-projects-filter label {
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 24px;
   font-weight: 400;
   line-height: 1.15;
@@ -398,7 +398,7 @@ useSeoMeta({
   border-radius: 100px;
   padding: 5px 14px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 14px;
 }
@@ -417,7 +417,7 @@ useSeoMeta({
   border-radius: 50%;
   color: #fff;
   background: rgba(0, 0, 0, .46);
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 16px;
   line-height: 24px;
   opacity: 0;
@@ -439,7 +439,7 @@ useSeoMeta({
 .design-project-card__text h2 {
   min-height: 68px;
   margin: 0 0 14px;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 30px;
   font-weight: 400;
   line-height: 34px;
@@ -473,7 +473,7 @@ useSeoMeta({
 }
 
 .design-projects-empty svg { width: 36px; height: 36px; color: #caa05c; }
-.design-projects-empty h2 { margin: 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 30px; font-weight: 400; line-height: 34px; }
+.design-projects-empty h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 30px; font-weight: 400; line-height: 34px; }
 .design-projects-empty p { margin: 0; font-size: 16px; line-height: 24px; }
 .design-projects-empty button { margin-top: 12px; border-bottom: 1px solid #caa05c; padding: 4px 0; color: #1c1c1d; }
 

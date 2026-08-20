@@ -2,21 +2,9 @@
 import { newsArticles, recentNewsArticles } from '~/data/news'
 
 const newsCategories = [
-  { label: '優惠活動', count: newsArticles.filter(article => article.category === 'activities').length },
-  { label: '最新消息', count: newsArticles.filter(article => article.category === 'latest').length },
-  { label: '媒體影音', count: newsArticles.filter(article => article.category === 'video').length },
-]
-
-const popularTags = [
-  'Architecture',
-  'Building',
-  'Construction',
-  'Design',
-  'Furniture',
-  'Interior',
-  'Kitchen',
-  'Living Room',
-  'Planning',
+  { label: '優惠活動', to: '/news/activities' },
+  { label: '最新消息', to: '/news/latest' },
+  { label: '媒體影音', to: '/news/video' },
 ]
 
 useSeoMeta({
@@ -53,21 +41,27 @@ useSeoMeta({
                 class="antra-news-post"
                 :class="{ 'antra-news-post--featured': index === 0 }"
               >
-                <div class="antra-news-post__thumbnail">
+                <NuxtLink
+                  :to="article.legacyPath"
+                  class="antra-news-post__thumbnail"
+                  :aria-label="`閱讀文章：${article.title}`"
+                >
                   <InternalNewsImage
                     :src="article.cover"
                     :alt="`${article.title}文章封面`"
                     :eager="index === 0"
                     class="antra-news-post__image"
                   />
-                </div>
+                </NuxtLink>
 
                 <div class="antra-news-post__content">
                   <div class="antra-news-post__meta">
                     <span class="antra-news-post__category">{{ article.categoryLabel }}</span>
                     <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
                   </div>
-                  <h2 class="antra-news-post__title">{{ article.title }}</h2>
+                  <h2 class="antra-news-post__title">
+                    <NuxtLink :to="article.legacyPath">{{ article.title }}</NuxtLink>
+                  </h2>
                   <p class="antra-news-post__excerpt">{{ article.excerpt }}</p>
                 </div>
               </article>
@@ -78,39 +72,34 @@ useSeoMeta({
             <section class="antra-news-widget antra-news-widget--tags" aria-labelledby="news-tags-title" v-reveal="{ anim: 'opalMoveLeft' }">
               <h2 id="news-tags-title">優惠消息</h2>
               <div class="antra-news-widget__tags" aria-label="文章分類標籤">
-                <span v-for="category in newsCategories" :key="category.label">{{ category.label }}</span>
+                <NuxtLink
+                  v-for="category in newsCategories"
+                  :key="category.label"
+                  :to="category.to"
+                  :aria-label="`查看${category.label}列表頁`"
+                >
+                  {{ category.label }}
+                </NuxtLink>
               </div>
             </section>
 
-            <section class="antra-news-widget antra-news-widget--categories" aria-labelledby="news-categories-title" v-reveal="{ anim: 'opalMoveLeft', delay: 80 }">
-              <h2 id="news-categories-title">Categories</h2>
-              <ul>
-                <li v-for="category in newsCategories" :key="category.label">
-                  <span>{{ category.label }}</span><span aria-label="文章數量">{{ category.count }}</span>
-                </li>
-              </ul>
-            </section>
-
-            <section class="antra-news-widget antra-news-widget--recent" aria-labelledby="sidebar-recent-title" v-reveal="{ anim: 'opalMoveLeft', delay: 160 }">
-              <h2 id="sidebar-recent-title">Recent Posts</h2>
+            <section class="antra-news-widget antra-news-widget--recent" aria-labelledby="sidebar-recent-title" v-reveal="{ anim: 'opalMoveLeft', delay: 80 }">
+              <h2 id="sidebar-recent-title">最新文章</h2>
               <ol>
                 <li v-for="article in recentNewsArticles" :key="article.id">
-                  <div class="antra-news-widget__recent-image">
+                  <NuxtLink
+                    :to="article.legacyPath"
+                    class="antra-news-widget__recent-image"
+                    :aria-label="`閱讀文章：${article.title}`"
+                  >
                     <InternalNewsImage :src="article.cover" :alt="`${article.title}文章封面`" />
-                  </div>
+                  </NuxtLink>
                   <div class="antra-news-widget__recent-content">
                     <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
-                    <h3>{{ article.title }}</h3>
+                    <h3><NuxtLink :to="article.legacyPath">{{ article.title }}</NuxtLink></h3>
                   </div>
                 </li>
               </ol>
-            </section>
-
-            <section class="antra-news-widget antra-news-widget--tags" aria-labelledby="popular-tags-title" v-reveal="{ anim: 'opalMoveLeft', delay: 240 }">
-              <h2 id="popular-tags-title">Popular Tags</h2>
-              <div class="antra-news-widget__tags" aria-label="熱門文章標籤">
-                <span v-for="tag in popularTags" :key="tag">{{ tag }}</span>
-              </div>
             </section>
           </aside>
         </div>
@@ -126,7 +115,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
 }
 
 .antra-news-breadcrumb__overlay {
@@ -147,10 +136,10 @@ useSeoMeta({
 .antra-news-breadcrumb h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 80px;
+  font-family: var(--font-cjk-serif);
+  font-size: 60px;
   font-weight: 400;
-  line-height: .9523809524;
+  line-height: 64px;
 }
 
 .antra-news-breadcrumb__trail {
@@ -158,10 +147,10 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 13px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
   font-weight: 400;
-  line-height: 14px;
+  line-height: 20px;
   text-transform: uppercase;
 }
 
@@ -201,6 +190,7 @@ useSeoMeta({
 .antra-news-widget {
   margin-bottom: 50px;
   color: #59585d;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   line-height: 24px;
 }
@@ -210,10 +200,10 @@ useSeoMeta({
 .antra-news-widget > h2 {
   margin: 0 0 30px;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 30px;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
   font-weight: 400;
-  line-height: 36px;
+  line-height: 31px;
 }
 
 .antra-news-widget--tags > h2 { margin-bottom: 20px; }
@@ -224,7 +214,7 @@ useSeoMeta({
   gap: 10px 7px;
 }
 
-.antra-news-widget__tags span {
+.antra-news-widget__tags a {
   display: inline-flex;
   align-items: center;
   min-height: 36px;
@@ -236,34 +226,21 @@ useSeoMeta({
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
+  transition: border-color .3s ease, color .3s ease, background-color .3s ease;
 }
 
-.antra-news-widget--categories > h2 { margin-bottom: 23px; }
+.antra-news-widget__tags a:hover,
+.antra-news-widget__tags a:focus-visible {
+  border-color: #caa05c;
+  color: #fff;
+  background: #caa05c;
+  outline: none;
+}
 
-.antra-news-widget--categories ul,
 .antra-news-widget--recent ol {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.antra-news-widget--categories li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 0 9px 2px;
-  padding-bottom: 9px;
-  border-bottom: 1px solid #e3e3e8;
-  color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 18px;
-  line-height: 26px;
-}
-
-.antra-news-widget--categories li span:last-child {
-  color: #59585d;
-  font-family: "Golos Text", sans-serif;
-  font-size: 16px;
 }
 
 .antra-news-widget--recent > h2 { margin-bottom: 28px; }
@@ -283,6 +260,7 @@ useSeoMeta({
 }
 
 .antra-news-widget__recent-image {
+  display: block;
   width: 110px;
   height: 100px;
   flex: 0 0 110px;
@@ -304,6 +282,7 @@ useSeoMeta({
   display: block;
   margin: 5px 0 7px;
   color: #9f9fa4;
+  font-family: var(--font-cjk-sans);
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
@@ -315,12 +294,26 @@ useSeoMeta({
   margin: 0;
   overflow: hidden;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 20px;
+  font-family: var(--font-cjk-sans);
+  font-size: 18px;
   font-weight: 400;
   line-height: 24px;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.antra-news-widget__recent-content h3 a,
+.antra-news-post__title a {
+  color: inherit;
+  transition: color .3s ease;
+}
+
+.antra-news-widget__recent-content h3 a:hover,
+.antra-news-widget__recent-content h3 a:focus-visible,
+.antra-news-post__title a:hover,
+.antra-news-post__title a:focus-visible {
+  color: #caa05c;
+  outline: none;
 }
 
 .antra-news-post {
@@ -335,10 +328,17 @@ useSeoMeta({
 
 .antra-news-post__thumbnail {
   position: relative;
+  display: block;
   width: 45.2%;
   flex: 0 0 45.2%;
   overflow: hidden;
   border-radius: 24px;
+}
+
+.antra-news-post__thumbnail:focus-visible,
+.antra-news-widget__recent-image:focus-visible {
+  outline: 2px solid #caa05c;
+  outline-offset: 4px;
 }
 
 .antra-news-post__image { aspect-ratio: 1.4482758621; }
@@ -357,6 +357,7 @@ useSeoMeta({
   align-items: center;
   gap: 8px 13px;
   margin: 15px 0 13px;
+  font-family: var(--font-cjk-sans);
 }
 
 .antra-news-post__category {
@@ -366,7 +367,7 @@ useSeoMeta({
   border-radius: 100px;
   color: #fff;
   background: #caa05c;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   line-height: 14px;
 }
@@ -398,10 +399,10 @@ useSeoMeta({
   margin: 0 0 20px;
   overflow: hidden;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
-  font-size: 30px;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
   font-weight: 400;
-  line-height: 34px;
+  line-height: 31px;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -411,6 +412,7 @@ useSeoMeta({
   margin: 0;
   overflow: hidden;
   color: #59585d;
+  font-family: var(--font-cjk-sans);
   font-size: 16px;
   line-height: 24px;
   -webkit-box-orient: vertical;
@@ -435,8 +437,8 @@ useSeoMeta({
 
 .antra-news-post--featured .antra-news-post__title {
   margin-bottom: 20px;
-  font-size: 40px;
-  line-height: 44px;
+  font-size: 38px;
+  line-height: 50px;
 }
 
 .antra-news-post--featured .antra-news-post__excerpt {
@@ -515,8 +517,8 @@ useSeoMeta({
 
   .antra-news-post__title {
     margin-bottom: 15px;
-    font-size: 24px;
-    line-height: 30px;
+    font-size: 25px;
+    line-height: 31px;
   }
 
   .antra-news-post--featured .antra-news-post__title {

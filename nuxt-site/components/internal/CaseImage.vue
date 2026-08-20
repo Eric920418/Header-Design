@@ -56,7 +56,7 @@ watch(() => props.src, () => { failed.value = false })
 
 .case-image-frame__error strong {
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 18px;
   font-weight: 400;
 }

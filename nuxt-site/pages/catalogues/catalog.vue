@@ -218,8 +218,8 @@ useSeoMeta({
 
 .product-catalogue-hero__overlay { position: absolute; z-index: -1; inset: 0; background: #100801; opacity: .64; }
 .product-catalogue-hero__inner { width: min(1410px, calc(100% - 60px)); margin-inline: auto; padding: 138px 0 97px; text-align: center; }
-.product-catalogue-hero h1 { margin: 0 0 31px; color: #fff; font-family: "Cal Sans", sans-serif; font-size: 68px; font-weight: 400; line-height: 1; }
-.product-catalogue-hero__trail { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: "Cal Sans", sans-serif; font-size: 13px; line-height: 14px; text-transform: uppercase; }
+.product-catalogue-hero h1 { margin: 0 0 31px; color: #fff; font-family: var(--font-display); font-size: 68px; font-weight: 400; line-height: 1; }
+.product-catalogue-hero__trail { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-ui); font-size: 13px; line-height: 14px; text-transform: uppercase; }
 .product-catalogue-hero__trail a { color: inherit; transition: color .3s ease; }
 .product-catalogue-hero__trail a:hover,
 .product-catalogue-hero__trail a:focus-visible { color: #caa05c; }
@@ -237,7 +237,7 @@ useSeoMeta({
 .product-catalogue-card__arrow { position: absolute; z-index: 3; right: 20px; bottom: 20px; display: flex; width: 54px; height: 54px; align-items: center; justify-content: center; border: 0; border-radius: 50%; color: #1c1c1d; background: #caa05c; opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity .45s ease, visibility .45s ease, transform .45s ease, background-color .3s ease; }
 .product-catalogue-card__arrow svg { width: 20px; height: 20px; }
 .product-catalogue-card__text { display: block; padding-top: 19px; }
-.product-catalogue-card__text strong { display: block; min-height: 56px; margin-bottom: 9px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 24px; font-weight: 400; line-height: 28px; transition: color .3s ease; }
+.product-catalogue-card__text strong { display: block; min-height: 56px; margin-bottom: 9px; color: #1c1c1d; font-family: var(--font-ui); font-size: 24px; font-weight: 400; line-height: 28px; transition: color .3s ease; }
 .product-catalogue-card__text > span { display: block; color: #737278; font-size: 14px; line-height: 21px; }
 .product-catalogue-card__link:hover .product-catalogue-card__shade,
 .product-catalogue-card__link:focus-visible .product-catalogue-card__shade { background: rgba(0,0,0,.3); }
@@ -254,12 +254,12 @@ useSeoMeta({
 .product-care__header { display: grid; grid-template-columns: 270px minmax(0, 1fr) minmax(260px, 300px); align-items: start; gap: 34px; margin-bottom: 52px; }
 .product-care__eyebrow { display: inline-flex; align-items: center; gap: 10px; color: #1c1c1d; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
 .product-care__eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: #caa05c; }
-.product-care__header h2 { max-width: 650px; margin: -5px 0 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 56px; font-weight: 400; line-height: 60px; }
+.product-care__header h2 { max-width: 650px; margin: -5px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 56px; font-weight: 400; line-height: 60px; }
 .product-care__header > p { margin: 4px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .product-care__layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 70px; align-items: start; }
 .product-care__filters { display: grid; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .product-care__filter { position: relative; display: block; min-width: 0; }
-.product-care__filter select { width: 100%; height: 64px; appearance: none; border: 1px solid transparent; border-radius: 999px; padding: 0 52px 0 24px; color: #59585d; background: #fff; font-family: "Cal Sans", sans-serif; font-size: 15px; line-height: 1; outline: 0; transition: border-color .3s ease, box-shadow .3s ease, color .3s ease; }
+.product-care__filter select { width: 100%; height: 64px; appearance: none; border: 1px solid transparent; border-radius: 999px; padding: 0 52px 0 24px; color: #59585d; background: #fff; font-family: var(--font-ui); font-size: 15px; line-height: 1; outline: 0; transition: border-color .3s ease, box-shadow .3s ease, color .3s ease; }
 .product-care__filter > svg { position: absolute; top: 50%; right: 22px; width: 17px; height: 17px; color: #59585d; pointer-events: none; transform: translateY(-50%); transition: color .3s ease, transform .3s ease; }
 .product-care__filter:hover select,
 .product-care__filter.is-active select { color: #1c1c1d; border-color: rgba(202,160,92,.5); }
@@ -270,7 +270,7 @@ useSeoMeta({
 .product-care-question { border-bottom: 1px solid #e3e3e8; }
 .product-care-question > button { display: grid; width: 100%; min-height: 78px; grid-template-columns: 48px minmax(0, 1fr) 40px; align-items: center; border: 0; padding: 0; color: #1c1c1d; background: transparent; text-align: left; }
 .product-care-question > button > span { color: #caa05c; font-size: 11px; letter-spacing: .08em; }
-.product-care-question > button > strong { font-family: "Cal Sans", sans-serif; font-size: 19px; font-weight: 400; line-height: 26px; }
+.product-care-question > button > strong { font-family: var(--font-ui); font-size: 19px; font-weight: 400; line-height: 26px; }
 .product-care-question > button > i { display: flex; width: 36px; height: 36px; align-items: center; justify-content: flex-end; color: #1c1c1d; transition: color .3s ease; }
 .product-care-question > button > i svg { width: 18px; height: 18px; stroke-width: 1.5; }
 .product-care-question.is-active > button > i { color: #caa05c; }
@@ -299,7 +299,7 @@ useSeoMeta({
 .product-care__media:hover .product-care__media-arrow,
 .product-care__media:focus-visible .product-care__media-arrow { background: #caa05c; transform: translateX(58%); }
 .product-care__media:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
-.product-care__feature h3 { margin: 34px 0 18px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 30px; font-weight: 400; line-height: 35px; }
+.product-care__feature h3 { margin: 34px 0 18px; color: #1c1c1d; font-family: var(--font-display); font-size: 30px; font-weight: 400; line-height: 35px; }
 .product-care__feature > p { margin: 0; color: #737278; font-size: 14px; line-height: 23px; }
 
 @media (max-width: 1199px) {

@@ -167,17 +167,17 @@ const services = [
 .builders-page { overflow: clip; color: #1c1c1d; background: #fff; }
 .builders-rail-wide { width: min(1770px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
 .builders-rail { width: min(1410px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
-.builders-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
+.builders-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
 .builders-pill i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: #caa05c; }
 .builders-pill--dark { border-color: rgb(255 255 255 / 24%); color: #fff; }
-.builders-round-link { display: inline-flex; min-height: 52px; width: max-content; align-items: center; justify-content: center; gap: 11px; padding: 13px 21px; border: 1px solid rgb(255 255 255 / 24%); border-radius: 999px; color: #fff; font-family: "Cal Sans", sans-serif; font-size: 14px; line-height: 20px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
+.builders-round-link { display: inline-flex; min-height: 52px; width: max-content; align-items: center; justify-content: center; gap: 11px; padding: 13px 21px; border: 1px solid rgb(255 255 255 / 24%); border-radius: 999px; color: #fff; font-family: var(--font-ui); font-size: 14px; line-height: 20px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .builders-round-link svg { width: 18px; height: 18px; }
 .builders-round-link:hover,
 .builders-round-link:focus-visible { color: #1c1c1d; border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
 .builders-hero { position: relative; z-index: 0; min-height: 820px; overflow: hidden; color: #fff; background: #1c1c1d; }
 .builders-hero__deco { position: absolute; z-index: -1; inset: 0; opacity: .08; background: url('/section-6/franchise/antra-original/h5-bg1.png') center / cover no-repeat; filter: invert(1); }
 .builders-hero__inner { display: grid; grid-template-columns: 64% 36%; padding: 142px 30px 0; }
-.builders-hero h1 { max-width: 960px; margin: 22px 0 0; font-family: "Cal Sans", sans-serif; font-size: clamp(72px, 7.28vw, 110px); font-weight: 400; line-height: 1; letter-spacing: -1px; }
+.builders-hero h1 { max-width: 960px; margin: 22px 0 0; font-family: var(--font-display); font-size: clamp(72px, 7.28vw, 110px); font-weight: 400; line-height: 1; letter-spacing: -1px; }
 .builders-hero h1 span { color: #caa05c; }
 .builders-hero__aside { width: min(430px, 100%); margin: 102px 0 0 6px; }
 .builders-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-size: 20px; line-height: 31px; }
@@ -186,7 +186,7 @@ const services = [
 .builders-hero-media :deep(img) { object-position: center 58%; }
 .builders-section-heading h2,
 .builders-lifetime h2,
-.builders-partners h2 { margin: 0; font-family: "Cal Sans", sans-serif; font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
+.builders-partners h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .builders-section-heading h2 span,
 .builders-lifetime h2 span { color: #caa05c; }
 .builders-section-heading > p { color: #59585d; font-size: 16px; line-height: 25px; }
@@ -198,7 +198,7 @@ const services = [
 .builders-team-card > :deep(.builder-image) { aspect-ratio: 4 / 5; }
 .builders-team-card:hover :deep(img) { transform: scale(1.035); }
 .builders-team-card__status { position: absolute; inset: auto 14px 14px; display: flex; min-height: 54px; align-items: center; justify-content: space-between; padding: 10px 12px 10px 18px; border-radius: 999px; color: #fff; background: rgb(28 28 29 / 84%); backdrop-filter: blur(14px); }
-.builders-team-card__status span { font-family: "Cal Sans", sans-serif; font-size: 17px; }
+.builders-team-card__status span { font-family: var(--font-ui); font-size: 17px; }
 .builders-team-card__status strong { display: flex; width: 34px; height: 34px; align-items: center; justify-content: center; border-radius: 50%; color: #1c1c1d; background: #caa05c; font-size: 12px; }
 .builders-capability { padding: 130px 30px 140px; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
@@ -206,17 +206,17 @@ const services = [
 .builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: 90px; }
 .builders-strength { display: flex; aspect-ratio: 1; flex-direction: column; align-items: center; justify-content: center; padding: 48px; border: 1px solid #caa05c; border-radius: 50%; text-align: center; background: rgb(255 255 255 / 86%); }
 .builders-strength > svg { width: 42px; height: 42px; color: #caa05c; stroke-width: 1.3; }
-.builders-strength > span { margin-top: 20px; color: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 44px; line-height: 48px; }
-.builders-strength h3 { margin: 5px 0 0; font-family: "Cal Sans", sans-serif; font-size: 25px; font-weight: 400; }
+.builders-strength > span { margin-top: 20px; color: #caa05c; font-family: var(--font-ui); font-size: 44px; line-height: 48px; }
+.builders-strength h3 { margin: 5px 0 0; font-family: var(--font-display); font-size: 25px; font-weight: 400; }
 .builders-strength p { max-width: 280px; margin: 15px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
 .builders-one { display: flex; flex-direction: column; align-items: center; margin-top: 72px; }
 .builders-one p { margin: 0 0 10px; color: #9f9fa4; font-size: 14px; letter-spacing: .08em; }
-.builders-one strong { display: inline-flex; min-height: 44px; align-items: center; padding: 9px 34px; border-radius: 999px; color: #fff; background: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 18px; font-weight: 400; letter-spacing: .16em; }
+.builders-one strong { display: inline-flex; min-height: 44px; align-items: center; padding: 9px 34px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-ui); font-size: 18px; font-weight: 400; letter-spacing: .16em; }
 .builders-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 44px; }
 .builders-service { padding: 40px; border-top: 1px solid #caa05c; background: #fff; }
 .builders-service > svg { width: 34px; height: 34px; color: #caa05c; stroke-width: 1.4; }
 .builders-service > span { display: block; margin-top: 30px; color: #9f9fa4; font-size: 11px; letter-spacing: .14em; }
-.builders-service h3 { margin: 8px 0 0; font-family: "Cal Sans", sans-serif; font-size: 28px; font-weight: 400; }
+.builders-service h3 { margin: 8px 0 0; font-family: var(--font-display); font-size: 28px; font-weight: 400; }
 .builders-service p { margin: 13px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
 .builders-lifetime { padding: 135px 30px; color: #fff; background: #1c1c1d; }
 .builders-lifetime__grid { display: grid; grid-template-columns: 54% 46%; align-items: center; }
@@ -244,7 +244,7 @@ const services = [
 .builders-contact__grid { display: grid; grid-template-columns: 42% 58%; align-items: start; }
 .builders-contact__aside { padding-right: 55px; }
 .builders-contact__copy { padding: 10px 0 42px; }
-.builders-contact__copy h3 { margin: 0; font-family: "Cal Sans", sans-serif; font-size: 34px; font-weight: 400; line-height: 42px; }
+.builders-contact__copy h3 { margin: 0; font-family: var(--font-display); font-size: 34px; font-weight: 400; line-height: 42px; }
 .builders-contact__copy h3 span { color: #caa05c; }
 .builders-contact__copy > p { max-width: 480px; margin: 18px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .builders-contact__copy dl { display: grid; gap: 18px; margin: 28px 0 0; }
@@ -252,7 +252,7 @@ const services = [
 .builders-contact__copy dt { display: flex; align-items: center; gap: 8px; color: #1c1c1d; font-size: 13px; }
 .builders-contact__copy dt svg { width: 17px; height: 17px; color: #caa05c; }
 .builders-contact__copy dd { margin: 0; color: #59585d; font-size: 14px; }
-.builders-contact__copy > strong { display: block; margin-top: 28px; color: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 18px; font-weight: 400; letter-spacing: .08em; }
+.builders-contact__copy > strong { display: block; margin-top: 28px; color: #caa05c; font-family: var(--font-ui); font-size: 18px; font-weight: 400; letter-spacing: .08em; }
 .builders-contact__aside > :deep(.builder-image) { aspect-ratio: 1.18 / 1; border-radius: 24px; }
 .builders-contact__form { min-width: 0; }
 

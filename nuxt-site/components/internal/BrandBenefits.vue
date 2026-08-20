@@ -36,18 +36,18 @@ import { brandBenefits } from '~/data/brandAdvantage'
 .brand-benefits { overflow: hidden; padding: 100px 30px 120px; background: #fff; }
 .brand-benefits-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-benefits-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 75px; }
-.brand-benefits-pill { display: inline-flex; width: fit-content; height: fit-content; align-items: center; gap: 7px; padding: 7px 13px 7px 10px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 24px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
+.brand-benefits-pill { display: inline-flex; width: fit-content; height: fit-content; align-items: center; gap: 7px; padding: 7px 13px 7px 10px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 24px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
 .brand-benefits-pill i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
-.brand-benefits-heading h2 { max-width: 830px; margin: 0; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.brand-benefits-heading h2 { max-width: 830px; margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .brand-benefits-heading h2 span { color: #caa05c; }
 .brand-benefits-heading > p { grid-column: 2; max-width: 830px; margin: 24px 0 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-benefits-list { display: grid; gap: 90px; }
 .brand-benefit-row { display: grid; grid-template-columns: minmax(0, 45%) minmax(0, 55%); align-items: center; gap: 70px; }
 .brand-benefit-copy { padding-left: 30px; }
 .brand-benefit-eyebrow { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; }
-.brand-benefit-eyebrow strong { color: #e3e3e8; font-family: "Cal Sans", sans-serif; font-size: 72px; font-weight: 400; line-height: 72px; }
-.brand-benefit-eyebrow span { color: #caa05c; font-family: "Cal Sans", sans-serif; font-size: 15px; line-height: 22px; text-transform: uppercase; }
-.brand-benefit-copy h3 { margin: 0 0 18px; color: #1c1c1d; font-family: "Cal Sans", sans-serif; font-size: 34px; font-weight: 400; line-height: 40px; }
+.brand-benefit-eyebrow strong { color: #e3e3e8; font-family: var(--font-ui); font-size: 72px; font-weight: 400; line-height: 72px; }
+.brand-benefit-eyebrow span { color: #caa05c; font-family: var(--font-ui); font-size: 15px; line-height: 22px; text-transform: uppercase; }
+.brand-benefit-copy h3 { margin: 0 0 18px; color: #1c1c1d; font-family: var(--font-display); font-size: 34px; font-weight: 400; line-height: 40px; }
 .brand-benefit-copy p { max-width: 520px; margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-benefit-image { width: 100%; aspect-ratio: 1.3461538462 / 1; border-radius: 24px; }
 

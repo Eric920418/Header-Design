@@ -57,7 +57,7 @@ watch(() => props.src, () => { failed.value = false })
   text-align: center;
 }
 
-.builder-image__error strong { color: #9f2f1f; font-family: "Cal Sans", sans-serif; font-size: 18px; font-weight: 400; }
+.builder-image__error strong { color: #9f2f1f; font-family: var(--font-ui); font-size: 18px; font-weight: 400; }
 .builder-image__error span,
 .builder-image__error code { max-width: 100%; overflow-wrap: anywhere; font-size: 13px; line-height: 20px; }
 .builder-image__error code { color: #9f2f1f; }

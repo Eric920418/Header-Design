@@ -81,7 +81,7 @@ const imageFailed = ref(false)
 }
 
 .antra-store-card__image-error strong {
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 22px;
   font-weight: 400;
   line-height: 28px;
@@ -99,7 +99,7 @@ const imageFailed = ref(false)
 .antra-store-card h2 {
   margin: 0;
   color: #1c1c1d;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 400;
   line-height: 34px;
@@ -128,7 +128,7 @@ const imageFailed = ref(false)
   border-radius: 24px;
   color: #fff;
   background: #caa05c;
-  font-family: "Cal Sans", sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 22px;
   transition: color .3s ease, background-color .3s ease;
