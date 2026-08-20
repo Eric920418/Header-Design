@@ -17,6 +17,7 @@ export type KitchenEquipment = {
   model: string
   name: string
   image: string
+  route: string
 }
 
 export type KitchenCase = {
@@ -140,12 +141,12 @@ export const AI_KITCHEN_PAGE: KitchenSeriesPageData = {
     { code: 'D0720', name: '亞光黑', image: `${base}/finishes/d0720.jpg` },
   ],
   equipment: [
-    { model: 'DR7396', name: '近吸除油煙機－渦輪變頻 AI風控系列', image: `${base}/equipment/dr7396.png` },
-    { model: 'G2926G', name: '智能雙炫火二口玻璃檯面爐', image: `${base}/equipment/g2926g.png` },
-    { model: 'P0531', name: '廚下RO雙溫淨熱飲', image: `${base}/equipment/p0531.png` },
-    { model: 'E8891', name: '嵌入式微波蒸烤箱', image: `${base}/equipment/e8891.png` },
-    { model: 'E7683', name: '半嵌式自動開門洗碗機', image: `${base}/equipment/e7683.png` },
-    { model: 'E3625', name: '嵌入式電器收納櫃', image: `${base}/equipment/e3625.png` },
+    { model: 'DR7396', name: '近吸除油煙機－渦輪變頻 AI風控系列', image: `${base}/equipment/dr7396.png`, route: '/products/sakura/range-hood/near-suction/dr7396' },
+    { model: 'G2926G', name: '智能雙炫火二口玻璃檯面爐', image: `${base}/equipment/g2926g.png`, route: '/products/sakura' },
+    { model: 'P0531', name: '廚下RO雙溫淨熱飲', image: `${base}/equipment/p0531.png`, route: '/products/sakura' },
+    { model: 'E8891', name: '嵌入式微波蒸烤箱', image: `${base}/equipment/e8891.png`, route: '/products/sakura' },
+    { model: 'E7683', name: '半嵌式自動開門洗碗機', image: `${base}/equipment/e7683.png`, route: '/products/sakura' },
+    { model: 'E3625', name: '嵌入式電器收納櫃', image: `${base}/equipment/e3625.png`, route: '/products/sakura' },
   ],
   cases: [
     {

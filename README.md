@@ -1,6 +1,42 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 1.2 設計靈感列表（2026-08-20 新版調整）
+
+- 依 `2026.08.15_1.0設計案例_調整.pptx` 第三頁重新校正 `/design-inspiration`，Hero 底圖改用 3.1 案例門市正式素材中的松竹店店面照，不再沿用 3.0 服務流程的室內示意背景。
+- Hero「設計靈感」改為 Noto Serif TC Medium 60px，麵包屑改為 Noto Sans TC 15px；桌面仍維持母版的 360px Hero、深色遮罩與置中構圖。
+- 依標註刪除篩選器上方可見的「設計型式／設計風格」欄位標題，但保留 `label` 為螢幕閱讀器使用；兩個下拉選單統一 Noto Sans TC 16px，原有型式／風格篩選、URL query、空狀態與分頁行為不變。
+- 三張卡片改直接使用 3.1 案例門市內容圖：case10 第 03 張、case56 第 04 張、case35 第 11 張；沒有另造假圖或用 PPT 截圖代替。卡片仍分別連到 `/gallery/case10`、`/gallery/case56`、`/gallery/case35`，並保留 `from=inspiration` 回返來源。
+- 案例標題改為 Noto Serif TC Medium 25px／36px、最多兩行；門市名稱改為 Noto Sans TC 15px／24px，符合新版標註且維持現有 Hover `View` 互動。
+
+### 1.2 新版 Design QA
+
+- **來源真值**：PPT 第三頁標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-03.png`，內嵌完整母版頁為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/assets/ppt/media/image12.png`（3440×4803），正規化 1440px 版本為 `/private/tmp/sakura-ai-kitchen.A3GeB0/reference-slide3-page-1440.png`。
+- **視覺比較**：已把 1440×900 的 Hero／篩選器與案例卡實作和母版放在同一張圖比對；新版保留母版的 360px Hero、三欄比例、圓角與灰底節奏，依紅字標註替換店面背景、刪除可見欄位標題並校正中文字體。完整首屏比較為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide3-compare-top.png`，卡片與文字聚焦比較為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide3-compare-cards.png`。
+- **互動驗證**：以「中島＋現代風」篩選後 URL 正確更新並只顯示 case35；「L型＋北歐風」會進入完整可見的空狀態，「查看全部案例」可清除 query 回到三張卡。案例 Hover 會顯示 `View` 並將圖片放大至 1.05 倍；case10 實際點擊可進入 `/gallery/case10?from=inspiration`。
+- **響應式與錯誤驗證**：390×844 的 `scrollWidth` 等於 390，Hero、兩個下拉選單、Filter 與單欄卡片均未產生水平溢位；桌機與手機的圖片載入失敗數皆為 0，瀏覽器 console 沒有 warn/error。
+- **Final result：PASS**。`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build`、`git diff --check` 全數通過；build 僅保留專案既有的 Tailwind sourcemap 警告，沒有編譯錯誤。
+
+## 1.0 AI 廚房（2026-08-20 新版調整）
+
+- 依 `2026.08.15_1.0設計案例_調整.pptx` 第二頁重新校正 `/home-style/aikitchen`；新版不是沿用舊頁換字，而是把 Hero 底部由影片卡改為 Home 02 結構，以三張正式 AI Kitchen 圖片輪播 AI CABINET、AI FAUCET、AI LIGHT，並補上可手動前後切換的控制。
+- Hero 底部的圓形 CTA 依標註連到 `/catalogues/kitchenware-catalog` 品牌系列型錄列表；桌面左側新增可展開的品牌系列抽屜，AI 廚房顯示目前頁，其餘尚未製作的系列回到首頁品牌系列區，不建立假內頁。
+- 內文標籤改為 `Kitchen Collections`，中文引言與套系標題使用 Noto Serif TC 25px，正文使用 Noto Sans TC；四套系頁籤使用 Bodoni Moda 20px。門板、推薦廚電與推薦案例亦依新版標註統一中文字體層級。
+- 推薦廚電桌面一次顯示五項，超過五項可輪播；每項補上 Hover `＋` 按鈕與真實站內跳轉。現階段只有 DR7396 已有產品詳情頁，其他型號先連到 2.0 SAKURA 廚電列表，避免建立不存在的假詳情路由。
+- 推薦案例改為較快的自動輪播，滑鼠移入或鍵盤聚焦即暫停；標題限制兩行、Noto Serif TC 25px，摘要限制三行、Noto Sans TC。
+- 原本的品牌影片 Dialog 已依「改 Home 02」標註移除，避免同一 Hero 同時存在兩套互斥的底部互動；三段 AI 功能輪播成為此區唯一主體。
+- 新增樣式沿用全站 `#CAA05C`、Noto Sans TC／Noto Serif TC 與既有模糊玻璃語彙；沒有用截圖冒充互動 Hero、假 SVG 或 CSS 圖形替代正式圖片與 Lucide 控制圖示。
+- 手機版維持全站右側 72px 快捷列，AI Hero 內容預留 93px 安全距；Hero 功能卡改為兩欄兩列、案例改成單卡輪播，沒有把桌機底部帶硬縮進手機寬度。
+- 桌機 Hero 的 Home 02 控制列右側另保留 86px 全站快捷列安全距，避免下一張按鈕被固定快捷列蓋住而無法操作。
+
+### 1.0 新版 Design QA
+
+- **來源真值**：PPT 第二頁標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-02.png`，內嵌完整母版頁為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/assets/ppt/media/image5.png`（3440×11821），正規化 1440px 版本為 `/private/tmp/sakura-ai-kitchen.A3GeB0/reference-slide2-page-1440.png`。
+- **視覺比較**：已在 1440×900 逐區比對 Hero、內容／套系、門板、廚電與推薦案例；Hero 與內文維持母版的構圖、圓角、金色層級及圖片比例，新版標註指定的 Home 02 資訊列則取代舊影片卡。比對圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/compare-hero.png`、`/private/tmp/sakura-ai-kitchen.A3GeB0/compare-intro.png`。
+- **互動驗證**：三段 Hero 可手動前後切換，品牌系列抽屜可展開且共 10 項、AI 廚房正確標示目前頁；四套系切換後名稱與圖片同步；推薦廚電桌面同畫面五項並顯示 Hover `＋`；案例桌面同畫面三項，2.6 秒自動前進，滑入後停止。
+- **響應式與錯誤驗證**：390×844 實機視窗的 `scrollWidth` 等於 390，Hero 資訊卡與按鈕保留右側快捷列安全距，套系、廚電與案例均未造成水平溢位；桌機與手機圖片載入失敗數皆為 0，重新載入目前版本後沒有新的 Vue warn/error。
+- **Final result：PASS**。`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build`、`git diff --check` 全數通過；build 僅保留專案既有的 Tailwind sourcemap 警告，沒有編譯錯誤。
+
 ## 2.4 廚房商品型錄／產品保養 Tips（2026-08-20 新版調整）
 
 - 依新版 `2026.08.18_2.0廚房產品_調整.pptx` 第六頁重新校正，而不是把 2026-08-16 舊版視為已完成：Hero 改用松竹店照片，標題改為 Noto Serif TC 80px，麵包屑改為 Noto Sans TC 15px。

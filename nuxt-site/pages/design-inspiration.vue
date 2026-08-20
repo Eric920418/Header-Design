@@ -108,7 +108,7 @@ useSeoMeta({
 
         <form class="design-projects-filter" v-reveal="{ anim: 'opalMoveUp' }" @submit.prevent="applyFilters">
           <div class="design-projects-filter__field">
-            <label for="design-form">設計型式</label>
+            <label for="design-form" class="sr-only">設計型式</label>
             <div class="design-projects-filter__select">
               <select id="design-form" v-model="draftForm" name="form">
                 <option v-for="option in DESIGN_FORM_OPTIONS" :key="option.label" :value="option.value">{{ option.label }}</option>
@@ -117,7 +117,7 @@ useSeoMeta({
           </div>
 
           <div class="design-projects-filter__field">
-            <label for="design-style">設計風格</label>
+            <label for="design-style" class="sr-only">設計風格</label>
             <div class="design-projects-filter__select">
               <select id="design-style" v-model="draftStyle" name="style">
                 <option v-for="option in DESIGN_STYLE_OPTIONS" :key="option.label" :value="option.value">{{ option.label }}</option>
@@ -203,7 +203,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
 }
 
 .design-projects-hero__overlay {
@@ -224,10 +224,10 @@ useSeoMeta({
 .design-projects-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-display);
-  font-size: 80px;
-  font-weight: 400;
-  line-height: .9523809524;
+  font-family: var(--font-cjk-serif);
+  font-size: 60px;
+  font-weight: 500;
+  line-height: 72px;
 }
 
 .design-projects-hero__trail {
@@ -235,10 +235,9 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: var(--font-ui);
-  font-size: 13px;
-  line-height: 14px;
-  text-transform: uppercase;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 22px;
 }
 
 .design-projects-hero__trail a { color: #fff; transition: color .3s ease; }
@@ -261,7 +260,7 @@ useSeoMeta({
 
 .design-projects-filter {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 20px;
   margin-bottom: 40px;
 }
@@ -271,15 +270,6 @@ useSeoMeta({
   min-width: 0;
   flex: 1 1 0;
   flex-direction: column;
-  gap: 20px;
-}
-
-.design-projects-filter label {
-  color: #1c1c1d;
-  font-family: var(--font-ui);
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 1.15;
 }
 
 .design-projects-filter__select { position: relative; }
@@ -306,6 +296,7 @@ useSeoMeta({
   padding: 17px 46px 17px 15px;
   color: #59585d;
   background: #fff;
+  font-family: var(--font-cjk-sans);
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
@@ -322,6 +313,7 @@ useSeoMeta({
   padding: 9px 9px 9px 30px;
   color: #1c1c1d;
   background: transparent;
+  font-family: var(--font-cjk-sans);
   font-size: 18px;
   font-weight: 400;
   line-height: 24px;
@@ -437,12 +429,12 @@ useSeoMeta({
 
 .design-project-card__text { padding-top: 23px; }
 .design-project-card__text h2 {
-  min-height: 68px;
+  min-height: 72px;
   margin: 0 0 14px;
-  font-family: var(--font-display);
-  font-size: 30px;
-  font-weight: 400;
-  line-height: 34px;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 36px;
 }
 
 .design-project-card__text h2 a {
@@ -455,7 +447,7 @@ useSeoMeta({
 }
 
 .design-project-card__text h2 a:hover { color: #caa05c; }
-.design-project-card__text p { margin: 0; color: #59585d; font-size: 16px; line-height: 24px; }
+.design-project-card__text p { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
 
 .design-projects-empty {
   display: flex;
@@ -515,7 +507,7 @@ useSeoMeta({
   .design-projects-section { padding: 60px 15px; }
   .design-projects-rail.internal-rail-safe { padding-inline: 0; }
   .design-projects-filter { flex-direction: column; align-items: flex-start; gap: 30px; }
-  .design-projects-filter__field { width: 100%; gap: 10px; }
+  .design-projects-filter__field { width: 100%; }
   .design-projects-filter select { width: 100%; min-width: 0; }
   .design-projects-filter__submit { font-size: 15px; }
   .design-projects-grid { grid-template-columns: 1fr; gap: 30px; }
