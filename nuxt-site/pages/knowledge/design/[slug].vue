@@ -8,6 +8,7 @@ const route = useRoute()
 const slug = String(route.params.slug)
 const detail = KITCHEN_GUIDE_DETAILS.find(entry => entry.slug === slug)
 const article = detail ? KITCHEN_GUIDE_ARTICLES.find(entry => entry.id === detail.articleId) : undefined
+const isKitchenOutletArticle = slug === 'kitchen-outlet-planning'
 
 if (!detail || !article) {
   throw createError({ statusCode: 404, message: `廚房裝修指南「${slug}」不存在或尚未公開。` })
@@ -33,7 +34,10 @@ useHead({
 </script>
 
 <template>
-  <main class="knowledge-detail-page">
+  <main
+    class="knowledge-detail-page"
+    :class="{ 'knowledge-detail-page--kitchen-outlet': isKitchenOutletArticle }"
+  >
     <section class="knowledge-detail-breadcrumb" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-detail-breadcrumb__overlay" aria-hidden="true" />
       <nav class="knowledge-detail-breadcrumb__trail" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
@@ -61,6 +65,9 @@ useHead({
           v-for="(section, sectionIndex) in detail.sections"
           :key="section.heading ?? `section-${sectionIndex}`"
           class="knowledge-detail-section"
+          :class="{
+            'knowledge-detail-section--cases': isKitchenOutletArticle && section.heading === '廚房插座設計案例介紹',
+          }"
           v-reveal="{ anim: 'opalMoveUp' }"
         >
           <h2 v-if="section.heading">{{ section.heading }}</h2>
@@ -75,10 +82,14 @@ useHead({
               <a v-if="point.url" :href="point.url" target="_blank" rel="noopener noreferrer">{{ point.title }}</a>
               <template v-else>{{ point.title }}</template>
             </h3>
-            <figure v-if="point.image" class="knowledge-detail-point__media" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
-              <InternalGuideImage :src="point.image.src" :alt="point.image.alt" />
-            </figure>
-            <p v-for="paragraph in point.paragraphs" :key="paragraph">{{ paragraph }}</p>
+            <div class="knowledge-detail-point__body">
+              <figure v-if="point.image" class="knowledge-detail-point__media" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
+                <InternalGuideImage :src="point.image.src" :alt="point.image.alt" />
+              </figure>
+              <div class="knowledge-detail-point__copy">
+                <p v-for="paragraph in point.paragraphs" :key="paragraph">{{ paragraph }}</p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -109,7 +120,10 @@ useHead({
       </div>
     </article>
 
-    <InternalKnowledgeRelatedCarousel :articles="relatedNewsArticles" />
+    <InternalKnowledgeRelatedCarousel
+      :articles="relatedNewsArticles"
+      :variant="isKitchenOutletArticle ? 'home07' : 'cards'"
+    />
   </main>
 </template>
 
@@ -296,6 +310,28 @@ useHead({
 
 .knowledge-detail-point { margin-top: 31px; }
 .knowledge-detail-point h3 { margin-top: 0; }
+.knowledge-detail-point__body { display: contents; }
+
+.knowledge-detail-section--cases .knowledge-detail-point {
+  margin-top: 52px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid #e3e3e8;
+}
+
+.knowledge-detail-section--cases .knowledge-detail-point:first-of-type { margin-top: 0; }
+.knowledge-detail-section--cases .knowledge-detail-point:last-child { padding-bottom: 0; border-bottom: 0; }
+.knowledge-detail-section--cases .knowledge-detail-point h3 { margin-bottom: 24px; }
+
+.knowledge-detail-section--cases .knowledge-detail-point__body {
+  display: grid;
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 30px;
+}
+
+.knowledge-detail-section--cases .knowledge-detail-point__media { margin: 0; }
+.knowledge-detail-section--cases .knowledge-detail-point__copy > p:first-child { margin-top: -5px; }
+.knowledge-detail-section--cases .knowledge-detail-point__copy > p:last-child { margin-bottom: 0; }
 
 .knowledge-detail-video {
   margin: 6px 0 54px;
@@ -355,6 +391,68 @@ useHead({
   background: #caa05c;
 }
 
+.knowledge-detail-page--kitchen-outlet {
+  font-family: var(--font-cjk-sans);
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail-breadcrumb {
+  background-image: url('/section-3/store-songzhu.jpg');
+  background-position: center 36%;
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail-breadcrumb__trail {
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail__header { margin-bottom: 40px; }
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail__meta {
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail__meta a {
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 15px;
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail__meta time {
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail__header h1 {
+  font-family: var(--font-cjk-serif);
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 50px;
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail-section h2 {
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 36px;
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail-section h3 {
+  font-family: var(--font-cjk-sans);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+}
+
+.knowledge-detail-page--kitchen-outlet .knowledge-detail-section p,
+.knowledge-detail-page--kitchen-outlet .knowledge-detail-links a,
+.knowledge-detail-page--kitchen-outlet .knowledge-detail-categories a {
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 25px;
+}
+
 @media (max-width: 1024px) {
   .knowledge-detail { padding-top: 80px; }
   .knowledge-detail__header h1 { font-size: 40px; line-height: 45px; }
@@ -376,7 +474,29 @@ useHead({
   .knowledge-detail-section h3 { font-size: 22px; line-height: 27px; }
   .knowledge-detail-section__media,
   .knowledge-detail-point__media { border-radius: 18px; }
+  .knowledge-detail-section--cases .knowledge-detail-point { margin-top: 42px; padding-bottom: 42px; }
+  .knowledge-detail-section--cases .knowledge-detail-point__body { grid-template-columns: 1fr; gap: 24px; }
+  .knowledge-detail-section--cases .knowledge-detail-point__copy > p:first-child { margin-top: 0; }
   .knowledge-detail-categories { padding-bottom: 45px; }
+
+  .knowledge-detail-page--kitchen-outlet .knowledge-detail {
+    padding-right: 93px;
+  }
+
+  .knowledge-detail-page--kitchen-outlet .knowledge-detail__header h1 {
+    font-size: 30px;
+    line-height: 41px;
+  }
+
+  .knowledge-detail-page--kitchen-outlet .knowledge-detail-section h2 {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .knowledge-detail-page--kitchen-outlet .knowledge-detail-section h3 {
+    font-size: 19px;
+    line-height: 29px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

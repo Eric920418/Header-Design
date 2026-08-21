@@ -30,12 +30,13 @@ useSeoMeta({
       <div class="kitchen-guide-newsroom__rail">
         <header class="kitchen-guide-heading">
           <div v-reveal="{ anim: 'opalMoveRight' }" class="kitchen-guide-heading__label">
-            <span class="kitchen-guide-heading__pill"><i aria-hidden="true" />Straight From The Newsroom</span>
+            <span class="kitchen-guide-heading__pill"><i aria-hidden="true" />Kitchen Knowledge</span>
             <span class="kitchen-guide-heading__horizontal" aria-hidden="true" />
             <span class="kitchen-guide-heading__vertical" aria-hidden="true" />
           </div>
           <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            Take A Look At <span>Our Latest Blog</span> &amp; Articles.
+            <span class="kitchen-guide-heading__zh">廚房裝修指南</span>
+            <span class="kitchen-guide-heading__en" lang="en">Kitchen Knowledge</span>
           </h2>
         </header>
 
@@ -79,6 +80,7 @@ useSeoMeta({
 .kitchen-guide-page {
   color: #59585d;
   background: #f6f6f6;
+  font-family: var(--font-cjk-sans);
 }
 
 .kitchen-guide-hero {
@@ -87,7 +89,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
 }
 
 .kitchen-guide-hero__overlay {
@@ -106,12 +108,12 @@ useSeoMeta({
 }
 
 .kitchen-guide-hero h1 {
-  margin: 0 0 35px;
+  margin: 0 0 20px;
   color: #fff;
-  font-family: var(--font-display);
-  font-size: 80px;
-  font-weight: 400;
-  line-height: .9523809524;
+  font-family: var(--font-cjk-serif);
+  font-size: 60px;
+  font-weight: 500;
+  line-height: 72px;
 }
 
 .kitchen-guide-hero__trail {
@@ -119,10 +121,9 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: var(--font-ui);
-  font-size: 13px;
-  line-height: 14px;
-  text-transform: uppercase;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 22px;
 }
 
 .kitchen-guide-hero__trail a {
@@ -152,6 +153,9 @@ useSeoMeta({
 
 .kitchen-guide-heading__label {
   position: relative;
+  z-index: 1;
+  grid-column: 1;
+  grid-row: 1;
   min-height: 128px;
   padding-top: 4px;
 }
@@ -164,11 +168,10 @@ useSeoMeta({
   border: 1px solid rgba(159, 159, 164, .25);
   border-radius: 24px;
   color: #1c1c1d;
-  font-family: var(--font-ui);
+  font-family: var(--font-cjk-sans);
   font-size: 12px;
   line-height: 14px;
   letter-spacing: .04em;
-  text-transform: uppercase;
 }
 
 .kitchen-guide-heading__pill i {
@@ -198,18 +201,35 @@ useSeoMeta({
 }
 
 .kitchen-guide-heading h2 {
+  grid-column: 1 / -1;
+  grid-row: 1;
   max-width: 760px;
   margin: 0;
-  padding-left: 72px;
   color: #1c1c1d;
-  font-family: var(--font-display);
-  font-size: 60px;
-  font-weight: 400;
-  line-height: 64px;
-  text-transform: capitalize;
+  justify-self: center;
+  text-align: center;
 }
 
-.kitchen-guide-heading h2 span { color: #caa05c; }
+.kitchen-guide-heading__zh,
+.kitchen-guide-heading__en {
+  display: block;
+}
+
+.kitchen-guide-heading__zh {
+  font-family: var(--font-cjk-serif);
+  font-size: 60px;
+  font-weight: 500;
+  line-height: 66px;
+}
+
+.kitchen-guide-heading__en {
+  margin-top: -4px;
+  color: #caa05c;
+  font-family: "Bodoni Moda", "Libre Baskerville", serif;
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 66px;
+}
 
 .kitchen-guide-posts {
   display: grid;
@@ -249,6 +269,7 @@ useSeoMeta({
   gap: 11px;
   margin-bottom: 4px;
   color: #9f9fa4;
+  font-family: var(--font-cjk-sans);
   font-size: 13px;
   line-height: 20px;
   text-transform: uppercase;
@@ -260,14 +281,14 @@ useSeoMeta({
 .kitchen-guide-list-item h3 {
   margin: 0;
   color: #1c1c1d;
-  font-family: var(--font-display);
-  font-weight: 400;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 36px;
 }
 
 .kitchen-guide-featured h3 {
   margin: 4px 0 19px;
-  font-size: 36px;
-  line-height: 44px;
 }
 
 .kitchen-guide-featured h3 a,
@@ -285,8 +306,9 @@ useSeoMeta({
 .kitchen-guide-list-item p {
   margin: 0;
   color: #59585d;
-  font-size: 14px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 26px;
 }
 
 .kitchen-guide-featured p {
@@ -329,8 +351,6 @@ useSeoMeta({
   display: -webkit-box;
   overflow: hidden;
   margin: 0 0 20px;
-  font-size: 28px;
-  line-height: 34px;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -346,7 +366,6 @@ useSeoMeta({
 
 @media (max-width: 1366px) {
   .kitchen-guide-newsroom { padding-top: 100px; padding-bottom: 100px; }
-  .kitchen-guide-heading h2 { padding-left: 50px; }
   .kitchen-guide-posts { gap: 30px; }
   .kitchen-guide-featured__image { height: 440px; }
 }
@@ -354,7 +373,8 @@ useSeoMeta({
 @media (max-width: 1024px) {
   .kitchen-guide-newsroom { padding-top: 80px; padding-bottom: 80px; }
   .kitchen-guide-heading { margin-bottom: 45px; }
-  .kitchen-guide-heading h2 { font-size: 45px; line-height: 50px; }
+  .kitchen-guide-heading__zh { font-size: 40px; line-height: 50px; }
+  .kitchen-guide-heading__en { font-size: 45px; line-height: 50px; }
   .kitchen-guide-featured { display: none; }
   .kitchen-guide-posts { display: block; }
   .kitchen-guide-list { width: 100%; }
@@ -373,11 +393,11 @@ useSeoMeta({
 
   .kitchen-guide-hero h1 {
     margin-bottom: 24px;
-    font-size: 48px;
+    font-size: 42px;
     line-height: 52px;
   }
 
-  .kitchen-guide-newsroom { padding: 60px 15px; }
+  .kitchen-guide-newsroom { padding: 60px 93px 60px 15px; }
   .kitchen-guide-newsroom__rail { padding-inline: 0; }
 
   .kitchen-guide-heading {
@@ -396,9 +416,10 @@ useSeoMeta({
 
   .kitchen-guide-heading h2 {
     padding: 0;
-    font-size: 30px;
-    line-height: 35px;
   }
+
+  .kitchen-guide-heading__zh { font-size: 30px; line-height: 40px; }
+  .kitchen-guide-heading__en { font-size: 31px; line-height: 38px; }
 
   .kitchen-guide-list-item {
     display: block;
@@ -416,8 +437,8 @@ useSeoMeta({
   .kitchen-guide-list-item__content { margin-top: 15px; }
 
   .kitchen-guide-list-item h3 {
-    font-size: 22px;
-    line-height: 28px;
+    font-size: 25px;
+    line-height: 36px;
   }
 }
 

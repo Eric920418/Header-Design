@@ -1,16 +1,51 @@
 <script setup lang="ts">
 import emblaCarouselVue from 'embla-carousel-vue'
+import { ArrowRight } from 'lucide-vue-next'
 import type { NewsArticleSummary } from '~/types/content'
 
-defineProps<{
+const props = withDefaults(defineProps<{
   articles: NewsArticleSummary[]
-}>()
+  variant?: 'cards' | 'home07'
+}>(), {
+  variant: 'cards',
+})
+
+const home07Articles = computed(() => props.articles.slice(0, 2))
 
 const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 })
 </script>
 
 <template>
-  <section class="knowledge-related" aria-label="延伸優惠消息文章" v-reveal="{ anim: 'opalMoveUp' }">
+  <section v-if="variant === 'home07'" class="knowledge-related knowledge-related--home07" aria-label="延伸文章">
+    <header class="knowledge-related-home07__intro" v-reveal="{ anim: 'opalMoveRight' }">
+      <span class="knowledge-related-home07__pill"><i aria-hidden="true" /> Straight From The Newsroom</span>
+      <h2>Take A Look At<br><em>Our Latest Blog</em><br>&amp; Articles!</h2>
+      <p>Check out our latest blog posts and industry insights to stay informed about the latest trends, technologies, and project updates.</p>
+      <NuxtLink to="/knowledge" class="knowledge-related-home07__cta">
+        <span>Explore Blogs</span>
+        <i><ArrowRight aria-hidden="true" /></i>
+      </NuxtLink>
+    </header>
+
+    <article
+      v-for="(article, index) in home07Articles"
+      :key="article.id"
+      class="knowledge-related-home07__article"
+      v-reveal="{ anim: 'opalMoveUp', delay: 80 + index * 80 }"
+    >
+      <NuxtLink :to="article.legacyPath" class="knowledge-related-home07__card">
+        <div class="knowledge-related-home07__media">
+          <InternalNewsImage :src="article.cover" :alt="`${article.title}文章封面`" />
+          <span>{{ article.categoryLabel }}</span>
+        </div>
+        <p class="knowledge-related-home07__author">By <strong>Admin</strong></p>
+        <h3>{{ article.title }}</h3>
+        <p class="knowledge-related-home07__excerpt">{{ article.excerpt }}</p>
+      </NuxtLink>
+    </article>
+  </section>
+
+  <section v-else class="knowledge-related" aria-label="延伸優惠消息文章" v-reveal="{ anim: 'opalMoveUp' }">
     <div ref="viewport" class="knowledge-related__viewport" aria-roledescription="carousel" aria-label="延伸優惠消息文章">
       <div class="knowledge-related__track">
         <article v-for="article in articles" :key="article.id" class="knowledge-related__slide">
@@ -135,9 +170,185 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   outline-offset: 6px;
 }
 
+.knowledge-related--home07 {
+  position: relative;
+  display: grid;
+  width: min(1410px, calc(100% - 60px));
+  align-items: start;
+  grid-template-columns: minmax(0, 1.02fr) repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  overflow: hidden;
+  padding: 70px 30px 108px;
+  background:
+    linear-gradient(30deg, transparent 49.7%, rgb(227 227 232 / 20%) 50%, transparent 50.3%) 0 0 / 180px 180px,
+    linear-gradient(150deg, transparent 49.7%, rgb(227 227 232 / 20%) 50%, transparent 50.3%) 0 0 / 180px 180px;
+}
+
+.knowledge-related-home07__intro { padding: 0 26px 0 0; }
+
+.knowledge-related-home07__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px 6px 9px;
+  border: 1px solid rgb(159 159 164 / 28%);
+  border-radius: 24px;
+  color: #1c1c1d;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.knowledge-related-home07__pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #caa05c;
+}
+
+.knowledge-related-home07__intro h2 {
+  margin: 31px 0 29px;
+  color: #1c1c1d;
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -.02em;
+}
+
+.knowledge-related-home07__intro h2 em {
+  color: #caa05c;
+  font-style: normal;
+}
+
+.knowledge-related-home07__intro > p {
+  max-width: 370px;
+  margin: 0;
+  color: #59585d;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.knowledge-related-home07__cta {
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 44px;
+  padding: 4px 5px 4px 24px;
+  border: 1px solid #9f9fa4;
+  border-radius: 999px;
+  color: #1c1c1d;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 20px;
+  transition: color .3s ease, border-color .3s ease;
+}
+
+.knowledge-related-home07__cta i {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #fff;
+  background: #caa05c;
+  place-items: center;
+  transition: background-color .3s ease, transform .3s ease;
+}
+
+.knowledge-related-home07__cta svg { width: 18px; height: 18px; }
+.knowledge-related-home07__cta:hover,
+.knowledge-related-home07__cta:focus-visible { border-color: #caa05c; color: #caa05c; }
+.knowledge-related-home07__cta:hover i { background: #1c1c1d; transform: translateX(2px); }
+
+.knowledge-related-home07__card {
+  display: block;
+  color: inherit;
+}
+
+.knowledge-related-home07__media {
+  position: relative;
+  aspect-ratio: 1.4;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #e3e3e8;
+}
+
+.knowledge-related-home07__media :deep(.antra-news-image) { width: 100%; height: 100%; }
+
+.knowledge-related-home07__media > span {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: #fff;
+  background: #caa05c;
+  font-family: var(--font-cjk-sans);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.knowledge-related-home07__author {
+  margin: 18px 0 8px;
+  color: #9f9fa4;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.knowledge-related-home07__author strong { color: #caa05c; font-weight: 500; }
+
+.knowledge-related-home07__article h3 {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: #1c1c1d;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 36px;
+  transition: color .3s ease;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.knowledge-related-home07__excerpt {
+  display: -webkit-box;
+  margin: 16px 0 0;
+  overflow: hidden;
+  color: #59585d;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 25px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.knowledge-related-home07__card:hover :deep(.antra-news-image img) { transform: scale(1.05); }
+.knowledge-related-home07__card:hover h3,
+.knowledge-related-home07__card:focus-visible h3 { color: #caa05c; }
+
+.knowledge-related-home07__card:focus-visible {
+  border-radius: 24px;
+  outline: 2px solid #caa05c;
+  outline-offset: 6px;
+}
+
 @media (max-width: 1024px) {
   .knowledge-related { padding-bottom: 80px; }
   .knowledge-related__slide { flex-basis: 50%; }
+  .knowledge-related--home07 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .knowledge-related-home07__intro { grid-column: 1 / -1; padding: 0 0 25px; }
+  .knowledge-related-home07__intro h2 { font-size: 48px; }
 }
 
 @media (max-width: 767px) {
@@ -151,12 +362,32 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   .knowledge-related__transition { border-radius: 18px; }
   .knowledge-related__category { top: 20px; left: 15px; }
   .knowledge-related__text-box h3 { font-size: 26px; line-height: 28px; }
+
+  .knowledge-related--home07 {
+    width: calc(100% - 108px);
+    grid-template-columns: 1fr;
+    gap: 38px;
+    margin-right: auto;
+    margin-left: 15px;
+    padding: 55px 15px 60px;
+  }
+
+  .knowledge-related-home07__intro { padding-bottom: 3px; }
+  .knowledge-related-home07__intro h2 { margin-block: 26px 22px; font-size: 40px; }
+  .knowledge-related-home07__intro > p { max-width: 100%; }
+  .knowledge-related-home07__cta { margin-top: 32px; }
+  .knowledge-related-home07__media { border-radius: 18px; }
+  .knowledge-related-home07__article h3 { font-size: 23px; line-height: 33px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .knowledge-related__transition::after,
-  .knowledge-related__text-box h3 { transition: none; }
+  .knowledge-related__text-box h3,
+  .knowledge-related-home07__cta,
+  .knowledge-related-home07__cta i,
+  .knowledge-related-home07__article h3 { transition: none; }
 
-  .knowledge-related__card:hover :deep(.antra-news-image img) { transform: none; }
+  .knowledge-related__card:hover :deep(.antra-news-image img),
+  .knowledge-related-home07__card:hover :deep(.antra-news-image img) { transform: none; }
 }
 </style>

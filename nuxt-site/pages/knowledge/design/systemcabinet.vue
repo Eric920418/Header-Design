@@ -14,6 +14,14 @@ const relatedNewsArticles = ['cash-subsidy-2025', 'franchise-seminar-2026', 'ame
   .map(id => newsArticles.find(entry => entry.id === id))
   .filter((entry): entry is (typeof newsArticles)[number] => Boolean(entry))
 
+const designStyleLinks = [
+  { label: '北歐風', to: '/design-inspiration?style=北歐風' },
+  { label: '現代風', to: '/design-inspiration?style=現代風' },
+  { label: '工業風', to: '/design-inspiration?style=工業風' },
+]
+
+const kitchenSeriesLinks = ['鄉村', '童樂', '閤樂', '臻美', '潮派', '君璽', '大廚']
+
 useSeoMeta({
   title: `${article.title}｜SAKURA 整體廚房`,
   description: article.excerpt,
@@ -93,7 +101,18 @@ useHead({
           <div v-for="step in systemCabinetSelectionSteps" :key="step.title" class="knowledge-copy-block__point">
             <h3>{{ step.title }}</h3>
             <ul>
-              <li v-for="bullet in step.bullets" :key="bullet">{{ bullet }}</li>
+              <template v-if="step.title.startsWith('STEP6')">
+                <li>
+                  色彩與紋理：根據家中風格（<template v-for="(style, styleIndex) in designStyleLinks" :key="style.label"><NuxtLink :to="style.to"><strong>{{ style.label }}</strong></NuxtLink><span v-if="styleIndex < designStyleLinks.length - 1">、</span></template>等），挑選合適的木紋、石紋、亮面或霧面烤漆材質，營造統一氛圍。
+                </li>
+                <li>門板造型：平面簡約、線條雕刻或格柵式鄉村風，各自展現不同氛圍，可依個人喜好與整體搭配做決定。</li>
+                <li>
+                  門板顏色推薦：<template v-for="(series, seriesIndex) in kitchenSeriesLinks" :key="series"><NuxtLink to="/#kitchen-series"><strong>{{ series }}</strong></NuxtLink><span v-if="seriesIndex < kitchenSeriesLinks.length - 1">、</span></template>。
+                </li>
+              </template>
+              <template v-else>
+                <li v-for="bullet in step.bullets" :key="bullet">{{ bullet }}</li>
+              </template>
             </ul>
           </div>
         </section>
@@ -105,20 +124,24 @@ useHead({
             <h3>
               <a :href="caseStudy.url" target="_blank" rel="noopener noreferrer">{{ caseStudy.title }}</a>
             </h3>
-            <figure v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
-              <InternalGuideImage :src="caseStudy.image" :alt="caseStudy.imageAlt" />
-            </figure>
-            <p>{{ caseStudy.introduction }}</p>
-            <ul>
-              <li v-for="highlight in caseStudy.highlights" :key="highlight">{{ highlight }}</li>
-            </ul>
-            <p>{{ caseStudy.conclusion }}</p>
+            <div class="knowledge-case__grid">
+              <figure v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
+                <InternalGuideImage :src="caseStudy.image" :alt="caseStudy.imageAlt" />
+              </figure>
+              <div class="knowledge-case__copy">
+                <p>{{ caseStudy.introduction }}</p>
+                <ul>
+                  <li v-for="highlight in caseStudy.highlights" :key="highlight">{{ highlight }}</li>
+                </ul>
+                <p>{{ caseStudy.conclusion }}</p>
+              </div>
+            </div>
             <span v-if="caseIndex < systemCabinetCaseStudies.length - 1" class="knowledge-case__divider" aria-hidden="true" />
           </article>
         </section>
 
         <section class="knowledge-copy-block knowledge-article__closing" v-reveal="{ anim: 'opalMoveUp' }">
-          <p><strong>SAKURA KITCHEN</strong>在廚房系統櫃材質的選擇上，始終堅持品質與安心兼具。從主打的MFC塑合板到頂級的FENIX奈米門板、自製的極晶門板，皆展現出對細節的高度重視。並搭配台灣櫻花自製封邊工藝與多道驗證測試，其耐用性與安全性更勝一籌。想了解更多廚房材質案例分享？那就快去看看<a href="https://www.sakura-kitchenlife.com.tw/catalogues/kitchenware-catalog" target="_blank" rel="noopener noreferrer">廚房系列型錄</a>吧！</p>
+          <p><strong>SAKURA KITCHEN</strong>在廚房系統櫃材質的選擇上，始終堅持品質與安心兼具。從主打的MFC塑合板到頂級的FENIX奈米門板、自製的極晶門板，皆展現出對細節的高度重視。並搭配台灣櫻花自製封邊工藝與多道驗證測試，其耐用性與安全性更勝一籌。想了解更多廚房材質案例分享？那就快去看看<NuxtLink to="/catalogues/kitchenware-catalog"><strong>廚房系列型錄</strong></NuxtLink>吧！</p>
         </section>
 
         <nav class="knowledge-article-categories" aria-label="文章分類" v-reveal="{ anim: 'opalMoveUp' }">
@@ -130,7 +153,7 @@ useHead({
       </div>
     </article>
 
-    <InternalKnowledgeRelatedCarousel :articles="relatedNewsArticles" />
+    <InternalKnowledgeRelatedCarousel :articles="relatedNewsArticles" variant="home07" />
   </main>
 </template>
 
@@ -138,6 +161,7 @@ useHead({
 .knowledge-article-page {
   color: #59585d;
   background: #f6f6f6;
+  font-family: var(--font-cjk-sans);
 }
 
 .knowledge-article-breadcrumb {
@@ -149,7 +173,7 @@ useHead({
   padding: 30px;
   place-items: center;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
 }
 
 .knowledge-article-breadcrumb__overlay {
@@ -167,9 +191,9 @@ useHead({
   justify-content: center;
   gap: 10px;
   margin-inline: auto;
-  font-family: var(--font-ui);
-  font-size: 13px;
-  line-height: 14px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 22px;
   text-transform: uppercase;
 }
 
@@ -192,14 +216,14 @@ useHead({
   margin-inline: auto;
 }
 
-.knowledge-article__header { margin-bottom: 30px; }
+.knowledge-article__header { margin-bottom: 40px; }
 
 .knowledge-article__meta {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 13px;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
 .knowledge-article__meta a {
@@ -210,9 +234,9 @@ useHead({
   border-radius: 100px;
   color: #fff;
   background: #caa05c;
-  font-family: var(--font-ui);
-  font-size: 14px;
-  line-height: 14px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 15px;
   transition: background-color .3s ease;
 }
 
@@ -223,7 +247,8 @@ useHead({
   position: relative;
   padding-right: 13px;
   color: #9f9fa4;
-  font-size: 14px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
   line-height: 24px;
   text-transform: uppercase;
 }
@@ -243,10 +268,10 @@ useHead({
 .knowledge-article__header h1 {
   margin: 0;
   color: #1c1c1d;
-  font-family: var(--font-display);
-  font-size: 50px;
-  font-weight: 400;
-  line-height: 54px;
+  font-family: var(--font-cjk-serif);
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 50px;
 }
 
 .knowledge-article__cover {
@@ -270,26 +295,27 @@ useHead({
 .knowledge-copy-block h2 {
   margin: 0 0 30px;
   color: #1c1c1d;
-  font-family: var(--font-display);
-  font-size: 40px;
-  font-weight: 400;
-  line-height: 44px;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 36px;
 }
 
 .knowledge-copy-block h3 {
   margin: 31px 0 12px;
   color: #1c1c1d;
-  font-family: var(--font-display);
-  font-size: 25px;
-  font-weight: 400;
+  font-family: var(--font-cjk-sans);
+  font-size: 20px;
+  font-weight: 500;
   line-height: 30px;
 }
 
 .knowledge-copy-block p {
   margin: 0 0 20px;
   color: #59585d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 25px;
 }
 
 .knowledge-copy-block ul {
@@ -302,11 +328,23 @@ useHead({
   margin-bottom: 9px;
   padding-left: 3px;
   color: #59585d;
-  font-size: 16px;
-  line-height: 24px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 25px;
 }
 
 .knowledge-copy-block li:last-child { margin-bottom: 0; }
+
+.knowledge-copy-block li a {
+  color: #caa05c;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color .3s ease;
+}
+
+.knowledge-copy-block li a:hover,
+.knowledge-copy-block li a:focus-visible { color: #1c1c1d; }
 
 .knowledge-material-table {
   width: 100%;
@@ -376,6 +414,13 @@ useHead({
 
 .knowledge-case h3 { margin-bottom: 24px; }
 
+.knowledge-case__grid {
+  display: grid;
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 30px;
+}
+
 .knowledge-case h3 a {
   color: inherit;
   text-decoration: underline;
@@ -388,7 +433,7 @@ useHead({
 .knowledge-case h3 a:focus-visible { color: #caa05c; }
 
 .knowledge-case figure {
-  margin: 0 0 30px;
+  margin: 0;
   overflow: hidden;
   border-radius: 24px;
   background: #e3e3e8;
@@ -402,6 +447,10 @@ useHead({
 }
 
 .knowledge-case figure :deep(.guide-image img) { object-fit: contain; }
+
+.knowledge-case__copy > p:first-child { margin-top: -5px; }
+.knowledge-case__copy > p:last-child { margin-bottom: 0; }
+.knowledge-case__copy ul { margin-bottom: 20px; }
 
 .knowledge-case__divider {
   display: block;
@@ -438,7 +487,8 @@ useHead({
   border: 1px solid #e3e3e8;
   border-radius: 24px;
   color: #59585d;
-  font-size: 14px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
   font-weight: 500;
   line-height: 24px;
   transition: color .3s ease, border-color .3s ease, background-color .3s ease;
@@ -456,8 +506,6 @@ useHead({
 
 @media (max-width: 1024px) {
   .knowledge-article { padding-top: 80px; }
-  .knowledge-article__header h1 { font-size: 40px; line-height: 45px; }
-  .knowledge-copy-block h2 { font-size: 36px; line-height: 41px; }
 }
 
 @media (max-width: 767px) {
@@ -468,16 +516,18 @@ useHead({
   }
 
   .knowledge-article {
-    padding: 60px 15px 0;
+    padding: 60px 93px 0 15px;
   }
 
-  .knowledge-article__header h1 { font-size: 30px; line-height: 35px; }
+  .knowledge-article__header h1 { font-size: 30px; line-height: 41px; }
   .knowledge-article__cover { margin-bottom: 45px; border-radius: 18px; }
   .knowledge-copy-block { margin-bottom: 45px; }
-  .knowledge-copy-block h2 { margin-bottom: 24px; font-size: 30px; line-height: 35px; }
-  .knowledge-copy-block h3 { margin-top: 26px; font-size: 22px; line-height: 27px; }
+  .knowledge-copy-block h2 { margin-bottom: 24px; font-size: 24px; line-height: 34px; }
+  .knowledge-copy-block h3 { margin-top: 26px; font-size: 19px; line-height: 29px; }
   .knowledge-material-table__hint { display: block; }
   .knowledge-case { margin-top: 42px; }
+  .knowledge-case__grid { grid-template-columns: 1fr; gap: 24px; }
+  .knowledge-case__copy > p:first-child { margin-top: 0; }
   .knowledge-case figure { border-radius: 18px; }
   .knowledge-article-categories { padding-bottom: 45px; }
 }
@@ -485,6 +535,7 @@ useHead({
 @media (prefers-reduced-motion: reduce) {
   .knowledge-article-breadcrumb__trail a,
   .knowledge-article__meta a,
+  .knowledge-copy-block li a,
   .knowledge-case h3 a,
   .knowledge-article-categories a { transition: none; }
 }

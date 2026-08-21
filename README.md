@@ -1,6 +1,62 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 1.3.2 廚房插座該如何規劃（2026-08-21 新版調整）
+
+- 依 `2026.08.15_1.0設計案例_調整.pptx` 第六頁重新校正 `/knowledge/design/kitchen-outlet-planning`，沿用正式 Vue 文章內容與甲方三張案例素材，不以 PPT 或官網截圖冒充可閱讀頁面。
+- Breadcrumb 改用松竹店門市照片；麵包屑、分類、日期、內文與分類 Tab 統一 Noto Sans TC，文章大標改為 Noto Serif TC Medium 38/50px，章節標為 25/36px，子標為 Noto Sans TC Medium 20/30px，內文為 15/25px。
+- 三個廚房插座案例依 PPT 指定的 Home 06 橫式結構改為圖片／說明各半的兩欄排版，案例標題保留甲方提供的櫻花官網正式案例連結；手機回到單欄並保留右側固定快捷列安全距。
+- 底部推薦區套用 Antra Home 07：桌機為左側模板標題與 CTA、右側兩張 1.4:1 橫式文章卡；手機維持單欄且不被右側快捷列遮住。1.3.3 尚未調整，仍保留原有卡片輪播樣式。
+
+### 1.3.2 新版 Design QA
+
+- **來源真值**：PPT 第六頁標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-06.png`，內嵌原頁完整截圖為 `assets/ppt/media/image25.png`（2880×14957），Home 06 橫式雙欄參考為 `assets/ppt/media/image24.png`（808×416），Home 07 參考為 `assets/ppt/media/image20.png`（1334×638）。
+- **同畫面比對**：桌機以 1440×1100 CSS viewport、DPR 1 實拍；原頁頂部正規化後與新版首屏合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide6-top-comparison-v1.png`，案例區合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide6-cases-comparison-v1.png`，Home 07 同尺寸比較為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide6-home07-comparison-v2.png`。PPT 指定的新 Hero、38px 大標與案例雙欄均屬必要差異。
+- **字體、節奏與色彩**：瀏覽器實測麵包屑為 Noto Sans TC 15/22px、文章大標為 Noto Serif TC Medium 38/50px、章節標為 Noto Serif TC Medium 25/36px、子標為 Noto Sans TC Medium 20/30px、內文為 Noto Sans TC 15/25px；Meta 到大標 15px、大標到首圖 40px，文章與主圖維持 930px 版心。保留全站 `#F6F6F6`、`#1C1C1D`、`#59585D`、`#CAA05C` 與 24px 圓角。
+- **案例與 Home 07**：三個案例在 1440px 下皆為 450px 圖片／450px 說明、30px gap，圖片維持 1.5:1 比例；三個案例標題保留 `noopener noreferrer` 的官方正式連結。Home 07 為 1380px 三欄，左側標題 52/55.12px，兩張正式文章圖皆為 418.55×298.96px、1.4:1。
+- **互動與修正歷程**：首輪曾把 case50 等官方網址誤轉為尚不存在的站內路由，實際點擊立刻出現 404，屬 P1 功能問題；已恢復甲方原始官方連結。另在修改途中發現一次 Vue 標籤閉合錯誤並立即修正；以全新瀏覽器分頁重測桌機與手機後，console warn/error、可見 alert 均為 0，31 張圖片全部完成且破圖 0。第二輪同畫面比對未留下可執行的 P0／P1／P2。
+- **手機版**：390×844 實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide6-mobile-top-390.png`、`/private/tmp/sakura-ai-kitchen.A3GeB0/slide6-mobile-cases-390-v3.png` 與 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide6-mobile-home07-cards-390.png`；文章與 Home 07 右緣皆為 297px，固定快捷列左緣為 318px，保留 21px 間距。三個案例與推薦卡皆回到單欄，`scrollWidth === clientWidth === 390`。
+- **建置結果**：`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 全數通過；build 只有專案既有的 Tailwind sourcemap 警告。
+- **final result: passed**
+
+## 1.3.1 廚房系統櫃材質有哪些（2026-08-21 新版調整）
+
+- 依 `2026.08.15_1.0設計案例_調整.pptx` 第五頁重新校正 `/knowledge/design/systemcabinet`；文章仍以真正的 Vue 文字、連結、圖片與語意表格呈現，不使用整頁截圖取代官網內容。
+- Breadcrumb 底圖改用 3.1 案例門市的松竹店店面照；麵包屑、分類、日期、內文與分類 Tab 統一 Noto Sans TC，文章大標改為 Noto Serif TC Medium 38/50px，章節標改為 25/36px，子標為 Noto Sans TC Medium 20/30px，內文為 15/25px。
+- 文章 Meta 到標題的距離由 12.5px 校正為 15px，標題到首圖由 30px 校正為 40px；五大板材仍以可選取、可讀取的 `table／thead／tbody／th` 呈現，手機只在表格自身提供水平滑動。
+- STEP6 的北歐風／現代風／工業風已做成加粗的設計靈感篩選連結；鄉村／童樂／閤樂／臻美／潮派／君璽／大廚已做成加粗的品牌系列跳轉，文章結尾的「廚房系列型錄」改走站內型錄路由。
+- 三個材質案例在桌機改為圖片／說明各半的兩欄排版，手機回到單欄並為右側固定快捷列保留 93px 安全距；底部推薦區使用 Antra Home 07 版型（52px 左側模板標題與 CTA、右側 1.4:1 橫式文章卡），不影響尚未調整的 1.3.3 內頁。
+
+### 1.3.1 新版 Design QA
+
+- **來源與狀態**：PPT 第五頁完整標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-05.png`，原頁完整截圖為 `assets/ppt/media/image16.png`（2880×16463），Home 07 參考為 `assets/ppt/media/image20.png`（1334×638），Hero 指定門市素材為 `assets/ppt/media/image13.jpg`（1919×1280）。驗證狀態為文章預設內容、三個案例與底部延伸文章全部顯示。
+- **正規化與同畫面比較**：桌機以 1440×1100 CSS viewport、DPR 1 擷取；PPT 原頁頂部裁成 2880×2200 後正規化為 1440×1100，與實作頂部合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide5-final-top-comparison.png`。Home 07 參考與實作皆正規化為 1334×638，左右合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide5-final-home07-comparison.png`。
+- **字體與節奏**：瀏覽器實測文章大標為 Noto Serif TC Medium 38/50px、章節標 25/36px、子標 Noto Sans TC Medium 20/30px、內文 Noto Sans TC 15/25px；Meta 到大標 15px、大標到首圖 40px，與 PPT 第五頁標註一致。Hero 為 185px，文章、主圖、表格與內文均維持 930px 版心。
+- **內容、跳轉與表格**：STEP6 實際輸出 3 個設計靈感連結與 7 個品牌系列連結；點擊「北歐風」成功進入 `/design-inspiration?style=北歐風`，Select 實際選中「北歐風」後可返回原文章。結尾型錄為站內連結；五大板材仍只有一張真正的語意表格，包含 4 筆 tbody 資料列、caption 與 10 個 th。
+- **案例與 Home 07**：1440px 實測三個案例 Grid 為 450px／450px、30px gap，圖片與完整文字各佔一欄；本頁限定 Home 07 為 1380px 寬三欄、左側 52/55.12px 模板標題、兩張 1.4:1 橫式正式文章圖。首輪同畫面比較發現舊 1.28 比例令卡圖偏高、標題被流動值縮至 45px，已校正為 1.4 與固定 52px；第二輪未留下可執行的 P0／P1／P2。
+- **響應式、圖片與錯誤**：390×844 實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide5-final-mobile-top-390.png` 與 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide5-final-mobile-home07-390.png`；`scrollWidth === clientWidth === 390`，文章內容右緣 297px、快捷列左緣 318px，保留 21px 間距。手機表格容器為 280px、內容 900px，只在表格自身橫向滑動；全部圖片載入成功，桌機／手機皆無可見 alert、Nuxt error 或 console warn/error。
+- **建置結果**：`NUXT_IGNORE_LOCK=1 pnpm typecheck`、`NUXT_IGNORE_LOCK=1 pnpm build` 與 `git diff --check` 全數通過；build 只有專案既有的 Tailwind sourcemap 警告。
+- **final result: passed**
+
+## 1.3 廚房裝修指南列表（2026-08-21 新版調整）
+
+- 依 `2026.08.15_1.0設計案例_調整.pptx` 第四頁重新校正 `/knowledge`，Hero 底圖改用 3.1 案例門市正式素材中的松竹店店面照；標題改為 Noto Serif TC Medium 60px，麵包屑改為 Noto Sans TC 15px。
+- 內容標籤由模板占位文案 `Straight From The Newsroom` 改為 `Kitchen Knowledge`；模板英文大標改為版心置中的「廚房裝修指南／Kitchen Knowledge」中英雙標，中文使用 Noto Serif TC Medium 60px，英文使用 Bodoni Moda 60px，左側標籤欄與裝飾線仍保留 Home 02 原有幾何。
+- 左側精選文章與右側三篇列表維持 PPT 指定的 Home 02 結構；文章標題統一 Noto Serif TC Medium 25px／36px，Meta、日期與摘要統一 Noto Sans TC，摘要為 15px／26px。
+- 「甲方提供 3 篇」只代表列表資料固定為三筆，不額外建立搜尋、分頁、後台或第四篇假資料；三張文章卡仍連到既有 `/knowledge/design/systemcabinet`、`/knowledge/design/kitchen-outlet-planning`、`/knowledge/design/knowledge31` 站內文章頁。
+- 手機版維持單欄三篇並預留 93px 右側快捷列安全距；文章圖片、標題與摘要不再被固定快捷列蓋住，中英雙標同步縮放且不產生水平溢位。
+
+### 1.3 新版 Design QA
+
+- **來源與狀態**：PPT 第四頁完整標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-04.png`（3178×2245），原頁完整截圖為 `assets/ppt/media/image14.png`（3440×4961），中英雙標聚焦參考為 `assets/ppt/media/image15.png`（1254×360），Hero 指定門市素材為 `assets/ppt/media/image13.jpg`（1919×1280）。驗證狀態為 `/knowledge` 預設列表、三篇資料全部顯示。
+- **正規化與同畫面比較**：桌機實作以 1440×1100 CSS viewport、DPR 1 擷取至 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide4-final-desktop-1440.png`；雙標參考先正規化為 1440×414，再與相同寬度、相同內容狀態的實作裁切合併至 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide4-final-heading-comparison.png`。Hero 素材／實作聚焦輸入為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide4-final-hero-comparison.png`。
+- **字體、節奏、色彩與內容**：Hero 實測 Noto Serif TC 60/72px、麵包屑 Noto Sans TC 15/22px；雙標為 Noto Serif TC Medium 60/66px 與 Bodoni Moda 60/66px；文章標題為 Noto Serif TC Medium 25/36px，摘要為 Noto Sans TC 15/26px。保留 `#F6F6F6`、`#1C1C1D`、`#59585D`、`#CAA05C` 與 Home 02 的 49／51.3 雙欄、60px 間距、24px 圓角；文案與日期仍是甲方三篇正式資料。
+- **圖片與互動**：松竹店 Hero、三張正式文章圖均完整載入，破圖數 0；Hover 實測文章圖片為 `matrix(1.1, 0, 0, 1.1, 0, 0)`。三筆 href 均為站內正式路由，並實際點擊第一篇成功進入 `/knowledge/design/systemcabinet` 後返回列表。
+- **響應式與錯誤**：390×844 CSS viewport、DPR 1 的 Hero／雙標實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide4-mobile-top-390-v2.png`，文章卡實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide4-mobile-cards-390.png`；三張卡均為 282px 單欄且右緣 297px，與快捷列保留 21px 間距，`scrollWidth === clientWidth === 390`。桌機／手機均無可見 alert、Nuxt error、破圖或 console warn/error。
+- **比較歷程**：首輪發現中英雙標誤留在右側 70% 欄且尺寸偏小，屬 P2 版心／層級漂移，已改為跨欄置中並校正至 60px；手機首輪發現固定快捷列覆蓋標題與摘要，屬 P2 可讀性問題，已加入 93px 安全距並縮放雙標。第二輪同畫面比較未留下可執行的 P0／P1／P2；PPT 指定把模板標籤改為 `Kitchen Knowledge`、Hero 換成門市照片，均屬必要差異。
+- **建置結果**：`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 全數通過；build 只有專案既有的 Tailwind sourcemap 警告。
+- **final result: passed**
+
 ## 1.2 設計靈感列表（2026-08-20 新版調整）
 
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第三頁重新校正 `/design-inspiration`，Hero 底圖改用 3.1 案例門市正式素材中的松竹店店面照，不再沿用 3.0 服務流程的室內示意背景。
