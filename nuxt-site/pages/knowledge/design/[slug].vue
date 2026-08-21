@@ -9,6 +9,8 @@ const slug = String(route.params.slug)
 const detail = KITCHEN_GUIDE_DETAILS.find(entry => entry.slug === slug)
 const article = detail ? KITCHEN_GUIDE_ARTICLES.find(entry => entry.id === detail.articleId) : undefined
 const isKitchenOutletArticle = slug === 'kitchen-outlet-planning'
+const isKitchenIslandArticle = slug === 'knowledge31'
+const usesPptArticleTemplate = isKitchenOutletArticle || isKitchenIslandArticle
 
 if (!detail || !article) {
   throw createError({ statusCode: 404, message: `廚房裝修指南「${slug}」不存在或尚未公開。` })
@@ -36,7 +38,11 @@ useHead({
 <template>
   <main
     class="knowledge-detail-page"
-    :class="{ 'knowledge-detail-page--kitchen-outlet': isKitchenOutletArticle }"
+    :class="{
+      'knowledge-detail-page--ppt-article': usesPptArticleTemplate,
+      'knowledge-detail-page--kitchen-outlet': isKitchenOutletArticle,
+      'knowledge-detail-page--kitchen-island': isKitchenIslandArticle,
+    }"
   >
     <section class="knowledge-detail-breadcrumb" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-detail-breadcrumb__overlay" aria-hidden="true" />
@@ -122,7 +128,7 @@ useHead({
 
     <InternalKnowledgeRelatedCarousel
       :articles="relatedNewsArticles"
-      :variant="isKitchenOutletArticle ? 'home07' : 'cards'"
+      :variant="usesPptArticleTemplate ? 'home07' : 'cards'"
     />
   </main>
 </template>
@@ -391,66 +397,70 @@ useHead({
   background: #caa05c;
 }
 
-.knowledge-detail-page--kitchen-outlet {
+.knowledge-detail-page--ppt-article {
   font-family: var(--font-cjk-sans);
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail-breadcrumb {
+.knowledge-detail-page--ppt-article .knowledge-detail-breadcrumb {
   background-image: url('/section-3/store-songzhu.jpg');
   background-position: center 36%;
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail-breadcrumb__trail {
+.knowledge-detail-page--ppt-article .knowledge-detail-breadcrumb__trail {
   font-family: var(--font-cjk-sans);
   font-size: 15px;
   line-height: 22px;
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail__header { margin-bottom: 40px; }
+.knowledge-detail-page--ppt-article .knowledge-detail__header { margin-bottom: 40px; }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail__meta {
+.knowledge-detail-page--ppt-article .knowledge-detail__meta {
   gap: 15px;
   margin-bottom: 15px;
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail__meta a {
+.knowledge-detail-page--ppt-article .knowledge-detail__meta a {
   font-family: var(--font-cjk-sans);
   font-size: 15px;
   line-height: 15px;
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail__meta time {
+.knowledge-detail-page--ppt-article .knowledge-detail__meta time {
   font-family: var(--font-cjk-sans);
   font-size: 15px;
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail__header h1 {
+.knowledge-detail-page--ppt-article .knowledge-detail__header h1 {
   font-family: var(--font-cjk-serif);
   font-size: 38px;
   font-weight: 500;
   line-height: 50px;
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail-section h2 {
+.knowledge-detail-page--ppt-article .knowledge-detail-section h2 {
   font-family: var(--font-cjk-serif);
   font-size: 25px;
   font-weight: 500;
   line-height: 36px;
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail-section h3 {
+.knowledge-detail-page--ppt-article .knowledge-detail-section h3 {
   font-family: var(--font-cjk-sans);
   font-size: 20px;
   font-weight: 500;
   line-height: 30px;
 }
 
-.knowledge-detail-page--kitchen-outlet .knowledge-detail-section p,
-.knowledge-detail-page--kitchen-outlet .knowledge-detail-links a,
-.knowledge-detail-page--kitchen-outlet .knowledge-detail-categories a {
+.knowledge-detail-page--ppt-article .knowledge-detail-section p,
+.knowledge-detail-page--ppt-article .knowledge-detail-links a,
+.knowledge-detail-page--ppt-article .knowledge-detail-categories a {
   font-family: var(--font-cjk-sans);
   font-size: 15px;
   line-height: 25px;
+}
+
+.knowledge-detail-page--kitchen-island .knowledge-detail-links a {
+  font-weight: 700;
 }
 
 @media (max-width: 1024px) {
@@ -479,21 +489,21 @@ useHead({
   .knowledge-detail-section--cases .knowledge-detail-point__copy > p:first-child { margin-top: 0; }
   .knowledge-detail-categories { padding-bottom: 45px; }
 
-  .knowledge-detail-page--kitchen-outlet .knowledge-detail {
+  .knowledge-detail-page--ppt-article .knowledge-detail {
     padding-right: 93px;
   }
 
-  .knowledge-detail-page--kitchen-outlet .knowledge-detail__header h1 {
+  .knowledge-detail-page--ppt-article .knowledge-detail__header h1 {
     font-size: 30px;
     line-height: 41px;
   }
 
-  .knowledge-detail-page--kitchen-outlet .knowledge-detail-section h2 {
+  .knowledge-detail-page--ppt-article .knowledge-detail-section h2 {
     font-size: 24px;
     line-height: 34px;
   }
 
-  .knowledge-detail-page--kitchen-outlet .knowledge-detail-section h3 {
+  .knowledge-detail-page--ppt-article .knowledge-detail-section h3 {
     font-size: 19px;
     line-height: 29px;
   }

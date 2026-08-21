@@ -1,6 +1,37 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 1.4 品牌系列型錄（2026-08-21 新版調整）
+
+- 依 `2026.08.15_1.0設計案例_調整.pptx` 第八、九頁校正 `/catalogues/kitchenware-catalog`；第九頁的甲方資訊提案明確補入 MUJI Basic+ 與 Clever，因此最終清單依甲方正式來源更新為八筆：MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic、Elegant。
+- 列表沿用 PPT 指定的 Projects 01 三欄版型與 24px 圓角卡片，八筆資料依 3／3／2 排成三列；Hero 標題改為 Noto Serif TC Medium 80px、麵包屑改為 Noto Sans TC 15px，卡片標題與說明分別校正為 Noto Serif TC Medium 25/36px、Noto Sans TC 15/23px。
+- 每張卡仍直接連到正式 PDF；Hover／鍵盤聚焦新增「開啟型錄」與箭頭提示、封面縮放及金色標題回饋。手機改為單欄，並為右側固定快捷列保留 93px 安全距。
+
+### 1.4 新版 Design QA
+
+- **來源與狀態**：PPT 第八、九頁完整標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-08.png`、`source-slide-09.png`，Projects 01 完整參考為 `assets/ppt/media/image33.png`（1038×2474）。第九頁甲方資訊來源短網址實際導向 SAKURA 正式 `/catalogues/kitchenware-catalog`；其八筆順序、文案、封面與 PDF 已逐筆核對。新增 Basic+／Clever 使用 PPT 原始 `image36.jpg`／`image38.jpg`，其餘六張本地素材雜湊亦與第九頁內嵌原圖完全相同。
+- **同畫面比對**：桌機以 1440×1100 CSS viewport、DPR 1 分段實拍並無縫拼接為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide9-implementation-full-1440-v1.jpg`；PPT 第九頁標註區與實作正規化後合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide9-ppt-implementation-comparison-v1.jpg`。模板篩選器依紅字指示刪除，Projects 01 的三欄結構、卡片比例、24px 圓角、圖下標題／說明與深色頁尾維持一致；把模板英文字與圖片換成甲方正式內容屬必要差異，未留下可執行的 P0／P1／P2。
+- **字體、內容與版面**：瀏覽器實測 Hero 為 Noto Serif TC Medium 80/76.19px、麵包屑為 Noto Sans TC 15/22px；卡片標題為 Noto Serif TC Medium 25/36px，說明為 Noto Sans TC 15/23px。1440px 下三欄皆約 411.33px，八筆依 3／3／2 排列；八個 href 皆指向 SAKURA 官方 PDF，逐一 HEAD 驗證皆為 HTTP 200、`application/pdf`。
+- **互動、手機與錯誤**：Hover 實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide9-hover-1440-v1.png`，實測「開啟型錄」由隱藏轉為可見、封面縮放至 1.05、標題轉為 `#CAA05C`；鍵盤聚焦共用相同回饋。390×844 實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide9-mobile-390-v1.png`，八張卡均為 282px 單欄、右緣 297px，快捷列左緣 318px，保留 21px 間距，`scrollWidth === clientWidth === 390`。全部圖片載入、破圖 0、可見 alert 0、console warn/error 0。
+- **建置結果**：`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 全數通過；build 只有專案既有的 Tailwind sourcemap 警告。
+- **final result: passed**
+
+## 1.3.3 中島廚房餐桌如何規劃（2026-08-21 新版調整）
+
+- 依 `2026.08.15_1.0設計案例_調整.pptx` 第七頁校正 `/knowledge/design/knowledge31`，保留既有完整文章資料、指定 YouTube 影片與正式延伸文章，不以簡報截圖代替網頁內容。
+- 文章頁套用 PPT 指定的 Noto Sans TC／Noto Serif TC 字級層級、松竹店 Breadcrumb 情境底圖、40px 標題至主圖間距，文末兩條跳轉文字加粗；底部推薦改用 Antra Home 07 三欄結構。
+- 1.3.2 與 1.3.3 共用同一組 PPT 文章模板規則，避免兩頁字體與間距再次分岔；1.3.2 的案例雙欄仍只作用於插座文章，不會套到本頁。
+
+### 1.3.3 新版 Design QA
+
+- **來源與狀態**：PPT 第七頁完整標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-07.png`，內嵌原頁完整截圖為 `assets/ppt/media/image28.png`（2880×11754），指定 YouTube 畫面參考為 `assets/ppt/media/image29.png`（1606×1068），Home 07 參考為 `assets/ppt/media/image20.png`（1334×638）。驗證狀態為文章預設內容、影片未播放／播放中，以及底部延伸文章全部顯示。
+- **同畫面比對**：桌機以 1440×1100 CSS viewport、DPR 1 實拍；原頁頂部正規化後與新版首屏合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide7-top-comparison-v1.png`，文章末段／影片合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide7-video-comparison-v1.png`，Home 07 同尺寸比較為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide7-home07-comparison-v1.png`。PPT 指定的松竹店 Hero、38px 大標與 Home 07 屬必要差異；首輪未發現可執行的 P0／P1／P2。
+- **字體、節奏與色彩**：瀏覽器實測麵包屑為 Noto Sans TC 15/22px、文章大標為 Noto Serif TC Medium 38/50px、章節標為 Noto Serif TC Medium 25/36px、子標為 Noto Sans TC Medium 20/30px、內文與文末連結為 Noto Sans TC 15/25px；Meta 到大標 15px、大標到首圖 40px，文章與主圖維持 930px 版心。沿用 `#F6F6F6`、`#1C1C1D`、`#59585D`、`#CAA05C` 與 24px 圓角。
+- **影片與跳轉**：播放按鈕實際載入 `https://www.youtube-nocookie.com/embed/ervCQo-l2T4?autoplay=1&rel=0&playsinline=1`，iframe 正常播放且沒有錯誤狀態；兩條文末跳轉維持甲方提供的正式外部網址、700 字重與 `noopener noreferrer`。Home 07 的 CTA 與兩張正式文章卡皆保留可操作連結。
+- **Home 07、手機與錯誤**：桌機推薦區為 1380×660.96px 三欄，左側模板標題 52/55.12px，兩張正式文章圖皆為 418.55×298.96px、1.4:1。390×844 手機實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide7-mobile-top-390.png`、`/private/tmp/sakura-ai-kitchen.A3GeB0/slide7-mobile-video-390.png` 與 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide7-mobile-related-390.png`；文章右緣 297px、快捷列左緣 318px，保留 21px 間距，`scrollWidth === clientWidth === 390`。全頁 29 張圖片全部載入、破圖 0、可見 alert 0、console warn/error 0。
+- **建置結果**：`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 全數通過；build 只有專案既有的 Tailwind sourcemap 警告。
+- **final result: passed**
+
 ## 1.3.2 廚房插座該如何規劃（2026-08-21 新版調整）
 
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第六頁重新校正 `/knowledge/design/kitchen-outlet-planning`，沿用正式 Vue 文章內容與甲方三張案例素材，不以 PPT 或官網截圖冒充可閱讀頁面。
