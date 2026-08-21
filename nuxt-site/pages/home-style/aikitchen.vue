@@ -102,7 +102,7 @@ useSeoMeta({
 
 <template>
   <main class="ai-kitchen-page">
-    <section aria-labelledby="ai-kitchen-hero-title" class="ai-hero">
+    <section aria-labelledby="ai-kitchen-hero-title" class="ai-hero hero-includes-header">
       <div class="absolute inset-0 bg-[#6f6d69]" aria-hidden="true" />
       <div class="absolute inset-0">
         <InternalBrandImage :src="data.heroSlides[previousHero]" alt="AI Kitchen 廚房空間" eager class="h-full w-full" />
@@ -177,7 +177,7 @@ useSeoMeta({
     <section id="ai-kitchen-intro" aria-labelledby="ai-intro-title" class="ai-intro">
       <div class="page-container">
         <div class="ai-section-heading">
-          <span v-reveal="{ anim: 'opalMoveRight' }" class="ai-section-kicker"><i /> Kitchen Collections</span>
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Kitchen Collections" />
           <h2 v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">Creative Projects That<br><span>Define Our Style</span></h2>
         </div>
         <div class="ai-intro__content">
@@ -299,11 +299,7 @@ useSeoMeta({
     <section aria-labelledby="cases-heading" class="ai-cases">
       <div class="page-container">
         <div class="ai-cases__heading">
-          <div class="ai-cases__heading-label">
-            <p v-reveal="{ anim: 'opalMoveRight' }"><span aria-hidden="true"></span>Recommended Cases</p>
-            <i class="ai-cases__rule ai-cases__rule--horizontal" aria-hidden="true"></i>
-            <i class="ai-cases__rule ai-cases__rule--vertical" aria-hidden="true"></i>
-          </div>
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Recommended Cases" class="ai-cases__heading-label" />
           <h2 id="cases-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 90 }">Take A Look At <span>Our Latest Blog</span> &amp; Articles.</h2>
         </div>
         <div
@@ -376,7 +372,7 @@ useSeoMeta({
 .ai-section-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .ai-section-kicker { display: inline-flex; width: fit-content; align-items: center; gap: 8px; margin-top: 10px; border: 1px solid #e3e3e8; border-radius: 24px; padding: 7px 13px 7px 10px; font-family: var(--font-cjk-sans); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
 .ai-section-kicker i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
-.ai-section-heading h2 { max-width: 900px; margin: 0; font-size: 60px; line-height: 64px; text-transform: none; }
+.ai-section-heading h2 { max-width: 900px; margin: 70px 0 0; font-size: 60px; line-height: 64px; text-transform: none; }
 .ai-section-heading h2 span, .ai-centered-heading h2 span { color: #caa05c; }
 .ai-intro__content { display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 56%); gap: 70px; margin-top: 80px; padding-top: 50px; border-top: 1px solid #e3e3e8; }
 .ai-intro__content h3 { max-width: 520px; margin: 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; letter-spacing: .02em; text-transform: none; }
@@ -527,6 +523,7 @@ useSeoMeta({
   .ai-hero__watermark { right: 15px; bottom: -26px; font-size: 100px; }
   .ai-intro, .ai-finishes, .ai-equipment, .ai-cases { padding: 60px 0; }
   .ai-section-heading { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+  .ai-section-heading h2 { margin-top: 0; }
   .ai-section-heading h2, .ai-centered-heading h2, .ai-centered-heading--compact h2 { font-size: 32px; line-height: 37px; }
   .ai-intro__content { display: block; margin-top: 45px; padding-top: 35px; text-align: center; }
   .ai-intro__content h3 { margin-inline: auto; }

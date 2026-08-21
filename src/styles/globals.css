@@ -33,6 +33,13 @@
 }
 
 :root {
+  /* ── 全站結構與內頁標題 token ── */
+  --site-header-height: 60px;
+  --font-weight-cjk-serif-emphasis: 600;
+  --template-heading-line: #e3e3e8;
+  --template-heading-dot: #caa05c;
+  --template-heading-dot-size: 5px;
+
   /* ── Antra 模板色盤（單一來源；JS 端見 src/theme/cis.ts）── */
   --gold: #caa05c;
   --gold-strong: #caa05c;

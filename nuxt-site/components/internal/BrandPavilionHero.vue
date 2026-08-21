@@ -16,7 +16,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape))
 </script>
 
 <template>
-  <section class="pavilion-single-hero" aria-labelledby="pavilion-hero-title">
+  <section class="pavilion-single-hero hero-includes-header" aria-labelledby="pavilion-hero-title">
     <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="pavilion-single-hero__rail ev">
       <InternalBrandImage
         src="/section-5/brand-pavilion/banner.jpg"

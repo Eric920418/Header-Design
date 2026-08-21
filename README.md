@@ -1159,3 +1159,11 @@ final result: passed
 - **加盟說明會**：QR Code 恢復官網順序，置於報名連結上方並限制為原始 500px 寬，不再被共用媒體樣式放大至 930px；報名列顯示「報名連結＋完整網址＋立即點我報名」。台北／台中／高雄場次標題改為 PPT 指定的 `【地區加盟說明會場次】`、Noto Serif TC 18/28px，三張正式場次圖同樣維持約 500px 窄版置中。
 - **高雄品牌館**：首段介紹保留單欄；PPT 點名的張永杰董事長段落改為 Home Six 參考的左圖右文雙欄，左側使用同一段原官網現場圖、右側保留指定原文，既有 `opalMoveUp／opalScaleUp` 進場語彙不另造動畫。第二張 HOME in O.N.E 現場圖與其後核心價值／結語仍完整保留；767px 以下依閱讀順序改為圖片在上、文字在下。
 - **Design QA／建置**：PPT 第 10 頁的加盟頁與品牌館標註區已和 1280×720 實作動畫終態放入同一張比較板 `/private/tmp/slide10-design-qa-comparison.png`。本機實測加盟頁 QR 與三張場次圖皆為 500px、報名列確實在 QR 後、三個場次標題為 Noto Serif TC 18px；高雄品牌館指定段落落在 930px 版心內的 400.5／489.5px 雙欄，兩張文章圖均載入完成。兩頁 `scrollWidth === innerWidth`、Reveal 隱藏 0、console error／warning 0；`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過，production build 只保留 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 全站內頁版面一致性（2026-08-21）
+
+- **中文字重單一規格**：新增 `--font-weight-cjk-serif-emphasis: 600`；46 個正式內頁網址中，所有實際使用 Noto Serif TC、標準字級 18px 以上的中文標題、文章標題、卡名與產品名稱統一為 SemiBold。Noto Sans TC 正文、小於 18px 的文字與純英文 Cal Sans／Bodoni Moda／Libre Baskerville 不受影響；共用 Header 的「十大廚房系列」與隱私權頁標題同步修正。
+- **Hero 含主導覽高度**：60px Header 高度集中為 `--site-header-height`，固定導覽覆蓋於 Hero；首頁與全部內頁 Hero 使用 `hero-includes-header` 回到文件 `y=0`，並保留每個模板原本的 Hero 高度與內部比例。沒有 Hero 的 `/franchising/form` 仍從 `y=60` 開始，未額外裁切標題、麵包屑或圖片。
+- **30／70 標題共用元件**：新增 `InternalTemplateHeadingRail`，以 FAQ／品牌門市既有正確版型為唯一基準，統一橢圓外框、5px 金點、1px `#E3E3E8` 水平線與垂直線；支援亮／暗色、標準／緊湊密度及操作按鈕插槽。FAQ、品牌門市、服務流程、關於我們、品牌辨識、集團品牌館、加盟、建商、AI Kitchen、裝修指南與案例推薦共 13 組標題已遷移；服務流程補上 `Service Process` 小標。767px 以下隱藏十字線但保留膠囊小標。
+- **全站 QA**：在 1280×720、768×1024、390×844 三種實際 viewport 逐一開啟全部 46 個有效內頁網址，確認 Hero 文件座標、Noto Serif TC computed style、十字線 DOM／5px 金點／1px 線條、手機線條隱藏與膠囊保留、水平溢位、圖片載入及前端錯誤；三種尺寸結果皆為字重違規 0、裝飾缺件 0、水平溢位 0、已完成圖片錯誤 0、Nuxt error 0。首頁 Hero 實測保持 952px 且起點為 `y=0`；表單頁在三種尺寸皆從 `y=60` 開始。手機／平板規則沿用各頁既有斷點並由共用元件集中控制，不改路由、資料、API 或圖片素材。
+- **建置**：`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過；production build 只保留 Tailwind CSS v4 既有 sourcemap warning。

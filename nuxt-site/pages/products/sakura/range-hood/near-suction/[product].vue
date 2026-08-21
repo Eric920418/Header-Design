@@ -78,7 +78,7 @@ useSeoMeta({
 
 <template>
   <main class="product-detail-page">
-    <section class="product-detail-hero" aria-label="產品導覽">
+    <section class="product-detail-hero hero-includes-header" aria-label="產品導覽">
       <span class="product-detail-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="product-detail-hero__inner">
         <nav aria-label="麵包屑" class="product-detail-hero__trail">

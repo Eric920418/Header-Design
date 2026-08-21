@@ -53,7 +53,7 @@ useSeoMeta({
 
 <template>
   <main class="builder-catalogue-page">
-    <section class="builder-catalogue-hero" aria-labelledby="builder-catalogue-title">
+    <section class="builder-catalogue-hero hero-includes-header" aria-labelledby="builder-catalogue-title">
       <span class="builder-catalogue-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="builder-catalogue-hero__inner">
         <h1 id="builder-catalogue-title">建商專區型錄</h1>

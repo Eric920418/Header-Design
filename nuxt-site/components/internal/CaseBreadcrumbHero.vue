@@ -6,7 +6,7 @@ const parentRoute = computed(() => fromDesignInspiration.value ? '/design-inspir
 </script>
 
 <template>
-  <section class="case-breadcrumb-hero" aria-label="案例門市麵包屑">
+  <section class="case-breadcrumb-hero hero-includes-header" aria-label="案例門市麵包屑">
     <div class="case-breadcrumb-hero__overlay" aria-hidden="true" />
     <nav aria-label="麵包屑" class="case-breadcrumb-hero__trail" v-reveal="{ anim: 'opalMoveUp' }">
       <NuxtLink to="/">首頁</NuxtLink>

@@ -21,7 +21,7 @@ useSeoMeta({
 
 <template>
   <main class="sakura-kitchen-page">
-    <section class="sakura-kitchen-hero-shell" aria-labelledby="sakura-kitchen-title">
+    <section class="sakura-kitchen-hero-shell hero-includes-header" aria-labelledby="sakura-kitchen-title">
       <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="sakura-kitchen-hero ev">
         <InternalBuilderImage
           src="/section-6/builders/sakura-kitchen/hero.jpeg"

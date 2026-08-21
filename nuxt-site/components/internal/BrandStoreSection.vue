@@ -2,11 +2,12 @@
   <section class="brand-store-section" aria-labelledby="brand-store-title">
     <div class="brand-store-rail internal-rail-safe">
       <header class="brand-store-heading">
-        <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-store-heading-aside ev">
-          <span class="brand-store-pill"><span aria-hidden="true" />Popular Queries</span>
-          <span class="brand-store-deco brand-store-deco-horizontal" aria-hidden="true" />
-          <span class="brand-store-deco brand-store-deco-vertical" aria-hidden="true" />
-        </div>
+        <InternalTemplateHeadingRail
+          v-reveal="{ anim: 'opalMoveRight' }"
+          label="Popular Queries"
+          data-ev="opalMoveRight"
+          class="brand-store-heading-aside ev"
+        />
         <div v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="brand-store-heading-copy ev">
           <h2 id="brand-store-title">Description. <span>Architecture<br />Process For</span> Exceptional Results</h2>
           <h3>全國最大廚具連鎖通路</h3>
@@ -32,13 +33,13 @@
 .brand-store-section { overflow: hidden; padding: 100px 30px 80px; background: #f6f6f6; }
 .brand-store-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-store-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
-.brand-store-heading-aside { position: relative; min-height: 250px; padding-top: 65px; }
+.brand-store-heading-aside { position: relative; min-height: 198px; padding-top: 70px; }
 .brand-store-pill { display: inline-flex; align-items: center; gap: 5px; padding: 8px 14px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 26px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
 .brand-store-pill > span { width: 5px; height: 5px; border-radius: 50%; background: #caa05c; }
 .brand-store-deco { position: absolute; display: block; border-color: #e3e3e8; }
 .brand-store-deco-horizontal { top: 117px; left: 30px; width: 300px; border-bottom: 1px solid #e3e3e8; }
 .brand-store-deco-vertical { top: 48px; right: 61px; height: 200px; border-right: 1px solid #e3e3e8; }
-.brand-store-heading-copy { padding-top: 60px; }
+.brand-store-heading-copy { padding-top: 70px; }
 .brand-store-heading h2 { width: min(850px, 100%); margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .brand-store-heading h2 span { color: #caa05c; }
 .brand-store-heading h3 { margin: 35px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }

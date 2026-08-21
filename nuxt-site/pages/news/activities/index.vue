@@ -14,7 +14,7 @@ useSeoMeta({
 
 <template>
   <main class="antra-activity-page">
-    <section class="antra-activity-breadcrumb" aria-labelledby="activity-page-title">
+    <section class="antra-activity-breadcrumb hero-includes-header" aria-labelledby="activity-page-title">
       <div class="antra-activity-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-activity-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="activity-page-title">優惠活動</h1>

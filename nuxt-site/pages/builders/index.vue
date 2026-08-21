@@ -25,7 +25,7 @@ const services = [
 
 <template>
   <main class="builders-page">
-    <section class="builders-hero" aria-labelledby="builders-title">
+    <section class="builders-hero hero-includes-header" aria-labelledby="builders-title">
       <span class="builders-hero__deco" aria-hidden="true" />
       <div class="builders-rail-wide builders-hero__inner internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="builders-hero__headline ev">
@@ -62,7 +62,7 @@ const services = [
     <section class="builders-capability" aria-labelledby="builders-capability-title">
       <div class="builders-rail internal-rail-safe">
         <header class="builders-section-heading builders-section-heading--split">
-          <span class="builders-pill"><i aria-hidden="true" />Built For Projects</span>
+          <InternalTemplateHeadingRail label="Built For Projects" />
           <div>
             <h2 id="builders-capability-title">Have A Project In <span>Mind? Let’s</span><br />Make It Happen</h2>
             <p>櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。</p>
@@ -202,6 +202,7 @@ const services = [
 .builders-team-card__status strong { display: flex; width: 34px; height: 34px; align-items: center; justify-content: center; border-radius: 50%; color: #1c1c1d; background: #caa05c; font-size: 12px; }
 .builders-capability { padding: 130px 30px 140px; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
+.builders-capability .builders-section-heading--split > div h2 { margin-top: 70px; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 17px; line-height: 27px; }
 .builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: 90px; }
 .builders-strength { display: flex; aspect-ratio: 1; flex-direction: column; align-items: center; justify-content: center; padding: 48px; border: 1px solid #caa05c; border-radius: 50%; text-align: center; background: rgb(255 255 255 / 86%); }
@@ -314,6 +315,7 @@ const services = [
   .builders-section-heading h2,
   .builders-lifetime h2,
   .builders-partners h2 { font-size: 41px; line-height: 46px; }
+  .builders-capability .builders-section-heading--split > div h2 { margin-top: 20px; }
   .builders-team__grid { grid-template-columns: 1fr; gap: 20px; }
   .builders-team-card > :deep(.builder-image) { aspect-ratio: 1 / 1.12; }
   .builders-strengths { grid-template-columns: 1fr; margin-top: 56px; }

@@ -39,7 +39,7 @@ useHead({
 
 <template>
   <main class="knowledge-article-page">
-    <section class="knowledge-article-breadcrumb" aria-label="廚房裝修指南麵包屑">
+    <section class="knowledge-article-breadcrumb hero-includes-header" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-article-breadcrumb__overlay" aria-hidden="true" />
       <nav class="knowledge-article-breadcrumb__trail" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
         <NuxtLink to="/">首頁</NuxtLink>

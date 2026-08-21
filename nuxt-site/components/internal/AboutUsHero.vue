@@ -1,5 +1,5 @@
 <template>
-  <section class="about-us-breadcrumb" aria-labelledby="about-us-page-title">
+  <section class="about-us-breadcrumb hero-includes-header" aria-labelledby="about-us-page-title">
     <InternalBrandImage
       src="/section-5/brand-pavilion/pavilion-taichung.jpg"
       alt="SAKURA 台中集團品牌館外觀"

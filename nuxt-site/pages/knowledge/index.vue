@@ -14,7 +14,7 @@ useSeoMeta({
 
 <template>
   <main class="kitchen-guide-page">
-    <section class="kitchen-guide-hero" aria-labelledby="kitchen-guide-page-title">
+    <section class="kitchen-guide-hero hero-includes-header" aria-labelledby="kitchen-guide-page-title">
       <span class="kitchen-guide-hero__overlay" aria-hidden="true" />
       <div class="kitchen-guide-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="kitchen-guide-page-title">廚房裝修指南</h1>
@@ -29,11 +29,7 @@ useSeoMeta({
     <section class="kitchen-guide-newsroom" aria-labelledby="kitchen-guide-heading">
       <div class="kitchen-guide-newsroom__rail">
         <header class="kitchen-guide-heading">
-          <div v-reveal="{ anim: 'opalMoveRight' }" class="kitchen-guide-heading__label">
-            <span class="kitchen-guide-heading__pill"><i aria-hidden="true" />Kitchen Knowledge</span>
-            <span class="kitchen-guide-heading__horizontal" aria-hidden="true" />
-            <span class="kitchen-guide-heading__vertical" aria-hidden="true" />
-          </div>
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Kitchen Knowledge" class="kitchen-guide-heading__label" />
           <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <span class="kitchen-guide-heading__zh">廚房裝修指南</span>
             <span class="kitchen-guide-heading__en" lang="en">Kitchen Knowledge</span>
@@ -156,8 +152,8 @@ useSeoMeta({
   z-index: 1;
   grid-column: 1;
   grid-row: 1;
-  min-height: 128px;
-  padding-top: 4px;
+  min-height: 198px;
+  padding-top: 70px;
 }
 
 .kitchen-guide-heading__pill {
@@ -201,13 +197,13 @@ useSeoMeta({
 }
 
 .kitchen-guide-heading h2 {
-  grid-column: 1 / -1;
+  grid-column: 2;
   grid-row: 1;
   max-width: 760px;
-  margin: 0;
+  margin: 70px 0 0;
   color: #1c1c1d;
-  justify-self: center;
-  text-align: center;
+  justify-self: start;
+  text-align: left;
 }
 
 .kitchen-guide-heading__zh,
@@ -415,7 +411,9 @@ useSeoMeta({
   .kitchen-guide-heading__vertical { display: none; }
 
   .kitchen-guide-heading h2 {
+    margin: 20px 0 0;
     padding: 0;
+    text-align: center;
   }
 
   .kitchen-guide-heading__zh { font-size: 30px; line-height: 40px; }

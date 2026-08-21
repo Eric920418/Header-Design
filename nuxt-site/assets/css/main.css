@@ -5,6 +5,15 @@
 .internal-rail-safe {
   padding-right: 86px;
 }
+
+.site-header-spacer {
+  height: var(--site-header-height);
+}
+
+/* Hero 的設計高度已包含 60px 主導覽；導覽固定覆蓋在首屏上方。 */
+.hero-includes-header {
+  margin-top: calc(-1 * var(--site-header-height));
+}
 :root {
   color-scheme: light;
 }
@@ -32,8 +41,113 @@ select {
 }
 
 .page-shell {
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - var(--site-header-height));
   background: #f6f6f6;
+}
+
+/*
+ * 中文襯線字的共用強調規則。
+ * 只收斂實際使用 Noto Serif TC、且標準字級 >= 18px 的語意標題；
+ * 英文模板字、中文無襯線正文與小字維持原本設定。
+ */
+:where(
+  .about-services__question,
+  .about-us-breadcrumb__inner h1,
+  .activity-detail-body h4,
+  .activity-related__text-box h3,
+  .ai-case-card__body h3,
+  .ai-intro__content h3,
+  .ai-suite-details h3,
+  .ai-suite-details__equipment-title,
+  .antra-activity-breadcrumb__inner h1,
+  .antra-activity-post__content h2,
+  .antra-breadcrumb__inner h1,
+  .antra-gallery-breadcrumb__inner h1,
+  .antra-latest-breadcrumb__inner h1,
+  .antra-latest-post__content h2,
+  .antra-news-breadcrumb__inner h1,
+  .antra-news-post__title a,
+  .antra-news-widget h2,
+  .antra-store-card__title-link h2,
+  .antra-video-breadcrumb__inner h1,
+  .antra-video-post__content h2,
+  .application-form__header h2,
+  .banner-process-title,
+  .brand-benefit-copy h3,
+  .brand-benefit-overlay__copy h3,
+  .brand-family-heading h3,
+  .brand-store-heading-copy h3,
+  .builder-catalogue-dialog__copy h2,
+  .builder-catalogue-hero__inner h1,
+  .builder-form__header h3,
+  .builders-contact__copy h3,
+  .builders-contact__copy h3 span,
+  .builders-lifetime__content h2,
+  .builders-lifetime__content h2 span,
+  .builders-partners__heading h2,
+  .builders-service h3,
+  .builders-strength h3,
+  .case-detail-header h1,
+  .case-detail-navigation__next strong,
+  .case-detail-navigation__previous strong,
+  .case-detail-reviews h2,
+  .case-detail-story-block h2,
+  .case-detail-widget h2,
+  .case-detail-widget h3,
+  .case-recommendation-card h3,
+  .catalogue-card__text strong,
+  .catalogue-hero__inner h1,
+  .design-project-card__text a,
+  .design-projects-hero__inner h1,
+  .download-document__heading h2,
+  .download-document__heading span,
+  .download-hero__inner h1,
+  .entry-title,
+  .franchise-application__header h1,
+  .franchise-news-row h3,
+  .franchise-post__content h3,
+  .kitchen-guide-featured__content h3 a,
+  .kitchen-guide-heading__zh,
+  .kitchen-guide-hero__inner h1,
+  .kitchen-guide-list-item__content h3 a,
+  .knowledge-article__header h1,
+  .knowledge-copy-block h2,
+  .knowledge-detail__header h1,
+  .knowledge-detail-section h2,
+  .knowledge-related-home07__card h3,
+  .latest-detail-franchise-link a,
+  .latest-detail-franchise-link span,
+  .latest-detail-section h4,
+  .latest-related__text-box h3,
+  .media-related__text-box h3,
+  .near-suction-catalogue__copy h2 span,
+  .near-suction-hero__inner h1,
+  .near-suction-product-card__text h3,
+  .near-suction-products h2 span,
+  .near-suction-series h2,
+  .product-catalogue__copy h2 span,
+  .product-catalogue-card__text strong,
+  .product-catalogue-hero__inner h1,
+  .product-model,
+  .product-overview__content > h1,
+  .product-specifications-dialog__heading h2,
+  .project-block__content h3,
+  .project-text-box h3,
+  .related-product-card__copy strong,
+  .related-products__heading h2 strong,
+  .sakura-kitchen-heading em,
+  .sakura-kitchen-heading h2,
+  .sakura-kitchen-series__card h3,
+  .sakura-product-card__text h3,
+  .sakura-product-hero__inner h1,
+  .sakura-series-card__text h3,
+  .sakura-series-catalogue__copy h2 span,
+  .sakura-series-categories h2,
+  .sakura-series-hero__inner h1,
+  .sakura-series-products h2 span,
+  .service-flow-block__heading h2
+) {
+  font-weight: var(--font-weight-cjk-serif-emphasis) !important;
 }
 
 .page-container {

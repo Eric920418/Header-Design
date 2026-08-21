@@ -41,8 +41,8 @@ useSeoMeta({
           </div>
 
           <section class="pavilion-gallery" aria-labelledby="pavilion-gallery-title">
-            <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
-              <span class="pavilion-gallery-kicker"><i aria-hidden="true" />Our Gallery</span>
+            <header data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
+              <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Gallery" />
               <h2 id="pavilion-gallery-title">Gallery Of Inspiring <span>Interior</span> Designs</h2>
             </header>
 
@@ -122,7 +122,7 @@ useSeoMeta({
 .pavilion-gallery-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; margin-bottom: 53px; }
 .pavilion-gallery-kicker { display: inline-flex; width: fit-content; align-items: center; gap: 7px; padding: 7px 14px; border: 1px solid #7272722e; border-radius: 24px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 12px; line-height: 14px; text-transform: uppercase; }
 .pavilion-gallery-kicker i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
-.pavilion-gallery-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.pavilion-gallery-heading h2 { margin: 70px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .pavilion-gallery-heading h2 span { color: #caa05c; }
 .pavilion-filter { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-bottom: 40px; }
 .pavilion-filter button { min-height: 46px; padding: 9px 18px; border: 1px solid #e3e3e8; border-radius: 100px; color: #59585d; background: #fff; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; text-align: left; cursor: pointer; transition: color .3s ease, border-color .3s ease, background .3s ease; }

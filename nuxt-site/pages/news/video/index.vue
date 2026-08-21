@@ -14,7 +14,7 @@ useSeoMeta({
 
 <template>
   <main class="antra-video-page">
-    <section class="antra-video-breadcrumb" aria-labelledby="video-page-title">
+    <section class="antra-video-breadcrumb hero-includes-header" aria-labelledby="video-page-title">
       <div class="antra-video-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-video-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="video-page-title">媒體影音</h1>

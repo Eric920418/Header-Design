@@ -20,11 +20,12 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
   <section :aria-labelledby="sectionId" class="antra-faq-section">
     <div class="antra-faq-rail" :class="{ 'internal-rail-safe': safeRail }">
       <header class="antra-faq-heading">
-        <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="antra-faq-heading__aside ev">
-          <span class="antra-faq-pill"><span aria-hidden="true" />Popular Queries</span>
-          <span class="antra-faq-deco antra-faq-deco--horizontal" aria-hidden="true" />
-          <span class="antra-faq-deco antra-faq-deco--vertical" aria-hidden="true" />
-        </div>
+        <InternalTemplateHeadingRail
+          v-reveal="{ anim: 'opalMoveRight' }"
+          label="Popular Queries"
+          data-ev="opalMoveRight"
+          class="antra-faq-heading__aside ev"
+        />
         <h2 :id="sectionId" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="antra-faq-title ev">
           Quick And Clear <span>Answers<br /> To Your Key</span> Questions
         </h2>

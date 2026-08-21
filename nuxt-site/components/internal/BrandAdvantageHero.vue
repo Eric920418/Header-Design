@@ -3,7 +3,7 @@ import { ArrowDown } from 'lucide-vue-next'
 </script>
 
 <template>
-  <section class="brand-h8-hero" aria-labelledby="brand-h8-title">
+  <section class="brand-h8-hero hero-includes-header" aria-labelledby="brand-h8-title">
     <div class="brand-h8-intro">
       <div class="brand-h8-intro__rail">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">

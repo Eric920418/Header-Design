@@ -21,7 +21,7 @@ onBeforeUnmount(() => timer && clearInterval(timer))
 </script>
 
 <template>
-  <section class="hero-template-section relative w-full overflow-hidden bg-[#9F9FA4]" aria-labelledby="hero-title">
+  <section class="hero-template-section hero-includes-header relative w-full overflow-hidden bg-[#9F9FA4]" aria-labelledby="hero-title">
     <div class="hidden" aria-hidden="true"><img v-for="image in slides" :key="image" :src="image" alt="" /></div>
     <div :key="`hero-${activeSlide}`" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
       <span v-if="previousSlide === null" class="absolute inset-0 bg-[#9F9FA4]" />

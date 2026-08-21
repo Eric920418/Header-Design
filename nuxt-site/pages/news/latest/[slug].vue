@@ -42,7 +42,7 @@ useHead({
       'latest-detail-page--kaohsiung-brand-hall': isKaohsiungBrandHall,
     }"
   >
-    <section class="latest-detail-breadcrumb" aria-label="最新消息麵包屑">
+    <section class="latest-detail-breadcrumb hero-includes-header" aria-label="最新消息麵包屑">
       <div class="latest-detail-breadcrumb__overlay" aria-hidden="true" />
       <nav aria-label="麵包屑" class="latest-detail-breadcrumb__trail" v-reveal="{ anim: 'opalMoveUp' }">
         <NuxtLink to="/">首頁</NuxtLink>

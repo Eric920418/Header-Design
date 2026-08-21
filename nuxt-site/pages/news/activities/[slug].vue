@@ -31,7 +31,7 @@ useHead({
 
 <template>
   <main class="activity-detail-page">
-    <section class="activity-detail-breadcrumb" aria-label="優惠活動麵包屑">
+    <section class="activity-detail-breadcrumb hero-includes-header" aria-label="優惠活動麵包屑">
       <div class="activity-detail-breadcrumb__overlay" aria-hidden="true" />
       <nav aria-label="麵包屑" class="activity-detail-breadcrumb__trail" v-reveal="{ anim: 'opalMoveUp' }">
         <NuxtLink to="/">首頁</NuxtLink>

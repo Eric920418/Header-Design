@@ -38,7 +38,7 @@ const scrollMarketing = (direction: -1 | 1) => {
 <template>
   <main class="franchise-page">
     <!-- Antra Home 05 / Banner Top / Elementor container 15c08dc -->
-    <section id="introduction" class="franchise-hero elementor-15c08dc" aria-labelledby="franchise-page-title">
+    <section id="introduction" class="franchise-hero hero-includes-header elementor-15c08dc" aria-labelledby="franchise-page-title">
       <InternalFranchiseImage src="/section-6/franchise/hero-building.jpg" alt="SAKURA KITCHEN 櫻花整體廚房門市建築外觀" eager class="franchise-hero__background" />
       <span class="franchise-hero__overlay" aria-hidden="true" />
       <div class="source-rail-wide franchise-hero__inner internal-rail-safe">
@@ -65,11 +65,11 @@ const scrollMarketing = (direction: -1 | 1) => {
     <section class="franchise-about elementor-df512f3" aria-labelledby="franchise-story-title">
       <div class="source-rail-wide internal-rail-safe">
         <div class="franchise-about__grid">
-          <aside class="source-heading-rail">
-            <span class="source-pill"><i aria-hidden="true" />About SAKURA</span>
-            <span class="source-heading-rail__line" aria-hidden="true" />
-            <NuxtLink to="/franchising/download" class="source-round-link source-round-link--outline"><Download aria-hidden="true" /> 加盟資料下載</NuxtLink>
-          </aside>
+          <InternalTemplateHeadingRail label="About SAKURA" class="source-heading-rail">
+            <template #actions>
+              <NuxtLink to="/franchising/download" class="source-round-link source-round-link--outline"><Download aria-hidden="true" /> 加盟資料下載</NuxtLink>
+            </template>
+          </InternalTemplateHeadingRail>
 
           <div class="franchise-about__content">
             <h2 id="franchise-story-title">We Shape <span>Interior Designs, Crafting</span> Timeless And Inspiring Spaces</h2>
@@ -129,10 +129,7 @@ const scrollMarketing = (direction: -1 | 1) => {
     <section class="franchise-projects elementor-1bcdd25" aria-labelledby="franchise-marketing-title">
       <div class="source-rail internal-rail-safe">
         <header class="source-split-heading">
-          <div class="source-heading-rail source-heading-rail--compact">
-            <span class="source-pill"><i aria-hidden="true" />Our Projects</span>
-            <span class="source-heading-rail__line" aria-hidden="true" />
-          </div>
+          <InternalTemplateHeadingRail label="Our Projects" density="compact" class="source-heading-rail source-heading-rail--compact" />
           <div>
             <h2 id="franchise-marketing-title">Creative <span>Projects That Define</span> Our Style</h2>
             <p>集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。</p>

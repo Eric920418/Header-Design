@@ -90,7 +90,7 @@ useSeoMeta({
 
 <template>
   <main class="design-inspiration-page">
-    <section class="design-projects-hero" aria-labelledby="design-projects-title">
+    <section class="design-projects-hero hero-includes-header" aria-labelledby="design-projects-title">
       <span class="design-projects-hero__overlay" aria-hidden="true" />
       <div class="design-projects-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="design-projects-title">設計靈感</h1>

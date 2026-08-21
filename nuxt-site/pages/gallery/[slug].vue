@@ -167,10 +167,7 @@ useHead({
 
         <section class="case-detail-related" aria-labelledby="related-cases-title">
           <div class="case-detail-related__heading">
-            <div class="case-detail-related__label-wrap" v-reveal="{ anim: 'opalMoveRight' }">
-              <span class="case-detail-related__eyebrow"><i aria-hidden="true" />straight from the newsroom</span>
-              <span class="case-detail-related__line" aria-hidden="true" />
-            </div>
+            <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="straight from the newsroom" class="case-detail-related__label-wrap" />
             <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }">Take a look at our latest blog &amp; articles.</h2>
           </div>
           <div ref="relatedViewport" class="case-detail-related__viewport" aria-label="相關案例輪播">

@@ -9,7 +9,7 @@ useSeoMeta({
 
 <template>
   <main>
-    <section class="antra-breadcrumb" aria-labelledby="service-page-title">
+    <section class="antra-breadcrumb hero-includes-header" aria-labelledby="service-page-title">
       <div class="antra-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="service-page-title">服務流程</h1>
@@ -22,7 +22,7 @@ useSeoMeta({
     <section aria-labelledby="service-intro-title" class="antra-service-intro">
       <div class="antra-service-intro__rail">
         <header class="antra-service-intro__heading">
-          <div aria-hidden="true" />
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Service Process" />
           <div v-reveal="{ anim: 'opalMoveLeft' }">
             <h2 id="service-intro-title">Description <span>Architecture<br />Process</span> For Exceptional Results.</h2>
             <p>堅持用專業的服務，依照您的需求提供設計，希望以更完整、更貼心的服務，讓您最滿意。</p>
@@ -113,7 +113,7 @@ useSeoMeta({
 }
 
 .antra-service-intro__heading > div:last-child {
-  padding: 42px 0 30px;
+  padding: 70px 0 30px;
 }
 
 .antra-service-intro h2 {
@@ -159,7 +159,7 @@ useSeoMeta({
   .antra-breadcrumb { min-height: 285px; }
   .antra-breadcrumb__inner { padding-block: 80px; }
   .antra-service-intro { padding-block: 80px; }
-  .antra-service-intro__heading > div:last-child { padding: 40px 0; }
+  .antra-service-intro__heading > div:last-child { padding: 70px 0 40px; }
   .antra-service-intro h2 { font-size: 46px; line-height: 52px; }
   .antra-service-video { padding-bottom: 80px; }
 }

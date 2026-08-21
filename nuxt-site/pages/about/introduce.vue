@@ -72,9 +72,7 @@ useSeoMeta({
     <section class="about-services" aria-labelledby="about-services-title">
       <div class="about-rail">
         <header class="about-services__heading">
-          <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev">
-            <span class="about-pill"><i aria-hidden="true" />關於我們</span>
-          </div>
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="關於我們" data-ev="opalMoveRight" class="ev" />
           <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">
             Explore Our Comprehensive<br /><span>Interior Design</span> Services
           </h2>
@@ -196,9 +194,7 @@ useSeoMeta({
     <section class="about-identity" aria-labelledby="about-identity-title">
       <div class="about-identity__rail">
         <header class="about-identity__heading">
-          <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev">
-            <span class="about-pill"><i aria-hidden="true" />專屬品牌辨識</span>
-          </div>
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="專屬品牌辨識" data-ev="opalMoveRight" class="ev" />
           <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">
             Gallery Of Inspiring<br /><span>Interior</span> Designs
           </h2>
@@ -248,7 +244,7 @@ useSeoMeta({
 
 .about-services { padding: 100px 30px 110px; background: #f6f6f6; }
 .about-services__heading { display: grid; grid-template-columns: 30% 70%; align-items: start; margin-bottom: 58px; }
-.about-services__heading h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.about-services__heading h2 { margin: 70px 0 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .about-services__heading h2 span { color: #caa05c; }
 .about-services__panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; }
 .about-services__visual { position: relative; min-height: 610px; overflow: hidden; border-radius: 24px; background: #1c1c1d; }
@@ -315,7 +311,7 @@ useSeoMeta({
 .about-identity { padding: 120px 30px 124px; background: #fff; }
 .about-identity__rail { width: min(1410px, 100%); margin-inline: auto; }
 .about-identity__heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
-.about-identity__heading h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.about-identity__heading h2 { margin: 70px 0 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .about-identity__heading h2 span { color: #caa05c; }
 .about-identity__description { width: min(930px, 100%); margin: -25px auto 52px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 26px; text-align: center; }
 .about-identity__grid { display: flex; gap: 30px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; scroll-snap-type: x mandatory; }

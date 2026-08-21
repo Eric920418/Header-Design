@@ -21,7 +21,7 @@ useSeoMeta({ title: '隱私權政策｜SAKURA 整體廚房', description: '台�
       <article class="internal-rail-safe mx-auto w-[calc(100%_-_30px)] max-w-[980px] rounded-[24px] bg-white p-6 shadow-sm sm:w-[calc(100%_-_60px)] sm:p-12 lg:p-16">
         <p class="border-b border-[#E3E3E8] pb-8 text-[#59585D]">台灣櫻花股份有限公司隱私權條款</p>
         <section v-for="(section, index) in sections" :key="section.title" class="mt-10" :aria-labelledby="`privacy-${index}`">
-          <h2 :id="`privacy-${index}`" class="font-display text-2xl leading-8 text-[#1C1C1D]"><span class="mr-1 text-[#CAA05C]">{{ numbers[index] }}</span>{{ section.title }}</h2>
+          <h2 :id="`privacy-${index}`" class="font-display text-2xl font-semibold leading-8 text-[#1C1C1D]"><span class="mr-1 font-semibold text-[#CAA05C]">{{ numbers[index] }}</span>{{ section.title }}</h2>
           <p v-for="paragraph in section.paragraphs || []" :key="paragraph" class="mt-4 text-[15px] leading-8 text-[#59585D]">{{ paragraph }}</p>
           <ul v-if="section.items" class="mt-4 space-y-3"><li v-for="item in section.items" :key="item" class="relative pl-6 text-[15px] leading-8 text-[#59585D]"><span class="absolute left-1 top-[13px] h-1.5 w-1.5 rounded-full bg-[#CAA05C]" />{{ item }}</li></ul>
         </section>

@@ -44,7 +44,7 @@ useHead({
       'knowledge-detail-page--kitchen-island': isKitchenIslandArticle,
     }"
   >
-    <section class="knowledge-detail-breadcrumb" aria-label="廚房裝修指南麵包屑">
+    <section class="knowledge-detail-breadcrumb hero-includes-header" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-detail-breadcrumb__overlay" aria-hidden="true" />
       <nav class="knowledge-detail-breadcrumb__trail" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
         <NuxtLink to="/">首頁</NuxtLink>

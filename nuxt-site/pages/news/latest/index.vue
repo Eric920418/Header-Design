@@ -14,7 +14,7 @@ useSeoMeta({
 
 <template>
   <main class="antra-latest-page">
-    <section class="antra-latest-breadcrumb" aria-labelledby="latest-page-title">
+    <section class="antra-latest-breadcrumb hero-includes-header" aria-labelledby="latest-page-title">
       <div class="antra-latest-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-latest-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="latest-page-title">最新消息</h1>
