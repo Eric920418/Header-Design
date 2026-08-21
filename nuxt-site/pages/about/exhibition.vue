@@ -41,7 +41,7 @@ useSeoMeta({
           </div>
 
           <section class="pavilion-gallery" aria-labelledby="pavilion-gallery-title">
-            <header data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
+            <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
               <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Gallery" />
               <h2 id="pavilion-gallery-title">Gallery Of Inspiring <span>Interior</span> Designs</h2>
             </header>
@@ -83,7 +83,7 @@ useSeoMeta({
             </div>
           </section>
 
-          <section class="pavilion-copy-block pavilion-copy-block--last" aria-labelledby="pavilion-styles-title">
+          <section v-reveal="{ anim: 'opalMoveUp' }" class="pavilion-copy-block pavilion-copy-block--last" aria-labelledby="pavilion-styles-title">
             <h2 id="pavilion-styles-title">Exploring Design Styles</h2>
             <h3 class="pavilion-notes-title">注意事項</h3>
             <ol class="pavilion-notes">

@@ -74,7 +74,7 @@ useSeoMeta({
 
     <section class="near-suction-series" aria-labelledby="near-suction-series-title">
       <div class="near-suction-rail internal-rail-safe">
-        <h2 id="near-suction-series-title">除油煙機系列</h2>
+        <h2 id="near-suction-series-title" v-reveal="{ anim: 'opalMoveUp' }">除油煙機系列</h2>
         <div class="near-suction-series__viewport" role="region" aria-label="除油煙機八個系列名稱">
           <div class="near-suction-series__track">
             <ul

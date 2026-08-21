@@ -177,7 +177,7 @@ useSeoMeta({
 
     <section class="related-products" aria-labelledby="related-products-title">
       <div class="product-detail-rail internal-rail-safe">
-        <div class="related-products__heading">
+        <div v-reveal="{ anim: 'opalMoveUp' }" class="related-products__heading">
           <div>
             <span>KITCHEN PRODUCT</span>
             <h2 id="related-products-title">

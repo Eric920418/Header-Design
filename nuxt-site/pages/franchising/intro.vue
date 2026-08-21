@@ -65,14 +65,14 @@ const scrollMarketing = (direction: -1 | 1) => {
     <section class="franchise-about elementor-df512f3" aria-labelledby="franchise-story-title">
       <div class="source-rail-wide internal-rail-safe">
         <div class="franchise-about__grid">
-          <InternalTemplateHeadingRail label="About SAKURA" class="source-heading-rail">
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="About SAKURA" class="source-heading-rail">
             <template #actions>
               <NuxtLink to="/franchising/download" class="source-round-link source-round-link--outline"><Download aria-hidden="true" /> 加盟資料下載</NuxtLink>
             </template>
           </InternalTemplateHeadingRail>
 
           <div class="franchise-about__content">
-            <h2 id="franchise-story-title">We Shape <span>Interior Designs, Crafting</span> Timeless And Inspiring Spaces</h2>
+            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">We Shape <span>Interior Designs, Crafting</span> Timeless And Inspiring Spaces</h2>
             <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="franchise-about__video ev">
               <InternalFranchiseVideo video-id="sAuAjtpvZYk" title="SAKURA KITCHEN 店經理的創業故事" />
             </div>
@@ -100,7 +100,7 @@ const scrollMarketing = (direction: -1 | 1) => {
     <section id="advantages" class="franchise-advantages elementor-158f4e8" aria-labelledby="franchise-advantage-title">
       <div class="source-rail internal-rail-safe">
         <div class="franchise-advantages__layout">
-          <header class="franchise-advantages__intro">
+          <header v-reveal="{ anim: 'opalMoveRight' }" class="franchise-advantages__intro">
             <span class="source-pill"><i aria-hidden="true" />Franchise Advantages</span>
             <h2 id="franchise-advantage-title">Take A Look At<br /><span>Our Latest Blog</span><br />&amp; Articles.</h2>
             <p>加盟創業首選品牌。從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。</p>
@@ -129,8 +129,8 @@ const scrollMarketing = (direction: -1 | 1) => {
     <section class="franchise-projects elementor-1bcdd25" aria-labelledby="franchise-marketing-title">
       <div class="source-rail internal-rail-safe">
         <header class="source-split-heading">
-          <InternalTemplateHeadingRail label="Our Projects" density="compact" class="source-heading-rail source-heading-rail--compact" />
-          <div>
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Projects" density="compact" class="source-heading-rail source-heading-rail--compact" />
+          <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <h2 id="franchise-marketing-title">Creative <span>Projects That Define</span> Our Style</h2>
             <p>集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。</p>
           </div>
@@ -158,7 +158,7 @@ const scrollMarketing = (direction: -1 | 1) => {
     <!-- Antra Home 01 spacing + the official client process/qualification artwork -->
     <section id="franchise-process" class="franchise-process elementor-ef444c3" aria-labelledby="franchise-process-title">
       <div class="source-rail internal-rail-safe">
-        <header class="franchise-process__heading">
+        <header v-reveal="{ anim: 'opalMoveUp' }" class="franchise-process__heading">
           <span class="source-pill"><i aria-hidden="true" />How To Join</span>
           <h2 id="franchise-process-title">Join <span>Our Newsletter</span><br /><span>Stay</span> Up To Date</h2>
           <p>加盟流程與辦法｜送出申請後，總部會依資格、店址與商圈條件進行評估，每一步都有專人協助。</p>
@@ -200,13 +200,13 @@ const scrollMarketing = (direction: -1 | 1) => {
     <section id="franchise-news" class="franchise-news elementor-836324d" aria-labelledby="franchise-news-title">
       <div class="source-rail internal-rail-safe">
         <span class="source-pill"><i aria-hidden="true" />招商訊息</span>
-        <h2 id="franchise-news-title">Behind <span>Every Statistic Pulses</span> A Human Story</h2>
+        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }">Behind <span>Every Statistic Pulses</span> A Human Story</h2>
         <div class="franchise-news__list">
           <NuxtLink v-for="article in franchiseNews" :key="article.id" :to="article.legacyPath" class="franchise-news-row">
             <i aria-hidden="true" /><h3>{{ article.title }}</h3><ArrowRight aria-hidden="true" />
           </NuxtLink>
         </div>
-        <div class="franchise-news__more"><NuxtLink to="/news/latest" class="source-round-link source-round-link--outline">查看更多 <ArrowRight aria-hidden="true" /></NuxtLink></div>
+        <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" class="franchise-news__more"><NuxtLink to="/news/latest" class="source-round-link source-round-link--outline">查看更多 <ArrowRight aria-hidden="true" /></NuxtLink></div>
       </div>
     </section>
   </main>

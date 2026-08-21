@@ -78,7 +78,7 @@ useSeoMeta({
 
     <section class="sakura-series-categories" aria-labelledby="sakura-series-categories-title">
       <div class="sakura-series-rail internal-rail-safe">
-        <h2 id="sakura-series-categories-title">
+        <h2 id="sakura-series-categories-title" v-reveal="{ anim: 'opalMoveUp' }">
           <strong>SAKURA</strong> 廚電產品
         </h2>
         <div class="sakura-series-categories__viewport" role="region" aria-label="SAKURA 商品、熱水器與淨水設備系列名稱">

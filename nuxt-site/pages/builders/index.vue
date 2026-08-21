@@ -45,7 +45,7 @@ const services = [
 
     <section class="builders-team" aria-labelledby="builders-team-title">
       <div class="builders-rail internal-rail-safe">
-        <header class="builders-section-heading builders-section-heading--team">
+        <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--team">
           <span class="builders-pill"><i aria-hidden="true" />Our Team</span>
           <h2 id="builders-team-title">Meet The <span>Experts Our</span><br />Interior Designers</h2>
           <p>專業團隊資訊即將公開。人物影像依 PPT 指定的 Antra Home 07 視覺呈現，正式人員姓名與職稱待甲方提供。</p>
@@ -62,8 +62,8 @@ const services = [
     <section class="builders-capability" aria-labelledby="builders-capability-title">
       <div class="builders-rail internal-rail-safe">
         <header class="builders-section-heading builders-section-heading--split">
-          <InternalTemplateHeadingRail label="Built For Projects" />
-          <div>
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Built For Projects" />
+          <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <h2 id="builders-capability-title">Have A Project In <span>Mind? Let’s</span><br />Make It Happen</h2>
             <p>櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。</p>
           </div>
@@ -119,7 +119,7 @@ const services = [
 
     <section class="builders-partners" aria-labelledby="builders-partners-title">
       <div class="builders-rail internal-rail-safe">
-        <header class="builders-partners__heading">
+        <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-partners__heading">
           <span>Our Website 75000+ VIP Customer</span>
           <h2 id="builders-partners-title">合作建設</h2>
         </header>
@@ -133,7 +133,7 @@ const services = [
 
     <section id="appointment" class="builders-contact" aria-labelledby="builders-contact-title">
       <div class="builders-rail internal-rail-safe">
-        <header class="builders-section-heading builders-section-heading--split builders-contact__heading">
+        <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
           <span class="builders-pill"><i aria-hidden="true" />Get In Touch</span>
           <div>
             <h2 id="builders-contact-title">Have A Project In <span>Mind? Let’s</span><br />Make It Happen</h2>
