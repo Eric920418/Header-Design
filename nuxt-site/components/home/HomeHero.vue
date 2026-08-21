@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ChevronRight, Circle } from 'lucide-vue-next'
+import { KITCHEN_STYLES } from '~/data/kitchenStyles'
 
 const slides = ['/home-2026/hero/ai-kitchen.jpg', '/home-2026/hero/clever-kitchen.jpg', '/home-2026/hero/basic-plus.jpg']
-const series = ['巧域廚房', '潮派廚房', '童樂廚房', '君璽廚房', '臻美廚房', '大廚廚房', '鄉村廚房', '閣樂廚房']
 const seriesOpen = ref(false)
 const activeSlide = ref(0)
 const previousSlide = ref<number | null>(null)
@@ -35,35 +35,46 @@ onBeforeUnmount(() => timer && clearInterval(timer))
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,.42)_42%,rgba(0,0,0,.86)_100%)]" />
 
     <div class="hero-template-top z-10 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
-      <div v-reveal data-ev="slideInLeft" class="ev ev-slow">
-        <div class="hero-template-eyebrow-row mb-[20px] flex justify-center">
+      <div>
+        <div v-reveal="{ anim: 'opalMoveRight', duration: 'slow' }" class="hero-template-eyebrow-row mb-[20px] flex justify-center">
           <span class="inline-flex h-[30px] items-center gap-[10px] rounded-[24px] border border-[rgba(159,159,164,0.18)] py-[3px] pl-[10px] pr-[13px] font-display text-[12px] uppercase leading-[22px] tracking-[1px] text-white"><Circle class="h-[5px] w-[5px] fill-[#CAA05C] stroke-0" />Trusted Design Partner</span>
         </div>
-        <h1 id="hero-title" class="hero-template-title m-0 font-display font-normal capitalize tracking-[-1px] text-white">Find Your <span class="text-[#CAA05C]">Inspired</span><br /><span class="text-[#CAA05C]">Kitchen</span> Design</h1>
-        <p class="hero-template-description mt-[30px] font-sans text-[18px] font-medium leading-[24px] text-white">Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.</p>
+        <h1 id="hero-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100, duration: 'slow' }" class="hero-template-title m-0 font-display font-normal capitalize tracking-[-1px] text-white">Find Your <span class="text-[#CAA05C]">Inspired</span><br /><span class="text-[#CAA05C]">Kitchen</span> Design</h1>
+        <p v-reveal="{ anim: 'opalMoveUp', delay: 180, duration: 'slow' }" class="hero-template-description mt-[30px] font-sans text-[18px] font-medium leading-[24px] text-white">Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.</p>
       </div>
     </div>
 
     <div aria-hidden="true" class="hero-template-divider absolute inset-x-0 z-10 h-px bg-white/25" />
     <div class="hero-template-bottom z-20 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
       <div class="hero-template-cta h-[120px] w-[120px] shrink-0">
-        <div v-reveal data-ev="fadeIn" class="ev ev-slow h-full w-full rounded-[200px] backdrop-blur-[58px]" style="animation-delay:900ms">
+        <div v-reveal="{ anim: 'opalScaleUp', delay: 360, duration: 'slow' }" class="h-full w-full rounded-[200px] backdrop-blur-[58px]">
           <a href="#contact" class="hero-start-project flex h-full w-full items-center justify-center rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center font-display text-[18px] leading-[24px] text-white transition-colors hover:text-[#CAA05C]"><span class="relative z-[1]">Start<br />Project</span></a>
         </div>
       </div>
       <div class="hero-template-watermark-slot pointer-events-none">
         <div class="hero-template-watermark select-none whitespace-nowrap text-right font-display opacity-[0.64]">
-          <div v-reveal data-ev="fadeInUp" class="ev ev-slow" style="animation-delay:900ms"><span aria-hidden="true" class="block bg-[linear-gradient(180deg,#CAA05C_14.9%,rgba(159,159,164,0)_80.95%)] bg-clip-text text-transparent">Kitchen</span></div>
+          <div v-reveal="{ anim: 'opalMoveUp', delay: 460, duration: 'slow' }"><span aria-hidden="true" class="block bg-[linear-gradient(180deg,#CAA05C_14.9%,rgba(159,159,164,0)_80.95%)] bg-clip-text text-transparent">Kitchen</span></div>
         </div>
       </div>
     </div>
 
     <div class="fixed left-0 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
       <div class="relative">
-        <div class="absolute left-0 top-0 overflow-hidden transition-all duration-500" :class="seriesOpen ? 'w-[190px] opacity-70' : 'w-0 opacity-0'">
-          <div class="w-[190px] border-y border-white/10 bg-[rgba(0,0,0,.55)] py-3 backdrop-blur-md"><ul><li v-for="name in series" :key="name"><a href="#kitchen-series" class="block whitespace-nowrap border-l-2 border-transparent py-2 pl-6 pr-4 text-base text-white hover:border-[#CAA05C] hover:bg-white/5 hover:text-[#CAA05C]">{{ name }}</a></li></ul></div>
+        <div id="hero-kitchen-series" :aria-hidden="!seriesOpen" :inert="seriesOpen ? undefined : true" class="absolute left-0 top-0 overflow-hidden transition-all duration-500" :class="seriesOpen ? 'w-[210px] opacity-100' : 'pointer-events-none w-0 opacity-0'">
+          <div class="w-[210px] border-y border-white/10 bg-[rgba(0,0,0,.66)] py-3 backdrop-blur-md">
+            <ul>
+              <li v-for="style in KITCHEN_STYLES" :key="style.slug">
+                <NuxtLink v-if="style.available && style.route" :to="style.route" class="flex items-center justify-between gap-3 whitespace-nowrap border-l-2 border-transparent py-2 pl-6 pr-4 text-[15px] text-white transition-colors hover:border-[#CAA05C] hover:bg-white/5 hover:text-[#CAA05C]" @click="seriesOpen = false">
+                  <span>{{ style.zh }}</span><span class="text-[10px] uppercase text-white/55">{{ style.en }}</span>
+                </NuxtLink>
+                <button v-else type="button" class="flex w-full items-center justify-between gap-3 whitespace-nowrap border-l-2 border-transparent py-2 pl-6 pr-4 text-left text-[15px] text-white transition-colors hover:border-[#CAA05C] hover:bg-white/5 hover:text-[#CAA05C]" @click="seriesOpen = false">
+                  <span>{{ style.zh }}</span><span class="max-w-[78px] truncate text-[10px] uppercase text-white/55">{{ style.en }}</span>
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
-        <button type="button" :aria-expanded="seriesOpen" :aria-label="seriesOpen ? '收合品牌系列選單' : '展開品牌系列選單'" class="flex h-36 w-10 flex-col items-center justify-center gap-2 rounded-r-2xl border border-white/10 bg-[rgba(0,0,0,.55)] text-white/85 backdrop-blur-md transition-all duration-500 hover:text-[#CAA05C]" :class="seriesOpen ? 'translate-x-[190px]' : ''" @click="seriesOpen = !seriesOpen">
+        <button type="button" aria-controls="hero-kitchen-series" :aria-expanded="seriesOpen" :aria-label="seriesOpen ? '收合品牌系列選單' : '展開品牌系列選單'" class="flex h-36 w-10 flex-col items-center justify-center gap-2 rounded-r-2xl border border-white/10 bg-[rgba(0,0,0,.55)] text-white/85 backdrop-blur-md transition-all duration-500 hover:text-[#CAA05C]" :class="seriesOpen ? 'translate-x-[210px]' : ''" @click="seriesOpen = !seriesOpen">
           <ChevronRight class="h-5 w-5 transition-transform" :class="seriesOpen ? 'rotate-180' : ''" /><span class="writing-vertical text-base tracking-[.3em]">品牌系列</span>
         </button>
       </div>

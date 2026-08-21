@@ -6,6 +6,7 @@ type RevealAnimation =
   | 'opalMoveLeft'
   | 'opalMoveRight'
   | 'opalScaleUp'
+  | 'storeGroupReveal'
   | 'slideInUp'
   | 'slideInDown'
   | 'slideInLeft'
@@ -28,6 +29,7 @@ const revealAnimations = new Set<RevealAnimation>([
   'opalMoveLeft',
   'opalMoveRight',
   'opalScaleUp',
+  'storeGroupReveal',
   'slideInUp',
   'slideInDown',
   'slideInLeft',

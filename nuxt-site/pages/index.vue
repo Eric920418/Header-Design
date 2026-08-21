@@ -13,6 +13,6 @@ useSeoMeta({
     <HomeServices />
     <HomeGallery />
     <HomeWhatWeDo />
-    <div v-reveal data-ev="slideInUp" class="ev"><HomeStoreLocation /></div>
+    <HomeStoreLocation />
   </div>
 </template>

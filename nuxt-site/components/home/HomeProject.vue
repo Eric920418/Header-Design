@@ -1,41 +1,102 @@
 <script setup lang="ts">
 import emblaCarouselVue from 'embla-carousel-vue'
-import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
-import { KITCHEN_STYLES } from '~/data/kitchenStyles'
+import { KITCHEN_STYLES, type KitchenStyle } from '~/data/kitchenStyles'
 
-const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'start' })
+const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false })
 const dragging = ref(false)
 const paused = ref(false)
 const reduced = useReducedMotion()
 let timer: ReturnType<typeof setInterval> | undefined
 let resume: ReturnType<typeof setTimeout> | undefined
 
-watch([emblaApi, reduced], ([api, isReduced]) => {
-  if (timer) clearInterval(timer)
+watch(emblaApi, (api) => {
   if (!api) return
   api.on('pointerDown', () => dragging.value = true)
   api.on('pointerUp', () => dragging.value = false)
-  if (!isReduced) timer = setInterval(() => { if (!paused.value) api.scrollNext() }, 2800)
 }, { immediate: true })
 
-function pause() { if (resume) clearTimeout(resume); paused.value = true }
-function unpause() { if (resume) clearTimeout(resume); resume = setTimeout(() => paused.value = false, 560) }
-onBeforeUnmount(() => { if (timer) clearInterval(timer); if (resume) clearTimeout(resume) })
+watch([emblaApi, reduced], ([api, isReduced]) => {
+  if (timer) clearInterval(timer)
+  if (!api || isReduced) return
+  timer = setInterval(() => {
+    if (!paused.value) api.scrollNext()
+  }, 3200)
+}, { immediate: true })
+
+function pause() {
+  if (resume) clearTimeout(resume)
+  paused.value = true
+}
+
+function unpause() {
+  if (resume) clearTimeout(resume)
+  resume = setTimeout(() => paused.value = false, 560)
+}
+
+function handleStyleClick(style: KitchenStyle, event: MouseEvent) {
+  if (!style.available || !style.route) event.preventDefault()
+}
+
+function handleCarouselKeydown(event: KeyboardEvent) {
+  if (event.key === 'ArrowLeft') emblaApi.value?.scrollPrev()
+  if (event.key === 'ArrowRight') emblaApi.value?.scrollNext()
+}
+
+onBeforeUnmount(() => {
+  if (timer) clearInterval(timer)
+  if (resume) clearTimeout(resume)
+})
 </script>
 
 <template>
-  <section id="kitchen-series" v-reveal data-ev="slideInUp" class="ev relative z-10 bg-[#f6f6f6]">
-    <div ref="emblaRef" class="cursor-grab overflow-hidden bg-[#1C1C1D] active:cursor-grabbing" @mouseenter="pause" @mouseleave="unpause"><div class="flex">
-      <div v-for="(style, index) in [...KITCHEN_STYLES, ...KITCHEN_STYLES]" :key="index" class="group shrink-0 w-[280px] transition-[width] duration-500 ease-out md:w-[340px] lg:w-[378px]" :class="dragging ? '' : 'hover:w-[420px] md:hover:w-[510px] lg:hover:w-[567px]'">
-        <article class="relative -ml-px h-[480px] w-[calc(100%+2px)] overflow-hidden md:h-[640px] lg:h-[880px]">
-          <img :src="style.image" :alt="`${style.en} ${style.zh}`" draggable="false" class="absolute inset-0 h-full w-full object-cover object-center" />
-          <div class="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-2/5 bg-[linear-gradient(rgba(0,0,0,0)_0%,rgba(0,0,0,.64)_30%,rgba(0,0,0,1)_100%)]" />
-          <span class="absolute left-8 top-8 z-[2] rounded-full border border-white/50 px-4 py-1.5 text-[16px] font-bold text-white backdrop-blur-sm">{{ style.en }}</span>
-          <div class="absolute inset-x-0 bottom-0 z-[2] px-8 pb-9"><h3 class="w-fit font-display text-[36px] leading-[44px] text-white transition-colors hover:text-[#CAA05C]">{{ style.zh }}</h3><p class="max-h-0 overflow-hidden text-[16px] leading-[24px] text-white/90 opacity-0 transition-all duration-500 group-hover:mt-2.5 group-hover:max-h-20 group-hover:opacity-100">{{ style.desc }}</p></div>
-        </article>
+  <section id="kitchen-series" aria-labelledby="home-project-heading" class="home-project-section relative z-10 bg-[#F6F6F6]">
+    <div class="home-project-heading mx-auto grid max-w-[1410px] grid-cols-1 px-[15px] md:px-[30px] min-[768px]:grid-cols-[30%_70%]">
+      <div v-reveal="{ anim: 'opalMoveRight' }">
+        <InternalTemplateHeadingRail label="FEATURED PROJECTS" />
       </div>
-    </div></div>
-    <button aria-label="向左瀏覽" class="absolute left-[30px] top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md hover:border-[#CAA05C] hover:bg-[#CAA05C] lg:left-[60px]" @click="emblaApi?.scrollNext()"><ArrowLeft /></button>
-    <button aria-label="向右瀏覽" class="absolute right-[30px] top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md hover:border-[#CAA05C] hover:bg-[#CAA05C]" @click="emblaApi?.scrollPrev()"><ArrowRight /></button>
+      <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="home-project-heading-copy flex items-center">
+        <h2 id="home-project-heading" class="max-w-[790px] font-display text-[38px] leading-[43px] text-[#1C1C1D] md:text-[52px] md:leading-[57px] min-[1201px]:text-[60px] min-[1201px]:leading-[64px]">
+          Creative <span class="text-[#CAA05C]">Projects That Define</span> Our Style
+        </h2>
+      </div>
+    </div>
+
+    <div v-reveal="{ anim: 'opalMoveUp', delay: 180 }" class="home-project-carousel-reveal">
+      <div
+        ref="emblaRef"
+        role="region"
+        aria-label="廚房系列輪播"
+        tabindex="0"
+        class="home-project-carousel cursor-grab overflow-hidden bg-[#1C1C1D] outline-none active:cursor-grabbing"
+        @mouseenter="pause"
+        @mouseleave="unpause"
+        @focusin="pause"
+        @focusout="unpause"
+        @keydown="handleCarouselKeydown"
+      >
+        <div class="home-project-track flex">
+          <NuxtLink
+            v-for="style in KITCHEN_STYLES"
+            :key="style.slug"
+            :to="style.route || '#kitchen-series'"
+            :tabindex="style.available && style.route ? 0 : -1"
+            :aria-disabled="style.available && style.route ? undefined : true"
+            class="home-project-slide group shrink-0"
+            :class="dragging ? 'is-dragging' : ''"
+            @click="handleStyleClick(style, $event)"
+          >
+            <article class="home-project-card relative -ml-px overflow-hidden">
+              <img :src="style.image" :alt="`${style.en} ${style.zh}`" draggable="false" class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]" />
+              <span class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.06)_20%,rgba(0,0,0,.86)_100%)]" />
+              <span class="absolute left-6 top-6 z-[2] rounded-full border border-white/50 px-4 py-1.5 text-[15px] font-semibold text-white backdrop-blur-sm">{{ style.en }}</span>
+              <div class="absolute inset-x-0 bottom-0 z-[2] px-6 pb-8 min-[1201px]:px-8 min-[1201px]:pb-9">
+                <h3 class="w-fit font-display text-[31px] leading-[38px] text-white transition-colors group-hover:text-[#CAA05C] min-[1201px]:text-[36px] min-[1201px]:leading-[44px]">{{ style.zh }}</h3>
+                <p class="home-project-description overflow-hidden text-[15px] leading-[23px] text-white/90">{{ style.desc }}</p>
+              </div>
+            </article>
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
   </section>
 </template>

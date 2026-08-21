@@ -454,6 +454,94 @@ body {
   }
 }
 
+/* Antra Home 09：標題軌與產品式案例輪播分離，避免 reveal 動到 Embla track。 */
+.home-project-heading {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.home-project-heading-copy {
+  min-width: 0;
+  padding: 30px 0;
+}
+.home-project-carousel-reveal {
+  overflow: hidden;
+}
+.home-project-track {
+  --home-project-columns: 1;
+  --home-project-basis: 100%;
+  --home-project-expanded: 100%;
+  gap: 18px;
+}
+.home-project-slide {
+  flex: 0 0 var(--home-project-basis);
+  min-width: 0;
+  transition: flex-basis 500ms ease-out;
+}
+.home-project-card {
+  width: calc(100% + 2px);
+  height: 480px;
+}
+.home-project-description {
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  transition: max-height 500ms ease, margin-top 500ms ease, opacity 350ms ease;
+}
+@media (hover: hover) {
+  .home-project-slide:hover .home-project-description,
+  .home-project-slide:focus-visible .home-project-description {
+    max-height: 72px;
+    margin-top: 10px;
+    opacity: 1;
+  }
+}
+@media (min-width: 768px) {
+  .home-project-track {
+    --home-project-columns: 2;
+    --home-project-basis: calc(50% - 9px);
+  }
+  .home-project-card { height: 540px; }
+}
+@media (min-width: 881px) {
+  .home-project-track {
+    --home-project-columns: 3;
+    --home-project-basis: calc(33.333333% - 12px);
+  }
+  .home-project-card { height: 580px; }
+}
+@media (min-width: 1025px) {
+  .home-project-track {
+    --home-project-columns: 4;
+    --home-project-basis: calc(25% - 13.5px);
+  }
+}
+@media (min-width: 1201px) {
+  .home-project-track {
+    --home-project-columns: 5;
+    --home-project-basis: calc(20% - 14.4px);
+    --home-project-expanded: calc(40% - 10.8px);
+  }
+  .home-project-card { height: 620px; }
+}
+@media (min-width: 1201px) and (hover: hover) {
+  .home-project-slide:not(.is-dragging):hover,
+  .home-project-slide:not(.is-dragging):focus-visible {
+    flex-basis: var(--home-project-expanded);
+  }
+}
+@media (max-width: 767px) {
+  .home-project-heading {
+    gap: 28px;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    text-align: center;
+  }
+  .home-project-heading-copy {
+    justify-content: center;
+    padding: 0;
+  }
+}
+
 /* Google Maps 會以 inline style 注入三個不在模板色盤內的灰色；只覆寫外觀，保留所有地圖操作。 */
 .antra-map > div:first-child > div:first-child {
   background-color: #f6f6f6 !important;
@@ -769,6 +857,9 @@ body {
   grid-template-columns: minmax(0, 1fr);
   gap: 30px;
 }
+.what-we-do-video {
+  max-width: 645px;
+}
 .what-we-do-heading,
 .what-we-do-description {
   text-align: center;
@@ -831,7 +922,7 @@ body {
     padding-bottom: 115px;
   }
   .what-we-do-layout {
-    gap: 70px;
+    gap: 90px;
   }
 }
 
@@ -975,9 +1066,39 @@ body {
   }
 }
 
+.store-location-filters {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.store-location-locate {
+  grid-column: 1 / -1;
+}
+@media (min-width: 768px) {
+  .store-location-filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .store-location-locate {
+    grid-column: auto;
+  }
+}
+@media (max-width: 480px) {
+  .store-location-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .store-location-locate {
+    grid-column: auto;
+  }
+  .store-board-meta {
+    flex-direction: column;
+    gap: 3px;
+  }
+}
+
 .store-board-slot {
   perspective: 1000px;
   transform-style: preserve-3d;
+}
+.store-board-list.is-visible .store-board-entry {
+  animation: storeFlipIn 1.25s ease both;
 }
 .store-board-slot:focus-visible {
   box-shadow: 0 0 0 2px #f6f6f6, 0 0 0 4px #caa05c;
@@ -1122,6 +1243,7 @@ body {
 .ev.is-visible[data-ev="opalMoveLeft"]  { animation-name: opalMoveLeft; }
 .ev.is-visible[data-ev="opalMoveRight"] { animation-name: opalMoveRight; }
 .ev.is-visible[data-ev="opalScaleUp"]   { animation-name: opalScaleUp; }
+.ev.is-visible[data-ev="storeGroupReveal"] { animation-name: storeGroupReveal; }
 
 /* Elementor 核心進場 keyframe（100% 位移，逐字取自 demo styleSheets） */
 @keyframes slideInUp    { 0% { transform: translate3d(0, 100%, 0); visibility: visible; }  100% { transform: translate3d(0, 0, 0); } }
@@ -1137,6 +1259,8 @@ body {
 @keyframes opalMoveLeft  { 0% { transform: translateX(100px); opacity: 0; }  100% { transform: translateX(0); opacity: 1; } }
 @keyframes opalMoveRight { 0% { transform: translateX(-100px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
 @keyframes opalScaleUp   { 0% { opacity: 0; transform: scale(0.6); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes storeGroupReveal { from, to { opacity: 1; } }
+@keyframes storeFlipIn   { 0% { opacity: 0; transform: perspective(1000px) rotateX(84deg); transform-origin: 50% 0; } 100% { opacity: 1; transform: perspective(1000px) rotateX(0deg); transform-origin: 50% 0; } }
 
 /* 減少動態：直接顯示、不動畫 */
 @media (prefers-reduced-motion: reduce) {
@@ -1152,4 +1276,8 @@ body {
   .animate-gallery-card { animation: none !important; }
   .store-board-face { animation: none !important; filter: none !important; transform: none !important; }
   .store-board-face-out { display: none !important; }
+  .store-board-entry { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .home-project-slide { transition: none !important; }
+  .home-project-slide:hover,
+  .home-project-slide:focus-visible { flex-basis: var(--home-project-basis) !important; }
 }

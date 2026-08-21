@@ -21,23 +21,31 @@ onBeforeUnmount(() => timer && clearInterval(timer))
   <section aria-labelledby="services-heading" class="relative overflow-hidden bg-[url('/services/h6-bg-2.jpg')] bg-cover bg-top bg-no-repeat px-[15px] pt-[60px] min-[768px]:px-[30px] min-[768px]:pt-[80px] min-[1025px]:pt-[100px] min-[1201px]:pt-[125px]">
     <div aria-hidden class="absolute inset-0 bg-black/[.76]" />
     <div class="relative z-10 mx-auto max-w-[1410px]">
-      <div v-reveal data-ev="slideInUp" class="ev relative mx-auto mb-[30px] max-w-[1083px] min-[768px]:mb-[60px]">
-        <div aria-hidden class="absolute left-0 top-0 hidden h-[15px] w-[502px] border-b border-white/[.18] min-[881px]:block"><img src="/services/deco-horizontal.svg" alt="" class="absolute bottom-[-1px] right-0 h-[15px] w-[15px] invert opacity-[.18]" /></div>
-        <div aria-hidden class="absolute left-[345px] top-0 hidden h-[179px] w-[15px] border-r border-white/[.18] min-[881px]:block"><img src="/services/deco-vertical.svg" alt="" class="absolute bottom-0 right-[-1px] h-[15px] w-[15px] invert opacity-[.18]" /></div>
-        <div class="flex flex-col items-center gap-[15px] text-center min-[768px]:gap-[30px] min-[768px]:pt-[38px] min-[881px]:flex-row min-[881px]:items-start min-[881px]:gap-0 min-[881px]:text-left">
-          <div class="min-[881px]:w-[30%] min-[881px]:pt-[8px]"><span class="inline-flex items-center gap-1.5 rounded-[24px] border border-white/[.18] px-[13px] py-[7px] pl-[9px] font-display text-[12px] uppercase tracking-[1px] text-white"><span class="h-1.5 w-1.5 rounded-full bg-[#CAA05C]" />廚房產品</span></div>
-          <h2 id="services-heading" class="w-full max-w-[769px] font-display text-[30px] capitalize leading-[35px] text-white min-[768px]:text-[45px] min-[768px]:leading-[50px] min-[881px]:w-[70%] min-[881px]:text-[60px] min-[881px]:leading-[64px]">Explore Our <span class="text-[#CAA05C]">Comprehensive Interior Design</span> Services</h2>
+      <div class="home-services-heading relative mx-auto mb-[30px] grid max-w-[1410px] grid-cols-1 min-[768px]:mb-[60px] min-[768px]:grid-cols-[30%_70%]">
+        <div v-reveal="{ anim: 'opalMoveRight' }">
+          <InternalTemplateHeadingRail label="KITCHEN PRODUCTS" tone="dark" />
+        </div>
+        <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="flex items-center">
+          <h2 id="services-heading" class="w-full max-w-[769px] text-center font-display text-[30px] capitalize leading-[35px] text-white min-[768px]:text-left min-[768px]:text-[45px] min-[768px]:leading-[50px] min-[881px]:text-[60px] min-[881px]:leading-[64px]">Explore Our <span class="text-[#CAA05C]">Comprehensive Interior Design</span> Services</h2>
         </div>
       </div>
-      <div v-reveal data-ev="slideInUp" class="ev"><div ref="emblaRef" class="cursor-grab overflow-hidden active:cursor-grabbing" @mouseenter="paused = true" @mouseleave="paused = false"><div class="-ml-[30px] flex">
-        <div v-for="service in services" :key="service.n" class="min-w-0 flex-[0_0_100%] pl-[30px] min-[768px]:flex-[0_0_50%] min-[1201px]:flex-[0_0_33.333%]">
+      <div ref="emblaRef" class="cursor-grab overflow-hidden active:cursor-grabbing" @mouseenter="paused = true" @mouseleave="paused = false" @focusin="paused = true" @focusout="paused = false"><div class="-ml-[30px] flex">
+        <div v-for="(service, index) in services" :key="service.n" v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }" class="min-w-0 flex-[0_0_100%] pl-[30px] min-[768px]:flex-[0_0_50%] min-[1201px]:flex-[0_0_33.333%]">
           <article class="group/svc flex flex-col overflow-hidden rounded-[24px] bg-white p-[10px]" :class="service.captionTop ? 'min-[569px]:flex-col-reverse' : ''">
             <div class="relative h-[250px] overflow-hidden rounded-[24px] md:h-[310px]"><img :src="service.img" :alt="service.alt" draggable="false" class="h-full w-full object-cover transition-transform duration-300 group-hover/svc:scale-110" /><span class="absolute inset-0 bg-black/[.11]" /></div>
             <div class="services-card-caption px-0 pb-[30px] pt-[20px] min-[768px]:px-[20px] min-[768px]:pb-[35px] min-[768px]:pt-[30px]"><div class="flex items-start justify-between"><h3 :aria-label="service.alt" class="mr-[30px] flex flex-1 items-center min-[768px]:mr-[10px] min-[881px]:mr-[30px] min-[1201px]:mr-[80px]"><img :src="service.logo" alt="" :class="service.logoClass" class="max-w-full shrink-0 brightness-0 opacity-[.89]" /></h3><span class="font-display text-[30px] leading-none text-[#E3E3E8]">{{ service.n }}</span></div><p class="mt-[10px] line-clamp-3 text-[16px] leading-[24px] text-[#9F9FA4] min-[768px]:mr-[70px] min-[768px]:mt-[23px]">{{ service.excerpt }}</p></div>
           </article>
         </div>
-      </div></div></div>
+      </div></div>
     </div>
-    <div class="relative z-10 -mx-[15px] pt-24 md:-mx-[30px]"><HomeLogoMarquee /></div>
+    <div class="relative z-10 -mx-[15px] mt-24 border-t border-white/20 md:-mx-[30px]"><HomeLogoMarquee /></div>
   </section>
 </template>
+
+<style scoped>
+.home-services-heading :deep(.template-heading-rail__pill) {
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 20px;
+}
+</style>
