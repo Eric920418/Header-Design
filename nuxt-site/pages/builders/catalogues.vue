@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { ArrowUpRight, X } from 'lucide-vue-next'
-import { KITCHEN_CATALOGUES } from '~/data/catalogues'
 
 interface BuilderCatalogueCard {
   id: string
   title: string
   description: string
   cover: string
-  pdfUrl?: string
   actionLabel: string
-  previewOnly: boolean
 }
 
 const catalogues: BuilderCatalogueCard[] = [
@@ -19,13 +16,7 @@ const catalogues: BuilderCatalogueCard[] = [
     description: '建商專區型錄 2026',
     cover: '/section-6/builders/catalogues/developer-catalogue-2026.jpg',
     actionLabel: '預覽',
-    previewOnly: true,
   },
-  ...KITCHEN_CATALOGUES.map(catalogue => ({
-    ...catalogue,
-    actionLabel: '開啟型錄',
-    previewOnly: false,
-  })),
 ]
 
 const previewDialog = ref<HTMLDialogElement | null>(null)
@@ -44,9 +35,9 @@ function closeOnBackdrop(event: MouseEvent) {
 
 useSeoMeta({
   title: '建商專區型錄｜SAKURA 整體廚房',
-  description: '預覽 SAKURA KITCHEN 2026 建商專區型錄，並瀏覽六大品牌系列正式產品型錄。',
+  description: '預覽 SAKURA KITCHEN 2026 建商專區型錄；正式 PDF 將於甲方提供後開放。',
   ogTitle: '建商專區型錄｜SAKURA 整體廚房',
-  ogDescription: 'SAKURA KITCHEN 建商合作型錄與六大品牌系列產品型錄。',
+  ogDescription: 'SAKURA KITCHEN 建商合作型錄。',
   ogImage: '/section-6/builders/catalogues/developer-catalogue-2026.jpg',
 })
 </script>
@@ -55,9 +46,9 @@ useSeoMeta({
   <main class="builder-catalogue-page">
     <section class="builder-catalogue-hero hero-includes-header" aria-labelledby="builder-catalogue-title">
       <span class="builder-catalogue-hero__overlay" aria-hidden="true" />
-      <div v-reveal="{ anim: 'opalMoveUp' }" class="builder-catalogue-hero__inner">
-        <h1 id="builder-catalogue-title">建商專區型錄</h1>
-        <nav aria-label="麵包屑" class="builder-catalogue-hero__trail">
+      <div class="builder-catalogue-hero__inner">
+        <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">建商專區型錄</h1>
+        <nav v-reveal="{ anim: 'opalMoveUp', delay: 90 }" aria-label="麵包屑" class="builder-catalogue-hero__trail ev" data-ev="opalMoveUp" style="animation-delay:90ms">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
           <NuxtLink to="/builders">建商專區</NuxtLink>
@@ -79,7 +70,6 @@ useSeoMeta({
           >
             <article>
               <button
-                v-if="catalogue.previewOnly"
                 type="button"
                 class="builder-catalogue-card__link"
                 aria-label="預覽 2026 建商專區型錄；正式 PDF 尚待提供"
@@ -101,30 +91,6 @@ useSeoMeta({
                   <small>正式 PDF 待甲方提供</small>
                 </span>
               </button>
-
-              <a
-                v-else
-                :href="catalogue.pdfUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="builder-catalogue-card__link"
-                :aria-label="`另開 PDF：${catalogue.title}`"
-              >
-                <span class="builder-catalogue-card__transition">
-                  <span class="builder-catalogue-card__image">
-                    <InternalCatalogueImage :src="catalogue.cover" :alt="`${catalogue.title}封面`" />
-                  </span>
-                  <span class="builder-catalogue-card__shade" aria-hidden="true" />
-                  <span class="builder-catalogue-card__action" aria-hidden="true">
-                    <span>{{ catalogue.actionLabel }}</span>
-                    <span class="builder-catalogue-card__arrow"><ArrowUpRight /></span>
-                  </span>
-                </span>
-                <span class="builder-catalogue-card__text">
-                  <strong>{{ catalogue.title }}</strong>
-                  <span>{{ catalogue.description }}</span>
-                </span>
-              </a>
             </article>
           </li>
         </ul>
@@ -190,9 +156,9 @@ useSeoMeta({
 .builder-catalogue-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-display);
+  font-family: var(--font-cjk-serif);
   font-size: 80px;
-  font-weight: 400;
+  font-weight: var(--font-cjk-serif-semibold, 600);
   line-height: .9523809524;
 }
 
@@ -201,10 +167,9 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: var(--font-ui);
-  font-size: 13px;
-  line-height: 16px;
-  text-transform: uppercase;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 22px;
 }
 
 .builder-catalogue-hero__trail a { color: inherit; transition: color .3s ease; }
@@ -285,7 +250,7 @@ useSeoMeta({
   align-items: center;
   gap: 12px;
   color: #fff;
-  font-family: var(--font-ui);
+  font-family: var(--font-cjk-sans);
   font-size: 15px;
   line-height: 20px;
   opacity: 0;
@@ -319,17 +284,17 @@ useSeoMeta({
   min-height: 34px;
   margin-bottom: 14px;
   color: #1c1c1d;
-  font-family: var(--font-ui);
-  font-size: 30px;
-  font-weight: 400;
+  font-family: var(--font-cjk-serif);
+  font-size: 25px;
+  font-weight: var(--font-cjk-serif-semibold, 600);
   line-height: 34px;
   transition: color .3s ease;
 }
 
 .builder-catalogue-card:first-child .builder-catalogue-card__text strong { word-spacing: .12em; }
 
-.builder-catalogue-card__text > span { display: block; color: #59585d; font-size: 16px; line-height: 24px; }
-.builder-catalogue-card__text small { display: block; margin-top: 7px; color: #9f2f1f; font-size: 13px; line-height: 20px; }
+.builder-catalogue-card__text > span { display: block; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
+.builder-catalogue-card__text small { display: block; margin-top: 7px; color: #9f2f1f; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 
 .builder-catalogue-card__link:hover .builder-catalogue-card__shade,
 .builder-catalogue-card__link:focus-visible .builder-catalogue-card__shade { background: rgb(0 0 0 / 34%); }
@@ -404,22 +369,23 @@ useSeoMeta({
 
 .builder-catalogue-dialog__copy > span {
   color: #9f9fa4;
-  font-size: 12px;
-  line-height: 18px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 22px;
   letter-spacing: .16em;
   text-transform: uppercase;
 }
 
 .builder-catalogue-dialog__copy h2 {
   margin: 14px 0 0;
-  font-family: var(--font-display);
+  font-family: var(--font-cjk-serif);
   font-size: 52px;
-  font-weight: 400;
+  font-weight: var(--font-cjk-serif-semibold, 600);
   line-height: 56px;
 }
 
-.builder-catalogue-dialog__copy p { margin: 24px 0 0; color: #59585d; font-size: 16px; line-height: 27px; }
-.builder-catalogue-dialog__copy strong { display: block; margin-top: 24px; color: #9f2f1f; font-size: 14px; line-height: 22px; }
+.builder-catalogue-dialog__copy p { margin: 24px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 27px; }
+.builder-catalogue-dialog__copy strong { display: block; margin-top: 24px; color: #9f2f1f; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 
 @media (max-width: 1023px) {
   .builder-catalogue-projects { padding-block: 80px; }
@@ -439,7 +405,7 @@ useSeoMeta({
   .builder-catalogue-card__action { right: 78px; bottom: 18px; gap: 9px; opacity: 1; visibility: visible; transform: none; }
   .builder-catalogue-card__arrow { width: 54px; height: 54px; }
   .builder-catalogue-card__text { padding-right: 72px; }
-  .builder-catalogue-card__text strong { min-height: 0; font-size: 26px; line-height: 30px; }
+  .builder-catalogue-card__text strong { min-height: 0; font-size: 25px; line-height: 32px; }
   .builder-catalogue-dialog { width: calc(100% - 30px); max-height: calc(100dvh - 30px); border-radius: 18px; }
   .builder-catalogue-dialog__panel { grid-template-columns: 1fr; gap: 28px; max-height: calc(100dvh - 30px); padding: 58px 18px 24px; }
   .builder-catalogue-dialog__cover { width: min(100%, 300px); margin-inline: auto; }

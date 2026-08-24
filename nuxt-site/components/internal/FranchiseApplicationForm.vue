@@ -224,7 +224,7 @@ const submit = async () => {
         <small v-if="errors.consent" id="application-consent-error">{{ errors.consent }}</small>
       </label>
 
-      <div class="application-form__submit-row">
+      <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="application-form__submit-row ev">
         <button type="submit" :disabled="submitState === 'submitting'">
           <span>{{ submitState === 'submitting' ? '送出中' : '確認送出' }}</span>
           <span class="application-form__submit-icon">
@@ -254,10 +254,11 @@ const submit = async () => {
   border-radius: 24px;
   background: #fff;
   box-shadow: 0 18px 70px rgb(28 28 29 / 8%);
+  font-family: var(--font-cjk-sans);
 }
 
-.application-form__header > span { color: #caa05c; font-family: var(--font-ui); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
-.application-form__header h2 { margin: 10px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 48px; }
+.application-form__header > span { color: #caa05c; font-family: var(--font-cjk-sans); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.application-form__header h2 { margin: 10px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 48px; }
 .application-form__header p { margin: 9px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
 
 .application-form__service {
@@ -283,7 +284,7 @@ const submit = async () => {
 .application-form form { margin-top: 38px; }
 .application-form__identity { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
 .application-form label,
-.application-field { display: block; min-width: 0; color: #1c1c1d; font-size: 14px; line-height: 22px; }
+.application-field { display: block; min-width: 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .application-form label > span:first-child,
 .application-field > span:first-child { display: block; margin-bottom: 9px; }
 
@@ -295,6 +296,8 @@ const submit = async () => {
   border-radius: 24px;
   color: #1c1c1d;
   background: #fff;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
   outline: none;
   transition: border-color .3s ease, box-shadow .3s ease;
 }
@@ -309,7 +312,7 @@ const submit = async () => {
 .application-form small { display: block; margin-top: 6px; color: #a74335; font-size: 13px; line-height: 20px; }
 
 .application-form__intent { display: grid; gap: 24px; margin: 42px 0 0; padding: 40px 0 0; border: 0; border-top: 1px solid #e3e3e8; }
-.application-form__intent legend { display: block; width: 100%; padding: 0 0 22px; color: #1c1c1d; font-family: var(--font-ui); font-size: 24px; font-weight: 400; line-height: 30px; }
+.application-form__intent legend { display: block; width: 100%; padding: 0 0 22px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 24px; font-weight: 600; line-height: 30px; }
 .application-form__radios { display: flex; flex-wrap: wrap; gap: 12px; }
 .application-form__radios label { position: relative; }
 .application-form__radios input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
@@ -326,10 +329,11 @@ const submit = async () => {
 .application-form__consent small { grid-column: 2; }
 
 .application-form__submit-row { display: flex; align-items: center; justify-content: space-between; gap: 30px; margin-top: 38px; }
-.application-form__submit-row > button { display: inline-flex; min-height: 60px; align-items: center; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgb(159 159 164 / 64%); border-radius: 999px; color: #1c1c1d; background: transparent; font-size: 15px; line-height: 22px; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
+.application-form__submit-row > button { position: relative; display: inline-flex; min-height: 60px; align-items: center; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgb(159 159 164 / 64%); border-radius: 999px; color: #1c1c1d; background: transparent; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; isolation: isolate; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
 .application-form__submit-row > button:hover:not(:disabled) { color: #fff; border-color: #caa05c; background: #caa05c; }
 .application-form__submit-row > button:disabled { cursor: wait; opacity: .62; }
-.application-form__submit-icon { display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
+.application-form__submit-icon { position: relative; display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
+.application-form__submit-icon::before { position: absolute; z-index: -1; inset: 0; border: 1px solid #caa05c; border-radius: inherit; animation: application-radar 2s ease-out infinite; content: ''; }
 .application-form__submit-row > button:hover .application-form__submit-icon { transform: rotate(0); }
 .application-form__submit-icon svg { width: 20px; height: 20px; }
 .application-form__submit-icon .is-spinning { animation: application-spin .8s linear infinite; }
@@ -345,6 +349,10 @@ const submit = async () => {
 .application-form__notice code { display: block; margin-top: 8px; overflow-wrap: anywhere; color: #8b3329; font-size: 12px; line-height: 19px; }
 
 @keyframes application-spin { to { transform: rotate(360deg); } }
+@keyframes application-radar {
+  0% { opacity: .65; transform: scale(1); }
+  75%, 100% { opacity: 0; transform: scale(1.55); }
+}
 
 @media (max-width: 767px) {
   .application-form { padding: 36px 20px 42px; border-radius: 18px; }
@@ -362,5 +370,6 @@ const submit = async () => {
   .application-form__radios label span,
   .application-form__submit-row > button,
   .application-form__submit-icon { transition: none; }
+  .application-form__submit-icon::before { animation: none; }
 }
 </style>

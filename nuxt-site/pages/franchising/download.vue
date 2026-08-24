@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, Download, ExternalLink, FileText } from 'lucide-vue-next'
+import { ArrowRight, Download, ExternalLink, FileText } from 'lucide-vue-next'
 import { FRANCHISE_BROCHURE_URL } from '~/data/franchise'
 
 useSeoMeta({
@@ -62,10 +62,10 @@ onMounted(verifyBrochure)
         class="download-hero__image"
       />
       <span class="download-hero__overlay" aria-hidden="true" />
-      <div v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="download-hero__inner ev">
-        <span class="download-pill"><i aria-hidden="true" />Franchise Information</span>
-        <h1 id="franchise-download-title">加盟資料下載</h1>
-        <nav aria-label="麵包屑" class="download-hero__trail">
+      <div class="download-hero__inner">
+        <span v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="download-pill ev"><i aria-hidden="true" />Franchise Information</span>
+        <h1 id="franchise-download-title" v-reveal="{ anim: 'opalMoveUp', delay: 80 }" data-ev="opalMoveUp" class="ev">加盟資料下載</h1>
+        <nav v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" aria-label="麵包屑" class="download-hero__trail ev">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
           <NuxtLink to="/franchising/intro">我要加盟</NuxtLink>
@@ -78,20 +78,19 @@ onMounted(verifyBrochure)
     <section class="download-document" aria-labelledby="franchise-document-title">
       <div class="download-rail">
         <header class="download-document__header">
-          <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="download-document__heading ev">
-            <span class="download-pill download-pill--dark"><i aria-hidden="true" />Official Brochure</span>
-            <h2 id="franchise-document-title">櫻花整體廚房<br /><span>加盟簡介</span></h2>
+          <div class="download-document__heading">
+            <h2 id="franchise-document-title" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev">櫻花整體廚房<br /><span>加盟簡介</span></h2>
           </div>
 
-          <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" data-ev="opalMoveLeft" class="download-document__summary ev">
-            <p>兩頁雙面六折頁，完整收錄櫻花品牌實力、總部支援、加盟準備金、資格條件與七階段加盟流程。</p>
-            <dl class="download-document__meta">
+          <div class="download-document__summary">
+            <p v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">兩頁雙面六折頁，完整收錄櫻花品牌實力、總部支援、加盟準備金、資格條件與七階段加盟流程。</p>
+            <dl v-reveal="{ anim: 'opalMoveUp', delay: 90 }" data-ev="opalMoveUp" class="download-document__meta ev">
               <div><dt>格式</dt><dd>PDF</dd></div>
               <div><dt>頁數</dt><dd>2 頁</dd></div>
               <div><dt>檔案大小</dt><dd>8.0 MB</dd></div>
             </dl>
 
-            <div class="download-document__actions">
+            <div v-reveal="{ anim: 'opalScaleUp', delay: 150 }" data-ev="opalScaleUp" class="download-document__actions ev">
               <a
                 :href="FRANCHISE_BROCHURE_URL"
                 target="_blank"
@@ -136,12 +135,15 @@ onMounted(verifyBrochure)
             <div class="download-preview__sheet">
               <InternalFranchiseImage :src="page.image" :alt="page.alt" fit="contain" />
             </div>
-            <div class="download-preview__caption"><span>PAGE {{ page.number }}</span><strong>{{ page.label }}</strong></div>
+            <div class="download-preview__caption"><span>PAGE {{ page.number }}</span></div>
           </article>
         </div>
 
-        <div class="download-document__back">
-          <NuxtLink to="/franchising/intro"><ArrowLeft aria-hidden="true" />返回我要加盟</NuxtLink>
+        <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="download-document__back ev">
+          <NuxtLink to="/franchising/intro" class="site-content-cta download-back-cta group/cta">
+            <span>返回我要加盟</span>
+            <span class="site-cta-icon download-back-cta__icon"><ArrowRight aria-hidden="true" /></span>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -154,7 +156,7 @@ onMounted(verifyBrochure)
 .download-hero {
   position: relative;
   isolation: isolate;
-  min-height: 360px;
+  min-height: 450px;
   overflow: hidden;
   color: #fff;
   background: #1c1c1d;
@@ -169,7 +171,7 @@ onMounted(verifyBrochure)
 .download-hero__inner {
   width: min(1410px, calc(100% - 60px));
   margin-inline: auto;
-  padding: 86px 86px 76px 0;
+  padding: 148px 86px 76px 0;
 }
 
 .download-pill {
@@ -180,26 +182,24 @@ onMounted(verifyBrochure)
   padding: 8px 16px;
   border: 1px solid rgb(255 255 255 / 28%);
   border-radius: 100px;
-  font-family: var(--font-ui);
+  font-family: var(--font-cjk-sans);
   font-size: 12px;
   letter-spacing: .14em;
   text-transform: uppercase;
 }
 
 .download-pill i { width: 7px; height: 7px; border-radius: 50%; background: #caa05c; }
-.download-pill--dark { border-color: #d0d0d5; color: #59585d; }
-
 .download-hero h1 {
   margin: 28px 0 30px;
   color: #fff;
-  font-family: var(--font-display);
+  font-family: var(--font-cjk-serif);
   font-size: clamp(58px, 7vw, 96px);
-  font-weight: 400;
+  font-weight: 600;
   line-height: .98;
   letter-spacing: -.035em;
 }
 
-.download-hero__trail { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; color: rgb(255 255 255 / 72%); }
+.download-hero__trail { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: rgb(255 255 255 / 72%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .download-hero__trail a { color: inherit; transition: color .25s ease; }
 .download-hero__trail a:hover,
 .download-hero__trail a:focus-visible { color: #caa05c; }
@@ -222,16 +222,16 @@ onMounted(verifyBrochure)
 }
 
 .download-document__heading h2 {
-  margin: 28px 0 0;
-  font-family: var(--font-display);
+  margin: 0;
+  font-family: var(--font-cjk-serif);
   font-size: clamp(52px, 5.4vw, 78px);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.02;
   letter-spacing: -.035em;
 }
 
 .download-document__heading h2 span { color: #caa05c; }
-.download-document__summary > p { max-width: 700px; margin: 4px 0 0; color: #59585d; font-size: 18px; line-height: 31px; }
+.download-document__summary > p { max-width: 700px; margin: 4px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 18px; line-height: 31px; }
 
 .download-document__meta {
   display: grid;
@@ -241,8 +241,8 @@ onMounted(verifyBrochure)
 }
 
 .download-document__meta div { padding-top: 16px; border-top: 1px solid #d0d0d5; }
-.download-document__meta dt { margin-bottom: 7px; color: #9f9fa4; font-size: 12px; letter-spacing: .12em; }
-.download-document__meta dd { margin: 0; font-family: var(--font-ui); font-size: 22px; }
+.download-document__meta dt { margin-bottom: 7px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 21px; letter-spacing: .08em; }
+.download-document__meta dd { margin: 0; font-family: var(--font-cjk-sans); font-size: 14px; font-weight: 600; line-height: 21px; }
 
 .download-document__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; }
 .download-action {
@@ -254,6 +254,7 @@ onMounted(verifyBrochure)
   padding: 12px 24px;
   border: 1px solid #1c1c1d;
   border-radius: 100px;
+  font-family: var(--font-cjk-sans);
   font-size: 15px;
   font-weight: 600;
   transition: color .25s ease, background-color .25s ease, border-color .25s ease, opacity .25s ease;
@@ -277,19 +278,28 @@ onMounted(verifyBrochure)
 
 .download-preview { display: grid; gap: 52px; padding-top: 72px; }
 .download-preview__sheet { overflow: hidden; aspect-ratio: 2.1132867133; border: 1px solid #e3e3e8; border-radius: 24px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 10%); }
-.download-preview__caption { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 22px 4px 0; }
-.download-preview__caption span { color: #9f9fa4; font-family: var(--font-ui); font-size: 12px; letter-spacing: .13em; }
-.download-preview__caption strong { font-family: var(--font-ui); font-size: 24px; font-weight: 400; }
+.download-preview__caption { display: flex; align-items: baseline; padding: 22px 4px 0; }
+.download-preview__caption span { color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 12px; letter-spacing: .13em; }
 
 .download-document__back { display: flex; justify-content: center; padding-top: 72px; }
-.download-document__back a { display: inline-flex; align-items: center; gap: 10px; color: #59585d; font-size: 14px; transition: color .25s ease; }
-.download-document__back a:hover,
-.download-document__back a:focus-visible { color: #caa05c; }
-.download-document__back svg { width: 17px; height: 17px; }
+.download-back-cta { display: inline-flex; width: max-content; min-height: 60px; align-items: center; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgb(159 159 164 / 64%); border-radius: 999px; color: #1c1c1d; background: transparent; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
+.download-back-cta:hover,
+.download-back-cta:focus-visible { color: #fff; border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
+.download-back-cta__icon { position: relative; display: inline-flex; width: 40px; height: 40px; flex: 0 0 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: color .3s ease, background-color .3s ease, transform .5s ease; }
+.download-back-cta__icon::after { position: absolute; width: 100%; height: 100%; border: 1px solid #caa05c; border-radius: 50%; content: ''; animation: download-back-radar 2s infinite; }
+.download-back-cta__icon svg { width: 20px; height: 20px; }
+.download-back-cta:hover .download-back-cta__icon,
+.download-back-cta:focus-visible .download-back-cta__icon { color: #caa05c; background: #fff; transform: rotate(0); }
+
+@keyframes download-back-radar {
+  0% { opacity: .8; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
 
 @media (max-width: 1023px) {
   .download-hero__inner,
   .download-rail { padding-right: 0; }
+  .download-hero__inner { padding-top: 132px; }
   .download-document { padding-block: 86px 100px; }
   .download-document__header { grid-template-columns: 1fr; gap: 42px; }
   .download-document__heading h2 { max-width: 680px; }
@@ -302,7 +312,7 @@ onMounted(verifyBrochure)
   .download-pill { font-size: 10px; }
   .download-document { padding: 64px 15px 76px; background-size: 52%; }
   .download-document__header { gap: 34px; padding-bottom: 52px; }
-  .download-document__heading h2 { margin-top: 22px; font-size: 43px; line-height: 47px; }
+  .download-document__heading h2 { font-size: 43px; line-height: 47px; }
   .download-document__summary > p { font-size: 16px; line-height: 27px; }
   .download-document__meta { gap: 10px; margin-top: 30px; }
   .download-document__meta dd { font-size: 18px; }
@@ -311,12 +321,15 @@ onMounted(verifyBrochure)
   .download-preview { gap: 38px; padding-top: 52px; }
   .download-preview__sheet { border-radius: 14px; box-shadow: 0 14px 36px rgb(28 28 29 / 10%); }
   .download-preview__caption { align-items: flex-start; padding-top: 15px; }
-  .download-preview__caption strong { font-size: 19px; text-align: right; }
   .download-document__back { padding-top: 54px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .download-action,
-  .download-document__back a { transition: none; }
+  .download-back-cta,
+  .download-back-cta__icon { transition: none; }
+  .download-back-cta__icon::after { animation: none; opacity: 0; }
+  .download-back-cta:hover,
+  .download-back-cta:focus-visible { transform: none; }
 }
 </style>

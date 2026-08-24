@@ -12,9 +12,16 @@ export const builderPartners = [
   { name: '茂德建設', logo: '/section-6/builders/partners/mawder.png' },
 ] as const
 
-export const builderTeamImages = [
-  '/section-6/builders/team/antra-team-1.jpg',
-  '/section-6/builders/team/antra-team-2.jpg',
-  '/section-6/builders/team/antra-team-3.jpg',
-  '/section-6/builders/team/antra-team-4.jpg',
+export const builderProjectCards = [
+  {
+    type: 'project',
+    title: 'SAKURA KITCHEN',
+    subtitle: '建商整體廚房',
+    image: '/section-6/builders/contact-kitchen.jpg',
+    logo: '/section-6/builders/sakura-kitchen-white.png',
+    href: '/builders/sakura-kitchen',
+  },
+  { type: 'coming-soon', title: 'Coming Soon', image: '/section-6/builders/team/antra-team-2.jpg' },
+  { type: 'coming-soon', title: 'Coming Soon', image: '/section-6/builders/team/antra-team-3.jpg' },
+  { type: 'coming-soon', title: 'Coming Soon', image: '/section-6/builders/team/antra-team-4.jpg' },
 ] as const
