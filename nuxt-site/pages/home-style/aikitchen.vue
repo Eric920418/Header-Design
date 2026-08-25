@@ -10,10 +10,9 @@ const currentHero = ref(0)
 const previousHero = ref(0)
 const heroTransition = ref(0)
 const activeSuiteIndex = ref(0)
-const equipmentPaused = ref(false)
+const activeSuiteImageIndex = ref(0)
 const casesPaused = ref(false)
 const seriesOpen = ref(false)
-const [equipmentViewport, equipmentApi] = emblaCarouselVue({ loop: true, align: 'start', duration: 28 })
 const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', duration: 18 })
 
 const heroStories = [
@@ -35,11 +34,13 @@ const heroStories = [
 ]
 
 const activeSuite = computed(() => data.suites[activeSuiteIndex.value]!)
+const activeSuiteImages = computed(() => activeSuite.value.images)
+const activeSuitePrimaryImage = computed(() => activeSuiteImages.value[activeSuiteImageIndex.value]!)
+const activeSuiteSecondaryImage = computed(() => activeSuiteImages.value[(activeSuiteImageIndex.value + 1) % activeSuiteImages.value.length]!)
 const activeHeroStory = computed(() => heroStories[currentHero.value]!)
-const equipmentLoop = computed(() => [...data.equipment, ...data.equipment])
+const visibleEquipment = data.equipment.slice(0, 5)
 const casesLoop = computed(() => [...data.cases, ...data.cases])
 let heroTimer: ReturnType<typeof setInterval> | undefined
-let equipmentTimer: ReturnType<typeof setInterval> | undefined
 let casesTimer: ReturnType<typeof setInterval> | undefined
 let stopMotionWatch: (() => void) | undefined
 
@@ -56,28 +57,33 @@ function changeHero() {
 function activateSuite(index: number) {
   if (index === activeSuiteIndex.value) return
   activeSuiteIndex.value = index
+  activeSuiteImageIndex.value = 0
 }
 
-function activateSuiteFromHover(index: number) {
-  if (!import.meta.client) return
-  if (window.innerWidth >= 768 && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    activateSuite(index)
-  }
+function showPreviousSuiteImage() {
+  const imageCount = activeSuiteImages.value.length
+  if (imageCount < 2) return
+  activeSuiteImageIndex.value = (activeSuiteImageIndex.value - 1 + imageCount) % imageCount
+}
+
+function showNextSuiteImage() {
+  const imageCount = activeSuiteImages.value.length
+  if (imageCount < 2) return
+  activeSuiteImageIndex.value = (activeSuiteImageIndex.value + 1) % imageCount
+}
+
+function formatGalleryNumber(value: number) {
+  return String(value).padStart(2, '0')
 }
 
 onMounted(() => {
   stopMotionWatch = watch(reducedMotion, (reduced) => {
     if (heroTimer) clearInterval(heroTimer)
-    if (equipmentTimer) clearInterval(equipmentTimer)
     if (casesTimer) clearInterval(casesTimer)
     heroTimer = undefined
-    equipmentTimer = undefined
     casesTimer = undefined
     if (!reduced) {
       heroTimer = setInterval(changeHero, 5000)
-      equipmentTimer = setInterval(() => {
-        if (!equipmentPaused.value) equipmentApi.value?.scrollNext()
-      }, 4000)
       casesTimer = setInterval(() => {
         if (!casesPaused.value) casesApi.value?.scrollNext()
       }, 2600)
@@ -86,7 +92,6 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   if (heroTimer) clearInterval(heroTimer)
-  if (equipmentTimer) clearInterval(equipmentTimer)
   if (casesTimer) clearInterval(casesTimer)
   stopMotionWatch?.()
 })
@@ -185,37 +190,37 @@ useSeoMeta({
         </div>
 
         <div v-reveal="{ anim: 'opalMoveUp' }" class="ai-suite-stage">
-          <div :key="`${activeSuite.id}-left-top`" class="ai-suite-image ai-suite-image--left-top">
-            <InternalBrandImage :src="activeSuite.images[0]" :alt="`${activeSuite.name} 套系空間一`" class="h-full w-full" />
+          <div :key="`${activeSuite.id}-${activeSuiteImageIndex}-left`" class="ai-suite-image ai-suite-image--left-top">
+            <InternalBrandImage :src="activeSuitePrimaryImage" :alt="`${activeSuite.name} 套系空間 ${activeSuiteImageIndex + 1}`" class="h-full w-full" />
           </div>
-          <div :key="`${activeSuite.id}-right-top`" class="ai-suite-image ai-suite-image--right-top">
-            <InternalBrandImage :src="activeSuite.images[1]" :alt="`${activeSuite.name} 套系空間二`" class="h-full w-full" />
-          </div>
-          <div :key="`${activeSuite.id}-left-bottom`" class="ai-suite-image ai-suite-image--left-bottom">
-            <InternalBrandImage :src="activeSuite.images[1]" :alt="`${activeSuite.name} 套系空間二延伸視角`" class="h-full w-full" />
-          </div>
-          <div :key="`${activeSuite.id}-right-bottom`" class="ai-suite-image ai-suite-image--right-bottom">
-            <InternalBrandImage :src="activeSuite.images[0]" :alt="`${activeSuite.name} 套系空間一延伸視角`" class="h-full w-full" />
+          <div :key="`${activeSuite.id}-${activeSuiteImageIndex}-right`" class="ai-suite-image ai-suite-image--right-top">
+            <InternalBrandImage :src="activeSuiteSecondaryImage" :alt="`${activeSuite.name} 套系空間 ${(activeSuiteImageIndex + 1) % activeSuiteImages.length + 1}`" class="h-full w-full" />
           </div>
 
-          <div class="ai-suite-tabs" role="tablist" aria-label="AI Kitchen 四套系">
-            <button
-              v-for="(suite, index) in data.suites"
-              :id="`suite-tab-${suite.id}`"
-              :key="suite.id"
-              type="button"
-              role="tab"
-              :aria-selected="activeSuiteIndex === index"
-              :aria-controls="`suite-panel-${suite.id}`"
-              :tabindex="activeSuiteIndex === index ? 0 : -1"
-              :class="{ 'is-active': activeSuiteIndex === index }"
-              @mouseenter="activateSuiteFromHover(index)"
-              @focus="activateSuite(index)"
-              @click="activateSuite(index)"
-            >
-              <span class="ai-suite-tabs__icon"><Check v-if="activeSuiteIndex === index" /></span>
-              <span>{{ suite.name }}</span>
-            </button>
+          <div class="ai-suite-center">
+            <div class="ai-suite-tabs" role="tablist" aria-label="AI Kitchen 四套系">
+              <button
+                v-for="(suite, index) in data.suites"
+                :id="`suite-tab-${suite.id}`"
+                :key="suite.id"
+                type="button"
+                role="tab"
+                :aria-selected="activeSuiteIndex === index"
+                :aria-controls="`suite-panel-${suite.id}`"
+                :tabindex="activeSuiteIndex === index ? 0 : -1"
+                :class="{ 'is-active': activeSuiteIndex === index }"
+                @focus="activateSuite(index)"
+                @click="activateSuite(index)"
+              >
+                <span class="ai-suite-tabs__icon"><Check v-if="activeSuiteIndex === index" /></span>
+                <span>{{ suite.name }}</span>
+              </button>
+            </div>
+            <div class="ai-suite-controls" aria-label="AI Kitchen 套系圖片切換">
+              <button type="button" :disabled="activeSuiteImages.length < 2" :aria-label="`上一張 ${activeSuite.name} 圖片`" @click="showPreviousSuiteImage"><ChevronLeft aria-hidden="true" /></button>
+              <span aria-live="polite">{{ formatGalleryNumber(activeSuiteImageIndex + 1) }} / {{ formatGalleryNumber(activeSuiteImages.length) }}</span>
+              <button type="button" :disabled="activeSuiteImages.length < 2" :aria-label="`下一張 ${activeSuite.name} 圖片`" @click="showNextSuiteImage"><ChevronRight aria-hidden="true" /></button>
+            </div>
           </div>
         </div>
 
@@ -268,27 +273,14 @@ useSeoMeta({
           <p v-reveal="{ anim: 'opalMoveUp' }">Kitchen Appliances</p>
           <h2 id="equipment-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Join Our Newsletter<br><span>Stay Up To Date</span></h2>
         </div>
-        <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }">
-          <div
-            ref="equipmentViewport"
-            class="ai-equipment__viewport"
-            aria-roledescription="carousel"
-            aria-label="AI Kitchen 推薦廚電"
-            @mouseenter="equipmentPaused = true"
-            @mouseleave="equipmentPaused = false"
-            @focusin="equipmentPaused = true"
-            @focusout="equipmentPaused = false"
-          >
-            <div class="ai-equipment__track">
-              <article v-for="(equipment, index) in equipmentLoop" :key="`${equipment.model}-${index}`" class="ai-equipment__slide" :aria-hidden="index >= data.equipment.length ? 'true' : undefined">
-                <NuxtLink :to="equipment.route" class="ai-equipment__card" :tabindex="index < data.equipment.length ? 0 : -1" :aria-label="`查看 ${equipment.model} ${equipment.name}`">
-                  <InternalBrandImage :src="equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
-                  <h3><span>{{ equipment.model }}</span>{{ equipment.name }}</h3>
-                  <span class="ai-equipment__action" aria-hidden="true"><Plus /></span>
-                </NuxtLink>
-              </article>
-            </div>
-          </div>
+        <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="ai-equipment__grid" aria-label="AI Kitchen 推薦廚電">
+          <article v-for="equipment in visibleEquipment" :key="equipment.model" class="ai-equipment__item">
+            <NuxtLink :to="equipment.route" class="ai-equipment__card" :aria-label="`查看 ${equipment.model} ${equipment.name}`">
+              <InternalBrandImage :src="equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
+              <h3><span>{{ equipment.model }}</span>{{ equipment.name }}</h3>
+              <span class="ai-equipment__action" aria-hidden="true"><Plus /></span>
+            </NuxtLink>
+          </article>
         </div>
       </div>
     </section>
@@ -367,28 +359,33 @@ useSeoMeta({
 .ai-section-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .ai-section-heading h2 { max-width: 900px; margin: 70px 0 0; font-size: 60px; line-height: 64px; text-transform: none; }
 .ai-section-heading h2 span, .ai-centered-heading h2 span { color: #caa05c; }
-.ai-intro__content { display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 56%); gap: 70px; margin-top: 80px; padding-top: 50px; border-top: 1px solid #e3e3e8; }
+.ai-intro__content { display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 56%); gap: 70px; margin-top: 64px; padding-top: 44px; border-top: 1px solid #e3e3e8; }
 .ai-intro__content h3 { max-width: 520px; margin: 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; letter-spacing: .02em; text-transform: none; }
 .ai-intro__paragraphs { display: grid; gap: 14px; align-content: start; padding-top: 5px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .ai-intro__paragraphs p { margin: 0; }
 
-.ai-suite-stage { display: grid; grid-template-columns: minmax(0, 1fr) 250px minmax(0, 1fr); grid-template-rows: 265px 265px; gap: 30px; margin-top: 90px; }
+.ai-suite-stage { display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); grid-template-rows: 420px; gap: 24px; margin-top: 60px; }
 .ai-suite-image { position: relative; overflow: hidden; border-radius: 24px; animation: ai-suite-image-in .8s cubic-bezier(.25,.46,.45,.94) both; }
 .ai-suite-image::after { position: absolute; inset: 0; background: linear-gradient(to top, rgb(0 0 0 / 16%), transparent 55%); content: ''; pointer-events: none; }
 .ai-suite-image--left-top { grid-column: 1; grid-row: 1; }
 .ai-suite-image--right-top { grid-column: 3; grid-row: 1; }
-.ai-suite-image--left-bottom { grid-column: 1; grid-row: 2; }
-.ai-suite-image--right-bottom { grid-column: 3; grid-row: 2; }
-.ai-suite-tabs { grid-column: 2; grid-row: 1 / 3; display: flex; flex-direction: column; justify-content: center; padding: 0 14px; }
-.ai-suite-tabs button { position: relative; display: grid; grid-template-columns: 30px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 74px; border-bottom: 1px solid #e3e3e8; color: #9f9fa4; text-align: left; transition: color .35s; }
+.ai-suite-center { grid-column: 2; grid-row: 1; display: flex; min-width: 0; flex-direction: column; align-self: center; gap: 18px; }
+.ai-suite-tabs { display: flex; flex-direction: column; }
+.ai-suite-tabs button { position: relative; display: grid; grid-template-columns: 26px 1fr; align-items: center; gap: 9px; width: 100%; min-height: 56px; border-bottom: 1px solid #e3e3e8; color: #9f9fa4; text-align: left; transition: color .35s; }
 .ai-suite-tabs button:first-child { border-top: 1px solid #e3e3e8; }
 .ai-suite-tabs button::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 1px; transform: scaleX(0); transform-origin: left; background: #caa05c; content: ''; transition: transform .8s cubic-bezier(.25,.46,.45,.94); }
 .ai-suite-tabs button.is-active { color: #1c1c1d; }
 .ai-suite-tabs button.is-active::after { transform: scaleX(1); }
-.ai-suite-tabs__icon { display: flex; width: 26px; height: 26px; align-items: center; justify-content: center; border-radius: 7px; background: #caa05c; color: #fff; }
-.ai-suite-tabs__icon svg { width: 15px; height: 15px; }
-.ai-suite-tabs button > span:last-child { font-family: "Bodoni Moda", serif; font-size: 20px; line-height: 28px; }
-.ai-suite-details { display: grid; grid-template-columns: 1.05fr 1fr 1fr; gap: 50px; margin-top: 40px; border-radius: 24px; background: #fff; padding: 42px 50px; box-shadow: 0 28px 80px -48px rgb(0 0 0 / 45%); animation: ai-suite-content-in .8s ease both; }
+.ai-suite-tabs__icon { display: flex; width: 24px; height: 24px; align-items: center; justify-content: center; border-radius: 7px; background: #caa05c; color: #fff; }
+.ai-suite-tabs__icon svg { width: 14px; height: 14px; }
+.ai-suite-tabs button > span:last-child { font-family: "Bodoni Moda", serif; font-size: 18px; line-height: 24px; }
+.ai-suite-controls { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.ai-suite-controls button { display: inline-flex; width: 42px; height: 42px; flex: 0 0 auto; align-items: center; justify-content: center; border: 1px solid #d8d8dc; border-radius: 50%; color: #1c1c1d; background: #fff; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
+.ai-suite-controls button:hover, .ai-suite-controls button:focus-visible { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
+.ai-suite-controls button:disabled { border-color: #e3e3e8; color: #c6c6ca; background: #f6f6f6; cursor: not-allowed; transform: none; }
+.ai-suite-controls button svg { width: 17px; height: 17px; }
+.ai-suite-controls > span { min-width: 48px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 12px; line-height: 18px; letter-spacing: .08em; text-align: center; }
+.ai-suite-details { display: grid; grid-template-columns: 1.05fr 1fr 1fr; gap: 50px; margin-top: 22px; border-radius: 24px; background: #fff; padding: 42px 50px; box-shadow: 0 28px 80px -48px rgb(0 0 0 / 45%); animation: ai-suite-content-in .8s ease both; }
 .ai-suite-details__number { color: #e3e3e8; font-family: var(--font-display); font-size: 54px; line-height: 1; }
 .ai-suite-details__name { margin: -18px 0 20px 42px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .ai-suite-details h3 { margin: 6px 0 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; text-transform: none; }
@@ -416,14 +413,12 @@ useSeoMeta({
 .ai-equipment { position: relative; overflow: hidden; background: #f6f6f6; }
 .ai-equipment::before { position: absolute; inset: 0; opacity: .035; background-image: linear-gradient(#1c1c1d 1px, transparent 1px), linear-gradient(90deg, #1c1c1d 1px, transparent 1px); background-size: 46px 46px; content: ''; pointer-events: none; }
 .ai-equipment .page-container { position: relative; }
-.ai-equipment__viewport { margin-top: 60px; overflow: hidden; cursor: grab; }
-.ai-equipment__viewport:active { cursor: grabbing; }
-.ai-equipment__track { display: flex; margin-left: -24px; touch-action: pan-y pinch-zoom; }
-.ai-equipment__slide { min-width: 0; flex: 0 0 50%; padding-left: 24px; }
+.ai-equipment__grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; margin-top: 60px; }
+.ai-equipment__item { min-width: 0; }
 .ai-equipment__card { position: relative; display: block; color: inherit; }
 .ai-equipment__image { aspect-ratio: 1.2; background: transparent; }
-.ai-equipment__slide h3 { margin: 20px auto 0; max-width: 220px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; font-weight: 400; line-height: 22px; text-align: center; text-transform: none; }
-.ai-equipment__slide h3 span { display: block; margin-bottom: 3px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 18px; font-weight: 500; }
+.ai-equipment__item h3 { margin: 20px auto 0; max-width: 220px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; font-weight: 400; line-height: 22px; text-align: center; text-transform: none; }
+.ai-equipment__item h3 span { display: block; margin-bottom: 3px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 18px; font-weight: 500; }
 .ai-equipment__action { position: absolute; top: 46%; right: 12px; display: flex; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: rgb(28 28 29 / 62%); opacity: 0; transform: translateY(10px); transition: opacity .3s ease, transform .3s ease, background-color .3s ease; }
 .ai-equipment__action svg { width: 20px; height: 20px; }
 .ai-equipment__card:hover .ai-equipment__action, .ai-equipment__card:focus-visible .ai-equipment__action { opacity: 1; transform: none; }
@@ -451,18 +446,17 @@ useSeoMeta({
 .ai-case-card--featured .ai-case-card__body h3 { margin: 0; }
 .ai-case-card--featured .ai-case-card__body p { display: none; }
 
-@media (min-width: 569px) { .ai-equipment__slide { flex-basis: 33.333%; } }
-@media (min-width: 768px) { .ai-equipment__slide { flex-basis: 25%; } }
-@media (min-width: 881px) { .ai-equipment__slide { flex-basis: 20%; } }
-@media (min-width: 1201px) { .ai-equipment__slide { flex-basis: 20%; } }
-
 @media (max-width: 1200px) {
   .ai-hero { height: 760px; }
   .ai-hero__inner { padding-top: 95px; }
   .ai-hero__cta { top: 220px; right: 0; }
   .ai-hero__bottom { grid-template-columns: 72px minmax(0, 1fr) 98px 88px; gap: 16px; }
   .ai-hero__story-thumb { width: 68px; height: 68px; }
-  .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 220px minmax(0, 1fr); grid-template-rows: 230px 230px; gap: 24px; }
+  .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 164px minmax(0, 1fr); grid-template-rows: 360px; gap: 18px; }
+  .ai-suite-tabs button { min-height: 50px; }
+  .ai-suite-tabs button > span:last-child { font-size: 17px; line-height: 22px; }
+  .ai-suite-controls { gap: 7px; }
+  .ai-suite-controls button { width: 38px; height: 38px; }
   .ai-suite-details { gap: 30px; padding: 36px; }
   .ai-finishes__grid { gap: 14px; }
   .ai-finishes__caption { padding-inline: 10px; }
@@ -476,8 +470,11 @@ useSeoMeta({
   .ai-series-drawer { display: none; }
   .ai-section-heading h2, .ai-centered-heading h2 { font-size: 48px; line-height: 53px; }
   .ai-intro__content { gap: 40px; }
-  .ai-suite-stage { grid-template-columns: 1fr 210px 1fr; grid-template-rows: 200px 200px; gap: 18px; }
-  .ai-suite-tabs button { min-height: 68px; }
+  .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); grid-template-rows: 320px; gap: 14px; }
+  .ai-suite-tabs button { min-height: 48px; }
+  .ai-suite-tabs button > span:last-child { font-size: 16px; line-height: 21px; }
+  .ai-suite-controls button { width: 36px; height: 36px; }
+  .ai-suite-controls > span { min-width: 42px; font-size: 11px; }
   .ai-suite-details { grid-template-columns: 1fr 1fr; }
   .ai-suite-details > div:last-child { grid-column: 1 / -1; }
   .ai-finishes__grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
@@ -509,25 +506,24 @@ useSeoMeta({
   .ai-section-heading { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
   .ai-section-heading h2 { margin-top: 0; }
   .ai-section-heading h2, .ai-centered-heading h2, .ai-centered-heading--compact h2 { font-size: 32px; line-height: 37px; }
-  .ai-intro__content { display: block; margin-top: 45px; padding-top: 35px; text-align: center; }
+  .ai-intro__content { display: block; margin-top: 40px; padding-top: 32px; text-align: center; }
   .ai-intro__content h3 { margin-inline: auto; }
   .ai-intro__paragraphs { margin-top: 28px; }
-  .ai-suite-stage { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 180px 180px; gap: 12px; margin-top: 55px; }
-  .ai-suite-tabs { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: 1fr 1fr; padding: 0; }
-  .ai-suite-tabs button { min-height: 58px; border: 1px solid #e3e3e8; padding: 0 10px; }
+  .ai-suite-stage { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 240px; gap: 12px; margin-top: 40px; }
+  .ai-suite-center { grid-column: 1 / -1; grid-row: 1; gap: 14px; }
+  .ai-suite-tabs { display: grid; grid-template-columns: 1fr 1fr; }
+  .ai-suite-tabs button { min-height: 50px; border: 1px solid #e3e3e8; padding: 0 10px; }
   .ai-suite-tabs button:first-child { border-top: 1px solid #e3e3e8; }
   .ai-suite-tabs button > span:last-child { font-size: 16px; }
   .ai-suite-image--left-top { grid-column: 1; grid-row: 2; }
   .ai-suite-image--right-top { grid-column: 2; grid-row: 2; }
-  .ai-suite-image--left-bottom { grid-column: 1; grid-row: 3; }
-  .ai-suite-image--right-bottom { grid-column: 2; grid-row: 3; }
   .ai-suite-image { border-radius: 16px; }
-  .ai-suite-details { display: block; margin-top: 20px; padding: 28px 22px; }
+  .ai-suite-details { display: block; margin-top: 16px; padding: 28px 22px; }
   .ai-suite-details > div + div { margin-top: 28px; }
   .ai-suite-details h3 { font-size: 23px; line-height: 30px; }
   .ai-finishes__grid { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; margin-top: 38px; }
   .ai-finishes__image { border-radius: 16px; }
-  .ai-equipment__viewport { margin-top: 38px; }
+  .ai-equipment__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 38px; }
   .ai-cases__heading { display: block; text-align: center; }
   .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 0 30px; font-size: 32px; line-height: 37px; }
   .ai-cases__viewport { margin-top: 38px; }
@@ -536,8 +532,13 @@ useSeoMeta({
   .ai-case-card__body h3 { font-size: 22px; line-height: 29px; }
 }
 
+@media (max-width: 767px) {
+  .ai-equipment__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
+}
+
 @media (max-width: 390px) {
   .ai-hero__title { font-size: 42px; }
+  .ai-suite-stage { grid-template-rows: auto 220px; }
   .ai-suite-tabs button { grid-template-columns: 24px 1fr; gap: 7px; }
   .ai-suite-tabs__icon { width: 22px; height: 22px; }
 }

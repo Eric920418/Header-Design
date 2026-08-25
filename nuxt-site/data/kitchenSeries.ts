@@ -1,7 +1,7 @@
 export type KitchenSuite = {
   id: string
   name: string
-  images: [string, string]
+  images: string[]
   headlines: [string, string]
   descriptions: string[]
   equipment: string[]
