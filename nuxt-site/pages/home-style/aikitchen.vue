@@ -13,9 +13,8 @@ const activeSuiteIndex = ref(0)
 const activeSuiteImageIndex = ref(0)
 const casesPaused = ref(false)
 const casesInteracted = ref(false)
-const featuredCaseSlide = ref(1)
 const seriesOpen = ref(false)
-const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false, duration: 26 })
+const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false, duration: 32 })
 
 const heroStories = [
   {
@@ -45,6 +44,7 @@ const casesLoop = computed(() => [...data.cases, ...data.cases])
 let heroTimer: ReturnType<typeof setInterval> | undefined
 let casesTimer: ReturnType<typeof setInterval> | undefined
 let stopMotionWatch: (() => void) | undefined
+let caseMorphFrame: number | undefined
 
 function showHero(index: number) {
   previousHero.value = currentHero.value
@@ -89,32 +89,73 @@ function handleCasesKeydown(event: KeyboardEvent) {
   }
 }
 
-function syncFeaturedCase() {
-  const selected = casesApi.value?.selectedScrollSnap() ?? 0
-  featuredCaseSlide.value = (selected + 1) % casesLoop.value.length
-}
-
 function stopCasesAutoplay() {
   casesInteracted.value = true
 }
 
-watch(casesApi, (api, oldApi, onCleanup) => {
-  oldApi?.off('select', syncFeaturedCase)
-  oldApi?.off('reInit', syncFeaturedCase)
-  oldApi?.off('pointerDown', stopCasesAutoplay)
+function initialCaseStyle(index: number) {
+  const isCenterCard = index === 1
+  return {
+    '--case-focus': isCenterCard ? '1' : '0',
+    '--case-image-height': isCenterCard ? '560px' : undefined,
+    '--case-image-radius': isCenterCard ? '0px' : '24px',
+  }
+}
+
+function updateCaseMorph() {
+  const viewport = casesViewport.value
+  if (!(viewport instanceof HTMLElement)) return
+
+  const viewportRect = viewport.getBoundingClientRect()
+  const slides = viewport.querySelectorAll<HTMLElement>('.ai-cases__slide')
+  const firstSlide = slides.item(0)
+  const slidePitch = firstSlide?.getBoundingClientRect().width || 1
+  const targetCenter = viewportRect.left + viewportRect.width / 2
+  const morphEnabled = window.innerWidth > 1024
+
+  slides.forEach((slide) => {
+    const card = slide.querySelector<HTMLElement>('.ai-case-card')
+    if (!card) return
+
+    const cardRect = card.getBoundingClientRect()
+    const distance = Math.abs(cardRect.left + cardRect.width / 2 - targetCenter)
+    const focus = morphEnabled ? Math.max(0, Math.min(1, 1 - distance / slidePitch)) : 0
+    const sideImageHeight = cardRect.width / 1.40625
+    const imageHeight = sideImageHeight + (560 - sideImageHeight) * focus
+
+    card.style.setProperty('--case-focus', focus.toFixed(4))
+    card.style.setProperty('--case-image-height', `${imageHeight.toFixed(2)}px`)
+    card.style.setProperty('--case-image-radius', `${(24 * (1 - focus)).toFixed(2)}px`)
+  })
+}
+
+function scheduleCaseMorph() {
+  if (caseMorphFrame !== undefined) return
+  caseMorphFrame = window.requestAnimationFrame(() => {
+    caseMorphFrame = undefined
+    updateCaseMorph()
+  })
+}
+
+watch(casesApi, (api, _oldApi, onCleanup) => {
   if (!api) return
-  syncFeaturedCase()
-  api.on('select', syncFeaturedCase)
-  api.on('reInit', syncFeaturedCase)
+  nextTick(scheduleCaseMorph)
+  api.on('scroll', scheduleCaseMorph)
+  api.on('select', scheduleCaseMorph)
+  api.on('settle', scheduleCaseMorph)
+  api.on('reInit', scheduleCaseMorph)
   api.on('pointerDown', stopCasesAutoplay)
   onCleanup(() => {
-    api.off('select', syncFeaturedCase)
-    api.off('reInit', syncFeaturedCase)
+    api.off('scroll', scheduleCaseMorph)
+    api.off('select', scheduleCaseMorph)
+    api.off('settle', scheduleCaseMorph)
+    api.off('reInit', scheduleCaseMorph)
     api.off('pointerDown', stopCasesAutoplay)
   })
 }, { immediate: true })
 
 onMounted(() => {
+  window.addEventListener('resize', scheduleCaseMorph, { passive: true })
   stopMotionWatch = watch(reducedMotion, (reduced) => {
     if (heroTimer) clearInterval(heroTimer)
     if (casesTimer) clearInterval(casesTimer)
@@ -131,6 +172,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (heroTimer) clearInterval(heroTimer)
   if (casesTimer) clearInterval(casesTimer)
+  if (caseMorphFrame !== undefined) window.cancelAnimationFrame(caseMorphFrame)
+  window.removeEventListener('resize', scheduleCaseMorph)
   stopMotionWatch?.()
 })
 
@@ -343,11 +386,14 @@ useSeoMeta({
         >
           <div class="ai-cases__track">
             <div v-for="(item, index) in casesLoop" :key="`${item.url}-${index}`" class="ai-cases__slide">
-              <a :href="item.url" target="_blank" rel="noopener noreferrer" class="ai-case-card" :class="{ 'ai-case-card--featured': index === featuredCaseSlide }">
+              <a :href="item.url" target="_blank" rel="noopener noreferrer" class="ai-case-card" :style="initialCaseStyle(index)">
                 <div class="ai-case-card__image"><InternalBrandImage :src="item.image" :alt="item.title" class="h-full w-full" /></div>
-                <div class="ai-case-card__body">
+                <div class="ai-case-card__body ai-case-card__body--side">
                   <h3>{{ item.title }}</h3>
                   <p>{{ item.excerpt }}</p>
+                </div>
+                <div class="ai-case-card__body ai-case-card__body--featured" aria-hidden="true">
+                  <h3>{{ item.title }}</h3>
                 </div>
               </a>
             </div>
@@ -475,19 +521,17 @@ useSeoMeta({
 .ai-cases__viewport:active { cursor: grabbing; }
 .ai-cases__track { display: flex; margin-left: -30px; touch-action: pan-y pinch-zoom; }
 .ai-cases__slide { min-width: 0; flex: 0 0 33.333333%; padding-left: 30px; }
-.ai-case-card { position: relative; display: flex; min-width: 0; height: 560px; flex-direction: column; color: #1c1c1d; transition: border-radius .5s cubic-bezier(.25, .46, .45, .94); }
-.ai-case-card__image { position: relative; aspect-ratio: 1.40625; flex: 0 0 auto; overflow: hidden; border-radius: 24px; transition: border-radius .5s cubic-bezier(.25, .46, .45, .94); }
+.ai-case-card { --case-focus: 0; --case-image-radius: 24px; position: relative; display: block; min-width: 0; height: 560px; overflow: hidden; border-radius: 24px; color: #1c1c1d; background: #fff; }
+.ai-case-card__image { position: relative; width: 100%; height: var(--case-image-height, auto); aspect-ratio: 1.40625; overflow: hidden; border-radius: 24px 24px var(--case-image-radius) var(--case-image-radius); will-change: height, border-radius; }
+.ai-case-card__image::after { position: absolute; inset: 32% 0 0; background: linear-gradient(180deg, transparent, rgb(53 52 49 / 56%) 30%, #353431 100%); content: ''; opacity: var(--case-focus); pointer-events: none; will-change: opacity; }
 .ai-case-card__image :deep(img) { transition: transform .5s; }
 .ai-case-card:hover .ai-case-card__image :deep(img) { transform: scale(1.1); }
-.ai-case-card__body { padding-top: 22px; transition: color .5s cubic-bezier(.25, .46, .45, .94), padding .5s cubic-bezier(.25, .46, .45, .94); }
+.ai-case-card__body { padding-top: 22px; }
 .ai-case-card__body h3 { display: -webkit-box; overflow: hidden; margin: 0 0 19px; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 30px; text-transform: none; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .ai-case-card__body p { display: -webkit-box; overflow: hidden; margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
-.ai-case-card--featured { overflow: hidden; border-radius: 24px; }
-.ai-case-card--featured .ai-case-card__image { position: absolute; inset: 0; aspect-ratio: auto; border-radius: 0; }
-.ai-case-card--featured .ai-case-card__image::after { position: absolute; inset: 40% 0 0; background: linear-gradient(180deg, transparent, rgb(53 52 49 / 56%) 30%, #353431 100%); content: ''; }
-.ai-case-card--featured .ai-case-card__body { position: absolute; inset-inline: 0; bottom: 0; z-index: 2; padding: 40px 50px 44px; color: #fff; }
-.ai-case-card--featured .ai-case-card__body h3 { margin: 0; }
-.ai-case-card--featured .ai-case-card__body p { display: none; }
+.ai-case-card__body--side { opacity: calc(1 - var(--case-focus)); transform: translateY(calc(var(--case-focus) * 18px)); will-change: opacity, transform; }
+.ai-case-card__body--featured { position: absolute; inset-inline: 0; bottom: 0; z-index: 2; padding: 40px 50px 44px; color: #fff; opacity: var(--case-focus); pointer-events: none; transform: translateY(calc((1 - var(--case-focus)) * 24px)); will-change: opacity, transform; }
+.ai-case-card__body--featured h3 { margin: 0; }
 
 @media (max-width: 1200px) {
   .ai-hero { height: 760px; }
@@ -523,13 +567,11 @@ useSeoMeta({
   .ai-finishes__grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .ai-cases__heading > h2 { font-size: 50px; line-height: 56px; }
   .ai-cases__slide { flex-basis: 50%; }
-  .ai-case-card { height: auto; }
-  .ai-case-card--featured { overflow: visible; border-radius: 0; }
-  .ai-case-card--featured .ai-case-card__image { position: relative; inset: auto; aspect-ratio: 1.40625; border-radius: 24px; }
-  .ai-case-card--featured .ai-case-card__image::after { display: none; }
-  .ai-case-card--featured .ai-case-card__body { position: relative; inset: auto; padding: 22px 0 0; color: #1c1c1d; }
-  .ai-case-card--featured .ai-case-card__body h3 { margin-bottom: 19px; }
-  .ai-case-card--featured .ai-case-card__body p { display: -webkit-box; }
+  .ai-case-card { height: auto; overflow: visible; border-radius: 0; }
+  .ai-case-card__image { height: auto !important; aspect-ratio: 1.40625; border-radius: 24px; }
+  .ai-case-card__image::after { display: none; }
+  .ai-case-card__body--side { opacity: 1; transform: none; }
+  .ai-case-card__body--featured { display: none; }
 }
 
 @media (max-width: 767px) {

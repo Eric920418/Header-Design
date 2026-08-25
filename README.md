@@ -26,7 +26,7 @@
 ## 1.4 品牌系列型錄（2026-08-21 新版調整）
 
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第八、九頁校正 `/catalogues/kitchenware-catalog`；第九頁的甲方資訊提案明確補入 MUJI Basic+ 與 Clever，因此最終清單依甲方正式來源更新為八筆：MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic、Elegant。
-- 列表沿用 PPT 指定的 Projects 01 三欄版型與 24px 圓角卡片，八筆資料依 3／3／2 排成三列；Hero 標題改為 Noto Serif TC Medium 80px、麵包屑改為 Noto Sans TC 15px，卡片標題與說明分別校正為 Noto Serif TC Medium 25/36px、Noto Sans TC 15/23px。
+- 列表沿用 PPT 指定的 Projects 01 三欄版型與 24px 圓角卡片，八筆資料依 3／3／2 排成三列；Hero 標題為 Noto Serif TC Medium 80px、麵包屑為 Noto Sans TC 15px。2026-08-25 依最新回饋將卡片主標統一為 Noto Serif TC Medium 20/30px，主標只保留系列名稱並移除尾端「型錄」；下方說明統一顯示「系列產品型錄」，不再重複一次 MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic 或 Elegant 系列名稱。
 - 每張卡仍直接連到正式 PDF；Hover／鍵盤聚焦新增「開啟型錄」與箭頭提示、封面縮放及金色標題回饋。手機改為單欄，並為右側固定快捷列保留 93px 安全距。
 
 ### 1.4 新版 Design QA
@@ -113,7 +113,7 @@
 ## 1.2 設計靈感列表（2026-08-20 新版調整）
 
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第三頁重新校正 `/design-inspiration`，Hero 底圖改用 3.1 案例門市正式素材中的松竹店店面照，不再沿用 3.0 服務流程的室內示意背景。
-- Hero「設計靈感」改為 Noto Serif TC Medium 60px，麵包屑改為 Noto Sans TC 15px；桌面仍維持母版的 360px Hero、深色遮罩與置中構圖。
+- Hero 顯示標題依 2026-08-25 最新回饋改為英文 `Design Inspiration`，使用模板英文字體 60px；麵包屑仍保留中文「設計靈感」及 Noto Sans TC 15px，桌面維持母版的 360px Hero、深色遮罩與置中構圖。列表卡片標題桌機與手機統一為 Noto Serif TC 20/30px，兩行預留高度同步由 72px 收斂為 60px。
 - 依標註刪除篩選器上方可見的「設計型式／設計風格」欄位標題，但保留 `label` 為螢幕閱讀器使用；兩個下拉選單統一 Noto Sans TC 16px，原有型式／風格篩選、URL query、空狀態與分頁行為不變。
 - 三張卡片改直接使用 3.1 案例門市內容圖：case10 第 03 張、case56 第 04 張、case35 第 11 張；沒有另造假圖或用 PPT 截圖代替。卡片仍分別連到 `/gallery/case10`、`/gallery/case56`、`/gallery/case35`，並保留 `from=inspiration` 回返來源。
 - 案例標題改為 Noto Serif TC Medium 25px／36px、最多兩行；門市名稱改為 Noto Sans TC 15px／24px，符合新版標註且維持現有 Hover `View` 互動。
@@ -133,6 +133,7 @@
 - 2026-08-25 依最新回饋重排 `Creative Projects That Define Our Style` 的四套系舞台：移除把同兩張素材重複渲染成上下四圖的結構，改為單列雙圖；桌機圖片高度由單列 265px 提高為 420px。中央套系選單由 250px／74px 縮為 190px／56px，整組頁籤、狀態與箭頭以 Grid `align-self: center` 在圖片高度內精確垂直置中，不使用固定 margin 猜位置。互動狀態拆分為套系索引與套系內圖片索引：四個頁籤只在點擊或鍵盤聚焦時切換套系及其文案，移向下方箭頭時不會再被途經的 Hover 頁籤誤切；箭頭只循環切換目前套系的圖片，進度顯示目前圖片張數而非錯誤的 `01 / 04`。`KitchenSuite.images` 改為任意長度陣列，可支援每套超過兩張素材。內容段落、舞台與詳情卡的垂直間距同步收斂，詳情由原本舞台下方 40px 提至 22px；1200、1024、767、390px 皆維持單列圖片且不以負 margin 硬拉版面。
 - 內文標籤改為 `Kitchen Collections`，中文引言與套系標題使用 Noto Serif TC 25px，正文使用 Noto Sans TC；四套系頁籤使用 Bodoni Moda 20px。門板、推薦廚電與推薦案例亦依新版標註統一中文字體層級。
 - 推薦廚電依 2026-08-25 最新回饋暫停輪播，只渲染資料前五項；已移除該區 Embla 軌道、複製資料、4 秒計時器、拖曳游標與 carousel ARIA，避免看似靜止但仍可被拖動。第六筆資料仍保留於資料層、不破壞後續恢復需求；桌機固定五欄、1200px 以下三欄、767px 以下兩欄自然換行。每項保留 Hover `＋` 按鈕與真實站內跳轉；現階段只有 DR7396 已有產品詳情頁，其他型號先連到 2.0 SAKURA 廚電列表，避免建立不存在的假詳情路由。
+- AI Kitchen「Take A Look At Our Latest Blog & Articles」改為真正逐卡移動的 Embla 循環輪播；桌機每次左側短卡向中央移動時，圖片高度、下圓角、暗色漸層與標題層會依滑動進度逐幀放大／交叉淡換，同一時間原中央長卡向右移並逐幀縮短，不再於 `select` 事件瞬間切換 featured class 而形成整排順移感。平板與手機維持等高卡片，避免窄螢幕因高度變形造成跳版；停留、鍵盤焦點、手動拖曳與 reduced-motion 行為不變。
 - 推薦案例於 2026-08-25 重新直接核對 Antra Home 03 XML、`assets/js/elementor-classes.js` 與 `assets/css/base/elementor.css`：改用真實 Embla 連續軌道，不以固定槽位整批替換內容。桌機同畫面三張，每 5 秒只將軌道往右推進一張；左側短卡在移入中央時轉為 560px 直式焦點卡，原中央長卡同步移往右側並恢復短卡，循環時始終只有一張焦點卡。保留約 500ms 轉場、無箭頭、Hover／鍵盤焦點暫停，左右拖曳或方向鍵操作後停止自動播放。1024px 以下依模板降為兩欄並取消直式焦點特效，767px 以下單欄。案例標題統一為 Noto Serif TC 20px／30px 行高，限制兩行；摘要維持 Noto Sans TC 15px、三行。
 - 原本的品牌影片 Dialog 已依「改 Home 02」標註移除，避免同一 Hero 同時存在兩套互斥的底部互動；三段 AI 功能輪播成為此區唯一主體。
 - 新增樣式沿用全站 `#CAA05C`、Noto Sans TC／Noto Serif TC 與既有模糊玻璃語彙；沒有用截圖冒充互動 Hero、假 SVG 或 CSS 圖形替代正式圖片與 Lucide 控制圖示。
@@ -375,6 +376,7 @@ pnpm dev
 ```
 
 根目錄指令會轉交 `nuxt-site/`，開發伺服器預設在 `http://localhost:3000`。
+開發模式使用 `nuxt-site/.nuxt-dev/`，正式建置與 typecheck 使用 `nuxt-site/.nuxt/`；兩者刻意分離，避免開著 dev 時執行 build 造成 Vite 的 `#app-manifest` 虛擬模組失效。
 
 ## 構建
 
@@ -460,7 +462,7 @@ pnpm build
 - **Section eyebrow**：Services／Gallery／WhatWeDo／Store 依序改為「廚房產品／門市案例／品牌承諾／門市查詢」，膠囊尺寸、金點、邊框與動畫不變。
 - **廚房產品卡**：順序與編號改為 `01 SAKURA → 02 SVAGO → 03 TEKA`；正式品牌拼字為 `SVAGO`。卡片尺寸、Logo 光學等大、Embla 輪播與 hover 不變。
 - **Services 底部 Logo 跑馬燈**：取代舊的 `Kitchen Product` 巨型文字，順序為 SAKURA／TLK／TEKA／SVAGO／SAKURA Home；每格 Logo `170×50px`、左右 margin 各 `70px`、四組無縫重複以完整覆蓋 4K。尺寸與間距沿用 SAKURA 官網 Footer，速度依最新需求由官網基準 `20s` 加快為 `16s linear infinite`；背景仍併入 Services 深色 Section，減少動態模式停止動畫。
-- **品牌承諾影片**：使用 YouTube `wH374AF9wLI`；初始顯示對應縮圖與模板正圓播放鈕，點擊後在原 16:9 卡片內切換為 autoplay iframe。縮圖或 iframe 載入失敗時，前端顯示完整錯誤理由、影片 ID 與 YouTube 備援連結。
+- **品牌承諾影片**：使用 YouTube `wH374AF9wLI`；2026-08-25 修正首頁放大影片區曾直接顯示 YouTube iframe 的回歸，重新使用共用 `InternalBrandVideo`。初始只顯示對應影片第一幀／縮圖與模板正圓播放鈕，不預先露出 YouTube 控制介面；點擊後才在原 16:9 卡片內載入 autoplay iframe。縮圖或 iframe 載入失敗時，前端顯示完整錯誤理由、影片 ID 與 YouTube 備援連結。
 - **Footer**：底部巨型 `footer-sakura.svg` 改為使用者提供的 `public/home-2026/footer/sakura-kitchen.png`；保留原始金色與比例、不降低透明度，所有斷點都水平置中並貼齊 Footer 底部。依最新回饋將總高調整為手機／平板 `390px`、桌面 `600px`；連結與圖示列的 top padding 增加 12px（手機 48px、桌面 60px），整排稍微下移。資訊列與 Logo 共用真正的 `1410px` 置中版心，不在 max-width 內再疊加 51px padding；390px 另為 Copyright 保留右側懸浮列安全區。背景、Copyright 與連結內容不變。
 - **門市案例第 6 點**：背景使用 `yuan-aifei.jpg`，右側兩張卡依序為 `old-house-kitchen.jpg` 與 `custom-kitchen.jpg`，沒有深色漸層遮罩。Section 維持真正 full-bleed，不套 1410px 版心；`≤1024px` 依 Home 3 tablet 規則堆疊，`1025–1512px` 將內容 top、水平安全距離、卡片尺寸與卡片下移量連續插值。卡片在 390px 為 170px、768–1024px 為 220px、1025px 為 140px、1200px 為 230px、1280px 為 280px、1440px 起固定 295px；1512px 精確維持原本左右 51px、兩卡 `295×295px`、箭頭 `y=901px`。每張縮圖可點擊切換背景，拖曳、3.2 秒自動播放、hover 與進場動畫均保留；減少動態模式停止自動播放與切換動畫。
 
@@ -564,7 +566,7 @@ pnpm build
 | Hero | eyebrow `Trusted Design Partner`；h1 `Find Your ⟨Inspired Interior⟩ Design`；副標 `Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.`；圓鈕 `Start Project` |
 | Services | eyebrow `Our Services`；h2 `Explore Our ⟨Comprehensive Interior Design⟩ Services`；6 服務卡 title/excerpt＝模板 home-6 dummy-data 佔位（待 SAKURA 本地化） |
 | Gallery | eyebrow `our gallery`；h2 `Interior design`；段落 `Lorem ipsum dolor sit amet consectetur. Magna nunc porttitor convallis faucibus laoreet.`（Home Three 原始文字） |
-| WhatWeDo | eyebrow `What we do`；h2 `SAKURA has ⟨created exceptional⟩`（Antra→SAKURA，2026-08-25 依版面長度移除 `architectural designs.`）；清單 `Residence And Condo / Modern Kitchen Renovate / Interior House Decoration`、段落 `We specialize in transforming visions…precision.`（本就與模板一致，未改） |
+| WhatWeDo | 2026-08-25 依最新首頁回饋本地化：eyebrow `Brand Commitment`；h2 `打造符合每個家庭的理想廚房`；正文使用甲方指定的全台家庭生活研究與廚房需求完整段落。原本三筆模板英文清單及 `We specialize…` 佔位文案已移除，不再與品牌承諾內容混用。 |
 | Store | eyebrow `get in touch`（未改）；h2 `Have a Project in ⟨Mind? Let’s Make⟩ It Happen`（模板 Contact 頁；彎引號 ’） |
 
 **刻意保留、未動的英文**：ProjectSection 10 個廚房系列卡名（`Basic+`/`AI Kitchen`/`Clever Kitchen`…）與 Hero 6 個風格名（`Modern`/`Scandinavian`…）＝對應旁邊中文的 SAKURA 產品/風格名；品牌專有名詞 `SAKURA`（浮水印）/`SVAGO`/`TEKA`/`Copyright © Taiwan Sakura Corporation…`/`YouTube`；`MarqueeBand` 裝飾字 `Kitchen Product`（模板無對應 marquee 文案）。
@@ -592,7 +594,7 @@ pnpm build
 | 標題區 → 內容距 | `mb-[60px]` |
 | eyebrow | `text-[15px]`、`mb-5`(20px) |
 | 卡片 grid 間距 | `gap-[30px]`；三欄卡寬自然 = (1410−60)/3 = **450** |
-| 兩欄 section | 預設模板基準為 `gap-[90px]`；品牌承諾區依最新需求改為文字／影片 `44% / 56%`、桌面 gap 70px，讓影片明顯大於文字欄 |
+| 兩欄 section | 預設模板基準為 `gap-[90px]`；品牌承諾區在 1201px 以上依最新需求改為文字／影片 `40% / 60%`、桌面 gap 70px，影片最大寬度由 645px 放大為 760px（1280px 畫面約 690px、1512px 達 760px）；881–1200px 維持較安全的 `44% / 56%`，手機回到單欄，避免中文標題被過度壓窄 |
 | 內容型 CTA 膠囊按鈕 | 全站統一鎖定總高 **60px**：`pl-[30px] pr-[9px] py-[9px]`、文字 `15/22px`、gap 8px、內圓 `40×40px`；按鈕與內圓均禁止 flex shrink，窄欄時不縮放、不換行。金色內圓在未 hover 時沿用影片播放鍵的 `2s` 雷達水波；hover 整顆 CTA 後水波立即停止並隱藏 |
 | 專案卡（project-style-4） | 378×880、hover 567、標題 `text-[36px]` |
 | Gallery 案例卡 | `basis-[450px]` × `aspect-[45/61]` = 450×610、間距 30 |

@@ -913,7 +913,7 @@ body {
   gap: 30px;
 }
 .what-we-do-video {
-  max-width: 645px;
+  max-width: 760px;
 }
 .what-we-do-heading,
 .what-we-do-description {
@@ -977,7 +977,8 @@ body {
     padding-bottom: 115px;
   }
   .what-we-do-layout {
-    gap: 90px;
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    gap: 70px;
   }
 }
 

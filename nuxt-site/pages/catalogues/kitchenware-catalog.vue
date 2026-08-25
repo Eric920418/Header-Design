@@ -211,13 +211,13 @@ useSeoMeta({
 
 .catalogue-card__text strong {
   display: block;
-  min-height: 36px;
+  min-height: 30px;
   margin-bottom: 9px;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 500;
-  line-height: 36px;
+  line-height: 30px;
   transition: color .3s ease;
 }
 
@@ -253,7 +253,7 @@ useSeoMeta({
   .catalogue-grid { grid-template-columns: 1fr; gap: 42px; }
   .catalogue-card__action { right: 18px; bottom: 18px; gap: 10px; opacity: 1; visibility: visible; transform: none; }
   .catalogue-card__arrow { width: 54px; height: 54px; }
-  .catalogue-card__text strong { min-height: 0; font-size: 25px; line-height: 36px; }
+  .catalogue-card__text strong { min-height: 0; font-size: 20px; line-height: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -93,7 +93,7 @@ useSeoMeta({
     <section class="design-projects-hero hero-includes-header" aria-labelledby="design-projects-title">
       <span class="design-projects-hero__overlay" aria-hidden="true" />
       <div class="design-projects-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="design-projects-title">設計靈感</h1>
+        <h1 id="design-projects-title">Design Inspiration</h1>
         <nav aria-label="麵包屑" class="design-projects-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -224,7 +224,7 @@ useSeoMeta({
 .design-projects-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-cjk-serif);
+  font-family: var(--font-display);
   font-size: 60px;
   font-weight: 500;
   line-height: 72px;
@@ -429,12 +429,12 @@ useSeoMeta({
 
 .design-project-card__text { padding-top: 23px; }
 .design-project-card__text h2 {
-  min-height: 72px;
+  min-height: 60px;
   margin: 0 0 14px;
   font-family: var(--font-cjk-serif);
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 500;
-  line-height: 36px;
+  line-height: 30px;
 }
 
 .design-project-card__text h2 a {
@@ -512,7 +512,7 @@ useSeoMeta({
   .design-projects-filter__submit { font-size: 15px; }
   .design-projects-grid { grid-template-columns: 1fr; gap: 30px; }
   .design-project-card__categories { top: 20px; left: 15px; }
-  .design-project-card__text h2 { min-height: 0; font-size: 26px; line-height: 30px; }
+  .design-project-card__text h2 { min-height: 0; font-size: 20px; line-height: 30px; }
   .design-projects-pagination { margin-top: 30px; }
 }
 

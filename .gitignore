@@ -8,5 +8,6 @@
 
 # Nuxt 3 產物
 nuxt-site/.nuxt/
+nuxt-site/.nuxt-dev/
 nuxt-site/.output/
 nuxt-site/node_modules/

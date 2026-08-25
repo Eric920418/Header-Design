@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-08-11',
   devtools: { enabled: true },
   ssr: true,
+  // `nuxt build` 會重建預設 `.nuxt`；與 dev 共用時會讓執行中的 Vite
+  // 暫時失去 `#app-manifest`。開發模式使用獨立目錄，兩種程序可安全並存。
+  buildDir: process.env.NODE_ENV === 'development' ? '.nuxt-dev' : '.nuxt',
   dir: {
     public: '../public',
   },
