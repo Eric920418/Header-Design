@@ -50,24 +50,27 @@ onBeforeUnmount(() => {
 
 <template>
   <section id="kitchen-series" aria-labelledby="home-project-heading" class="home-project-section relative z-10 bg-[#F6F6F6]">
-    <div class="home-project-heading mx-auto grid max-w-[1410px] grid-cols-1 px-[15px] md:px-[30px] min-[768px]:grid-cols-[30%_70%]">
+    <div class="home-project-heading mx-auto grid max-w-[1470px] grid-cols-1 px-[15px] md:px-[30px] min-[768px]:grid-cols-[30%_70%]">
       <div v-reveal="{ anim: 'opalMoveRight' }">
         <InternalTemplateHeadingRail label="FEATURED PROJECTS" />
       </div>
-      <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="home-project-heading-copy flex items-center">
-        <h2 id="home-project-heading" class="max-w-[790px] font-display text-[38px] leading-[43px] text-[#1C1C1D] md:text-[52px] md:leading-[57px] min-[1201px]:text-[60px] min-[1201px]:leading-[64px]">
+      <div v-reveal="{ anim: 'opalMoveLeft' }" class="home-project-heading-copy">
+        <h2 id="home-project-heading" class="home-project-title">
           Creative <span class="text-[#CAA05C]">Projects That Define</span> Our Style
         </h2>
+        <p class="home-project-heading-description">
+          We specialize in transforming visions into reality. Explore our portfolio of innovative architectural and interior design projects crafted with precision.
+        </p>
       </div>
     </div>
 
-    <div v-reveal="{ anim: 'opalMoveUp', delay: 180 }" class="home-project-carousel-reveal">
+    <div v-reveal="{ anim: 'opalMoveLeft', delay: 400 }" class="home-project-carousel-reveal">
       <div
         ref="emblaRef"
         role="region"
         aria-label="廚房系列輪播"
         tabindex="0"
-        class="home-project-carousel cursor-grab overflow-hidden bg-[#1C1C1D] outline-none active:cursor-grabbing"
+        class="home-project-carousel cursor-grab overflow-hidden bg-transparent outline-none active:cursor-grabbing"
         @mouseenter="pause"
         @mouseleave="unpause"
         @focusin="pause"
@@ -85,7 +88,7 @@ onBeforeUnmount(() => {
             :class="dragging ? 'is-dragging' : ''"
             @click="handleStyleClick(style, $event)"
           >
-            <article class="home-project-card relative -ml-px overflow-hidden">
+            <article class="home-project-card relative overflow-hidden">
               <img :src="style.image" :alt="`${style.en} ${style.zh}`" draggable="false" class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]" />
               <span class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.06)_20%,rgba(0,0,0,.86)_100%)]" />
               <span class="absolute left-6 top-6 z-[2] rounded-full border border-white/50 px-4 py-1.5 text-[15px] font-semibold text-white backdrop-blur-sm">{{ style.en }}</span>

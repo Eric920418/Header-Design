@@ -1,8 +1,13 @@
 <script setup lang="ts">
-const items = [
-  { href: '/gallery', icon: '/floating-icons/case.png', label: '案例門市', primary: true },
-  { href: 'https://www.sakura-kitchenlife.com.tw/measuring', icon: '/floating-icons/measure.png', label: '到府丈量' },
-  { href: 'https://icare.sakura.com.tw', icon: '/floating-icons/service.png', label: '客服中心' },
+const primaryItem = {
+  href: '/gallery',
+  icon: '/floating-icons/case.png',
+  label: '案例門市',
+}
+
+const serviceItems = [
+  { href: 'https://www.sakura-kitchenlife.com.tw/measuring', icon: '/floating-icons/official-quick-link-2.svg', label: '免費丈量' },
+  { href: 'https://icare.sakura.com.tw', icon: '/floating-icons/official-quick-link-3.svg', label: '線上客服', newTab: true },
 ]
 
 const rail = ref<HTMLElement | null>(null)
@@ -40,29 +45,23 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <aside ref="rail" aria-label="快速服務" class="floating-buttons fixed bottom-[70px] right-0 z-[90] flex w-[72px] flex-col sm:bottom-9 sm:w-[74px]" :class="{ 'floating-buttons--focused-mobile-form': isFocusedMobileForm }" :style="{ transform: `translateY(${offset}px)` }">
-    <a v-for="(item, index) in items" :key="item.label" :href="item.href" :aria-label="item.label" :target="item.href.startsWith('http') ? '_blank' : undefined" :rel="item.href.startsWith('http') ? 'noopener noreferrer' : undefined" class="relative block p-2" :class="[item.primary ? 'mb-5 bg-[#B79258]' : 'bg-[#737373]', !item.primary && index > 1 ? 'quick-link-divider' : '']">
-      <svg aria-hidden="true" viewBox="0 0 70 70" class="block h-14 w-14 sm:h-[58px] sm:w-[58px]">
-        <image :href="item.icon" x="14" y="4" width="42" height="42" preserveAspectRatio="xMidYMid meet" />
-        <text x="35" y="63" fill="#fff" font-family="Noto Sans TC, sans-serif" font-size="14" font-weight="400" text-anchor="middle">{{ item.label }}</text>
-      </svg>
+  <aside ref="rail" aria-label="快速服務" class="floating-buttons fixed right-0 bottom-[70px] z-[90] sm:bottom-9" :class="{ 'floating-buttons--focused-mobile-form': isFocusedMobileForm }" :style="{ transform: `translateY(${offset}px)` }">
+    <a :href="primaryItem.href" :aria-label="primaryItem.label" class="relative mb-5 block h-[72px] w-[72px] bg-[#B79258] text-white sm:h-[74px] sm:w-[74px]">
+      <img :src="primaryItem.icon" alt="" class="absolute top-[13px] left-1/2 h-[29px] w-[29px] -translate-x-1/2 sm:top-[14px] sm:h-[30px] sm:w-[30px]" />
+      <span class="absolute inset-x-0 bottom-[11px] block whitespace-nowrap text-center font-['Noto_Sans_TC'] text-xs leading-3 sm:bottom-3">{{ primaryItem.label }}</span>
     </a>
+    <div class="bg-[#737373]">
+      <template v-for="(item, index) in serviceItems" :key="item.label">
+        <div v-if="index" aria-hidden="true" class="h-px w-full bg-white/50" />
+        <a :href="item.href" :aria-label="item.label" :target="item.newTab ? '_blank' : undefined" :rel="item.newTab ? 'noopener noreferrer' : undefined" class="block p-2">
+          <img :src="item.icon" alt="" class="block w-14 sm:w-[58px]" />
+        </a>
+      </template>
+    </div>
   </aside>
 </template>
 
 <style scoped>
-.quick-link-divider {
-  margin-top: 1px;
-}
-
-.quick-link-divider::before {
-  position: absolute;
-  inset: -1px 0 auto;
-  height: 1px;
-  background: rgb(255 255 255 / 50%);
-  content: '';
-}
-
 @media (max-width: 767px) {
   .floating-buttons--focused-mobile-form { display: none; }
 }
