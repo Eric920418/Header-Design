@@ -12,8 +12,10 @@ const heroTransition = ref(0)
 const activeSuiteIndex = ref(0)
 const activeSuiteImageIndex = ref(0)
 const casesPaused = ref(false)
+const casesInteracted = ref(false)
+const featuredCaseSlide = ref(1)
 const seriesOpen = ref(false)
-const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', duration: 18 })
+const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false, duration: 26 })
 
 const heroStories = [
   {
@@ -76,6 +78,42 @@ function formatGalleryNumber(value: number) {
   return String(value).padStart(2, '0')
 }
 
+function handleCasesKeydown(event: KeyboardEvent) {
+  if (event.key === 'ArrowRight') {
+    casesInteracted.value = true
+    casesApi.value?.scrollPrev()
+  }
+  if (event.key === 'ArrowLeft') {
+    casesInteracted.value = true
+    casesApi.value?.scrollNext()
+  }
+}
+
+function syncFeaturedCase() {
+  const selected = casesApi.value?.selectedScrollSnap() ?? 0
+  featuredCaseSlide.value = (selected + 1) % casesLoop.value.length
+}
+
+function stopCasesAutoplay() {
+  casesInteracted.value = true
+}
+
+watch(casesApi, (api, oldApi, onCleanup) => {
+  oldApi?.off('select', syncFeaturedCase)
+  oldApi?.off('reInit', syncFeaturedCase)
+  oldApi?.off('pointerDown', stopCasesAutoplay)
+  if (!api) return
+  syncFeaturedCase()
+  api.on('select', syncFeaturedCase)
+  api.on('reInit', syncFeaturedCase)
+  api.on('pointerDown', stopCasesAutoplay)
+  onCleanup(() => {
+    api.off('select', syncFeaturedCase)
+    api.off('reInit', syncFeaturedCase)
+    api.off('pointerDown', stopCasesAutoplay)
+  })
+}, { immediate: true })
+
 onMounted(() => {
   stopMotionWatch = watch(reducedMotion, (reduced) => {
     if (heroTimer) clearInterval(heroTimer)
@@ -85,8 +123,8 @@ onMounted(() => {
     if (!reduced) {
       heroTimer = setInterval(changeHero, 5000)
       casesTimer = setInterval(() => {
-        if (!casesPaused.value) casesApi.value?.scrollNext()
-      }, 2600)
+        if (!casesPaused.value && !casesInteracted.value) casesApi.value?.scrollPrev()
+      }, 5000)
     }
   }, { immediate: true })
 })
@@ -296,19 +334,23 @@ useSeoMeta({
           class="ai-cases__viewport"
           aria-roledescription="carousel"
           aria-label="推薦設計案例"
+          tabindex="0"
           @mouseenter="casesPaused = true"
           @mouseleave="casesPaused = false"
           @focusin="casesPaused = true"
           @focusout="casesPaused = false"
+          @keydown="handleCasesKeydown"
         >
           <div class="ai-cases__track">
-            <a v-for="(item, index) in casesLoop" :key="`${item.url}-${index}`" :href="item.url" target="_blank" rel="noopener noreferrer" class="ai-case-card ai-cases__slide" :class="{ 'ai-case-card--featured': index % data.cases.length === 1 }" :aria-hidden="index >= data.cases.length ? 'true' : undefined" :tabindex="index < data.cases.length ? 0 : -1">
-              <div class="ai-case-card__image"><InternalBrandImage :src="item.image" :alt="item.title" class="h-full w-full" /></div>
-              <div class="ai-case-card__body">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.excerpt }}</p>
-              </div>
-            </a>
+            <div v-for="(item, index) in casesLoop" :key="`${item.url}-${index}`" class="ai-cases__slide">
+              <a :href="item.url" target="_blank" rel="noopener noreferrer" class="ai-case-card" :class="{ 'ai-case-card--featured': index === featuredCaseSlide }">
+                <div class="ai-case-card__image"><InternalBrandImage :src="item.image" :alt="item.title" class="h-full w-full" /></div>
+                <div class="ai-case-card__body">
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.excerpt }}</p>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -428,16 +470,17 @@ useSeoMeta({
 .ai-cases__heading { display: grid; grid-template-columns: 30% 70%; }
 .ai-cases__heading > h2 { max-width: 688px; margin: 0; padding: 64px 0 60px; font-size: 60px; line-height: 64px; text-transform: none; }
 .ai-cases__heading > h2 span { color: #caa05c; }
-.ai-cases__viewport { overflow: hidden; cursor: grab; }
+.ai-cases__viewport { overflow: hidden; cursor: grab; outline: none; }
+.ai-cases__viewport:focus-visible { box-shadow: 0 0 0 2px #caa05c inset; }
 .ai-cases__viewport:active { cursor: grabbing; }
 .ai-cases__track { display: flex; margin-left: -30px; touch-action: pan-y pinch-zoom; }
-.ai-cases__slide { min-width: 0; flex: 0 0 33.333%; padding-left: 30px; }
-.ai-case-card { position: relative; display: flex; min-width: 0; height: 560px; flex-direction: column; color: #1c1c1d; }
-.ai-case-card__image { position: relative; aspect-ratio: 1.40625; flex: 0 0 auto; overflow: hidden; border-radius: 24px; }
+.ai-cases__slide { min-width: 0; flex: 0 0 33.333333%; padding-left: 30px; }
+.ai-case-card { position: relative; display: flex; min-width: 0; height: 560px; flex-direction: column; color: #1c1c1d; transition: border-radius .5s cubic-bezier(.25, .46, .45, .94); }
+.ai-case-card__image { position: relative; aspect-ratio: 1.40625; flex: 0 0 auto; overflow: hidden; border-radius: 24px; transition: border-radius .5s cubic-bezier(.25, .46, .45, .94); }
 .ai-case-card__image :deep(img) { transition: transform .5s; }
 .ai-case-card:hover .ai-case-card__image :deep(img) { transform: scale(1.1); }
-.ai-case-card__body { padding-top: 22px; }
-.ai-case-card__body h3 { display: -webkit-box; overflow: hidden; margin: 0 0 19px; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; text-transform: none; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.ai-case-card__body { padding-top: 22px; transition: color .5s cubic-bezier(.25, .46, .45, .94), padding .5s cubic-bezier(.25, .46, .45, .94); }
+.ai-case-card__body h3 { display: -webkit-box; overflow: hidden; margin: 0 0 19px; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 30px; text-transform: none; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .ai-case-card__body p { display: -webkit-box; overflow: hidden; margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
 .ai-case-card--featured { overflow: hidden; border-radius: 24px; }
 .ai-case-card--featured .ai-case-card__image { position: absolute; inset: 0; aspect-ratio: auto; border-radius: 0; }
@@ -523,17 +566,13 @@ useSeoMeta({
   .ai-suite-details h3 { font-size: 23px; line-height: 30px; }
   .ai-finishes__grid { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; margin-top: 38px; }
   .ai-finishes__image { border-radius: 16px; }
-  .ai-equipment__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 38px; }
+  .ai-equipment__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; margin-top: 38px; }
   .ai-cases__heading { display: block; text-align: center; }
   .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 0 30px; font-size: 32px; line-height: 37px; }
   .ai-cases__viewport { margin-top: 38px; }
   .ai-cases__slide { flex-basis: 100%; }
   .ai-case-card__body { min-height: 0; padding-top: 18px; }
-  .ai-case-card__body h3 { font-size: 22px; line-height: 29px; }
-}
-
-@media (max-width: 767px) {
-  .ai-equipment__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
+  .ai-case-card__body h3 { font-size: 20px; line-height: 30px; }
 }
 
 @media (max-width: 390px) {

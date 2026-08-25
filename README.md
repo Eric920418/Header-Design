@@ -133,7 +133,7 @@
 - 2026-08-25 依最新回饋重排 `Creative Projects That Define Our Style` 的四套系舞台：移除把同兩張素材重複渲染成上下四圖的結構，改為單列雙圖；桌機圖片高度由單列 265px 提高為 420px。中央套系選單由 250px／74px 縮為 190px／56px，整組頁籤、狀態與箭頭以 Grid `align-self: center` 在圖片高度內精確垂直置中，不使用固定 margin 猜位置。互動狀態拆分為套系索引與套系內圖片索引：四個頁籤只在點擊或鍵盤聚焦時切換套系及其文案，移向下方箭頭時不會再被途經的 Hover 頁籤誤切；箭頭只循環切換目前套系的圖片，進度顯示目前圖片張數而非錯誤的 `01 / 04`。`KitchenSuite.images` 改為任意長度陣列，可支援每套超過兩張素材。內容段落、舞台與詳情卡的垂直間距同步收斂，詳情由原本舞台下方 40px 提至 22px；1200、1024、767、390px 皆維持單列圖片且不以負 margin 硬拉版面。
 - 內文標籤改為 `Kitchen Collections`，中文引言與套系標題使用 Noto Serif TC 25px，正文使用 Noto Sans TC；四套系頁籤使用 Bodoni Moda 20px。門板、推薦廚電與推薦案例亦依新版標註統一中文字體層級。
 - 推薦廚電依 2026-08-25 最新回饋暫停輪播，只渲染資料前五項；已移除該區 Embla 軌道、複製資料、4 秒計時器、拖曳游標與 carousel ARIA，避免看似靜止但仍可被拖動。第六筆資料仍保留於資料層、不破壞後續恢復需求；桌機固定五欄、1200px 以下三欄、767px 以下兩欄自然換行。每項保留 Hover `＋` 按鈕與真實站內跳轉；現階段只有 DR7396 已有產品詳情頁，其他型號先連到 2.0 SAKURA 廚電列表，避免建立不存在的假詳情路由。
-- 推薦案例改為較快的自動輪播，滑鼠移入或鍵盤聚焦即暫停；標題限制兩行、Noto Serif TC 25px，摘要限制三行、Noto Sans TC。
+- 推薦案例於 2026-08-25 重新直接核對 Antra Home 03 XML、`assets/js/elementor-classes.js` 與 `assets/css/base/elementor.css`：改用真實 Embla 連續軌道，不以固定槽位整批替換內容。桌機同畫面三張，每 5 秒只將軌道往右推進一張；左側短卡在移入中央時轉為 560px 直式焦點卡，原中央長卡同步移往右側並恢復短卡，循環時始終只有一張焦點卡。保留約 500ms 轉場、無箭頭、Hover／鍵盤焦點暫停，左右拖曳或方向鍵操作後停止自動播放。1024px 以下依模板降為兩欄並取消直式焦點特效，767px 以下單欄。案例標題統一為 Noto Serif TC 20px／30px 行高，限制兩行；摘要維持 Noto Sans TC 15px、三行。
 - 原本的品牌影片 Dialog 已依「改 Home 02」標註移除，避免同一 Hero 同時存在兩套互斥的底部互動；三段 AI 功能輪播成為此區唯一主體。
 - 新增樣式沿用全站 `#CAA05C`、Noto Sans TC／Noto Serif TC 與既有模糊玻璃語彙；沒有用截圖冒充互動 Hero、假 SVG 或 CSS 圖形替代正式圖片與 Lucide 控制圖示。
 - 手機版維持全站右側 72px 快捷列，AI Hero 內容預留 93px 安全距；Hero 功能卡改為兩欄兩列、案例改成單卡輪播，沒有把桌機底部帶硬縮進手機寬度。
@@ -143,7 +143,7 @@
 
 - **來源真值**：PPT 第二頁標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-02.png`，內嵌完整母版頁為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/assets/ppt/media/image5.png`（3440×11821），正規化 1440px 版本為 `/private/tmp/sakura-ai-kitchen.A3GeB0/reference-slide2-page-1440.png`。
 - **視覺比較**：已在 1440×900 逐區比對 Hero、內容／套系、門板、廚電與推薦案例；Hero 與內文維持母版的構圖、圓角、金色層級及圖片比例，新版標註指定的 Home 02 資訊列則取代舊影片卡。比對圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/compare-hero.png`、`/private/tmp/sakura-ai-kitchen.A3GeB0/compare-intro.png`。
-- **互動驗證**：三段 Hero 可手動前後切換，品牌系列抽屜可展開且共 10 項、AI 廚房正確標示目前頁；四套系切換後名稱與圖片同步；推薦廚電桌面同畫面五項並顯示 Hover `＋`；案例桌面同畫面三項，2.6 秒自動前進，滑入後停止。
+- **互動驗證**：三段 Hero 可手動前後切換，品牌系列抽屜可展開且共 10 項、AI 廚房正確標示目前頁；四套系切換後名稱與圖片同步；推薦廚電桌面同畫面五項並顯示 Hover `＋`；案例桌面同畫面三項，每 5 秒實際往右滑動一張，進入中央的卡片拉高、離開中央的卡片縮短，不得以淡入淡出或三槽同時換內容取代；滑入／聚焦暫停，左右拖曳可切換且操作後停止自動播放。
 - **響應式與錯誤驗證**：390×844 實機視窗的 `scrollWidth` 等於 390，Hero 資訊卡與按鈕保留右側快捷列安全距，套系、廚電與案例均未造成水平溢位；桌機與手機圖片載入失敗數皆為 0，重新載入目前版本後沒有新的 Vue warn/error。
 - **Final result：PASS**。`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build`、`git diff --check` 全數通過；build 僅保留專案既有的 Tailwind sourcemap 警告，沒有編譯錯誤。
 
@@ -1050,11 +1050,11 @@ final result: passed
 - **PPT／Antra 結構**：以正式 `2026.08.14_1.0設計案例_櫻花整體廚房頁面開版.pptx` 第二頁為結構真值，逐段對照已購 Antra Home 09、Home 08、Gallery 01、Home 01 與 Home 03 原始 Elementor DOM／CSS；沒有使用簡報截圖當作頁面區塊。
 - **Hero**：使用正式 AI Kitchen 01–03 圖，保留 `Find Your Inspired Interior Design`、Start Project 圓形 CTA、水波、影片小卡與大型 `Interior` 裝飾字；三層換圖沿用 Page 1 的灰底／遮罩圖／原色圖結構，每 5 秒換圖、2 秒完成錯時由上而下揭露，reduced-motion 時停在第一張。
 - **正式文案與四套系**：使用官方 AI Kitchen 開場三段文案，以及 i Fun、i Chef、i Loft Chic、i Premium 的完整標題、說明與廚電配備。四套系不是一般 2×2 卡片，而是 PPT 指定的左右四影像窗與中央四項選單；桌面 Hover／Focus、手機點擊切換，影像與內容使用 Home 08 的 0.8 秒展開／淡入。
-- **Gallery／廚電／案例**：六款門板 D0751、D0754、D0750、D0718、D0032、D0720 使用櫻花官網 340×340 獨立原圖；六款推薦廚電使用官方透明底原圖，依 Home 01 的 6／5／4／3／2 欄規則與 4 秒循環呈現。Home 03 推薦案例使用 PPT 內嵌的三張原始高解析照片，只保留正式案例標題並連到櫻花官方案例頁，不保留模板假分類或英文假文案。
+- **Gallery／廚電／案例**：六款門板 D0751、D0754、D0750、D0718、D0032、D0720 使用櫻花官網 340×340 獨立原圖；推薦廚電資料保留六款官方透明底原圖，但目前依最新回饋只固定渲染前五項，不輪播。Home 03 推薦案例使用 PPT 內嵌的三張原始高解析照片，只保留正式案例標題並連到櫻花官方案例頁，不保留模板假分類或英文假文案。
 - **資料與導覽**：新增 `KitchenSeriesPageData`、`KitchenSuite`、`KitchenFinish`、`KitchenEquipment`、`KitchenCase` 型別與 AI Kitchen 唯一註冊資料。`KitchenStyle` 增加 `slug／route／available`，AI Kitchen 指向 `/home-style/aikitchen`，官方名稱「閤樂廚房」已校正；Header「品牌系列」只作 Mega Menu 觸發器並移除不成立的「查看全部」。
 - **素材與錯誤**：11 張正式系列圖、6 張門板、6 張廚電與 3 張案例圖集中於 `public/section-1/brand-series/ai-kitchen/`。頁面圖片全部透過共用錯誤元件在原容器顯示名稱、路徑與完整載入錯誤，不留下破圖圖示。
 - **QA**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 只保留 Tailwind CSS v4 既有 sourcemap warning。390／768／1024／1512／1920／2560／3840px 實測皆 `scrollWidth === clientWidth`，正式圖片載入失敗 0、前端錯誤區塊 0；斷點依序呈現 2／3／3／6／6／6／6 欄門板、1／2／2／3／3／3／3 欄案例，1410px 版心在超寬螢幕不再放大。1512px 已驗證 i Chef 切換會同步更新四個圖片窗、完整說明及廚電配備；390px 重新載入並捲至套系區後仍維持預設 i Fun，不會被觸控裝置的假 Hover 誤切換。Header 桌面 Mega Menu 與手機 Accordion 均只有 AI Kitchen 可進入，九個系列皆為 `aria-disabled`，不存在「查看全部」假連結。Hero 三層來源會在 5 秒後切換，遮罩層 1.333 秒、原色層 1.667 秒加 0.333 秒延遲，共同構成 2 秒轉場；影片 Dialog、關閉操作與所有 Reveal 均正常。正式路由回傳 HTTP 200，未知 `/home-style/not-created` 回傳 Nuxt 404。
-- **Home 03 推薦案例校正**：初版誤把 `Recommended Cases` 與 `Take A Look At Our Latest Blog & Articles.` 套進置中標題共用元件，未還原 Home 03。現已改回原始 30／70 標題列：左側膠囊、金色圓點、水平／垂直裝飾線，右側 60/64px 大標並將 `Our Latest Blog` 標為模板金色。三案依 `post-style-3` 重製為 560px 舞台，中央案例使用直式滿版圖片、底部漸層與白字覆蓋，左右案例維持 1.40625 圖片比例、30/34px 標題及三行官方中文摘要；PPT 標示刪除的假分類與模板英文摘要沒有加回。1024px 以下解除中央特殊卡，回復一致的 2／1 欄內容流。
+- **Home 03 推薦案例校正**：初版誤把 `Recommended Cases` 與 `Take A Look At Our Latest Blog & Articles.` 套進置中標題共用元件，未還原 Home 03。現已改回原始 30／70 標題列：左側膠囊、金色圓點、水平／垂直裝飾線，右側 60/64px 大標並將 `Our Latest Blog` 標為模板金色。三案依 `post-style-3` 重製為 560px 舞台，第二個可見案例使用直式滿版圖片、底部漸層與白字覆蓋，左右案例維持 1.40625 圖片比例、20/30px 標題及三行官方中文摘要；PPT 標示刪除的假分類與模板英文摘要沒有加回。1024px 以下解除中央特殊卡，回復一致的 2／1 欄內容流。
 
 ## Nuxt 3 — 1.2 設計靈感列表頁（2026-08-14）
 
