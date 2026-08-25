@@ -53,7 +53,7 @@ onBeforeUnmount(() => {
 
 <template>
   <footer class="relative h-[390px] w-full overflow-hidden bg-[#1C1C1D] text-white lg:h-[600px]">
-    <div aria-hidden class="absolute inset-0 bg-[url('/footer-antra-bg.jpg')] bg-cover bg-center opacity-20" />
+    <div aria-hidden class="absolute inset-0 bg-[url('/home-2026/footer/kitchen-background.webp')] bg-cover bg-center opacity-20" />
     <div class="relative z-10 mx-auto flex h-[220px] max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]">
       <nav aria-label="頁尾連結" class="flex flex-wrap items-center gap-x-10 gap-y-4 font-cjk-sans text-[15px] text-white/80 md:text-[18px]">
         <NuxtLink to="#">網站地圖</NuxtLink>

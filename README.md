@@ -464,7 +464,7 @@ pnpm build
 - **Services 底部 Logo 跑馬燈**：取代舊的 `Kitchen Product` 巨型文字，順序為 SAKURA／TLK／TEKA／SVAGO／SAKURA Home；每格 Logo `170×50px`、左右 margin 各 `70px`、四組無縫重複以完整覆蓋 4K。尺寸與間距沿用 SAKURA 官網 Footer，速度依最新需求由官網基準 `20s` 加快為 `16s linear infinite`；背景仍併入 Services 深色 Section，減少動態模式停止動畫。
 - **品牌承諾影片**：使用 YouTube `wH374AF9wLI`；2026-08-25 修正首頁放大影片區曾直接顯示 YouTube iframe 的回歸，重新使用共用 `InternalBrandVideo`。待機封面改用從 1080p 正式原片第 `0.00s` 直接擷取的 `/public/home-2026/brand-commitment-opening-frame.webp`，並依指定畫面裁掉原片上下電影黑邊；人物與廣告畫面沒有 AI 重繪。初始只顯示這一幀與模板正圓播放鈕，不預先露出 YouTube 控制介面；點擊後才在原 16:9 卡片內載入 autoplay iframe。封面或 iframe 載入失敗時，前端顯示完整錯誤理由、影片 ID 與 YouTube 備援連結。
 - **指定影格 Design QA**：來源真值為使用者提供的 `截圖 2026-08-25 晚上11.35.50.png`（940×648）；瀏覽器實作為 1280×720 viewport 中 690×388 的 16:9 影片卡。實作擷圖 `/private/tmp/home-brand-commitment-implementation-1280x720.png`、正規化的影格對照板 `/private/tmp/home-brand-design-qa.png`；人物、食材紙袋、棕色櫃體與中央構圖一致，實作保留 Antra 自有的圓形水波播放鈕，不把參考圖的 YouTube 控制介面燒進圖片。封面實際載入 1920×790，`object-fit: cover`、中心對齊，點擊後 iframe 數量為 1，browser console error 為 0；`final result: passed`。
-- **Footer**：底部巨型 `footer-sakura.svg` 改為使用者提供的 `public/home-2026/footer/sakura-kitchen.png`；保留原始金色與比例、不降低透明度，所有斷點都水平置中並貼齊 Footer 底部。依最新回饋將總高調整為手機／平板 `390px`、桌面 `600px`；連結與圖示列的 top padding 增加 12px（手機 48px、桌面 60px），整排稍微下移。資訊列與 Logo 共用真正的 `1410px` 置中版心，不在 max-width 內再疊加 51px padding；390px 另為 Copyright 保留右側懸浮列安全區。背景、Copyright 與連結內容不變。
+- **Footer**：底部巨型 `footer-sakura.svg` 改為使用者提供的 `public/home-2026/footer/sakura-kitchen.png`；保留原始金色與比例、不降低透明度，所有斷點都水平置中並貼齊 Footer 底部。2026-08-25 再將 Footer 背景替換為使用者提供的 `IMG_1340.PNG`，網頁最佳化檔為 `public/home-2026/footer/kitchen-background.webp`（1774×887），保留原有深色透明圖層以確保白色連結與金色 Logo 可讀。依最新回饋將總高調整為手機／平板 `390px`、桌面 `600px`；連結與圖示列的 top padding 增加 12px（手機 48px、桌面 60px），整排稍微下移。資訊列與 Logo 共用真正的 `1410px` 置中版心，不在 max-width 內再疊加 51px padding；390px 另為 Copyright 保留右側懸浮列安全區。Copyright 與連結內容不變。
 - **門市案例第 6 點**：背景使用 `yuan-aifei.jpg`，右側兩張卡依序為 `old-house-kitchen.jpg` 與 `custom-kitchen.jpg`，沒有深色漸層遮罩。Section 維持真正 full-bleed，不套 1410px 版心；`≤1024px` 依 Home 3 tablet 規則堆疊，`1025–1512px` 將內容 top、水平安全距離、卡片尺寸與卡片下移量連續插值。卡片在 390px 為 170px、768–1024px 為 220px、1025px 為 140px、1200px 為 230px、1280px 為 280px、1440px 起固定 295px；1512px 精確維持原本左右 51px、兩卡 `295×295px`、箭頭 `y=901px`。每張縮圖可點擊切換背景，拖曳、3.2 秒自動播放、hover 與進場動畫均保留；減少動態模式停止自動播放與切換動畫。
 
 依專案文件規範，Design QA 結果繼續記錄在本 `README.md`，不另建第二份 Markdown 文件。
@@ -671,7 +671,7 @@ final result: passed
 
 `Footer.tsx` 使用 Antra Home 6 Footer 主體 `6632dbf` 的三段式結構，但依需求刪除模板的訂閱區、地址、電話與多欄選單，只保留原有「網站地圖／隱私權政策」、Copyright、數位展板與 YouTube。
 
-- **模板素材**：使用模板原始 `1920×950` 背景圖，已本地化為 `public/footer-antra-bg.jpg`；外層套用模板同級的 75% 黑色遮罩。
+- **背景素材（最新）**：已依指定圖片改用 `public/home-2026/footer/kitchen-background.webp`，來源為 `IMG_1340.PNG`（1774×887）；Nuxt Footer 沿用原本深色底與 20% 背景圖層，不改連結、圖示、Copyright 與底部 Logo 的可讀層級。舊的 `public/footer-antra-bg.jpg` 保留為歷史模板素材，不再由現行 Nuxt Footer 渲染。
 - **結構高度（最新）**：依驗收回饋進一步由手機／平板 420px、桌面 650px 收斂為 **390px / 600px**。上半資訊區維持 220px、版權帶維持 70px，縮減的是版權帶下方的背景／Logo 舞台；內容最大寬 1410px，桌面左右 51px。
 - **簡化內容**：左側只放網站地圖與隱私權政策，右側只保留數位展板與 YouTube 圖示；中間版權帶逐字保留 `Copyright © Taiwan Sakura Corporation. All rights reserved`。
 - **資訊列下移**：上半區高度不變，內層由手機 `py:36px`、桌面 `py:48px` 改為手機 `pt:48px / pb:24px`、桌面 `pt:60px / pb:24px`；網站地圖、隱私權政策、數位展板與 YouTube 整排往下 12px，但不增加 Footer 總高。
@@ -686,6 +686,7 @@ final result: passed
 - **Viewport / state**：`390 / 767 / 768 / 880 / 881 / 1024 / 1025 / 1200 / 1201 / 1366 / 1367 / 1512 / 1920 / 2560 / 3840px`，頁面捲到底、reduced-motion、Footer 靜止狀態。
 - **版心量測**：390／768／1024／1512px 的資訊列與 Logo 左緣分別同為 `15 / 30 / 51 / 51px`；1920／2560／3840px 的 1410px 版心左緣分別為 `255 / 575 / 1215px`。修正前 1512px 資訊內容誤在 x=102，現在與 Logo 的 x=51 完全一致。
 - **高度與素材**：390–1023px Footer 高 390px、≥1024px 高 600px；資訊區 220px、Copyright 70px 均未改。PNG 自然尺寸 3156×245，各斷點顯示比例 12.88:1、`object-fit:contain`、bottom gap 皆 0，沒有裁切、變形或透明度處理。
+- **2026-08-25 背景替換 Design QA**：來源真值為 `/Users/eric/Downloads/IMG_1340.PNG`（1774×887），現行素材為 `public/home-2026/footer/kitchen-background.webp`（1774×887，88KB）。桌面 1280×720 viewport 中 Footer 為 1280×600，實作擷圖 `/private/tmp/footer-kitchen-background-1280.png`、對照板 `/private/tmp/footer-design-qa-1280.png`；手機 390×844 viewport 中 Footer 為 390×390，實作擷圖 `/private/tmp/footer-kitchen-background-390.png`、對照板 `/private/tmp/footer-design-qa-390.png`。兩種斷點皆為 `background-size:cover`、`background-position:50% 50%`、圖層透明度 0.2；桌面保留完整中央櫃體與右側造型吊燈，手機以水槽與中櫃為中心裁切，沒有拉伸。連結、社群圖示、Copyright、底部 Logo 與回頂端按鈕的原有層級均保留；`final result: passed`。
 - **互動與可讀性**：四個連結均可鍵盤 focus；文字連結 hover 為 `rgb(202,160,92)`，圖示 hover opacity=1；`/privacy.html` 回應 200。390／1512px 的連結、圖示與 Copyright 對右側懸浮列重疊面積均為 0。
 - **Overflow / console**：15 個 viewport 全數 `scrollWidth === clientWidth`，所有圖片載入成功，無 console error 或 page error。`pnpm build` 通過。
 
