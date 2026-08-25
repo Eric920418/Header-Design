@@ -15,7 +15,10 @@ import { ArrowRight } from 'lucide-vue-next'
         <div v-reveal="{ anim: 'opalScaleUp', delay: 320 }" class="what-we-do-cta-row flex"><NuxtLink to="/about/advantage" class="site-content-cta group/cta inline-flex h-[60px] items-center gap-[8px] rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white"><span class="font-cjk-sans text-[15px]">櫻花優勢</span><span class="site-cta-icon flex h-[40px] w-[40px] -rotate-45 items-center justify-center rounded-full bg-[#CAA05C] text-white transition-transform group-hover/cta:rotate-0"><ArrowRight class="h-5 w-5" /></span></NuxtLink></div>
       </div>
       <div v-reveal="{ anim: 'opalMoveLeft', delay: 200 }" class="what-we-do-video relative w-full min-w-0 justify-self-end">
-        <InternalBrandVideo alt="SAKURA 品牌承諾影片第一幀" />
+        <InternalBrandVideo
+          cover="/home-2026/brand-commitment-opening-frame.webp"
+          alt="SAKURA 品牌承諾影片開場畫面：兩位女性手持食材紙袋"
+        />
       </div>
     </div>
   </section>
