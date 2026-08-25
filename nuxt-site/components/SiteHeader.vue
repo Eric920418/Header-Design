@@ -293,8 +293,8 @@ function handleHeaderClick(event: MouseEvent) {
             </div>
           </div>
 
-          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="flex w-[160px] shrink-0 items-center justify-center min-[1200px]:w-[260px]">
-            <img src="/home-2026/footer/sakura-kitchen.png" alt="SAKURA Kitchen" class="h-[20.5px] w-full object-contain brightness-0 invert" />
+          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="flex w-[160px] shrink-0 items-center justify-center min-[1200px]:w-[266px]">
+            <img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA Kitchen" width="266" height="21" class="h-auto w-full object-contain" />
           </NuxtLink>
 
           <div class="flex flex-1 items-center justify-end gap-1">
@@ -331,7 +331,7 @@ function handleHeaderClick(event: MouseEvent) {
         </nav>
 
         <div class="flex w-full items-center justify-between lg:hidden">
-          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="w-[184px]"><img src="/home-2026/footer/sakura-kitchen.png" alt="SAKURA Kitchen" class="w-full origin-left scale-125 brightness-0 invert" /></NuxtLink>
+          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="w-[184px]"><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA Kitchen" width="266" height="21" class="h-auto w-full" /></NuxtLink>
           <div class="flex items-center gap-5 text-white"><button aria-label="搜尋" @click="searchOpen = true"><Search class="h-6 w-6" /></button><button :aria-label="mobileOpen ? '關閉選單' : '開啟選單'" @click="mobileOpen = !mobileOpen"><X v-if="mobileOpen" class="h-7 w-7" /><Menu v-else class="h-7 w-7" /></button></div>
         </div>
       </div>

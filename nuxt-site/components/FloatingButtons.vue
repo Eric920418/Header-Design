@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
 
 <template>
   <aside ref="rail" aria-label="快速服務" class="floating-buttons fixed bottom-[70px] right-0 z-[90] flex w-[72px] flex-col sm:bottom-9 sm:w-[74px]" :class="{ 'floating-buttons--focused-mobile-form': isFocusedMobileForm }" :style="{ transform: `translateY(${offset}px)` }">
-    <a v-for="(item, index) in items" :key="item.label" :href="item.href" :target="item.href.startsWith('http') ? '_blank' : undefined" :rel="item.href.startsWith('http') ? 'noopener noreferrer' : undefined" class="flex h-[72px] flex-col items-center justify-center text-center text-[13px] leading-4 text-white sm:h-[74px]" :class="[item.primary ? 'mb-5 bg-[#B79258]' : 'bg-[#737373]', !item.primary && index > 1 ? 'border-t border-white/50' : '']">
+    <a v-for="(item, index) in items" :key="item.label" :href="item.href" :target="item.href.startsWith('http') ? '_blank' : undefined" :rel="item.href.startsWith('http') ? 'noopener noreferrer' : undefined" class="flex h-[72px] flex-col items-center justify-center text-center text-[12px] leading-[14px] text-white sm:h-[74px]" :class="[item.primary ? 'mb-5 bg-[#B79258]' : 'bg-[#737373]', !item.primary && index > 1 ? 'border-t border-white/50' : '']">
       <img :src="item.icon" alt="" class="mb-1 h-9 w-9 object-contain" />{{ item.label }}
     </a>
   </aside>

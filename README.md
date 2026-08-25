@@ -4,10 +4,11 @@
 ## 0.0 首頁（2026-08-21 調整）
 
 - 依 `2026.08.21_0.0首頁 _調整.pptx` 第 2、3 頁重核共用 Header、首頁 Hero、Home 09 廚房系列、Kitchen Products、Home 01 案例輪播、Home 06 品牌承諾、門市查詢與 Footer；版型直接沿用專案內 Antra Home 01／06／09 原始模板資料，不以 PPT 或網站截圖充當前端內容。
-- Header 導覽統一 Noto Sans TC 15px，桌機 Logo 為 260×20.5px、搜尋圖示為 15×15.5px；桌機下拉改為受控狀態，選項跳轉、路由變更與 Escape 會立即收回。品牌系列保留 hover 移動走廊，完整顯示十大系列，且系列視窗開啟時原「設計靈感／廚房裝修指南／品牌系列型錄」浮層維持在最上方，不再被覆蓋。「我要加盟」導覽只保留加盟介紹、加盟優勢、加盟金與流程、加盟 Q&A，下載與申請頁路由本身未刪除。
+- Header 導覽統一 Noto Sans TC 15px；2026-08-25 依甲方正式 `橫式英文logo.svg`，桌機與手機 Header 已改用原始白色／紅色向量商標 `public/home-2026/logos/sakura-kitchen-horizontal.svg`，不再把 Footer 金色 PNG 透過濾鏡與 transform 偽裝成 Header Logo。桌機完整尺寸為約 266×21px、1024–1199px 維持 160px 緊湊框、手機為 184px，搜尋圖示為 15×15.5px。桌機下拉改為受控狀態，選項跳轉、路由變更與 Escape 會立即收回。品牌系列保留 hover 移動走廊，完整顯示十大系列，且系列視窗開啟時原「設計靈感／廚房裝修指南／品牌系列型錄」浮層維持在最上方，不再被覆蓋。「我要加盟」導覽只保留加盟介紹、加盟優勢、加盟金與流程、加盟 Q&A，下載與申請頁路由本身未刪除。
 - Hero 保持總高已包含 60px 主導覽；側欄與 Header 共用 `KITCHEN_STYLES` 單一資料源。Home 09 使用 30／70 標題軌、18px 卡距與 1／2／3／4／5 欄響應式配置，1201px 以上 hover 卡寬翻倍，移除舊的大型圓形箭頭並保留拖曳、鍵盤左右鍵、自動輪播及停留暫停。
 - Kitchen Products 使用共用深色標題軌，`KITCHEN PRODUCTS` 為 Noto Sans TC 15px，Logo 跑馬燈上方加入 1px 白線。案例區依 Home 01 重排並使用 `SHOWROOM PROJECTS`；Home 06 標題收斂至 560px、影片上限 645px，YouTube 固定從 0:00 載入且不自動播放，逾時或載入失敗時會完整顯示影片 ID、排查提示與外部觀看連結。
 - 門市篩選與資訊統一 Noto Sans TC 15px，手機為定位滿寬＋區域／城市兩欄、480px 以下單欄；移除隨機定時換卡，改為區塊進場時依序 `rotateX` 翻牌。Footer copyright 僅將 `Taiwan Sakura Corporation.` 設為金色，右側圖示重新拉開，大型 SAKURA KITCHEN 距底 30px，頁尾滿版且無底部留白。
+- 2026-08-25 重新量測原官網 `/home-style/cleverkitchen` 的右側快捷列：官網將標籤轉為 70×70 SVG 路徑並以 58×58 顯示於 74×74 按鈕，換算文字視覺高度約 12px。本站「案例門市／到府丈量／客服中心」由原本 13px／16px 行高校正為 Noto Sans TC 12px／14px，保留既有 72／74px 按鈕、36px 圖示、20px 首卡間距與捲動位置邏輯。
 - 首頁小標、主標與 CTA 分開使用 `opalMove*`／`opalScaleUp`，CTA 保留雷達水波、箭頭旋轉與 hover 填金；`prefers-reduced-motion` 會關閉進場、輪播、翻牌與水波，但所有內容立即可見。共用 Header／Footer 調整會套用全站，其他改動僅影響首頁。
 
 ### 0.0 Design QA
