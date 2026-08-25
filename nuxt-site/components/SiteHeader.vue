@@ -171,31 +171,39 @@ function handleHeaderClick(event: MouseEvent) {
               </button>
               <NuxtLink v-else :to="item.to || '#'" class="px-1 py-2 text-[15px] text-white min-[1440px]:px-3">{{ item.label }}</NuxtLink>
 
-              <div v-if="item.mega" class="desktop-nav-dropdown fixed inset-x-0 top-[var(--site-header-height)] z-50 border-t border-black/5 bg-white shadow-2xl transition-all duration-300" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
-                <div class="mx-auto max-w-[1200px] px-[30px] py-8 xl:px-0">
-                  <div class="grid grid-cols-3 gap-[30px]">
-                    <template v-for="card in item.mega" :key="card.label">
-                      <NuxtLink v-if="card.to" :to="card.to" class="group/card block">
-                        <div class="mb-4 flex h-[50px] items-center">
-                          <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
+              <div
+                v-if="item.mega"
+                class="desktop-nav-dropdown fixed inset-x-0 top-[var(--site-header-height)] z-50 pt-7 transition-all duration-300"
+                :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'"
+                @pointerenter="clearDesktopMenuCloseTimer"
+                @pointerleave="scheduleDesktopMenuClose"
+              >
+                <div class="border-t border-black/5 bg-white shadow-2xl">
+                  <div class="mx-auto max-w-[1200px] px-[30px] py-8 xl:px-0">
+                    <div class="grid grid-cols-3 gap-[30px]">
+                      <template v-for="card in item.mega" :key="card.label">
+                        <NuxtLink v-if="card.to" :to="card.to" class="group/card block">
+                          <div class="mb-4 flex h-[50px] items-center">
+                            <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
+                          </div>
+                          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
+                            <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
+                          </div>
+                        </NuxtLink>
+                        <div v-else aria-disabled="true" class="group/card block cursor-not-allowed opacity-55">
+                          <div class="mb-4 flex h-[50px] items-center">
+                            <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
+                          </div>
+                          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
+                            <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover" />
+                          </div>
                         </div>
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
-                          <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
-                        </div>
-                      </NuxtLink>
-                      <div v-else aria-disabled="true" class="group/card block cursor-not-allowed opacity-55">
-                        <div class="mb-4 flex h-[50px] items-center">
-                          <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
-                        </div>
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
-                          <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover" />
-                        </div>
-                      </div>
-                    </template>
+                      </template>
+                    </div>
+                    <NuxtLink to="/catalogues/catalog" class="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] transition-colors hover:text-[#CAA05C]">
+                      廚房商品型錄 <ArrowRight class="h-4 w-4" />
+                    </NuxtLink>
                   </div>
-                  <NuxtLink to="/catalogues/catalog" class="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] transition-colors hover:text-[#CAA05C]">
-                    廚房商品型錄 <ArrowRight class="h-4 w-4" />
-                  </NuxtLink>
                 </div>
               </div>
 
@@ -217,7 +225,7 @@ function handleHeaderClick(event: MouseEvent) {
 
               <div
                 v-if="item.seriesMega"
-                class="fixed inset-x-0 top-[var(--site-header-height)] z-[60] pt-5 transition-all duration-300"
+                class="fixed inset-x-0 top-[var(--site-header-height)] z-[60] pt-7 transition-all duration-300"
                 :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'"
                 @pointerenter="clearDesktopMenuCloseTimer"
                 @pointerleave="scheduleDesktopMenuClose"

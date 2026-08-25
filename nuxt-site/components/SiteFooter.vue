@@ -76,7 +76,7 @@ onBeforeUnmount(() => {
   <button
     type="button"
     aria-label="回到頂端"
-    class="fixed right-[84px] bottom-5 z-[95] flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-white/80 text-[#1C1C1D] shadow-[0_8px_24px_rgba(0,0,0,.16)] backdrop-blur-md transition-[background-color,color,transform] duration-300 hover:-translate-y-1 hover:bg-[#CAA05C] hover:text-white sm:right-[88px]"
+    class="fixed right-3 bottom-[20px] z-[95] flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-white/80 text-[#1C1C1D] shadow-[0_8px_24px_rgba(0,0,0,.16)] backdrop-blur-md transition-[background-color,color,transform] duration-300 hover:-translate-y-1 hover:bg-[#CAA05C] hover:text-white sm:right-[13px]"
     @click="scrollToTop"
   >
     <ArrowUp class="h-5 w-5" aria-hidden="true" />

@@ -12,6 +12,7 @@ const serviceItems = [
 
 const rail = ref<HTMLElement | null>(null)
 const offset = ref(0)
+const RAIL_BOTTOM_PX = 88
 const reduced = useReducedMotion()
 const route = useRoute()
 const isFocusedMobileForm = computed(() => ['/franchising/intro', '/franchising/download', '/franchising/form', '/builders', '/about/exhibition', '/about/introduce'].includes(route.path) || route.path.startsWith('/gallery/') || route.path.startsWith('/news') || route.path.startsWith('/products'))
@@ -22,7 +23,7 @@ const update = () => {
   const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
   const progress = Math.min(1, window.scrollY / maxScroll)
   const railHeight = rail.value.offsetHeight
-  const startTop = window.innerHeight - railHeight - (window.innerWidth < 640 ? 70 : 36)
+  const startTop = window.innerHeight - railHeight - RAIL_BOTTOM_PX
   const endTop = 112
   offset.value = Math.min(0, (endTop - startTop) * progress)
 }
@@ -45,7 +46,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <aside ref="rail" aria-label="快速服務" class="floating-buttons fixed right-0 bottom-[70px] z-[90] sm:bottom-9" :class="{ 'floating-buttons--focused-mobile-form': isFocusedMobileForm }" :style="{ transform: `translateY(${offset}px)` }">
+  <aside ref="rail" aria-label="快速服務" class="floating-buttons fixed right-0 z-[90]" :class="{ 'floating-buttons--focused-mobile-form': isFocusedMobileForm }" :style="{ bottom: `${RAIL_BOTTOM_PX}px`, transform: `translateY(${offset}px)` }">
     <a :href="primaryItem.href" :aria-label="primaryItem.label" class="relative mb-5 block h-[72px] w-[72px] bg-[#B79258] text-white sm:h-[74px] sm:w-[74px]">
       <img :src="primaryItem.icon" alt="" class="absolute top-[13px] left-1/2 h-[29px] w-[29px] -translate-x-1/2 sm:top-[14px] sm:h-[30px] sm:w-[30px]" />
       <span class="absolute inset-x-0 bottom-[11px] block whitespace-nowrap text-center font-['Noto_Sans_TC'] text-xs leading-3 sm:bottom-3">{{ primaryItem.label }}</span>
