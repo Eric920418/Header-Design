@@ -8,7 +8,7 @@
 - Hero 保持總高已包含 60px 主導覽；側欄與 Header 共用 `KITCHEN_STYLES` 單一資料源。Home 09 使用 30／70 標題軌、18px 卡距與 1／2／3／4／5 欄響應式配置，1201px 以上 hover 卡寬翻倍，移除舊的大型圓形箭頭並保留拖曳、鍵盤左右鍵、自動輪播及停留暫停。
 - Kitchen Products 使用共用深色標題軌，`KITCHEN PRODUCTS` 為 Noto Sans TC 15px，Logo 跑馬燈上方加入 1px 白線。案例區依 Home 01 重排並使用 `SHOWROOM PROJECTS`；Home 06 標題收斂至 560px、影片上限 645px，YouTube 固定從 0:00 載入且不自動播放，逾時或載入失敗時會完整顯示影片 ID、排查提示與外部觀看連結。
 - 門市篩選與資訊統一 Noto Sans TC 15px，手機為定位滿寬＋區域／城市兩欄、480px 以下單欄；移除隨機定時換卡，改為區塊進場時依序 `rotateX` 翻牌。Footer copyright 僅將 `Taiwan Sakura Corporation.` 設為金色，右側圖示重新拉開，大型 SAKURA KITCHEN 距底 30px，頁尾滿版且無底部留白。
-- 2026-08-25 重新量測原官網 `/home-style/cleverkitchen` 的右側快捷列：官網將標籤轉為 70×70 SVG 路徑並以 58×58 顯示於 74×74 按鈕，換算文字視覺高度約 12px。本站「案例門市／到府丈量／客服中心」由原本 13px／16px 行高校正為 Noto Sans TC 12px／14px，保留既有 72／74px 按鈕、36px 圖示、20px 首卡間距與捲動位置邏輯。
+- 2026-08-25 重新量測原官網 `/home-style/cleverkitchen` 的右側快捷列：官網把「圖示＋標籤」製成 70×70 SVG，再以手機 56×56px、桌機 58×58px 放進四周 8px padding 的 72／74px 按鈕。本站「案例門市／到府丈量／客服中心」已改用同一 SVG viewBox 與顯示比例，保留既有功能名稱、連結、20px 首卡間距與捲動位置邏輯。
 - 首頁小標、主標與 CTA 分開使用 `opalMove*`／`opalScaleUp`，CTA 保留雷達水波、箭頭旋轉與 hover 填金；`prefers-reduced-motion` 會關閉進場、輪播、翻牌與水波，但所有內容立即可見。共用 Header／Footer 調整會套用全站，其他改動僅影響首頁。
 
 ### 0.0 Design QA
@@ -1208,3 +1208,8 @@ final result: passed
 - **全站 QA**：在 1280×720、768×1024、390×844 三種實際 viewport 逐一開啟全部 46 個有效內頁網址，確認 Hero 文件座標、Noto Serif TC computed style、十字線 DOM／5px 金點／1px 線條、手機線條隱藏與膠囊保留、水平溢位、圖片載入及前端錯誤；三種尺寸結果皆為字重違規 0、裝飾缺件 0、水平溢位 0、已完成圖片錯誤 0、Nuxt error 0。首頁 Hero 實測保持 952px 且起點為 `y=0`；表單頁在三種尺寸皆從 `y=60` 開始。手機／平板規則沿用各頁既有斷點並由共用元件集中控制，不改路由、資料、API 或圖片素材。
 - **動畫 QA**：動畫驗收另把首頁納入，於同三種 viewport 逐一檢查 47 個網址、每種尺寸各 171 個主標題與 58 個主要 CTA，未綁定動畫、水平溢位與 Nuxt error 均為 0。針對本次補齊的集團品牌館、建商、加盟、隱私權及商品三層模板，再逐項捲入驗證 75 個動畫目標；全部成功進入 `is-visible`、維持可見並取得非 `none` 的對應 keyframe。
 - **建置**：`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過；production build 只保留 Tailwind CSS v4 既有 sourcemap warning。
+
+## Nuxt 3 — 右側快速服務按鈕官網比例校正（2026-08-25）
+
+- **官網尺寸真值**：依原官網實際 DOM 與 computed layout 校正，不再只憑截圖估算。按鈕在手機為 `72 × 72px`、桌機為 `74 × 74px`，四周固定 `8px` padding；內容框因此分別為 `56 × 56px` 與 `58 × 58px`，第一顆按鈕下方保留 `20px` 間距。
+- **內容比例**：原官網把圖示與標籤一起置於 70 × 70 SVG 後縮放顯示；本站保留既有三個正式功能與連結，改用相同 `70 × 70` viewBox、`42 × 42` 圖示區及底部 14px SVG 標籤，再整體縮成 56／58px。這讓圖示、字級與上下留白同步縮放，不再用獨立 HTML 文字近似原站。
