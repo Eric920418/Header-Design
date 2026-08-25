@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
 
 <template>
   <aside ref="rail" aria-label="快速服務" class="floating-buttons fixed bottom-[70px] right-0 z-[90] flex w-[72px] flex-col sm:bottom-9 sm:w-[74px]" :class="{ 'floating-buttons--focused-mobile-form': isFocusedMobileForm }" :style="{ transform: `translateY(${offset}px)` }">
-    <a v-for="(item, index) in items" :key="item.label" :href="item.href" :aria-label="item.label" :target="item.href.startsWith('http') ? '_blank' : undefined" :rel="item.href.startsWith('http') ? 'noopener noreferrer' : undefined" class="block p-2" :class="[item.primary ? 'mb-5 bg-[#B79258]' : 'bg-[#737373]', !item.primary && index > 1 ? 'border-t border-white/50' : '']">
+    <a v-for="(item, index) in items" :key="item.label" :href="item.href" :aria-label="item.label" :target="item.href.startsWith('http') ? '_blank' : undefined" :rel="item.href.startsWith('http') ? 'noopener noreferrer' : undefined" class="relative block p-2" :class="[item.primary ? 'mb-5 bg-[#B79258]' : 'bg-[#737373]', !item.primary && index > 1 ? 'quick-link-divider' : '']">
       <svg aria-hidden="true" viewBox="0 0 70 70" class="block h-14 w-14 sm:h-[58px] sm:w-[58px]">
         <image :href="item.icon" x="14" y="4" width="42" height="42" preserveAspectRatio="xMidYMid meet" />
         <text x="35" y="63" fill="#fff" font-family="Noto Sans TC, sans-serif" font-size="14" font-weight="400" text-anchor="middle">{{ item.label }}</text>
@@ -51,6 +51,18 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.quick-link-divider {
+  margin-top: 1px;
+}
+
+.quick-link-divider::before {
+  position: absolute;
+  inset: -1px 0 auto;
+  height: 1px;
+  background: rgb(255 255 255 / 50%);
+  content: '';
+}
+
 @media (max-width: 767px) {
   .floating-buttons--focused-mobile-form { display: none; }
 }
