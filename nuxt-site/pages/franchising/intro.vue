@@ -85,7 +85,7 @@ onBeforeUnmount(() => {
       <div class="source-rail-wide franchise-hero__inner internal-rail-safe">
         <div class="franchise-hero__grid">
           <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev">
-            <span class="source-pill source-pill--dark"><i aria-hidden="true" />我要加盟</span>
+            <InternalSectionPill tone="dark">我要加盟</InternalSectionPill>
             <h1 id="franchise-page-title">Find Your Inspired <span>Interior Design</span></h1>
           </div>
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="franchise-hero__aside ev">
@@ -107,7 +107,7 @@ onBeforeUnmount(() => {
     <section class="franchise-about elementor-df512f3" aria-labelledby="franchise-story-title">
       <div class="source-rail-wide internal-rail-safe">
         <div class="franchise-about__grid">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Partners" class="source-heading-rail">
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Partners" source="home5" class="source-heading-rail">
             <template #actions>
               <NuxtLink to="/franchising/download" target="_blank" rel="noopener" class="source-round-link source-round-link--outline"><Download aria-hidden="true" /> 加盟資料下載</NuxtLink>
             </template>
@@ -153,7 +153,7 @@ onBeforeUnmount(() => {
       <div class="source-rail internal-rail-safe">
         <div class="franchise-advantages__layout">
           <header v-reveal="{ anim: 'opalMoveRight' }" class="franchise-advantages__intro">
-            <span class="source-pill"><i aria-hidden="true" />Franchise Advantages</span>
+            <InternalSectionPill>Franchise Advantages</InternalSectionPill>
             <h2 id="franchise-advantage-title">加盟創業首選品牌</h2>
             <p>從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。</p>
             <strong aria-hidden="true">{{ String(activeAdvantageGroup + 1).padStart(2, '0') }}</strong>
@@ -189,7 +189,7 @@ onBeforeUnmount(() => {
     <!-- Antra Home 07 / Newsletter / Elementor container 8ca2535 -->
     <section class="franchise-newsletter elementor-8ca2535" aria-labelledby="franchise-conversion-title">
       <div class="franchise-newsletter__content">
-        <span v-reveal="{ anim: 'opalMoveUp' }" class="source-pill source-pill--dark"><i aria-hidden="true" />Subscribe To The Newsletter</span>
+        <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" tone="dark">Subscribe To The Newsletter</InternalSectionPill>
         <h2 id="franchise-conversion-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }">Join <span>Our Newsletter</span><br /><span>Stay</span> Up To Date</h2>
         <p v-reveal="{ anim: 'opalMoveUp', delay: 120 }">從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！</p>
         <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 170 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--gold">快來了解加盟金、補助金，填寫表單 <ArrowRight aria-hidden="true" /></NuxtLink>
@@ -200,7 +200,7 @@ onBeforeUnmount(() => {
     <section class="franchise-projects elementor-1bcdd25" aria-labelledby="franchise-marketing-title">
       <div class="source-rail internal-rail-safe">
         <header class="source-split-heading">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Projects" density="compact" class="source-heading-rail source-heading-rail--compact" />
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Projects" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <h2 id="franchise-marketing-title">強大廣告行銷</h2>
             <p>集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。</p>
@@ -297,7 +297,7 @@ onBeforeUnmount(() => {
     <!-- Antra Home 05 / Trusted Experience / Elementor container 836324d -->
     <section id="franchise-news" class="franchise-news elementor-836324d" aria-labelledby="franchise-news-title">
       <div class="source-rail internal-rail-safe">
-        <span class="source-pill franchise-news__pill"><i aria-hidden="true" />Franchise Information</span>
+        <InternalSectionPill>Franchise Information</InternalSectionPill>
         <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }">Behind <span>Every Statistic Pulses</span> A Human Story</h2>
         <div class="franchise-news__list">
           <NuxtLink v-for="article in franchiseNews" :key="article.id" :to="article.legacyPath" class="franchise-news-row">
@@ -315,9 +315,6 @@ onBeforeUnmount(() => {
 .source-rail-wide { width: min(1770px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
 .source-rail { width: min(1410px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
 
-.source-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
-.source-pill i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: #caa05c; }
-.source-pill--dark { border-color: rgb(255 255 255 / 24%); color: #fff; }
 .source-round-link { position: relative; isolation: isolate; display: inline-flex; min-height: 52px; width: max-content; align-items: center; justify-content: center; gap: 11px; padding: 13px 21px; border: 1px solid rgb(255 255 255 / 22%); border-radius: 999px; color: #fff; font-family: var(--font-ui); font-size: 14px; line-height: 20px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .source-round-link::after { position: absolute; z-index: -1; right: 11px; width: 38px; height: 38px; pointer-events: none; border: 1px solid currentcolor; border-radius: 50%; opacity: 0; content: ""; animation: franchise-radar 2.6s ease-out infinite; }
 .source-round-link svg { width: 18px; height: 18px; transition: transform .3s ease; }
@@ -346,7 +343,6 @@ onBeforeUnmount(() => {
 .franchise-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-family: var(--font-ui); font-size: 15px; line-height: 24px; }
 .franchise-hero__aside p + p { margin-top: 16px; }
 .franchise-hero__aside .source-round-link { margin-top: 50px; }
-.franchise-hero .source-pill { font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; letter-spacing: 0; text-transform: none; }
 
 .franchise-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -400px; overflow: hidden; border-radius: 24px; }
 .franchise-hero-media :deep(img) { object-position: center 55%; }
@@ -354,9 +350,7 @@ onBeforeUnmount(() => {
 .franchise-about { padding: 124px 30px 0; background: #fff url('/section-6/franchise/antra-original/h6-bg-3.png') top right / auto no-repeat; }
 .franchise-about::after { position: absolute; pointer-events: none; content: ""; }
 .franchise-about__grid { display: grid; grid-template-columns: 30% 70%; }
-.source-heading-rail { position: relative; min-height: 100%; padding-top: 70px; }
-.source-heading-rail__line { position: absolute; top: 138px; left: 30px; width: min(300px, calc(100% - 60px)); border-top: 1px solid #e3e3e8; }
-.source-heading-rail__line::after { position: absolute; top: -68px; right: 0; height: 200px; border-right: 1px solid #e3e3e8; content: ""; }
+.source-heading-rail { min-height: 100%; }
 .source-heading-rail > .source-round-link { position: absolute; bottom: 92px; left: 0; }
 .franchise-about__content { padding: 70px 0 90px 58px; }
 .franchise-about h2,
@@ -417,8 +411,6 @@ onBeforeUnmount(() => {
 
 .franchise-projects { padding: 97px 30px 108px; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
 .source-split-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
-.source-heading-rail--compact { min-height: 220px; padding-top: 18px; }
-.source-heading-rail--compact .source-heading-rail__line { top: 65px; }
 .source-split-heading > div:last-child { padding-left: 58px; }
 .source-split-heading h2 { max-width: 620px; margin-top: 65px; }
 .source-split-heading p { max-width: 636px; margin: 30px 0 0; color: #59585d; font-size: 16px; line-height: 25px; }
@@ -474,7 +466,6 @@ onBeforeUnmount(() => {
 
 .franchise-faq { overflow: hidden; padding: 100px 30px 130px; background: #f6f6f6; }
 .franchise-faq__heading { display: grid; grid-template-columns: 30% 66.6666%; margin-bottom: 60px; }
-.franchise-faq__heading-rail :deep(.template-heading-rail__pill) { font-family: var(--font-cjk-sans); }
 .franchise-faq__heading h2 { align-self: start; width: min(732px, 100%); margin: 70px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .franchise-faq__heading h2 span { color: #caa05c; }
 .franchise-faq__body { display: grid; grid-template-columns: 71% 29%; }
@@ -502,7 +493,6 @@ onBeforeUnmount(() => {
 .franchise-faq__promo p { width: min(310px, 100%); margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 
 .franchise-news { padding: 108px 30px 86px; background: #fff url('/section-6/franchise/antra-original/h5-bg02.png') top right / auto no-repeat; }
-.franchise-news__pill { font-family: var(--font-cjk-sans); }
 .franchise-news h2 { max-width: 786px; margin-top: 28px; }
 .franchise-news__list { margin-top: 60px; border-top: 1px solid #e3e3e8; }
 .franchise-news-row { display: grid; grid-template-columns: 14px 1fr 46px; gap: 18px; align-items: center; min-height: 84px; border-bottom: 1px solid #e3e3e8; }
@@ -559,7 +549,6 @@ onBeforeUnmount(() => {
   .franchise-hero-media { height: 500px; margin-top: -260px; }
   .franchise-about { padding-top: 80px; }
   .franchise-about__grid { grid-template-columns: 27% 73%; }
-  .source-heading-rail__line { left: 0; width: calc(100% - 30px); }
   .franchise-advantages { padding-block: 90px; }
   .franchise-advantages__layout { grid-template-columns: 1fr; }
   .franchise-advantages__intro { position: static; min-height: auto; padding: 0 0 46px; }
@@ -615,8 +604,6 @@ onBeforeUnmount(() => {
   .franchise-news { padding: 75px 15px 80px; }
   .franchise-about { background-size: 70% auto; }
   .franchise-about__grid { grid-template-columns: 1fr; }
-  .source-heading-rail { min-height: auto; padding: 0; }
-  .source-heading-rail__line { display: none; }
   .source-heading-rail > .source-round-link { position: static; margin-top: 22px; }
   .franchise-about__content { padding: 38px 0 50px; }
   .franchise-about h2,
@@ -641,7 +628,6 @@ onBeforeUnmount(() => {
   .franchise-post__features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .source-split-heading { grid-template-columns: 1fr; margin-bottom: 38px; }
-  .source-heading-rail--compact { min-height: auto; }
   .source-split-heading > div:last-child { padding: 0; }
   .source-split-heading h2 { margin-top: 28px; }
   .source-split-heading p { font-size: 15px; line-height: 24px; }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Download, FilePenLine } from 'lucide-vue-next'
+import { Download } from 'lucide-vue-next'
 import { FRANCHISE_BROCHURE_URL } from '~/data/franchise'
 
 useSeoMeta({
@@ -16,7 +16,7 @@ useSeoMeta({
     <section class="franchise-application" aria-labelledby="franchise-application-title">
       <div class="franchise-application__rail">
         <header class="franchise-application__header">
-          <span v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="franchise-application__pill ev"><i aria-hidden="true" /><FilePenLine aria-hidden="true" />Franchise Application</span>
+          <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">Franchise Application</InternalSectionPill>
           <h1 id="franchise-application-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev">申請加盟</h1>
           <p v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" class="ev">請留下您的聯絡方式，我們會立即提供您完整的加盟資訊。</p>
           <div v-reveal="{ anim: 'opalScaleUp', delay: 210 }" data-ev="opalScaleUp" class="franchise-application__download-reveal ev">
@@ -45,9 +45,6 @@ useSeoMeta({
 
 .franchise-application__rail { width: min(930px, 100%); margin-inline: auto; }
 .franchise-application__header { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.franchise-application__pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
-.franchise-application__pill i { width: 7px; height: 7px; border-radius: 50%; background: #caa05c; }
-.franchise-application__pill svg { width: 14px; height: 14px; }
 
 .franchise-application__header h1 { margin: 28px 0 0; font-family: var(--font-cjk-serif); font-size: 64px; font-weight: 600; line-height: 68px; letter-spacing: -.025em; }
 .franchise-application__header p { max-width: 620px; margin: 18px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 26px; }

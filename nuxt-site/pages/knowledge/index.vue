@@ -148,59 +148,16 @@ useSeoMeta({
 }
 
 .kitchen-guide-heading__label {
-  position: relative;
   z-index: 1;
   grid-column: 1;
   grid-row: 1;
-  min-height: 198px;
-  padding-top: 70px;
-}
-
-.kitchen-guide-heading__pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 13px 6px 9px;
-  border: 1px solid rgba(159, 159, 164, .25);
-  border-radius: 24px;
-  color: #1c1c1d;
-  font-family: var(--font-cjk-sans);
-  font-size: 12px;
-  line-height: 14px;
-  letter-spacing: .04em;
-}
-
-.kitchen-guide-heading__pill i {
-  width: 8px;
-  height: 8px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: #caa05c;
-}
-
-.kitchen-guide-heading__horizontal {
-  position: absolute;
-  top: 76px;
-  left: 0;
-  width: calc(100% + 1px);
-  height: 1px;
-  background: #e3e3e8;
-}
-
-.kitchen-guide-heading__vertical {
-  position: absolute;
-  top: 76px;
-  right: 0;
-  width: 1px;
-  height: 52px;
-  background: #e3e3e8;
 }
 
 .kitchen-guide-heading h2 {
   grid-column: 2;
   grid-row: 1;
   max-width: 760px;
-  margin: 70px 0 0;
+  margin: 64px 0 0;
   color: #1c1c1d;
   justify-self: start;
   text-align: left;
@@ -402,13 +359,8 @@ useSeoMeta({
   }
 
   .kitchen-guide-heading__label {
-    min-height: auto;
     margin-bottom: 25px;
-    padding: 0;
   }
-
-  .kitchen-guide-heading__horizontal,
-  .kitchen-guide-heading__vertical { display: none; }
 
   .kitchen-guide-heading h2 {
     margin: 20px 0 0;

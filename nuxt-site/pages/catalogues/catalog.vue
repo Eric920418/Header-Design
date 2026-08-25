@@ -101,7 +101,7 @@ useSeoMeta({
     <section class="product-care" aria-labelledby="product-care-title">
       <div class="product-catalogue-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="product-care__header">
-          <span class="product-care__eyebrow"><i aria-hidden="true" />Product Care Tips</span>
+          <span class="product-care__eyebrow"><InternalSectionPill>Product Care Tips</InternalSectionPill></span>
           <h2 id="product-care-title">廚房產品保養</h2>
           <p>從選購、安裝到日常清潔，依產品分類快速查看實用重點。</p>
         </header>
@@ -256,8 +256,7 @@ useSeoMeta({
 .product-care { padding: 116px 30px 138px; background: #f6f6f6; }
 .product-care .internal-rail-safe { padding-inline: 43px; }
 .product-care__header { display: grid; grid-template-columns: 270px minmax(0, 1fr) minmax(260px, 300px); align-items: start; gap: 34px; margin-bottom: 52px; }
-.product-care__eyebrow { position: relative; display: inline-flex; width: fit-content; align-items: center; gap: 8px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 26px; padding: 8px 14px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; font-weight: 400; line-height: 14px; letter-spacing: .08em; text-transform: uppercase; }
-.product-care__eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: #caa05c; }
+.product-care__eyebrow { position: relative; display: inline-flex; width: fit-content; }
 .product-care__eyebrow::after { position: absolute; top: 50%; left: calc(100% + 16px); width: 104px; height: 1px; background: #e3e3e8; content: ''; }
 .product-care__header h2 { max-width: 650px; margin: -5px 0 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 56px; font-weight: 500; line-height: 66px; }
 .product-care__header > p { margin: 4px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }

@@ -25,8 +25,8 @@ function handleVideoLoad() {
     <div class="what-we-do-layout relative z-10 mx-auto grid max-w-[1410px] items-center">
       <div class="what-we-do-copy min-w-0">
         <div class="what-we-do-heading mb-[40px]">
-          <span v-reveal="{ anim: 'opalMoveRight' }" class="mb-[20px] inline-flex items-center gap-[6px] rounded-[24px] border border-[rgba(114,114,114,.18)] px-[13px] py-[3px] pl-[10px] font-display text-[12px] uppercase tracking-[1px] text-[#1C1C1D]"><span class="h-[6px] w-[6px] rounded-full bg-[#CAA05C]" />品牌承諾</span>
-          <h2 id="what-we-do-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="what-we-do-title mx-auto max-w-[560px] font-display capitalize text-[#1C1C1D]">SAKURA has <span class="text-[#CAA05C]">created exceptional</span> architectural designs.</h2>
+          <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" class="mb-[20px]">品牌承諾</InternalSectionPill>
+          <h2 id="what-we-do-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="what-we-do-title mx-auto max-w-[560px] font-display capitalize text-[#1C1C1D]">SAKURA has <span class="text-[#CAA05C]">created exceptional</span></h2>
         </div>
         <ul v-reveal="{ anim: 'opalMoveUp', delay: 180 }" class="border-t border-[#E3E3E8]"><li v-for="item in items" :key="item" class="flex items-center gap-[7px] border-b border-[#E3E3E8] py-[16px] font-display text-[18px] leading-[24px] text-[#1C1C1D]"><Check class="h-[19px] w-[19px] text-[#CAA05C]" :stroke-width="3" />{{ item }}</li></ul>
         <p v-reveal="{ anim: 'opalMoveUp', delay: 240 }" class="what-we-do-description mx-auto max-w-[645px] text-[16px] leading-[24px] text-[#59585D]">We specialize in transforming visions into reality. Explore our portfolio of innovative architectural and interior design projects crafted with precision.</p>

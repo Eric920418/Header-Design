@@ -18,7 +18,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
 <template>
   <section v-if="variant === 'home07'" class="knowledge-related knowledge-related--home07" aria-label="延伸文章">
     <header class="knowledge-related-home07__intro" v-reveal="{ anim: 'opalMoveRight' }">
-      <span class="knowledge-related-home07__pill"><i aria-hidden="true" /> Straight From The Newsroom</span>
+      <InternalSectionPill>Straight From The Newsroom</InternalSectionPill>
       <h2>Take A Look At<br><em>Our Latest Blog</em><br>&amp; Articles!</h2>
       <p>Check out our latest blog posts and industry insights to stay informed about the latest trends, technologies, and project updates.</p>
       <NuxtLink to="/knowledge" class="knowledge-related-home07__cta">
@@ -186,27 +186,6 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
 
 .knowledge-related-home07__intro { padding: 0 26px 0 0; }
 
-.knowledge-related-home07__pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 13px 6px 9px;
-  border: 1px solid rgb(159 159 164 / 28%);
-  border-radius: 24px;
-  color: #1c1c1d;
-  font-family: var(--font-ui);
-  font-size: 11px;
-  line-height: 14px;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-}
-
-.knowledge-related-home07__pill i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #caa05c;
-}
 
 .knowledge-related-home07__intro h2 {
   margin: 31px 0 29px;

@@ -113,7 +113,7 @@ useSeoMeta({
 }
 
 .antra-service-intro__heading > div:last-child {
-  padding: 70px 0 30px;
+  padding: 64px 0 30px;
 }
 
 .antra-service-intro h2 {

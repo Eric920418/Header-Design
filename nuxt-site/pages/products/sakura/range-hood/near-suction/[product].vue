@@ -121,7 +121,7 @@ useSeoMeta({
         </div>
 
         <div v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="product-overview__content">
-          <span class="product-brand-pill"><i aria-hidden="true" />SAKURA Product</span>
+          <InternalSectionPill>SAKURA Product</InternalSectionPill>
           <h1 id="product-overview-title">{{ product.title }}</h1>
           <p class="product-model">{{ product.model }}</p>
 
@@ -214,7 +214,7 @@ useSeoMeta({
     <section class="product-catalogue" aria-labelledby="product-catalogue-title">
       <div class="product-detail-rail internal-rail-safe product-catalogue__grid">
         <div v-reveal="{ anim: 'opalMoveRight' }" class="product-catalogue__copy">
-          <span class="product-brand-pill"><i aria-hidden="true" />SAKURA Product Catalogue</span>
+          <InternalSectionPill>SAKURA Product Catalogue</InternalSectionPill>
           <h2 id="product-catalogue-title">
             <span>廚房商品型錄</span>
             <em>Kitchen Product Catalog</em>
@@ -319,8 +319,6 @@ useSeoMeta({
 .product-image-leave-to { opacity: 0; transform: scale(1.015); }
 
 .product-overview__content { min-width: 0; padding-top: 4px; }
-.product-brand-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; border: 1px solid #e3e3e8; border-radius: 999px; padding: 7px 13px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 12px; line-height: 18px; letter-spacing: .08em; }
-.product-brand-pill i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: #caa05c; }
 .product-overview__content > h1 { margin: 26px 0 8px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 38px; font-weight: 500; line-height: 50px; }
 .product-model { margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 500; line-height: 27px; letter-spacing: .08em; }
 .product-features { padding: 41px 0 36px; border-bottom: 1px solid #e3e3e8; }

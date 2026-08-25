@@ -120,10 +120,7 @@ useSeoMeta({
       <span class="absolute inset-x-0 bottom-0 z-[3] h-[45%] bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true" />
 
       <div class="ai-hero__inner">
-        <div v-reveal="{ anim: 'opalMoveRight' }" class="ai-hero__eyebrow">
-          <span aria-hidden="true" />
-          Trusted Design Partner
-        </div>
+        <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" tone="dark" class="ai-hero__eyebrow">Trusted Design Partner</InternalSectionPill>
         <h1 id="ai-kitchen-hero-title" v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="ai-hero__title">
           Find Your <span>Inspired</span><br>
           <span>Interior</span> Design
@@ -331,8 +328,6 @@ useSeoMeta({
 .ai-kitchen-page { overflow: clip; background: #fff; color: #1c1c1d; }
 .ai-hero { position: relative; height: 840px; overflow: hidden; background: #6f6d69; color: #fff; }
 .ai-hero__inner { position: relative; z-index: 5; width: min(1584px, calc(100% - 60px)); height: 100%; margin-inline: auto; padding-top: 118px; }
-.ai-hero__eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 13px; line-height: 18px; letter-spacing: 1px; text-transform: uppercase; }
-.ai-hero__eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: #caa05c; }
 .ai-hero__title { margin-top: 24px; max-width: 1100px; font-size: clamp(74px, 7.9vw, 130px); line-height: .93; letter-spacing: -.035em; text-transform: none; }
 .ai-hero__title span { color: #caa05c; }
 .ai-hero__cta { position: absolute; top: 250px; right: 4%; display: inline-flex; width: 120px; height: 120px; align-items: center; justify-content: center; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
@@ -370,8 +365,6 @@ useSeoMeta({
 
 .ai-intro { padding: 120px 0; background: #f6f6f6; }
 .ai-section-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
-.ai-section-kicker { display: inline-flex; width: fit-content; align-items: center; gap: 8px; margin-top: 10px; border: 1px solid #e3e3e8; border-radius: 24px; padding: 7px 13px 7px 10px; font-family: var(--font-cjk-sans); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
-.ai-section-kicker i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
 .ai-section-heading h2 { max-width: 900px; margin: 70px 0 0; font-size: 60px; line-height: 64px; text-transform: none; }
 .ai-section-heading h2 span, .ai-centered-heading h2 span { color: #caa05c; }
 .ai-intro__content { display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 56%); gap: 70px; margin-top: 80px; padding-top: 50px; border-top: 1px solid #e3e3e8; }
@@ -438,15 +431,8 @@ useSeoMeta({
 
 .ai-cases { background: #fff; }
 .ai-cases__heading { display: grid; grid-template-columns: 30% 70%; }
-.ai-cases__heading-label { position: relative; padding-top: 70px; }
-.ai-cases__heading-label > p { display: inline-flex; align-items: center; gap: 8px; margin: 0; border: 1px solid #e3e3e8; border-radius: 26px; padding: 8px 14px; font-family: var(--font-cjk-sans); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
-.ai-cases__heading-label > p span { width: 5px; height: 5px; flex: 0 0 auto; border-radius: 50%; background: #caa05c; }
-.ai-cases__heading > h2 { max-width: 688px; margin: 0; padding: 70px 0 60px; font-size: 60px; line-height: 64px; text-transform: none; }
+.ai-cases__heading > h2 { max-width: 688px; margin: 0; padding: 64px 0 60px; font-size: 60px; line-height: 64px; text-transform: none; }
 .ai-cases__heading > h2 span { color: #caa05c; }
-.ai-cases__rule { position: absolute; display: block; border-color: #e3e3e8; pointer-events: none; }
-.ai-cases__rule--horizontal { top: 118px; left: 30px; width: 525px; border-top: 1px solid #e3e3e8; }
-.ai-cases__rule--horizontal::after { position: absolute; top: -8px; right: -1px; width: 15px; height: 15px; border: 1px solid #e3e3e8; border-radius: 50%; background: #fff; content: ''; }
-.ai-cases__rule--vertical { top: 50px; right: 61px; height: 200px; border-right: 1px solid #e3e3e8; }
 .ai-cases__viewport { overflow: hidden; cursor: grab; }
 .ai-cases__viewport:active { cursor: grabbing; }
 .ai-cases__track { display: flex; margin-left: -30px; touch-action: pan-y pinch-zoom; }
@@ -496,7 +482,6 @@ useSeoMeta({
   .ai-suite-details > div:last-child { grid-column: 1 / -1; }
   .ai-finishes__grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .ai-cases__heading > h2 { font-size: 50px; line-height: 56px; }
-  .ai-cases__rule--horizontal { width: 300px; }
   .ai-cases__slide { flex-basis: 50%; }
   .ai-case-card { height: auto; }
   .ai-case-card--featured { overflow: visible; border-radius: 0; }
@@ -510,7 +495,6 @@ useSeoMeta({
 @media (max-width: 767px) {
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
-  .ai-hero__eyebrow { font-size: 11px; }
   .ai-hero__title { margin-top: 18px; font-size: clamp(44px, 13vw, 68px); line-height: .98; }
   .ai-hero__cta { top: 300px; right: 0; width: 82px; height: 82px; }
   .ai-hero__cta > span { font-size: 13px; line-height: 16px; }
@@ -545,9 +529,7 @@ useSeoMeta({
   .ai-finishes__image { border-radius: 16px; }
   .ai-equipment__viewport { margin-top: 38px; }
   .ai-cases__heading { display: block; text-align: center; }
-  .ai-cases__heading-label { padding-top: 0; }
   .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 0 30px; font-size: 32px; line-height: 37px; }
-  .ai-cases__rule { display: none; }
   .ai-cases__viewport { margin-top: 38px; }
   .ai-cases__slide { flex-basis: 100%; }
   .ai-case-card__body { min-height: 0; padding-top: 18px; }

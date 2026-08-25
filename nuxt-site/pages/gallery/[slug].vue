@@ -267,11 +267,7 @@ useHead({
 
 .case-detail-related { margin-top: 108px; padding-top: 100px; border-top: 1px solid #e3e3e8; }
 .case-detail-related__heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
-.case-detail-related__label-wrap { position: relative; padding-top: 70px; }
-.case-detail-related__eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 3px 13px 3px 10px; border: 1px solid rgba(159,159,164,.35); border-radius: 24px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 22px; letter-spacing: 1px; }
-.case-detail-related__eyebrow i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
-.case-detail-related__line { position: absolute; top: 88px; right: 28px; width: min(300px, 72%); border-top: 1px solid #e3e3e8; }
-.case-detail-related__heading > h2 { padding: 70px 0 60px; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
+.case-detail-related__heading > h2 { padding: 64px 0 60px; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
 .case-detail-related__viewport { overflow: hidden; }
 .case-detail-related__track { display: flex; gap: 30px; touch-action: pan-y pinch-zoom; }
 .case-detail-related__slide { min-width: 0; flex: 0 0 calc((100% - 60px) / 3); }
@@ -297,8 +293,6 @@ useHead({
   .case-detail-booking { grid-column: 1 / -1; }
   .case-detail-widget { margin-top: 0; }
   .case-detail-related { margin-top: 88px; padding-top: 80px; }
-  .case-detail-related__label-wrap { padding-top: 50px; }
-  .case-detail-related__line { top: 68px; }
   .case-detail-related__heading > h2 { padding: 50px 0 30px; font-size: 50px; line-height: 56px; }
   .case-detail-related__slide { flex-basis: calc((100% - 30px) / 2); }
 }
@@ -323,8 +317,7 @@ useHead({
   .case-detail-reviews > h2 { font-size: 25px; line-height: 31px; }
   .case-detail-related { margin-top: 68px; padding-top: 60px; }
   .case-detail-related__heading { grid-template-columns: 1fr; }
-  .case-detail-related__label-wrap { padding-top: 0; text-align: center; }
-  .case-detail-related__line { display: none; }
+  .case-detail-related__label-wrap { text-align: center; }
   .case-detail-related__heading > h2 { padding: 20px 0 30px; font-size: 40px; line-height: 46px; text-align: center; }
   .case-detail-related__viewport { margin-top: 38px; }
   .case-detail-related__track { gap: 15px; }

@@ -33,13 +33,8 @@
 .brand-store-section { overflow: hidden; padding: 100px 30px 80px; background: #f6f6f6; }
 .brand-store-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-store-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
-.brand-store-heading-aside { position: relative; min-height: 198px; padding-top: 70px; }
-.brand-store-pill { display: inline-flex; align-items: center; gap: 5px; padding: 8px 14px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 26px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
-.brand-store-pill > span { width: 5px; height: 5px; border-radius: 50%; background: #caa05c; }
-.brand-store-deco { position: absolute; display: block; border-color: #e3e3e8; }
-.brand-store-deco-horizontal { top: 117px; left: 30px; width: 300px; border-bottom: 1px solid #e3e3e8; }
-.brand-store-deco-vertical { top: 48px; right: 61px; height: 200px; border-right: 1px solid #e3e3e8; }
-.brand-store-heading-copy { padding-top: 70px; }
+.brand-store-heading-aside { align-self: stretch; }
+.brand-store-heading-copy { padding-top: 64px; }
 .brand-store-heading h2 { width: min(850px, 100%); margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .brand-store-heading h2 span { color: #caa05c; }
 .brand-store-heading h3 { margin: 35px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
@@ -54,16 +49,12 @@
 @media (max-width: 1024px) {
   .brand-store-section { padding-block: 80px; }
   .brand-store-heading h2 { font-size: 48px; line-height: 52px; }
-  .brand-store-deco-horizontal { width: 220px; }
-  .brand-store-deco-vertical { right: 30px; height: 100px; }
 }
 
 @media (max-width: 767px) {
   .brand-store-section { padding: 60px 15px; }
   .brand-store-rail.internal-rail-safe { padding-right: 72px; }
   .brand-store-heading { grid-template-columns: 1fr; margin-bottom: 35px; text-align: center; }
-  .brand-store-heading-aside { min-height: auto; padding: 0; }
-  .brand-store-deco { display: none; }
   .brand-store-heading-copy { padding-top: 20px; }
   .brand-store-heading h2 { font-size: 30px; line-height: 35px; }
   .brand-store-heading h2 br { display: none; }

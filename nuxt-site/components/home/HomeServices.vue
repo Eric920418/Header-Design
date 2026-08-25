@@ -22,10 +22,8 @@ onBeforeUnmount(() => timer && clearInterval(timer))
     <div aria-hidden class="absolute inset-0 bg-black/[.76]" />
     <div class="relative z-10 mx-auto max-w-[1410px]">
       <div class="home-services-heading relative mx-auto mb-[30px] grid max-w-[1410px] grid-cols-1 min-[768px]:mb-[60px] min-[768px]:grid-cols-[30%_70%]">
-        <div v-reveal="{ anim: 'opalMoveRight' }">
-          <InternalTemplateHeadingRail label="KITCHEN PRODUCTS" tone="dark" />
-        </div>
-        <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="flex items-center">
+        <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="KITCHEN PRODUCTS" tone="dark" source="home6" class="home-services-heading__rail" />
+        <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="home-services-heading__copy">
           <h2 id="services-heading" class="w-full max-w-[769px] text-center font-display text-[30px] capitalize leading-[35px] text-white min-[768px]:text-left min-[768px]:text-[45px] min-[768px]:leading-[50px] min-[881px]:text-[60px] min-[881px]:leading-[64px]">Explore Our <span class="text-[#CAA05C]">Comprehensive Interior Design</span> Services</h2>
         </div>
       </div>
@@ -43,9 +41,42 @@ onBeforeUnmount(() => timer && clearInterval(timer))
 </template>
 
 <style scoped>
-.home-services-heading :deep(.template-heading-rail__pill) {
-  font-family: var(--font-cjk-sans);
-  font-size: 15px;
-  line-height: 20px;
+@media (min-width: 768px) {
+  .home-services-heading__rail {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .home-services-heading__copy {
+    z-index: 1;
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: 38px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 880px) {
+  .home-services-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .home-services-heading__rail,
+  .home-services-heading__copy {
+    grid-column: 1;
+  }
+
+  .home-services-heading__rail {
+    grid-row: 1;
+  }
+
+  .home-services-heading__copy {
+    grid-row: 2;
+    padding-top: 30px;
+  }
+
+  .home-services-heading__copy h2 {
+    margin-inline: auto;
+    text-align: center;
+  }
 }
 </style>

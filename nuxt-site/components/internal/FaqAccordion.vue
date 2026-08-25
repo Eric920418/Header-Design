@@ -87,58 +87,13 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
 }
 
 .antra-faq-heading__aside {
-  position: relative;
-  min-height: 198px;
-  padding-top: 70px;
-}
-
-.antra-faq-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 14px;
-  border: 1px solid rgb(114 114 114 / 18%);
-  border-radius: 26px;
-  color: #1c1c1d;
-  font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 14px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.antra-faq-pill > span {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #caa05c;
-}
-
-.antra-faq-deco {
-  position: absolute;
-  display: block;
-  border-color: #e3e3e8;
-}
-
-.antra-faq-deco--horizontal {
-  top: 121px;
-  left: 30px;
-  width: 300px;
-  border-bottom: 1px solid #e3e3e8;
-}
-
-.antra-faq-deco--vertical {
-  top: 50px;
-  right: 61px;
-  height: 200px;
-  border-right: 1px solid #e3e3e8;
+  align-self: stretch;
 }
 
 .antra-faq-title {
   align-self: start;
   width: min(732px, 100%);
-  margin: 70px 0 0;
+  margin: 64px 0 0;
   color: #1c1c1d;
   font-family: var(--font-display);
   font-size: 60px;
@@ -233,8 +188,6 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
   .antra-faq-section { padding-block: 80px; }
   .antra-faq-title { font-size: 36px; line-height: 42px; }
   .antra-faq-question { font-size: 20px; line-height: 30px; }
-  .antra-faq-deco--horizontal { width: 220px; }
-  .antra-faq-deco--vertical { right: 30px; height: 100px; }
 }
 
 @media (max-width: 767px) {
@@ -244,8 +197,6 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
     padding-right: 72px;
   }
   .antra-faq-heading { grid-template-columns: 1fr; margin-bottom: 30px; text-align: center; }
-  .antra-faq-heading__aside { min-height: auto; padding: 0; }
-  .antra-faq-deco { display: none; }
   .antra-faq-title { width: 100%; margin-top: 20px; font-size: 30px; line-height: 35px; }
   .antra-faq-title br { display: none; }
   .antra-faq-group + .antra-faq-group { margin-top: 36px; }

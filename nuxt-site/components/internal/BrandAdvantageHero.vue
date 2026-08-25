@@ -7,7 +7,7 @@ import { ArrowDown } from 'lucide-vue-next'
     <div class="brand-h8-intro">
       <div class="brand-h8-intro__rail">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
-          <span class="brand-h8-pill"><i aria-hidden="true" />品牌優勢</span>
+          <InternalSectionPill>品牌優勢</InternalSectionPill>
           <h1 id="brand-h8-title">Find Your<br /><span>Inspired<br />Interior</span> Design</h1>
           <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
             <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
@@ -47,8 +47,6 @@ import { ArrowDown } from 'lucide-vue-next'
 .brand-h8-intro { padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #f6f6f6 50% 100%); }
 .brand-h8-intro__rail { display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
-.brand-h8-pill { display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px 7px 10px; border: 1px solid rgb(114 114 114 / 18%); border-radius: 24px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; }
-.brand-h8-pill i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
 .brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: 100px; font-weight: 400; line-height: 100px; letter-spacing: -.01em; text-transform: capitalize; }
 .brand-h8-copy h1 span { color: #caa05c; }
 .brand-h8-nav { display: flex; max-width: 570px; border-top: 1px solid #d2d1cf; }

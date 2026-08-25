@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight, Circle, Database, RefreshCw } from 'lucide-vue-next'
+import { ArrowUpRight, Database, RefreshCw } from 'lucide-vue-next'
 import { SAKURA_PRODUCT_GROUPS } from '~/data/sakuraProducts'
 import type { SakuraProductCategory, SakuraProductGroup } from '~/data/sakuraProducts'
 
@@ -109,10 +109,7 @@ useSeoMeta({
     <section class="sakura-product-story" aria-labelledby="sakura-product-story-title">
       <div class="sakura-product-story__rail internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-story__copy">
-          <p class="sakura-product-story__eyebrow">
-            <Circle aria-hidden="true" />
-            Kitchen Appliance
-          </p>
+          <InternalSectionPill class="sakura-product-story__eyebrow">Kitchen Appliance</InternalSectionPill>
           <h2 id="sakura-product-story-title">
             Behind <span>Every Statistic Pulses</span> A Human Story
           </h2>
@@ -256,29 +253,7 @@ useSeoMeta({
   gap: 72px;
 }
 
-.sakura-product-story__eyebrow {
-  display: inline-flex;
-  margin: 0 0 24px;
-  border: 1px solid #e3e3e8;
-  border-radius: 999px;
-  padding: 7px 12px;
-  color: #59585d;
-  background: #fff;
-  gap: 7px;
-  font-family: var(--font-cjk-sans);
-  font-size: 12px;
-  line-height: 14px;
-  text-transform: uppercase;
-}
-
-.sakura-product-story__eyebrow svg {
-  width: 6px;
-  height: 6px;
-  flex: 0 0 auto;
-  color: #caa05c;
-  fill: currentcolor;
-  stroke: none;
-}
+.sakura-product-story__eyebrow { margin: 0 0 24px; }
 
 .sakura-product-story h2 {
   max-width: 620px;

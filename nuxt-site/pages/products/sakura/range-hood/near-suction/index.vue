@@ -100,7 +100,7 @@ useSeoMeta({
     <section class="near-suction-catalogue" aria-labelledby="near-suction-catalogue-title">
       <div class="near-suction-rail internal-rail-safe near-suction-catalogue__grid">
         <div v-reveal="{ anim: 'opalMoveRight' }" class="near-suction-catalogue__copy">
-          <span class="near-suction-pill"><i aria-hidden="true" />SAKURA Product Catalogue</span>
+          <InternalSectionPill>SAKURA Product Catalogue</InternalSectionPill>
           <h2 id="near-suction-catalogue-title">
             <span>廚房商品型錄</span>
             <em>Kitchen Product Catalog</em>
@@ -206,8 +206,6 @@ useSeoMeta({
 
 .near-suction-catalogue { padding: 120px 30px 130px; background: #fff; }
 .near-suction-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
-.near-suction-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; border: 1px solid #e3e3e8; border-radius: 999px; padding: 7px 13px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 14px; letter-spacing: .08em; text-transform: uppercase; }
-.near-suction-pill i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: #caa05c; }
 .near-suction-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .near-suction-catalogue__copy h2 span { font-family: var(--font-cjk-serif); font-size: 60px; line-height: 64px; }
 .near-suction-catalogue__copy h2 em { color: #caa05c; font-family: var(--font-editorial); font-size: 48px; font-style: normal; font-weight: 400; line-height: 52px; }

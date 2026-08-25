@@ -106,7 +106,7 @@ useSeoMeta({
     <section class="sakura-series-catalogue" aria-labelledby="sakura-catalogue-title">
       <div class="sakura-series-rail internal-rail-safe sakura-series-catalogue__grid">
         <div v-reveal="{ anim: 'opalMoveRight' }" class="sakura-series-catalogue__copy">
-          <span class="sakura-series-pill"><i aria-hidden="true" />SAKURA Product Catalogue</span>
+          <InternalSectionPill>SAKURA Product Catalogue</InternalSectionPill>
           <h2 id="sakura-catalogue-title">
             <span>廚房商品型錄</span>
             <em>Kitchen Product Catalog</em>
@@ -207,8 +207,6 @@ useSeoMeta({
 
 .sakura-series-catalogue { padding: 120px 30px 130px; background: #fff; }
 .sakura-series-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
-.sakura-series-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; border: 1px solid #e3e3e8; border-radius: 999px; padding: 7px 13px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 14px; letter-spacing: .08em; text-transform: uppercase; }
-.sakura-series-pill i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: #caa05c; }
 .sakura-series-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .sakura-series-catalogue__copy h2 span { font-family: var(--font-cjk-serif); font-size: 60px; line-height: 64px; }
 .sakura-series-catalogue__copy h2 em { color: #caa05c; font-family: var(--font-editorial); font-size: 48px; font-style: normal; font-weight: 400; line-height: 52px; }

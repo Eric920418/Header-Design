@@ -55,7 +55,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
       <span class="builders-hero__deco" aria-hidden="true" />
       <div class="builders-rail-wide builders-hero__inner internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="builders-hero__headline ev">
-          <span class="builders-pill builders-pill--dark"><i aria-hidden="true" />建商專區</span>
+          <InternalSectionPill tone="dark">建商專區</InternalSectionPill>
           <h1 id="builders-title">Find Your Inspired<br /><span>Interior Design</span></h1>
         </div>
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="builders-hero__aside ev">
@@ -75,7 +75,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
     <section class="builders-team" aria-labelledby="builders-team-title">
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--team">
-          <span class="builders-pill"><i aria-hidden="true" />Our Team</span>
+          <InternalSectionPill>Our Team</InternalSectionPill>
           <h2 id="builders-team-title">Meet The <span>Experts Our</span><br />Interior Designers</h2>
         </header>
         <div class="builders-team__grid">
@@ -149,7 +149,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
     <section class="builders-lifetime" aria-labelledby="builders-lifetime-title">
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="builders-lifetime__heading ev">
-          <span class="builders-pill"><i aria-hidden="true" />Lifetime Service</span>
+          <InternalSectionPill class="builders-lifetime__pill">Lifetime Service</InternalSectionPill>
           <h2 id="builders-lifetime-title">一鍵登錄 <span>終身服務</span></h2>
           <p>購買 SAKURA iCare 系列產品，掃描保證書專屬 QR Code，即可啟動智能化服務，銜接產品登錄、保固與後續服務。</p>
         </header>
@@ -191,7 +191,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
     <section id="appointment" class="builders-contact" aria-labelledby="builders-contact-title">
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
-          <span class="builders-pill"><i aria-hidden="true" />Get In Touch</span>
+          <InternalSectionPill>Get In Touch</InternalSectionPill>
           <div>
             <h2 id="builders-contact-title">Have A Project In <span>Mind? Let’s</span><br />Make It Happen</h2>
           </div>
@@ -250,9 +250,6 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-page { overflow: clip; color: #1c1c1d; background: #fff; }
 .builders-rail-wide { width: min(1770px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
 .builders-rail { width: min(1410px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
-.builders-pill { display: inline-flex; width: max-content; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid rgb(159 159 164 / 28%); border-radius: 26px; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
-.builders-pill i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: #caa05c; }
-.builders-pill--dark { border-color: rgb(255 255 255 / 24%); color: #fff; }
 .builders-round-link { display: inline-flex; min-height: 60px; width: max-content; flex: none; align-items: center; justify-content: center; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgb(255 255 255 / 34%); border-radius: 999px; color: #fff; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .builders-round-link__icon { position: relative; isolation: isolate; display: inline-flex; width: 40px; height: 40px; flex: none; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: color .35s ease, background-color .35s ease, transform .5s ease; }
 .builders-round-link__icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; content: ''; background: #caa05c; animation: builders-cta-radar 2s ease-out infinite; }
@@ -321,7 +318,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-service p { margin: 13px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
 .builders-lifetime { padding: 130px 30px 140px; color: #1c1c1d; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
 .builders-lifetime__heading { width: min(920px, 100%); margin-inline: auto; text-align: center; }
-.builders-lifetime__heading .builders-pill { margin-inline: auto; }
+.builders-lifetime__pill { margin-inline: auto; }
 .builders-lifetime__heading h2 { margin-top: 24px; font-family: var(--font-cjk-serif); font-weight: var(--font-cjk-serif-semibold, 600); }
 .builders-lifetime__heading h2 span { display: inline-block; color: #caa05c; white-space: nowrap; }
 .builders-lifetime__heading p { max-width: 690px; margin: 24px auto 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }

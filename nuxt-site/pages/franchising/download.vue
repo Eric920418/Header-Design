@@ -63,7 +63,7 @@ onMounted(verifyBrochure)
       />
       <span class="download-hero__overlay" aria-hidden="true" />
       <div class="download-hero__inner">
-        <span v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="download-pill ev"><i aria-hidden="true" />Franchise Information</span>
+        <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" tone="dark" class="ev">Franchise Information</InternalSectionPill>
         <h1 id="franchise-download-title" v-reveal="{ anim: 'opalMoveUp', delay: 80 }" data-ev="opalMoveUp" class="ev">加盟資料下載</h1>
         <nav v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" aria-label="麵包屑" class="download-hero__trail ev">
           <NuxtLink to="/">首頁</NuxtLink>
@@ -174,21 +174,6 @@ onMounted(verifyBrochure)
   padding: 148px 86px 76px 0;
 }
 
-.download-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 36px;
-  padding: 8px 16px;
-  border: 1px solid rgb(255 255 255 / 28%);
-  border-radius: 100px;
-  font-family: var(--font-cjk-sans);
-  font-size: 12px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-}
-
-.download-pill i { width: 7px; height: 7px; border-radius: 50%; background: #caa05c; }
 .download-hero h1 {
   margin: 28px 0 30px;
   color: #fff;
@@ -309,7 +294,6 @@ onMounted(verifyBrochure)
   .download-hero { min-height: 288px; }
   .download-hero__inner { width: calc(100% - 30px); padding-block: 54px 48px; }
   .download-hero h1 { margin-block: 24px; font-size: 48px; line-height: 52px; }
-  .download-pill { font-size: 10px; }
   .download-document { padding: 64px 15px 76px; background-size: 52%; }
   .download-document__header { gap: 34px; padding-bottom: 52px; }
   .download-document__heading h2 { font-size: 43px; line-height: 47px; }

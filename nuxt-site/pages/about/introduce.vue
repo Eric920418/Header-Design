@@ -239,8 +239,6 @@ useSeoMeta({
 <style scoped>
 .about-us-page { overflow: hidden; color: #1c1c1d; background: #f6f6f6; }
 .about-rail { width: min(1410px, 100%); margin-inline: auto; }
-.about-pill { display: inline-flex; width: fit-content; align-items: center; gap: 7px; padding: 7px 14px 7px 10px; border: 1px solid #7272722e; border-radius: 24px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 12px; line-height: 14px; letter-spacing: 1px; text-transform: uppercase; }
-.about-pill i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
 
 .about-services { padding: 100px 30px 110px; background: #f6f6f6; }
 .about-services__heading { display: grid; grid-template-columns: 30% 70%; align-items: start; margin-bottom: 58px; }
@@ -389,8 +387,6 @@ useSeoMeta({
   .about-services { padding: 60px 15px 65px; }
   .about-services__heading,
   .about-identity__heading { display: block; margin-bottom: 30px; text-align: center; }
-  .about-services__heading .about-pill,
-  .about-identity__heading .about-pill { margin-inline: auto; }
   .about-services__heading h2,
   .about-identity__heading h2 { margin-top: 20px; font-size: 30px; line-height: 35px; }
   .about-services__panel { display: block; }

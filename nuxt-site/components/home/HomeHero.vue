@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronRight, Circle } from 'lucide-vue-next'
+import { ChevronRight } from 'lucide-vue-next'
 import { KITCHEN_STYLES } from '~/data/kitchenStyles'
 
 const slides = ['/home-2026/hero/ai-kitchen.jpg', '/home-2026/hero/clever-kitchen.jpg', '/home-2026/hero/basic-plus.jpg']
@@ -41,7 +41,7 @@ onBeforeUnmount(() => timer && clearInterval(timer))
         <!-- Home 06 原始 `antra-heading` widget：eyebrow 與 H1 是同一個 slideInLeft 動畫單元。 -->
         <div v-reveal="{ anim: 'slideInLeft', duration: 'slow' }">
           <div class="hero-template-eyebrow-row mb-[20px] flex justify-center">
-            <span class="inline-flex h-[30px] items-center gap-[10px] rounded-[24px] border border-[rgba(159,159,164,0.55)] py-[3px] pl-[10px] pr-[13px] font-display text-[12px] uppercase leading-[22px] tracking-[1px] text-white"><Circle class="h-[5px] w-[5px] fill-[#CAA05C] stroke-0" />Trusted Design Partner</span>
+            <InternalSectionPill tone="dark">Trusted Design Partner</InternalSectionPill>
           </div>
           <h1 id="hero-title" class="hero-template-title m-0 font-display font-normal capitalize tracking-[-1px] text-white">Find Your <span class="text-[#CAA05C]">Inspired</span><br /><span class="text-[#CAA05C]">Kitchen</span> Design</h1>
         </div>

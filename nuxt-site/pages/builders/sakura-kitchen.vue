@@ -91,7 +91,7 @@ useSeoMeta({
     <section class="sakura-kitchen-series" aria-labelledby="sakura-kitchen-series-title">
       <div class="sakura-kitchen-rail internal-rail-safe">
         <header class="sakura-kitchen-heading sakura-kitchen-heading--series">
-          <p v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="sakura-kitchen-heading__kicker ev">EXPLORE OUR COLLECTIONS</p>
+          <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="sakura-kitchen-heading__kicker ev">EXPLORE OUR COLLECTIONS</InternalSectionPill>
           <h2 id="sakura-kitchen-series-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev" style="animation-delay:70ms">打造符合每個家庭的<br /><em>理想廚房</em></h2>
           <div v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" class="sakura-kitchen-heading__copy ev" style="animation-delay:140ms">
             <p>源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。</p>
@@ -160,7 +160,7 @@ useSeoMeta({
 .sakura-kitchen-heading h2 em { color: #caa05c; font-style: normal; }
 .sakura-kitchen-heading__copy { display: grid; max-width: 970px; gap: 10px; margin: 24px auto 0; color: #59585d; font-family: var(--font-cjk-sans); }
 .sakura-kitchen-heading__copy p { margin: 0; font-size: 15px; line-height: 26px; }
-.sakura-kitchen-heading__kicker { margin: 0 0 15px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 12px; line-height: 18px; letter-spacing: .18em; text-transform: uppercase; }
+.sakura-kitchen-heading__kicker { margin: 0 0 15px; }
 .sakura-kitchen-panorama { position: relative; width: 100%; aspect-ratio: 4 / 1; margin: 68px auto 0; overflow: hidden; border-radius: 24px; background: #1c1c1d; }
 .sakura-kitchen-panorama > :deep(.builder-image) { position: absolute; inset: 0; }
 .sakura-kitchen-panorama :deep(img) { object-position: center 54%; }

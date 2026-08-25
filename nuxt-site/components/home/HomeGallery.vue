@@ -24,7 +24,7 @@ function pointerUp(event: PointerEvent) { if (dragStart.value === null) return; 
     <span aria-hidden="true" class="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.62)_0%,rgba(0,0,0,.26)_48%,rgba(0,0,0,.12)_100%)]" />
     <div class="gallery-content-shell relative z-10 w-full"><div class="gallery-main-layout">
       <div class="gallery-heading-column">
-        <div v-reveal="{ anim: 'opalMoveRight' }" class="mb-[26px]"><span class="inline-flex items-center gap-2 rounded-[24px] border border-white/25 px-[13px] py-[5px] pl-[9px]"><span class="h-[6px] w-[6px] rounded-full bg-[#CAA05C]" /><span class="font-cjk-sans text-[15px] uppercase leading-[20px] tracking-[1px] text-white">SHOWROOM PROJECTS</span></span></div>
+        <div v-reveal="{ anim: 'opalMoveRight' }" class="mb-[26px]"><InternalSectionPill tone="dark">SHOWROOM PROJECTS</InternalSectionPill></div>
         <h2 id="gallery-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="gallery-heading-title font-display capitalize text-white">Interior Design</h2>
         <p v-reveal="{ anim: 'opalMoveUp', delay: 180 }" class="gallery-description mt-[37px] w-[378px] max-w-full text-[18px] leading-[24px] text-white">Lorem ipsum dolor sit amet consectetur. Magna nunc porttitor convallis faucibus laoreet.</p>
         <div v-reveal="{ anim: 'opalScaleUp', delay: 260 }">

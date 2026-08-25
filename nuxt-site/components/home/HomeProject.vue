@@ -52,7 +52,7 @@ onBeforeUnmount(() => {
   <section id="kitchen-series" aria-labelledby="home-project-heading" class="home-project-section relative z-10 bg-[#F6F6F6]">
     <div class="home-project-heading mx-auto grid max-w-[1470px] grid-cols-1 px-[15px] md:px-[30px] min-[768px]:grid-cols-[30%_70%]">
       <div v-reveal="{ anim: 'opalMoveRight' }">
-        <InternalTemplateHeadingRail label="FEATURED PROJECTS" />
+        <InternalTemplateHeadingRail label="FEATURED PROJECTS" source="home9" />
       </div>
       <div v-reveal="{ anim: 'opalMoveLeft' }" class="home-project-heading-copy">
         <h2 id="home-project-heading" class="home-project-title">

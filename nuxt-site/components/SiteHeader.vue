@@ -74,9 +74,6 @@ const searchOpen = ref(false)
 const expanded = ref<number | null>(null)
 const keyboardNavigation = ref(false)
 const activeDesktopMenu = ref<string | null>(null)
-const seriesMegaOpen = ref(false)
-const SERIES_MEGA_OPEN_DELAY_MS = 180
-let seriesMegaOpenTimer: ReturnType<typeof setTimeout> | null = null
 let desktopMenuCloseTimer: ReturnType<typeof setTimeout> | null = null
 const allNav = computed(() => [...leftNav, ...rightNav])
 const route = useRoute()
@@ -92,7 +89,6 @@ function clearDesktopMenuCloseTimer() {
 
 function openDesktopMenu(label: string) {
   clearDesktopMenuCloseTimer()
-  if (activeDesktopMenu.value !== label) closeSeriesMega()
   activeDesktopMenu.value = label
 }
 
@@ -100,41 +96,8 @@ function scheduleDesktopMenuClose() {
   clearDesktopMenuCloseTimer()
   desktopMenuCloseTimer = setTimeout(() => {
     activeDesktopMenu.value = null
-    closeSeriesMega()
     desktopMenuCloseTimer = null
   }, 160)
-}
-
-function clearSeriesMegaOpenTimer() {
-  if (seriesMegaOpenTimer === null) return
-  clearTimeout(seriesMegaOpenTimer)
-  seriesMegaOpenTimer = null
-}
-
-function scheduleSeriesMegaOpen() {
-  clearSeriesMegaOpenTimer()
-  seriesMegaOpen.value = false
-  seriesMegaOpenTimer = setTimeout(() => {
-    seriesMegaOpen.value = true
-    seriesMegaOpenTimer = null
-  }, SERIES_MEGA_OPEN_DELAY_MS)
-}
-
-function openSeriesMegaFromKeyboard() {
-  clearSeriesMegaOpenTimer()
-  seriesMegaOpen.value = true
-}
-
-function closeSeriesMega() {
-  clearSeriesMegaOpenTimer()
-  seriesMegaOpen.value = false
-}
-
-function handleSeriesMegaFocusOut(event: FocusEvent) {
-  const currentTarget = event.currentTarget
-  const nextTarget = event.relatedTarget
-  if (currentTarget instanceof HTMLElement && nextTarget instanceof Node && currentTarget.contains(nextTarget)) return
-  closeSeriesMega()
 }
 
 function closeAllMenus() {
@@ -144,7 +107,6 @@ function closeAllMenus() {
   expanded.value = null
   searchOpen.value = false
   keyboardNavigation.value = false
-  closeSeriesMega()
 }
 
 function handleDesktopItemFocusOut(event: FocusEvent) {
@@ -155,7 +117,6 @@ function handleDesktopItemFocusOut(event: FocusEvent) {
 }
 
 onBeforeUnmount(() => {
-  clearSeriesMegaOpenTimer()
   clearDesktopMenuCloseTimer()
 })
 
@@ -238,20 +199,14 @@ function handleHeaderClick(event: MouseEvent) {
                 </div>
               </div>
 
-              <div v-else-if="item.children" class="desktop-nav-dropdown absolute left-0 top-full z-[70] pt-2 transition-all" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
+              <div v-else-if="item.children && !item.seriesMega" class="desktop-nav-dropdown absolute left-0 top-full z-[70] pt-2 transition-all" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
                 <ul class="series-dropdown-list relative z-[70] min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li
-                    v-for="(child, childIndex) in item.children"
+                    v-for="child in item.children"
                     :key="child.label"
                     class="group/series relative z-[70]"
-                    @pointerenter="item.seriesMega && (childIndex === 0 ? scheduleSeriesMegaOpen() : closeSeriesMega())"
-                    @focusin="item.seriesMega && childIndex === 0 && openSeriesMegaFromKeyboard()"
-                    @focusout="item.seriesMega && childIndex === 0 && handleSeriesMegaFocusOut($event)"
                   >
-                    <button v-if="item.seriesMega && childIndex === 0" type="button" aria-haspopup="true" class="flex w-full items-center justify-between gap-4 whitespace-nowrap px-5 py-2.5 text-left text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
-                      {{ child.label }} <ArrowRight class="h-4 w-4" />
-                    </button>
-                    <span v-else-if="child.disabled" aria-disabled="true" class="flex cursor-not-allowed items-center justify-between px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
+                    <span v-if="child.disabled" aria-disabled="true" class="flex cursor-not-allowed items-center justify-between px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
                     <a v-else-if="child.external" :href="child.to" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</a>
                     <NuxtLink v-else :to="child.to || '/'" class="flex items-center justify-between gap-4 whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
                       {{ child.label }}
@@ -262,30 +217,51 @@ function handleHeaderClick(event: MouseEvent) {
 
               <div
                 v-if="item.seriesMega"
-                class="fixed inset-x-0 top-[var(--site-header-height)] z-[60] transition-all duration-300"
-                :class="seriesMegaOpen ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'"
-                @pointerenter="clearSeriesMegaOpenTimer(); seriesMegaOpen = true"
+                class="fixed inset-x-0 top-[var(--site-header-height)] z-[60] pt-5 transition-all duration-300"
+                :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'"
+                @pointerenter="clearDesktopMenuCloseTimer"
+                @pointerleave="scheduleDesktopMenuClose"
               >
                 <div class="border-t border-black/5 bg-white shadow-2xl">
                   <div class="mx-auto max-w-[1512px] px-5 py-7 xl:px-12">
-                    <div class="mb-3 flex items-end justify-between">
-                      <div><p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Kitchen Series</p><h2 class="mt-1 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">十大廚房系列</h2></div>
-                      <p class="text-xs text-[#9F9FA4]">目前開放 AI Kitchen</p>
-                    </div>
-                    <div class="grid grid-cols-5 gap-3 xl:gap-4">
-                      <template v-for="style in KITCHEN_STYLES" :key="style.slug">
-                        <NuxtLink v-if="style.available && style.route" :to="style.route" class="group/card relative aspect-[16/10] overflow-hidden rounded-xl bg-[#1C1C1D]" @click="closeAllMenus">
-                          <img :src="style.image" :alt="style.zh" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
-                          <span class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-                          <span class="absolute inset-x-0 bottom-0 p-3 text-white"><span class="block text-[15px]">{{ style.zh }}</span><span class="block truncate text-[11px] text-white/70">{{ style.en }}</span></span>
-                        </NuxtLink>
-                        <div v-else aria-disabled="true" class="relative aspect-[16/10] cursor-not-allowed overflow-hidden rounded-xl bg-[#1C1C1D] opacity-55">
-                          <img :src="style.image" :alt="style.zh" class="absolute inset-0 h-full w-full object-cover grayscale" />
-                          <span class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
-                          <span class="absolute right-2 top-2 rounded-full border border-white/30 px-2 py-0.5 text-[9px] text-white/70">尚未開放</span>
-                          <span class="absolute inset-x-0 bottom-0 p-3 text-white"><span class="block text-[15px]">{{ style.zh }}</span><span class="block truncate text-[11px] text-white/70">{{ style.en }}</span></span>
+                    <div class="grid grid-cols-[210px_minmax(0,1fr)] gap-7 xl:grid-cols-[230px_minmax(0,1fr)] xl:gap-10">
+                      <div class="border-r border-[#E3E3E8] pr-7 xl:pr-10">
+                        <p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Design Inspiration</p>
+                        <h2 class="mt-1 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">設計案例</h2>
+                        <nav aria-label="設計案例分類" class="mt-5 border-t border-[#E3E3E8] pt-2">
+                          <NuxtLink
+                            v-for="child in (item.children || []).slice(1)"
+                            :key="child.label"
+                            :to="child.to || '/'"
+                            class="group/link flex items-center justify-between border-b border-[#E3E3E8] py-3 text-[14px] text-[#59585D] transition-colors hover:text-[#CAA05C]"
+                          >
+                            {{ child.label }}
+                            <ArrowRight class="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
+                          </NuxtLink>
+                        </nav>
+                      </div>
+
+                      <div class="min-w-0">
+                        <div class="mb-3 flex items-end justify-between">
+                          <div><p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Kitchen Series</p><h2 class="mt-1 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">十大廚房系列</h2></div>
+                          <p class="text-xs text-[#9F9FA4]">目前開放 AI Kitchen</p>
                         </div>
-                      </template>
+                        <div class="grid grid-cols-5 gap-3 xl:gap-4">
+                          <template v-for="style in KITCHEN_STYLES" :key="style.slug">
+                            <NuxtLink v-if="style.available && style.route" :to="style.route" class="group/card relative aspect-[16/10] overflow-hidden rounded-xl bg-[#1C1C1D]" @click="closeAllMenus">
+                              <img :src="style.image" :alt="style.zh" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
+                              <span class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+                              <span class="absolute inset-x-0 bottom-0 p-3 text-white"><span class="block text-[15px]">{{ style.zh }}</span><span class="block truncate text-[11px] text-white/70">{{ style.en }}</span></span>
+                            </NuxtLink>
+                            <div v-else aria-disabled="true" class="relative aspect-[16/10] cursor-not-allowed overflow-hidden rounded-xl bg-[#1C1C1D] opacity-55">
+                              <img :src="style.image" :alt="style.zh" class="absolute inset-0 h-full w-full object-cover grayscale" />
+                              <span class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+                              <span class="absolute right-2 top-2 rounded-full border border-white/30 px-2 py-0.5 text-[9px] text-white/70">尚未開放</span>
+                              <span class="absolute inset-x-0 bottom-0 p-3 text-white"><span class="block text-[15px]">{{ style.zh }}</span><span class="block truncate text-[11px] text-white/70">{{ style.en }}</span></span>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -314,7 +290,14 @@ function handleHeaderClick(event: MouseEvent) {
                 </button>
               </div>
               <button v-else-if="item.children" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap px-1 text-[15px] text-white min-[1440px]:px-3" @click="openDesktopMenu(item.label)">{{ item.label }} <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" /></button>
-              <a v-else-if="item.to?.startsWith('http')" :href="item.to" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-1 py-2 text-[15px] text-white min-[1440px]:px-3">{{ item.label }}</a>
+              <a
+                v-else-if="item.to?.startsWith('http')"
+                :href="item.to"
+                target="_blank"
+                rel="noopener noreferrer"
+                :data-footer-align-anchor="item.label === '櫻花集團' ? 'sakura-group' : undefined"
+                class="whitespace-nowrap px-1 py-2 text-[15px] text-white min-[1440px]:px-3"
+              >{{ item.label }}</a>
               <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap px-1 py-2 text-[15px] text-white min-[1440px]:px-3">{{ item.label }}</NuxtLink>
               <div v-if="item.children" class="desktop-nav-dropdown absolute right-0 top-full z-50 pt-2 transition-all" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
