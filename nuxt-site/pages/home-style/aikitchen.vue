@@ -120,12 +120,13 @@ function updateCaseMorph() {
     const cardRect = card.getBoundingClientRect()
     const distance = Math.abs(cardRect.left + cardRect.width / 2 - targetCenter)
     const focus = morphEnabled ? Math.max(0, Math.min(1, 1 - distance / slidePitch)) : 0
+    const geometryFocus = 1 - Math.pow(1 - focus, 3)
     const sideImageHeight = cardRect.width / 1.40625
-    const imageHeight = sideImageHeight + (560 - sideImageHeight) * focus
+    const imageHeight = sideImageHeight + (560 - sideImageHeight) * geometryFocus
 
     card.style.setProperty('--case-focus', focus.toFixed(4))
     card.style.setProperty('--case-image-height', `${imageHeight.toFixed(2)}px`)
-    card.style.setProperty('--case-image-radius', `${(24 * (1 - focus)).toFixed(2)}px`)
+    card.style.setProperty('--case-image-radius', `${(24 * (1 - geometryFocus)).toFixed(2)}px`)
   })
 }
 
