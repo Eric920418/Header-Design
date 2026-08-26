@@ -105,7 +105,7 @@
 - 2026-08-26 將列表 Hero 主標由中文「廚房裝修指南」改為英文 `Kitchen Knowledge`，並與設計靈感／品牌系列型錄 Hero 統一桌機與手機的高度、內距、英文字體與標題位置；中文頁名仍保留於麵包屑及 SEO。
 
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第四頁重新校正 `/knowledge`，Hero 底圖改用 3.1 案例門市正式素材中的松竹店店面照；標題改為 Noto Serif TC Medium 60px，麵包屑改為 Noto Sans TC 15px。
-- 內容標籤由模板占位文案 `Straight From The Newsroom` 改為 `Kitchen Knowledge`；模板英文大標改為版心置中的「廚房裝修指南／Kitchen Knowledge」中英雙標，中文使用 Noto Serif TC Medium 60px，英文使用 Bodoni Moda 60px，左側標籤欄與裝飾線仍保留 Home 02 原有幾何。
+- 2026-08-26 依最新回饋將內容標題完整恢復 Home 02 原版英文：左側小標為 `Straight From The Newsroom`，右側大標為 `Take A Look At Our Latest Blog & Articles.`；大標使用原版 Cal Sans 60/64px，`Our Latest Blog` 保留品牌金色，左側標籤欄與裝飾線維持 Home 02 原有幾何。中文「廚房裝修指南」只保留於麵包屑、文章分類及 SEO。
 - 左側精選文章與右側三篇列表維持 PPT 指定的 Home 02 結構；文章標題統一 Noto Serif TC Medium 25px／36px，Meta、日期與摘要統一 Noto Sans TC，摘要為 15px／26px。
 - 「甲方提供 3 篇」只代表列表資料固定為三筆，不額外建立搜尋、分頁、後台或第四篇假資料；三張文章卡仍連到既有 `/knowledge/design/systemcabinet`、`/knowledge/design/kitchen-outlet-planning`、`/knowledge/design/knowledge31` 站內文章頁。
 - 手機版維持單欄三篇並預留 93px 右側快捷列安全距；文章圖片、標題與摘要不再被固定快捷列蓋住，中英雙標同步縮放且不產生水平溢位。

@@ -29,10 +29,9 @@ useSeoMeta({
     <section class="kitchen-guide-newsroom" aria-labelledby="kitchen-guide-heading">
       <div class="kitchen-guide-newsroom__rail">
         <header class="kitchen-guide-heading">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Kitchen Knowledge" class="kitchen-guide-heading__label" />
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Straight From The Newsroom" class="kitchen-guide-heading__label" />
           <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <span class="kitchen-guide-heading__zh">廚房裝修指南</span>
-            <span class="kitchen-guide-heading__en" lang="en">Kitchen Knowledge</span>
+            Take A Look At <span>Our Latest Blog</span> &amp; Articles.
           </h2>
         </header>
 
@@ -159,30 +158,16 @@ useSeoMeta({
   max-width: 760px;
   margin: 64px 0 0;
   color: #1c1c1d;
-  justify-self: start;
-  text-align: left;
-}
-
-.kitchen-guide-heading__zh,
-.kitchen-guide-heading__en {
-  display: block;
-}
-
-.kitchen-guide-heading__zh {
-  font-family: var(--font-cjk-serif);
-  font-size: 60px;
-  font-weight: 500;
-  line-height: 66px;
-}
-
-.kitchen-guide-heading__en {
-  margin-top: -4px;
-  color: #caa05c;
-  font-family: "Bodoni Moda", "Libre Baskerville", serif;
+  font-family: var(--font-display);
   font-size: 60px;
   font-weight: 400;
-  line-height: 66px;
+  line-height: 64px;
+  justify-self: start;
+  text-align: left;
+  text-transform: capitalize;
 }
+
+.kitchen-guide-heading h2 span { color: #caa05c; }
 
 .kitchen-guide-posts {
   display: grid;
@@ -326,8 +311,7 @@ useSeoMeta({
 @media (max-width: 1024px) {
   .kitchen-guide-newsroom { padding-top: 80px; padding-bottom: 80px; }
   .kitchen-guide-heading { margin-bottom: 45px; }
-  .kitchen-guide-heading__zh { font-size: 40px; line-height: 50px; }
-  .kitchen-guide-heading__en { font-size: 45px; line-height: 50px; }
+  .kitchen-guide-heading h2 { font-size: 45px; line-height: 50px; }
   .kitchen-guide-featured { display: none; }
   .kitchen-guide-posts { display: block; }
   .kitchen-guide-list { width: 100%; }
@@ -365,11 +349,10 @@ useSeoMeta({
   .kitchen-guide-heading h2 {
     margin: 20px 0 0;
     padding: 0;
+    font-size: 30px;
+    line-height: 35px;
     text-align: center;
   }
-
-  .kitchen-guide-heading__zh { font-size: 30px; line-height: 40px; }
-  .kitchen-guide-heading__en { font-size: 31px; line-height: 38px; }
 
   .kitchen-guide-list-item {
     display: block;
