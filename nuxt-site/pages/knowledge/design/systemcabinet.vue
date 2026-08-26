@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Camera, Images, PanelsTopLeft, PlaySquare } from 'lucide-vue-next'
 import {
   systemCabinetCaseStudies,
   systemCabinetImportance,
@@ -7,12 +6,11 @@ import {
   systemCabinetSelectionSteps,
 } from '~/data/kitchenSystemCabinet'
 import { KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
-import { newsArticles } from '~/data/news'
 
 const article = KITCHEN_GUIDE_ARTICLES.find(entry => entry.id === 'systemcabinet')!
-const relatedNewsArticles = ['cash-subsidy-2025', 'franchise-seminar-2026', 'american-urban']
-  .map(id => newsArticles.find(entry => entry.id === id))
-  .filter((entry): entry is (typeof newsArticles)[number] => Boolean(entry))
+const relatedGuideArticles = KITCHEN_GUIDE_ARTICLES
+  .filter(entry => entry.id !== article.id)
+  .map(entry => ({ ...entry, categoryLabel: '廚房裝修指南' }))
 
 const designStyleLinks = [
   { label: '北歐風', to: '/design-inspiration?style=北歐風' },
@@ -144,16 +142,10 @@ useHead({
           <p><strong>SAKURA KITCHEN</strong>在廚房系統櫃材質的選擇上，始終堅持品質與安心兼具。從主打的MFC塑合板到頂級的FENIX奈米門板、自製的極晶門板，皆展現出對細節的高度重視。並搭配台灣櫻花自製封邊工藝與多道驗證測試，其耐用性與安全性更勝一籌。想了解更多廚房材質案例分享？那就快去看看<NuxtLink to="/catalogues/kitchenware-catalog"><strong>廚房系列型錄</strong></NuxtLink>吧！</p>
         </section>
 
-        <nav class="knowledge-article-categories" aria-label="文章分類" v-reveal="{ anim: 'opalMoveUp' }">
-          <NuxtLink to="/news/activities"><Camera aria-hidden="true" />優惠活動</NuxtLink>
-          <NuxtLink to="/news/latest"><Images aria-hidden="true" />最新消息</NuxtLink>
-          <NuxtLink to="/news/video"><PlaySquare aria-hidden="true" />媒體影音</NuxtLink>
-          <NuxtLink to="/knowledge" aria-current="page"><PanelsTopLeft aria-hidden="true" />廚房裝修指南</NuxtLink>
-        </nav>
       </div>
     </article>
 
-    <InternalKnowledgeRelatedCarousel :articles="relatedNewsArticles" variant="home07" />
+    <InternalKnowledgeRelatedCarousel :articles="relatedGuideArticles" variant="home07" />
   </main>
 </template>
 
@@ -470,40 +462,6 @@ useHead({
   text-underline-offset: 4px;
 }
 
-.knowledge-article-categories {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 4px 0 60px;
-}
-
-.knowledge-article-categories a {
-  display: inline-flex;
-  min-height: 34px;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 14px;
-  border: 1px solid #e3e3e8;
-  border-radius: 24px;
-  color: #59585d;
-  font-family: var(--font-cjk-sans);
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 24px;
-  transition: color .3s ease, border-color .3s ease, background-color .3s ease;
-}
-
-.knowledge-article-categories :deep(svg) { width: 15px; height: 15px; }
-
-.knowledge-article-categories a:hover,
-.knowledge-article-categories a:focus-visible,
-.knowledge-article-categories a[aria-current="page"] {
-  border-color: #caa05c;
-  color: #fff;
-  background: #caa05c;
-}
-
 @media (max-width: 1024px) {
   .knowledge-article { padding-top: 80px; }
 }
@@ -529,14 +487,12 @@ useHead({
   .knowledge-case__grid { grid-template-columns: 1fr; gap: 24px; }
   .knowledge-case__copy > p:first-child { margin-top: 0; }
   .knowledge-case figure { border-radius: 18px; }
-  .knowledge-article-categories { padding-bottom: 45px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .knowledge-article-breadcrumb__trail a,
   .knowledge-article__meta a,
   .knowledge-copy-block li a,
-  .knowledge-case h3 a,
-  .knowledge-article-categories a { transition: none; }
+  .knowledge-case h3 a { transition: none; }
 }
 </style>

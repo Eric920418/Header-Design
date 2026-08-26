@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight } from 'lucide-vue-next'
+import { Download } from 'lucide-vue-next'
 import { KITCHEN_CATALOGUES } from '~/data/catalogues'
 
 useSeoMeta({
@@ -37,11 +37,10 @@ useSeoMeta({
           >
             <article>
               <a
-                :href="catalogue.pdfUrl"
-                target="_blank"
-                rel="noopener noreferrer"
+                :href="`/api/catalogues/${catalogue.id}`"
+                :download="catalogue.downloadFilename"
                 class="catalogue-card__link"
-                :aria-label="`開啟 PDF：${catalogue.title}`"
+                :aria-label="`下載 PDF：${catalogue.title}`"
               >
                 <span class="catalogue-card__transition">
                   <span class="catalogue-card__image">
@@ -49,8 +48,8 @@ useSeoMeta({
                   </span>
                   <span class="catalogue-card__shade" aria-hidden="true" />
                   <span class="catalogue-card__action" aria-hidden="true">
-                    <span>開啟型錄</span>
-                    <span class="catalogue-card__arrow"><ArrowUpRight /></span>
+                    <span>下載型錄</span>
+                    <span class="catalogue-card__arrow"><Download /></span>
                   </span>
                 </span>
                 <span class="catalogue-card__text">
@@ -154,11 +153,8 @@ useSeoMeta({
 .catalogue-card__image {
   display: block;
   width: 100%;
-  aspect-ratio: .8333333333;
   overflow: hidden;
 }
-
-.catalogue-card__image :deep(img) { transition: transform .5s ease; }
 
 .catalogue-card__shade {
   position: absolute;
@@ -231,8 +227,6 @@ useSeoMeta({
 
 .catalogue-card__link:hover .catalogue-card__shade,
 .catalogue-card__link:focus-visible .catalogue-card__shade { background: rgba(0, 0, 0, .25); }
-.catalogue-card__link:hover .catalogue-card__image :deep(img),
-.catalogue-card__link:focus-visible .catalogue-card__image :deep(img) { transform: scale(1.05); }
 .catalogue-card__link:hover .catalogue-card__action,
 .catalogue-card__link:focus-visible .catalogue-card__action { opacity: 1; visibility: visible; transform: translateY(0); }
 .catalogue-card__link:hover .catalogue-card__text strong,
@@ -257,11 +251,8 @@ useSeoMeta({
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .catalogue-card__image :deep(img),
   .catalogue-card__shade,
   .catalogue-card__action,
   .catalogue-card__text strong { transition: none; }
-  .catalogue-card__link:hover .catalogue-card__image :deep(img),
-  .catalogue-card__link:focus-visible .catalogue-card__image :deep(img) { transform: none; }
 }
 </style>

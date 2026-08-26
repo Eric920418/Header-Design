@@ -27,19 +27,21 @@
 
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第八、九頁校正 `/catalogues/kitchenware-catalog`；第九頁的甲方資訊提案明確補入 MUJI Basic+ 與 Clever，因此最終清單依甲方正式來源更新為八筆：MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic、Elegant。
 - 列表沿用 PPT 指定的 Projects 01 三欄版型與 24px 圓角卡片，八筆資料依 3／3／2 排成三列；Hero 標題為 Noto Serif TC Medium 80px、麵包屑為 Noto Sans TC 15px。2026-08-25 依最新回饋將卡片主標統一為 Noto Serif TC Medium 20/30px，主標只保留系列名稱並移除尾端「型錄」；下方說明統一顯示「系列產品型錄」，不再重複一次 MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic 或 Elegant 系列名稱。
-- 每張卡仍直接連到正式 PDF；Hover／鍵盤聚焦新增「開啟型錄」與箭頭提示、封面縮放及金色標題回饋。手機改為單欄，並為右側固定快捷列保留 93px 安全距。
+- 每張卡均使用同網域 `/api/catalogues/:id` 下載端點代理正式 PDF；2026-08-26 移除 `target="_blank"`，並由端點回傳 `Content-Disposition: attachment`，點擊後直接下載具有明確檔名的 PDF，不再開啟新分頁或進入瀏覽器 PDF 預覽。Hover／鍵盤聚焦文案同步改為「下載型錄」與 Download 圖示；上游連線、HTTP 或非 PDF 錯誤會回傳完整狀態、型錄 ID、來源與原始回應，不靜默失敗。手機改為單欄，並為右側固定快捷列保留 93px 安全距。
+- 2026-08-26 逐份渲染並檢查甲方 `1.4_品牌系列型錄` 八份 PDF 第一頁：Premium、Elegant、Loft Chic、Joyful、Harmony、iPremium、Clever 均有完整正式封面，現有卡片素材亦對應這些封面；Basic+ PDF 第一頁是產品規格內頁，因此保留甲方另附的 Basic+ 封面。封面顯示改為依圖片原始比例自動撐高並使用 `object-fit: contain`，移除原本偏方形的固定比例與 Hover 1.05 倍放大，任何狀態都不得裁掉 Logo、頂部色塊或底部系列名稱。
 
 ### 1.4 新版 Design QA
 
 - **來源與狀態**：PPT 第八、九頁完整標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-08.png`、`source-slide-09.png`，Projects 01 完整參考為 `assets/ppt/media/image33.png`（1038×2474）。第九頁甲方資訊來源短網址實際導向 SAKURA 正式 `/catalogues/kitchenware-catalog`；其八筆順序、文案、封面與 PDF 已逐筆核對。新增 Basic+／Clever 使用 PPT 原始 `image36.jpg`／`image38.jpg`，其餘六張本地素材雜湊亦與第九頁內嵌原圖完全相同。
 - **同畫面比對**：桌機以 1440×1100 CSS viewport、DPR 1 分段實拍並無縫拼接為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide9-implementation-full-1440-v1.jpg`；PPT 第九頁標註區與實作正規化後合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide9-ppt-implementation-comparison-v1.jpg`。模板篩選器依紅字指示刪除，Projects 01 的三欄結構、卡片比例、24px 圓角、圖下標題／說明與深色頁尾維持一致；把模板英文字與圖片換成甲方正式內容屬必要差異，未留下可執行的 P0／P1／P2。
-- **字體、內容與版面**：瀏覽器實測 Hero 為 Noto Serif TC Medium 80/76.19px、麵包屑為 Noto Sans TC 15/22px；卡片標題為 Noto Serif TC Medium 25/36px，說明為 Noto Sans TC 15/23px。1440px 下三欄皆約 411.33px，八筆依 3／3／2 排列；八個 href 皆指向 SAKURA 官方 PDF，逐一 HEAD 驗證皆為 HTTP 200、`application/pdf`。
-- **互動、手機與錯誤**：Hover 實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide9-hover-1440-v1.png`，實測「開啟型錄」由隱藏轉為可見、封面縮放至 1.05、標題轉為 `#CAA05C`；鍵盤聚焦共用相同回饋。390×844 實拍為 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide9-mobile-390-v1.png`，八張卡均為 282px 單欄、右緣 297px，快捷列左緣 318px，保留 21px 間距，`scrollWidth === clientWidth === 390`。全部圖片載入、破圖 0、可見 alert 0、console warn/error 0。
+- **字體、內容與版面**：瀏覽器實測 Hero 為 Noto Serif TC Medium 80/76.19px、麵包屑為 Noto Sans TC 15/22px；卡片標題為 Noto Serif TC Medium 20/30px，說明為 Noto Sans TC 15/23px。1440px 下三欄皆約 411.33px，八筆依 3／3／2 排列；八張卡均指向同網域下載端點，沒有 `target="_blank"`，並各自帶入明確的 `download` 檔名。
+- **互動、手機與錯誤**：Hover／鍵盤聚焦會顯示「下載型錄」與 Download 圖示、加深遮罩並將標題轉為 `#CAA05C`，封面本身不再縮放或裁切。390×844 下維持單欄並替快捷列保留安全距，卡片高度依各封面原始比例自然延伸。2026-08-26 實測 `/api/catalogues/basic-plus` 回傳 HTTP 200、`application/pdf`、`Content-Disposition: attachment; filename="SAKURA-MUJI-Basic-Plus.pdf"`，檔案為 1,228,218 bytes 且開頭簽章為 `%PDF-`；找不到 ID 或上游異常時由 Nuxt 完整回傳錯誤內容。
 - **建置結果**：`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 全數通過；build 只有專案既有的 Tailwind sourcemap 警告。
 - **final result: passed**
 
 ## 1.3.3 中島廚房餐桌如何規劃（2026-08-21 新版調整）
 
+- 2026-08-26 文章尾段與其餘廚房裝修指南內頁統一：移除四顆跨分類膠囊；Home 07 只推薦另外兩篇「廚房裝修指南」，移除作者列，標題統一 20/30px，CTA 改用右上斜箭頭，並保留每張卡正確的站內文章路由。
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第七頁校正 `/knowledge/design/knowledge31`，保留既有完整文章資料、指定 YouTube 影片與正式延伸文章，不以簡報截圖代替網頁內容。
 - 文章頁套用 PPT 指定的 Noto Sans TC／Noto Serif TC 字級層級、松竹店 Breadcrumb 情境底圖、40px 標題至主圖間距，文末兩條跳轉文字加粗；底部推薦改用 Antra Home 07 三欄結構。
 - 1.3.2 與 1.3.3 共用同一組 PPT 文章模板規則，避免兩頁字體與間距再次分岔；1.3.2 的案例雙欄仍只作用於插座文章，不會套到本頁。
@@ -56,10 +58,11 @@
 
 ## 1.3.2 廚房插座該如何規劃（2026-08-21 新版調整）
 
+- 2026-08-26 文章尾段與其餘廚房裝修指南內頁統一：移除四顆跨分類膠囊；Home 07 只推薦另外兩篇「廚房裝修指南」，移除作者列，標題統一 20/30px，CTA 改用右上斜箭頭，並保留每張卡正確的站內文章路由。
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第六頁重新校正 `/knowledge/design/kitchen-outlet-planning`，沿用正式 Vue 文章內容與甲方三張案例素材，不以 PPT 或官網截圖冒充可閱讀頁面。
 - Breadcrumb 改用松竹店門市照片；麵包屑、分類、日期、內文與分類 Tab 統一 Noto Sans TC，文章大標改為 Noto Serif TC Medium 38/50px，章節標為 25/36px，子標為 Noto Sans TC Medium 20/30px，內文為 15/25px。
 - 三個廚房插座案例依 PPT 指定的 Home 06 橫式結構改為圖片／說明各半的兩欄排版，案例標題保留甲方提供的櫻花官網正式案例連結；手機回到單欄並保留右側固定快捷列安全距。
-- 底部推薦區套用 Antra Home 07：桌機為左側模板標題與 CTA、右側兩張 1.4:1 橫式文章卡；手機維持單欄且不被右側快捷列遮住。1.3.3 尚未調整，仍保留原有卡片輪播樣式。
+- 底部推薦區套用 Antra Home 07：桌機為左側模板標題與 CTA、右側兩張 1.4:1 橫式文章卡；手機維持單欄且不被右側快捷列遮住。1.3.2、1.3.3 現已共用同一套延伸文章規則。
 
 ### 1.3.2 新版 Design QA
 
@@ -74,6 +77,8 @@
 
 ## 1.3.1 廚房系統櫃材質有哪些（2026-08-21 新版調整）
 
+- 2026-08-26 依最新頁面標註調整文章尾段：移除優惠活動／最新消息／媒體影音／廚房裝修指南四顆分類膠囊；Home 07 延伸區不再混入優惠與招商消息，只顯示另外兩篇「廚房裝修指南」，並保留各自正確的站內文章路由。
+- 延伸卡移除 `By Admin`，中文標題統一為 Noto Serif TC Medium 20/30px；`Explore Blogs` CTA 使用 Lucide `ArrowUpRight` 右上斜箭頭，hover 方向同步右上移動。桌機 1512px 與手機 390px 均為兩筆正確文章、分類標籤一致，破圖、可見錯誤與水平溢位皆為 0。
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第五頁重新校正 `/knowledge/design/systemcabinet`；文章仍以真正的 Vue 文字、連結、圖片與語意表格呈現，不使用整頁截圖取代官網內容。
 - Breadcrumb 底圖改用 3.1 案例門市的松竹店店面照；麵包屑、分類、日期、內文與分類 Tab 統一 Noto Sans TC，文章大標改為 Noto Serif TC Medium 38/50px，章節標改為 25/36px，子標為 Noto Sans TC Medium 20/30px，內文為 15/25px。
 - 文章 Meta 到標題的距離由 12.5px 校正為 15px，標題到首圖由 30px 校正為 40px；五大板材仍以可選取、可讀取的 `table／thead／tbody／th` 呈現，手機只在表格自身提供水平滑動。
@@ -82,6 +87,7 @@
 
 ### 1.3.1 新版 Design QA
 
+- **2026-08-26 標註圖複驗**：來源為 `/Users/eric/Downloads/IMG_1341 2.PNG`（2560×1362）；以 `/knowledge/design/systemcabinet` 桌機 1512px 與手機 390px 實際渲染比對。DOM 掃描確認分類導覽為 0、推薦卡為 2、作者列為 0，兩張卡均標示「廚房裝修指南」並分別連到 `/knowledge/design/kitchen-outlet-planning`、`/knowledge/design/knowledge31`；computed style 為 20px／30px，兩個 viewport 的 `scrollWidth === clientWidth`，圖片失敗與前端 alert 均為 0。`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 全數通過；build 只有專案既有的 Tailwind sourcemap 警告。
 - **來源與狀態**：PPT 第五頁完整標註圖為 `/private/tmp/sakura-ai-kitchen.A3GeB0/template-inspect/template-inspect/source-slides/source-slide-05.png`，原頁完整截圖為 `assets/ppt/media/image16.png`（2880×16463），Home 07 參考為 `assets/ppt/media/image20.png`（1334×638），Hero 指定門市素材為 `assets/ppt/media/image13.jpg`（1919×1280）。驗證狀態為文章預設內容、三個案例與底部延伸文章全部顯示。
 - **正規化與同畫面比較**：桌機以 1440×1100 CSS viewport、DPR 1 擷取；PPT 原頁頂部裁成 2880×2200 後正規化為 1440×1100，與實作頂部合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide5-final-top-comparison.png`。Home 07 參考與實作皆正規化為 1334×638，左右合併於 `/private/tmp/sakura-ai-kitchen.A3GeB0/slide5-final-home07-comparison.png`。
 - **字體與節奏**：瀏覽器實測文章大標為 Noto Serif TC Medium 38/50px、章節標 25/36px、子標 Noto Sans TC Medium 20/30px、內文 Noto Sans TC 15/25px；Meta 到大標 15px、大標到首圖 40px，與 PPT 第五頁標註一致。Hero 為 185px，文章、主圖、表格與內文均維持 930px 版心。

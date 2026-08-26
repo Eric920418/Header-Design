@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import emblaCarouselVue from 'embla-carousel-vue'
-import { ArrowRight } from 'lucide-vue-next'
-import type { NewsArticleSummary } from '~/types/content'
+import { ArrowUpRight } from 'lucide-vue-next'
+import type { KitchenGuideArticle, NewsArticleSummary } from '~/types/content'
+
+type RelatedArticle = KitchenGuideArticle | NewsArticleSummary
 
 const props = withDefaults(defineProps<{
-  articles: NewsArticleSummary[]
+  articles: RelatedArticle[]
   variant?: 'cards' | 'home07'
 }>(), {
   variant: 'cards',
 })
 
 const home07Articles = computed(() => props.articles.slice(0, 2))
+const articleRoute = (article: RelatedArticle) => 'legacyPath' in article
+  ? article.legacyPath
+  : article.detailRoute || '/knowledge'
+const isKitchenGuide = (article: RelatedArticle): article is KitchenGuideArticle => 'detailRoute' in article
 
 const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 })
 </script>
@@ -23,7 +29,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
       <p>Check out our latest blog posts and industry insights to stay informed about the latest trends, technologies, and project updates.</p>
       <NuxtLink to="/knowledge" class="knowledge-related-home07__cta">
         <span>Explore Blogs</span>
-        <i><ArrowRight aria-hidden="true" /></i>
+        <i><ArrowUpRight aria-hidden="true" /></i>
       </NuxtLink>
     </header>
 
@@ -33,12 +39,12 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
       class="knowledge-related-home07__article"
       v-reveal="{ anim: 'opalMoveUp', delay: 80 + index * 80 }"
     >
-      <NuxtLink :to="article.legacyPath" class="knowledge-related-home07__card">
+      <NuxtLink :to="articleRoute(article)" class="knowledge-related-home07__card">
         <div class="knowledge-related-home07__media">
-          <InternalNewsImage :src="article.cover" :alt="`${article.title}文章封面`" />
+          <InternalGuideImage v-if="isKitchenGuide(article)" :src="article.cover" :alt="`${article.title}文章封面`" />
+          <InternalNewsImage v-else :src="article.cover" :alt="`${article.title}文章封面`" />
           <span>{{ article.categoryLabel }}</span>
         </div>
-        <p class="knowledge-related-home07__author">By <strong>Admin</strong></p>
         <h3>{{ article.title }}</h3>
         <p class="knowledge-related-home07__excerpt">{{ article.excerpt }}</p>
       </NuxtLink>
@@ -49,10 +55,11 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
     <div ref="viewport" class="knowledge-related__viewport" aria-roledescription="carousel" aria-label="延伸優惠消息文章">
       <div class="knowledge-related__track">
         <article v-for="article in articles" :key="article.id" class="knowledge-related__slide">
-          <NuxtLink :to="article.legacyPath" class="knowledge-related__card">
+          <NuxtLink :to="articleRoute(article)" class="knowledge-related__card">
             <div class="knowledge-related__transition">
               <div class="knowledge-related__media">
-                <InternalNewsImage :src="article.cover" :alt="`${article.title}文章封面`" />
+                <InternalGuideImage v-if="isKitchenGuide(article)" :src="article.cover" :alt="`${article.title}文章封面`" />
+                <InternalNewsImage v-else :src="article.cover" :alt="`${article.title}文章封面`" />
               </div>
               <span class="knowledge-related__category">{{ article.categoryLabel }}</span>
             </div>
@@ -115,7 +122,8 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   background: #e3e3e8;
 }
 
-.knowledge-related__media :deep(.antra-news-image) { width: 100%; height: 100%; }
+.knowledge-related__media :deep(.antra-news-image),
+.knowledge-related__media :deep(.guide-image) { width: 100%; height: 100%; }
 
 .knowledge-related__category {
   position: absolute;
@@ -159,7 +167,8 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   -webkit-line-clamp: 2;
 }
 
-.knowledge-related__card:hover :deep(.antra-news-image img) { transform: scale(1.05); }
+.knowledge-related__card:hover :deep(.antra-news-image img),
+.knowledge-related__card:hover :deep(.guide-image img) { transform: scale(1.05); }
 .knowledge-related__card:hover .knowledge-related__transition::after { background: rgb(0 0 0 / 25%); }
 .knowledge-related__card:hover h3,
 .knowledge-related__card:focus-visible h3 { color: #caa05c; }
@@ -242,7 +251,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
 .knowledge-related-home07__cta svg { width: 18px; height: 18px; }
 .knowledge-related-home07__cta:hover,
 .knowledge-related-home07__cta:focus-visible { border-color: #caa05c; color: #caa05c; }
-.knowledge-related-home07__cta:hover i { background: #1c1c1d; transform: translateX(2px); }
+.knowledge-related-home07__cta:hover i { background: #1c1c1d; transform: translate(2px, -2px); }
 
 .knowledge-related-home07__card {
   display: block;
@@ -257,7 +266,8 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   background: #e3e3e8;
 }
 
-.knowledge-related-home07__media :deep(.antra-news-image) { width: 100%; height: 100%; }
+.knowledge-related-home07__media :deep(.antra-news-image),
+.knowledge-related-home07__media :deep(.guide-image) { width: 100%; height: 100%; }
 
 .knowledge-related-home07__media > span {
   position: absolute;
@@ -276,25 +286,16 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   line-height: 16px;
 }
 
-.knowledge-related-home07__author {
-  margin: 18px 0 8px;
-  color: #9f9fa4;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 20px;
-}
-
-.knowledge-related-home07__author strong { color: #caa05c; font-weight: 500; }
-
 .knowledge-related-home07__article h3 {
   display: -webkit-box;
   margin: 0;
   overflow: hidden;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 25px;
+  margin-top: 18px;
+  font-size: 20px;
   font-weight: 500;
-  line-height: 36px;
+  line-height: 30px;
   transition: color .3s ease;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -312,7 +313,8 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   -webkit-line-clamp: 3;
 }
 
-.knowledge-related-home07__card:hover :deep(.antra-news-image img) { transform: scale(1.05); }
+.knowledge-related-home07__card:hover :deep(.antra-news-image img),
+.knowledge-related-home07__card:hover :deep(.guide-image img) { transform: scale(1.05); }
 .knowledge-related-home07__card:hover h3,
 .knowledge-related-home07__card:focus-visible h3 { color: #caa05c; }
 
@@ -356,7 +358,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   .knowledge-related-home07__intro > p { max-width: 100%; }
   .knowledge-related-home07__cta { margin-top: 32px; }
   .knowledge-related-home07__media { border-radius: 18px; }
-  .knowledge-related-home07__article h3 { font-size: 23px; line-height: 33px; }
+  .knowledge-related-home07__article h3 { font-size: 20px; line-height: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -367,6 +369,8 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   .knowledge-related-home07__article h3 { transition: none; }
 
   .knowledge-related__card:hover :deep(.antra-news-image img),
-  .knowledge-related-home07__card:hover :deep(.antra-news-image img) { transform: none; }
+  .knowledge-related__card:hover :deep(.guide-image img),
+  .knowledge-related-home07__card:hover :deep(.antra-news-image img),
+  .knowledge-related-home07__card:hover :deep(.guide-image img) { transform: none; }
 }
 </style>

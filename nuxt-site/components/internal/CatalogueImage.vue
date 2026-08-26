@@ -20,15 +20,19 @@ const failed = ref(false)
 </template>
 
 <style scoped>
-.catalogue-image,
-.catalogue-image img {
+.catalogue-image {
   display: block;
   width: 100%;
-  height: 100%;
 }
 
 .catalogue-image { background: #e3e3e8; }
-.catalogue-image img { object-fit: cover; object-position: center; }
+.catalogue-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
 
 .catalogue-image__error {
   display: flex;

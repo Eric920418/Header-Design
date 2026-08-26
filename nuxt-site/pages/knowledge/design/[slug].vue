@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { Camera, Images, PanelsTopLeft, PlaySquare } from 'lucide-vue-next'
 import { KITCHEN_GUIDE_DETAILS } from '~/data/kitchenGuideDetails'
 import { KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
-import { newsArticles } from '~/data/news'
 
 const route = useRoute()
 const slug = String(route.params.slug)
@@ -16,9 +14,9 @@ if (!detail || !article) {
   throw createError({ statusCode: 404, message: `廚房裝修指南「${slug}」不存在或尚未公開。` })
 }
 
-const relatedNewsArticles = ['cash-subsidy-2025', 'franchise-seminar-2026', 'american-urban']
-  .map(id => newsArticles.find(entry => entry.id === id))
-  .filter((entry): entry is (typeof newsArticles)[number] => Boolean(entry))
+const relatedGuideArticles = KITCHEN_GUIDE_ARTICLES
+  .filter(entry => entry.id !== article.id)
+  .map(entry => ({ ...entry, categoryLabel: '廚房裝修指南' }))
 
 useSeoMeta({
   title: `${article.title}｜SAKURA 整體廚房`,
@@ -117,17 +115,11 @@ useHead({
           </div>
         </section>
 
-        <nav class="knowledge-detail-categories" aria-label="文章分類" v-reveal="{ anim: 'opalMoveUp' }">
-          <NuxtLink to="/news/activities"><Camera aria-hidden="true" />優惠活動</NuxtLink>
-          <NuxtLink to="/news/latest"><Images aria-hidden="true" />最新消息</NuxtLink>
-          <NuxtLink to="/news/video"><PlaySquare aria-hidden="true" />媒體影音</NuxtLink>
-          <NuxtLink to="/knowledge" aria-current="page"><PanelsTopLeft aria-hidden="true" />廚房裝修指南</NuxtLink>
-        </nav>
       </div>
     </article>
 
     <InternalKnowledgeRelatedCarousel
-      :articles="relatedNewsArticles"
+      :articles="relatedGuideArticles"
       :variant="usesPptArticleTemplate ? 'home07' : 'cards'"
     />
   </main>
@@ -364,39 +356,6 @@ useHead({
 .knowledge-detail-links a:hover,
 .knowledge-detail-links a:focus-visible { color: #caa05c; }
 
-.knowledge-detail-categories {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 4px 0 60px;
-}
-
-.knowledge-detail-categories a {
-  display: inline-flex;
-  min-height: 34px;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 14px;
-  border: 1px solid #e3e3e8;
-  border-radius: 24px;
-  color: #59585d;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 24px;
-  transition: color .3s ease, border-color .3s ease, background-color .3s ease;
-}
-
-.knowledge-detail-categories :deep(svg) { width: 15px; height: 15px; }
-
-.knowledge-detail-categories a:hover,
-.knowledge-detail-categories a:focus-visible,
-.knowledge-detail-categories a[aria-current="page"] {
-  border-color: #caa05c;
-  color: #fff;
-  background: #caa05c;
-}
-
 .knowledge-detail-page--ppt-article {
   font-family: var(--font-cjk-sans);
 }
@@ -452,8 +411,7 @@ useHead({
 }
 
 .knowledge-detail-page--ppt-article .knowledge-detail-section p,
-.knowledge-detail-page--ppt-article .knowledge-detail-links a,
-.knowledge-detail-page--ppt-article .knowledge-detail-categories a {
+.knowledge-detail-page--ppt-article .knowledge-detail-links a {
   font-family: var(--font-cjk-sans);
   font-size: 15px;
   line-height: 25px;
@@ -487,8 +445,6 @@ useHead({
   .knowledge-detail-section--cases .knowledge-detail-point { margin-top: 42px; padding-bottom: 42px; }
   .knowledge-detail-section--cases .knowledge-detail-point__body { grid-template-columns: 1fr; gap: 24px; }
   .knowledge-detail-section--cases .knowledge-detail-point__copy > p:first-child { margin-top: 0; }
-  .knowledge-detail-categories { padding-bottom: 45px; }
-
   .knowledge-detail-page--ppt-article .knowledge-detail {
     padding-right: 93px;
   }
@@ -513,7 +469,6 @@ useHead({
   .knowledge-detail-breadcrumb__trail a,
   .knowledge-detail__meta a,
   .knowledge-detail-section h3 a,
-  .knowledge-detail-links a,
-  .knowledge-detail-categories a { transition: none; }
+  .knowledge-detail-links a { transition: none; }
 }
 </style>
