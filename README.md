@@ -29,7 +29,8 @@
 
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第八、九頁校正 `/catalogues/kitchenware-catalog`；第九頁的甲方資訊提案明確補入 MUJI Basic+ 與 Clever，因此最終清單依甲方正式來源更新為八筆：MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic、Elegant。
 - 列表沿用 PPT 指定的 Projects 01 三欄版型與 24px 圓角卡片，八筆資料依 3／3／2 排成三列；Hero 標題為 Noto Serif TC Medium 80px、麵包屑為 Noto Sans TC 15px。2026-08-25 依最新回饋將卡片主標統一為 Noto Serif TC Medium 20/30px，主標只保留系列名稱並移除尾端「型錄」；下方說明統一顯示「系列產品型錄」，不再重複一次 MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic 或 Elegant 系列名稱。
-- 每張卡均使用同網域 `/api/catalogues/:id` 下載端點代理正式 PDF；2026-08-26 移除 `target="_blank"`，並由端點回傳 `Content-Disposition: attachment`，點擊後直接下載具有明確檔名的 PDF，不再開啟新分頁或進入瀏覽器 PDF 預覽。Hover／鍵盤聚焦文案同步改為「下載型錄」與 Download 圖示；上游連線、HTTP 或非 PDF 錯誤會回傳完整狀態、型錄 ID、來源與原始回應，不靜默失敗。手機改為單欄，並為右側固定快捷列保留 93px 安全距。
+- 每張卡恢復原本的 PDF 預覽互動：點擊完整封面或標題會以新分頁開啟正式 `pdfUrl`，Hover／鍵盤聚焦顯示「開啟型錄」與右上斜箭頭；封面仍依原始比例完整顯示、不裁切。下載不再綁定整張卡，而是放在標題右側的獨立膠囊按鈕，使用同網域 `/api/catalogues/:id` 端點與 `Content-Disposition: attachment` 直接下載具有明確檔名的 PDF；手機縮為 44px 圓形圖示按鈕。上游連線、HTTP 或非 PDF 錯誤會回傳完整狀態、型錄 ID、來源與原始回應，不靜默失敗。手機維持單欄，並為右側固定快捷列保留 93px 安全距。
+- **預覽／下載 Design QA（2026-08-26）**：來源截圖為 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_cbRE3S/截圖 2026-08-26 晚上7.36.44.png`（902×222），桌機 1280×720 與手機 390×844 的瀏覽器實作截圖整理於 `/private/tmp/catalogue-page-implementation.png`、`/private/tmp/catalogue-title-download-implementation.png`，聚焦比較圖為 `/private/tmp/catalogue-title-download-comparison.png`。字體維持先前核准的 Noto Serif TC 20/30px；標題、說明的左對齊與 9px 間距保留，下載膠囊精確對齊標題列右緣。8 張卡均有獨立預覽與下載連結，桌機 Hover 覆層 opacity 為 1、手機下載鈕為 44×44px，兩個 viewport 水平溢位皆為 0。正式封面資產、品牌色與原始比例未變，沒有剩餘 P0／P1／P2 差異；最終結果：`passed`。
 - 2026-08-26 逐份渲染並檢查甲方 `1.4_品牌系列型錄` 八份 PDF 第一頁：Premium、Elegant、Loft Chic、Joyful、Harmony、iPremium、Clever 均有完整正式封面，現有卡片素材亦對應這些封面；Basic+ PDF 第一頁是產品規格內頁，因此保留甲方另附的 Basic+ 封面。封面顯示改為依圖片原始比例自動撐高並使用 `object-fit: contain`，移除原本偏方形的固定比例與 Hover 1.05 倍放大，任何狀態都不得裁掉 Logo、頂部色塊或底部系列名稱。
 
 ### 1.4 新版 Design QA

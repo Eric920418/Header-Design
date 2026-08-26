@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Download } from 'lucide-vue-next'
+import { ArrowUpRight, Download } from 'lucide-vue-next'
 import { KITCHEN_CATALOGUES } from '~/data/catalogues'
 
 useSeoMeta({
@@ -37,10 +37,11 @@ useSeoMeta({
           >
             <article>
               <a
-                :href="`/api/catalogues/${catalogue.id}`"
-                :download="catalogue.downloadFilename"
-                class="catalogue-card__link"
-                :aria-label="`下載 PDF：${catalogue.title}`"
+                :href="catalogue.pdfUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="catalogue-card__preview-link"
+                :aria-label="`預覽 PDF：${catalogue.title}`"
               >
                 <span class="catalogue-card__transition">
                   <span class="catalogue-card__image">
@@ -48,15 +49,28 @@ useSeoMeta({
                   </span>
                   <span class="catalogue-card__shade" aria-hidden="true" />
                   <span class="catalogue-card__action" aria-hidden="true">
-                    <span>下載型錄</span>
-                    <span class="catalogue-card__arrow"><Download /></span>
+                    <span>開啟型錄</span>
+                    <span class="catalogue-card__arrow"><ArrowUpRight /></span>
                   </span>
                 </span>
-                <span class="catalogue-card__text">
-                  <strong>{{ catalogue.title }}</strong>
-                  <span>{{ catalogue.description }}</span>
-                </span>
               </a>
+              <div class="catalogue-card__text">
+                <div class="catalogue-card__title-row">
+                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer" class="catalogue-card__title-link">
+                    <strong>{{ catalogue.title }}</strong>
+                  </a>
+                  <a
+                    :href="`/api/catalogues/${catalogue.id}`"
+                    :download="catalogue.downloadFilename"
+                    class="catalogue-card__download"
+                    :aria-label="`下載 PDF：${catalogue.title}`"
+                  >
+                    <Download aria-hidden="true" />
+                    <span>下載</span>
+                  </a>
+                </div>
+                <span>{{ catalogue.description }}</span>
+              </div>
             </article>
           </li>
         </ul>
@@ -139,8 +153,8 @@ useSeoMeta({
 
 .catalogue-card { min-width: 0; }
 .catalogue-card article,
-.catalogue-card__link { display: block; }
-.catalogue-card__link { color: inherit; }
+.catalogue-card__preview-link { display: block; }
+.catalogue-card__preview-link { color: inherit; }
 
 .catalogue-card__transition {
   position: relative;
@@ -201,14 +215,25 @@ useSeoMeta({
 
 .catalogue-card__text {
   position: relative;
-  display: block;
   padding-top: 23px;
 }
 
-.catalogue-card__text strong {
+.catalogue-card__title-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.catalogue-card__title-link {
+  min-width: 0;
+  color: inherit;
+}
+
+.catalogue-card__title-link strong {
   display: block;
   min-height: 30px;
-  margin-bottom: 9px;
+  margin: 0;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
   font-size: 20px;
@@ -217,21 +242,46 @@ useSeoMeta({
   transition: color .3s ease;
 }
 
+.catalogue-card__download {
+  display: inline-flex;
+  min-width: 86px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #d7d7dc;
+  border-radius: 999px;
+  padding-inline: 15px;
+  color: #1c1c1d;
+  background: transparent;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 22px;
+  transition: border-color .3s ease, color .3s ease, background-color .3s ease, transform .3s ease;
+}
+
+.catalogue-card__download svg { width: 17px; height: 17px; }
+
 .catalogue-card__text > span {
   display: block;
+  margin-top: 9px;
   color: #59585d;
   font-family: var(--font-cjk-sans);
   font-size: 15px;
   line-height: 23px;
 }
 
-.catalogue-card__link:hover .catalogue-card__shade,
-.catalogue-card__link:focus-visible .catalogue-card__shade { background: rgba(0, 0, 0, .25); }
-.catalogue-card__link:hover .catalogue-card__action,
-.catalogue-card__link:focus-visible .catalogue-card__action { opacity: 1; visibility: visible; transform: translateY(0); }
-.catalogue-card__link:hover .catalogue-card__text strong,
-.catalogue-card__link:focus-visible .catalogue-card__text strong { color: #caa05c; }
-.catalogue-card__link:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; border-radius: 24px; }
+.catalogue-card__preview-link:hover .catalogue-card__shade,
+.catalogue-card__preview-link:focus-visible .catalogue-card__shade { background: rgba(0, 0, 0, .25); }
+.catalogue-card__preview-link:hover .catalogue-card__action,
+.catalogue-card__preview-link:focus-visible .catalogue-card__action { opacity: 1; visibility: visible; transform: translateY(0); }
+.catalogue-card__preview-link:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; border-radius: 24px; }
+.catalogue-card__title-link:hover strong,
+.catalogue-card__title-link:focus-visible strong { color: #caa05c; }
+.catalogue-card__title-link:focus-visible,
+.catalogue-card__download:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
+.catalogue-card__download:hover { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
 
 @media (max-width: 1023px) {
   .catalogue-projects { padding-block: 80px; }
@@ -247,12 +297,16 @@ useSeoMeta({
   .catalogue-grid { grid-template-columns: 1fr; gap: 42px; }
   .catalogue-card__action { right: 18px; bottom: 18px; gap: 10px; opacity: 1; visibility: visible; transform: none; }
   .catalogue-card__arrow { width: 54px; height: 54px; }
-  .catalogue-card__text strong { min-height: 0; font-size: 20px; line-height: 30px; }
+  .catalogue-card__title-row { gap: 12px; }
+  .catalogue-card__title-link strong { min-height: 0; font-size: 20px; line-height: 30px; }
+  .catalogue-card__download { min-width: 44px; width: 44px; height: 44px; padding: 0; }
+  .catalogue-card__download span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .catalogue-card__shade,
   .catalogue-card__action,
-  .catalogue-card__text strong { transition: none; }
+  .catalogue-card__title-link strong,
+  .catalogue-card__download { transition: none; }
 }
 </style>
