@@ -235,23 +235,25 @@ function handleHeaderClick(event: MouseEvent) {
                     <div class="grid grid-cols-[210px_minmax(0,1fr)] gap-7 xl:grid-cols-[230px_minmax(0,1fr)] xl:gap-10">
                       <div class="border-r border-[#E3E3E8] pr-7 xl:pr-10">
                         <p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Design Inspiration</p>
-                        <h2 class="mt-1 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">設計案例</h2>
+                        <h2 class="mt-1 flex items-center gap-3 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">
+                          <span>品牌系列</span>
+                          <ArrowRight aria-hidden="true" class="h-5 w-5 text-[#CAA05C]" />
+                        </h2>
                         <nav aria-label="設計案例分類" class="mt-5 border-t border-[#E3E3E8] pt-2">
                           <NuxtLink
                             v-for="child in (item.children || []).slice(1)"
                             :key="child.label"
                             :to="child.to || '/'"
-                            class="group/link flex items-center justify-between border-b border-[#E3E3E8] py-3 text-[14px] text-[#59585D] transition-colors hover:text-[#CAA05C]"
+                            class="flex items-center border-b border-[#E3E3E8] py-3 text-[14px] text-[#59585D] transition-colors hover:text-[#CAA05C]"
                           >
                             {{ child.label }}
-                            <ArrowRight class="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
                           </NuxtLink>
                         </nav>
                       </div>
 
                       <div class="min-w-0">
                         <div class="mb-3 flex items-end justify-between">
-                          <div><p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Kitchen Series</p><h2 class="mt-1 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">十大廚房系列</h2></div>
+                          <div><p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Kitchen Series</p><h2 class="mt-1 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">品牌系列</h2></div>
                           <p class="text-xs text-[#9F9FA4]">目前開放 AI Kitchen</p>
                         </div>
                         <div class="grid grid-cols-5 gap-3 xl:gap-4">
@@ -317,13 +319,13 @@ function handleHeaderClick(event: MouseEvent) {
               </div>
             </div>
             <span class="mx-3 h-7 w-px bg-white/40" />
-            <button type="button" aria-label="搜尋" class="flex h-10 w-10 items-center justify-center text-white" @click="closeAllMenus(); searchOpen = true"><Search class="h-[15.5px] w-[15px]" /></button>
+            <button type="button" aria-label="搜尋" class="flex h-10 w-10 items-center justify-center text-white" @click="closeAllMenus(); searchOpen = true"><Search class="h-[15px] w-[15px]" /></button>
           </div>
         </nav>
 
         <div class="flex w-full items-center justify-between lg:hidden">
           <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="w-[184px]"><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA Kitchen" width="266" height="21" class="h-auto w-full" /></NuxtLink>
-          <div class="flex items-center gap-5 text-white"><button aria-label="搜尋" @click="searchOpen = true"><Search class="h-6 w-6" /></button><button :aria-label="mobileOpen ? '關閉選單' : '開啟選單'" @click="mobileOpen = !mobileOpen"><X v-if="mobileOpen" class="h-7 w-7" /><Menu v-else class="h-7 w-7" /></button></div>
+          <div class="flex items-center gap-5 text-white"><button type="button" aria-label="搜尋" class="flex h-10 w-10 items-center justify-center" @click="searchOpen = true"><Search class="h-[15px] w-[15px]" /></button><button :aria-label="mobileOpen ? '關閉選單' : '開啟選單'" @click="mobileOpen = !mobileOpen"><X v-if="mobileOpen" class="h-7 w-7" /><Menu v-else class="h-7 w-7" /></button></div>
         </div>
       </div>
     </div>

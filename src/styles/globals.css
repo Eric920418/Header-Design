@@ -1285,6 +1285,19 @@ body {
   to   { transform: scale(1.16) translate3d(-4%, 0, 0); }
 }
 
+/* Home 01 的背景不是揭幕完就停止：同一張圖在 5 秒停留期間仍持續緩慢放大並向左移。
+   遮罩層與原色層共用同一時間軸，才不會在第二層覆蓋時發生畫面跳動；上一張則停在
+   動畫終態，讓下一輪揭幕尚未完全蓋住畫面時也能維持連續。 */
+.hero-page1-image-active {
+  transform-origin: center center;
+  will-change: transform;
+  animation: hero-kenburns 5s ease-out both;
+}
+.hero-page1-image-settled {
+  transform: scale(1.16) translate3d(-4%, 0, 0);
+  transform-origin: center center;
+}
+
 /* Antra Page 1 Slider Revolution BG Animation：
    `slidingoverlaydown / double / power2.inOut / d:2000 / sd:1333.333`。
    首次底層是模板灰，後續底層保留上一張完整圖片；其上依序為
@@ -1373,6 +1386,8 @@ body {
   .animate-marquee { animation: none !important; transform: none !important; }
   .hero-page1-image-layer { clip-path: inset(0) !important; animation: none !important; }
   .hero-page1-image-layer-masked { display: none !important; }
+  .hero-page1-image-active,
+  .hero-page1-image-settled { transform: none !important; animation: none !important; }
   .antra-template-video-popup::after { animation: none !important; opacity: 0; }
   .site-cta-icon::after { animation: none !important; opacity: 0; }
   .hero-start-project::after { animation: none !important; opacity: 0; }

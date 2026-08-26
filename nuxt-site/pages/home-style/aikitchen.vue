@@ -190,18 +190,16 @@ useSeoMeta({
   <main class="ai-kitchen-page">
     <section aria-labelledby="ai-kitchen-hero-title" class="ai-hero hero-includes-header">
       <div class="absolute inset-0 bg-[#6f6d69]" aria-hidden="true" />
-      <div class="absolute inset-0">
-        <InternalBrandImage :src="data.heroSlides[previousHero]" alt="AI Kitchen 廚房空間" eager class="h-full w-full" />
+      <div v-if="heroTransition > 0" class="absolute inset-0 overflow-hidden">
+        <InternalBrandImage :src="data.heroSlides[previousHero]" alt="AI Kitchen 廚房空間" eager class="hero-page1-image-settled h-full w-full" />
       </div>
-      <template v-if="heroTransition > 0">
-        <div :key="`mask-${heroTransition}`" class="hero-page1-image-layer hero-page1-image-layer-masked">
-          <InternalBrandImage :src="data.heroSlides[currentHero]" alt="AI Kitchen 輪播轉場圖片" eager class="h-full w-full" />
-          <span class="absolute inset-0 bg-[rgba(16,8,1,.46)]" aria-hidden="true" />
-        </div>
-        <div :key="`final-${heroTransition}`" class="hero-page1-image-layer hero-page1-image-layer-final">
-          <InternalBrandImage :src="data.heroSlides[currentHero]" alt="AI Kitchen 廚房空間" eager class="h-full w-full" />
-        </div>
-      </template>
+      <div :key="`mask-${heroTransition}-${currentHero}`" class="hero-page1-image-layer hero-page1-image-layer-masked">
+        <InternalBrandImage :src="data.heroSlides[currentHero]" alt="AI Kitchen 輪播轉場圖片" eager class="hero-page1-image-active h-full w-full" />
+        <span class="absolute inset-0 bg-[rgba(16,8,1,.46)]" aria-hidden="true" />
+      </div>
+      <div :key="`final-${heroTransition}-${currentHero}`" class="hero-page1-image-layer hero-page1-image-layer-final">
+        <InternalBrandImage :src="data.heroSlides[currentHero]" alt="AI Kitchen 廚房空間" eager class="hero-page1-image-active h-full w-full" />
+      </div>
       <span class="absolute inset-0 z-[3] bg-gradient-to-r from-black/55 via-black/15 to-black/10" aria-hidden="true" />
       <span class="absolute inset-x-0 bottom-0 z-[3] h-[45%] bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true" />
 
@@ -228,7 +226,6 @@ useSeoMeta({
           </div>
           <NuxtLink to="/catalogues/kitchenware-catalog" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
             <span>品牌系列<br>型錄</span>
-            <ArrowRight aria-hidden="true" />
           </NuxtLink>
           <div class="ai-hero__story-controls" aria-label="AI Kitchen 功能輪播控制">
             <button type="button" aria-label="上一項 AI Kitchen 功能" @click="showHero(currentHero - 1)"><ChevronLeft /></button>
@@ -338,7 +335,12 @@ useSeoMeta({
         </div>
         <div class="ai-finishes__grid">
           <article v-for="(finish, index) in data.finishes" :key="finish.code" v-reveal="{ anim: 'opalMoveUp', delay: index * 70 }">
-            <InternalBrandImage :src="finish.image" :alt="`${finish.code} ${finish.name} 門板`" class="ai-finishes__image" />
+            <InternalBrandImage
+              :src="finish.image"
+              :alt="`${finish.code} ${finish.name} 門板`"
+              class="ai-finishes__image"
+              :class="{ 'ai-finishes__image--light': finish.code === 'D0032' }"
+            />
             <div class="ai-finishes__caption">
               <p>{{ finish.code }}</p>
               <h3>{{ finish.name }}</h3>
@@ -410,7 +412,7 @@ useSeoMeta({
 .ai-hero__inner { position: relative; z-index: 5; width: min(1584px, calc(100% - 60px)); height: 100%; margin-inline: auto; padding-top: 118px; }
 .ai-hero__title { margin-top: 24px; max-width: 1100px; font-size: clamp(74px, 7.9vw, 130px); line-height: .93; letter-spacing: -.035em; text-transform: none; }
 .ai-hero__title span { color: #caa05c; }
-.ai-hero__cta { position: absolute; top: 250px; right: 4%; display: inline-flex; width: 120px; height: 120px; align-items: center; justify-content: center; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
+.ai-hero__cta { position: relative; display: inline-flex; width: 120px; height: 120px; align-items: center; justify-content: center; margin-top: 30px; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
 .ai-hero__cta > span { position: relative; z-index: 2; font-family: var(--font-display); font-size: 15px; line-height: 19px; }
 .ai-hero__cta svg { position: relative; z-index: 2; width: 18px; margin-left: 5px; transform: rotate(-45deg); transition: transform .4s; }
 .ai-hero__cta:hover { border-color: #caa05c; background: #caa05c; }
@@ -422,9 +424,7 @@ useSeoMeta({
 .ai-hero__story-copy > strong { display: block; margin-top: 2px; color: #fff; font-size: 18px; font-weight: 500; line-height: 26px; }
 .ai-hero__story-copy > p { display: -webkit-box; overflow: hidden; max-width: 700px; margin: 6px 0 0; color: rgb(255 255 255 / 78%); font-size: 15px; line-height: 23px; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .ai-hero__catalogue-link { display: inline-flex; width: 98px; height: 98px; align-items: center; justify-content: center; border: 1px solid rgb(202 160 92 / 72%); border-radius: 50%; color: #fff; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 18px; text-align: center; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
-.ai-hero__catalogue-link svg { width: 15px; height: 15px; margin-left: 3px; transform: rotate(-45deg); transition: transform .3s ease; }
 .ai-hero__catalogue-link:hover, .ai-hero__catalogue-link:focus-visible { color: #1c1c1d; background: #caa05c; transform: translateY(-3px); }
-.ai-hero__catalogue-link:hover svg, .ai-hero__catalogue-link:focus-visible svg { transform: none; }
 .ai-hero__story-controls { display: flex; justify-content: flex-end; gap: 8px; }
 .ai-hero__story-controls button { display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border: 1px solid rgb(255 255 255 / 24%); border-radius: 50%; color: #fff; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
 .ai-hero__story-controls button:hover, .ai-hero__story-controls button:focus-visible { border-color: #caa05c; color: #1c1c1d; background: #caa05c; }
@@ -443,13 +443,13 @@ useSeoMeta({
 .ai-series-drawer.is-open > button svg { transform: rotate(180deg); }
 .ai-series-drawer > button span { font-family: var(--font-cjk-sans); font-size: 15px; line-height: 18px; letter-spacing: .28em; writing-mode: vertical-rl; }
 
-.ai-intro { padding: 120px 0; background: #f6f6f6; }
+.ai-intro { padding: 100px 0; background: #f6f6f6; }
 .ai-section-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .ai-section-heading h2 { max-width: 900px; margin: 70px 0 0; font-size: 60px; line-height: 64px; text-transform: none; }
 .ai-section-heading h2 span, .ai-centered-heading h2 span { color: #caa05c; }
-.ai-intro__content { display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 56%); gap: 70px; margin-top: 64px; padding-top: 44px; border-top: 1px solid #e3e3e8; }
-.ai-intro__content h3 { max-width: 520px; margin: 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; letter-spacing: .02em; text-transform: none; }
-.ai-intro__paragraphs { display: grid; gap: 14px; align-content: start; padding-top: 5px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.ai-intro__content { display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); gap: 24px; margin-top: 64px; padding-top: 44px; border-top: 1px solid #e3e3e8; }
+.ai-intro__content h3 { grid-column: 1; max-width: 520px; margin: 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; letter-spacing: .02em; text-transform: none; }
+.ai-intro__paragraphs { display: grid; grid-column: 3; gap: 14px; align-content: start; padding-top: 5px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .ai-intro__paragraphs p { margin: 0; }
 
 .ai-suite-stage { display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); grid-template-rows: 420px; gap: 24px; margin-top: 60px; }
@@ -476,8 +476,9 @@ useSeoMeta({
 .ai-suite-details { display: grid; grid-template-columns: 1.05fr 1fr 1fr; gap: 50px; margin-top: 22px; border-radius: 24px; background: #fff; padding: 42px 50px; box-shadow: 0 28px 80px -48px rgb(0 0 0 / 45%); animation: ai-suite-content-in .8s ease both; }
 .ai-suite-details__number { color: #e3e3e8; font-family: var(--font-display); font-size: 54px; line-height: 1; }
 .ai-suite-details__name { margin: -18px 0 20px 42px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
-.ai-suite-details h3 { margin: 6px 0 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; text-transform: none; }
-.ai-suite-details__description { margin: 0 0 12px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.ai-suite-details h3 { margin: 6px 0 0; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 30px; text-transform: none; }
+.ai-suite-details > div:nth-child(2) { display: flex; flex-direction: column; align-self: center; justify-content: center; text-align: left; }
+.ai-suite-details__description { margin: 0 0 12px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; text-wrap: pretty; }
 .ai-suite-details__equipment-title { margin: 0 0 14px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
 .ai-suite-details ul { margin: 0; padding: 0; list-style: none; }
 .ai-suite-details li { padding: 7px 0; border-bottom: 1px solid #e3e3e8; color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 21px; }
@@ -493,6 +494,8 @@ useSeoMeta({
 .ai-finishes__grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; margin-top: 55px; }
 .ai-finishes__grid article { min-width: 0; }
 .ai-finishes__image { aspect-ratio: 1; border-radius: 24px; transition: transform .5s; }
+.ai-finishes__image--light { border: 1px solid #e3e3e8; background: #fff; }
+.ai-finishes__image--light :deep(img) { transform: scale(1.012); }
 .ai-finishes__grid article:hover .ai-finishes__image { transform: translateY(-7px); }
 .ai-finishes__caption { width: calc(100% - 8px); margin: -2px auto 0; border: 1px solid #e3e3e8; background: #fff; padding: 10px 14px 13px; }
 .ai-finishes__caption p { margin: 0; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 18px; }
@@ -536,9 +539,9 @@ useSeoMeta({
 @media (max-width: 1200px) {
   .ai-hero { height: 760px; }
   .ai-hero__inner { padding-top: 95px; }
-  .ai-hero__cta { top: 220px; right: 0; }
   .ai-hero__bottom { grid-template-columns: 72px minmax(0, 1fr) 98px 88px; gap: 16px; }
   .ai-hero__story-thumb { width: 68px; height: 68px; }
+  .ai-intro__content { grid-template-columns: minmax(0, 1fr) 164px minmax(0, 1fr); gap: 18px; }
   .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 164px minmax(0, 1fr); grid-template-rows: 360px; gap: 18px; }
   .ai-suite-tabs button { min-height: 50px; }
   .ai-suite-tabs button > span:last-child { font-size: 17px; line-height: 22px; }
@@ -553,10 +556,10 @@ useSeoMeta({
   .ai-hero { height: 720px; }
   .ai-hero__inner { padding-top: 80px; }
   .ai-hero__title { font-size: clamp(64px, 9.5vw, 96px); }
-  .ai-hero__cta { top: 250px; width: 105px; height: 105px; }
+  .ai-hero__cta { width: 105px; height: 105px; margin-top: 24px; }
   .ai-series-drawer { display: none; }
   .ai-section-heading h2, .ai-centered-heading h2 { font-size: 48px; line-height: 53px; }
-  .ai-intro__content { gap: 40px; }
+  .ai-intro__content { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); gap: 14px; }
   .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); grid-template-rows: 320px; gap: 14px; }
   .ai-suite-tabs button { min-height: 48px; }
   .ai-suite-tabs button > span:last-child { font-size: 16px; line-height: 21px; }
@@ -578,7 +581,7 @@ useSeoMeta({
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
   .ai-hero__title { margin-top: 18px; font-size: clamp(44px, 13vw, 68px); line-height: .98; }
-  .ai-hero__cta { top: 300px; right: 0; width: 82px; height: 82px; }
+  .ai-hero__cta { width: 82px; height: 82px; margin-top: 22px; }
   .ai-hero__cta > span { font-size: 13px; line-height: 16px; }
   .ai-hero__bottom { right: 0; bottom: 18px; min-height: 236px; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; border-radius: 18px; padding: 14px; }
   .ai-hero__story-thumb { width: 64px; height: 64px; }
@@ -605,7 +608,7 @@ useSeoMeta({
   .ai-suite-image { border-radius: 16px; }
   .ai-suite-details { display: block; margin-top: 16px; padding: 28px 22px; }
   .ai-suite-details > div + div { margin-top: 28px; }
-  .ai-suite-details h3 { font-size: 23px; line-height: 30px; }
+  .ai-suite-details h3 { font-size: 20px; line-height: 30px; }
   .ai-finishes__grid { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; margin-top: 38px; }
   .ai-finishes__image { border-radius: 16px; }
   .ai-equipment__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; margin-top: 38px; }

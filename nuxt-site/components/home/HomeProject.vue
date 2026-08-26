@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
               <span class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.06)_20%,rgba(0,0,0,.86)_100%)]" />
               <span class="absolute left-6 top-6 z-[2] rounded-full border border-white/50 px-4 py-1.5 text-[15px] font-semibold text-white backdrop-blur-sm">{{ style.en }}</span>
               <div class="absolute inset-x-0 bottom-0 z-[2] px-6 pb-8 min-[1201px]:px-8 min-[1201px]:pb-9">
-                <h3 class="w-fit font-display text-[31px] leading-[38px] text-white transition-colors group-hover:text-[#CAA05C] min-[1201px]:text-[36px] min-[1201px]:leading-[44px]">{{ style.zh }}</h3>
+                <h3 class="w-fit font-display text-[30px] leading-[38px] text-white transition-colors group-hover:text-[#CAA05C]">{{ style.zh }}</h3>
                 <p class="home-project-description overflow-hidden text-[15px] leading-[23px] text-white/90">{{ style.desc }}</p>
               </div>
             </article>

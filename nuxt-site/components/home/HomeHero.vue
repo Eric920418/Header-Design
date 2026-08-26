@@ -27,12 +27,12 @@ onBeforeUnmount(() => timer && clearInterval(timer))
          暗色新圖先向下揭幕，原色新圖延遲 333ms 再覆蓋。 -->
     <div :key="`hero-${activeSlide}`" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
       <span v-if="previousSlide === null" class="absolute inset-0 bg-[#9F9FA4]" />
-      <img v-else :src="slides[previousSlide]" alt="" class="absolute inset-0 h-full w-full object-cover object-center" />
+      <img v-else :src="slides[previousSlide]" alt="" class="hero-page1-image-settled absolute inset-0 h-full w-full object-cover object-center" />
       <span class="hero-page1-image-layer hero-page1-image-layer-masked">
-        <img :src="slides[activeSlide]" alt="" class="absolute inset-0 h-full w-full object-cover object-center" />
+        <img :src="slides[activeSlide]" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" />
         <span class="absolute inset-0 bg-[rgba(16,8,1,0.46)]" />
       </span>
-      <span class="hero-page1-image-layer hero-page1-image-layer-final"><img :src="slides[activeSlide]" alt="" class="absolute inset-0 h-full w-full object-cover object-center" /></span>
+      <span class="hero-page1-image-layer hero-page1-image-layer-final"><img :src="slides[activeSlide]" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" /></span>
     </div>
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,.42)_42%,rgba(0,0,0,.86)_100%)]" />
 
@@ -58,7 +58,7 @@ onBeforeUnmount(() => timer && clearInterval(timer))
       </div>
       <div class="hero-template-watermark-slot pointer-events-none">
         <div class="hero-template-watermark select-none whitespace-nowrap text-right font-display opacity-[0.64]">
-          <div v-reveal="{ anim: 'fadeInUp', delay: 900, duration: 'slow' }"><span aria-hidden="true" class="block bg-[linear-gradient(180deg,#CAA05C_14.9%,rgba(159,159,164,0)_80.95%)] bg-clip-text text-transparent">Kitchen</span></div>
+          <div v-reveal="{ anim: 'fadeInUp', delay: 250 }"><span aria-hidden="true" class="block bg-[linear-gradient(180deg,#CAA05C_14.9%,rgba(159,159,164,0)_80.95%)] bg-clip-text text-transparent">Kitchen</span></div>
         </div>
       </div>
     </div>
