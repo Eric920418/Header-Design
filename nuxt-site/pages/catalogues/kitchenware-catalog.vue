@@ -16,7 +16,7 @@ useSeoMeta({
     <section class="catalogue-hero hero-includes-header" aria-labelledby="catalogue-page-title">
       <span class="catalogue-hero__overlay" aria-hidden="true" />
       <div class="catalogue-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="catalogue-page-title">品牌系列型錄</h1>
+        <h1 id="catalogue-page-title">Kitchen Catalogues</h1>
         <nav aria-label="麵包屑" class="catalogue-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -74,7 +74,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
 }
 
 .catalogue-hero__overlay {
@@ -95,10 +95,10 @@ useSeoMeta({
 .catalogue-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-cjk-serif);
-  font-size: 80px;
+  font-family: var(--font-display);
+  font-size: 60px;
   font-weight: 500;
-  line-height: .9523809524;
+  line-height: 72px;
 }
 
 .catalogue-hero__trail {

@@ -93,7 +93,7 @@ useSeoMeta({
     <section class="design-projects-hero hero-includes-header" aria-labelledby="design-projects-title">
       <span class="design-projects-hero__overlay" aria-hidden="true" />
       <div class="design-projects-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="design-projects-title">Design Inspiration</h1>
+        <h1 id="design-projects-title">Inspiration</h1>
         <nav aria-label="麵包屑" class="design-projects-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>

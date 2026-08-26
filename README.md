@@ -25,6 +25,8 @@
 
 ## 1.4 品牌系列型錄（2026-08-21 新版調整）
 
+- 2026-08-26 將列表 Hero 主標由中文「品牌系列型錄」改為英文 `Kitchen Catalogues`；Hero 同步對齊設計靈感與廚房裝修指南列表，改用相同的松竹店背景、36% 構圖、64% 深色遮罩、桌機 360px／手機 288px 高度及 Cal Sans 60px 英文標題，麵包屑仍保留中文名稱。
+
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第八、九頁校正 `/catalogues/kitchenware-catalog`；第九頁的甲方資訊提案明確補入 MUJI Basic+ 與 Clever，因此最終清單依甲方正式來源更新為八筆：MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic、Elegant。
 - 列表沿用 PPT 指定的 Projects 01 三欄版型與 24px 圓角卡片，八筆資料依 3／3／2 排成三列；Hero 標題為 Noto Serif TC Medium 80px、麵包屑為 Noto Sans TC 15px。2026-08-25 依最新回饋將卡片主標統一為 Noto Serif TC Medium 20/30px，主標只保留系列名稱並移除尾端「型錄」；下方說明統一顯示「系列產品型錄」，不再重複一次 MUJI Basic+、Clever、iPremium、Joyful、Premium、Harmony、Loft Chic 或 Elegant 系列名稱。
 - 每張卡均使用同網域 `/api/catalogues/:id` 下載端點代理正式 PDF；2026-08-26 移除 `target="_blank"`，並由端點回傳 `Content-Disposition: attachment`，點擊後直接下載具有明確檔名的 PDF，不再開啟新分頁或進入瀏覽器 PDF 預覽。Hover／鍵盤聚焦文案同步改為「下載型錄」與 Download 圖示；上游連線、HTTP 或非 PDF 錯誤會回傳完整狀態、型錄 ID、來源與原始回應，不靜默失敗。手機改為單欄，並為右側固定快捷列保留 93px 安全距。
@@ -99,6 +101,8 @@
 
 ## 1.3 廚房裝修指南列表（2026-08-21 新版調整）
 
+- 2026-08-26 將列表 Hero 主標由中文「廚房裝修指南」改為英文 `Kitchen Knowledge`，並與設計靈感／品牌系列型錄 Hero 統一桌機與手機的高度、內距、英文字體與標題位置；中文頁名仍保留於麵包屑及 SEO。
+
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第四頁重新校正 `/knowledge`，Hero 底圖改用 3.1 案例門市正式素材中的松竹店店面照；標題改為 Noto Serif TC Medium 60px，麵包屑改為 Noto Sans TC 15px。
 - 內容標籤由模板占位文案 `Straight From The Newsroom` 改為 `Kitchen Knowledge`；模板英文大標改為版心置中的「廚房裝修指南／Kitchen Knowledge」中英雙標，中文使用 Noto Serif TC Medium 60px，英文使用 Bodoni Moda 60px，左側標籤欄與裝飾線仍保留 Home 02 原有幾何。
 - 左側精選文章與右側三篇列表維持 PPT 指定的 Home 02 結構；文章標題統一 Noto Serif TC Medium 25px／36px，Meta、日期與摘要統一 Noto Sans TC，摘要為 15px／26px。
@@ -119,7 +123,7 @@
 ## 1.2 設計靈感列表（2026-08-20 新版調整）
 
 - 依 `2026.08.15_1.0設計案例_調整.pptx` 第三頁重新校正 `/design-inspiration`，Hero 底圖改用 3.1 案例門市正式素材中的松竹店店面照，不再沿用 3.0 服務流程的室內示意背景。
-- Hero 顯示標題依 2026-08-25 最新回饋改為英文 `Design Inspiration`，使用模板英文字體 60px；麵包屑仍保留中文「設計靈感」及 Noto Sans TC 15px，桌面維持母版的 360px Hero、深色遮罩與置中構圖。列表卡片標題桌機與手機統一為 Noto Serif TC 20/30px，兩行預留高度同步由 72px 收斂為 60px。
+- Hero 顯示標題依 2026-08-26 最新回饋由 `Design Inspiration` 精簡為英文 `Inspiration`，使用模板英文字體 60px；麵包屑仍保留中文「設計靈感」及 Noto Sans TC 15px，桌面維持母版的 360px Hero、深色遮罩與置中構圖。列表卡片標題桌機與手機統一為 Noto Serif TC 20/30px，兩行預留高度同步由 72px 收斂為 60px。
 - 依標註刪除篩選器上方可見的「設計型式／設計風格」欄位標題，但保留 `label` 為螢幕閱讀器使用；兩個下拉選單統一 Noto Sans TC 16px，原有型式／風格篩選、URL query、空狀態與分頁行為不變。
 - 三張卡片改直接使用 3.1 案例門市內容圖：case10 第 03 張、case56 第 04 張、case35 第 11 張；沒有另造假圖或用 PPT 截圖代替。卡片仍分別連到 `/gallery/case10`、`/gallery/case56`、`/gallery/case35`，並保留 `from=inspiration` 回返來源。
 - 案例標題改為 Noto Serif TC Medium 25px／36px、最多兩行；門市名稱改為 Noto Sans TC 15px／24px，符合新版標註且維持現有 Hover `View` 互動。
@@ -1095,6 +1099,8 @@ final result: passed
 - **動畫與建置**：Breadcrumb、標題左右兩欄與文章兩欄使用既有 `opalMoveUp／Left／Right`，不把 Reveal 套在圖片本身；reduced-motion 由全站指令立即顯示內容並停用圖片縮放。`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 只有 Tailwind CSS v4 既有 sourcemap warning，沒有新增型別、SSR 或打包錯誤。
 
 ## Nuxt 3 — 1.3.1 廚房裝修指南內頁（2026-08-14）
+
+- 2026-08-26 依最新回饋調整 `/knowledge/design/systemcabinet` 麵包屑 Hero：桌機總高度由原始 185px 提高為 300px、手機由原始 150px 提高為 250px；Hero 以 60px 共用 Header 高度作第一列，麵包屑置中於 Header 下方的實際可見區域，不再只置中整個被導覽覆蓋的容器而產生視覺偏上。
 
 - **正式路由與 PPT 結構**：新增 SSR 路由 `/knowledge/design/systemcabinet`，依正式開版 PPT 第五頁組合 Antra `Single Post 01` 的 185px Breadcrumb、文章 Meta／50px 標題，以及 `Projects Details` 的 930px 內容流、40/44px 章節標題、24px 圓角圖片與底部分類 Tab。列表頁「廚房系統櫃材質」的大卡和右側第一筆已改走站內路由，其餘兩篇未開版文章仍連正式官網，不建立假內頁。
 - **日期判讀**：PPT 第五頁的母版縮圖仍殘留 `NOV 1, 2025`，但同份 PPT 第四頁與櫻花官網文章皆為 `2025-05-09`；頁面保留 Single Post 的日期幾何，內容採可驗證的 `MAY 9, 2025`，不把模板占位資料當正式文章資訊。

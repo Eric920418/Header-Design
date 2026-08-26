@@ -160,9 +160,10 @@ useHead({
   position: relative;
   isolation: isolate;
   display: grid;
-  min-height: 185px;
+  min-height: 300px;
   overflow: hidden;
-  padding: 30px;
+  grid-template-rows: var(--site-header-height) minmax(0, 1fr);
+  padding: 0 30px;
   place-items: center;
   color: #fff;
   background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
@@ -178,8 +179,10 @@ useHead({
 
 .knowledge-article-breadcrumb__trail {
   display: flex;
+  grid-row: 2;
   width: min(1410px, 100%);
   align-items: center;
+  align-self: center;
   justify-content: center;
   gap: 10px;
   margin-inline: auto;
@@ -468,7 +471,7 @@ useHead({
 
 @media (max-width: 767px) {
   .knowledge-article-breadcrumb {
-    min-height: 150px;
+    min-height: 250px;
     padding-inline: 15px;
     background-attachment: scroll;
   }

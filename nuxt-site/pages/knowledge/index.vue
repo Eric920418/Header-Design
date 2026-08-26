@@ -17,7 +17,7 @@ useSeoMeta({
     <section class="kitchen-guide-hero hero-includes-header" aria-labelledby="kitchen-guide-page-title">
       <span class="kitchen-guide-hero__overlay" aria-hidden="true" />
       <div class="kitchen-guide-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="kitchen-guide-page-title">廚房裝修指南</h1>
+        <h1 id="kitchen-guide-page-title">Kitchen Knowledge</h1>
         <nav aria-label="麵包屑" class="kitchen-guide-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -104,9 +104,9 @@ useSeoMeta({
 }
 
 .kitchen-guide-hero h1 {
-  margin: 0 0 20px;
+  margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-cjk-serif);
+  font-family: var(--font-display);
   font-size: 60px;
   font-weight: 500;
   line-height: 72px;
@@ -335,18 +335,18 @@ useSeoMeta({
 
 @media (max-width: 767px) {
   .kitchen-guide-hero {
-    min-height: 300px;
+    min-height: 288px;
     background-attachment: scroll;
   }
 
   .kitchen-guide-hero__inner {
-    width: min(100% - 30px, 1410px);
-    padding: 112px 0 75px;
+    width: calc(100% - 30px);
+    padding: 80px 0 60px;
   }
 
   .kitchen-guide-hero h1 {
-    margin-bottom: 24px;
-    font-size: 42px;
+    margin-bottom: 25px;
+    font-size: 48px;
     line-height: 52px;
   }
 
