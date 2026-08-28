@@ -14,7 +14,7 @@ const activeSuiteImageIndex = ref(0)
 const casesPaused = ref(false)
 const casesInteracted = ref(false)
 const seriesOpen = ref(false)
-const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false, duration: 32 })
+const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false, duration: 24 })
 
 const heroStories = [
   {
@@ -201,7 +201,7 @@ useSeoMeta({
       <div class="ai-hero__inner">
         <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" tone="dark" class="ai-hero__eyebrow">Trusted Design Partner</InternalSectionPill>
         <h1 id="ai-kitchen-hero-title" v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="ai-hero__title">
-          Design
+          Find Your Inspired<br><span class="text-[#caa05c]">Interior Design</span>
         </h1>
 
         <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" v-reveal="{ anim: 'opalScaleUp', delay: 220 }" class="hero-start-project ai-hero__cta">
@@ -471,7 +471,7 @@ useSeoMeta({
 .ai-suite-details__number { color: #e3e3e8; font-family: var(--font-display); font-size: 54px; line-height: 1; }
 .ai-suite-details__name { margin: -18px 0 20px 42px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .ai-suite-details h3 { margin: 6px 0 0; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 30px; text-transform: none; }
-.ai-suite-details > div:nth-child(2) { display: flex; flex-direction: column; align-self: start; justify-content: flex-start; padding-top: 92px; text-align: left; }
+.ai-suite-details > div:nth-child(2) { display: flex; flex-direction: column; align-self: start; justify-content: flex-start; padding-top: 49px; text-align: left; }
 .ai-suite-details__description { margin: 0 0 12px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; text-wrap: pretty; }
 .ai-suite-details__equipment-title { margin: 0 0 14px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
 .ai-suite-details ul { margin: 0; padding: 0; list-style: none; }

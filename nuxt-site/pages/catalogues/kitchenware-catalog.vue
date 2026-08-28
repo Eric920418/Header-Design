@@ -49,7 +49,7 @@ useSeoMeta({
                   </span>
                   <span class="catalogue-card__shade" aria-hidden="true" />
                   <span class="catalogue-card__action" aria-hidden="true">
-                    <span>預覽型錄</span>
+                    <span>預覽</span>
                     <span class="catalogue-card__arrow"><ArrowUpRight /></span>
                   </span>
                 </span>

@@ -36,7 +36,7 @@ onBeforeUnmount(() => timer && clearInterval(timer))
     </div>
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,.42)_42%,rgba(0,0,0,.86)_100%)]" />
 
-    <div class="hero-template-top z-10 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
+    <div class="hero-template-top translate-y-[24px] z-10 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
       <div :key="`hero-copy-${activeSlide}`" class="hero-slide-copy">
         <div>
           <div aria-hidden="true" class="mb-[20px] h-[30px]" />

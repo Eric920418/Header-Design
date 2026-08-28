@@ -8,10 +8,11 @@ import type {
 export const DESIGN_FORM_OPTIONS: DesignFilterOption<DesignInspirationForm>[] = [
   { label: '全部型式', value: '' },
   { label: '一字型', value: '一字型' },
+  { label: '一字型+中島', value: '一字型+中島' },
+  { label: '島', value: '中島' },
   { label: 'L型', value: 'L型' },
+  { label: 'L型+中島', value: 'L型+中島' },
   { label: 'ㄇ字型', value: 'ㄇ字型' },
-  { label: '中島', value: '中島' },
-  { label: '其他', value: '其他' },
 ]
 
 export const DESIGN_STYLE_OPTIONS: DesignFilterOption<DesignInspirationStyle>[] = [

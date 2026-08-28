@@ -384,13 +384,15 @@ function handleHeaderClick(event: MouseEvent) {
 
 .site-header__nav-side {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, max-content);
+  column-gap: clamp(4px, .6vw, 10px);
   min-width: 0;
   align-items: center;
 }
 
 .site-header__nav-side--left {
   grid-column: 2;
+  justify-content: end;
 }
 
 .site-header__desktop-logo {
@@ -399,6 +401,7 @@ function handleHeaderClick(event: MouseEvent) {
 
 .site-header__nav-side--right {
   grid-column: 4;
+  justify-content: start;
 }
 
 .site-header__nav-side > .desktop-nav-item {
