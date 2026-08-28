@@ -2,7 +2,23 @@
 import { ChevronRight } from 'lucide-vue-next'
 import { KITCHEN_STYLES } from '~/data/kitchenStyles'
 
-const slides = ['/home-2026/hero/ai-kitchen.jpg', '/home-2026/hero/clever-kitchen.jpg', '/home-2026/hero/basic-plus.jpg']
+const slides = [
+  {
+    image: '/home-2026/hero/ai-kitchen.jpg',
+    title: 'Premium',
+    description: '舒朗大器的開放式設計，打開客餐廚界線，盡享流動的生活饗宴。寬闊中島空間與精品般的逸品展櫃，伴隨智慧科技從容料理。無論氣派社交宴請、私密親友小聚都優雅盡興，怡然自在。',
+  },
+  {
+    image: '/home-2026/hero/clever-kitchen.jpg',
+    title: 'Clever',
+    description: '你是否渴望一個既能收納得宜，又能展現生活美感的廚房？「巧」凝聚設計的思維與生活靈感，「域」開展廚居空間的延伸與自在。巧域廚房，把有限化為無限，以坪效為基礎，以美型為靈魂，讓收納的秩序與設計的質感並行，為日常開啟全新的生活風景。',
+  },
+  {
+    image: '/home-2026/hero/basic-plus.jpg',
+    title: 'Basic +',
+    description: 'Basic+ 廚房系列，以生活的基本為出發，整合 MUJI RENOVATION 的空間觀察與 SAKURA 的廚房專業，打造更貼近日常的料理環境。',
+  },
+]
 const seriesOpen = ref(false)
 const activeSlide = ref(0)
 const previousSlide = ref<number | null>(null)
@@ -22,17 +38,17 @@ onBeforeUnmount(() => timer && clearInterval(timer))
 
 <template>
   <section class="hero-template-section hero-includes-header relative w-full overflow-hidden bg-[#9F9FA4]" aria-labelledby="hero-title">
-    <div class="hidden" aria-hidden="true"><img v-for="image in slides" :key="image" :src="image" alt="" /></div>
+    <div class="hidden" aria-hidden="true"><img v-for="slide in slides" :key="slide.image" :src="slide.image" alt="" /></div>
     <!-- Antra Home 01 / Slider Revolution `slidingoverlaydown` + `double`：
          暗色新圖先向下揭幕，原色新圖延遲 333ms 再覆蓋。 -->
     <div :key="`hero-${activeSlide}`" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
       <span v-if="previousSlide === null" class="absolute inset-0 bg-[#9F9FA4]" />
-      <img v-else :src="slides[previousSlide]" alt="" class="hero-page1-image-settled absolute inset-0 h-full w-full object-cover object-center" />
+      <img v-else :src="slides[previousSlide].image" alt="" class="hero-page1-image-settled absolute inset-0 h-full w-full object-cover object-center" />
       <span class="hero-page1-image-layer hero-page1-image-layer-masked">
-        <img :src="slides[activeSlide]" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" />
+        <img :src="slides[activeSlide].image" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" />
         <span class="absolute inset-0 bg-[rgba(16,8,1,0.46)]" />
       </span>
-      <span class="hero-page1-image-layer hero-page1-image-layer-final"><img :src="slides[activeSlide]" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" /></span>
+      <span class="hero-page1-image-layer hero-page1-image-layer-final"><img :src="slides[activeSlide].image" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" /></span>
     </div>
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,.42)_42%,rgba(0,0,0,.86)_100%)]" />
 
@@ -40,9 +56,9 @@ onBeforeUnmount(() => timer && clearInterval(timer))
       <div :key="`hero-copy-${activeSlide}`" class="hero-slide-copy">
         <div>
           <div aria-hidden="true" class="mb-[20px] h-[30px]" />
-          <h1 id="hero-title" class="hero-template-title m-0 font-display font-normal capitalize tracking-[-1px] text-white">Design</h1>
+          <h1 id="hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ slides[activeSlide].title }}</h1>
         </div>
-        <p class="hero-template-description mt-[30px] font-sans text-[18px] font-medium leading-[24px] text-white">Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.</p>
+        <p class="hero-template-description mt-[30px] font-cjk-sans text-[15px] font-normal leading-[26px] text-white">{{ slides[activeSlide].description }}</p>
       </div>
     </div>
 
