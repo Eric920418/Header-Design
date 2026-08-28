@@ -159,17 +159,17 @@ function handleHeaderClick(event: MouseEvent) {
               @focusin="openDesktopMenu(item.label)"
               @focusout="handleDesktopItemFocusOut"
             >
-              <div v-if="item.children && item.to" class="flex h-[var(--site-header-height)] items-center whitespace-nowrap px-1 text-[15px] leading-[15px] text-white">
+              <div v-if="item.children && item.to" class="flex h-[var(--site-header-height)] items-center whitespace-nowrap text-[15px] leading-[15px] text-white">
                 <NuxtLink :to="item.to" class="flex h-full items-center">{{ item.label }}</NuxtLink>
                 <button type="button" :aria-label="`展開${item.label}選單`" :aria-expanded="activeDesktopMenu === item.label" class="flex h-full items-center pl-1" @click="openDesktopMenu(item.label)">
                   <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" />
                 </button>
               </div>
-              <button v-else-if="item.children || item.mega" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap px-1 text-[15px] leading-[15px] text-white" @click="openDesktopMenu(item.label)">
+              <button v-else-if="item.children || item.mega" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap text-[15px] leading-[15px] text-white" @click="openDesktopMenu(item.label)">
                 {{ item.label }}
                 <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" />
               </button>
-              <NuxtLink v-else :to="item.to || '#'" class="px-1 py-2 text-[15px] text-white">{{ item.label }}</NuxtLink>
+              <NuxtLink v-else :to="item.to || '#'" class="py-2 text-[15px] text-white">{{ item.label }}</NuxtLink>
 
               <div
                 v-if="item.mega"
@@ -293,22 +293,22 @@ function handleHeaderClick(event: MouseEvent) {
               @focusin="openDesktopMenu(item.label)"
               @focusout="handleDesktopItemFocusOut"
             >
-              <div v-if="item.children && item.to" class="flex h-[var(--site-header-height)] items-center whitespace-nowrap px-1 text-[15px] leading-[15px] text-white">
+              <div v-if="item.children && item.to" class="flex h-[var(--site-header-height)] items-center whitespace-nowrap text-[15px] leading-[15px] text-white">
                 <NuxtLink :to="item.to" class="flex h-full items-center">{{ item.label }}</NuxtLink>
                 <button type="button" :aria-label="`展開${item.label}選單`" :aria-expanded="activeDesktopMenu === item.label" class="flex h-full items-center pl-1" @click="openDesktopMenu(item.label)">
                   <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" />
                 </button>
               </div>
-              <button v-else-if="item.children" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap px-1 text-[15px] text-white" @click="openDesktopMenu(item.label)">{{ item.label }} <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" /></button>
+              <button v-else-if="item.children" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap text-[15px] text-white" @click="openDesktopMenu(item.label)">{{ item.label }} <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" /></button>
               <a
                 v-else-if="item.to?.startsWith('http')"
                 :href="item.to"
                 target="_blank"
                 rel="noopener noreferrer"
                 :data-footer-align-anchor="item.label === '櫻花集團' ? 'sakura-group' : undefined"
-                class="whitespace-nowrap px-1 py-2 text-[15px] text-white"
+                class="whitespace-nowrap py-2 text-[15px] text-white"
               >{{ item.label }}</a>
-              <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap px-1 py-2 text-[15px] text-white">{{ item.label }}</NuxtLink>
+              <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap py-2 text-[15px] text-white">{{ item.label }}</NuxtLink>
               <div v-if="item.children" class="desktop-nav-dropdown absolute right-0 top-full z-50 pt-2 transition-all" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li v-for="child in item.children" :key="child.label">
@@ -435,7 +435,7 @@ function handleHeaderClick(event: MouseEvent) {
 @media (min-width: 1200px) {
   .site-header__desktop-nav {
     --header-logo-width: 266px;
-    --header-logo-gutter-shift: clamp(42px, calc((100vw - 1024px) * .28), 130px);
+    --header-logo-gutter-shift: clamp(42px, calc((100vw - 1024px) * .37), 160px);
   }
 
   .site-header__nav-side--left {
