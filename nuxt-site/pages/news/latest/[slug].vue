@@ -279,9 +279,9 @@ useHead({
   margin: 0;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 400;
-  line-height: 46px;
+  line-height: 41px;
 }
 
 .latest-detail-cover {
@@ -503,7 +503,7 @@ useHead({
   .latest-detail-article { padding: 60px 15px 0; }
   .latest-detail-header { margin-bottom: 30px; }
 
-  .latest-detail-header h1 { font-size: 25px; line-height: 32px; }
+  .latest-detail-header h1 { font-size: 30px; line-height: 41px; }
   .latest-detail-meta .categories-link a { min-height: 28px; padding: 7px 12px; font-size: 13px; }
   .latest-detail-cover { border-radius: 18px; }
 

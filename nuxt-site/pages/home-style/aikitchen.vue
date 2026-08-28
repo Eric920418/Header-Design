@@ -157,7 +157,7 @@ onMounted(() => {
       heroTimer = setInterval(changeHero, 5000)
       casesTimer = setInterval(() => {
         if (!casesPaused.value && !casesInteracted.value) casesApi.value?.scrollNext()
-      }, 5000)
+      }, 4000)
     }
   }, { immediate: true })
 })

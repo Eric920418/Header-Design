@@ -294,9 +294,9 @@ useSeoMeta({
   margin: 0;
   overflow: hidden;
   color: #1c1c1d;
-  font-family: var(--font-cjk-sans);
+  font-family: var(--font-cjk-serif);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 24px;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;

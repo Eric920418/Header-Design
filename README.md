@@ -936,7 +936,7 @@ final result: passed
 
 - **PPT 結構**：共用 Header 後顯示「首頁 / 優惠消息 / 優惠活動」Breadcrumb；文章區依序為分類／日期 Meta、文章標題、主圖、正式內文、Projects Details 分類 Tab 與三篇優惠活動輪播，最後接共用 Footer。沒有自行加入 PPT 未指定的 Sidebar、搜尋、留言、社群分享、前後文章卡或輪播區標題。
 - **Antra 原始碼對照**：內頁 DOM 依 `content-single.php` 的 `single-content → entry-header → post-thumbnail → entry-content` 順序重建，Meta 依 `inc/template-functions.php` 的 `entry-meta-top / categories-link / posted-on` 結構；尺寸直接對照 `style.css`。Breadcrumb 僅保留 PPT 內頁使用的 185px 影像帶，不沿用列表頁的大標題 Hero。
-- **Antra Single Post 規格**：標題與主圖使用 1410px 置中版心，主圖保留 24px 圓角與下方 30px；內文使用模板原生 930px 置中欄、`16/24px` 內文、`40/44px` `h4` 區段標題與 30px 段距。手機文章標題改為 `25/30px`、內文 `h4` 為 `30/33px`、左右 15px。
+- **Antra Single Post 規格**：標題與主圖使用 1410px 置中版心，主圖保留 24px 圓角與下方 30px；內文使用模板原生 930px 置中欄、`16/24px` 內文、`40/44px` `h4` 區段標題與 30px 段距。文章主標依 2026-08-28 最新全站內容頁規格在桌機與手機統一為 `30/41px`，內文 `h4` 手機為 `30/33px`、左右 15px。
 - **圖片完整顯示修正**：Antra 原始 Single Post 會把主圖強制裁成 `1.7893401015:1`，但本案三張正式主圖均約為 4:3，直接套用會切掉甲方素材上下內容。依本案素材完整性要求，優惠活動內頁主圖改為依原始比例自然撐高並使用 `object-fit: contain`；內文單圖／雙圖同樣維持自然高度。列表卡片及 Projects Details 輪播仍保留模板的固定比例與裁切行為，不受此修正影響。
 - **內文流回查**：主圖以下改為 Antra `content.xml` 與 WordPress `entry-content` 的單一內容流，不再把每段包成自訂 Section。段落固定 `16/24px` 與 30px 下距；章節改用模板 `h4` 的桌面 `40/44px`、手機 `30/33px`，上距 60／45px；清單恢復一般文字粗細與原生圓點，不再使用金色圓點、500 字重或額外 Section 留白。內文圖片仍依模板 `.row / .column-item` 邏輯維持桌面雙欄、手機單欄。
 - **正式內容**：三篇文字逐段核對櫻花官網正式頁面，不把內文做成一張長截圖。第一篇保留兩組活動、指定機型登錄連結與注意事項；第二篇保留健檢範圍、六大品牌識別、日期、電話、預約與 LINE；第三篇保留活動期間、滿額贈品、兩張圖文說明及門市查詢連結。
@@ -996,7 +996,7 @@ final result: passed
 - `/news/video/wabisabi`
 - `/news/video/business`
 
-- **PPT／Antra 結構**：使用 `Single Post 01` 的 185px 小型 Breadcrumb、文章 Meta 與 `50/54px` 標題；主影片改用 PPT 指定的 Home One Video Popup 元素，接著為 930px 正式內文、Projects Details 四分類 Tab 及三篇媒體影音輪播。未加入 PPT 沒有的 Sidebar、搜尋、分享、留言、前後篇卡或額外區段標題。
+- **PPT／Antra 結構**：使用 `Single Post 01` 的 185px 小型 Breadcrumb、文章 Meta 與最新統一的 `30/41px` 文章標題；主影片改用 PPT 指定的 Home One Video Popup 元素，接著為 930px 正式內文、Projects Details 四分類 Tab 及三篇媒體影音輪播。未加入 PPT 沒有的 Sidebar、搜尋、分享、留言、前後篇卡或額外區段標題。
 - **正式影片來源**：三支 YouTube ID 不是依縮圖猜測，而是逐篇由櫻花官網播放按鈕核對，依序為 `lbSOIDpM5Ic`、`Fv_B1sN2z6I`、`ZRHA-9Rm_vg`。初始狀態保留正式封面與模板正圓 96px 水波播放鍵；點擊後才在原本 16:9 區域載入 `youtube-nocookie.com` iframe，啟用 autoplay、playsinline 與 fullscreen。
 - **正式文章內容**：三篇段落與裝修案例連結整理在 `nuxt-site/data/mediaVideos.ts`，逐篇核對官網 `/news/video/american_urban`、`wabisabi`、`business`；沒有自行補寫設計宣稱。Unknown slug 由 Nuxt 404 完整顯示「不存在或尚未公開」。
 - **影片錯誤介面**：載入中顯示可理解狀態；iframe error 或 12 秒逾時會在原影片區顯示「影片載入失敗」、影片 ID、可能原因及「前往 YouTube 觀看」連結，不會只留下空白或黑框。實測觸發 `american_urban` 錯誤後，備援連結正確指向 `https://www.youtube.com/watch?v=lbSOIDpM5Ic`。
@@ -1081,7 +1081,7 @@ final result: passed
 - **資料與導覽**：新增 `KitchenSeriesPageData`、`KitchenSuite`、`KitchenFinish`、`KitchenEquipment`、`KitchenCase` 型別與 AI Kitchen 唯一註冊資料。`KitchenStyle` 增加 `slug／route／available`，AI Kitchen 指向 `/home-style/aikitchen`，官方名稱「閤樂廚房」已校正；Header「品牌系列」只作 Mega Menu 觸發器並移除不成立的「查看全部」。
 - **素材與錯誤**：11 張正式系列圖、6 張門板、6 張廚電與 3 張案例圖集中於 `public/section-1/brand-series/ai-kitchen/`。頁面圖片全部透過共用錯誤元件在原容器顯示名稱、路徑與完整載入錯誤，不留下破圖圖示。
 - **QA**：`pnpm typecheck` 與 `NUXT_IGNORE_LOCK=1 pnpm build` 均通過；production build 只保留 Tailwind CSS v4 既有 sourcemap warning。390／768／1024／1512／1920／2560／3840px 實測皆 `scrollWidth === clientWidth`，正式圖片載入失敗 0、前端錯誤區塊 0；斷點依序呈現 2／3／3／6／6／6／6 欄門板、1／2／2／3／3／3／3 欄案例，1410px 版心在超寬螢幕不再放大。1512px 已驗證 i Chef 切換會同步更新四個圖片窗、完整說明及廚電配備；390px 重新載入並捲至套系區後仍維持預設 i Fun，不會被觸控裝置的假 Hover 誤切換。Header 桌面 Mega Menu 與手機 Accordion 均只有 AI Kitchen 可進入，九個系列皆為 `aria-disabled`，不存在「查看全部」假連結。Hero 三層來源會在 5 秒後切換，遮罩層 1.333 秒、原色層 1.667 秒加 0.333 秒延遲，共同構成 2 秒轉場；影片 Dialog、關閉操作與所有 Reveal 均正常。正式路由回傳 HTTP 200，未知 `/home-style/not-created` 回傳 Nuxt 404。
-- **Home 03 推薦案例校正**：初版誤把 `Recommended Cases` 與 `Take A Look At Our Latest Blog & Articles.` 套進置中標題共用元件，未還原 Home 03。現已改回原始 30／70 標題列：左側膠囊、金色圓點、水平／垂直裝飾線，右側 60/64px 大標並將 `Our Latest Blog` 標為模板金色。三案依 `post-style-3` 重製為 560px 舞台，第二個可見案例使用直式滿版圖片、底部漸層與白字覆蓋，左右案例維持 1.40625 圖片比例、20/30px 標題及三行官方中文摘要；PPT 標示刪除的假分類與模板英文摘要沒有加回。1024px 以下解除中央特殊卡，回復一致的 2／1 欄內容流。
+- **Home 03 推薦案例校正**：初版誤把 `Recommended Cases` 與 `Take A Look At Our Latest Blog & Articles.` 套進置中標題共用元件，未還原 Home 03。現已改回原始 30／70 標題列：左側膠囊、金色圓點、水平／垂直裝飾線，右側 60/64px 大標並將 `Our Latest Blog` 標為模板金色。三案依 `post-style-3` 重製為 560px 舞台，第二個可見案例使用直式滿版圖片、底部漸層與白字覆蓋，左右案例維持 1.40625 圖片比例、20/30px 標題及三行官方中文摘要；PPT 標示刪除的假分類與模板英文摘要沒有加回。1024px 以下解除中央特殊卡，回復一致的 2／1 欄內容流。2026-08-28 自動輪播頻率由每 5 秒提高為每 4 秒，Embla 轉場 duration 仍維持 24，避免提高頻率後產生瞬移。
 
 ## Nuxt 3 — 1.2 設計靈感列表頁（2026-08-14）
 
@@ -1209,7 +1209,7 @@ final result: passed
 ## Nuxt 3 — 4.0 優惠消息總覽頁（2026-08-19）
 
 - **PPT 第七頁真值**：`/news` 保留 Antra News List 既有的首篇大圖、後續左右圖文與右側欄結構，只依調整稿第 7 頁更換 Hero 為案例門市同一張店面圖；Hero「優惠消息」套用 Noto Serif TC 60px，麵包屑使用 Noto Sans TC 15px。文章首篇標題為 Noto Serif TC 38/50px，後續標題為 25/31px，日期、分類及摘要統一為 Noto Sans TC。
-- **側欄與實際導覽**：依紅框刪除 `Categories` 與 `Popular Tags`，保留「優惠消息」分類膠囊及「最新文章」。分類膠囊不再是不可操作的 `span`，而是分別連到 `/news/activities`、`/news/latest`、`/news/video` 的正式列表頁；主列表與最新文章的圖片、標題也接上既有正式文章路由，並補齊鍵盤 Focus 樣式。側欄兩個標題為 Noto Serif TC 25/31px，最新文章標題為 Noto Sans TC 18/24px，文章列間保留一個文字框的間距。
+- **側欄與實際導覽**：依紅框刪除 `Categories` 與 `Popular Tags`，保留「優惠消息」分類膠囊及「最新文章」。分類膠囊不再是不可操作的 `span`，而是分別連到 `/news/activities`、`/news/latest`、`/news/video` 的正式列表頁；主列表與最新文章的圖片、標題也接上既有正式文章路由，並補齊鍵盤 Focus 樣式。側欄兩個標題為 Noto Serif TC 25/31px；2026-08-28 四筆最新文章標題改為 Noto Serif TC SemiBold 18/24px，日期仍維持 Noto Sans TC，文章列間保留一個文字框的間距。
 - **手機可讀性**：390px 實機寬度回查時發現右側快速服務列會直接遮住文章標題與摘要，因此在全部 `/news…` 路由的 767px 以下隱藏該列；桌機優惠消息頁及其他非新聞路由維持原行為，不為了容納固定列而壓窄文章內容。
 - **Design QA／建置**：依專案僅保留一份文件的規則，本節取代額外的 `design-qa.md`。已把 PPT 第 7 頁、其內嵌 Antra 長頁與 1512px production preview 放在同一比較輸入檢查，證據為 `/private/tmp/news-design-qa-same-frame.png`，最終結果 `passed`。1512×980 實測 Hero／麵包屑為 60／15px，首篇／一般文章為 38/50、25/31px，側欄只剩「優惠消息／最新文章」兩個 25px 標題、最新文章 18px；三個分類路由、首篇文章路由皆可實際跳轉，9 篇主文章與 4 篇最新文章均有圖片及標題連結。桌面與 390×844 手機皆 `scrollWidth === clientWidth`、圖片錯誤 0、console error／warning 0；手機側欄與快速服務列隱藏後，文章標題、摘要不再被遮擋。`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過，production build 只保留 Tailwind CSS v4 既有 sourcemap warning。
 
@@ -1223,14 +1223,14 @@ final result: passed
 ## Nuxt 3 — 4.1／4.2／4.3 優惠消息文章內頁（2026-08-19）
 
 - **PPT 第九頁真值與範圍**：第 9 頁左側再次標示「文章頁同內容調整」，因此修改範圍是 `/news/activities/[slug]`、`/news/latest/[slug]`、`/news/video/[slug]` 三套正式文章模板，不是只修示意圖中的優惠活動。三頁麵包屑底圖統一換成 3.1 案例門市店面圖，文字使用 Noto Sans TC 15/20px 並加寬字距。
-- **文章版面與字級**：文章 Header、主圖／影片與內文改為廚房裝修指南文章內頁相同的 930px 版心；分類日期列間距由 12.5px 校正為 15px，標題至主圖間距由 30px 改為 40px。文章大標固定 Noto Serif TC 38/46px，段落標題為 Noto Serif TC 25/32px，段落、清單及文章連結為 Noto Sans TC 15/26px；三頁都不再由 Cal Sans／Golos Text 搶先顯示中文字。
+- **文章版面與字級**：文章 Header、主圖／影片與內文改為廚房裝修指南文章內頁相同的 930px 版心；分類日期列間距由 12.5px 校正為 15px，標題至主圖間距由 30px 改為 40px。優惠活動、最新消息與媒體影音三種內容頁的文章大標在所有斷點統一為 Noto Serif TC 30/41px，段落標題為 Noto Serif TC 25/32px，段落、清單及文章連結為 Noto Sans TC 15/26px；三頁都不再由 Cal Sans／Golos Text 搶先顯示中文字。
 - **分類狀態**：文章底部移除 PPT 指定刪除的「廚房裝修指南」，只保留優惠活動、最新消息、媒體影音；每一頁只有目前分類使用金底白字，另外兩個維持白底灰字及可操作 Hover，不再出現優惠活動頁四顆按鈕全部金底的錯誤。
 - **輪播改成列表卡排版**：`InternalActivityRelatedCarousel`、`InternalLatestRelatedCarousel`、`InternalMediaRelatedCarousel` 保留 Embla 拖曳與正式文章連結，但圖片比例改為優惠活動列表使用的 `1.40625`、金色分類膠囊改置於左上 20px、移除黑色遮罩；卡片下方只保留完整日期與標題，標題使用 Noto Serif TC 25/32px，桌面卡片間距由 30px 改為 40px。
-- **Design QA／建置**：依專案只維護 README 的規則，本節取代額外的 `design-qa.md`。來源視覺為 PPT 第 9 頁與內嵌文章長頁，實作證據為 `/private/tmp/slide9-activity-top-1512.png`、`/private/tmp/slide9-activity-middle-1512.png`、`/private/tmp/slide9-activity-bottom-final-1512.png`，同畫面比較板為 `/private/tmp/slide9-article-design-qa.png`，最終結果 `passed`。1512×980 三類文章均確認底圖、930px 版心、38px 大標、25px 段落標題、15px 內文、正確目前分類與 3 張正式輪播卡；輪播第二張可實際跳轉。390×844 實測無水平溢位，文章為 360px 版心、快速服務列隱藏。Noto Serif TC／Noto Sans TC 字型載入檢查皆為 `true`，圖片載入錯誤與 console error／warning 為 0；`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過，production build 只保留 Tailwind CSS v4 既有 sourcemap warning。
+- **Design QA／建置**：依專案只維護 README 的規則，本節取代額外的 `design-qa.md`。來源視覺為 PPT 第 9 頁與內嵌文章長頁，實作證據為 `/private/tmp/slide9-activity-top-1512.png`、`/private/tmp/slide9-activity-middle-1512.png`、`/private/tmp/slide9-activity-bottom-final-1512.png`，同畫面比較板為 `/private/tmp/slide9-article-design-qa.png`，最終結果 `passed`。1512×980 三類文章均確認底圖、930px 版心、25px 段落標題、15px 內文、正確目前分類與 3 張正式輪播卡；2026-08-28 文章大標另依最新回饋統一更新為 30px。輪播第二張可實際跳轉。390×844 實測無水平溢位，文章為 360px 版心、快速服務列隱藏。Noto Serif TC／Noto Sans TC 字型載入檢查皆為 `true`，圖片載入錯誤與 console error／warning 為 0；`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過，production build 只保留 Tailwind CSS v4 既有 sourcemap warning。
 
 ## Nuxt 3 — 4.2 最新消息指定文章調整（2026-08-19）
 
-- **PPT 第十頁真值與範圍**：第 10 頁不是第 9 頁共用文章模板的再版，而是 `/news/latest/2026-franchise-seminar` 與 `/news/latest/kaohsiung_opening` 兩篇指定文章的內容例外；共用的 930px 版心、38px 文章標題、15px 正文、三分類 Tab 與推薦文章維持不動。最新消息文章的麵包屑背景依指定改用素材庫 `5.2 集團品牌館／Taichung` 的台中集團品牌館正面照，定位沿用 3.1 已驗收的 `center 88%`。
+- **PPT 第十頁真值與範圍**：第 10 頁不是第 9 頁共用文章模板的再版，而是 `/news/latest/2026-franchise-seminar` 與 `/news/latest/kaohsiung_opening` 兩篇指定文章的內容例外；共用的 930px 版心、30px 文章標題、15px 正文、三分類 Tab 與推薦文章維持不動。最新消息文章的麵包屑背景依指定改用素材庫 `5.2 集團品牌館／Taichung` 的台中集團品牌館正面照，定位沿用 3.1 已驗收的 `center 88%`。
 - **加盟說明會**：QR Code 恢復官網順序，置於報名連結上方並限制為原始 500px 寬，不再被共用媒體樣式放大至 930px；報名列顯示「報名連結＋完整網址＋立即點我報名」。台北／台中／高雄場次標題改為 PPT 指定的 `【地區加盟說明會場次】`、Noto Serif TC 18/28px，三張正式場次圖同樣維持約 500px 窄版置中。
 - **高雄品牌館**：首段介紹保留單欄；PPT 點名的張永杰董事長段落改為 Home Six 參考的左圖右文雙欄，左側使用同一段原官網現場圖、右側保留指定原文，既有 `opalMoveUp／opalScaleUp` 進場語彙不另造動畫。第二張 HOME in O.N.E 現場圖與其後核心價值／結語仍完整保留；767px 以下依閱讀順序改為圖片在上、文字在下。
 - **Design QA／建置**：PPT 第 10 頁的加盟頁與品牌館標註區已和 1280×720 實作動畫終態放入同一張比較板 `/private/tmp/slide10-design-qa-comparison.png`。本機實測加盟頁 QR 與三張場次圖皆為 500px、報名列確實在 QR 後、三個場次標題為 Noto Serif TC 18px；高雄品牌館指定段落落在 930px 版心內的 400.5／489.5px 雙欄，兩張文章圖均載入完成。兩頁 `scrollWidth === innerWidth`、Reveal 隱藏 0、console error／warning 0；`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過，production build 只保留 Tailwind CSS v4 既有 sourcemap warning。

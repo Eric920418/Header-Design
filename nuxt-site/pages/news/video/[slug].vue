@@ -195,9 +195,9 @@ useHead({
   margin: 0;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 400;
-  line-height: 46px;
+  line-height: 41px;
 }
 
 .media-detail-video { margin-bottom: 30px; }
@@ -280,7 +280,7 @@ useHead({
   .media-detail-breadcrumb { min-height: 155px; padding: 15px; }
   .media-detail-article { padding: 60px 15px 0; }
   .media-detail-header { margin-bottom: 30px; }
-  .media-detail-header h1 { font-size: 25px; line-height: 32px; }
+  .media-detail-header h1 { font-size: 30px; line-height: 41px; }
   .media-detail-meta .categories-link a { min-height: 28px; padding: 7px 12px; font-size: 13px; }
   .media-detail-categories { margin-top: 50px; padding-bottom: 45px; }
 }

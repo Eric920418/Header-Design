@@ -228,9 +228,9 @@ useHead({
   margin: 0;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 400;
-  line-height: 46px;
+  line-height: 41px;
 }
 
 .activity-detail-cover {
@@ -396,8 +396,8 @@ useHead({
   .activity-detail-header { margin-bottom: 30px; }
 
   .activity-detail-header h1 {
-    font-size: 25px;
-    line-height: 32px;
+    font-size: 30px;
+    line-height: 41px;
   }
 
   .activity-detail-meta .categories-link a { min-height: 28px; padding: 7px 12px; font-size: 13px; }
