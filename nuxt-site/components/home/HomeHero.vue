@@ -37,15 +37,12 @@ onBeforeUnmount(() => timer && clearInterval(timer))
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,.42)_42%,rgba(0,0,0,.86)_100%)]" />
 
     <div class="hero-template-top z-10 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
-      <div>
-        <!-- Home 06 原始 `antra-heading` widget：eyebrow 與 H1 是同一個 slideInLeft 動畫單元。 -->
-        <div v-reveal="{ anim: 'slideInLeft', duration: 'slow' }">
-          <div class="hero-template-eyebrow-row mb-[20px] flex justify-center">
-            <InternalSectionPill tone="dark">Trusted Design Partner</InternalSectionPill>
-          </div>
-          <h1 id="hero-title" class="hero-template-title m-0 font-display font-normal capitalize tracking-[-1px] text-white">Find Your <span class="text-[#CAA05C]">Inspired</span><br /><span class="text-[#CAA05C]">Kitchen</span> Design</h1>
+      <div :key="`hero-copy-${activeSlide}`" class="hero-slide-copy">
+        <div>
+          <div aria-hidden="true" class="mb-[20px] h-[30px]" />
+          <h1 id="hero-title" class="hero-template-title m-0 font-display font-normal capitalize tracking-[-1px] text-white">Design</h1>
         </div>
-        <p v-reveal="{ anim: 'slideInLeft', duration: 'slow' }" class="hero-template-description mt-[30px] font-sans text-[18px] font-medium leading-[24px] text-white">Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.</p>
+        <p class="hero-template-description mt-[30px] font-sans text-[18px] font-medium leading-[24px] text-white">Transform your vision into reality with our innovative designs, creating modern spaces that blend functionality, aesthetics, and sustainability.</p>
       </div>
     </div>
 
@@ -53,7 +50,10 @@ onBeforeUnmount(() => timer && clearInterval(timer))
     <div class="hero-template-bottom z-20 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
       <div class="hero-template-cta h-[120px] w-[120px] shrink-0">
         <div v-reveal="{ anim: 'fadeIn', delay: 900, duration: 'slow' }" class="h-full w-full rounded-[200px] backdrop-blur-[58px]">
-          <a href="#contact" class="hero-start-project flex h-full w-full items-center justify-center rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center font-display text-[18px] leading-[24px] text-white transition-colors hover:text-[#CAA05C]"><span class="relative z-[1]">Start<br />Project</span></a>
+          <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" class="hero-start-project group/hero-cta relative flex h-full w-full items-center justify-center overflow-hidden rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center text-[18px] leading-[24px] text-white transition-colors hover:text-[#CAA05C]">
+            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-display transition-opacity duration-300 group-hover/hero-cta:opacity-0 group-focus-visible/hero-cta:opacity-0">Start<br />Project</span>
+            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-cjk-sans opacity-0 transition-opacity duration-300 group-hover/hero-cta:opacity-100 group-focus-visible/hero-cta:opacity-100">設計靈感</span>
+          </NuxtLink>
         </div>
       </div>
       <div class="hero-template-watermark-slot pointer-events-none">

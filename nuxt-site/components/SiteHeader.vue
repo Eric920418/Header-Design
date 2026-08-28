@@ -148,8 +148,8 @@ function handleHeaderClick(event: MouseEvent) {
   >
     <div class="h-full bg-[linear-gradient(90deg,#b79258_20%,#d2b587)]">
       <div class="flex h-[var(--site-header-height)] items-center px-5 min-[1440px]:px-12">
-        <nav aria-label="主要導覽" class="hidden w-full items-center lg:flex">
-          <div class="flex flex-1 items-center justify-start gap-1">
+        <nav aria-label="主要導覽" class="site-header__desktop-nav hidden w-full items-center lg:grid">
+          <div class="site-header__nav-side site-header__nav-side--left">
             <div
               v-for="item in leftNav"
               :key="item.label"
@@ -279,11 +279,11 @@ function handleHeaderClick(event: MouseEvent) {
             </div>
           </div>
 
-          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="flex w-[160px] shrink-0 items-center justify-center min-[1200px]:w-[266px]">
+          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="site-header__desktop-logo flex w-[160px] shrink-0 items-center justify-center min-[1200px]:w-[266px]">
             <img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA Kitchen" width="266" height="21" class="h-auto w-full object-contain" />
           </NuxtLink>
 
-          <div class="flex flex-1 items-center justify-end gap-1">
+          <div class="site-header__nav-side site-header__nav-side--right">
             <div
               v-for="item in rightNav"
               :key="item.label"
@@ -318,7 +318,9 @@ function handleHeaderClick(event: MouseEvent) {
                 </ul>
               </div>
             </div>
-            <span class="mx-3 h-7 w-px bg-white/40" />
+          </div>
+
+          <div class="site-header__desktop-search">
             <button type="button" aria-label="搜尋" class="flex h-10 w-10 items-center justify-center text-white" @click="closeAllMenus(); searchOpen = true"><Search class="h-[15px] w-[15px]" /></button>
           </div>
         </nav>
@@ -375,6 +377,62 @@ function handleHeaderClick(event: MouseEvent) {
 </template>
 
 <style scoped>
+.site-header__desktop-nav {
+  --header-logo-width: 160px;
+  grid-template-columns: 40px minmax(0, 1fr) var(--header-logo-width) minmax(0, 1fr) 40px;
+}
+
+.site-header__nav-side {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-width: 0;
+  align-items: center;
+}
+
+.site-header__nav-side--left {
+  grid-column: 2;
+}
+
+.site-header__desktop-logo {
+  grid-column: 3;
+}
+
+.site-header__nav-side--right {
+  grid-column: 4;
+}
+
+.site-header__nav-side > .desktop-nav-item {
+  min-width: 0;
+  justify-self: center;
+}
+
+.site-header__desktop-search {
+  position: relative;
+  grid-column: 5;
+  display: flex;
+  width: 40px;
+  height: var(--site-header-height);
+  align-items: center;
+  justify-content: center;
+}
+
+.site-header__desktop-search::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1px;
+  height: 28px;
+  content: '';
+  background: rgb(255 255 255 / 40%);
+  transform: translate(-12px, -50%);
+}
+
+@media (min-width: 1200px) {
+  .site-header__desktop-nav {
+    --header-logo-width: 266px;
+  }
+}
+
 .desktop-nav-dropdown {
   transition-duration: 220ms;
   transition-property: opacity, visibility;

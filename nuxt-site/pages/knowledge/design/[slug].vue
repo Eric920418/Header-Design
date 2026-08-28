@@ -233,9 +233,9 @@ useHead({
   margin: 0;
   color: #1c1c1d;
   font-family: var(--font-display);
-  font-size: 50px;
+  font-size: 30px;
   font-weight: 400;
-  line-height: 54px;
+  line-height: 41px;
 }
 
 .knowledge-detail__cover {
@@ -391,9 +391,9 @@ useHead({
 
 .knowledge-detail-page--ppt-article .knowledge-detail__header h1 {
   font-family: var(--font-cjk-serif);
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 500;
-  line-height: 50px;
+  line-height: 41px;
 }
 
 .knowledge-detail-page--ppt-article .knowledge-detail-section h2 {
@@ -423,7 +423,7 @@ useHead({
 
 @media (max-width: 1024px) {
   .knowledge-detail { padding-top: 80px; }
-  .knowledge-detail__header h1 { font-size: 40px; line-height: 45px; }
+  .knowledge-detail__header h1 { font-size: 30px; line-height: 41px; }
   .knowledge-detail-section h2 { font-size: 36px; line-height: 41px; }
 }
 
@@ -435,7 +435,7 @@ useHead({
   }
 
   .knowledge-detail { padding: 60px 15px 0; }
-  .knowledge-detail__header h1 { font-size: 30px; line-height: 35px; }
+  .knowledge-detail__header h1 { font-size: 30px; line-height: 41px; }
   .knowledge-detail__cover { margin-bottom: 45px; border-radius: 18px; }
   .knowledge-detail-section { margin-bottom: 45px; }
   .knowledge-detail-section h2 { margin-bottom: 24px; font-size: 30px; line-height: 35px; }

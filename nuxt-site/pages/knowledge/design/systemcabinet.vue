@@ -264,9 +264,9 @@ useHead({
   margin: 0;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 500;
-  line-height: 50px;
+  line-height: 41px;
 }
 
 .knowledge-article__cover {

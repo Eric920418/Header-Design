@@ -6,7 +6,7 @@ const primaryItem = {
 }
 
 const serviceItems = [
-  { href: 'https://www.sakura-kitchenlife.com.tw/measuring', icon: '/floating-icons/official-quick-link-2.svg', label: '免費丈量' },
+  { href: 'https://www.sakura-kitchenlife.com.tw/measuring', icon: '/floating-icons/official-quick-link-2.svg', label: '到府丈量' },
   { href: 'https://icare.sakura.com.tw', icon: '/floating-icons/official-quick-link-3.svg', label: '線上客服', newTab: true },
 ]
 

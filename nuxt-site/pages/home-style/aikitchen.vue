@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import emblaCarouselVue from 'embla-carousel-vue'
-import { ArrowRight, Check, ChevronLeft, ChevronRight, Plus } from 'lucide-vue-next'
+import { Check, ChevronLeft, ChevronRight, Plus } from 'lucide-vue-next'
 import { AI_KITCHEN_PAGE } from '~/data/kitchenSeries'
 import { KITCHEN_STYLES } from '~/data/kitchenStyles'
 
@@ -81,25 +81,16 @@ function formatGalleryNumber(value: number) {
 function handleCasesKeydown(event: KeyboardEvent) {
   if (event.key === 'ArrowRight') {
     casesInteracted.value = true
-    casesApi.value?.scrollPrev()
+    casesApi.value?.scrollNext()
   }
   if (event.key === 'ArrowLeft') {
     casesInteracted.value = true
-    casesApi.value?.scrollNext()
+    casesApi.value?.scrollPrev()
   }
 }
 
 function stopCasesAutoplay() {
   casesInteracted.value = true
-}
-
-function initialCaseStyle(index: number) {
-  const isCenterCard = index === 1
-  return {
-    '--case-focus': isCenterCard ? '1' : '0',
-    '--case-image-height': isCenterCard ? '560px' : undefined,
-    '--case-image-radius': isCenterCard ? '0px' : '24px',
-  }
 }
 
 function updateCaseMorph() {
@@ -120,7 +111,7 @@ function updateCaseMorph() {
     const cardRect = card.getBoundingClientRect()
     const distance = Math.abs(cardRect.left + cardRect.width / 2 - targetCenter)
     const focus = morphEnabled ? Math.max(0, Math.min(1, 1 - distance / slidePitch)) : 0
-    const geometryFocus = 1 - Math.pow(1 - focus, 3)
+    const geometryFocus = 1 - Math.pow(1 - focus, 6)
     const sideImageHeight = cardRect.width / 1.40625
     const imageHeight = sideImageHeight + (560 - sideImageHeight) * geometryFocus
 
@@ -165,7 +156,7 @@ onMounted(() => {
     if (!reduced) {
       heroTimer = setInterval(changeHero, 5000)
       casesTimer = setInterval(() => {
-        if (!casesPaused.value && !casesInteracted.value) casesApi.value?.scrollPrev()
+        if (!casesPaused.value && !casesInteracted.value) casesApi.value?.scrollNext()
       }, 5000)
     }
   }, { immediate: true })
@@ -190,6 +181,9 @@ useSeoMeta({
 <template>
   <main class="ai-kitchen-page">
     <section aria-labelledby="ai-kitchen-hero-title" class="ai-hero hero-includes-header">
+      <div class="hidden" aria-hidden="true">
+        <img v-for="image in data.heroSlides" :key="image" :src="image" alt="" loading="eager" decoding="async">
+      </div>
       <div class="absolute inset-0 bg-[#6f6d69]" aria-hidden="true" />
       <div v-if="heroTransition > 0" class="absolute inset-0 overflow-hidden">
         <InternalBrandImage :src="data.heroSlides[previousHero]" alt="AI Kitchen 廚房空間" eager class="hero-page1-image-settled h-full w-full" />
@@ -207,14 +201,13 @@ useSeoMeta({
       <div class="ai-hero__inner">
         <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" tone="dark" class="ai-hero__eyebrow">Trusted Design Partner</InternalSectionPill>
         <h1 id="ai-kitchen-hero-title" v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="ai-hero__title">
-          Find Your <span>Inspired</span><br>
-          <span>Interior</span> Design
+          Design
         </h1>
 
-        <a href="#ai-kitchen-intro" v-reveal="{ anim: 'opalScaleUp', delay: 220 }" class="hero-start-project ai-hero__cta">
+        <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" v-reveal="{ anim: 'opalScaleUp', delay: 220 }" class="hero-start-project ai-hero__cta">
           <span>Start<br>Project</span>
-          <ArrowRight aria-hidden="true" />
-        </a>
+          <span class="ai-hero__cta-label--hover" aria-hidden="true">設計靈感</span>
+        </NuxtLink>
 
         <div class="ai-hero__bottom">
           <span :key="`story-thumb-${currentHero}`" class="ai-hero__story-thumb">
@@ -389,7 +382,7 @@ useSeoMeta({
         >
           <div class="ai-cases__track">
             <div v-for="(item, index) in casesLoop" :key="`${item.url}-${index}`" class="ai-cases__slide">
-              <a :href="item.url" target="_blank" rel="noopener noreferrer" class="ai-case-card" :style="initialCaseStyle(index)">
+              <a :href="item.url" target="_blank" rel="noopener noreferrer" class="ai-case-card" :class="{ 'ai-case-card--initial-center': index === 1 }">
                 <div class="ai-case-card__image"><InternalBrandImage :src="item.image" :alt="item.title" class="h-full w-full" /></div>
                 <div class="ai-case-card__body ai-case-card__body--side">
                   <h3>{{ item.title }}</h3>
@@ -412,12 +405,12 @@ useSeoMeta({
 .ai-hero { position: relative; height: 840px; overflow: hidden; background: #6f6d69; color: #fff; }
 .ai-hero__inner { position: relative; z-index: 5; width: min(1584px, calc(100% - 60px)); height: 100%; margin-inline: auto; padding-top: 118px; }
 .ai-hero__title { margin-top: 24px; max-width: 1100px; font-size: clamp(74px, 7.9vw, 130px); line-height: .93; letter-spacing: -.035em; text-transform: none; }
-.ai-hero__title span { color: #caa05c; }
-.ai-hero__cta { position: relative; display: inline-flex; width: 120px; height: 120px; align-items: center; justify-content: center; margin-top: 30px; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
-.ai-hero__cta > span { position: relative; z-index: 2; font-family: var(--font-display); font-size: 15px; line-height: 19px; }
-.ai-hero__cta svg { position: relative; z-index: 2; width: 18px; margin-left: 5px; transform: rotate(-45deg); transition: transform .4s; }
-.ai-hero__cta:hover { border-color: #caa05c; background: #caa05c; }
-.ai-hero__cta:hover svg { transform: rotate(0); }
+.ai-hero__cta { position: relative; display: inline-flex; width: 120px; height: 120px; overflow: hidden; align-items: center; justify-content: center; margin: 30px 0 0 30px; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
+.ai-hero__cta > span { position: absolute; z-index: 2; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 15px; line-height: 19px; transition: opacity .3s ease; }
+.ai-hero__cta > .ai-hero__cta-label--hover { opacity: 0; font-family: var(--font-cjk-sans); }
+.ai-hero__cta:hover, .ai-hero__cta:focus-visible { border-color: #caa05c; background: #caa05c; }
+.ai-hero__cta:hover > span:first-child, .ai-hero__cta:focus-visible > span:first-child { opacity: 0; }
+.ai-hero__cta:hover > .ai-hero__cta-label--hover, .ai-hero__cta:focus-visible > .ai-hero__cta-label--hover { opacity: 1; }
 .ai-hero__bottom { position: absolute; right: 86px; bottom: 28px; left: 0; display: grid; min-height: 142px; grid-template-columns: 84px minmax(0, 1fr) 108px 94px; align-items: center; gap: 22px; border: 1px solid rgb(255 255 255 / 15%); border-radius: 24px; background: rgb(37 35 35 / 48%); padding: 14px 18px; backdrop-filter: blur(18px); }
 .ai-hero__story-thumb { display: block; width: 78px; height: 78px; overflow: hidden; border: 1px solid rgb(255 255 255 / 32%); border-radius: 50%; animation: ai-story-in .55s ease both; }
 .ai-hero__story-copy { min-width: 0; font-family: var(--font-cjk-sans); animation: ai-story-in .55s ease both; }
@@ -478,7 +471,7 @@ useSeoMeta({
 .ai-suite-details__number { color: #e3e3e8; font-family: var(--font-display); font-size: 54px; line-height: 1; }
 .ai-suite-details__name { margin: -18px 0 20px 42px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .ai-suite-details h3 { margin: 6px 0 0; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 30px; text-transform: none; }
-.ai-suite-details > div:nth-child(2) { display: flex; flex-direction: column; align-self: center; justify-content: center; text-align: left; }
+.ai-suite-details > div:nth-child(2) { display: flex; flex-direction: column; align-self: start; justify-content: flex-start; padding-top: 92px; text-align: left; }
 .ai-suite-details__description { margin: 0 0 12px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; text-wrap: pretty; }
 .ai-suite-details__equipment-title { margin: 0 0 14px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
 .ai-suite-details ul { margin: 0; padding: 0; list-style: none; }
@@ -526,6 +519,7 @@ useSeoMeta({
 .ai-cases__track { display: flex; margin-left: -30px; touch-action: pan-y pinch-zoom; }
 .ai-cases__slide { min-width: 0; flex: 0 0 33.333333%; padding-left: 30px; }
 .ai-case-card { --case-focus: 0; --case-image-radius: 24px; position: relative; display: block; min-width: 0; height: 560px; overflow: hidden; border-radius: 24px; color: #1c1c1d; background: #fff; }
+.ai-case-card--initial-center { --case-focus: 1; --case-image-height: 560px; --case-image-radius: 0px; }
 .ai-case-card__image { position: relative; width: 100%; height: var(--case-image-height, auto); aspect-ratio: 1.40625; overflow: hidden; border-radius: 24px 24px var(--case-image-radius) var(--case-image-radius); will-change: height, border-radius; }
 .ai-case-card__image::after { position: absolute; inset: 32% 0 0; background: linear-gradient(180deg, transparent, rgb(53 52 49 / 56%) 30%, #353431 100%); content: ''; opacity: var(--case-focus); pointer-events: none; will-change: opacity; }
 .ai-case-card__image :deep(img) { transition: transform .5s; }
@@ -536,6 +530,10 @@ useSeoMeta({
 .ai-case-card__body--side { opacity: calc(1 - var(--case-focus)); transform: translateY(calc(var(--case-focus) * 18px)); will-change: opacity, transform; }
 .ai-case-card__body--featured { position: absolute; inset-inline: 0; bottom: 0; z-index: 2; padding: 40px 50px 44px; color: #fff; opacity: var(--case-focus); pointer-events: none; transform: translateY(calc((1 - var(--case-focus)) * 24px)); will-change: opacity, transform; }
 .ai-case-card__body--featured h3 { margin: 0; }
+
+@media (min-width: 1025px) {
+  .ai-hero__inner { padding-left: clamp(0px, calc(70px - (100vw - 1584px) / 2), 40px); }
+}
 
 @media (max-width: 1200px) {
   .ai-hero { height: 760px; }
@@ -582,7 +580,7 @@ useSeoMeta({
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
   .ai-hero__title { margin-top: 18px; font-size: clamp(44px, 13vw, 68px); line-height: .98; }
-  .ai-hero__cta { width: 82px; height: 82px; margin-top: 22px; }
+  .ai-hero__cta { width: 82px; height: 82px; margin-top: 22px; margin-left: 15px; }
   .ai-hero__cta > span { font-size: 13px; line-height: 16px; }
   .ai-hero__bottom { right: 0; bottom: 18px; min-height: 236px; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; border-radius: 18px; padding: 14px; }
   .ai-hero__story-thumb { width: 64px; height: 64px; }
@@ -608,6 +606,7 @@ useSeoMeta({
   .ai-suite-image--right-top { grid-column: 2; grid-row: 2; }
   .ai-suite-image { border-radius: 16px; }
   .ai-suite-details { display: block; margin-top: 16px; padding: 28px 22px; }
+  .ai-suite-details > div:nth-child(2) { padding-top: 0; }
   .ai-suite-details > div + div { margin-top: 28px; }
   .ai-suite-details h3 { font-size: 20px; line-height: 30px; }
   .ai-finishes__grid { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; margin-top: 38px; }
