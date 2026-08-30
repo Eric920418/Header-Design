@@ -101,7 +101,7 @@ export const storeCases: StoreCaseDetail[] = [
     address: '111 臺北市士林區承德路四段238號',
     cover: '/section-3/store-chengde.jpg',
     reservationUrl: 'https://pse.is/95cq3r',
-    images: case56Images,
+    images: [case56Images[1]!, case56Images[0]!, ...case56Images.slice(2)],
     meta: {
       style: '北歐風',
       color: '單色系(非白色)',
@@ -128,7 +128,7 @@ export const storeCases: StoreCaseDetail[] = [
         paragraphs: [
           '房價高漲的環境下，老屋成為許多購屋族考慮的選項之一，透過裝修創造老屋新生，打造出合適的居住環境。本案為生活努力打拼的屋主夫妻，選擇翻修屋齡 40 多年的老屋，決定釋放封閉狹小的廚房空間，讓機能配置更加彈性！SAKURA KITCHEN承德店的陳冠瑋設計師，充分了解屋主夫妻的需要，透過大數據資料庫經驗客製化 3D 圖面，從挑選色彩、規劃中島機能、整合收納系統及選擇家電款式等，一點一滴完成夢想中的北歐質感廚房。',
         ],
-        images: [case56Images[1]!, case56Images[2]!],
+        images: [case56Images[4]!, case56Images[2]!],
         imageLayout: 'pair',
       },
       {

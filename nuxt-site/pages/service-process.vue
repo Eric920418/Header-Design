@@ -12,7 +12,7 @@ useSeoMeta({
     <section class="antra-breadcrumb hero-includes-header" aria-labelledby="service-page-title">
       <div class="antra-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="service-page-title">服務流程</h1>
+        <h1 id="service-page-title">Our Process</h1>
         <nav aria-label="麵包屑" class="antra-breadcrumb__trail">
           <NuxtLink to="/">首頁</NuxtLink><span aria-hidden="true">/</span><span aria-current="page">服務流程</span>
         </nav>
@@ -75,9 +75,9 @@ useSeoMeta({
 .antra-breadcrumb h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-cjk-serif);
+  font-family: var(--font-display);
   font-size: 80px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: .9523809524;
 }
 
@@ -139,7 +139,7 @@ useSeoMeta({
 
 .antra-service-video {
   overflow: hidden;
-  padding: 0 30px 100px;
+  padding: 0 30px;
   background: #f6f6f6;
 }
 
@@ -161,7 +161,6 @@ useSeoMeta({
   .antra-service-intro { padding-block: 80px; }
   .antra-service-intro__heading > div:last-child { padding: 70px 0 40px; }
   .antra-service-intro h2 { font-size: 46px; line-height: 52px; }
-  .antra-service-video { padding-bottom: 80px; }
 }
 
 @media (max-width: 767px) {
@@ -177,7 +176,7 @@ useSeoMeta({
   .antra-service-intro__heading > div:first-child { display: none; }
   .antra-service-intro__heading > div:last-child { padding: 0 0 30px; }
   .antra-service-intro h2 { font-size: 30px; line-height: 35px; }
-  .antra-service-video { padding: 0 15px 60px; }
+  .antra-service-video { padding-inline: 15px; }
 }
 
 </style>

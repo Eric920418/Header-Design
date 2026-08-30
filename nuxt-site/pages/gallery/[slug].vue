@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import emblaCarouselVue from 'embla-carousel-vue'
-import { ArrowLeft, ArrowRight, CalendarClock, MapPin, Phone } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, CalendarClock, MapPin, Phone, UserRound } from 'lucide-vue-next'
 import { getStoreCase, storeCases } from '~/data/storeCases'
 
 const route = useRoute()
@@ -159,6 +159,7 @@ useHead({
             <h2 id="case-reviews-title">顧客評論</h2>
             <ol class="case-detail-review-list">
               <li v-for="(review, reviewIndex) in item.reviews" :key="reviewIndex">
+                <span class="case-detail-review-avatar" aria-hidden="true"><UserRound /></span>
                 <blockquote>{{ review }}</blockquote>
               </li>
             </ol>
@@ -167,7 +168,7 @@ useHead({
 
         <section class="case-detail-related" aria-labelledby="related-cases-title">
           <div class="case-detail-related__heading">
-            <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="straight from the newsroom" class="case-detail-related__label-wrap" />
+            <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="FEATURED PROJECTS" class="case-detail-related__label-wrap" />
             <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }">Take a look at our latest blog &amp; articles.</h2>
           </div>
           <div ref="relatedViewport" class="case-detail-related__viewport" aria-label="相關案例輪播">
@@ -208,12 +209,12 @@ useHead({
 }
 
 .case-detail-header { grid-area: header; padding-bottom: 40px; }
-.case-detail-header h1 { max-width: 900px; color: #1c1c1d; font-family: var(--font-display); font-size: 38px; font-weight: 400; line-height: 50px; }
+.case-detail-header h1 { max-width: 900px; color: #1c1c1d; font-family: var(--font-display); font-size: 30px; font-weight: 600; line-height: 40px; }
 .case-detail-carousel { grid-area: carousel; min-width: 0; }
 
 .case-detail-sidebar { grid-area: sidebar; min-width: 0; align-self: stretch; }
 .case-detail-sidebar__sticky { position: sticky; top: 96px; }
-.case-detail-booking { display: flex; width: 100%; height: 60px; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgba(159,159,164,.64); border-radius: 999px; color: #1c1c1d; background: transparent; font-size: 15px; line-height: 22px; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
+.case-detail-booking { display: flex; width: 100%; height: 60px; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgba(159,159,164,.64); border-radius: 999px; color: #1c1c1d; background: transparent; font-family: var(--font-ui); font-size: 18px; line-height: 24px; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
 .case-detail-booking:hover { border-color: #caa05c; color: #fff; background: #caa05c; }
 .case-detail-booking .site-cta-icon { display: flex; width: 40px; height: 40px; flex: 0 0 auto; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
 .case-detail-booking:hover .site-cta-icon { transform: rotate(0); }
@@ -225,7 +226,7 @@ useHead({
 .case-detail-specs { border-top: 1px solid #e3e3e8; }
 .case-detail-specs > div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 55px; padding: 12px 0; border-bottom: 1px solid #e3e3e8; }
 .case-detail-specs dt { color: #9f9fa4; font-size: 15px; line-height: 22px; }
-.case-detail-specs dd { color: #1c1c1d; font-family: var(--font-display); font-size: 16px; line-height: 24px; }
+.case-detail-specs dd { color: #1c1c1d; font-family: var(--font-display); font-size: 16px; font-weight: 600; line-height: 24px; }
 .case-detail-contact-list { display: grid; gap: 14px; margin-top: 20px; }
 .case-detail-contact-list li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 11px; align-items: start; font-size: 15px; line-height: 23px; }
 .case-detail-contact-list :deep(svg) { width: 19px; height: 19px; margin-top: 2px; color: #caa05c; }
@@ -256,16 +257,18 @@ useHead({
 .case-detail-navigation span { display: flex; align-items: center; gap: 8px; color: #9f9fa4; font-family: var(--font-ui); font-size: 15px; line-height: 20px; }
 .case-detail-navigation__next span { justify-content: flex-end; }
 .case-detail-navigation span :deep(svg) { width: 16px; height: 16px; }
-.case-detail-navigation strong { display: -webkit-box; overflow: hidden; margin-top: 12px; font-family: var(--font-display); font-size: 25px; font-weight: 400; line-height: 31px; transition: color .3s ease; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.case-detail-navigation strong { display: -webkit-box; overflow: hidden; margin-top: 12px; font-family: var(--font-display); font-size: 20px; font-weight: 600; line-height: 30px; transition: color .3s ease; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .case-detail-navigation a:hover strong { color: #caa05c; }
 
 .case-detail-reviews { grid-area: reviews; margin-top: 61px; }
 .case-detail-reviews > h2 { color: #1c1c1d; font-family: var(--font-display); font-size: 25px; font-weight: 400; line-height: 31px; }
 .case-detail-review-list { margin-top: 26px; border-top: 1px solid #e3e3e8; }
-.case-detail-review-list li { padding: 24px 0; border-bottom: 1px solid #e3e3e8; }
+.case-detail-review-list li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 20px; align-items: start; padding: 24px 0; border-bottom: 1px solid #e3e3e8; }
+.case-detail-review-avatar { display: flex; width: 48px; height: 48px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #d2d2d4; }
+.case-detail-review-avatar :deep(svg) { width: 28px; height: 28px; }
 .case-detail-review-list blockquote { color: #59585d; font-size: 16px; line-height: 26px; }
 
-.case-detail-related { margin-top: 108px; padding-top: 100px; border-top: 1px solid #e3e3e8; }
+.case-detail-related { margin-top: 0; padding-top: 100px; border-top: 1px solid #e3e3e8; }
 .case-detail-related__heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .case-detail-related__heading > h2 { padding: 64px 0 60px; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
 .case-detail-related__viewport { overflow: hidden; }
@@ -276,7 +279,7 @@ useHead({
   .case-detail-content { padding-top: 80px; padding-bottom: 88px; }
   .case-detail-layout { column-gap: 30px; }
   .case-detail-sidebar { padding-right: 0; }
-  .case-detail-header h1 { font-size: 38px; line-height: 50px; }
+  .case-detail-header h1 { font-size: 30px; line-height: 40px; }
   .case-detail-story-block h2 { font-size: 25px; line-height: 31px; }
 }
 
@@ -292,7 +295,7 @@ useHead({
   .case-detail-sidebar__sticky { position: static; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 30px; margin-top: 60px; }
   .case-detail-booking { grid-column: 1 / -1; }
   .case-detail-widget { margin-top: 0; }
-  .case-detail-related { margin-top: 88px; padding-top: 80px; }
+  .case-detail-related { margin-top: 0; padding-top: 80px; }
   .case-detail-related__heading > h2 { padding: 50px 0 30px; font-size: 50px; line-height: 56px; }
   .case-detail-related__slide { flex-basis: calc((100% - 30px) / 2); }
 }
@@ -315,7 +318,10 @@ useHead({
   .case-detail-navigation__next { border-top: 1px solid #e3e3e8; border-left: 0; }
   .case-detail-reviews { margin-top: 50px; }
   .case-detail-reviews > h2 { font-size: 25px; line-height: 31px; }
-  .case-detail-related { margin-top: 68px; padding-top: 60px; }
+  .case-detail-review-list li { grid-template-columns: 40px minmax(0, 1fr); gap: 15px; }
+  .case-detail-review-avatar { width: 40px; height: 40px; }
+  .case-detail-review-avatar :deep(svg) { width: 24px; height: 24px; }
+  .case-detail-related { margin-top: 0; padding-top: 60px; }
   .case-detail-related__heading { grid-template-columns: 1fr; }
   .case-detail-related__label-wrap { text-align: center; }
   .case-detail-related__heading > h2 { padding: 20px 0 30px; font-size: 40px; line-height: 46px; text-align: center; }

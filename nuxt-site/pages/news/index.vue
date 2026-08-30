@@ -21,7 +21,7 @@ useSeoMeta({
     <section class="antra-news-breadcrumb hero-includes-header" aria-labelledby="news-page-title">
       <div class="antra-news-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-news-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="news-page-title">優惠消息</h1>
+        <h1 id="news-page-title">Updates</h1>
         <nav aria-label="麵包屑" class="antra-news-breadcrumb__trail">
           <NuxtLink to="/">首頁</NuxtLink><span aria-hidden="true">/</span><span aria-current="page">優惠消息</span>
         </nav>
@@ -136,7 +136,7 @@ useSeoMeta({
 .antra-news-breadcrumb h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-cjk-serif);
+  font-family: var(--font-display);
   font-size: 60px;
   font-weight: 400;
   line-height: 64px;
@@ -437,8 +437,9 @@ useSeoMeta({
 
 .antra-news-post--featured .antra-news-post__title {
   margin-bottom: 20px;
-  font-size: 38px;
-  line-height: 50px;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 40px;
 }
 
 .antra-news-post--featured .antra-news-post__excerpt {

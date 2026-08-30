@@ -58,7 +58,7 @@ const detailRoute = computed(() => props.source === 'inspiration'
 .case-recommendation-card__booking:hover { color: #fff; background: #1c1c1d; }
 .case-recommendation-card__body { padding-top: 21px; }
 .case-recommendation-card__meta { display: flex; justify-content: space-between; gap: 16px; color: #9f9fa4; font-size: 13px; line-height: 20px; }
-.case-recommendation-card h3 { display: -webkit-box; min-height: 62px; margin-top: 8px; overflow: hidden; color: #1c1c1d; font-family: var(--font-display); font-size: 25px; font-weight: 400; line-height: 31px; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.case-recommendation-card h3 { display: -webkit-box; min-height: 60px; margin-top: 8px; overflow: hidden; color: #1c1c1d; font-family: var(--font-display); font-size: 20px; font-weight: 600; line-height: 30px; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .case-recommendation-card h3 a { transition: color .3s ease; }
 .case-recommendation-card h3 a:hover { color: #caa05c; }
 .case-recommendation-card__location { display: flex; align-items: flex-start; gap: 8px; margin-top: 13px; color: #59585d; font-size: 14px; line-height: 22px; }
@@ -86,7 +86,7 @@ const detailRoute = computed(() => props.source === 'inspiration'
 
 @media (max-width: 1200px) and (min-width: 1025px) {
   .case-recommendation-card { height: 448px; }
-  .case-recommendation-card h3 { font-size: 24px; line-height: 30px; }
+  .case-recommendation-card h3 { font-size: 20px; line-height: 30px; }
   .case-recommendation-card--featured .case-recommendation-card__body { right: 15px; bottom: 30px; left: 15px; }
 }
 
@@ -108,7 +108,7 @@ const detailRoute = computed(() => props.source === 'inspiration'
 }
 
 @media (max-width: 767px) {
-  .case-recommendation-card h3 { font-size: 22px; line-height: 28px; }
+  .case-recommendation-card h3 { font-size: 20px; line-height: 28px; }
   .case-recommendation-card__meta { flex-direction: column; gap: 2px; }
 }
 

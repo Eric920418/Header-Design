@@ -50,7 +50,7 @@ useSeoMeta({
     <section class="antra-gallery-breadcrumb hero-includes-header" aria-labelledby="gallery-page-title">
       <div class="antra-gallery-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-gallery-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="gallery-page-title">案例門市</h1>
+        <h1 id="gallery-page-title">Stores</h1>
         <nav aria-label="麵包屑" class="antra-gallery-breadcrumb__trail">
           <NuxtLink to="/">首頁</NuxtLink><span aria-hidden="true">/</span><span aria-current="page">案例門市</span>
         </nav>
@@ -73,7 +73,6 @@ useSeoMeta({
           <div v-if="selectedRegion" class="antra-store-filter__row antra-store-filter__row--cities">
             <span class="antra-store-filter__label">縣市</span>
             <div class="antra-store-filter__options" role="group" :aria-label="`${selectedRegion}縣市`">
-              <button type="button" :aria-pressed="selectedCity === ''" :class="{ 'is-active': selectedCity === '' }" @click="selectCity('')">全部縣市</button>
               <button v-for="city in availableCities" :key="city" type="button" :aria-pressed="selectedCity === city" :class="{ 'is-active': selectedCity === city }" @click="selectCity(city)">{{ city }}</button>
             </div>
           </div>
@@ -115,7 +114,7 @@ useSeoMeta({
   isolation: isolate;
   min-height: 360px;
   overflow: hidden;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 45% / cover no-repeat fixed;
   color: #fff;
 }
 
@@ -148,10 +147,10 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: var(--font-ui);
-  font-size: 13px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
   font-weight: 400;
-  line-height: 14px;
+  line-height: 22px;
   text-transform: uppercase;
 }
 
@@ -189,15 +188,16 @@ useSeoMeta({
 
 .antra-store-filter__label {
   color: #9f9fa4;
-  font-family: var(--font-ui);
-  font-size: 16px;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
   line-height: 24px;
 }
 
 .antra-store-filter__options {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 26px;
+  align-items: center;
+  gap: 10px 25px;
   padding-block: 14px;
 }
 
@@ -209,11 +209,15 @@ useSeoMeta({
   border-radius: 24px;
   color: #59585d;
   background: transparent;
+  font-family: var(--font-cjk-sans);
   font-size: 15px;
   line-height: 22px;
   cursor: pointer;
   transition: color .3s ease, border-color .3s ease, background-color .3s ease;
 }
+
+.antra-store-filter__row:first-child button { width: 60px; }
+.antra-store-filter__row--cities button { min-width: 72px; }
 
 .antra-store-filter button:hover {
   border-color: rgba(202, 160, 92, .45);
@@ -229,6 +233,7 @@ useSeoMeta({
 .antra-store-gallery__result-count {
   margin-top: 36px;
   color: #9f9fa4;
+  font-family: var(--font-cjk-sans);
   font-size: 15px;
   line-height: 24px;
 }

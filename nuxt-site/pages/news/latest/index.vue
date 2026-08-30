@@ -17,7 +17,7 @@ useSeoMeta({
     <section class="antra-latest-breadcrumb hero-includes-header" aria-labelledby="latest-page-title">
       <div class="antra-latest-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-latest-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="latest-page-title">最新消息</h1>
+        <h1 id="latest-page-title">NEWS</h1>
         <nav aria-label="麵包屑" class="antra-latest-breadcrumb__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -92,7 +92,7 @@ useSeoMeta({
 .antra-latest-breadcrumb h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-cjk-serif);
+  font-family: var(--font-display);
   font-size: 60px;
   font-weight: 400;
   line-height: 64px;
@@ -178,7 +178,7 @@ useSeoMeta({
   border-radius: 100px;
   color: #fff;
   background: #caa05c;
-  font-family: var(--font-cjk-serif);
+  font-family: var(--font-cjk-sans);
   font-size: 14px;
   line-height: 14px;
 }
@@ -220,9 +220,9 @@ useSeoMeta({
   overflow: hidden;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 24px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -268,10 +268,6 @@ useSeoMeta({
   .antra-latest-index { padding: 60px 15px; }
   .antra-latest-grid { grid-template-columns: minmax(0, 1fr); }
 
-  .antra-latest-post h2 {
-    font-size: 18px;
-    line-height: 24px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

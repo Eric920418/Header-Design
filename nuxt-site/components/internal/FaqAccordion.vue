@@ -105,15 +105,15 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
 .antra-faq-title span { color: #caa05c; }
 
 .antra-faq-list { width: 100%; }
-.antra-faq-group + .antra-faq-group { margin-top: 48px; }
+.antra-faq-group + .antra-faq-group { margin-top: 36px; }
 
 .antra-faq-group__title {
-  margin: 0 0 12px;
+  margin: 0;
   color: #caa05c;
-  font-family: var(--font-cjk-sans);
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 24px;
+  font-family: var(--font-cjk-serif);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
 }
 
 .antra-faq-item {
@@ -130,7 +130,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 22px 0;
+  padding: 18px 0;
   border: 0;
   background: transparent;
   color: #1c1c1d;
@@ -142,10 +142,10 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
   display: flex;
   min-width: 0;
   align-items: baseline;
-  font-family: var(--font-cjk-sans);
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 30px;
+  font-family: var(--font-cjk-serif);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
 }
 
 .antra-faq-number {
@@ -187,7 +187,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
 @media (max-width: 1024px) {
   .antra-faq-section { padding-block: 80px; }
   .antra-faq-title { font-size: 36px; line-height: 42px; }
-  .antra-faq-question { font-size: 20px; line-height: 30px; }
+  .antra-faq-question { font-size: 18px; line-height: 28px; }
 }
 
 @media (max-width: 767px) {
@@ -199,7 +199,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
   .antra-faq-heading { grid-template-columns: 1fr; margin-bottom: 30px; text-align: center; }
   .antra-faq-title { width: 100%; margin-top: 20px; font-size: 30px; line-height: 35px; }
   .antra-faq-title br { display: none; }
-  .antra-faq-group + .antra-faq-group { margin-top: 36px; }
+  .antra-faq-group + .antra-faq-group { margin-top: 30px; }
   .antra-faq-question { font-size: 18px; line-height: 28px; }
   .antra-faq-number { margin-right: 14px; font-size: 14px; line-height: 30px; }
   .antra-faq-button { align-items: flex-start; gap: 16px; }
