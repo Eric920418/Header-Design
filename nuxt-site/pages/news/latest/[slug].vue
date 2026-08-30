@@ -15,9 +15,6 @@ if (!detail || !article) {
 const latestArticles = newsArticles.filter(entry => entry.category === 'latest')
 const isFranchiseSeminar = detail.id === 'franchise-seminar-2026'
 const isKaohsiungBrandHall = detail.id === 'kaohsiung-brand-hall'
-const franchiseRegistrationUrl = isFranchiseSeminar
-  ? detail.sections[1]?.links?.[0]?.url ?? ''
-  : ''
 
 useSeoMeta({
   title: `${article.title}｜SAKURA 整體廚房`,
@@ -80,8 +77,8 @@ useHead({
             <section
               class="latest-detail-section"
               :class="{
-                'latest-detail-section--franchise-register': isFranchiseSeminar && sectionIndex === 1,
-                'latest-detail-section--franchise-session': isFranchiseSeminar && sectionIndex >= 2,
+                'latest-detail-section--franchise-register': isFranchiseSeminar && sectionIndex === 3,
+                'latest-detail-section--franchise-session': isFranchiseSeminar && sectionIndex < 3,
                 'latest-detail-section--two-column': isKaohsiungBrandHall && sectionIndex === 1,
               }"
               v-reveal="{ anim: 'opalMoveUp' }"
@@ -93,40 +90,7 @@ useHead({
               </ul>
 
               <div
-                v-if="section.images?.length && isFranchiseSeminar && sectionIndex === 1"
-                class="latest-detail-media-reveal"
-                v-reveal="{ anim: 'opalScaleUp', delay: 100 }"
-              >
-                <div class="latest-detail-media">
-                  <figure v-for="image in section.images" :key="image.src">
-                    <InternalNewsImage :src="image.src" :alt="image.alt" />
-                  </figure>
-                </div>
-              </div>
-
-              <p
-                v-if="section.links?.length && isFranchiseSeminar && sectionIndex === 1"
-                class="latest-detail-franchise-link"
-              >
-                <span>報名連結</span>
-                <a
-                  :href="franchiseRegistrationUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {{ franchiseRegistrationUrl }}
-                </a>
-                <a
-                  :href="franchiseRegistrationUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  （立即點我報名）
-                </a>
-              </p>
-
-              <div
-                v-else-if="section.links?.length"
+                v-if="section.links?.length"
                 class="latest-detail-links"
               >
                 <a
@@ -141,7 +105,7 @@ useHead({
               </div>
 
               <div
-                v-if="section.images?.length && !(isFranchiseSeminar && sectionIndex === 1)"
+                v-if="section.images?.length"
                 class="latest-detail-media-reveal"
                 v-reveal="{ anim: 'opalScaleUp', delay: 100 }"
               >
@@ -154,6 +118,12 @@ useHead({
                   </figure>
                 </div>
               </div>
+              <p
+                v-if="isFranchiseSeminar && sectionIndex === 3"
+                class="latest-detail-franchise-qr-label"
+              >
+                報名QR code
+              </p>
             </section>
           </template>
 
@@ -391,8 +361,8 @@ useHead({
 }
 
 .latest-detail-section--franchise-register .latest-detail-media {
-  margin-top: 35px;
-  margin-bottom: 14px;
+  width: min(128px, 100%);
+  margin-block: 0 6px;
 }
 
 .latest-detail-section--franchise-register .latest-detail-media figure,
@@ -400,34 +370,20 @@ useHead({
   border-radius: 0;
 }
 
-.latest-detail-section .latest-detail-franchise-link {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 8px;
+.latest-detail-section .latest-detail-franchise-qr-label {
   margin: 0 0 30px;
-  color: #1c1c1d;
-  font-family: var(--font-cjk-serif);
-  font-size: 18px;
-  line-height: 28px;
+  color: #9f9fa4;
+  font-family: var(--font-cjk-sans);
+  font-size: 15px;
+  line-height: 26px;
   text-align: center;
 }
 
-.latest-detail-franchise-link a {
-  color: #caa05c;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  transition: color .3s ease;
-}
-
-.latest-detail-franchise-link a:hover,
-.latest-detail-franchise-link a:focus-visible { color: #1c1c1d; }
-
 .latest-detail-section--franchise-session h4 {
   margin: 40px 0 14px;
-  font-size: 18px;
-  line-height: 28px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
   text-align: center;
 }
 
@@ -524,6 +480,12 @@ useHead({
   .latest-detail-section--franchise-register .latest-detail-media figure,
   .latest-detail-section--franchise-session .latest-detail-media figure { border-radius: 0; }
 
+  .latest-detail-section--franchise-session h4 {
+    margin: 40px 0 14px;
+    font-size: 20px;
+    line-height: 30px;
+  }
+
   .latest-detail-section--two-column {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
@@ -540,7 +502,6 @@ useHead({
   .latest-detail-breadcrumb { background-attachment: scroll; }
   .latest-detail-breadcrumb__trail a,
   .latest-detail-meta .categories-link a,
-  .latest-detail-franchise-link a,
   .latest-detail-links a,
   .latest-detail-categories a { transition: none; }
 }

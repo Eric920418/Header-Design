@@ -116,9 +116,9 @@ const [viewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 24 }
   overflow: hidden;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 25px;
-  font-weight: 400;
-  line-height: 32px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
   transition: color .3s ease;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -149,7 +149,7 @@ const [viewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 24 }
   .activity-related__transition { border-radius: 18px; }
   .activity-related__category { top: 20px; left: 15px; }
   .activity-related__text-box { width: 100%; }
-  .activity-related__card h3 { font-size: 22px; line-height: 28px; }
+  .activity-related__card h3 { font-size: 20px; line-height: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

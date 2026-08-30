@@ -27,7 +27,7 @@ useSeoMeta({
 
     <InternalBrandBenefits />
     <InternalBrandStoreSection />
-    <InternalFaqAccordion :groups="brandAdvantageFaqGroups" section-id="brand-advantage-faq-title" safe-rail />
+    <InternalFaqAccordion class="brand-advantage-faq" :groups="brandAdvantageFaqGroups" section-id="brand-advantage-faq-title" safe-rail />
   </main>
 </template>
 
@@ -39,6 +39,7 @@ useSeoMeta({
 .brand-family-heading h2 { scroll-margin-top: 100px; margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
 .brand-family-heading h3 { margin: 24px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .brand-family-heading p { width: min(1050px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
+.brand-advantage-faq { background: linear-gradient(180deg, #fff 0%, #f6f6f6 72.12%); }
 
 @media (max-width: 1024px) {
   .brand-family-section { padding: 80px 30px 65px; }

@@ -1040,6 +1040,7 @@ final result: passed
 
 `nuxt-site/pages/about/advantage.vue` 已建立正式 SSR 路由 `/about/advantage`。甲方於 2026-08-13 確認第三頁「步驟三（引用甲方資訊提案）」才是最終結構真值，因此第二頁／早期 Home 09 組版不再作為驗收基準；現行版本逐段對照第三頁紅框標註、已購 Antra Home 08、Home 01、Gallery 01、FAQs Elementor 原始資料重製，沒有使用簡報截圖，也沒有建立 5.3 假頁。
 
+- **2026-08-30 品牌承諾 PPT 第 2 頁更新**：依 `2026.08.21_5.0品牌承諾_.pptx` 重核 `/about/advantage`。Hero 小標改為 `OUR COMMITMENT`，左半加入承德店正式影像與淺灰遮罩，右側摘要改用 Noto Serif TC 18px SemiBold，圓形向下按鈕移到左欄水平中央，摘要另保留右側快捷列安全欄；三張品牌優勢卡撤除舊 Hover 覆蓋層，改為白色 28px 圓角終態卡並沿用既有 `v-reveal` 依序向上出場，01／02／03 統一固定在卡片右下顯示 80px。優勢、門市與 FAQ 背景依 Home 07 節奏交替為上淺下深／上深下淺／上淺下深；三民店圖說更新為「櫻花廚藝生活館_三民店」，FAQ 仍沿用服務流程共用元件。
 - **2026-08-20 新版調整 PPT 第二頁**：依 `2026.08.15_5.0品牌承諾_調整.pptx` 的紅線標註校正 5.1，不拿整頁參考截圖當網頁素材。Hero 三個導覽序號改為 PPT 指定的 `。`，導覽統一 `Noto Sans TC 16px`；五種家庭中文標籤改為 `Noto Sans TC 18px`、英文標籤加入正式 `Bodoni Moda 20px`；兩處中文段落標題改為 `Noto Serif TC 25px`；河南店標籤更新為簡報指定的「櫻花廚藝生活館_河南店」並使用 `Noto Sans TC 16px`。門市與 FAQ 間距縮短 40px，FAQ 維持母版全寬三組 12 題、問題 `Noto Sans TC 20px`，並增加展開答案上方內距，修正簡報指出的內文上緣壓迫；同時啟用既有右側快捷列安全欄，避免固定的案例門市／到府丈量／客服中心蓋住 FAQ 加減號。
 - **2026-08-20 5.1 Design QA**：來源真值為 PPT 第二頁內嵌的 2880×16040 原頁截圖與頁面紅線標註；以 1440×900 同尺寸擷取 FAQ 並和來源放入 `/private/tmp/sakura-brand-ppt.IaJdHi/faq-comparison-board.png` 同畫面檢查。桌機實測三組 12 題、單題展開、滑鼠與 Enter 切換、`Bodoni Moda` 載入、圖片錯誤 0、水平溢位 0；390×844 實測 `scrollWidth === 390`，FAQ rail 為 x=15–375、操作內容為 x=15–303、快捷列為 x=318–390，互不重疊。型別檢查與 production build 均通過；建置只保留 Tailwind v4 既有 sourcemap warning。最終無剩餘可執行的 P0／P1／P2，右側安全欄屬避免固定工具列遮擋操作的必要差異。
 - **2026-08-20 新版調整 PPT 第三頁**：重新放大檢查「步驟二／步驟三」而不是沿用舊筆記。第三頁把三項優勢指定為 Home 01 的 Blog 三欄卡與 `Initial Consultation` 向上覆蓋動畫，不是三組左文右圖寬版列；現已把英文母版標題還原為 `Take A Look At Our Latest / Blog & Articles.` 的兩行節奏，三張卡依 01 Digitization／02 Safety／03 Professional 使用正式圖片與逐字文案，桌機 Hover 會讓白色圓角詳情卡由卡底完整向上覆蓋，reduced-motion 停用轉場，平板與手機則維持不依賴 Hover 的完整靜態內容。Hero 補回 PPT 標示的 Home 01 圓形向下控制，實際捲到家庭型態段落；優勢與門市背景回到母版連續的 `#f6f6f6`，家庭、優勢、門市三段也加入快捷列安全欄，避免第三欄內容被固定服務按鈕覆蓋。
@@ -1235,20 +1236,21 @@ final result: passed
 - **手機可讀性**：快速服務列的手機隱藏條件由單一 `/news` 擴充至全部 `/news…` 路由，避免三個列表及後續文章內頁的標題、摘要與操作區被固定列遮擋；桌機仍保留原快捷列。
 - **本輪 QA（2026-08-30）**：1280px 桌機逐頁實測三個英文 Hero 均為 Cal Sans 60/64px Regular，麵包屑為 Noto Sans TC 15/20px，分類膠囊為 Noto Sans TC，卡片標題為 Noto Serif TC SemiBold 20/30px；三頁圖片破損皆為 0。390×844 手機三頁皆 `scrollWidth === innerWidth === 390`，Hero 正常縮為 30/35px、卡片標題維持 20/30px；Console error／warning 0。`pnpm --dir nuxt-site typecheck` 與 `git diff --check` 通過。
 
-## Nuxt 3 — 4.1／4.2／4.3 優惠消息文章內頁（2026-08-19）
+## Nuxt 3 — 4.1／4.2／4.3 優惠消息文章內頁（2026-08-30 最新調整）
 
 - **PPT 第九頁真值與範圍**：第 9 頁左側再次標示「文章頁同內容調整」，因此修改範圍是 `/news/activities/[slug]`、`/news/latest/[slug]`、`/news/video/[slug]` 三套正式文章模板，不是只修示意圖中的優惠活動。三頁麵包屑底圖統一換成 3.1 案例門市店面圖，文字使用 Noto Sans TC 15/20px 並加寬字距。
+- **2026-08-30 第 9 頁複核**：麵包屑維持投影片示意的水平／垂直置中；三套文章主標統一為 Noto Serif TC 30/41px、SemiBold，底部推薦卡標題則由舊版 25px（手機 22px）修正為全斷點 Noto Serif TC 20/30px、SemiBold。第 10 頁兩篇指定文章的內容例外未提前混入本次共用模板調整。
 - **文章版面與字級**：文章 Header、主圖／影片與內文改為廚房裝修指南文章內頁相同的 930px 版心；分類日期列間距由 12.5px 校正為 15px，標題至主圖間距由 30px 改為 40px。優惠活動、最新消息與媒體影音三種內容頁的文章大標在所有斷點統一為 Noto Serif TC 30/41px，段落標題為 Noto Serif TC 25/32px，段落、清單及文章連結為 Noto Sans TC 15/26px；三頁都不再由 Cal Sans／Golos Text 搶先顯示中文字。
 - **分類狀態**：文章底部移除 PPT 指定刪除的「廚房裝修指南」，只保留優惠活動、最新消息、媒體影音；每一頁只有目前分類使用金底白字，另外兩個維持白底灰字及可操作 Hover，不再出現優惠活動頁四顆按鈕全部金底的錯誤。
-- **輪播改成列表卡排版**：`InternalActivityRelatedCarousel`、`InternalLatestRelatedCarousel`、`InternalMediaRelatedCarousel` 保留 Embla 拖曳與正式文章連結，但圖片比例改為優惠活動列表使用的 `1.40625`、金色分類膠囊改置於左上 20px、移除黑色遮罩；卡片下方只保留完整日期與標題，標題使用 Noto Serif TC 25/32px，桌面卡片間距由 30px 改為 40px。
+- **輪播改成列表卡排版**：`InternalActivityRelatedCarousel`、`InternalLatestRelatedCarousel`、`InternalMediaRelatedCarousel` 保留 Embla 拖曳與正式文章連結，但圖片比例改為優惠活動列表使用的 `1.40625`、金色分類膠囊改置於左上 20px、移除黑色遮罩；卡片下方只保留完整日期與標題，標題使用 Noto Serif TC SemiBold 20/30px，桌面卡片間距由 30px 改為 40px。
 - **Design QA／建置**：依專案只維護 README 的規則，本節取代額外的 `design-qa.md`。來源視覺為 PPT 第 9 頁與內嵌文章長頁，實作證據為 `/private/tmp/slide9-activity-top-1512.png`、`/private/tmp/slide9-activity-middle-1512.png`、`/private/tmp/slide9-activity-bottom-final-1512.png`，同畫面比較板為 `/private/tmp/slide9-article-design-qa.png`，最終結果 `passed`。1512×980 三類文章均確認底圖、930px 版心、25px 段落標題、15px 內文、正確目前分類與 3 張正式輪播卡；2026-08-28 文章大標另依最新回饋統一更新為 30px。輪播第二張可實際跳轉。390×844 實測無水平溢位，文章為 360px 版心、快速服務列隱藏。Noto Serif TC／Noto Sans TC 字型載入檢查皆為 `true`，圖片載入錯誤與 console error／warning 為 0；`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過，production build 只保留 Tailwind CSS v4 既有 sourcemap warning。
 
-## Nuxt 3 — 4.2 最新消息指定文章調整（2026-08-19）
+## Nuxt 3 — 4.2 最新消息指定文章調整（2026-08-30 最新調整）
 
 - **PPT 第十頁真值與範圍**：第 10 頁不是第 9 頁共用文章模板的再版，而是 `/news/latest/2026-franchise-seminar` 與 `/news/latest/kaohsiung_opening` 兩篇指定文章的內容例外；共用的 930px 版心、30px 文章標題、15px 正文、三分類 Tab 與推薦文章維持不動。最新消息文章的麵包屑背景依指定改用素材庫 `5.2 集團品牌館／Taichung` 的台中集團品牌館正面照，定位沿用 3.1 已驗收的 `center 88%`。
-- **加盟說明會**：QR Code 恢復官網順序，置於報名連結上方並限制為原始 500px 寬，不再被共用媒體樣式放大至 930px；報名列顯示「報名連結＋完整網址＋立即點我報名」。台北／台中／高雄場次標題改為 PPT 指定的 `【地區加盟說明會場次】`、Noto Serif TC 18/28px，三張正式場次圖同樣維持約 500px 窄版置中。
+- **加盟說明會**：依第 10 頁最新標註刪除主圖下方的歡迎短句；QR Code 改到台北／台中／高雄三張場次表之後，縮為 128px 並顯示「報名QR code」，不再把 QR 與文字連結放在文章前段。三個場次標題維持 `【地區加盟說明會場次】`，並修正為 PPT 指定的 Noto Serif TC SemiBold 20/30px；三張正式場次圖維持約 500px 窄版置中。
 - **高雄品牌館**：首段介紹保留單欄；PPT 點名的張永杰董事長段落改為 Home Six 參考的左圖右文雙欄，左側使用同一段原官網現場圖、右側保留指定原文，既有 `opalMoveUp／opalScaleUp` 進場語彙不另造動畫。第二張 HOME in O.N.E 現場圖與其後核心價值／結語仍完整保留；767px 以下依閱讀順序改為圖片在上、文字在下。
-- **Design QA／建置**：PPT 第 10 頁的加盟頁與品牌館標註區已和 1280×720 實作動畫終態放入同一張比較板 `/private/tmp/slide10-design-qa-comparison.png`。本機實測加盟頁 QR 與三張場次圖皆為 500px、報名列確實在 QR 後、三個場次標題為 Noto Serif TC 18px；高雄品牌館指定段落落在 930px 版心內的 400.5／489.5px 雙欄，兩張文章圖均載入完成。兩頁 `scrollWidth === innerWidth`、Reveal 隱藏 0、console error／warning 0；`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過，production build 只保留 Tailwind CSS v4 既有 sourcemap warning。
+- **Design QA／建置**：2026-08-30 於 1280px 實測加盟頁文章主標為 Noto Serif TC 30/41px、SemiBold，三個場次標題為 20/30px、SemiBold；三張場次圖後才出現 128px QR 與「報名QR code」，歡迎短句及舊報名連結皆已移除。高雄品牌館仍使用指定台中品牌館麵包屑圖與 930px 雙欄段落。兩頁圖片破損 0、`scrollWidth === innerWidth`；390×844 手機同樣維持 30px 主標、20px 場次標題、128px QR、單欄品牌館段落且無水平溢位，console error／warning 0。
 
 ## Nuxt 3 — 全站內頁版面一致性（2026-08-21）
 

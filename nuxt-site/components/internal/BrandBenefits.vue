@@ -24,16 +24,7 @@ import { brandBenefits } from '~/data/brandAdvantage'
             <div class="brand-benefit-eyebrow"><strong>{{ benefit.number }}</strong><span>{{ benefit.englishTitle }}</span></div>
             <h3>{{ benefit.title }}</h3>
             <p>{{ benefit.description }}</p>
-          </div>
-
-          <div class="brand-benefit-overlay" aria-hidden="true">
-            <InternalBrandImage :src="benefit.image" alt="" class="brand-benefit-overlay__image" />
-            <div class="brand-benefit-overlay__copy">
-              <div class="brand-benefit-overlay__eyebrow"><strong>{{ benefit.number }}</strong><span>{{ benefit.englishTitle }}</span></div>
-              <h3>{{ benefit.title }}</h3>
-              <p>{{ benefit.description }}</p>
-              <span class="brand-benefit-overlay__number">{{ benefit.number }}</span>
-            </div>
+            <span class="brand-benefit-number" aria-hidden="true">{{ benefit.number }}</span>
           </div>
         </article>
       </div>
@@ -42,37 +33,22 @@ import { brandBenefits } from '~/data/brandAdvantage'
 </template>
 
 <style scoped>
-.brand-benefits { overflow: hidden; padding: 100px 30px 120px; background: #f6f6f6; }
+.brand-benefits { overflow: hidden; padding: 100px 30px 120px; background: linear-gradient(180deg, #fff 0%, #f6f6f6 72.12%); }
 .brand-benefits-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-benefits-heading { width: min(900px, 100%); margin: 0 auto 60px; text-align: center; }
 .brand-benefits-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .brand-benefits-heading h2 span { color: #caa05c; }
 .brand-benefits-heading > p { max-width: 830px; margin: 24px auto 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-benefit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
-.brand-benefit-card { position: relative; min-width: 0; min-height: 610px; overflow: visible; }
-.brand-benefit-image { width: 100%; aspect-ratio: 1.3461538462 / 1; border-radius: 24px; }
-.brand-benefit-copy { padding: 20px 4px 0; }
+.brand-benefit-card { position: relative; min-width: 0; min-height: 730px; overflow: hidden; border-radius: 28px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 8%); }
+.brand-benefit-image { width: calc(100% - 32px); margin: 16px; aspect-ratio: 1.48 / 1; border-radius: 20px; }
+.brand-benefit-copy { min-height: 360px; padding: 28px 32px 80px; }
 .brand-benefit-eyebrow { display: flex; align-items: baseline; gap: 7px; margin-bottom: 12px; color: #1c1c1d; font-family: var(--font-ui); }
 .brand-benefit-eyebrow strong { color: #caa05c; font-size: 18px; font-weight: 600; line-height: 24px; }
 .brand-benefit-eyebrow span { font-size: 15px; font-weight: 600; line-height: 22px; }
 .brand-benefit-copy h3 { margin: 0 0 14px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
-.brand-benefit-copy p { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
-.brand-benefit-overlay { position: absolute; inset: 0; overflow: hidden; border-radius: 28px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 10%); opacity: 0; transform: translateY(100%); transition: opacity .45s ease, transform .55s cubic-bezier(.22, 1, .36, 1); }
-.brand-benefit-overlay__image { width: calc(100% - 32px); margin: 16px; aspect-ratio: 1.48 / 1; border-radius: 20px; }
-.brand-benefit-overlay__copy { position: relative; min-height: 260px; padding: 18px 28px 34px; }
-.brand-benefit-overlay__eyebrow { display: flex; align-items: baseline; gap: 5px; color: #1c1c1d; font-family: var(--font-ui); font-size: 20px; font-weight: 600; line-height: 28px; }
-.brand-benefit-overlay__eyebrow strong { color: #caa05c; }
-.brand-benefit-overlay__copy h3 { margin: 14px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
-.brand-benefit-overlay__copy p { position: relative; z-index: 1; margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
-.brand-benefit-overlay__number { position: absolute; right: 20px; bottom: -18px; color: #e3e3e8; font-family: var(--font-ui); font-size: 112px; font-weight: 400; line-height: 1; }
-
-@media (hover: hover) and (pointer: fine) {
-  .brand-benefit-card:hover .brand-benefit-overlay { opacity: 1; transform: translateY(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .brand-benefit-overlay { transition: none; }
-}
+.brand-benefit-copy p { position: relative; z-index: 1; margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.brand-benefit-number { position: absolute; right: 24px; bottom: 18px; color: #e3e3e8; font-family: var(--font-ui); font-size: 80px; font-weight: 400; line-height: 1; }
 
 @media (max-width: 1200px) {
   .brand-benefit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -81,7 +57,6 @@ import { brandBenefits } from '~/data/brandAdvantage'
 @media (max-width: 1024px) {
   .brand-benefits { padding-block: 80px; }
   .brand-benefits-heading h2 { font-size: 48px; line-height: 52px; }
-  .brand-benefit-overlay { display: none; }
 }
 
 @media (max-width: 767px) {
@@ -92,6 +67,7 @@ import { brandBenefits } from '~/data/brandAdvantage'
   .brand-benefits-heading > p { font-size: 15px; line-height: 24px; text-align: left; }
   .brand-benefit-grid { grid-template-columns: 1fr; gap: 45px; }
   .brand-benefit-card { min-height: auto; }
+  .brand-benefit-copy { min-height: auto; padding: 24px 24px 80px; }
   .brand-benefit-copy h3 { font-size: 22px; line-height: 32px; }
   .brand-benefit-copy p { font-size: 15px; line-height: 24px; }
 }

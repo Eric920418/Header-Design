@@ -10,19 +10,6 @@ export const latestArticleDetails: LatestArticleDetail[] = [
     },
     sections: [
       {
-        paragraphs: ['歡迎您加盟櫻花整體廚房，一起創造美好生活！'],
-      },
-      {
-        images: [{
-          src: '/section-4/news/latest/franchise-seminar-2026-register.png',
-          alt: '2026 櫻花整體廚房加盟說明會報名 QR Code',
-        }],
-        links: [{
-          label: '立即填寫加盟說明會報名表單',
-          url: 'https://forms.gle/5dBz3LxNNom5JXVg7',
-        }],
-      },
-      {
         heading: '【台北加盟說明會場次】',
         images: [{
           src: '/section-4/news/latest/franchise-seminar-2026-taipei.png',
@@ -41,6 +28,12 @@ export const latestArticleDetails: LatestArticleDetail[] = [
         images: [{
           src: '/section-4/news/latest/franchise-seminar-2026-kaohsiung.png',
           alt: '2026 櫻花整體廚房高雄加盟說明會場次表',
+        }],
+      },
+      {
+        images: [{
+          src: '/section-4/news/latest/franchise-seminar-2026-register.png',
+          alt: '2026 櫻花整體廚房加盟說明會報名 QR Code',
         }],
       },
     ],

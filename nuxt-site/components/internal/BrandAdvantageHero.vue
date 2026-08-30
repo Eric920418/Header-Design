@@ -7,7 +7,7 @@ import { ArrowDown } from 'lucide-vue-next'
     <div class="brand-h8-intro">
       <div class="brand-h8-intro__rail">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
-          <InternalSectionPill>品牌優勢</InternalSectionPill>
+          <InternalSectionPill>OUR COMMITMENT</InternalSectionPill>
           <h1 id="brand-h8-title">Find Your<br /><span>Inspired<br />Interior</span> Design</h1>
           <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
             <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
@@ -44,8 +44,9 @@ import { ArrowDown } from 'lucide-vue-next'
 
 <style scoped>
 .brand-h8-hero { overflow: hidden; background: #f6f6f6; }
-.brand-h8-intro { padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #f6f6f6 50% 100%); }
-.brand-h8-intro__rail { display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
+.brand-h8-intro { position: relative; padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #f6f6f6 50% 100%); }
+.brand-h8-intro::before { position: absolute; inset: 0 50% 0 0; background: linear-gradient(rgb(234 233 231 / 91%), rgb(234 233 231 / 91%)), url('/section-3/store-chengde.jpg') center / cover no-repeat; content: ''; pointer-events: none; }
+.brand-h8-intro__rail { position: relative; display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
 .brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: 100px; font-weight: 400; line-height: 100px; letter-spacing: -.01em; text-transform: capitalize; }
 .brand-h8-copy h1 span { color: #caa05c; }
@@ -57,13 +58,13 @@ import { ArrowDown } from 'lucide-vue-next'
 .brand-h8-nav b { color: #caa05c; }
 .brand-h8-nav a[aria-current="page"] span { color: #1c1c1d; }
 .brand-h8-nav > span[aria-disabled="true"] { opacity: .55; }
-.brand-h8-scroll { display: inline-flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin-top: 38px; border: 1px solid rgb(202 160 92 / 35%); border-radius: 50%; background: #caa05c; color: #fff; box-shadow: 0 14px 30px rgb(28 28 29 / 12%); transition: transform .35s ease, box-shadow .35s ease; }
+.brand-h8-scroll { display: flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin: 38px 0 0 calc(50% - 27px); border: 1px solid rgb(202 160 92 / 35%); border-radius: 50%; background: #caa05c; color: #fff; box-shadow: 0 14px 30px rgb(28 28 29 / 12%); transition: transform .35s ease, box-shadow .35s ease; }
 .brand-h8-scroll svg { width: 18px; height: 18px; stroke-width: 1.8; }
 .brand-h8-scroll:hover { transform: translateY(4px); box-shadow: 0 8px 18px rgb(28 28 29 / 16%); }
-.brand-h8-aside { display: flex; min-width: 0; flex-direction: column; align-items: flex-end; gap: 30px; }
+.brand-h8-aside { display: flex; min-width: 0; flex-direction: column; align-items: flex-end; gap: 30px; padding-right: 74px; }
 .brand-h8-aside__image { width: min(510px, 100%); height: 267px; border-radius: 28px; }
 .brand-h8-aside__image :deep(img) { object-position: 62% 45%; }
-.brand-h8-aside p { width: min(510px, 100%); margin: 0; color: #59585d; font-size: 18px; font-weight: 500; line-height: 24px; }
+.brand-h8-aside p { width: min(510px, 100%); margin: 0; color: #59585d; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 28px; }
 .brand-h8-stage { position: relative; width: min(1770px, calc(100% - 60px)); margin: -300px auto 0; overflow: hidden; border-radius: 24px; }
 .brand-h8-stage__image { width: 100%; aspect-ratio: 2 / 1; border-radius: 24px; }
 
@@ -74,6 +75,7 @@ import { ArrowDown } from 'lucide-vue-next'
 
 @media (max-width: 1024px) {
   .brand-h8-intro { padding: 100px 30px 0; background: #f6f6f6; }
+  .brand-h8-intro::before { display: none; }
   .brand-h8-intro__rail { grid-template-columns: 1fr; }
   .brand-h8-copy { text-align: center; }
   .brand-h8-copy h1 { margin-inline: auto; font-size: 60px; line-height: 60px; }
@@ -91,6 +93,7 @@ import { ArrowDown } from 'lucide-vue-next'
   .brand-h8-nav > * { padding: 10px 0; }
   .brand-h8-nav > * + * { padding-left: 0; border-left: 0; border-top: 1px solid #d2d1cf; }
   .brand-h8-aside { gap: 20px; }
+  .brand-h8-aside { padding-right: 72px; }
   .brand-h8-aside__image { height: 250px; }
   .brand-h8-aside p { font-size: 15px; line-height: 24px; }
   .brand-h8-stage { width: calc(100% - 30px); margin-top: 30px; }
