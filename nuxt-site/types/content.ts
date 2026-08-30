@@ -44,12 +44,12 @@ export interface BrandPavilion {
 }
 
 export interface BrandHistoryItem {
-  year: '1978' | '1992' | '2016' | '2020'
-  templateQuestion: string
-  summary: string
+  year: '1978' | '1992' | '1994' | '1997' | '2000' | '2003' | '2008' | '2009' | '2011' | '2013' | '2014' | '2016' | '2017' | '2018' | '2020' | '2021'
+  templateQuestion?: string
+  summary?: string
   description: string
   image: string
-  icon: string
+  icon?: string
 }
 
 export interface BrandValueItem {

@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import emblaCarouselVue from 'embla-carousel-vue'
 import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-vue-next'
-import { brandHistory, brandIdentities, brandValues } from '~/data/aboutUs'
+import { brandHistory, brandHistoryHighlights, brandIdentities, brandValues } from '~/data/aboutUs'
 
-const activeHistoryYear = ref<(typeof brandHistory)[number]['year']>('1978')
-const activeHistory = computed(() => brandHistory.find(item => item.year === activeHistoryYear.value) ?? brandHistory[0]!)
+const activeHistoryYear = ref<(typeof brandHistoryHighlights)[number]['year']>('1978')
+const activeHistory = computed(() => brandHistoryHighlights.find(item => item.year === activeHistoryYear.value) ?? brandHistoryHighlights[0]!)
+const [historyEmblaRef, historyEmblaApi] = emblaCarouselVue({ align: 'start', loop: false, slidesToScroll: 1 })
 const activeValueId = ref<(typeof brandValues)[number]['id']>('service')
 const identityTrack = ref<HTMLElement | null>(null)
 const identityViewportRatio = ref(1)
@@ -83,7 +85,7 @@ useSeoMeta({
             <InternalBrandImage
               :key="activeHistory.year"
               :src="activeHistory.image"
-              :alt="`${activeHistory.year} ${activeHistory.summary}`"
+              :alt="`${activeHistory.year} ${activeHistory.summary ?? activeHistory.description}`"
               class="about-services__visual-image"
             />
             <div class="about-services__visual-shade" aria-hidden="true" />
@@ -94,7 +96,7 @@ useSeoMeta({
 
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" data-ev="opalMoveLeft" class="about-services__list ev" style="animation-delay:100ms">
             <div
-              v-for="item in brandHistory"
+              v-for="item in brandHistoryHighlights"
               :key="item.year"
               class="about-services__item"
               :class="{ 'is-open': activeHistoryYear === item.year }"
@@ -107,7 +109,7 @@ useSeoMeta({
                 @click="activeHistoryYear = item.year"
               >
                 <span class="about-services__year">{{ item.year }}</span>
-                <span class="about-services__question">{{ item.templateQuestion }}</span>
+                <span class="about-services__question">{{ item.templateQuestion ?? item.description }}</span>
                 <span class="about-services__plus" aria-hidden="true"><Plus /></span>
               </button>
               <Transition name="service-answer">
@@ -129,22 +131,28 @@ useSeoMeta({
 
     <section class="about-history" aria-label="櫻花整體廚房品牌紀事">
       <div class="about-rail">
-        <div class="about-history__grid" role="region" aria-label="櫻花整體廚房品牌紀事輪播" tabindex="0">
-          <article
-            v-for="(item, index) in brandHistory"
-            :key="item.year"
-            v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }"
-            data-ev="opalMoveUp"
-            class="about-history__card ev"
-            :style="{ animationDelay: `${index * 100}ms` }"
-          >
-            <InternalBrandImage :src="item.image" :alt="`${item.year} 年品牌記事`" class="about-history__image" />
-            <div class="about-history__content">
-              <img :src="item.icon" alt="" aria-hidden="true" class="about-history__icon" />
-              <span>{{ item.year }}</span>
-              <p>{{ item.description }}</p>
+        <div class="about-history__carousel">
+          <div ref="historyEmblaRef" class="about-history__viewport" role="region" aria-label="櫻花整體廚房品牌紀事輪播" tabindex="0" @keydown.left.prevent="historyEmblaApi?.scrollPrev()" @keydown.right.prevent="historyEmblaApi?.scrollNext()">
+            <div class="about-history__grid">
+              <article
+                v-for="(item, index) in brandHistory"
+                :key="item.year"
+                v-reveal="{ anim: 'opalMoveUp', delay: Math.min(index * 100, 300) }"
+                data-ev="opalMoveUp"
+                class="about-history__card ev"
+                :style="{ animationDelay: `${Math.min(index * 100, 300)}ms` }"
+              >
+                <InternalBrandImage :src="item.image" :alt="`${item.year} 年品牌記事`" class="about-history__image" />
+                <div class="about-history__content">
+                  <span class="about-history__icon-slot"><img v-if="item.icon" :src="item.icon" alt="" aria-hidden="true" class="about-history__icon" /></span>
+                  <span class="about-history__year">{{ item.year }}</span>
+                  <p>{{ item.description }}</p>
+                </div>
+              </article>
             </div>
-          </article>
+          </div>
+          <button type="button" class="about-history__nav about-history__nav--previous" aria-label="上一則品牌記事" @click="historyEmblaApi?.scrollPrev()"><ChevronLeft aria-hidden="true" /></button>
+          <button type="button" class="about-history__nav about-history__nav--next" aria-label="下一則品牌記事" @click="historyEmblaApi?.scrollNext()"><ChevronRight aria-hidden="true" /></button>
         </div>
       </div>
     </section>
@@ -268,14 +276,21 @@ useSeoMeta({
 .service-answer-leave-from { max-height: 480px; opacity: 1; transform: none; }
 
 .about-history { padding: 0 30px 120px; background: #f6f6f6; }
-.about-history__grid { display: flex; gap: 30px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; scroll-snap-type: x mandatory; }
-.about-history__grid::-webkit-scrollbar { display: none; }
-.about-history__card { min-width: 0; flex: 0 0 calc((100% - 90px) / 4); scroll-snap-align: start; }
+.about-history__carousel { position: relative; }
+.about-history__viewport { overflow: hidden; }
+.about-history__grid { display: flex; margin-left: -30px; touch-action: pan-y pinch-zoom; }
+.about-history__card { min-width: 0; flex: 0 0 33.3333%; padding-left: 30px; }
 .about-history__image { width: 130px; height: 130px; border-radius: 24px; }
 .about-history__content { position: relative; padding: 28px 0 0; }
-.about-history__icon { width: 25px; height: 25px; margin-bottom: 20px; filter: invert(68%) sepia(23%) saturate(865%) hue-rotate(358deg) brightness(93%); }
-.about-history__content > span { display: block; margin-bottom: 13px; color: #caa05c; font-family: var(--font-ui); font-size: 30px; line-height: 34px; }
+.about-history__icon-slot { display: block; width: 25px; height: 25px; margin-bottom: 20px; }
+.about-history__icon { display: block; width: 25px; height: 25px; filter: invert(68%) sepia(23%) saturate(865%) hue-rotate(358deg) brightness(93%); }
+.about-history__year { display: block; margin-bottom: 13px; color: #caa05c; font-family: var(--font-ui); font-size: 30px; line-height: 34px; }
 .about-history__content p { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 22px; }
+.about-history__nav { position: absolute; z-index: 2; top: 65px; display: grid; width: 48px; height: 48px; place-items: center; border: 1px solid #e3e3e8; border-radius: 50%; color: #1c1c1d; background: rgb(255 255 255 / 90%); box-shadow: 0 8px 24px rgb(0 0 0 / 10%); cursor: pointer; transition: color .3s ease, background .3s ease, transform .3s ease; }
+.about-history__nav--previous { left: -24px; }
+.about-history__nav--next { right: 58px; }
+.about-history__nav:hover { color: #fff; background: #caa05c; transform: scale(1.05); }
+.about-history__nav svg { width: 20px; height: 20px; }
 
 .about-values { padding: 0; background: #1c1c1d; }
 .about-values__stage { position: relative; min-height: 820px; overflow: hidden; color: #fff; background: #1c1c1d; }
@@ -374,7 +389,7 @@ useSeoMeta({
   .about-services__question { font-size: 18px; line-height: 24px; }
   .about-services__answer { padding-right: 48px; padding-left: 64px; }
   .about-history { padding-bottom: 80px; }
-  .about-history__card { flex-basis: calc((100% - 30px) / 2); }
+  .about-history__card { flex-basis: 50%; }
   .about-values__stage { min-height: 820px; }
   .about-values__columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .about-values__card:nth-child(-n+2) { border-bottom: 1px solid rgb(255 255 255 / 24%); }
@@ -397,9 +412,13 @@ useSeoMeta({
   .about-services__question { font-size: 16px; line-height: 22px; }
   .about-services__answer { padding: 0 36px 20px 45px; }
   .about-history { padding: 0 15px 65px; }
-  .about-history__grid { gap: 18px; margin-right: -15px; padding-right: 15px; }
+  .about-history__grid { margin-left: -18px; }
   .about-history__card { flex-basis: min(82vw, 300px); }
+  .about-history__card { padding-left: 18px; }
   .about-history__image { width: 150px; height: 150px; }
+  .about-history__nav { top: 75px; width: 42px; height: 42px; }
+  .about-history__nav--previous { left: -8px; }
+  .about-history__nav--next { right: -8px; }
   .about-values__stage { min-height: 1600px; }
   .about-values__columns { grid-template-columns: 1fr; }
   .about-values__card { min-height: 400px; border-right: 0; border-bottom: 1px solid rgb(255 255 255 / 24%); }
@@ -420,6 +439,7 @@ useSeoMeta({
 @media (prefers-reduced-motion: reduce) {
   .about-services__plus,
   .about-services__visual-image :deep(img),
+  .about-history__nav,
   .about-values__image,
   .about-values__copy,
   .about-values__copy p,

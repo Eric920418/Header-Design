@@ -43,7 +43,7 @@ useSeoMeta({
           <section class="pavilion-gallery" aria-labelledby="pavilion-gallery-title">
             <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
               <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Gallery" />
-              <h2 id="pavilion-gallery-title">Gallery Of Inspiring <span>Interior</span> Designs</h2>
+              <h2 id="pavilion-gallery-title">Gallery Of Inspiring <span>Kitchen</span> Designs</h2>
             </header>
 
             <div v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-filter ev" role="tablist" aria-label="選擇集團品牌館">
@@ -84,7 +84,7 @@ useSeoMeta({
           </section>
 
           <section v-reveal="{ anim: 'opalMoveUp' }" class="pavilion-copy-block pavilion-copy-block--last" aria-labelledby="pavilion-styles-title">
-            <h2 id="pavilion-styles-title">Exploring Design Styles</h2>
+            <h2 id="pavilion-styles-title">Important Information &amp; Guidelines</h2>
             <h3 class="pavilion-notes-title">注意事項</h3>
             <ol class="pavilion-notes">
               <li v-for="(notice, index) in pavilionNotice" :key="notice">
@@ -101,12 +101,12 @@ useSeoMeta({
 
 <style scoped>
 .pavilion-single-page { background: #f6f6f6; }
-.pavilion-single-post { overflow: hidden; padding: 0 30px 118px; background: #f6f6f6; }
+.pavilion-single-post { overflow: hidden; padding: 0 30px 118px; background: linear-gradient(180deg, #fff 0%, #f6f6f6 48%, #fff 100%); }
 .single-content { width: min(930px, 100%); margin-inline: auto; }
 .entry-content { overflow: visible; }
 .entry-content p { margin: 0 0 30px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; }
 .pavilion-lead { padding-top: 10px; }
-.pavilion-copy-block h2 { margin: 0 0 23px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 500; line-height: 40px; text-transform: capitalize; }
+.pavilion-copy-block h2 { margin: 0 0 23px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 600; line-height: 40px; text-transform: capitalize; }
 .pavilion-copy-block h3 { margin: 0 0 13px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 19px; font-weight: 500; line-height: 27px; }
 .pavilion-copy-block--last { padding-top: 53px; }
 .pavilion-copy-block--last h2 { font-family: var(--font-cjk-sans); font-weight: 500; }

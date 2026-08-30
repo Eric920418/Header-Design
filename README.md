@@ -1061,6 +1061,8 @@ final result: passed
 
 `nuxt-site/pages/about/exhibition.vue` 已依正式品牌承諾 PPT 第四頁建立 SSR 路由 `/about/exhibition`。第一次實作只套用相近的模板視覺 token，卻以自訂 Hero、三張資訊卡與深色注意事項重新組版，並不符合使用者要求，已判定不合格並撤除。現行版本逐段回到 Antra Home 09、Single Post 02、Projects 01 與 Home 06 的原始 DOM／CSS 結構；沒有把簡報畫面當成圖片，第三個節點由獨立的 5.3 `/about/introduce` 正式承接。
 
+- **2026-08-30／新版 PPT 第 3 頁校正**：5.2 的正確頁面是「集團品牌館」，不是再次建立 5.1 品牌優勢 FAQ。保留既有 Home 09 Hero、嵌入影片及台北／台中／高雄三館切換，將 Gallery 主標的 `Interior` 改為 `Kitchen`、注意事項英文標題改為 `Important Information & Guidelines`；Fundamentals 標題依標註使用 Noto Serif TC 30px SemiBold，頁面內容底色套用 Home 07 的上淺下深、再上深下淺漸層。
+
 - **導覽與 Hero（2026-08-20 第四頁校正）**：Header「品牌承諾 → 集團品牌館」在桌面與手機均已接到 `/about/exhibition`；Hero 使用正式 `Exhibition_Banner_Asset_01`，依 Home 09 的 1410px／24px 圓角影像舞台與左下 60/58px 英文大標重建，保留 `Creative Projects That Define Our Style`。重新放大 PPT 第四頁後，確認右側 Home 09 參考圖確實標示「嵌入影片」，舊版 README 將其判讀成「影片彈窗應撤除」並不成立；現行玻璃元件仍保留品牌優勢／集團品牌館／關於我們三個節點，但目前頁「集團品牌館」改為可操作的影片入口，開啟既有正式 SAKURA 品牌承諾影片，保留載入中、12 秒逾時、完整錯誤原因與 YouTube 備援。Hero 與 Header 的桌面／手機間距同步依紅字改為 20px，三個節點文字依註記改為 Noto Sans TC 16px。
 - **正式內容**：依 PPT 第四頁逐字呈現「享受、交流、體驗」、六感體驗與現代美術館空間敘述；台北館、台中館、高雄館使用各自正式圖片、地址及週一至週五 8:30–17:30 營業時間。館別詳情補上 PPT 指定的「注意事項」標題，四點參觀須知逐字保存建設公司預約範圍、客服電話、門市服務、維修限制與全預約制資訊；官方頁面目前另有不同拆分方式，但不覆蓋 PPT 的四點版本。
 - **注意事項結構修正**：完整放大檢查 PPT 第四頁紅線後，確認注意事項不是館別 Sidebar 的內容，而是指定放入 Single Post 02 最下方 `Exploring Design Styles` 複製文字區塊。現已移除底部錯誤重複的「透過鏡面…」段落，改成全寬「注意事項」與四點正式文案；館別 Projects 01 只保留各館圖片、地址及營業時間，結構與 PPT 一致。四點內容逐字校正 `SAKURA KITCHEN與TLK`、客服電話與標點，且不依賴 Reveal 才能存在於 DOM。
@@ -1074,6 +1076,8 @@ final result: passed
 ## Nuxt 3 — 5.3 關於我們（2026-08-20）
 
 `nuxt-site/pages/about/introduce.vue` 依品牌承諾 PPT 第 5 頁調整既有 `/about/introduce`，保留已符合 Antra 模板的 Breadcrumb、Service 01、品牌紀事、四欄 Process 與 Gallery 結構，不另造一套近似版型。
+
+- **2026-08-30／新版 PPT 第 4 頁校正**：5.3 的正確頁面是「關於我們」，不是品牌優勢 FAQ。Hero 繼續使用能同時露出 `SAKURA GROUP／O.N.E` 的台中館正式影像與既有裁切；「櫻花整體廚房記事」依 PPT 指定資料夾及官方頁面補齊 1978–2021 共 16 筆正式影像與文案，改用專案既有 Embla 實作每次三筆、左右箭頭及鍵盤方向鍵切換。右箭頭另向內預留全站快捷列寬度，避免點擊被「案例門市」攔截；上方 Service 01 大圖問答仍只保留 1978、1992、2016、2020 四個重點年份，避免完整年表反向撐壞版面。
 
 - **Hero 與字體**：Breadcrumb 底圖依標註改用 5.2 集團品牌館的台中館正式照片，麵包屑逐字維持「首頁／關於我們」並改為 Noto Sans TC 15/22px。內頁膠囊、說明文、歷史內容與品牌辨識使用 Noto Sans TC；Service 01 年表問題改為 Noto Serif TC 20px Medium；四項品牌承諾標題改為 Noto Serif TC 30/40px。
 - **品牌紀事輪播**：1978／1992／2016／2020 四段正式文案與圖片不改成自訂卡片內容；桌機維持四張完整並列，平板顯示兩張、手機提供可滑動的單列 scroll-snap 輪播，符合 PPT「參照官網輪播」標註。
