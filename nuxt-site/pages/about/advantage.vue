@@ -33,13 +33,15 @@ useSeoMeta({
 
 <style scoped>
 .brand-advantage-page { background: #f6f6f6; }
-.brand-family-section { overflow: hidden; padding: 100px 30px 95px; background: #f6f6f6; }
+.brand-family-section { overflow: hidden; padding: 100px 30px 95px; background: linear-gradient(180deg, #f1eee8 0%, #e9e4dc 100%); }
+.brand-advantage-page :deep(.brand-benefits) { background: linear-gradient(180deg, #fff 0%, #faf8f4 100%); }
+.brand-advantage-page :deep(.brand-store-section) { background: linear-gradient(180deg, #e7e2da 0%, #f0ede7 100%); }
 .brand-family-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-family-heading { margin-bottom: 50px; }
 .brand-family-heading h2 { scroll-margin-top: 100px; margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
 .brand-family-heading h3 { margin: 24px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .brand-family-heading p { width: min(1050px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
-.brand-advantage-faq { background: linear-gradient(180deg, #fff 0%, #f6f6f6 72.12%); }
+.brand-advantage-faq { background: linear-gradient(180deg, #faf8f4 0%, #fff 100%); }
 
 @media (max-width: 1024px) {
   .brand-family-section { padding: 80px 30px 65px; }

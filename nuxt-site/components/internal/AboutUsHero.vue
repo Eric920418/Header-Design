@@ -19,7 +19,7 @@
 <style scoped>
 .about-us-breadcrumb { position: relative; isolation: isolate; min-height: 360px; overflow: hidden; color: #fff; background: #1c1c1d; }
 .about-us-breadcrumb__image { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; }
-.about-us-breadcrumb__image :deep(img) { object-position: center 58%; }
+.about-us-breadcrumb__image :deep(img) { object-position: center 61%; }
 .about-us-breadcrumb__overlay { position: absolute; z-index: -1; inset: 0; background: rgb(16 8 1 / 64%); }
 .about-us-breadcrumb__inner { width: min(1410px, calc(100% - 60px)); margin-inline: auto; padding: 138px 0 97px; text-align: center; }
 .about-us-breadcrumb h1 { margin: 0 0 35px; color: #fff; font-family: var(--font-display); font-size: 80px; font-weight: 400; line-height: .9523809524; }

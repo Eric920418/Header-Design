@@ -6,12 +6,18 @@
 - 依 `2026.08.21_3.0門市與服務、4.0優惠消息 _調整.pptx` 第 2 頁修正 `/service-process`：Hero 標題改為模板英文字型的 `Our Process`，保留既有安全頂距，不與置中 Logo 重疊。
 - 移除影片區底部多餘的 100px padding，改由 FAQ 自身頂部留白負責兩區間距；FAQ 分類標題下方 12px 間距改為 0，分類間距與題目列垂直留白同步縮小。
 - 共用 FAQ 分類標題統一為 Noto Serif TC 20px SemiBold，題目統一為 Noto Serif TC 18px SemiBold；服務流程頁與品牌優勢頁沿用同一元件，不重複維護樣式。
+- 2026-08-31 將 Hero 台中品牌館背景的垂直焦點由 88% 改為 61%，與 `/about/introduce` 使用相同裁切位置；Hero 高度、遮罩與文字位置不變。
+- 服務流程頁 FAQ 題目獨立調為 Noto Serif TC 20/30px，展開內文的頂部 padding 由 12px 收為 0；共用 FAQ 元件及品牌優勢等其他頁面的 18px 題目規格不變。
 
 ## 3.2 案例門市列表頁（2026-08-30 調整）
 
 - 依同份調整簡報第 3 頁修正 `/gallery`：Hero 標題改為模板英文字型的 `Stores`，背景改用素材包 `3.2_案例門市` 的松竹店正式門市照片，麵包屑統一 Noto Sans TC 15px。
 - 篩選列維持固定橢圓寬度，橫向間距由 26px 精確收為 25px；選取區域後只顯示該區縣市，刪除重複的「全部縣市」按鈕，篩選狀態仍由網址 query 保存。
 - 門市卡標題統一 Noto Serif TC 18px SemiBold，地址改為 Noto Sans TC 16px 並加入金色定位圖示；預約門市按鈕改為 Noto Sans TC 15px，地址與 CTA 間距收為 25px。
+- 2026-08-31 桌機版「區域／縣市」選項改用共用 7 欄網格，修正原 flex 因 60px／72px 按鈕寬度不同而逐欄錯位；1024px 以下仍保留原本可換行配置。
+- 同日將篩選按鈕文字改為 Noto Sans TC 18/26px，桌機膠囊最小高度由 34px 微增至 40px、水平 padding 由 14px 增至 18px；區域與縣市按鈕寬度同步擴為 74px／至少 90px，仍維持共用欄線。
+- 7 欄不再使用會隨版心撐滿的 `1fr`，改為固定 94px 欄寬與 25px 欄距；超寬螢幕不會把篩選項目拉散，上下兩列仍共用相同起點。
+- 修正固定欄寬後三字縣市名稱被 padding 擠成兩行：按鈕統一採 `border-box` 與 `white-space: nowrap`，桌機共用欄寬及縣市按鈕最小寬度微調為 94px，區域與縣市仍不換行且逐欄對齊。
 
 ## 0.0 首頁（2026-08-21 調整）
 
@@ -1041,6 +1047,10 @@ final result: passed
 `nuxt-site/pages/about/advantage.vue` 已建立正式 SSR 路由 `/about/advantage`。甲方於 2026-08-13 確認第三頁「步驟三（引用甲方資訊提案）」才是最終結構真值，因此第二頁／早期 Home 09 組版不再作為驗收基準；現行版本逐段對照第三頁紅框標註、已購 Antra Home 08、Home 01、Gallery 01、FAQs Elementor 原始資料重製，沒有使用簡報截圖，也沒有建立 5.3 假頁。
 
 - **2026-08-30 品牌承諾 PPT 第 2 頁更新**：依 `2026.08.21_5.0品牌承諾_.pptx` 重核 `/about/advantage`。Hero 小標改為 `OUR COMMITMENT`，左半加入承德店正式影像與淺灰遮罩，右側摘要改用 Noto Serif TC 18px SemiBold，圓形向下按鈕移到左欄水平中央，摘要另保留右側快捷列安全欄；三張品牌優勢卡撤除舊 Hover 覆蓋層，改為白色 28px 圓角終態卡並沿用既有 `v-reveal` 依序向上出場，01／02／03 統一固定在卡片右下顯示 80px。優勢、門市與 FAQ 背景依 Home 07 節奏交替為上淺下深／上深下淺／上淺下深；三民店圖說更新為「櫻花廚藝生活館_三民店」，FAQ 仍沿用服務流程共用元件。
+- **Hero 遮罩（2026-08-31）**：桌機左半承德店背景由 91% 淺灰覆蓋改為 48% 黑色遮罩，讓門市影像更清楚；同一背景欄內的主標、膠囊與導覽同步改為白色系以維持對比。1024px 以下原本即隱藏背景圖，仍保留淺底深字，不套用桌機反白。
+- **Hero CTA 波紋（2026-08-31）**：向下箭頭按鈕直接沿用首頁 `hero-start-project` 的金色擴散波紋、Hover 停止與減少動態保護，不另建重複動畫。
+- **品牌優勢卡滾動敘事（2026-08-31）**：`Take A Look At Our Latest Blog & Articles.` 的三張優勢卡改為桌機 sticky 滾動出場；01 先固定，02／03 分兩段滑程由下方依序滑入，三張完整停留後才釋放區塊。外層裁切改用不建立捲動容器的 `overflow: clip`，避免阻斷 sticky；1200px 以下及 `prefers-reduced-motion` 維持原本靜態／直排顯示。
+- **全頁 Section 背景層次（2026-08-31）**：品牌家庭、三項優勢、門市與 FAQ 改為暖石色／白色／暖灰／淺象牙的交替漸層，讓每個 section 有清楚分段而不改成另一套深色視覺；既有文字、十字線、卡片及 sticky 滾動行為不變。
 - **2026-08-20 新版調整 PPT 第二頁**：依 `2026.08.15_5.0品牌承諾_調整.pptx` 的紅線標註校正 5.1，不拿整頁參考截圖當網頁素材。Hero 三個導覽序號改為 PPT 指定的 `。`，導覽統一 `Noto Sans TC 16px`；五種家庭中文標籤改為 `Noto Sans TC 18px`、英文標籤加入正式 `Bodoni Moda 20px`；兩處中文段落標題改為 `Noto Serif TC 25px`；河南店標籤更新為簡報指定的「櫻花廚藝生活館_河南店」並使用 `Noto Sans TC 16px`。門市與 FAQ 間距縮短 40px，FAQ 維持母版全寬三組 12 題、問題 `Noto Sans TC 20px`，並增加展開答案上方內距，修正簡報指出的內文上緣壓迫；同時啟用既有右側快捷列安全欄，避免固定的案例門市／到府丈量／客服中心蓋住 FAQ 加減號。
 - **2026-08-20 5.1 Design QA**：來源真值為 PPT 第二頁內嵌的 2880×16040 原頁截圖與頁面紅線標註；以 1440×900 同尺寸擷取 FAQ 並和來源放入 `/private/tmp/sakura-brand-ppt.IaJdHi/faq-comparison-board.png` 同畫面檢查。桌機實測三組 12 題、單題展開、滑鼠與 Enter 切換、`Bodoni Moda` 載入、圖片錯誤 0、水平溢位 0；390×844 實測 `scrollWidth === 390`，FAQ rail 為 x=15–375、操作內容為 x=15–303、快捷列為 x=318–390，互不重疊。型別檢查與 production build 均通過；建置只保留 Tailwind v4 既有 sourcemap warning。最終無剩餘可執行的 P0／P1／P2，右側安全欄屬避免固定工具列遮擋操作的必要差異。
 - **2026-08-20 新版調整 PPT 第三頁**：重新放大檢查「步驟二／步驟三」而不是沿用舊筆記。第三頁把三項優勢指定為 Home 01 的 Blog 三欄卡與 `Initial Consultation` 向上覆蓋動畫，不是三組左文右圖寬版列；現已把英文母版標題還原為 `Take A Look At Our Latest / Blog & Articles.` 的兩行節奏，三張卡依 01 Digitization／02 Safety／03 Professional 使用正式圖片與逐字文案，桌機 Hover 會讓白色圓角詳情卡由卡底完整向上覆蓋，reduced-motion 停用轉場，平板與手機則維持不依賴 Hover 的完整靜態內容。Hero 補回 PPT 標示的 Home 01 圓形向下控制，實際捲到家庭型態段落；優勢與門市背景回到母版連續的 `#f6f6f6`，家庭、優勢、門市三段也加入快捷列安全欄，避免第三欄內容被固定服務按鈕覆蓋。
@@ -1078,6 +1088,7 @@ final result: passed
 `nuxt-site/pages/about/introduce.vue` 依品牌承諾 PPT 第 5 頁調整既有 `/about/introduce`，保留已符合 Antra 模板的 Breadcrumb、Service 01、品牌紀事、四欄 Process 與 Gallery 結構，不另造一套近似版型。
 
 - **2026-08-30／新版 PPT 第 4 頁校正**：5.3 的正確頁面是「關於我們」，不是品牌優勢 FAQ。Hero 繼續使用能同時露出 `SAKURA GROUP／O.N.E` 的台中館正式影像與既有裁切；「櫻花整體廚房記事」依 PPT 指定資料夾及官方頁面補齊 1978–2021 共 16 筆正式影像與文案，改用專案既有 Embla 實作每次三筆、左右箭頭及鍵盤方向鍵切換。右箭頭另向內預留全站快捷列寬度，避免點擊被「案例門市」攔截；上方 Service 01 大圖問答仍只保留 1978、1992、2016、2020 四個重點年份，避免完整年表反向撐壞版面。
+- **Hero 圖片焦點（2026-08-31）**：只將台中品牌館背景的垂直焦點由 58% 調為 61%，讓圖片稍微上移；Hero 高度、遮罩、標題與麵包屑位置不變。
 
 - **Hero 與字體**：Breadcrumb 底圖依標註改用 5.2 集團品牌館的台中館正式照片，麵包屑逐字維持「首頁／關於我們」並改為 Noto Sans TC 15/22px。內頁膠囊、說明文、歷史內容與品牌辨識使用 Noto Sans TC；Service 01 年表問題改為 Noto Serif TC 20px Medium；四項品牌承諾標題改為 Noto Serif TC 30/40px。
 - **品牌紀事輪播**：1978／1992／2016／2020 四段正式文案與圖片不改成自訂卡片內容；桌機維持四張完整並列，平板顯示兩張、手機提供可滑動的單列 scroll-snap 輪播，符合 PPT「參照官網輪播」標註。
@@ -1242,6 +1253,7 @@ final result: passed
 
 ## Nuxt 3 — 4.1／4.2／4.3 優惠消息文章內頁（2026-08-30 最新調整）
 
+- **三套文章 Hero 統一（2026-08-31）**：完整掃描 `/news/activities/[slug]`、`/news/latest/[slug]`、`/news/video/[slug]`，三套內容頁全部改為與各自列表頁一致的 360／285／204px Hero、置中展示標題與麵包屑；展示標題分別沿用 `Promotions／NEWS／Media`。文章正式標題仍是每頁唯一 `h1`，各分類既有正式背景素材不互相覆蓋。
 - **PPT 第九頁真值與範圍**：第 9 頁左側再次標示「文章頁同內容調整」，因此修改範圍是 `/news/activities/[slug]`、`/news/latest/[slug]`、`/news/video/[slug]` 三套正式文章模板，不是只修示意圖中的優惠活動。三頁麵包屑底圖統一換成 3.1 案例門市店面圖，文字使用 Noto Sans TC 15/20px 並加寬字距。
 - **2026-08-30 第 9 頁複核**：麵包屑維持投影片示意的水平／垂直置中；三套文章主標統一為 Noto Serif TC 30/41px、SemiBold，底部推薦卡標題則由舊版 25px（手機 22px）修正為全斷點 Noto Serif TC 20/30px、SemiBold。第 10 頁兩篇指定文章的內容例外未提前混入本次共用模板調整。
 - **文章版面與字級**：文章 Header、主圖／影片與內文改為廚房裝修指南文章內頁相同的 930px 版心；分類日期列間距由 12.5px 校正為 15px，標題至主圖間距由 30px 改為 40px。優惠活動、最新消息與媒體影音三種內容頁的文章大標在所有斷點統一為 Noto Serif TC 30/41px，段落標題為 Noto Serif TC 25/32px，段落、清單及文章連結為 Noto Sans TC 15/26px；三頁都不再由 Cal Sans／Golos Text 搶先顯示中文字。
@@ -1251,6 +1263,7 @@ final result: passed
 
 ## Nuxt 3 — 4.2 最新消息指定文章調整（2026-08-30 最新調整）
 
+- **文章內頁 Hero（2026-08-31）**：`/news/latest/[slug]` 由原本僅 185px 的麵包屑帶改為與最新消息列表一致的 360px 桌機／285px 平板／204px 手機 Hero，補回 `NEWS` 展示標題與相同置中節奏；展示標題使用一般文字，文章正式標題仍是頁面唯一 `h1`。第 10 頁指定的台中品牌館背景、遮罩及麵包屑內容不變。
 - **PPT 第十頁真值與範圍**：第 10 頁不是第 9 頁共用文章模板的再版，而是 `/news/latest/2026-franchise-seminar` 與 `/news/latest/kaohsiung_opening` 兩篇指定文章的內容例外；共用的 930px 版心、30px 文章標題、15px 正文、三分類 Tab 與推薦文章維持不動。最新消息文章的麵包屑背景依指定改用素材庫 `5.2 集團品牌館／Taichung` 的台中集團品牌館正面照，定位沿用 3.1 已驗收的 `center 88%`。
 - **加盟說明會**：依第 10 頁最新標註刪除主圖下方的歡迎短句；QR Code 改到台北／台中／高雄三張場次表之後，縮為 128px 並顯示「報名QR code」，不再把 QR 與文字連結放在文章前段。三個場次標題維持 `【地區加盟說明會場次】`，並修正為 PPT 指定的 Noto Serif TC SemiBold 20/30px；三張正式場次圖維持約 500px 窄版置中。
 - **高雄品牌館**：首段介紹保留單欄；PPT 點名的張永杰董事長段落改為 Home Six 參考的左圖右文雙欄，左側使用同一段原官網現場圖、右側保留指定原文，既有 `opalMoveUp／opalScaleUp` 進場語彙不另造動畫。第二張 HOME in O.N.E 現場圖與其後核心價值／結語仍完整保留；767px 以下依閱讀順序改為圖片在上、文字在下。
@@ -1258,6 +1271,7 @@ final result: passed
 
 ## Nuxt 3 — 全站內頁版面一致性（2026-08-21）
 
+- **全站桌面捲動重量（2026-08-31）**：Lenis 慣性時間由 1.5 秒收為 1.2 秒，降低滾動拖尾與沉重感；滾輪距離、既有 expo ease-out、`prefers-reduced-motion` 保護及 992px 以下原生捲動皆不變。
 - **中文字重單一規格**：新增 `--font-weight-cjk-serif-emphasis: 600`；46 個正式內頁網址中，所有實際使用 Noto Serif TC、標準字級 18px 以上的中文標題、文章標題、卡名與產品名稱統一為 SemiBold。Noto Sans TC 正文、小於 18px 的文字與純英文 Cal Sans／Bodoni Moda／Libre Baskerville 不受影響；共用 Header 的「十大廚房系列」與隱私權頁標題同步修正。
 - **Hero 含主導覽高度**：60px Header 高度集中為 `--site-header-height`，固定導覽覆蓋於 Hero；首頁與全部內頁 Hero 使用 `hero-includes-header` 回到文件 `y=0`，並保留每個模板原本的 Hero 高度與內部比例。沒有 Hero 的 `/franchising/form` 仍從 `y=60` 開始，未額外裁切標題、麵包屑或圖片。
 - **30／70 標題共用元件**：新增 `InternalTemplateHeadingRail`，統一橢圓外框、5px 金點與 1px `#E3E3E8` 水平／垂直裝飾；支援亮／暗色、標準／緊湊密度、Home 04／09／06／05／01 原始幾何及操作按鈕插槽。FAQ、品牌門市、服務流程、關於我們、品牌辨識、集團品牌館、加盟、建商、AI Kitchen、裝修指南與案例推薦共 13 組標題已遷移；服務流程補上 `Service Process` 小標。2026-08-25 再直接核對 Antra XML 的 Elementor `icon` widget 與正式 `deco-horizontal.svg／deco-vertical.svg`：兩條線末端均恢復原版 15×15 SVG 箭頭 path，不再以無箭頭的純色 span 代替；Home 06 裝飾改為相對整個 30／70 row 定位，垂直線採原始桌機 `offset-x: 345px`／平板 `200px`，主標從原始 38px 上內距開始，避免線條壓到 `Explore Our…`。768–880px 依原始 `mobile-extra` 設定改為上下排列、置中小標與主標，並使用 150／100px 的線條偏移，避免垂直線擦到首字；767px 以下依模板隱藏裝飾線與箭頭、保留膠囊小標。

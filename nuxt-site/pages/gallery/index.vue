@@ -203,21 +203,28 @@ useSeoMeta({
 
 .antra-store-filter button {
   position: relative;
-  min-height: 34px;
-  padding: 5px 14px;
+  box-sizing: border-box;
+  min-height: 40px;
+  padding: 7px 18px;
   border: 1px solid transparent;
   border-radius: 24px;
   color: #59585d;
   background: transparent;
   font-family: var(--font-cjk-sans);
-  font-size: 15px;
-  line-height: 22px;
+  font-size: 18px;
+  line-height: 26px;
+  white-space: nowrap;
   cursor: pointer;
   transition: color .3s ease, border-color .3s ease, background-color .3s ease;
 }
 
-.antra-store-filter__row:first-child button { width: 60px; }
-.antra-store-filter__row--cities button { min-width: 72px; }
+.antra-store-filter__row:first-child button { width: 74px; }
+.antra-store-filter__row--cities button { min-width: 94px; }
+
+@media (min-width: 1025px) {
+  .antra-store-filter__options { display: grid; grid-template-columns: repeat(7, 94px); }
+  .antra-store-filter button { justify-self: start; }
+}
 
 .antra-store-filter button:hover {
   border-color: rgba(202, 160, 92, .45);

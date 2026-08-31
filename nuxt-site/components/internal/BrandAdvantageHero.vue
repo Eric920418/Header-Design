@@ -14,7 +14,7 @@ import { ArrowDown } from 'lucide-vue-next'
             <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span>集團品牌館</span></NuxtLink>
             <NuxtLink to="/about/introduce"><b aria-hidden="true">。</b><span>關於我們</span></NuxtLink>
           </nav>
-          <a href="#brand-family-title" class="brand-h8-scroll" aria-label="向下查看品牌優勢內容">
+          <a href="#brand-family-title" class="brand-h8-scroll hero-start-project" aria-label="向下查看品牌優勢內容">
             <ArrowDown aria-hidden="true" />
           </a>
         </div>
@@ -45,7 +45,7 @@ import { ArrowDown } from 'lucide-vue-next'
 <style scoped>
 .brand-h8-hero { overflow: hidden; background: #f6f6f6; }
 .brand-h8-intro { position: relative; padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #f6f6f6 50% 100%); }
-.brand-h8-intro::before { position: absolute; inset: 0 50% 0 0; background: linear-gradient(rgb(234 233 231 / 91%), rgb(234 233 231 / 91%)), url('/section-3/store-chengde.jpg') center / cover no-repeat; content: ''; pointer-events: none; }
+.brand-h8-intro::before { position: absolute; inset: 0 50% 0 0; background: linear-gradient(rgb(18 18 18 / 48%), rgb(18 18 18 / 48%)), url('/section-3/store-chengde.jpg') center / cover no-repeat; content: ''; pointer-events: none; }
 .brand-h8-intro__rail { position: relative; display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
 .brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: 100px; font-weight: 400; line-height: 100px; letter-spacing: -.01em; text-transform: capitalize; }
@@ -67,6 +67,15 @@ import { ArrowDown } from 'lucide-vue-next'
 .brand-h8-aside p { width: min(510px, 100%); margin: 0; color: #59585d; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 28px; }
 .brand-h8-stage { position: relative; width: min(1770px, calc(100% - 60px)); margin: -300px auto 0; overflow: hidden; border-radius: 24px; }
 .brand-h8-stage__image { width: 100%; aspect-ratio: 2 / 1; border-radius: 24px; }
+
+@media (min-width: 1025px) {
+  .brand-h8-copy h1 { color: #fff; }
+  .brand-h8-copy :deep(.section-pill) { border-color: rgb(255 255 255 / 28%); color: #fff; }
+  .brand-h8-nav { border-color: rgb(255 255 255 / 28%); }
+  .brand-h8-nav > * { color: rgb(255 255 255 / 70%); }
+  .brand-h8-nav > * + * { border-color: rgb(255 255 255 / 28%); }
+  .brand-h8-nav a[aria-current="page"] span { color: #fff; }
+}
 
 @media (max-width: 1366px) {
   .brand-h8-intro { padding-top: 140px; padding-bottom: 350px; }

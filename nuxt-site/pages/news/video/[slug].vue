@@ -33,13 +33,16 @@ useHead({
   <main class="media-detail-page">
     <section class="media-detail-breadcrumb hero-includes-header" aria-label="媒體影音麵包屑">
       <div class="media-detail-breadcrumb__overlay" aria-hidden="true" />
-      <nav aria-label="麵包屑" class="media-detail-breadcrumb__trail" v-reveal="{ anim: 'opalMoveUp' }">
-        <NuxtLink to="/">首頁</NuxtLink>
-        <span aria-hidden="true">/</span>
-        <NuxtLink to="/news">優惠消息</NuxtLink>
-        <span aria-hidden="true">/</span>
-        <NuxtLink to="/news/video" aria-current="page">媒體影音</NuxtLink>
-      </nav>
+      <div class="media-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
+        <p class="media-detail-breadcrumb__title">Media</p>
+        <nav aria-label="麵包屑" class="media-detail-breadcrumb__trail">
+          <NuxtLink to="/">首頁</NuxtLink>
+          <span aria-hidden="true">/</span>
+          <NuxtLink to="/news">優惠消息</NuxtLink>
+          <span aria-hidden="true">/</span>
+          <NuxtLink to="/news/video" aria-current="page">媒體影音</NuxtLink>
+        </nav>
+      </div>
     </section>
 
     <article class="media-detail-article" :aria-labelledby="`media-title-${article.id}`">
@@ -92,11 +95,8 @@ useHead({
 .media-detail-breadcrumb {
   position: relative;
   isolation: isolate;
-  display: grid;
-  min-height: 185px;
+  min-height: 360px;
   overflow: hidden;
-  padding: 30px;
-  place-items: center;
   color: #fff;
   background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
 }
@@ -107,6 +107,22 @@ useHead({
   inset: 0;
   background: #100801;
   opacity: .64;
+}
+
+.media-detail-breadcrumb__inner {
+  width: min(1410px, calc(100% - 60px));
+  margin-inline: auto;
+  padding: 138px 0 97px;
+  text-align: center;
+}
+
+.media-detail-breadcrumb__title {
+  margin: 0 0 35px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 64px;
 }
 
 .media-detail-breadcrumb__trail {
@@ -268,16 +284,19 @@ useHead({
 
 @media (max-width: 1024px) {
   .media-detail-breadcrumb {
-    min-height: 175px;
-    padding: 30px;
+    min-height: 285px;
     background-attachment: scroll;
   }
+
+  .media-detail-breadcrumb__inner { padding-block: 80px; }
 
   .media-detail-article { padding-top: 80px; }
 }
 
 @media (max-width: 767px) {
-  .media-detail-breadcrumb { min-height: 155px; padding: 15px; }
+  .media-detail-breadcrumb { min-height: 204px; }
+  .media-detail-breadcrumb__inner { width: calc(100% - 30px); padding: 80px 0 60px; }
+  .media-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }
   .media-detail-article { padding: 60px 15px 0; }
   .media-detail-header { margin-bottom: 30px; }
   .media-detail-header h1 { font-size: 30px; line-height: 41px; }

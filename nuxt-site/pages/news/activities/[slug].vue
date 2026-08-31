@@ -33,13 +33,16 @@ useHead({
   <main class="activity-detail-page">
     <section class="activity-detail-breadcrumb hero-includes-header" aria-label="優惠活動麵包屑">
       <div class="activity-detail-breadcrumb__overlay" aria-hidden="true" />
-      <nav aria-label="麵包屑" class="activity-detail-breadcrumb__trail" v-reveal="{ anim: 'opalMoveUp' }">
-        <NuxtLink to="/">首頁</NuxtLink>
-        <span aria-hidden="true">/</span>
-        <NuxtLink to="/news">優惠消息</NuxtLink>
-        <span aria-hidden="true">/</span>
-        <NuxtLink to="/news/activities" aria-current="page">優惠活動</NuxtLink>
-      </nav>
+      <div class="activity-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
+        <p class="activity-detail-breadcrumb__title">Promotions</p>
+        <nav aria-label="麵包屑" class="activity-detail-breadcrumb__trail">
+          <NuxtLink to="/">首頁</NuxtLink>
+          <span aria-hidden="true">/</span>
+          <NuxtLink to="/news">優惠消息</NuxtLink>
+          <span aria-hidden="true">/</span>
+          <NuxtLink to="/news/activities" aria-current="page">優惠活動</NuxtLink>
+        </nav>
+      </div>
     </section>
 
     <article class="activity-detail-article has-post-thumbnail" :aria-labelledby="`activity-title-${article.id}`">
@@ -118,11 +121,8 @@ useHead({
 .activity-detail-breadcrumb {
   position: relative;
   isolation: isolate;
-  display: grid;
-  min-height: 185px;
+  min-height: 360px;
   overflow: hidden;
-  padding: 30px;
-  place-items: center;
   color: #fff;
   background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
 }
@@ -133,6 +133,22 @@ useHead({
   inset: 0;
   background: #100801;
   opacity: .64;
+}
+
+.activity-detail-breadcrumb__inner {
+  width: min(1410px, calc(100% - 60px));
+  margin-inline: auto;
+  padding: 138px 0 97px;
+  text-align: center;
+}
+
+.activity-detail-breadcrumb__title {
+  margin: 0 0 35px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 64px;
 }
 
 .activity-detail-breadcrumb__trail {
@@ -376,22 +392,21 @@ useHead({
 
 .activity-detail-categories span[aria-disabled="true"] { cursor: not-allowed; opacity: .55; }
 
-@media (max-width: 1200px) and (min-width: 1025px) {
-  .activity-detail-breadcrumb { min-height: 185px; }
-}
-
 @media (max-width: 1024px) {
   .activity-detail-breadcrumb {
-    min-height: 175px;
-    padding: 30px;
+    min-height: 285px;
     background-attachment: scroll;
   }
+
+  .activity-detail-breadcrumb__inner { padding-block: 80px; }
 
   .activity-detail-article { padding-top: 80px; }
 }
 
 @media (max-width: 767px) {
-  .activity-detail-breadcrumb { min-height: 155px; padding: 15px; }
+  .activity-detail-breadcrumb { min-height: 204px; }
+  .activity-detail-breadcrumb__inner { width: calc(100% - 30px); padding: 80px 0 60px; }
+  .activity-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }
   .activity-detail-article { padding: 60px 15px 0; }
   .activity-detail-header { margin-bottom: 30px; }
 

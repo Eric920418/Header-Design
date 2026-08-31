@@ -8,7 +8,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <main>
+  <main class="service-process-page">
     <section class="antra-breadcrumb hero-includes-header" aria-labelledby="service-page-title">
       <div class="antra-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
@@ -53,7 +53,7 @@ useSeoMeta({
   isolation: isolate;
   min-height: 360px;
   overflow: hidden;
-  background: url('/section-5/brand-pavilion/pavilion-taichung.jpg') center 88% / cover no-repeat;
+  background: url('/section-5/brand-pavilion/pavilion-taichung.jpg') center 61% / cover no-repeat;
   color: #fff;
 }
 
@@ -147,6 +147,9 @@ useSeoMeta({
   width: min(1410px, 100%);
   margin-inline: auto;
 }
+
+.service-process-page :deep(.antra-faq-question) { font-size: 20px; line-height: 30px; }
+.service-process-page :deep(.antra-faq-panel p) { padding-top: 0; }
 
 @media (min-width: 1025px) and (max-width: 1366px) {
   .antra-service-intro h2 {
