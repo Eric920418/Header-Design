@@ -85,7 +85,7 @@ onBeforeUnmount(() => {
       <div class="source-rail-wide franchise-hero__inner internal-rail-safe">
         <div class="franchise-hero__grid">
           <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev">
-            <InternalSectionPill tone="dark">我要加盟</InternalSectionPill>
+            <InternalSectionPill tone="dark">FRANCHISE WITH US</InternalSectionPill>
             <h1 id="franchise-page-title">Find Your Inspired <span>Kitchen Design</span></h1>
           </div>
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="franchise-hero__aside ev">
@@ -190,7 +190,7 @@ onBeforeUnmount(() => {
     <section class="franchise-newsletter elementor-8ca2535" aria-labelledby="franchise-conversion-title">
       <div class="franchise-newsletter__content">
         <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" tone="dark">Subscribe To The Newsletter</InternalSectionPill>
-        <h2 id="franchise-conversion-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }">Join <span>Our Newsletter</span><br /><span>Stay</span> Up To Date</h2>
+        <h2 id="franchise-conversion-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }">Franchise <span>With SAKURA</span></h2>
         <p v-reveal="{ anim: 'opalMoveUp', delay: 120 }">從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！</p>
         <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 170 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--news">快來了解加盟金、補助金，填寫表單 <ArrowRight aria-hidden="true" /></NuxtLink>
       </div>
@@ -292,10 +292,10 @@ onBeforeUnmount(() => {
 
           <aside v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" data-ev="opalMoveLeft" class="franchise-faq__promo ev">
             <NuxtLink to="/franchising/download" target="_blank" rel="noopener" class="franchise-faq__promo-image" aria-label="在新分頁開啟加盟資料下載頁">
-              <InternalFranchiseImage src="/section-6/franchise/franchise-benefits-sheet.png" alt="櫻花加盟總部八大優勢資料預覽" fit="contain" />
+              <InternalFranchiseImage src="/section-6/franchise/franchise-download-cover.png" alt="櫻花整體廚房加盟資料封面" fit="contain" />
             </NuxtLink>
             <h3><NuxtLink to="/franchising/download" target="_blank" rel="noopener">加盟資料下載</NuxtLink></h3>
-            <p>專業教育訓練與實戰支持。報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！</p>
+            <p>報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！</p>
           </aside>
         </div>
       </div>
@@ -492,15 +492,15 @@ onBeforeUnmount(() => {
 .franchise-faq__panel.is-open { grid-template-rows: 1fr; }
 .franchise-faq__panel > div { overflow: hidden; }
 .franchise-faq__panel p { width: min(100%, 832px); margin: 0; padding: 0 40px 32px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
-.franchise-faq__promo { min-width: 0; padding-left: 100px; color: #1c1c1d; }
+.franchise-faq__promo { min-width: 0; padding-left: 100px; color: #1c1c1d; text-align: center; }
 .franchise-faq__promo-image { display: block; overflow: hidden; border-radius: 24px; background: #fff; }
 .franchise-faq__promo-image :deep(.franchise-image) { width: 100%; aspect-ratio: 774 / 1074; background: #fff; }
 .franchise-faq__promo-image :deep(img) { transition: transform .5s ease; }
 .franchise-faq__promo-image:hover :deep(img) { transform: scale(1.025); }
-.franchise-faq__promo h3 { width: min(310px, 100%); margin: 30px 0 20px; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 600; line-height: 35px; }
+.franchise-faq__promo h3 { width: min(310px, 100%); margin: 30px auto 20px; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 600; line-height: 35px; }
 .franchise-faq__promo h3 a { transition: color .3s ease; }
 .franchise-faq__promo h3 a:hover { color: #a57b38; }
-.franchise-faq__promo p { width: min(310px, 100%); margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.franchise-faq__promo p { width: min(310px, 100%); margin: 0 auto; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 
 .franchise-news { padding: 108px 30px 86px; background: #fff url('/section-6/franchise/antra-original/h5-bg02.png') top right / auto no-repeat; }
 .franchise-news h2 { max-width: 786px; margin-top: 28px; }

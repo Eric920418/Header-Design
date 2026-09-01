@@ -47,9 +47,9 @@ export const franchiseAdvantages: FranchiseAdvantage[] = [
     image: '/section-6/franchise/factory.png',
     imageAlt: '櫻花整體廚房自有工廠與自動化生產線',
     features: [
-      { icon: '/section-6/franchise/icons/Global_Icon_Asset_01.svg', label: '導入 AI 全自動化生產' },
-      { icon: '/section-6/franchise/icons/Global_Icon_Asset_02.svg', label: '產品專屬 QR Code' },
-      { icon: '/section-6/franchise/icons/Global_Icon_Asset_03.svg', label: '生產數據視覺化系統' },
+      { icon: '/section-6/franchise/icons/Global_Icon_Asset_02.svg', label: '導入 AI 全自動化生產' },
+      { icon: '/section-6/franchise/icons/Global_Icon_Asset_03.svg', label: '產品專屬 QR Code' },
+      { icon: '/section-6/franchise/icons/Global_Icon_Asset_04.svg', label: '生產數據視覺化系統' },
     ],
     badge: 'AI 導入',
   },
