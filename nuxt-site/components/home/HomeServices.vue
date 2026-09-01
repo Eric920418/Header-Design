@@ -24,7 +24,7 @@ onBeforeUnmount(() => timer && clearInterval(timer))
       <div class="home-services-heading relative mx-auto mb-[30px] grid max-w-[1410px] grid-cols-1 min-[768px]:mb-[60px] min-[768px]:grid-cols-[30%_70%]">
         <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="KITCHEN PRODUCTS" tone="dark" source="home6" class="home-services-heading__rail" />
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="home-services-heading__copy">
-          <h2 id="services-heading" class="w-full max-w-[769px] text-center font-display text-[30px] capitalize leading-[35px] text-white min-[768px]:text-left min-[768px]:text-[45px] min-[768px]:leading-[50px] min-[881px]:text-[60px] min-[881px]:leading-[64px]">Explore Our <span class="text-[#CAA05C]">Comprehensive Interior Design</span> Services</h2>
+          <h2 id="services-heading" class="w-full max-w-[769px] text-center font-display text-[30px] capitalize leading-[35px] text-white min-[768px]:text-left min-[768px]:text-[45px] min-[768px]:leading-[50px] min-[881px]:text-[60px] min-[881px]:leading-[64px]">Explore Our <span class="text-[#CAA05C]">Comprehensive Kitchen Design</span> Services</h2>
         </div>
       </div>
       <div ref="emblaRef" class="cursor-grab overflow-hidden active:cursor-grabbing" @mouseenter="paused = true" @mouseleave="paused = false" @focusin="paused = true" @focusout="paused = false"><div class="-ml-[30px] flex">

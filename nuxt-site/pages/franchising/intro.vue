@@ -86,7 +86,7 @@ onBeforeUnmount(() => {
         <div class="franchise-hero__grid">
           <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev">
             <InternalSectionPill tone="dark">我要加盟</InternalSectionPill>
-            <h1 id="franchise-page-title">Find Your Inspired <span>Interior Design</span></h1>
+            <h1 id="franchise-page-title">Find Your Inspired <span>Kitchen Design</span></h1>
           </div>
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="franchise-hero__aside ev">
             <h2>為什麼選擇加盟櫻花整體廚房？</h2>

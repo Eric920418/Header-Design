@@ -56,7 +56,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
       <div class="builders-rail-wide builders-hero__inner internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="builders-hero__headline ev">
           <InternalSectionPill tone="dark">建商專區</InternalSectionPill>
-          <h1 id="builders-title">Find Your Inspired<br /><span>Interior Design</span></h1>
+          <h1 id="builders-title">Find Your Inspired<br /><span>Kitchen Design</span></h1>
         </div>
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="builders-hero__aside ev">
           <p>一站式整體廚房解決方案，為建案提升價值與銷售力。</p>
@@ -76,7 +76,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--team">
           <InternalSectionPill>Our Team</InternalSectionPill>
-          <h2 id="builders-team-title">Meet The <span>Experts Our</span><br />Interior Designers</h2>
+          <h2 id="builders-team-title">Meet The <span>Experts Our</span><br />Kitchen Designers</h2>
         </header>
         <div class="builders-team__grid">
           <template v-for="(card, index) in builderProjectCards" :key="card.image">

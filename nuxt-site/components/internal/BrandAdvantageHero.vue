@@ -8,7 +8,7 @@ import { ArrowDown } from 'lucide-vue-next'
       <div class="brand-h8-intro__rail">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
           <InternalSectionPill>OUR COMMITMENT</InternalSectionPill>
-          <h1 id="brand-h8-title">Find Your<br /><span>Inspired<br />Interior</span> Design</h1>
+          <h1 id="brand-h8-title">Find Your<br /><span>Inspired<br />Kitchen</span> Design</h1>
           <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
             <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
             <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span>集團品牌館</span></NuxtLink>

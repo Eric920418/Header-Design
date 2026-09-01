@@ -8,7 +8,7 @@
     />
     <div class="about-us-breadcrumb__overlay" aria-hidden="true" />
     <div v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="about-us-breadcrumb__inner ev">
-      <h1 id="about-us-page-title">關於我們</h1>
+      <h1 id="about-us-page-title">About Us</h1>
       <nav aria-label="麵包屑" class="about-us-breadcrumb__trail">
         <NuxtLink to="/">首頁</NuxtLink><span aria-hidden="true">/</span><span aria-current="page">關於我們</span>
       </nav>

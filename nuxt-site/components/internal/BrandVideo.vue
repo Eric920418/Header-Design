@@ -6,24 +6,30 @@ const props = withDefaults(defineProps<{
   aspect?: string
   flat?: boolean
   alt?: string
+  autoplay?: boolean
 }>(), {
   cover: '',
   aspect: '16 / 9',
   flat: false,
   alt: 'SAKURA 品牌承諾影片縮圖',
+  autoplay: false,
 })
 
 const videoId = 'wH374AF9wLI'
-const state = ref<'idle' | 'loading' | 'playing' | 'error'>('idle')
+const state = ref<'idle' | 'loading' | 'playing' | 'error'>(props.autoplay ? 'loading' : 'idle')
 let timeout: ReturnType<typeof setTimeout> | undefined
 
-const play = () => {
-  state.value = 'loading'
+const startTimeout = () => {
   if (import.meta.client) {
     timeout = setTimeout(() => {
       if (state.value === 'loading') state.value = 'error'
     }, 12000)
   }
+}
+
+const play = () => {
+  state.value = 'loading'
+  startTimeout()
 }
 
 const loaded = () => {
@@ -36,6 +42,7 @@ const failed = () => {
   state.value = 'error'
 }
 
+onMounted(() => props.autoplay && startTimeout())
 onBeforeUnmount(() => timeout && clearTimeout(timeout))
 </script>
 

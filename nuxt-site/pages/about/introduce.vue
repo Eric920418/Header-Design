@@ -5,7 +5,10 @@ import { brandHistory, brandHistoryHighlights, brandIdentities, brandValues } fr
 
 const activeHistoryYear = ref<(typeof brandHistoryHighlights)[number]['year']>('1978')
 const activeHistory = computed(() => brandHistoryHighlights.find(item => item.year === activeHistoryYear.value) ?? brandHistoryHighlights[0]!)
-const [historyEmblaRef, historyEmblaApi] = emblaCarouselVue({ align: 'start', loop: false, slidesToScroll: 1 })
+const [historyEmblaRef, historyEmblaApi] = emblaCarouselVue({ align: 'start', loop: true, slidesToScroll: 1 })
+const historyPaused = ref(false)
+const reducedMotion = useReducedMotion()
+let historyTimer: ReturnType<typeof setInterval> | undefined
 const activeValueId = ref<(typeof brandValues)[number]['id']>('service')
 const identityTrack = ref<HTMLElement | null>(null)
 const identityViewportRatio = ref(1)
@@ -47,6 +50,13 @@ const identityProgressStyle = computed(() => ({
   transform: `translateX(${identityScrollRatio.value * ((1 / identityViewportRatio.value) - 1) * 100}%)`,
 }))
 
+watch([historyEmblaApi, reducedMotion], ([api, isReduced]) => {
+  if (historyTimer) clearInterval(historyTimer)
+  if (api && !isReduced) historyTimer = setInterval(() => {
+    if (!historyPaused.value) api.scrollNext()
+  }, 3500)
+}, { immediate: true })
+
 onMounted(() => {
   nextTick(updateIdentityProgress)
   window.addEventListener('resize', updateIdentityProgress)
@@ -54,6 +64,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (historyTimer) clearInterval(historyTimer)
   window.removeEventListener('resize', updateIdentityProgress)
   window.removeEventListener('keydown', handleIdentityKeyboard)
 })
@@ -74,9 +85,9 @@ useSeoMeta({
     <section class="about-services" aria-labelledby="about-services-title">
       <div class="about-rail">
         <header class="about-services__heading">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="關於我們" data-ev="opalMoveRight" class="ev" />
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="About Us" data-ev="opalMoveRight" class="ev" />
           <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">
-            Explore Our Comprehensive<br /><span>Interior Design</span> Services
+            Explore Our Comprehensive<br /><span>Kitchen Design</span> Services
           </h2>
         </header>
 
@@ -131,7 +142,7 @@ useSeoMeta({
 
     <section class="about-history" aria-label="櫻花整體廚房品牌紀事">
       <div class="about-rail">
-        <div class="about-history__carousel">
+        <div class="about-history__carousel" @mouseenter="historyPaused = true" @mouseleave="historyPaused = false" @focusin="historyPaused = true" @focusout="historyPaused = false">
           <div ref="historyEmblaRef" class="about-history__viewport" role="region" aria-label="櫻花整體廚房品牌紀事輪播" tabindex="0" @keydown.left.prevent="historyEmblaApi?.scrollPrev()" @keydown.right.prevent="historyEmblaApi?.scrollNext()">
             <div class="about-history__grid">
               <article
@@ -204,7 +215,7 @@ useSeoMeta({
         <header class="about-identity__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="專屬品牌辨識" data-ev="opalMoveRight" class="ev" />
           <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">
-            Gallery Of Inspiring<br /><span>Interior</span> Designs
+            Gallery Of Inspiring<br /><span>Kitchen</span> Designs
           </h2>
         </header>
 
@@ -279,7 +290,7 @@ useSeoMeta({
 .about-history__carousel { position: relative; }
 .about-history__viewport { overflow: hidden; }
 .about-history__grid { display: flex; margin-left: -30px; touch-action: pan-y pinch-zoom; }
-.about-history__card { min-width: 0; flex: 0 0 33.3333%; padding-left: 30px; }
+.about-history__card { min-width: 0; flex: 0 0 25%; padding-left: 30px; }
 .about-history__image { width: 130px; height: 130px; border-radius: 24px; }
 .about-history__content { position: relative; padding: 28px 0 0; }
 .about-history__icon-slot { display: block; width: 25px; height: 25px; margin-bottom: 20px; }
@@ -374,6 +385,10 @@ useSeoMeta({
   .about-identity__card { flex-basis: calc((100% - 96px) / 5); }
 }
 
+@media (min-width: 768px) and (max-width: 1600px) {
+  .about-history { padding-right: 110px; }
+}
+
 @media (max-width: 1024px) {
   .about-services,
   .about-identity { padding-block: 80px; }
@@ -389,7 +404,7 @@ useSeoMeta({
   .about-services__question { font-size: 18px; line-height: 24px; }
   .about-services__answer { padding-right: 48px; padding-left: 64px; }
   .about-history { padding-bottom: 80px; }
-  .about-history__card { flex-basis: 50%; }
+  .about-history__card { flex-basis: 33.3333%; }
   .about-values__stage { min-height: 820px; }
   .about-values__columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .about-values__card:nth-child(-n+2) { border-bottom: 1px solid rgb(255 255 255 / 24%); }

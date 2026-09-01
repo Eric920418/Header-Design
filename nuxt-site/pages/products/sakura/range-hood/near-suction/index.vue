@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { ArrowRight } from 'lucide-vue-next'
 import { PRODUCT_CATALOGUES } from '~/data/productCatalogues'
+import { SAKURA_PRODUCT_GROUPS } from '~/data/sakuraProducts'
 import {
   SAKURA_NEAR_SUCTION_PRODUCTS,
   getSakuraNearSuctionProductRoute,
 } from '~/data/sakuraNearSuctionProducts'
-import { RANGE_HOOD_SERIES } from '~/data/sakuraProductSeries'
 
+const productCategories = SAKURA_PRODUCT_GROUPS.flatMap(group => group.categories)
 const catalogueHighlights = PRODUCT_CATALOGUES.slice(0, 2)
 
 useSeoMeta({
-  title: '近吸系列｜SAKURA 廚電產品',
+  title: '近吸系列｜SAKURA Kitchen Appliances',
   description: '瀏覽 SAKURA 近吸系列除油煙機 R7600、R7615、R7653、DR7396、DR7397、R7302A 與 R7301A。',
-  ogTitle: '近吸系列｜SAKURA 廚電產品',
+  ogTitle: '近吸系列｜SAKURA Kitchen Appliances',
   ogDescription: 'SAKURA 近吸系列七項除油煙機產品。',
   ogImage: SAKURA_NEAR_SUCTION_PRODUCTS[0]?.image,
 })
@@ -23,11 +24,11 @@ useSeoMeta({
     <section class="near-suction-hero hero-includes-header" aria-labelledby="near-suction-page-title">
       <span class="near-suction-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="near-suction-hero__inner">
-        <h1 id="near-suction-page-title">SAKURA 廚電產品</h1>
+        <h1 id="near-suction-page-title">SAKURA Kitchen Appliances</h1>
         <nav aria-label="麵包屑" class="near-suction-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
-          <NuxtLink to="/products/sakura">SAKURA 廚電產品</NuxtLink>
+          <NuxtLink to="/products/sakura">SAKURA Kitchen Appliances</NuxtLink>
           <span aria-hidden="true">/</span>
           <NuxtLink to="/products/sakura/range-hood">除油煙機系列</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -39,8 +40,8 @@ useSeoMeta({
     <section class="near-suction-products" aria-labelledby="near-suction-products-title">
       <div class="near-suction-rail internal-rail-safe">
         <h2 id="near-suction-products-title" v-reveal="{ anim: 'opalMoveUp' }">
+          <em>SUKURA Products</em>
           <span>近吸系列</span>
-          <em>Range Hood Series</em>
         </h2>
         <ul class="near-suction-product-grid" aria-label="近吸系列商品清單">
           <li
@@ -74,8 +75,10 @@ useSeoMeta({
 
     <section class="near-suction-series" aria-labelledby="near-suction-series-title">
       <div class="near-suction-rail internal-rail-safe">
-        <h2 id="near-suction-series-title" v-reveal="{ anim: 'opalMoveUp' }">除油煙機系列</h2>
-        <div class="near-suction-series__viewport" role="region" aria-label="除油煙機八個系列名稱">
+        <h2 id="near-suction-series-title" v-reveal="{ anim: 'opalMoveUp' }">
+          <strong>SAKURA</strong> 廚電產品
+        </h2>
+        <div v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="near-suction-series__viewport" role="region" aria-label="SAKURA 商品、熱水器與淨水設備系列名稱">
           <div class="near-suction-series__track">
             <ul
               v-for="groupIndex in 2"
@@ -84,12 +87,12 @@ useSeoMeta({
               :aria-hidden="groupIndex === 2 ? 'true' : undefined"
             >
               <li
-                v-for="series in RANGE_HOOD_SERIES"
-                :key="`${groupIndex}-${series.id}`"
+                v-for="category in productCategories"
+                :key="`${groupIndex}-${category.id}`"
                 class="near-suction-series-name"
               >
-                <strong>{{ series.title }}</strong>
-                <span>{{ series.productCount }} 個產品</span>
+                <strong>{{ category.title }}</strong>
+                <span>{{ category.groupLabel }}</span>
               </li>
             </ul>
           </div>
@@ -102,8 +105,7 @@ useSeoMeta({
         <div v-reveal="{ anim: 'opalMoveRight' }" class="near-suction-catalogue__copy">
           <InternalSectionPill>SAKURA Product Catalogue</InternalSectionPill>
           <h2 id="near-suction-catalogue-title">
-            <span>廚房商品型錄</span>
-            <em>Kitchen Product Catalog</em>
+            <span>Kitchen Product Catalogue</span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta near-suction-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -154,8 +156,8 @@ useSeoMeta({
 
 .near-suction-products { padding: 100px 30px 125px; background: #f6f6f6; }
 .near-suction-products h2 { display: flex; margin: 0 0 54px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
-.near-suction-products h2 span { font-family: var(--font-cjk-serif); font-size: 40px; line-height: 50px; }
-.near-suction-products h2 em { color: #caa05c; font-family: var(--font-editorial); font-size: 40px; font-style: normal; font-weight: 400; line-height: 46px; }
+.near-suction-products h2 span { font-family: var(--font-cjk-serif); font-size: 30px; line-height: 40px; }
+.near-suction-products h2 em { margin-bottom: 8px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 13px; font-style: normal; font-weight: 400; line-height: 19px; letter-spacing: .12em; text-transform: uppercase; }
 .near-suction-product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 58px 30px; margin: 0; padding: 0; list-style: none; }
 .near-suction-product-grid > li { min-width: 0; }
 .near-suction-product-card { display: block; min-width: 0; color: inherit; }
@@ -189,16 +191,18 @@ useSeoMeta({
 .near-suction-series { overflow: hidden; padding: 50px 30px 125px; background: #f6f6f6; }
 .near-suction-series h2 { display: flex; margin: 0 0 62px; color: #1c1c1d; align-items: center; justify-content: center; gap: 24px; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; text-align: center; }
 .near-suction-series h2::before,
-.near-suction-series h2::after { width: min(190px, 18vw); height: 1px; background: #d7d7db; content: ""; }
+.near-suction-series h2::after { height: 1px; flex: 1 1 0; background: #d7d7db; content: ""; }
+.near-suction-series h2 strong { font-weight: 700; }
 .near-suction-series__viewport { width: 100%; overflow: hidden; }
-.near-suction-series__track { display: flex; width: max-content; animation: near-suction-series 31s linear infinite; }
+.near-suction-series__track { display: flex; width: max-content; animation: near-suction-series 48s linear .65s infinite; animation-play-state: paused; }
+.near-suction-series__viewport.is-visible .near-suction-series__track { animation-play-state: running; }
 .near-suction-series__group { display: flex; flex: none; margin: 0; padding: 0; list-style: none; }
-.near-suction-series-name { display: flex; width: 190px; min-width: 190px; align-items: center; justify-content: center; flex-direction: column; gap: 6px; padding-inline: 14px; color: #85858a; text-align: center; transition: color .3s ease; }
+.near-suction-series-name { display: flex; width: 200px; min-width: 200px; align-items: center; justify-content: center; flex-direction: column; gap: 6px; padding-inline: 14px; color: #85858a; text-align: center; transition: color .3s ease; }
 .near-suction-series-name strong { color: inherit; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 400; line-height: 28px; white-space: nowrap; }
 .near-suction-series-name span { color: #aaa9ae; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 19px; letter-spacing: .08em; white-space: nowrap; }
 .near-suction-series-name:hover { color: #59585d; }
 .near-suction-series-name:hover span { color: #77777c; }
-.near-suction-series__viewport:hover .near-suction-series__track { animation-play-state: paused; }
+.near-suction-series__viewport.is-visible:hover .near-suction-series__track { animation-play-state: paused; }
 
 @keyframes near-suction-series {
   to { transform: translateX(-50%); }
@@ -207,34 +211,36 @@ useSeoMeta({
 .near-suction-catalogue { padding: 120px 30px 130px; background: #fff; }
 .near-suction-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
 .near-suction-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
-.near-suction-catalogue__copy h2 span { font-family: var(--font-cjk-serif); font-size: 60px; line-height: 64px; }
-.near-suction-catalogue__copy h2 em { color: #caa05c; font-family: var(--font-editorial); font-size: 48px; font-style: normal; font-weight: 400; line-height: 52px; }
-.near-suction-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: transform .3s ease, background-color .3s ease; }
+.near-suction-catalogue__copy h2 span { font-family: var(--font-editorial); font-size: 60px; font-weight: 400; line-height: 64px; }
+.near-suction-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid #1c1c1d; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .near-suction-catalogue__cta:hover,
-.near-suction-catalogue__cta:focus-visible { background: #2a2a2b; transform: translateY(-2px); }
+.near-suction-catalogue__cta:focus-visible { border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
 .near-suction-catalogue__cta:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .near-suction-catalogue__cta > span:first-child { white-space: nowrap; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
-.near-suction-catalogue__cta .site-cta-icon { display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; }
+.near-suction-catalogue__cta .site-cta-icon { position: relative; isolation: isolate; display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
+.near-suction-catalogue__cta .site-cta-icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; background: #caa05c; content: ""; animation: near-suction-cta-radar 2s ease-out infinite; }
 .near-suction-catalogue__cta svg { width: 19px; height: 19px; }
+.near-suction-catalogue__cta:hover .site-cta-icon,
+.near-suction-catalogue__cta:focus-visible .site-cta-icon { transform: rotate(0); }
+.near-suction-catalogue__cta:hover .site-cta-icon::after,
+.near-suction-catalogue__cta:focus-visible .site-cta-icon::after { animation: none; opacity: 0; }
+@keyframes near-suction-cta-radar { from { opacity: .55; transform: scale(1); } to { opacity: 0; transform: scale(1.55); } }
 .near-suction-catalogue__copy > p { margin: 18px 0 0; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 20px; }
 .near-suction-catalogue__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .near-suction-catalogue-card { min-width: 0; }
 .near-suction-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #f6f6f6; }
 .near-suction-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .near-suction-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
-.near-suction-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 400; line-height: 28px; }
+.near-suction-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
 .near-suction-catalogue-card:hover .near-suction-catalogue-card__cover :deep(img) { transform: scale(1.04); }
 
 @media (max-width: 1023px) {
   .near-suction-products { padding-block: 80px 100px; }
-  .near-suction-products h2 span,
-  .near-suction-products h2 em { font-size: 38px; line-height: 45px; }
   .near-suction-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .near-suction-series { padding-bottom: 100px; }
   .near-suction-catalogue { padding-block: 96px; }
   .near-suction-catalogue__grid { gap: 42px; }
   .near-suction-catalogue__copy h2 span { font-size: 50px; line-height: 55px; }
-  .near-suction-catalogue__copy h2 em { font-size: 40px; line-height: 46px; }
 }
 
 @media (max-width: 767px) {
@@ -245,8 +251,7 @@ useSeoMeta({
   .near-suction-hero__trail { font-size: 12px; line-height: 18px; }
   .near-suction-products { padding: 60px 15px 80px; }
   .near-suction-products h2 { margin-bottom: 38px; }
-  .near-suction-products h2 span { font-size: 34px; line-height: 42px; }
-  .near-suction-products h2 em { font-size: 31px; line-height: 38px; }
+  .near-suction-products h2 span { font-size: 30px; line-height: 40px; }
   .near-suction-product-grid { grid-template-columns: 1fr; gap: 42px; }
   .near-suction-product-card__image,
   .near-suction-catalogue-card__cover { border-radius: 18px; }
@@ -266,12 +271,13 @@ useSeoMeta({
   .near-suction-catalogue__grid { grid-template-columns: 1fr; }
   .near-suction-catalogue__copy h2 { margin-block: 22px 30px; }
   .near-suction-catalogue__copy h2 span { font-size: 43px; line-height: 48px; }
-  .near-suction-catalogue__copy h2 em { font-size: 34px; line-height: 40px; }
   .near-suction-catalogue__cards { gap: 16px; }
   .near-suction-catalogue-card h3 { font-size: 18px; line-height: 23px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .near-suction-catalogue__cta,
+  .near-suction-catalogue__cta .site-cta-icon,
   .near-suction-product-card__image :deep(img),
   .near-suction-product-card__shade,
   .near-suction-product-card__action,

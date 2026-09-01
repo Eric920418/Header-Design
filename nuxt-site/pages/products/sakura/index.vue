@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight, Database, RefreshCw } from 'lucide-vue-next'
+import { ArrowRight, Database, RefreshCw } from 'lucide-vue-next'
 import { SAKURA_PRODUCT_GROUPS } from '~/data/sakuraProducts'
 import type { SakuraProductCategory, SakuraProductGroup } from '~/data/sakuraProducts'
 
@@ -66,7 +66,19 @@ const {
 )
 
 const productGroups = computed(() => remoteGroups.value?.length ? remoteGroups.value : SAKURA_PRODUCT_GROUPS)
-const productCategories = computed(() => productGroups.value.flatMap(group => group.categories))
+const productCategories = computed(() => productGroups.value.flatMap((group) => {
+  if (group.id === 'kitchen-appliances') {
+    return group.categories.map(category => ({ ...category, groupLabel: 'SUKURA Products' }))
+  }
+  if (group.id === 'water-heaters') {
+    return group.categories.map(category => ({ ...category, groupLabel: 'Water Heater' }))
+  }
+  if (group.id === 'water-purifiers') {
+    const category = group.categories[0]
+    return category ? [{ ...category, title: '淨水設備', groupLabel: 'Water Purifier' }] : []
+  }
+  return group.categories
+}))
 const usingSnapshot = computed(() => Boolean(productSourceError.value) || Boolean(productEndpoint && !remoteGroups.value?.length))
 const sourceStatusTitle = computed(() => productSourceError.value ? '商品資料讀取失敗' : '商品資料介接狀態')
 const sourceStatusMessage = computed(() => {
@@ -84,9 +96,9 @@ function retryProducts() {
 }
 
 useSeoMeta({
-  title: 'SAKURA 廚電產品｜SAKURA 整體廚房',
-  description: '瀏覽 SAKURA 廚電、熱水器與淨水設備共 13 個商品分類。',
-  ogTitle: 'SAKURA 廚電產品｜SAKURA 整體廚房',
+  title: 'SAKURA Kitchen Appliances｜SAKURA 整體廚房',
+  description: '瀏覽 SAKURA 廚電、熱水器與淨水設備共 9 個商品分類。',
+  ogTitle: 'SAKURA Kitchen Appliances｜SAKURA 整體廚房',
   ogDescription: 'SAKURA 廚電、熱水器與淨水設備商品分類。',
   ogImage: '/services/sakura-product.png',
 })
@@ -97,11 +109,11 @@ useSeoMeta({
     <section class="sakura-product-hero hero-includes-header" aria-labelledby="sakura-product-title">
       <span class="sakura-product-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-hero__inner">
-        <h1 id="sakura-product-title">SAKURA 廚電產品</h1>
+        <h1 id="sakura-product-title">SAKURA Kitchen Appliances</h1>
         <nav aria-label="麵包屑" class="sakura-product-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
-          <span aria-current="page">SAKURA 廚電產品</span>
+          <span aria-current="page">SAKURA Kitchen Appliances</span>
         </nav>
       </div>
     </section>
@@ -159,7 +171,8 @@ useSeoMeta({
               <article>
                 <div class="sakura-product-card__image">
                   <InternalProductCategoryImage :src="category.image" :alt="`${category.title}代表商品`" />
-                  <span class="sakura-product-card__arrow" aria-hidden="true"><ArrowUpRight /></span>
+                  <span class="sakura-product-card__shade" aria-hidden="true" />
+                  <span class="sakura-product-card__arrow" aria-hidden="true"><ArrowRight /></span>
                 </div>
                 <div class="sakura-product-card__text">
                   <span>{{ category.groupLabel }}</span>
@@ -327,28 +340,29 @@ useSeoMeta({
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+  border: 1px solid #e3e3e8;
   border-radius: 24px;
   background: #fff;
 }
 
 .sakura-product-card__image :deep(img) { transition: transform .55s ease; }
+.sakura-product-card__shade { position: absolute; inset: 0; background: rgb(0 0 0 / 42%); opacity: 0; transition: opacity .4s ease; }
 .sakura-product-card__arrow {
   position: absolute;
-  right: 20px;
-  bottom: 20px;
-  display: flex;
-  width: 58px;
-  height: 58px;
-  align-items: center;
-  justify-content: center;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 60px;
+  height: 60px;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 72%);
   border-radius: 50%;
   color: #fff;
-  background: #1c1c1d;
   opacity: 0;
-  transform: translateY(12px);
+  transform: translate(-50%, -50%) scale(.76) rotate(-45deg);
   transition: opacity .35s ease, transform .35s ease, background-color .35s ease;
 }
-.sakura-product-card__arrow svg { width: 21px; height: 21px; }
+.sakura-product-card__arrow svg { width: 24px; height: 24px; }
 .sakura-product-card__text { padding-top: 20px; }
 .sakura-product-card__text span {
   display: block;
@@ -373,9 +387,12 @@ useSeoMeta({
 
 .sakura-product-card:hover .sakura-product-card__image :deep(img) { transform: scale(1.04); }
 .sakura-product-card:hover .sakura-product-card__text h3 { color: #caa05c; }
+.sakura-product-card__link:hover .sakura-product-card__shade,
+.sakura-product-card__link:focus-visible .sakura-product-card__shade,
 .sakura-product-card__link:hover .sakura-product-card__arrow,
-.sakura-product-card__link:focus-visible .sakura-product-card__arrow { opacity: 1; transform: translateY(0); }
-.sakura-product-card__link:hover .sakura-product-card__arrow { background: #caa05c; }
+.sakura-product-card__link:focus-visible .sakura-product-card__arrow { opacity: 1; }
+.sakura-product-card__link:hover .sakura-product-card__arrow,
+.sakura-product-card__link:focus-visible .sakura-product-card__arrow { background: #caa05c; transform: translate(-50%, -50%) scale(1) rotate(0); }
 .sakura-product-card__link:focus-visible { border-radius: 24px; outline-offset: 7px; }
 
 @keyframes sakura-product-spin { to { transform: rotate(360deg); } }
@@ -405,12 +422,16 @@ useSeoMeta({
   .sakura-product-list { padding: 0 15px 80px; }
   .sakura-product-grid { grid-template-columns: 1fr; gap: 38px; }
   .sakura-product-card__image { border-radius: 18px; }
-  .sakura-product-card__arrow { right: 16px; bottom: 16px; width: 52px; height: 52px; opacity: 1; transform: none; }
+  .sakura-product-card__shade { display: none; }
+  .sakura-product-card__arrow { top: auto; right: 16px; bottom: 16px; left: auto; width: 52px; height: 52px; opacity: 1; background: #caa05c; transform: none; }
+  .sakura-product-card__link:hover .sakura-product-card__arrow,
+  .sakura-product-card__link:focus-visible .sakura-product-card__arrow { transform: none; }
   .sakura-product-card__text h3 { font-size: 25px; line-height: 31px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sakura-product-card__image :deep(img),
+  .sakura-product-card__shade,
   .sakura-product-card__text h3,
   .sakura-product-card__arrow { transition: none; }
   .sakura-product-card:hover .sakura-product-card__image :deep(img) { transform: none; }

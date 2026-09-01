@@ -59,7 +59,7 @@ onBeforeUnmount(() => {
           Creative <span class="text-[#CAA05C]">Projects That Define</span> Our Style
         </h2>
         <p class="home-project-heading-description">
-          We specialize in transforming visions into reality. Explore our portfolio of innovative architectural and interior design projects crafted with precision.
+          We specialize in transforming visions into reality. Explore our portfolio of innovative architectural and kitchen design projects crafted with precision.
         </p>
       </div>
     </div>

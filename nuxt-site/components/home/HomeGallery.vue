@@ -25,7 +25,7 @@ function pointerUp(event: PointerEvent) { if (dragStart.value === null) return; 
     <div class="gallery-content-shell relative z-10 w-full"><div class="gallery-main-layout">
       <div class="gallery-heading-column">
         <div v-reveal="{ anim: 'opalMoveRight' }" class="mb-[26px]"><InternalSectionPill tone="dark">SHOWROOM PROJECTS</InternalSectionPill></div>
-        <h2 id="gallery-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="gallery-heading-title font-display capitalize text-white">Interior Design</h2>
+        <h2 id="gallery-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="gallery-heading-title font-display capitalize text-white">Kitchen Design</h2>
         <p v-reveal="{ anim: 'opalMoveUp', delay: 180 }" class="gallery-description mt-[37px] w-[378px] max-w-full text-[18px] leading-[24px] text-white">Lorem ipsum dolor sit amet consectetur. Magna nunc porttitor convallis faucibus laoreet.</p>
         <div v-reveal="{ anim: 'opalScaleUp', delay: 260 }">
           <NuxtLink to="/gallery" class="site-content-cta group/cta mt-[40px] inline-flex h-[60px] items-center gap-[8px] rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-white hover:border-[#CAA05C] hover:bg-[#CAA05C]"><span class="font-cjk-sans text-[15px]">更多設計</span><span class="site-cta-icon flex h-[40px] w-[40px] -rotate-45 items-center justify-center rounded-full bg-[#CAA05C] transition-transform group-hover/cta:rotate-0"><ArrowRight class="h-5 w-5" /></span></NuxtLink>

@@ -42,6 +42,8 @@ useSeoMeta({
 .brand-family-heading h3 { margin: 24px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .brand-family-heading p { width: min(1050px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-advantage-faq { background: linear-gradient(180deg, #faf8f4 0%, #fff 100%); }
+.brand-advantage-page :deep(.antra-faq-question) { font-size: 20px; line-height: 30px; }
+.brand-advantage-page :deep(.antra-faq-panel p) { padding-top: 0; }
 
 @media (max-width: 1024px) {
   .brand-family-section { padding: 80px 30px 65px; }

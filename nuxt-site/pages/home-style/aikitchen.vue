@@ -201,7 +201,7 @@ useSeoMeta({
       <div class="ai-hero__inner">
         <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" tone="dark" class="ai-hero__eyebrow">Trusted Design Partner</InternalSectionPill>
         <h1 id="ai-kitchen-hero-title" v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="ai-hero__title">
-          Find Your Inspired<br><span class="text-[#caa05c]">Interior Design</span>
+          Find Your Inspired<br><span class="text-[#caa05c]">Kitchen Design</span>
         </h1>
 
         <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" v-reveal="{ anim: 'opalScaleUp', delay: 220 }" class="hero-start-project ai-hero__cta">
@@ -227,7 +227,7 @@ useSeoMeta({
           </div>
         </div>
       </div>
-      <span class="ai-hero__watermark" aria-hidden="true">Interior</span>
+      <span class="ai-hero__watermark" aria-hidden="true">Kitchen</span>
     </section>
 
     <aside class="ai-series-drawer" :class="{ 'is-open': seriesOpen }" aria-label="品牌系列快速選單">
@@ -325,7 +325,7 @@ useSeoMeta({
       <div class="page-container">
         <div class="ai-centered-heading">
           <p v-reveal="{ anim: 'opalMoveUp' }">Material Selection</p>
-          <h2 id="finish-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Gallery Of Inspiring<br><span>Interior Designs</span></h2>
+          <h2 id="finish-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Gallery Of Inspiring<br><span>Kitchen Designs</span></h2>
         </div>
         <div class="ai-finishes__grid">
           <article v-for="(finish, index) in data.finishes" :key="finish.code" v-reveal="{ anim: 'opalMoveUp', delay: index * 70 }">

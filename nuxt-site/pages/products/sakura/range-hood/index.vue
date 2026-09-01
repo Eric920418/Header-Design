@@ -9,9 +9,9 @@ const productCategories = SAKURA_PRODUCT_GROUPS.flatMap(group => group.categorie
 const catalogueHighlights = PRODUCT_CATALOGUES.slice(0, 2)
 
 useSeoMeta({
-  title: '除油煙機系列｜SAKURA 廚電產品',
+  title: '除油煙機系列｜SAKURA Kitchen Appliances',
   description: '瀏覽 SAKURA 除油煙機近吸、歐化、隱藏、流線、深罩、斜背、輕巧與配備系列。',
-  ogTitle: '除油煙機系列｜SAKURA 廚電產品',
+  ogTitle: '除油煙機系列｜SAKURA Kitchen Appliances',
   ogDescription: 'SAKURA 除油煙機八大系列與商品數量。',
   ogImage: RANGE_HOOD_SERIES[0]?.image,
 })
@@ -22,11 +22,11 @@ useSeoMeta({
     <section class="sakura-series-hero hero-includes-header" aria-labelledby="sakura-series-title">
       <span class="sakura-series-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-series-hero__inner">
-        <h1 id="sakura-series-title">SAKURA 廚電產品</h1>
+        <h1 id="sakura-series-title">SAKURA Kitchen Appliances</h1>
         <nav aria-label="麵包屑" class="sakura-series-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
-          <NuxtLink to="/products/sakura">SAKURA 廚電產品</NuxtLink>
+          <NuxtLink to="/products/sakura">SAKURA Kitchen Appliances</NuxtLink>
           <span aria-hidden="true">/</span>
           <span aria-current="page">除油煙機系列</span>
         </nav>
@@ -36,8 +36,8 @@ useSeoMeta({
     <section class="sakura-series-products" aria-labelledby="range-hood-series-title">
       <div class="sakura-series-rail internal-rail-safe">
         <h2 id="range-hood-series-title" v-reveal="{ anim: 'opalMoveUp' }">
+          <em>SUKURA Products</em>
           <span>除油煙機系列</span>
-          <em>Range Hood Series</em>
         </h2>
         <ul class="sakura-series-grid" aria-label="除油煙機系列清單">
           <li
@@ -81,7 +81,7 @@ useSeoMeta({
         <h2 id="sakura-series-categories-title" v-reveal="{ anim: 'opalMoveUp' }">
           <strong>SAKURA</strong> 廚電產品
         </h2>
-        <div class="sakura-series-categories__viewport" role="region" aria-label="SAKURA 商品、熱水器與淨水設備系列名稱">
+        <div v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="sakura-series-categories__viewport" role="region" aria-label="SAKURA 商品、熱水器與淨水設備系列名稱">
           <div class="sakura-series-categories__track">
             <ul
               v-for="groupIndex in 2"
@@ -108,8 +108,7 @@ useSeoMeta({
         <div v-reveal="{ anim: 'opalMoveRight' }" class="sakura-series-catalogue__copy">
           <InternalSectionPill>SAKURA Product Catalogue</InternalSectionPill>
           <h2 id="sakura-catalogue-title">
-            <span>廚房商品型錄</span>
-            <em>Kitchen Product Catalog</em>
+            <span>Kitchen Product Catalogue</span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta sakura-series-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -160,8 +159,8 @@ useSeoMeta({
 
 .sakura-series-products { padding: 100px 30px 125px; background: #f6f6f6; }
 .sakura-series-products h2 { display: flex; margin: 0 0 54px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
-.sakura-series-products h2 span { font-family: var(--font-cjk-serif); font-size: 40px; line-height: 50px; }
-.sakura-series-products h2 em { color: #caa05c; font-family: var(--font-editorial); font-size: 40px; font-style: normal; font-weight: 400; line-height: 46px; }
+.sakura-series-products h2 span { font-family: var(--font-cjk-serif); font-size: 30px; line-height: 40px; }
+.sakura-series-products h2 em { margin-bottom: 8px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 13px; font-style: normal; font-weight: 400; line-height: 19px; letter-spacing: .12em; text-transform: uppercase; }
 .sakura-series-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 46px 30px; margin: 0; padding: 0; list-style: none; }
 .sakura-series-card,
 .sakura-series-card article,
@@ -174,7 +173,8 @@ useSeoMeta({
 .sakura-series-card__shade { position: absolute; inset: 0; background: rgb(0 0 0 / 42%); opacity: 0; transition: opacity .4s ease; }
 .sakura-series-card__action { position: absolute; top: 50%; left: 50%; display: grid; width: 60px; height: 60px; place-items: center; border: 1px solid rgb(255 255 255 / 72%); border-radius: 50%; color: #fff; opacity: 0; transition: opacity .4s ease, transform .4s ease, background-color .4s ease; transform: translate(-50%, -50%) scale(.76) rotate(-45deg); }
 .sakura-series-card__action svg { width: 24px; height: 24px; }
-.sakura-series-card__text { display: flex; min-height: 102px; align-items: flex-start; justify-content: space-between; gap: 20px; border-top: 1px solid #e3e3e8; padding: 22px 24px 24px; }
+.sakura-series-card__text { position: relative; display: flex; min-height: 102px; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 22px 24px 24px; }
+.sakura-series-card__text::before { position: absolute; top: 0; right: 24px; left: 24px; height: 1px; background: #e3e3e8; content: ""; }
 .sakura-series-card__text h3 { margin: 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; transition: color .3s ease; }
 .sakura-series-card__text span { flex: none; padding-top: 7px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 19px; }
 .sakura-series-card:hover .sakura-series-card__image :deep(img) { transform: scale(1.045); }
@@ -189,17 +189,18 @@ useSeoMeta({
 .sakura-series-categories { overflow: hidden; padding: 50px 30px 125px; background: #f6f6f6; }
 .sakura-series-categories h2 { display: flex; margin: 0 0 62px; color: #1c1c1d; align-items: center; justify-content: center; gap: 24px; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; text-align: center; }
 .sakura-series-categories h2::before,
-.sakura-series-categories h2::after { width: min(190px, 18vw); height: 1px; background: #d7d7db; content: ""; }
+.sakura-series-categories h2::after { height: 1px; flex: 1 1 0; background: #d7d7db; content: ""; }
 .sakura-series-categories h2 strong { font-weight: 700; }
 .sakura-series-categories__viewport { width: 100%; overflow: hidden; }
-.sakura-series-categories__track { display: flex; width: max-content; animation: sakura-product-categories 48s linear infinite; }
+.sakura-series-categories__track { display: flex; width: max-content; animation: sakura-product-categories 48s linear .65s infinite; animation-play-state: paused; }
+.sakura-series-categories__viewport.is-visible .sakura-series-categories__track { animation-play-state: running; }
 .sakura-series-categories__group { display: flex; flex: none; margin: 0; padding: 0; list-style: none; }
 .sakura-series-category { display: flex; width: 200px; min-width: 200px; align-items: center; justify-content: center; flex-direction: column; gap: 6px; padding-inline: 14px; color: #85858a; text-align: center; transition: color .3s ease; }
 .sakura-series-category strong { color: inherit; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 400; line-height: 28px; white-space: nowrap; }
 .sakura-series-category span { color: #aaa9ae; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 19px; letter-spacing: .08em; white-space: nowrap; }
 .sakura-series-category:hover { color: #59585d; }
 .sakura-series-category:hover span { color: #77777c; }
-.sakura-series-categories__viewport:hover .sakura-series-categories__track { animation-play-state: paused; }
+.sakura-series-categories__viewport.is-visible:hover .sakura-series-categories__track { animation-play-state: paused; }
 
 @keyframes sakura-product-categories {
   to { transform: translateX(-50%); }
@@ -208,34 +209,36 @@ useSeoMeta({
 .sakura-series-catalogue { padding: 120px 30px 130px; background: #fff; }
 .sakura-series-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
 .sakura-series-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
-.sakura-series-catalogue__copy h2 span { font-family: var(--font-cjk-serif); font-size: 60px; line-height: 64px; }
-.sakura-series-catalogue__copy h2 em { color: #caa05c; font-family: var(--font-editorial); font-size: 48px; font-style: normal; font-weight: 400; line-height: 52px; }
-.sakura-series-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: transform .3s ease, background-color .3s ease; }
+.sakura-series-catalogue__copy h2 span { font-family: var(--font-editorial); font-size: 60px; font-weight: 400; line-height: 64px; }
+.sakura-series-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid #1c1c1d; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .sakura-series-catalogue__cta:hover,
-.sakura-series-catalogue__cta:focus-visible { background: #2a2a2b; transform: translateY(-2px); }
+.sakura-series-catalogue__cta:focus-visible { border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
 .sakura-series-catalogue__cta:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .sakura-series-catalogue__cta > span:first-child { white-space: nowrap; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
-.sakura-series-catalogue__cta .site-cta-icon { display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; }
+.sakura-series-catalogue__cta .site-cta-icon { position: relative; isolation: isolate; display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
+.sakura-series-catalogue__cta .site-cta-icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; background: #caa05c; content: ""; animation: sakura-series-cta-radar 2s ease-out infinite; }
 .sakura-series-catalogue__cta svg { width: 19px; height: 19px; }
+.sakura-series-catalogue__cta:hover .site-cta-icon,
+.sakura-series-catalogue__cta:focus-visible .site-cta-icon { transform: rotate(0); }
+.sakura-series-catalogue__cta:hover .site-cta-icon::after,
+.sakura-series-catalogue__cta:focus-visible .site-cta-icon::after { animation: none; opacity: 0; }
+@keyframes sakura-series-cta-radar { from { opacity: .55; transform: scale(1); } to { opacity: 0; transform: scale(1.55); } }
 .sakura-series-catalogue__copy > p { margin: 18px 0 0; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 20px; }
 .sakura-series-catalogue__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .sakura-series-catalogue-card { min-width: 0; }
 .sakura-series-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #f6f6f6; }
 .sakura-series-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .sakura-series-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
-.sakura-series-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 400; line-height: 28px; }
+.sakura-series-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
 .sakura-series-catalogue-card:hover .sakura-series-catalogue-card__cover :deep(img) { transform: scale(1.04); }
 
 @media (max-width: 1023px) {
   .sakura-series-products { padding-block: 80px 100px; }
-  .sakura-series-products h2 span,
-  .sakura-series-products h2 em { font-size: 38px; line-height: 45px; }
   .sakura-series-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sakura-series-categories { padding-bottom: 100px; }
   .sakura-series-catalogue { padding-block: 96px; }
   .sakura-series-catalogue__grid { gap: 42px; }
   .sakura-series-catalogue__copy h2 span { font-size: 50px; line-height: 55px; }
-  .sakura-series-catalogue__copy h2 em { font-size: 40px; line-height: 46px; }
 }
 
 @media (max-width: 767px) {
@@ -246,12 +249,12 @@ useSeoMeta({
   .sakura-series-hero__trail { font-size: 12px; line-height: 18px; }
   .sakura-series-products { padding: 60px 15px 80px; }
   .sakura-series-products h2 { margin-bottom: 38px; }
-  .sakura-series-products h2 span { font-size: 34px; line-height: 42px; }
-  .sakura-series-products h2 em { font-size: 31px; line-height: 38px; }
+  .sakura-series-products h2 span { font-size: 30px; line-height: 40px; }
   .sakura-series-grid { grid-template-columns: 1fr; gap: 32px; }
   .sakura-series-card article,
   .sakura-series-card__link,
   .sakura-series-catalogue-card__cover { border-radius: 18px; }
+  .sakura-series-card__text::before { right: 18px; left: 18px; }
   .sakura-series-card__action { top: auto; right: 18px; bottom: 18px; left: auto; width: 48px; height: 48px; opacity: 1; background: #caa05c; transform: none; }
   .sakura-series-card__shade { display: none; }
   .sakura-series-card__link:hover .sakura-series-card__action,
@@ -259,7 +262,7 @@ useSeoMeta({
   .sakura-series-categories { padding: 24px 15px 78px; }
   .sakura-series-categories h2 { gap: 13px; margin-bottom: 42px; font-size: 20px; line-height: 28px; }
   .sakura-series-categories h2::before,
-  .sakura-series-categories h2::after { width: 42px; }
+  .sakura-series-categories h2::after { width: 42px; flex: none; }
   .sakura-series-category { width: 170px; min-width: 170px; padding-inline: 10px; }
   .sakura-series-category strong { font-size: 18px; line-height: 24px; }
   .sakura-series-category span { font-size: 11px; line-height: 16px; }
@@ -267,12 +270,13 @@ useSeoMeta({
   .sakura-series-catalogue__grid { grid-template-columns: 1fr; }
   .sakura-series-catalogue__copy h2 { margin-block: 22px 30px; }
   .sakura-series-catalogue__copy h2 span { font-size: 43px; line-height: 48px; }
-  .sakura-series-catalogue__copy h2 em { font-size: 34px; line-height: 40px; }
   .sakura-series-catalogue__cards { gap: 16px; }
   .sakura-series-catalogue-card h3 { font-size: 18px; line-height: 23px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sakura-series-catalogue__cta,
+  .sakura-series-catalogue__cta .site-cta-icon,
   .sakura-series-card__image :deep(img),
   .sakura-series-card__shade,
   .sakura-series-card__action,
