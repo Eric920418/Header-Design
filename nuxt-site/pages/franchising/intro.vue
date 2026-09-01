@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight, Download, Minus, Plus } from 'lucide-vue-next'
+import { ArrowRight, Download } from 'lucide-vue-next'
 import {
   FRANCHISE_FORM_URL,
   franchiseAdvantages,
@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
         <div class="franchise-advantages__layout">
           <header v-reveal="{ anim: 'opalMoveRight' }" class="franchise-advantages__intro">
             <InternalSectionPill>Franchise Advantages</InternalSectionPill>
-            <h2 id="franchise-advantage-title">加盟創業首選品牌</h2>
+            <h2 id="franchise-advantage-title">Franchise Success Starts Here</h2>
             <p>從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。</p>
             <strong aria-hidden="true">{{ String(activeAdvantageGroup + 1).padStart(2, '0') }}</strong>
           </header>
@@ -192,7 +192,7 @@ onBeforeUnmount(() => {
         <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" tone="dark">Subscribe To The Newsletter</InternalSectionPill>
         <h2 id="franchise-conversion-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }">Join <span>Our Newsletter</span><br /><span>Stay</span> Up To Date</h2>
         <p v-reveal="{ anim: 'opalMoveUp', delay: 120 }">從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！</p>
-        <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 170 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--gold">快來了解加盟金、補助金，填寫表單 <ArrowRight aria-hidden="true" /></NuxtLink>
+        <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 170 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--news">快來了解加盟金、補助金，填寫表單 <ArrowRight aria-hidden="true" /></NuxtLink>
       </div>
     </section>
 
@@ -202,15 +202,23 @@ onBeforeUnmount(() => {
         <header class="source-split-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Projects" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <h2 id="franchise-marketing-title">強大廣告行銷</h2>
+            <h2 id="franchise-marketing-title">Powerful Marketing</h2>
             <p>集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。</p>
           </div>
         </header>
 
         <div ref="marketingTrack" class="franchise-project-track elementor-widget-antra-project" tabindex="0" aria-label="品牌行銷案例，可用左右方向鍵或觸控水平瀏覽" @keydown.left.prevent="scrollMarketing(-1)" @keydown.right.prevent="scrollMarketing(1)">
           <article v-for="(story, index) in franchiseMarketingStories" :key="story.title" v-reveal="{ anim: 'opalMoveUp', delay: (index % 3) * 80 }" class="project-block">
-            <InternalFranchiseImage :src="story.image" :alt="story.title" />
-            <div class="project-block__content"><h3>{{ story.title }}</h3><span>{{ String(index + 1).padStart(2, '0') }}</span></div>
+            <div class="project-block__media">
+              <InternalFranchiseImage :src="story.image" :alt="story.title" />
+              <div class="project-block__overlay">
+                <h3>{{ story.title }}</h3>
+                <span>{{ String(index + 1).padStart(2, '0') }}</span>
+              </div>
+            </div>
+            <div class="project-block__content">
+              <p>{{ story.excerpt }}</p>
+            </div>
           </article>
         </div>
       </div>
@@ -275,8 +283,7 @@ onBeforeUnmount(() => {
               <h3>
                 <button type="button" :aria-expanded="openFaq === index" :aria-controls="`franchise-faq-panel-${index}`" @click="toggleFaq(index)">
                   <span class="franchise-faq__question"><span class="franchise-faq__number">{{ String(index + 1).padStart(2, '0') }}</span>{{ item.question }}</span>
-                  <Minus v-if="openFaq === index" aria-hidden="true" />
-                  <Plus v-else aria-hidden="true" />
+                  <span class="franchise-faq__symbol" aria-hidden="true">{{ openFaq === index ? '−' : '+' }}</span>
                 </button>
               </h3>
               <div :id="`franchise-faq-panel-${index}`" class="franchise-faq__panel" :class="{ 'is-open': openFaq === index }" role="region" :aria-hidden="openFaq !== index"><div><p>{{ item.answer }}</p></div></div>
@@ -384,7 +391,7 @@ onBeforeUnmount(() => {
 .franchise-marquee { width: 100%; overflow: hidden; }
 .franchise-marquee__track { display: flex; width: max-content; align-items: center; animation: franchise-marquee 38s linear infinite; }
 .franchise-marquee--reverse .franchise-marquee__track { animation-direction: reverse; animation-duration: 34s; }
-.franchise-marquee__track > :deep(.franchise-image) { width: auto; height: 112px; flex: none; background: transparent; }
+.franchise-marquee__track > :deep(.franchise-image) { width: auto; height: 180px; flex: none; background: transparent; }
 .franchise-marquees:hover .franchise-marquee__track,
 .franchise-marquees:focus-within .franchise-marquee__track { animation-play-state: paused; }
 
@@ -396,18 +403,19 @@ onBeforeUnmount(() => {
 .franchise-advantages__intro > strong { display: block; margin-top: 34px; color: rgb(159 159 164 / 18%); font-family: var(--font-ui); font-size: 116px; font-weight: 400; line-height: 1; transition: opacity .25s ease, transform .25s ease; }
 .franchise-advantage-scenes { min-width: 0; }
 .franchise-advantage-scene { display: flex; min-height: 100vh; align-items: center; padding: 46px 0; }
-.franchise-post-grid { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 30px; }
+.franchise-post-grid { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
+.franchise-post { display: flex; flex-direction: column; }
 .franchise-post__media { position: relative; aspect-ratio: 1.68 / 1; overflow: hidden; border-radius: 18px; }
 .franchise-post__media > span { position: absolute; top: 16px; left: 16px; padding: 7px 13px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .franchise-post:hover .franchise-post__media :deep(img) { transform: scale(1.045); }
-.franchise-post__content { padding-top: 15px; }
+.franchise-post__content { display: flex; flex: 1; flex-direction: column; padding-top: 15px; }
 .franchise-post__content > span { color: #caa05c; font-size: 12px; line-height: 20px; }
 .franchise-post h3 { margin: 5px 0 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 600; line-height: 34px; }
 .franchise-post p { margin: 11px 0 14px; color: #59585d; font-family: var(--font-ui); font-size: 15px; line-height: 23px; }
-.franchise-post__features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 14px 0 0; border-top: 1px solid #e3e3e8; list-style: none; }
-.franchise-post__features li { display: flex; min-width: 0; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
-.franchise-post__features > li > :deep(.franchise-image) { width: 42px; height: 42px; background: transparent; }
-.franchise-post__features span { color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
+.franchise-post__features { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: auto 0 0; padding: 12px 0 0; border-top: 1px solid #e3e3e8; list-style: none; }
+.franchise-post__features li { display: flex; min-width: 0; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+.franchise-post__features > li > :deep(.franchise-image) { width: 34px; height: 34px; background: transparent; }
+.franchise-post__features span { color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 20px; }
 
 .franchise-projects { padding: 97px 30px 108px; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
 .source-split-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
@@ -419,13 +427,16 @@ onBeforeUnmount(() => {
 .franchise-project-track:focus-visible,
 .franchise-faq__item button:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .franchise-project-track::-webkit-scrollbar { display: none; }
-.project-block { min-width: calc((100% - 60px) / 3); overflow: hidden; scroll-snap-align: start; border-radius: 18px; background: #fff; box-shadow: 0 16px 50px rgb(28 28 29 / 5%); }
+.project-block { min-width: calc((100% - 60px) / 3); overflow: hidden; scroll-snap-align: start; border-radius: 18px; background: #fff; }
 .project-block:nth-child(3n + 2) { transform: translateY(50px); }
-.project-block > :deep(.franchise-image) { aspect-ratio: 1.45 / 1; border-radius: 18px; }
+.project-block__media { position: relative; aspect-ratio: 1860 / 1400; overflow: hidden; border-radius: 18px; }
+.project-block__media > :deep(.franchise-image) { height: 100%; }
+.project-block__overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 24px 58px 24px 22px; color: #fff; background: linear-gradient(180deg, transparent 36%, rgb(18 18 18 / 78%)); }
+.project-block__overlay h3 { margin: 0; font-family: var(--font-display); font-size: 24px; font-weight: 400; line-height: 30px; }
+.project-block__overlay span { position: absolute; right: 22px; bottom: 26px; color: rgb(255 255 255 / 65%); font-family: var(--font-ui); font-size: 18px; }
 .project-block:hover :deep(img) { transform: scale(1.04); }
-.project-block__content { position: relative; min-height: 138px; padding: 22px 62px 25px 22px; }
-.project-block__content h3 { margin: 0; font-family: var(--font-display); font-size: 24px; font-weight: 400; line-height: 30px; }
-.project-block__content span { position: absolute; top: 25px; right: 22px; color: #e3e3e8; font-family: var(--font-ui); font-size: 18px; }
+.project-block__content { min-height: 122px; padding: 20px 22px 24px; }
+.project-block__content p { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
 
 .franchise-newsletter { position: relative; isolation: isolate; display: grid; width: min(1770px, calc(100% - 60px)); min-height: 600px; place-items: center; margin: 110px auto 0; overflow: hidden; padding: 110px 30px 120px; border-radius: 26px; color: #fff; text-align: center; background: linear-gradient(180deg, rgb(15 14 13 / 35%), rgb(15 14 13 / 88%)), url('/hero-antra-home-6.jpg') center 58% / cover no-repeat; }
 .franchise-newsletter::before { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgb(255 255 255 / 3%), rgb(0 0 0 / 26%)); content: ""; }
@@ -436,7 +447,7 @@ onBeforeUnmount(() => {
 
 .franchise-process { padding: 92px 30px 118px; background: #fff url('/section-6/franchise/antra-original/h1-bg01-1.png') center / cover no-repeat; }
 .franchise-process__heading { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.franchise-process h2 { margin: 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 600; line-height: 35px; letter-spacing: .04em; }
+.franchise-process h2 { margin: 0; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 600; line-height: 40px; letter-spacing: .04em; }
 .franchise-process__rail-scroll { width: 100%; margin-top: 34px; }
 .franchise-process__rail-scroll:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; }
 .franchise-process__rail { width: 100%; min-height: 251px; background: transparent; }
@@ -449,7 +460,7 @@ onBeforeUnmount(() => {
 .franchise-support-item h3 { margin: 0; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 27px; }
 .franchise-support-item h3 span { color: #caa05c; }
 .franchise-support-item p { margin: 5px 0 0; color: rgb(255 255 255 / 72%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
-.franchise-support-panel__cta { display: flex; min-height: 52px; align-items: center; justify-content: center; margin-top: 30px; padding: 12px 22px; color: #fff; background: #caa05c; box-shadow: 0 0 0 0 rgb(202 160 92 / 0%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; animation: franchise-support-cta-breathe 2.8s ease-in-out infinite; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
+.franchise-support-panel__cta { display: inline-flex; width: max-content; min-height: 52px; align-items: center; justify-content: center; margin-top: 30px; padding: 12px 32px; border-radius: 999px; color: #fff; background: #caa05c; box-shadow: 0 0 0 0 rgb(202 160 92 / 0%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; animation: franchise-support-cta-breathe 2.8s ease-in-out infinite; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
 .franchise-support-panel__cta:hover { color: #1c1c1d; background: #fff; transform: translateY(-2px); }
 .franchise-support-panel__cta:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 @keyframes franchise-support-cta-breathe {
@@ -466,22 +477,21 @@ onBeforeUnmount(() => {
 
 .franchise-faq { overflow: hidden; padding: 100px 30px 130px; background: #f6f6f6; }
 .franchise-faq__heading { display: grid; grid-template-columns: 30% 66.6666%; margin-bottom: 60px; }
-.franchise-faq__heading h2 { align-self: start; width: min(732px, 100%); margin: 70px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.franchise-faq__heading h2 { align-self: start; width: min(732px, 100%); margin: 64px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .franchise-faq__heading h2 span { color: #caa05c; }
 .franchise-faq__body { display: grid; grid-template-columns: 71% 29%; }
 .franchise-faq__list { min-width: 0; }
 .franchise-faq__item { border-top: 1px solid rgb(159 159 164 / 24%); }
-.franchise-faq__item:first-child { border-top-color: #1c1c1d; }
 .franchise-faq__item:last-child { border-bottom: 1px solid rgb(159 159 164 / 24%); }
 .franchise-faq__item h3 { margin: 0; }
-.franchise-faq__item button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; border: 0; color: #1c1c1d; background: transparent; text-align: left; cursor: pointer; }
+.franchise-faq__item button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 0; border: 0; color: #1c1c1d; background: transparent; text-align: left; cursor: pointer; }
 .franchise-faq__question { display: flex; min-width: 0; align-items: baseline; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 30px; }
 .franchise-faq__number { flex: none; margin-right: 26px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 400; line-height: 30px; }
-.franchise-faq__item button > svg { width: 18px; height: 18px; flex: none; color: #1c1c1d; transition: color .3s ease, transform .3s ease; }
+.franchise-faq__symbol { flex: none; color: #1c1c1d; font-family: var(--font-ui); font-size: 22px; line-height: 1; }
 .franchise-faq__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s ease; }
 .franchise-faq__panel.is-open { grid-template-rows: 1fr; }
 .franchise-faq__panel > div { overflow: hidden; }
-.franchise-faq__panel p { width: min(100%, 832px); margin: 0; padding: 12px 40px 32px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.franchise-faq__panel p { width: min(100%, 832px); margin: 0; padding: 0 40px 32px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .franchise-faq__promo { min-width: 0; padding-left: 100px; color: #1c1c1d; }
 .franchise-faq__promo-image { display: block; overflow: hidden; border-radius: 24px; background: #fff; }
 .franchise-faq__promo-image :deep(.franchise-image) { width: 100%; aspect-ratio: 774 / 1074; background: #fff; }
@@ -611,13 +621,13 @@ onBeforeUnmount(() => {
   .franchise-projects h2,
   .franchise-newsletter h2,
   .franchise-news h2 { font-size: 34px; line-height: 39px; }
-  .franchise-process h2 { font-size: 25px; line-height: 35px; }
+  .franchise-process h2 { font-size: 30px; line-height: 40px; }
   .franchise-about h2 { margin-bottom: 34px; }
   .franchise-about__lead { margin-bottom: 28px; font-size: 16px; line-height: 24px; }
   .franchise-testimonials { grid-template-columns: 1fr; gap: 28px; }
   .franchise-testimonial blockquote { font-size: 14px; line-height: 23px; }
   .franchise-marquees { gap: 9px; padding-bottom: 0; background: none; }
-  .franchise-marquee__track > :deep(.franchise-image) { height: 72px; }
+  .franchise-marquee__track > :deep(.franchise-image) { height: 112px; }
 
   .franchise-advantages__layout { grid-template-columns: 1fr; }
   .franchise-advantages__intro { position: static; padding: 0 0 38px; }
@@ -633,7 +643,7 @@ onBeforeUnmount(() => {
   .source-split-heading p { font-size: 15px; line-height: 24px; }
   .project-block { min-width: 84vw; }
   .project-block:nth-child(even) { transform: none; }
-  .project-block__content h3 { font-size: 20px; line-height: 26px; }
+  .project-block__overlay h3 { font-size: 20px; line-height: 26px; }
 
   .franchise-newsletter { width: calc(100% - 30px); min-height: 560px; margin-top: 75px; padding: 80px 20px; border-radius: 20px; }
   .franchise-newsletter p { font-size: 15px; line-height: 24px; }
@@ -654,10 +664,11 @@ onBeforeUnmount(() => {
   .franchise-faq__promo-image { width: min(310px, 100%); margin-inline: auto; }
   .franchise-faq__promo h3,
   .franchise-faq__promo p { margin-inline: auto; }
-  .franchise-faq__item button { padding: 20px 0 22px; }
-  .franchise-faq__question { align-items: flex-start; font-size: 18px; line-height: 27px; }
-  .franchise-faq__number { margin-right: 14px; font-size: 14px; line-height: 27px; }
-  .franchise-faq__panel p { padding: 10px 0 26px 42px; font-size: 14px; line-height: 23px; }
+  .franchise-faq__item button { align-items: flex-start; gap: 16px; padding: 18px 0; }
+  .franchise-faq__question { align-items: flex-start; font-size: 18px; line-height: 28px; }
+  .franchise-faq__number { margin-right: 14px; font-size: 14px; line-height: 30px; }
+  .franchise-faq__symbol { padding-top: 5px; }
+  .franchise-faq__panel p { padding: 0 0 26px 44px; font-size: 15px; line-height: 25px; }
 
   .franchise-news__list { margin-top: 40px; }
   .franchise-news-row { min-height: 76px; grid-template-columns: 10px 1fr 40px; gap: 12px; }
@@ -675,7 +686,7 @@ onBeforeUnmount(() => {
   .franchise-support-panel__cta,
   .franchise-faq__promo-image :deep(img),
   .franchise-advantages__intro > strong,
-  .franchise-faq__item button > svg,
+  .franchise-faq__symbol,
   .franchise-faq__panel,
   .franchise-news-row h3,
   .franchise-news-row > svg { transition: none; }
