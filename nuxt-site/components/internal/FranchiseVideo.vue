@@ -40,10 +40,6 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
     <template v-if="state === 'idle'">
       <InternalFranchiseImage :src="cover" :alt="`${title}影片封面`" eager class="franchise-video__cover" @click="play" />
       <span class="franchise-video__shade" aria-hidden="true" />
-      <div class="franchise-video__label" aria-hidden="true">
-        <span>Partner Stories</span>
-        <strong>店經理的創業故事</strong>
-      </div>
       <button type="button" :aria-label="`播放：${title}`" class="franchise-video__play" @click="play">
         <span aria-hidden="true" />
         <Play class="relative ml-1 h-7 w-7 fill-current" aria-hidden="true" />
@@ -80,10 +76,6 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
 .franchise-video__cover :deep(img) { width: 100%; height: 100%; }
 .franchise-video__cover :deep(img) { object-fit: cover; }
 .franchise-video__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(0 0 0 / 70%), rgb(0 0 0 / 7%) 72%); }
-.franchise-video__label { position: absolute; bottom: 38px; left: 40px; z-index: 2; color: #fff; }
-.franchise-video__label span { display: block; margin-bottom: 7px; color: #caa05c; font-size: 12px; line-height: 14px; letter-spacing: .16em; text-transform: uppercase; }
-.franchise-video__label strong { display: block; font-family: var(--font-ui); font-size: 32px; font-weight: 400; line-height: 36px; }
-
 .franchise-video__play {
   position: absolute;
   top: 50%;

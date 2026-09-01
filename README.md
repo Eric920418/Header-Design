@@ -236,9 +236,10 @@
 - 2026-09-01 商品型號／售價列改為左側固定欄位對齊，R7600 的 `$18,000` 不再貼齊資訊欄最右側；同一共用詳情模板的其餘型號價格同步維持一致欄線。
 - 2026-09-01 商品內頁「詳細規格」與底部「廚房商品型錄下載」主 CTA 統一套用全站標準 Hover：按鈕轉金並上移 2px、箭頭由 -45° 旋正、金色雷達波紋停止；鍵盤 Focus 與減少動態偏好同步支援，附件下載維持次要按鈕樣式。
 - 2026-09-01 Related Products 區的 `KITCHEN PRODUCT` 改用全站既有 `InternalSectionPill` 膠囊小標，呈現圓角細框、金色圓點與大寫文字；中文「SAKURA 廚電」維持主標層級，移除重複的 `Kitchen Appliances` 英文副標。
+- 2026-09-01 Related Products 的 720×540 商品 PNG 為不透明白底，圖片位移校正後曾露出卡片的 `#f6f6f6` 灰底；圖片容器改為同色白底，保留各型號既有置中與 Hover 縮放，同時消除四邊灰條。
 - 2026-09-01 七個近吸商品內頁的麵包屑品牌名稱、頁面標題與 Open Graph 標題同步上層，統一改為 `SAKURA Kitchen Appliances`；產品系列與商品名稱維持中文。商品 Hero 直接對齊 `/gallery/case10` 的共用案例規格：桌面 366px、相同背景 48% 定位、麵包屑字體與四段響應式高度。
 - Related Products 區改為新版指定的 `KITCHEN PRODUCT` 眉標，以及「SAKURA 廚電 / Kitchen Appliances」雙語標題；中文使用 Noto Serif TC Medium 40px、英文使用 Bodoni Moda 40px。四張關聯商品的名稱改用 Noto Serif TC，型號與售價改用 Noto Sans TC，商品透明主體依各圖實際邊界校正視覺中心；既有上一組／下一組切換與真實商品連結保留。
-- 型錄段落補齊「廚房商品型錄 / Kitchen Product Catalog」雙語標題、白色 CTA 箭頭與 Noto Sans TC 20px 型錄名稱。詳細規格 Dialog 的型號改為 Noto Sans TC 16px、標題改為 Noto Serif TC，表格使用 Noto Sans TC 並保留上下及窄螢幕橫向捲動，不用縮字或裁掉規格列；關閉鈕鍵盤 Focus 改用外框提示，不再因自動聚焦整顆填金而偏離 PPT 的白色圓鈕。
+- 型錄段落比照上一層 `/products/sakura/range-hood/near-suction`，統一為單一 `Kitchen Product Catalogue` 英文主標、白色區塊、淺灰封面底與 Noto Serif TC Medium 20px 型錄名稱；標準 CTA 動畫維持共通規格。詳細規格 Dialog 的型號改為 Noto Sans TC 16px、標題改為 Noto Serif TC，表格使用 Noto Sans TC 並保留上下及窄螢幕橫向捲動，不用縮字或裁掉規格列；關閉鈕鍵盤 Focus 改用外框提示，不再因自動聚焦整顆填金而偏離 PPT 的白色圓鈕。
 
 ### 2.1.1.1.1 新版 Design QA
 
@@ -1186,6 +1187,8 @@ final result: passed
 ## Nuxt 3 — 6.1 我要加盟 Landing Page（2026-08-22）
 
 - **PPT 第 3 頁文案校正（2026-08-24）**：依最新稿第 3 頁右側提案，不改 Home 05／01／07／04 的既有模板結構，只更新可選取 HTML 文案。Hero 小標改為「我要加盟」，三個內容主標改為「店經理的創業故事／加盟創業首選品牌／強大廣告行銷」；Hero 的 73%、700 萬戶、36 年說明移除非來源空格，兩位店經理依簡報順序改為謝立宸 14 年、劉芳玲 2 年，並逐字補回完整創業故事。六大優勢摘要逐項依簡報原文補齊自有工廠、家庭研究、永久服務、商圈機制、全台支援與廚藝大學內容，不再使用前版縮寫。390px 初驗發現浮動快捷列已隱藏但舊安全欄仍壓縮主標，造成「店經理的創業故事」末字孤行；現已於 767px 以下解除本頁多餘安全欄，三組中文主標恢復完整內容寬度。
+- **加盟故事標題還原（2026-09-01）**：`/franchising/intro#introduction` 的故事區主標還原 Home 05 原版英文結構與金色分段；依全站既有規則將原文 `Interior` 改為 `Kitchen`，呈現 `We Shape Kitchen Designs, Crafting Timeless and Inspiring Spaces`。影片封面的 `Partner Stories`／店經理故事標籤整組移除，只保留封面、遮罩與中央播放按鈕；播放標題維持英文無障礙名稱。
+- **加盟資料下載按鈕修正（2026-09-01）**：故事區左側的 Outline 下載按鈕不再繼承箭頭 CTA 專用的右側雷達偽元素，避免 38px 動畫圓圈壓住「載」字；下載圖示、膠囊外框與 Hover 顏色維持原樣。
 - **第 3 頁 Design QA（2026-08-24）**：將 PPT 第 3 頁完整標註與 1440×1000 實作的故事、優勢、行銷三段放入同一張 `/private/tmp/franchise-slide3-copy-design-qa.png` 核對；390×844 另逐段驗證中文主標、內容寬度與手機安全欄。桌機與手機皆無水平溢位或失效圖片，唯一 `h1` 保留英文模板標題；Hero 申請 CTA 為 `/franchising/form`、`target="_blank"` 且含 `rel="noopener"`。初驗唯一 P2 為手機主標孤字，修正後三組標題均維持單行，沒有剩餘 P0／P1／P2 差異，最終結果：`passed`。
 - **最新 PPT 真值與 Hero**：SSR 路由 `/franchising/intro` 改以 `2026.08.19_6.0合作專區_調整.pptx` 第 2 頁為唯一主規格，只採用該頁明確引用的第 3 頁加盟內容，覆蓋 8 月 14 日舊版。Hero 維持 Antra Home 05、從 `y=0` 開始且高度包含 60px Header；pill 依第 3 頁文案更新為「我要加盟」，英文大標保留 `Find Your Inspired / Interior Design`，右欄以 Noto Sans TC 16／15px 呈現 73%、700 萬戶、36 年品牌內容。申請 CTA 以新分頁開啟站內 `/franchising/form` 並含 `rel="noopener"`。
 - **加盟故事與正式素材**：保留 Home 05 30／70 標題軌、YouTube `sAuAjtpvZYk` 與兩位店經理訪談，標籤更新為 `Our Partners`。原本把文案壓成圖片的 `story-strip.png` 已停止渲染，改用甲方 `marquee-1.webp`、`marquee-2.webp` 建立雙排反向循環；Hover、鍵盤焦點暫停，reduced-motion 停止移動。圖片及影片失敗時仍在原位置完整顯示檔案路徑、原因與備援操作。

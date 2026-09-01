@@ -114,9 +114,9 @@ onBeforeUnmount(() => {
           </InternalTemplateHeadingRail>
 
           <div class="franchise-about__content">
-            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">店經理的創業故事</h2>
+            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">We Shape <span>Kitchen Designs, Crafting</span> Timeless and Inspiring Spaces</h2>
             <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="franchise-about__video ev">
-              <InternalFranchiseVideo video-id="sAuAjtpvZYk" title="SAKURA KITCHEN 店經理的創業故事" />
+              <InternalFranchiseVideo video-id="sAuAjtpvZYk" title="SAKURA KITCHEN Store Manager Stories" />
             </div>
 
             <div class="franchise-testimonials">
@@ -323,6 +323,7 @@ onBeforeUnmount(() => {
 .source-round-link:hover svg.lucide-arrow-right { transform: rotate(0); }
 .source-round-link--gold { border-color: #caa05c; color: #1c1c1d; background: #caa05c; }
 .source-round-link--outline { border-color: rgb(89 88 93 / 36%); color: #1c1c1d; }
+.source-round-link--outline::after { content: none; }
 .source-round-link--outline:hover { border-color: #caa05c; color: #a57b38; }
 .source-round-link--hero { min-height: 60px; gap: 8px; padding: 9px 9px 9px 30px; font-size: 15px; line-height: 22px; letter-spacing: .5px; }
 .source-round-link--hero::after { right: 9px; width: 40px; height: 40px; }
@@ -360,7 +361,6 @@ onBeforeUnmount(() => {
 .franchise-process h2,
 .franchise-news h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .franchise-about h2 { max-width: 822px; margin-bottom: 50px; }
-#franchise-story-title,
 #franchise-advantage-title,
 #franchise-marketing-title { font-family: var(--font-cjk-serif); font-weight: var(--font-cjk-serif-semibold, 600); letter-spacing: .02em; }
 .franchise-about h2 span,
