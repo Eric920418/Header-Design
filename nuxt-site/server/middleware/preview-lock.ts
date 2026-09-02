@@ -1,5 +1,5 @@
-import { createHash } from 'node:crypto'
-import { createError, getCookie, getRequestURL, sendRedirect } from 'h3'
+import { createError, deleteCookie, getCookie, getRequestURL, sendRedirect } from 'h3'
+import { isPreviewAccessTokenValid } from '../utils/previewAccess'
 
 export default defineEventHandler((event) => {
   const url = getRequestURL(event)
@@ -12,8 +12,11 @@ export default defineEventHandler((event) => {
 
   if (isPublicRequest) return
 
-  const expectedToken = createHash('sha256').update(useRuntimeConfig(event).previewPassword).digest('hex')
-  if (getCookie(event, 'sakura_preview_access') === expectedToken) return
+  const configuredPassword = useRuntimeConfig(event).previewPassword
+  if (isPreviewAccessTokenValid(getCookie(event, 'sakura_preview_access'), configuredPassword)) return
+
+  deleteCookie(event, 'sakura_preview_access', { path: '/' })
+  deleteCookie(event, 'sakura_preview_expires_at', { path: '/' })
 
   if (path.startsWith('/api/')) {
     throw createError({ statusCode: 401, statusMessage: '此網站需要先通過提案預覽密碼驗證。' })

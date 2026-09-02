@@ -1,5 +1,6 @@
 import { createHash, timingSafeEqual } from 'node:crypto'
 import { createError, readBody, setCookie } from 'h3'
+import { createPreviewAccessToken } from '../utils/previewAccess'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ password?: unknown }>(event)
@@ -15,13 +16,17 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, statusMessage: '密碼錯誤，請確認大小寫與空格後再試一次。' })
   }
 
-  setCookie(event, 'sakura_preview_access', configuredHash.toString('hex'), {
+  const { expiresAt, token } = createPreviewAccessToken(configuredPassword)
+  const cookieOptions = {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60,
     path: '/',
-  })
+  } as const
+
+  setCookie(event, 'sakura_preview_access', token, cookieOptions)
+  setCookie(event, 'sakura_preview_expires_at', String(expiresAt), { ...cookieOptions, httpOnly: false })
 
   return { ok: true }
 })
