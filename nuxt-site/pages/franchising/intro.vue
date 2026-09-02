@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
         <div class="franchise-advantages__layout">
           <header v-reveal="{ anim: 'opalMoveRight' }" class="franchise-advantages__intro">
             <InternalSectionPill>Franchise Advantages</InternalSectionPill>
-            <h2 id="franchise-advantage-title">Franchise Success Starts Here</h2>
+            <h2 id="franchise-advantage-title">Franchise <span>Success</span> Starts Here</h2>
             <p>從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。</p>
             <strong aria-hidden="true">{{ String(activeAdvantageGroup + 1).padStart(2, '0') }}</strong>
           </header>
@@ -434,7 +434,7 @@ onBeforeUnmount(() => {
 .project-block__overlay span { position: absolute; right: 22px; bottom: 26px; color: rgb(255 255 255 / 65%); font-family: var(--font-ui); font-size: 18px; }
 .project-block:hover :deep(img) { transform: scale(1.04); }
 .project-block__content { min-height: 122px; padding: 20px 22px 24px; }
-.project-block__content p { margin: 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; line-height: 30px; }
+.project-block__content p { margin: 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 30px; }
 
 .franchise-newsletter { position: relative; isolation: isolate; display: grid; width: min(1770px, calc(100% - 60px)); min-height: 600px; place-items: center; margin: 110px auto 0; overflow: hidden; padding: 110px 30px 120px; border-radius: 26px; color: #fff; text-align: center; background: linear-gradient(180deg, rgb(15 14 13 / 35%), rgb(15 14 13 / 88%)), url('/section-6/builders/builder-hero.jpg') center 58% / cover no-repeat; }
 .franchise-newsletter::before { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgb(255 255 255 / 3%), rgb(0 0 0 / 26%)); content: ""; }

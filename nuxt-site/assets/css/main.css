@@ -121,7 +121,6 @@ select {
   .near-suction-series h2,
   .product-catalogue__copy h2 span,
   .product-catalogue-card__text strong,
-  .product-catalogue-hero__inner h1,
   .product-model,
   .product-overview__content > h1,
   .product-specifications-dialog__heading h2,
@@ -130,14 +129,11 @@ select {
   .related-product-card__copy strong,
   .related-products__heading h2 strong,
   .sakura-kitchen-heading em,
-  .sakura-kitchen-heading h2,
+  .sakura-kitchen-advantage .sakura-kitchen-heading h2,
   .sakura-kitchen-series__card h3,
   .sakura-product-card__text h3,
-  .sakura-product-hero__inner h1,
   .sakura-series-card__text h3,
-  .sakura-series-catalogue__copy h2 span,
   .sakura-series-categories h2,
-  .sakura-series-hero__inner h1,
   .sakura-series-products h2 span,
   .service-flow-block__heading h2
 ) {

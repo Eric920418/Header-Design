@@ -1,6 +1,10 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+- **2026-09-02 建商合作夥伴標題**：`/builders` Logo 輪播區小標由 `Our Website 75000+ VIP Customer` 精簡為 `OUR CLIENTS`，保留既有置中版面與字型規格。
+- **2026-09-02 全站細節校正**：商品型錄 Hero 改為 `Kitchen Product Catalogue`，保留中文麵包屑；保養分類改為三顆直接切換按鈕，「廚房產品保養」中心線精確對齊中間的「除油煙機」按鈕。產品型錄的 `Product`、加盟優勢的 `Success` 改為品牌金色，行銷卡內文固定 600 字重，品牌優勢三張文章卡同步縮短。建商頁 Hero 小標改為 `Property Developers`，設計師區恢復一張正式卡與三張同尺寸 `Coming Soon` 卡，兩處專案標題改於問號後分行；同時縮限舊的全域中文字重規則，讓 One-Click、Creating the Ideal Kitchen 與產品型錄等英文標題真正使用模板字型。SAKURA KITCHEN 型錄入口改用站內導航，確保切頁回到頁首。
+- **提案預覽密碼鎖（2026-09-02）**：全站頁面由 Nitro 伺服器中介層保護，未驗證訪客會導向 `/preview-access`；密碼經伺服器端 SHA-256 定長比對後簽發 12 小時 HttpOnly Cookie。預設提案密碼由私有 runtime config 提供，正式環境可用 `NUXT_PREVIEW_PASSWORD` 覆蓋；靜態圖片與 Nuxt 執行資源維持可載入，API 未授權時回傳完整 401 錯誤。
+
 ## 3.1 服務流程／FAQ（2026-08-30 調整）
 
 - 依 `2026.08.21_3.0門市與服務、4.0優惠消息 _調整.pptx` 第 2 頁修正 `/service-process`：Hero 標題改為模板英文字型的 `Our Process`，保留既有安全頂距，不與置中 Logo 重疊。

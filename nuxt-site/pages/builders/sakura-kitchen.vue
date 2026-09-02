@@ -77,8 +77,6 @@ useSeoMeta({
           <span class="sakura-kitchen-panorama__shade" aria-hidden="true" />
           <NuxtLink
             to="/builders/catalogues"
-            target="_blank"
-            rel="noopener noreferrer"
             class="site-content-cta sakura-kitchen-content-cta sakura-kitchen-content-cta--photo"
           >
             <span>產品型錄</span>
@@ -172,6 +170,7 @@ useSeoMeta({
 
 .sakura-kitchen-series { padding: 112px 30px 130px; background: #fff; }
 .sakura-kitchen-heading--series { width: min(1020px, 100%); }
+.sakura-kitchen-heading--series h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: -.02em; }
 .sakura-kitchen-series__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 68px; }
 .sakura-kitchen-series__card { position: relative; min-width: 0; aspect-ratio: 1.45 / 1; overflow: hidden; border-radius: 24px; background: #1c1c1d; }
 .sakura-kitchen-series__card :deep(.builder-image) { position: absolute; inset: 0; }

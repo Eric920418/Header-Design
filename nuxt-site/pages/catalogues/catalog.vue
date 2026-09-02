@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight, ChevronDown, ChevronRight } from 'lucide-vue-next'
+import { ArrowUpRight, ChevronRight } from 'lucide-vue-next'
 import { PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES } from '~/data/productCatalogues'
 
 const activeCategoryIndex = ref(1)
@@ -26,16 +26,6 @@ function selectQuestion(index: number) {
   activeQuestionIndex.value = index
 }
 
-function selectQuestionFromCategory(categoryIndex: number, event: Event) {
-  const select = event.target as HTMLSelectElement
-  const questionIndex = Number(select.value)
-  if (!Number.isInteger(questionIndex)) return
-
-  activeCategoryIndex.value = categoryIndex
-  activeQuestionIndex.value = questionIndex
-  select.value = ''
-}
-
 useSeoMeta({
   title: '廚房商品型錄｜SAKURA 整體廚房',
   description: '下載櫻花整體廚房、五金收納、櫻花石英石、SAKURA 廚電與進口廚電型錄，並查看廚房產品保養重點。',
@@ -50,7 +40,7 @@ useSeoMeta({
     <section class="product-catalogue-hero hero-includes-header" aria-labelledby="product-catalogue-title">
       <span class="product-catalogue-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="product-catalogue-hero__inner">
-        <h1 id="product-catalogue-title">廚房商品型錄</h1>
+        <h1 id="product-catalogue-title">Kitchen Product Catalogue</h1>
         <nav aria-label="麵包屑" class="product-catalogue-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -109,26 +99,17 @@ useSeoMeta({
         <div class="product-care__layout">
           <div class="product-care__faq">
             <div class="product-care__filters" aria-label="產品保養問題分類">
-          <label
+          <button
             v-for="(category, index) in PRODUCT_CARE_CATEGORIES"
             :key="category.id"
+            type="button"
             class="product-care__filter"
             :class="{ 'is-active': activeCategoryIndex === index }"
+            :aria-pressed="activeCategoryIndex === index"
+            @click="selectCategory(index)"
           >
-            <span class="sr-only">{{ category.label }}問題</span>
-            <select
-              value=""
-              :aria-label="`${category.label}問題`"
-              @focus="selectCategory(index)"
-              @change="selectQuestionFromCategory(index, $event)"
-            >
-              <option value="" disabled selected>{{ category.label }}</option>
-              <option v-for="(question, questionIndex) in category.questions" :key="question.id" :value="questionIndex">
-                {{ question.question }}
-              </option>
-            </select>
-            <ChevronDown aria-hidden="true" />
-              </label>
+            {{ category.label }}
+          </button>
             </div>
 
             <div
@@ -217,7 +198,7 @@ useSeoMeta({
 
 .product-catalogue-hero__overlay { position: absolute; z-index: -1; inset: 0; background: #100801; opacity: .64; }
 .product-catalogue-hero__inner { width: min(1410px, calc(100% - 60px)); margin-inline: auto; padding: 138px 0 97px; text-align: center; }
-.product-catalogue-hero h1 { margin: 0 0 31px; color: #fff; font-family: var(--font-cjk-serif); font-size: 80px; font-weight: 500; line-height: 1; }
+.product-catalogue-hero h1 { margin: 0 0 31px; color: #fff; font-family: var(--font-display); font-size: 80px; font-weight: 400; line-height: 1; }
 .product-catalogue-hero__trail { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .product-catalogue-hero__trail a { color: inherit; transition: color .3s ease; }
 .product-catalogue-hero__trail a:hover,
@@ -253,17 +234,14 @@ useSeoMeta({
 .product-care .internal-rail-safe { padding-inline: 43px; }
 .product-care__header { display: grid; grid-template-columns: 270px minmax(0, 1fr) minmax(260px, 300px); align-items: start; gap: 34px; margin-bottom: 52px; }
 .product-care__eyebrow { position: relative; display: inline-flex; width: fit-content; }
-.product-care__header h2 { max-width: 650px; margin: -5px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 600; line-height: 40px; }
+.product-care__header h2 { max-width: 650px; justify-self: center; margin: -5px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 600; line-height: 40px; text-align: center; }
 .product-care__header > p { margin: 4px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .product-care__layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 70px; align-items: start; }
 .product-care__filters { display: grid; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.product-care__filter { position: relative; display: block; min-width: 0; }
-.product-care__filter select { width: 100%; height: 64px; appearance: none; border: 1px solid transparent; border-radius: 999px; padding: 0 52px 0 24px; color: #59585d; background: #fff; font-family: var(--font-ui); font-size: 16px; line-height: 1; outline: 0; transition: border-color .3s ease, box-shadow .3s ease, color .3s ease; }
-.product-care__filter > svg { position: absolute; top: 50%; right: 22px; width: 17px; height: 17px; color: #59585d; pointer-events: none; transform: translateY(-50%); transition: color .3s ease, transform .3s ease; }
-.product-care__filter:hover select,
-.product-care__filter.is-active select { color: #1c1c1d; border-color: rgba(202,160,92,.5); }
-.product-care__filter:focus-within select { border-color: #caa05c; box-shadow: 0 0 0 3px rgba(202,160,92,.17); }
-.product-care__filter:focus-within > svg { color: #caa05c; transform: translateY(-50%) rotate(180deg); }
+.product-care__filter { width: 100%; height: 64px; min-width: 0; border: 1px solid rgb(227 227 232 / 90%); border-radius: 999px; padding: 0 24px; color: #59585d; background: #fff; font-family: var(--font-ui); font-size: 16px; line-height: 1; cursor: pointer; transition: border-color .3s ease, box-shadow .3s ease, color .3s ease, background-color .3s ease; }
+.product-care__filter:hover,
+.product-care__filter.is-active { color: #1c1c1d; border-color: rgb(202 160 92 / 50%); }
+.product-care__filter:focus-visible { outline: 0; border-color: #caa05c; box-shadow: 0 0 0 3px rgb(202 160 92 / 17%); }
 .product-care__panel { padding-top: 54px; }
 .product-care__questions { border-top: 1px solid rgb(159 159 164 / 24%); }
 .product-care-question { border-bottom: 1px solid rgb(159 159 164 / 24%); }
@@ -297,6 +275,12 @@ useSeoMeta({
 .product-care__feature h3 { margin: 30px 0 14px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 500; line-height: 30px; }
 .product-care__feature > p { margin: 0; color: #737278; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 
+@media (min-width: 1024px) {
+  .product-care__header { position: relative; grid-template-columns: minmax(0, 1fr) 260px; gap: 70px; }
+  .product-care__header h2 { position: absolute; left: calc((100% - 330px) / 2); transform: translateX(-50%); }
+  .product-care__header > p { grid-column: 2; }
+}
+
 @media (max-width: 1199px) {
   .product-care__layout { gap: 42px; }
 }
@@ -329,7 +313,7 @@ useSeoMeta({
   .product-care__header h2 { margin-top: 20px; font-size: 30px; line-height: 40px; }
   .product-care__header > p { font-size: 15px; line-height: 24px; }
   .product-care__filters { grid-template-columns: 1fr; gap: 12px; }
-  .product-care__filter select { height: 58px; padding-inline: 20px 48px; font-size: 16px; }
+  .product-care__filter { height: 58px; padding-inline: 20px; font-size: 16px; }
   .product-care__layout { gap: 38px; }
   .product-care__panel { padding-top: 42px; }
   .product-care-question > button { align-items: flex-start; gap: 16px; }
@@ -346,8 +330,7 @@ useSeoMeta({
   .product-catalogue-card__shade,
   .product-catalogue-card__action,
   .product-catalogue-card__text strong,
-  .product-care__filter select,
-  .product-care__filter > svg,
+  .product-care__filter,
   .product-care__media :deep(img),
   .product-care__media-arrow { transition: none; }
   .product-catalogue-card__link:hover .product-catalogue-card__image :deep(img),

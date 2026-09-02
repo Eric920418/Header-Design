@@ -55,7 +55,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
       <span class="builders-hero__deco" aria-hidden="true" />
       <div class="builders-rail-wide builders-hero__inner internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="builders-hero__headline ev">
-          <InternalSectionPill tone="dark">建商專區</InternalSectionPill>
+          <InternalSectionPill tone="dark">Property Developers</InternalSectionPill>
           <h1 id="builders-title">Find Your Inspired<br /><span>Kitchen Design</span></h1>
         </div>
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="builders-hero__aside ev">
@@ -105,7 +105,16 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
               <div class="builders-team-card__status"><span>{{ card.title }}</span><strong>{{ String(index + 1).padStart(2, '0') }}</strong></div>
             </article>
           </template>
-          <p v-reveal="{ anim: 'opalMoveUp', delay: 90 }" data-ev="opalMoveUp" class="builders-team__coming-soon ev">Coming Soon</p>
+          <article
+            v-for="index in 3"
+            :key="`coming-soon-${index}`"
+            v-reveal="{ anim: 'opalMoveUp', delay: index * 90 }"
+            data-ev="opalMoveUp"
+            class="builders-team-card builders-team-card--coming-soon ev"
+            :style="{ animationDelay: `${index * 90}ms` }"
+          >
+            <strong>Coming Soon</strong>
+          </article>
         </div>
       </div>
     </section>
@@ -115,7 +124,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
         <header class="builders-section-heading builders-section-heading--split">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Brands" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <h2 id="builders-capability-title">Have A Project In <span>Mind? Let’s</span><br />Make It Happen</h2>
+            <h2 id="builders-capability-title">Have A Project In <span>Mind?</span><br /><span>Let’s</span> Make It Happen</h2>
             <p>櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。</p>
           </div>
         </header>
@@ -182,7 +191,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 
     <section class="builders-partners" aria-labelledby="builders-partners-title">
       <div class="builders-partners__rail">
-        <h2 id="builders-partners-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">Our Website <span>75000+</span> VIP Customer</h2>
+        <h2 id="builders-partners-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">OUR CLIENTS</h2>
         <ul class="sr-only">
           <li v-for="partner in builderPartners" :key="partner.name">{{ partner.name }}</li>
         </ul>
@@ -210,7 +219,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
           <InternalSectionPill>Get In Touch</InternalSectionPill>
           <div>
-            <h2 id="builders-contact-title">Have A Project In <span>Mind? Let’s</span><br />Make It Happen</h2>
+            <h2 id="builders-contact-title">Have A Project In <span>Mind?</span><br /><span>Let’s</span> Make It Happen</h2>
           </div>
         </header>
 
@@ -298,9 +307,10 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-section-heading--team { display: grid; grid-template-columns: 25% 48% 27%; align-items: end; margin-bottom: 60px; }
 .builders-section-heading--team > p { margin: 0 0 4px; }
 .builders-team__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; }
-.builders-team__coming-soon { display: grid; min-height: 100%; grid-column: 2 / -1; place-items: center; margin: 0; font-family: var(--font-display); font-size: clamp(36px, 3vw, 52px); font-weight: 600; }
 .builders-team-card { position: relative; display: block; min-width: 0; overflow: hidden; border-radius: 24px; color: inherit; background: #fafafa; text-decoration: none; }
 .builders-team-card--project { grid-column: 1; }
+.builders-team-card--coming-soon { display: grid; aspect-ratio: 4 / 5; place-items: center; border: 1px solid #e3e3e8; background: #fafafa url('/section-6/franchise/antra-original/h5-bg02.png') center / cover no-repeat; }
+.builders-team-card--coming-soon strong { padding: 24px; font-family: var(--font-display); font-size: clamp(24px, 2vw, 34px); font-weight: 400; text-align: center; }
 .builders-team-card > :deep(.builder-image) { aspect-ratio: 4 / 5; }
 .builders-team-card:hover :deep(img) { transform: scale(1.035); }
 .builders-team-card:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
@@ -346,7 +356,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-lifetime { padding: 72px 30px 140px; color: #1c1c1d; background: #fafafa url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
 .builders-lifetime__heading { width: min(920px, 100%); margin-inline: auto; text-align: center; }
 .builders-lifetime__pill { margin-inline: auto; }
-.builders-lifetime__heading h2 { margin-top: 24px; font-family: var(--font-cjk-serif); font-weight: var(--font-cjk-serif-semibold, 600); }
+.builders-lifetime__heading h2 { margin-top: 24px; font-family: var(--font-display); font-weight: 400; }
 .builders-lifetime__heading h2 span { display: inline-block; color: #caa05c; white-space: nowrap; }
 .builders-lifetime__heading p { max-width: 690px; margin: 24px auto 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .builders-lifetime__visual { margin-top: 58px; overflow: hidden; border: 1px solid #e3e3e8; border-radius: 24px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 8%); }
@@ -461,7 +471,6 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-lifetime h2 { font-size: 41px; line-height: 46px; }
   .builders-capability .builders-section-heading--split > div h2 { margin-top: 20px; }
   .builders-team__grid { grid-template-columns: 1fr; gap: 20px; }
-  .builders-team__coming-soon { min-height: 140px; grid-column: 1; }
   .builders-team-card > :deep(.builder-image) { aspect-ratio: 1 / 1.12; }
   .builders-strengths { grid-template-columns: 1fr; margin-top: 56px; }
   .builders-capability__showcase { padding: 18px 18px 48px; border-radius: 26px; }

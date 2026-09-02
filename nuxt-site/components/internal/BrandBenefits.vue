@@ -91,9 +91,9 @@ onBeforeUnmount(() => stopScrollStory?.())
 .brand-benefits-heading > p { max-width: 830px; margin: 24px auto 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-benefit-story { position: relative; }
 .brand-benefit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
-.brand-benefit-card { position: relative; min-width: 0; min-height: 650px; overflow: hidden; border-radius: 28px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 8%); }
+.brand-benefit-card { position: relative; min-width: 0; min-height: 590px; overflow: hidden; border-radius: 28px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 8%); }
 .brand-benefit-image { width: calc(100% - 32px); margin: 16px; aspect-ratio: 1.62 / 1; border-radius: 20px; }
-.brand-benefit-copy { min-height: 300px; padding: 24px 28px 70px; }
+.brand-benefit-copy { min-height: 240px; padding: 24px 28px 58px; }
 .brand-benefit-eyebrow { display: flex; align-items: baseline; gap: 7px; margin-bottom: 12px; color: #1c1c1d; font-family: var(--font-ui); }
 .brand-benefit-eyebrow strong { color: #caa05c; font-size: 18px; font-weight: 600; line-height: 24px; }
 .brand-benefit-eyebrow span { font-size: 15px; font-weight: 600; line-height: 22px; }

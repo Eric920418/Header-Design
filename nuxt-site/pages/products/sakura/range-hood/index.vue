@@ -108,7 +108,7 @@ useSeoMeta({
         <div v-reveal="{ anim: 'opalMoveRight' }" class="sakura-series-catalogue__copy">
           <InternalSectionPill>SAKURA Product Catalogue</InternalSectionPill>
           <h2 id="sakura-catalogue-title">
-            <span>Kitchen Product Catalogue</span>
+            <span>Kitchen <em>Product</em> Catalogue</span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta sakura-series-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -210,6 +210,7 @@ useSeoMeta({
 .sakura-series-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
 .sakura-series-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .sakura-series-catalogue__copy h2 span { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
+.sakura-series-catalogue__copy h2 em { color: #caa05c; font-style: normal; }
 .sakura-series-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid #1c1c1d; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .sakura-series-catalogue__cta:hover,
 .sakura-series-catalogue__cta:focus-visible { border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
