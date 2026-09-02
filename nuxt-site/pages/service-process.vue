@@ -99,7 +99,7 @@ useSeoMeta({
 .antra-service-intro {
   overflow: hidden;
   padding: 100px 30px 110px;
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 .antra-service-intro__rail {
@@ -140,7 +140,7 @@ useSeoMeta({
 .antra-service-video {
   overflow: hidden;
   padding: 0 30px;
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 .antra-service-video__rail {

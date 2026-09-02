@@ -189,7 +189,7 @@ export function StoreLocationSection() {
     // 間距依模板實測：py 120
     <section
       aria-labelledby="store-location-heading"
-      className="store-location-section relative overflow-hidden bg-[#f6f6f6] py-[60px]"
+      className="store-location-section relative overflow-hidden bg-[#fafafa] py-[60px]"
     >
       <div className="mx-auto w-full max-w-[1512px] pl-5 pr-[88px] sm:pl-8 sm:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
         {/* ── 標題列：eyebrow(左欄) + 大標(右偏) + 十字裝飾線（同 PricingSection，相同座標/位置） ── */}

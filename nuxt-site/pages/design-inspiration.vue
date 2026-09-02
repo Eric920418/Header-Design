@@ -246,7 +246,7 @@ useSeoMeta({
 .design-projects-section {
   overflow: hidden;
   padding: 100px 30px 130px;
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 .design-projects-rail {

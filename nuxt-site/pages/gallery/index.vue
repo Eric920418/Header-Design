@@ -164,7 +164,7 @@ useSeoMeta({
 .antra-store-gallery {
   overflow: hidden;
   padding: 100px 30px 108px;
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 .antra-store-gallery__rail {
@@ -205,8 +205,8 @@ useSeoMeta({
   position: relative;
   box-sizing: border-box;
   min-height: 40px;
-  padding: 7px 18px;
-  border: 1px solid transparent;
+  padding: 7px 26px;
+  border: 1px solid #d0d0d5;
   border-radius: 24px;
   color: #59585d;
   background: transparent;
@@ -218,11 +218,11 @@ useSeoMeta({
   transition: color .3s ease, border-color .3s ease, background-color .3s ease;
 }
 
-.antra-store-filter__row:first-child button { width: 74px; }
-.antra-store-filter__row--cities button { min-width: 94px; }
+.antra-store-filter__row:first-child button { min-width: 104px; }
+.antra-store-filter__row--cities button { min-width: 110px; }
 
 @media (min-width: 1025px) {
-  .antra-store-filter__options { display: grid; grid-template-columns: repeat(7, 94px); }
+  .antra-store-filter__options { display: grid; grid-template-columns: repeat(7, 110px); }
   .antra-store-filter button { justify-self: start; }
 }
 
@@ -348,7 +348,7 @@ useSeoMeta({
 
   .antra-store-filter button {
     min-height: 32px;
-    padding: 4px 12px;
+    padding: 4px 16px;
     font-size: 14px;
   }
 

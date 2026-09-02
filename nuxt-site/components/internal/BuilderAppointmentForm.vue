@@ -184,7 +184,7 @@ const submit = async () => {
 .builder-form label { display: block; min-width: 0; color: #1c1c1d; font-size: 14px; line-height: 22px; }
 .builder-form label > span:first-child { display: block; margin-bottom: 9px; }
 .builder-form input,
-.builder-form textarea { width: 100%; border: 1px solid rgb(159 159 164 / 28%); border-radius: 24px; color: #1c1c1d; background: #f6f6f6; outline: none; transition: border-color .3s ease, box-shadow .3s ease, background-color .3s ease; }
+.builder-form textarea { width: 100%; border: 1px solid rgb(159 159 164 / 28%); border-radius: 24px; color: #1c1c1d; background: #fafafa; outline: none; transition: border-color .3s ease, box-shadow .3s ease, background-color .3s ease; }
 .builder-form input { height: 58px; padding: 0 21px; }
 .builder-form textarea { min-height: 132px; resize: vertical; padding: 17px 21px; }
 .builder-form input::placeholder,
@@ -206,7 +206,7 @@ const submit = async () => {
 .builder-form__submit-row > p { max-width: 300px; margin: 0; color: #9f9fa4; font-size: 12px; line-height: 19px; text-align: right; }
 .builder-form__submit-row > p a { color: #8b6224; text-decoration: underline; text-underline-offset: 3px; }
 .is-spinning { animation: builder-spin 1s linear infinite; }
-.builder-form__notice { margin-top: 26px; padding: 18px 20px; border: 1px solid #e3e3e8; border-radius: 18px; color: #59585d; background: #f6f6f6; }
+.builder-form__notice { margin-top: 26px; padding: 18px 20px; border: 1px solid #e3e3e8; border-radius: 18px; color: #59585d; background: #fafafa; }
 .builder-form__notice.is-error { border-color: #d9a39b; background: #fff4f1; }
 .builder-form__notice.is-success { border-color: #caa05c; background: #fff9ed; }
 .builder-form__notice strong { color: #1c1c1d; }

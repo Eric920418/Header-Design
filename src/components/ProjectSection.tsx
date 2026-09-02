@@ -49,7 +49,7 @@ export function ProjectSection() {
   }, [emblaApi]);
 
   return (
-    <section id="kitchen-series" ref={sectionRef} data-ev="slideInUp" className="ev relative z-10 bg-[#f6f6f6]">
+    <section id="kitchen-series" ref={sectionRef} data-ev="slideInUp" className="ev relative z-10 bg-[#fafafa]">
       {/* bg 深色：作為次像素髮絲縫的保險——即使卡間偶有 <1px 縫，透出的是深色(近卡片暗部)而非亮背景，肉眼難察 */}
       <div className="overflow-hidden cursor-grab active:cursor-grabbing bg-[#1C1C1D]" ref={emblaRef}>
         <div className="flex">
@@ -64,7 +64,7 @@ export function ProjectSection() {
               {/* 固定高度、hover 變寬（伸縮）+ 底部漸層 + 左上膠囊 + 英中標。
                   w-[calc(100%+2px)] + -ml-px：內容比卡槽左右各寬 1px（共 +2px），
                   接縫「兩側」都被相鄰卡內容蓋住 → 軌道以小數 transform 位移(如 -3004.36)時，
-                  不論往左往右移，卡間都不露出次像素髮絲縫（背景 #f6f6f6 透出）。
+                  不論往左往右移，卡間都不露出次像素髮絲縫（背景 #fafafa 透出）。
                   卡槽(.group)仍是 378，Embla 量測/迴圈總長不受影響。 */}
               <article className="relative overflow-hidden w-[calc(100%+2px)] -ml-px h-[480px] md:h-[640px] lg:h-[880px]">
                 <img

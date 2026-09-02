@@ -164,7 +164,7 @@ useSeoMeta({
 .antra-news-index {
   overflow: hidden;
   padding: 100px 30px 108px;
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 .antra-news-index__rail {

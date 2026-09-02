@@ -30,7 +30,7 @@
 </template>
 
 <style scoped>
-.brand-store-section { overflow: hidden; padding: 100px 30px 80px; background: linear-gradient(180deg, #f6f6f6 0%, #fff 72.12%); }
+.brand-store-section { overflow: hidden; padding: 100px 30px 80px; background: linear-gradient(180deg, #fafafa 0%, #fff 72.12%); }
 .brand-store-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-store-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
 .brand-store-heading-aside { align-self: stretch; }

@@ -256,10 +256,10 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.about-us-page { overflow: hidden; color: #1c1c1d; background: #f6f6f6; }
+.about-us-page { overflow: hidden; color: #1c1c1d; background: #fafafa; }
 .about-rail { width: min(1410px, 100%); margin-inline: auto; }
 
-.about-services { padding: 100px 30px 110px; background: #f6f6f6; }
+.about-services { padding: 100px 30px 110px; background: #fafafa; }
 .about-services__heading { display: grid; grid-template-columns: 30% 70%; align-items: start; margin-bottom: 58px; }
 .about-services__heading h2 { margin: 70px 0 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .about-services__heading h2 span { color: #caa05c; }
@@ -286,7 +286,7 @@ useSeoMeta({
 .service-answer-enter-to,
 .service-answer-leave-from { max-height: 480px; opacity: 1; transform: none; }
 
-.about-history { padding: 0 30px 120px; background: #f6f6f6; }
+.about-history { padding: 0 30px 120px; background: #fafafa; }
 .about-history__carousel { position: relative; }
 .about-history__viewport { overflow: hidden; }
 .about-history__grid { display: flex; margin-left: -30px; touch-action: pan-y pinch-zoom; }

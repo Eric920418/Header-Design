@@ -128,7 +128,7 @@ useHead({
 <style scoped>
 .knowledge-detail-page {
   color: #59585d;
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 .knowledge-detail-breadcrumb {

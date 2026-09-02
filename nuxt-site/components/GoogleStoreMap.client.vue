@@ -17,10 +17,10 @@ const STORE_ZOOM = 16
 
 // 與遷移前 Vite 地圖相同的 Antra 中性色盤，完整保留道路、行政區、公園與水域規則。
 const MAP_STYLE = [
-  { elementType: 'geometry', stylers: [{ color: '#f6f6f6' }] },
+  { elementType: 'geometry', stylers: [{ color: '#fafafa' }] },
   { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
   { elementType: 'labels.text.fill', stylers: [{ color: '#59585d' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#f6f6f6' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#fafafa' }] },
   { featureType: 'administrative', elementType: 'geometry', stylers: [{ visibility: 'off' }] },
   { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
   { featureType: 'administrative.neighborhood', stylers: [{ visibility: 'off' }] },

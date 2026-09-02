@@ -90,7 +90,7 @@ useHead({
 </template>
 
 <style scoped>
-.media-detail-page { color: #59585d; background: #f6f6f6; }
+.media-detail-page { color: #59585d; background: #fafafa; }
 
 .media-detail-breadcrumb {
   position: relative;

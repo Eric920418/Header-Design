@@ -42,7 +42,7 @@ select {
 
 .page-shell {
   min-height: calc(100vh - var(--site-header-height));
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 /*

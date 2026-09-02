@@ -35,12 +35,12 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.franchise-application-page { overflow: clip; color: #1c1c1d; background: #f6f6f6; }
+.franchise-application-page { overflow: clip; color: #1c1c1d; background: #fafafa; }
 
 .franchise-application {
   min-height: 1150px;
   padding: 96px 30px 130px;
-  background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat;
+  background: #fafafa url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat;
 }
 
 .franchise-application__rail { width: min(930px, 100%); margin-inline: auto; }

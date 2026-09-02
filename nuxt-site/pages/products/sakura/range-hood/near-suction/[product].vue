@@ -275,7 +275,7 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.product-detail-page { overflow: clip; color: #59585d; background: #f6f6f6; }
+.product-detail-page { overflow: clip; color: #59585d; background: #fafafa; }
 .product-detail-rail { width: min(1410px, 100%); margin-inline: auto; box-sizing: border-box; }
 .product-detail-rail.internal-rail-safe { padding-inline: 43px; }
 
@@ -293,7 +293,7 @@ useSeoMeta({
 .product-detail-hero__trail a:hover,
 .product-detail-hero__trail a:focus-visible { color: #caa05c; }
 
-.product-overview { padding: 112px 30px 132px; background: #f6f6f6; }
+.product-overview { padding: 112px 30px 132px; background: #fafafa; }
 .product-overview__grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(410px, .92fr); align-items: start; gap: clamp(58px, 6vw, 102px); }
 .product-gallery { position: sticky; top: 92px; min-width: 0; }
 .product-gallery__stage { position: relative; display: grid; overflow: hidden; aspect-ratio: 1; place-items: center; border-radius: 26px; background: #fff; }
@@ -378,7 +378,7 @@ useSeoMeta({
 .product-catalogue { padding: 120px 30px 130px; background: #fff; }
 .product-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
 .product-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
-.product-catalogue__copy h2 span { font-family: var(--font-editorial); font-size: 60px; font-weight: 400; line-height: 64px; }
+.product-catalogue__copy h2 span { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
 .product-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid #1c1c1d; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .product-catalogue__cta:hover,
 .product-catalogue__cta:focus-visible { border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
@@ -395,13 +395,13 @@ useSeoMeta({
 .product-catalogue__copy > p { margin: 18px 0 0; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 20px; }
 .product-catalogue__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .product-catalogue-card { min-width: 0; }
-.product-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #f6f6f6; }
+.product-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #fafafa; }
 .product-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .product-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
 .product-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
 .product-catalogue-card:hover .product-catalogue-card__cover :deep(img) { transform: scale(1.04); }
 
-.product-specifications-dialog { width: min(980px, calc(100% - 60px)); max-width: none; max-height: calc(100dvh - 60px); margin: auto; padding: 0; overflow: hidden; border: 0; border-radius: 24px; color: #59585d; background: #f6f6f6; box-shadow: 0 26px 80px rgb(0 0 0 / 38%); }
+.product-specifications-dialog { width: min(980px, calc(100% - 60px)); max-width: none; max-height: calc(100dvh - 60px); margin: auto; padding: 0; overflow: hidden; border: 0; border-radius: 24px; color: #59585d; background: #fafafa; box-shadow: 0 26px 80px rgb(0 0 0 / 38%); }
 .product-specifications-dialog::backdrop { background: rgb(16 8 1 / 76%); backdrop-filter: blur(8px); }
 .product-specifications-dialog__panel { max-height: calc(100dvh - 60px); overflow-y: auto; padding: 50px; overscroll-behavior: contain; scrollbar-gutter: stable; }
 .product-specifications-dialog__heading { display: flex; align-items: start; justify-content: space-between; gap: 30px; margin-bottom: 34px; }

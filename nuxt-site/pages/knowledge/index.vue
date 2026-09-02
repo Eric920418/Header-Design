@@ -74,7 +74,7 @@ useSeoMeta({
 <style scoped>
 .kitchen-guide-page {
   color: #59585d;
-  background: #f6f6f6;
+  background: #fafafa;
   font-family: var(--font-cjk-sans);
 }
 

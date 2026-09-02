@@ -83,7 +83,7 @@ onBeforeUnmount(() => stopScrollStory?.())
 </template>
 
 <style scoped>
-.brand-benefits { overflow: clip; padding: 100px 30px 120px; background: linear-gradient(180deg, #fff 0%, #f6f6f6 72.12%); }
+.brand-benefits { overflow: clip; padding: 100px 30px 60px; background: linear-gradient(180deg, #fff 0%, #fafafa 72.12%); }
 .brand-benefits-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-benefits-heading { width: min(900px, 100%); margin: 0 auto 60px; text-align: center; }
 .brand-benefits-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
@@ -91,9 +91,9 @@ onBeforeUnmount(() => stopScrollStory?.())
 .brand-benefits-heading > p { max-width: 830px; margin: 24px auto 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-benefit-story { position: relative; }
 .brand-benefit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
-.brand-benefit-card { position: relative; min-width: 0; min-height: 730px; overflow: hidden; border-radius: 28px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 8%); }
-.brand-benefit-image { width: calc(100% - 32px); margin: 16px; aspect-ratio: 1.48 / 1; border-radius: 20px; }
-.brand-benefit-copy { min-height: 360px; padding: 28px 32px 80px; }
+.brand-benefit-card { position: relative; min-width: 0; min-height: 650px; overflow: hidden; border-radius: 28px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 8%); }
+.brand-benefit-image { width: calc(100% - 32px); margin: 16px; aspect-ratio: 1.62 / 1; border-radius: 20px; }
+.brand-benefit-copy { min-height: 300px; padding: 24px 28px 70px; }
 .brand-benefit-eyebrow { display: flex; align-items: baseline; gap: 7px; margin-bottom: 12px; color: #1c1c1d; font-family: var(--font-ui); }
 .brand-benefit-eyebrow strong { color: #caa05c; font-size: 18px; font-weight: 600; line-height: 24px; }
 .brand-benefit-eyebrow span { font-size: 15px; font-weight: 600; line-height: 22px; }

@@ -197,7 +197,7 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.sakura-product-page { color: #59585d; background: #f6f6f6; }
+.sakura-product-page { color: #59585d; background: #fafafa; }
 
 .sakura-product-hero {
   position: relative;
@@ -246,7 +246,7 @@ useSeoMeta({
 .sakura-product-hero__trail a:hover,
 .sakura-product-hero__trail a:focus-visible { color: #caa05c; }
 
-.sakura-product-story { padding: 100px 30px 80px; background: #f6f6f6; }
+.sakura-product-story { padding: 100px 30px 80px; background: #fafafa; }
 
 .sakura-product-story__rail,
 .sakura-product-source__rail,
@@ -291,7 +291,7 @@ useSeoMeta({
 
 .sakura-product-story__image :deep(img) { object-fit: cover; }
 
-.sakura-product-source { padding: 0 30px 50px; background: #f6f6f6; }
+.sakura-product-source { padding: 0 30px 50px; background: #fafafa; }
 .sakura-product-source__rail {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -321,7 +321,7 @@ useSeoMeta({
 .sakura-product-source button svg { width: 17px; height: 17px; }
 .sakura-product-source button svg.is-loading { animation: sakura-product-spin .9s linear infinite; }
 
-.sakura-product-list { overflow: hidden; padding: 0 30px 130px; background: #f6f6f6; }
+.sakura-product-list { overflow: hidden; padding: 0 30px 130px; background: #fafafa; }
 .sakura-product-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

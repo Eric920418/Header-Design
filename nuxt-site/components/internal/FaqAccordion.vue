@@ -71,7 +71,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
 .antra-faq-section {
   overflow: hidden;
   padding: 100px 30px 130px;
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 .antra-faq-rail {

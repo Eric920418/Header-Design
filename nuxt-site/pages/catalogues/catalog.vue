@@ -207,7 +207,7 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.product-catalogue-page { overflow: clip; color: #59585d; background: #f6f6f6; }
+.product-catalogue-page { overflow: clip; color: #59585d; background: #fafafa; }
 .product-catalogue-rail { width: min(1410px, 100%); margin-inline: auto; box-sizing: border-box; }
 
 .product-catalogue-hero {
@@ -227,7 +227,7 @@ useSeoMeta({
 .product-catalogue-hero__trail a:hover,
 .product-catalogue-hero__trail a:focus-visible { color: #caa05c; }
 
-.product-catalogue-projects { padding: 100px 30px 130px; background: #f6f6f6; }
+.product-catalogue-projects { padding: 100px 30px 130px; background: #fafafa; }
 .product-catalogue-projects .internal-rail-safe { padding-inline: 43px; }
 .product-catalogue-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 50px 30px; margin: 0; padding: 0; list-style: none; }
 .product-catalogue-card,
@@ -241,7 +241,7 @@ useSeoMeta({
 .product-catalogue-card__arrow { display: flex; width: 64px; height: 64px; align-items: center; justify-content: center; border: 1px solid rgb(255 255 255 / 16%); border-radius: 50%; color: #fff; background: rgb(0 0 0 / 58%); backdrop-filter: blur(28px); }
 .product-catalogue-card__arrow svg { width: 24px; height: 24px; }
 .product-catalogue-card__text { display: block; padding-top: 19px; }
-.product-catalogue-card__text strong { display: block; min-height: 72px; margin-bottom: 9px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; transition: color .3s ease; }
+.product-catalogue-card__text strong { display: block; margin-bottom: 9px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; transition: color .3s ease; }
 .product-catalogue-card__text > span { display: block; color: #737278; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 23px; }
 .product-catalogue-card__link:hover .product-catalogue-card__shade,
 .product-catalogue-card__link:focus-visible .product-catalogue-card__shade { background: linear-gradient(180deg, rgb(16 8 1 / 38%) 0%, rgb(16 8 1 / 8%) 78%); }
@@ -253,7 +253,7 @@ useSeoMeta({
 .product-catalogue-card__link:focus-visible .product-catalogue-card__text strong { color: #caa05c; }
 .product-catalogue-card__link:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; border-radius: 24px; }
 
-.product-care { padding: 116px 30px 138px; background: #f6f6f6; }
+.product-care { padding: 116px 30px 138px; background: #fafafa; }
 .product-care .internal-rail-safe { padding-inline: 43px; }
 .product-care__header { display: grid; grid-template-columns: 270px minmax(0, 1fr) minmax(260px, 300px); align-items: start; gap: 34px; margin-bottom: 52px; }
 .product-care__eyebrow { position: relative; display: inline-flex; width: fit-content; }
@@ -290,7 +290,7 @@ useSeoMeta({
 .product-care-question__answer li span { display: block; }
 .product-care-question__answer ol li { grid-template-columns: 56px minmax(0, 1fr); gap: 10px; }
 .product-care-question__answer ol li > span { color: #caa05c; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-.product-care-question__tip { display: grid; gap: 4px; margin-top: 18px !important; padding: 15px 17px; border-left: 2px solid #caa05c; background: #f6f6f6; }
+.product-care-question__tip { display: grid; gap: 4px; margin-top: 18px !important; padding: 15px 17px; border-left: 2px solid #caa05c; background: #fafafa; }
 .product-care-question__tip strong { color: #1c1c1d; }
 .product-care__feature { position: sticky; top: 90px; min-width: 0; }
 .product-care__media { position: relative; display: block; width: 100%; aspect-ratio: .8; overflow: hidden; border-radius: 22px; background: #e9e9ec; }
@@ -331,7 +331,7 @@ useSeoMeta({
   .product-catalogue-grid { grid-template-columns: 1fr; gap: 44px; }
   .product-catalogue-card__action { right: 18px; bottom: 18px; gap: 9px; opacity: 1; visibility: visible; transform: none; }
   .product-catalogue-card__arrow { width: 54px; height: 54px; }
-  .product-catalogue-card__text strong { min-height: 0; font-size: 26px; line-height: 31px; }
+  .product-catalogue-card__text strong { font-size: 20px; line-height: 28px; }
   .product-care { padding: 82px 93px 92px 15px; }
   .product-care__header { grid-template-columns: 1fr; gap: 0; margin-bottom: 38px; }
   .product-care__header > p { grid-column: auto; }

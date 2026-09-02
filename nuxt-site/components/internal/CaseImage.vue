@@ -50,7 +50,7 @@ watch(() => props.src, () => { failed.value = false })
   gap: 8px;
   padding: 24px;
   color: #59585d;
-  background: #f6f6f6;
+  background: #fafafa;
   text-align: center;
 }
 

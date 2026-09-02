@@ -80,7 +80,7 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.catalogue-page { color: #59585d; background: #f6f6f6; }
+.catalogue-page { color: #59585d; background: #fafafa; }
 
 .catalogue-hero {
   position: relative;
@@ -132,7 +132,7 @@ useSeoMeta({
 .catalogue-projects {
   overflow: hidden;
   padding: 100px 30px 130px;
-  background: #f6f6f6;
+  background: #fafafa;
 }
 
 .catalogue-projects__rail {

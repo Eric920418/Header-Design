@@ -125,10 +125,10 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.sakura-kitchen-page { overflow: clip; color: #1c1c1d; background: #f6f6f6; }
+.sakura-kitchen-page { overflow: clip; color: #1c1c1d; background: #fafafa; }
 .sakura-kitchen-rail { width: min(1410px, 100%); margin-inline: auto; box-sizing: border-box; }
 
-.sakura-kitchen-hero-shell { padding: 80px 30px 0; background: #f6f6f6; }
+.sakura-kitchen-hero-shell { padding: 80px 30px 0; background: #fafafa; }
 .sakura-kitchen-hero { position: relative; width: min(1410px, 100%); aspect-ratio: 2.203125 / 1; margin-inline: auto; overflow: hidden; border-radius: 24px; color: #fff; background: #1c1c1d; }
 .sakura-kitchen-hero__image { position: absolute; inset: 0; }
 .sakura-kitchen-hero__image :deep(img) { object-position: center 52%; }
@@ -154,7 +154,7 @@ useSeoMeta({
 .sakura-kitchen-hero__project-card-copy > span:not(.sakura-kitchen-hero__project-card-link) { margin-top: clamp(7px, .8vw, 11px); color: rgb(255 255 255 / 88%); font-size: clamp(11px, 1.04vw, 15px); line-height: 1.35; }
 .sakura-kitchen-hero__project-card-link { width: fit-content; margin-top: clamp(7px, .8vw, 11px); font-family: var(--font-cjk-sans); font-size: clamp(11px, .95vw, 14px); line-height: 1.25; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 
-.sakura-kitchen-advantage { scroll-margin-top: 80px; padding: 82px 30px 112px; background: #f6f6f6; }
+.sakura-kitchen-advantage { scroll-margin-top: 80px; padding: 82px 30px 112px; background: #fafafa; }
 .sakura-kitchen-heading { width: min(1040px, 100%); margin-inline: auto; text-align: center; }
 .sakura-kitchen-heading h2 { margin: 0; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: var(--font-cjk-serif-semibold, 600); line-height: 50px; letter-spacing: 0; text-transform: none; }
 .sakura-kitchen-heading h2 em { color: #caa05c; font-style: normal; }

@@ -318,7 +318,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.franchise-page { overflow: clip; color: #1c1c1d; background: #f6f6f6; }
+.franchise-page { overflow: clip; color: #1c1c1d; background: #fafafa; }
 .source-rail-wide { width: min(1770px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
 .source-rail { width: min(1410px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
 
@@ -368,7 +368,6 @@ onBeforeUnmount(() => {
 .franchise-process h2,
 .franchise-news h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .franchise-about h2 { max-width: 822px; margin-bottom: 50px; }
-#franchise-advantage-title,
 #franchise-marketing-title { font-family: var(--font-cjk-serif); font-weight: var(--font-cjk-serif-semibold, 600); letter-spacing: .02em; }
 .franchise-about h2 span,
 .franchise-advantages h2 span,
@@ -395,7 +394,7 @@ onBeforeUnmount(() => {
 .franchise-marquees:hover .franchise-marquee__track,
 .franchise-marquees:focus-within .franchise-marquee__track { animation-play-state: paused; }
 
-.franchise-advantages { padding: 0 30px; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat; }
+.franchise-advantages { padding: 0 30px; background: #fafafa url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat; }
 .franchise-advantages__layout { display: grid; grid-template-columns: 30% 70%; gap: 0; }
 .franchise-advantages__intro { position: sticky; top: var(--site-header-height, 60px); display: flex; min-height: calc(100vh - var(--site-header-height, 60px)); align-self: start; flex-direction: column; justify-content: center; padding: 38px 58px 38px 0; }
 .franchise-advantages__intro h2 { margin-top: 28px; }
@@ -417,7 +416,7 @@ onBeforeUnmount(() => {
 .franchise-post__features > li > :deep(.franchise-image) { width: 34px; height: 34px; background: transparent; }
 .franchise-post__features span { color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 20px; }
 
-.franchise-projects { padding: 97px 30px 108px; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
+.franchise-projects { padding: 97px 30px 108px; background: #fafafa url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
 .source-split-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
 .source-split-heading > div:last-child { padding-left: 58px; }
 .source-split-heading h2 { max-width: 620px; margin-top: 65px; }
@@ -475,7 +474,7 @@ onBeforeUnmount(() => {
 .franchise-qualification-item h4 { margin: 0; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 27px; }
 .franchise-qualification-item p { margin: 4px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
 
-.franchise-faq { overflow: hidden; padding: 100px 30px 130px; background: #f6f6f6; }
+.franchise-faq { overflow: hidden; padding: 100px 30px 130px; background: #fafafa; }
 .franchise-faq__heading { display: grid; grid-template-columns: 30% 66.6666%; margin-bottom: 60px; }
 .franchise-faq__heading h2 { align-self: start; width: min(732px, 100%); margin: 64px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
 .franchise-faq__heading h2 span { color: #caa05c; }

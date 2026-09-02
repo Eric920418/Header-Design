@@ -49,7 +49,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape))
 </template>
 
 <style scoped>
-.pavilion-single-hero { padding: 20px 30px 38px; background: #f6f6f6; }
+.pavilion-single-hero { padding: 20px 30px 38px; background: #fafafa; }
 .pavilion-single-hero__rail { position: relative; width: min(1410px, 100%); aspect-ratio: 2.203125 / 1; margin-inline: auto; overflow: hidden; border-radius: 24px; color: #fff; }
 .pavilion-single-hero__image { position: absolute; inset: 0; width: 100%; height: 100%; }
 .pavilion-single-hero__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(16 8 1 / 58%) 0%, rgb(16 8 1 / 12%) 61%, rgb(16 8 1 / 28%) 100%); }

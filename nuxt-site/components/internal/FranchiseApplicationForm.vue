@@ -339,7 +339,7 @@ const submit = async () => {
 .application-form__submit-icon .is-spinning { animation: application-spin .8s linear infinite; }
 .application-form__submit-row > p { max-width: 360px; margin: 0; color: #9f9fa4; font-size: 12px; line-height: 19px; text-align: right; }
 
-.application-form__notice { margin-top: 28px; padding: 18px 20px; border: 1px solid #d0d0d5; border-radius: 18px; color: #59585d; background: #f6f6f6; }
+.application-form__notice { margin-top: 28px; padding: 18px 20px; border: 1px solid #d0d0d5; border-radius: 18px; color: #59585d; background: #fafafa; }
 .application-form__notice.is-error { border-color: #e2aaa1; background: #fff4f1; }
 .application-form__notice.is-success { border-color: #9fc2a7; background: #f3fbf4; }
 .application-form__notice strong { color: #1c1c1d; }

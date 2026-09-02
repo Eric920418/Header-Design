@@ -54,7 +54,7 @@ function handleError() {
   gap: 8px;
   padding: 24px;
   color: #59585d;
-  background: #f6f6f6;
+  background: #fafafa;
   text-align: center;
 }
 .brand-image-error strong { color: #1c1c1d; font-family: var(--font-ui); font-size: 18px; font-weight: 400; }

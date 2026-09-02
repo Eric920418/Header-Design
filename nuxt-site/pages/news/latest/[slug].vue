@@ -144,7 +144,7 @@ useHead({
 </template>
 
 <style scoped>
-.latest-detail-page { color: #59585d; background: #f6f6f6; }
+.latest-detail-page { color: #59585d; background: #fafafa; }
 
 .latest-detail-breadcrumb {
   position: relative;

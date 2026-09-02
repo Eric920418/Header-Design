@@ -157,7 +157,7 @@ export function HeroStyleMarquee() {
     <section
       aria-label="廚房風格"
       aria-roledescription="carousel"
-      className="group/brands overflow-hidden bg-[#f6f6f6] px-[15px] py-3 md:px-[30px] md:py-4"
+      className="group/brands overflow-hidden bg-[#fafafa] px-[15px] py-3 md:px-[30px] md:py-4"
     >
       {/* Home 4 的 Brand 外層是 full-width，實際輪播內容則停在 1770px 置中版心。
           小於版心時仍沿用 section 的 15/30px 安全邊距，故 1512px 現有構圖完全不位移。 */}

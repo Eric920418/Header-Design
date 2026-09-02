@@ -43,9 +43,9 @@ import { ArrowDown } from 'lucide-vue-next'
 </template>
 
 <style scoped>
-.brand-h8-hero { overflow: hidden; background: #f6f6f6; }
-.brand-h8-intro { position: relative; padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #f6f6f6 50% 100%); }
-.brand-h8-intro::before { position: absolute; inset: 0 50% 0 0; background: linear-gradient(rgb(18 18 18 / 48%), rgb(18 18 18 / 48%)), url('/section-3/store-chengde.jpg') center / cover no-repeat; content: ''; pointer-events: none; }
+.brand-h8-hero { overflow: hidden; background: #fafafa; }
+.brand-h8-intro { position: relative; padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #fafafa 50% 100%); }
+.brand-h8-intro::before { position: absolute; inset: 0 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), url('/section-3/store-chengde.jpg') center / cover no-repeat; content: ''; pointer-events: none; }
 .brand-h8-intro__rail { position: relative; display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
 .brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: 100px; font-weight: 400; line-height: 100px; letter-spacing: -.01em; text-transform: capitalize; }
@@ -83,7 +83,7 @@ import { ArrowDown } from 'lucide-vue-next'
 }
 
 @media (max-width: 1024px) {
-  .brand-h8-intro { padding: 100px 30px 0; background: #f6f6f6; }
+  .brand-h8-intro { padding: 100px 30px 0; background: #fafafa; }
   .brand-h8-intro::before { display: none; }
   .brand-h8-intro__rail { grid-template-columns: 1fr; }
   .brand-h8-copy { text-align: center; }

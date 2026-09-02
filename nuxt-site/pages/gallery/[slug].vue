@@ -190,7 +190,7 @@ useHead({
 </template>
 
 <style scoped>
-.case-detail-page { color: #59585d; background: #f6f6f6; }
+.case-detail-page { color: #59585d; background: #fafafa; }
 .case-detail-content { padding: 100px 30px 108px; overflow: clip; }
 .case-detail-rail { box-sizing: border-box; width: min(1496px, 100%); margin-inline: auto; }
 .case-detail-rail.internal-rail-safe { padding-inline: 43px; }

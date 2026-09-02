@@ -40,7 +40,7 @@ useSeoMeta({
     <section class="near-suction-products" aria-labelledby="near-suction-products-title">
       <div class="near-suction-rail internal-rail-safe">
         <h2 id="near-suction-products-title" v-reveal="{ anim: 'opalMoveUp' }">
-          <em>SUKURA Products</em>
+          <em>Industrial Elegance Condo</em>
           <span>近吸系列</span>
         </h2>
         <ul class="near-suction-product-grid" aria-label="近吸系列商品清單">
@@ -134,7 +134,7 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.near-suction-page { overflow: clip; color: #59585d; background: #f6f6f6; }
+.near-suction-page { overflow: clip; color: #59585d; background: #fafafa; }
 .near-suction-rail { width: min(1410px, 100%); margin-inline: auto; box-sizing: border-box; }
 .near-suction-rail.internal-rail-safe { padding-inline: 43px; }
 
@@ -154,10 +154,10 @@ useSeoMeta({
 .near-suction-hero__trail a:hover,
 .near-suction-hero__trail a:focus-visible { color: #caa05c; }
 
-.near-suction-products { padding: 100px 30px 125px; background: #f6f6f6; }
+.near-suction-products { padding: 100px 30px 125px; background: #fafafa; }
 .near-suction-products h2 { display: flex; margin: 0 0 54px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .near-suction-products h2 span { font-family: var(--font-cjk-serif); font-size: 30px; line-height: 40px; }
-.near-suction-products h2 em { margin-bottom: 8px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 13px; font-style: normal; font-weight: 400; line-height: 19px; letter-spacing: .12em; text-transform: uppercase; }
+.near-suction-products h2 em { margin-bottom: 8px; color: #caa05c; font-family: var(--font-display); font-size: 40px; font-style: normal; font-weight: 400; line-height: 44px; }
 .near-suction-product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 58px 30px; margin: 0; padding: 0; list-style: none; }
 .near-suction-product-grid > li { min-width: 0; }
 .near-suction-product-card { display: block; min-width: 0; color: inherit; }
@@ -188,7 +188,7 @@ useSeoMeta({
 .near-suction-product-card:hover .near-suction-product-card__action,
 .near-suction-product-card:focus-visible .near-suction-product-card__action { background: #caa05c; transform: translate(-50%, -50%) scale(1) rotate(0); }
 
-.near-suction-series { overflow: hidden; padding: 50px 30px 125px; background: #f6f6f6; }
+.near-suction-series { overflow: hidden; padding: 50px 30px 125px; background: #fafafa; }
 .near-suction-series h2 { display: flex; margin: 0 0 62px; color: #1c1c1d; align-items: center; justify-content: center; gap: 24px; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; text-align: center; }
 .near-suction-series h2::before,
 .near-suction-series h2::after { height: 1px; flex: 1 1 0; background: #d7d7db; content: ""; }
@@ -211,7 +211,7 @@ useSeoMeta({
 .near-suction-catalogue { padding: 120px 30px 130px; background: #fff; }
 .near-suction-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
 .near-suction-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
-.near-suction-catalogue__copy h2 span { font-family: var(--font-editorial); font-size: 60px; font-weight: 400; line-height: 64px; }
+.near-suction-catalogue__copy h2 span { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
 .near-suction-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid #1c1c1d; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .near-suction-catalogue__cta:hover,
 .near-suction-catalogue__cta:focus-visible { border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
@@ -228,7 +228,7 @@ useSeoMeta({
 .near-suction-catalogue__copy > p { margin: 18px 0 0; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 20px; }
 .near-suction-catalogue__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .near-suction-catalogue-card { min-width: 0; }
-.near-suction-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #f6f6f6; }
+.near-suction-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #fafafa; }
 .near-suction-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .near-suction-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
 .near-suction-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
@@ -243,6 +243,10 @@ useSeoMeta({
   .near-suction-catalogue__copy h2 span { font-size: 50px; line-height: 55px; }
 }
 
+@media (max-width: 1024px) {
+  .near-suction-products h2 em { font-size: 36px; line-height: 42px; }
+}
+
 @media (max-width: 767px) {
   .near-suction-rail.internal-rail-safe { padding-inline: 0; }
   .near-suction-hero { min-height: 288px; background-attachment: scroll; }
@@ -251,6 +255,7 @@ useSeoMeta({
   .near-suction-hero__trail { font-size: 12px; line-height: 18px; }
   .near-suction-products { padding: 60px 15px 80px; }
   .near-suction-products h2 { margin-bottom: 38px; }
+  .near-suction-products h2 em { font-size: 30px; line-height: 35px; }
   .near-suction-products h2 span { font-size: 30px; line-height: 40px; }
   .near-suction-product-grid { grid-template-columns: 1fr; gap: 42px; }
   .near-suction-product-card__image,

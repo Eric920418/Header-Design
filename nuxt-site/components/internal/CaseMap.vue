@@ -79,7 +79,7 @@ onBeforeUnmount(() => { if (timer) clearTimeout(timer) })
   place-content: center;
   padding: 30px;
   color: #59585d;
-  background: #f6f6f6;
+  background: #fafafa;
   text-align: center;
 }
 

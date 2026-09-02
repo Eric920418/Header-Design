@@ -14,10 +14,10 @@ const STORE_ZOOM = 16;
 
 // 地圖功能不變；可見圖面只使用 Antra 模板的中性色盤。
 const LIGHT_STYLE: any[] = [
-  { elementType: 'geometry', stylers: [{ color: '#f6f6f6' }] },
+  { elementType: 'geometry', stylers: [{ color: '#fafafa' }] },
   { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
   { elementType: 'labels.text.fill', stylers: [{ color: '#59585d' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#f6f6f6' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#fafafa' }] },
   { featureType: 'administrative', elementType: 'geometry', stylers: [{ visibility: 'off' }] },
   { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
   { featureType: 'administrative.neighborhood', stylers: [{ visibility: 'off' }] },

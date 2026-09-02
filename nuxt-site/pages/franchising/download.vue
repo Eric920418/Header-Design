@@ -151,7 +151,7 @@ onMounted(verifyBrochure)
 </template>
 
 <style scoped>
-.franchise-download-page { overflow: clip; color: #1c1c1d; background: #f6f6f6; }
+.franchise-download-page { overflow: clip; color: #1c1c1d; background: #fafafa; }
 
 .download-hero {
   position: relative;
@@ -192,7 +192,7 @@ onMounted(verifyBrochure)
 
 .download-document {
   padding: 110px 30px 126px;
-  background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat;
+  background: #fafafa url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat;
 }
 
 .download-rail { width: min(1410px, 100%); margin-inline: auto; padding-right: 86px; }

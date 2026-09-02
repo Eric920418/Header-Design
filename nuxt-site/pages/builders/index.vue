@@ -299,7 +299,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-section-heading--team > p { margin: 0 0 4px; }
 .builders-team__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; }
 .builders-team__coming-soon { display: grid; min-height: 100%; grid-column: 2 / -1; place-items: center; margin: 0; font-family: var(--font-display); font-size: clamp(36px, 3vw, 52px); font-weight: 600; }
-.builders-team-card { position: relative; display: block; min-width: 0; overflow: hidden; border-radius: 24px; color: inherit; background: #f6f6f6; text-decoration: none; }
+.builders-team-card { position: relative; display: block; min-width: 0; overflow: hidden; border-radius: 24px; color: inherit; background: #fafafa; text-decoration: none; }
 .builders-team-card--project { grid-column: 1; }
 .builders-team-card > :deep(.builder-image) { aspect-ratio: 4 / 5; }
 .builders-team-card:hover :deep(img) { transform: scale(1.035); }
@@ -317,7 +317,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-team-card__project-status > svg { width: 36px; height: 36px; flex: none; padding: 9px; border-radius: 50%; color: #1c1c1d; background: #caa05c; transform: rotate(-45deg); transition: transform .35s ease; }
 .builders-team-card--project:hover .builders-team-card__project-status > svg,
 .builders-team-card--project:focus-visible .builders-team-card__project-status > svg { transform: rotate(0); }
-.builders-capability { padding: 130px 30px 72px; background: #f6f6f6; }
+.builders-capability { padding: 130px 30px 72px; background: #fafafa; }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-capability .builders-section-heading--split > div h2 { margin-top: 70px; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 17px; line-height: 27px; }
@@ -343,7 +343,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-service h3 > svg { width: 25px; height: 25px; flex: none; color: #c4a574; stroke-width: 4.5; }
 .builders-service p { display: flex; flex-direction: column; gap: 10px; margin: 13px 0 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 21px; line-height: 1.45; }
 .builders-service p span { white-space: nowrap; }
-.builders-lifetime { padding: 72px 30px 140px; color: #1c1c1d; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
+.builders-lifetime { padding: 72px 30px 140px; color: #1c1c1d; background: #fafafa url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
 .builders-lifetime__heading { width: min(920px, 100%); margin-inline: auto; text-align: center; }
 .builders-lifetime__pill { margin-inline: auto; }
 .builders-lifetime__heading h2 { margin-top: 24px; font-family: var(--font-cjk-serif); font-weight: var(--font-cjk-serif-semibold, 600); }
@@ -367,7 +367,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-partner > :deep(.builder-image) { background: transparent; }
 .builders-partner :deep(img) { max-width: 100%; max-height: 100%; opacity: .42; filter: grayscale(1); }
 @keyframes builders-partners-marquee { to { transform: translateX(-50%); } }
-.builders-contact { scroll-margin-top: 60px; padding: 120px 30px 130px; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
+.builders-contact { scroll-margin-top: 60px; padding: 120px 30px 130px; background: #fafafa url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
 .builders-contact__heading { margin-bottom: 58px; }
 .builders-contact__grid { display: grid; grid-template-columns: 42% 58%; align-items: start; }
 .builders-contact__aside { padding-right: 55px; }

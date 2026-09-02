@@ -118,7 +118,7 @@ function handleBoardFocusOut(event: FocusEvent) {
 </script>
 
 <template>
-  <section id="contact" aria-labelledby="store-location-heading" class="store-location-section relative overflow-hidden bg-[#f6f6f6] py-[60px]">
+  <section id="contact" aria-labelledby="store-location-heading" class="store-location-section relative overflow-hidden bg-[#fafafa] py-[60px]">
     <div class="mx-auto w-full max-w-[1512px] pl-5 pr-[88px] sm:pl-8 sm:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
       <div class="relative mb-[60px]"><div class="grid grid-cols-1 items-start lg:grid-cols-[minmax(260px,424px)_minmax(0,1fr)] lg:pt-[46px]"><div class="mb-5 lg:mb-0"><InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }">STORE LOCATOR</InternalSectionPill></div><h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="max-w-[661px] font-display text-[42px] leading-[46px] text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:text-[60px] xl:leading-[64px]">Have a Project in <span class="text-[#CAA05C]">Mind?<br />Let’s Make</span> It Happen</h2></div></div>
       <div class="flex min-w-0 flex-col gap-8 lg:flex-row">

@@ -152,7 +152,7 @@ useHead({
 <style scoped>
 .knowledge-article-page {
   color: #59585d;
-  background: #f6f6f6;
+  background: #fafafa;
   font-family: var(--font-cjk-sans);
 }
 
@@ -393,7 +393,7 @@ useHead({
 }
 
 .knowledge-material-table tbody th {
-  background: #f6f6f6;
+  background: #fafafa;
   font-weight: 700;
 }
 

@@ -42,7 +42,7 @@ onBeforeUnmount(() => { if (autoplay) clearInterval(autoplay); if (previewTimer)
 </script>
 
 <template>
-  <section aria-label="廚房風格" aria-roledescription="carousel" class="group/brands overflow-hidden bg-[#f6f6f6] px-[15px] py-3 md:px-[30px] md:py-4" @mouseenter="paused = true" @mouseleave="paused = false; preview = null">
+  <section aria-label="廚房風格" aria-roledescription="carousel" class="group/brands overflow-hidden bg-[#fafafa] px-[15px] py-3 md:px-[30px] md:py-4" @mouseenter="paused = true" @mouseleave="paused = false; preview = null">
     <div class="mx-auto w-full max-w-[1770px]">
       <div ref="emblaRef" class="h-[62px] overflow-hidden"><div class="flex h-[62px] touch-pan-y">
         <template v-for="setIndex in 3" :key="setIndex"><div v-for="(item, index) in styles" :key="`${setIndex}-${item.en}`" class="brand-carousel-slide group/item mr-[120px] flex h-[62px] min-w-0 shrink-0 items-center justify-center overflow-visible">
