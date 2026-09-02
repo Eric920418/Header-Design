@@ -1,7 +1,8 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
-- **2026-09-02 英文小標與合作建商標題**：`/about/introduce` 品牌辨識小標改為 `DISTINCTIVE BRAND IDENTITY`；`/builders` 的 `OUR TEAM`／`OUR BRANDS` 分別改為 `OUR BRAND`／`WHY SAKURA`。合作建商標題 `OUR CLIENTS` 完整沿用廚房產品內頁的左右細線、Serif TC 25/36px 與置中排列，手機版同步縮為 20/28px。
+- **2026-09-02 寬桌機導覽展開間距**：1440px 以上 Header 左右導覽選項欄距由最高 6px 放寬為 14–22px；左側選項向左、右側選項向右展開，中央 Logo 與搜尋按鈕位置維持不變，較窄桌機與手機導覽不受影響。
+- **2026-09-02 英文小標與合作建商標題**：`/about/introduce` 品牌辨識小標改為 `DISTINCTIVE BRAND IDENTITY`；`/builders` 的 `OUR TEAM`／`OUR BRANDS` 分別改為 `OUR BRAND`／`WHY SAKURA`。合作建商標題 `OUR CLIENTS` 完整沿用廚房產品內頁的左右細線、Serif TC 25/36px、英文 700 字重與置中排列，手機版同步縮為 20/28px。
 - **2026-09-02 建商能力區分層**：`/builders` 的能力數據與 `HOME in O.N.E` 服務內容由單一大白框拆成上下兩個獨立圓角容器，保留原有內容與背景圖，並統一陰影、邊框及響應式間距。
 - **2026-09-02 案例延伸標題配色**：`/gallery/[slug]` 的 `Take a look at our latest blog & articles.` 改為黑金混排，`our latest blog` 使用品牌金色，其餘文字維持黑色。
 - **2026-09-02 建商合作夥伴標題**：`/builders` Logo 輪播區小標由 `Our Website 75000+ VIP Customer` 精簡為 `OUR CLIENTS`，保留既有置中版面與字型規格。

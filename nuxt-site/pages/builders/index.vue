@@ -363,7 +363,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-lifetime__visual > :deep(.builder-image) { aspect-ratio: 16 / 9; background: #fff; }
 .builders-partners { overflow: hidden; padding: 86px 0 102px; background: #fff url('/section-6/franchise/antra-original/h1-bg02.png') bottom center / 100% auto no-repeat; }
 .builders-partners__rail { width: 100%; }
-.builders-partners h2 { display: flex; width: min(1410px, calc(100% - 60px)); margin: 0 auto 62px; box-sizing: border-box; align-items: center; justify-content: center; gap: 24px; padding-inline: 43px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; text-align: center; }
+.builders-partners h2 { display: flex; width: min(1410px, calc(100% - 60px)); margin: 0 auto 62px; box-sizing: border-box; align-items: center; justify-content: center; gap: 24px; padding-inline: 43px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 700; line-height: 36px; text-align: center; }
 .builders-partners h2::before,
 .builders-partners h2::after { height: 1px; flex: 1 1 0; background: #d7d7db; content: ""; }
 .builders-partners__viewport { display: grid; gap: 0; border-block: 1px solid #e3e3e8; }

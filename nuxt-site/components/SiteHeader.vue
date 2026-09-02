@@ -449,6 +449,12 @@ function handleHeaderClick(event: MouseEvent) {
   }
 }
 
+@media (min-width: 1440px) {
+  .site-header__nav-side {
+    column-gap: clamp(14px, 1.25vw, 22px);
+  }
+}
+
 .desktop-nav-dropdown {
   transition-duration: 220ms;
   transition-property: opacity, visibility;
