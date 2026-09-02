@@ -24,6 +24,7 @@ export interface FranchiseTestimonial {
 }
 
 export interface FranchiseMarketingStory {
+  shortTitle: string
   title: string
   excerpt: string
   image: string
@@ -147,26 +148,31 @@ export const franchiseTestimonials: FranchiseTestimonial[] = [
 
 export const franchiseMarketingStories: FranchiseMarketingStory[] = [
   {
+    shortTitle: '藝人 袁艾菲',
     title: '袁艾菲與老公結婚二周年甜蜜獻禮，讓愛增溫的法寶藏在簡約美廚細節裡',
     excerpt: '以工業風「潮派廚房」為主軸，從動線、材質、家電與五金收納，打造兼具簡約風尚與實用機能的複合式美廚。',
     image: '/section-6/franchise/marketing-01.jpg',
   },
   {
+    shortTitle: '藝人 小蠻與邵翔',
     title: '一心只為孩子的成長！小蠻與邵翔攜手打造安心親子廚房',
     excerpt: '開放式中島廚房透過動線、機能、收納與外型規劃，在有限空間中實現安心親子共廚。',
     image: '/section-6/franchise/marketing-02.jpg',
   },
   {
+    shortTitle: '藝人 徐凱希',
     title: '凱希與爸爸共築夢想廚居，幸福傳承再續新篇',
     excerpt: '從選材配色、動線、工作區到收納整合，打造兼具高效率與高顏值的一字型理想廚房。',
     image: '/section-6/franchise/marketing-03.jpg',
   },
   {
+    shortTitle: '藝人 荳荳',
     title: '顛覆對廚房的既定想像，藝人荳荳新居唯一指定',
     excerpt: '以全新品牌門市、專業設計服務與生活需求規劃，為新居量身打造時尚又實用的理想廚房。',
     image: '/section-6/franchise/marketing-04.jpg',
   },
   {
+    shortTitle: '藝人 鍾欣怡',
     title: '名人推薦：鍾欣怡體驗全新升級 SAKURA KITCHEN 門市',
     excerpt: '一站整合品牌資源與永久免費廚房安心健檢，為家庭打造專屬夢想餐廚。',
     image: '/section-6/franchise/marketing-05.jpg',

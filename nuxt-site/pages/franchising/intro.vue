@@ -212,12 +212,12 @@ onBeforeUnmount(() => {
             <div class="project-block__media">
               <InternalFranchiseImage :src="story.image" :alt="story.title" />
               <div class="project-block__overlay">
-                <h3>{{ story.title }}</h3>
+                <h3>{{ story.shortTitle }}</h3>
                 <span>{{ String(index + 1).padStart(2, '0') }}</span>
               </div>
             </div>
             <div class="project-block__content">
-              <p>{{ story.excerpt }}</p>
+              <p>{{ story.title }}</p>
             </div>
           </article>
         </div>
@@ -401,7 +401,7 @@ onBeforeUnmount(() => {
 .franchise-advantages__intro p { max-width: 360px; margin: 24px 0 0; color: #59585d; font-size: 16px; line-height: 25px; }
 .franchise-advantages__intro > strong { display: block; margin-top: 34px; color: rgb(159 159 164 / 18%); font-family: var(--font-ui); font-size: 116px; font-weight: 400; line-height: 1; transition: opacity .25s ease, transform .25s ease; }
 .franchise-advantage-scenes { min-width: 0; }
-.franchise-advantage-scene { display: flex; min-height: 100vh; align-items: center; padding: 46px 0; }
+.franchise-advantage-scene { display: flex; align-items: center; padding: 46px 0; }
 .franchise-post-grid { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
 .franchise-post { display: flex; flex-direction: column; }
 .franchise-post__media { position: relative; aspect-ratio: 1.68 / 1; overflow: hidden; border-radius: 18px; }
@@ -435,9 +435,9 @@ onBeforeUnmount(() => {
 .project-block__overlay span { position: absolute; right: 22px; bottom: 26px; color: rgb(255 255 255 / 65%); font-family: var(--font-ui); font-size: 18px; }
 .project-block:hover :deep(img) { transform: scale(1.04); }
 .project-block__content { min-height: 122px; padding: 20px 22px 24px; }
-.project-block__content p { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
+.project-block__content p { margin: 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; line-height: 30px; }
 
-.franchise-newsletter { position: relative; isolation: isolate; display: grid; width: min(1770px, calc(100% - 60px)); min-height: 600px; place-items: center; margin: 110px auto 0; overflow: hidden; padding: 110px 30px 120px; border-radius: 26px; color: #fff; text-align: center; background: linear-gradient(180deg, rgb(15 14 13 / 35%), rgb(15 14 13 / 88%)), url('/hero-antra-home-6.jpg') center 58% / cover no-repeat; }
+.franchise-newsletter { position: relative; isolation: isolate; display: grid; width: min(1770px, calc(100% - 60px)); min-height: 600px; place-items: center; margin: 110px auto 0; overflow: hidden; padding: 110px 30px 120px; border-radius: 26px; color: #fff; text-align: center; background: linear-gradient(180deg, rgb(15 14 13 / 35%), rgb(15 14 13 / 88%)), url('/section-6/builders/builder-hero.jpg') center 58% / cover no-repeat; }
 .franchise-newsletter::before { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgb(255 255 255 / 3%), rgb(0 0 0 / 26%)); content: ""; }
 .franchise-newsletter__content { display: flex; max-width: 760px; flex-direction: column; align-items: center; }
 .franchise-newsletter h2 { max-width: 650px; margin-top: 20px; }
@@ -459,7 +459,7 @@ onBeforeUnmount(() => {
 .franchise-support-item h3 { margin: 0; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 27px; }
 .franchise-support-item h3 span { color: #caa05c; }
 .franchise-support-item p { margin: 5px 0 0; color: rgb(255 255 255 / 72%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
-.franchise-support-panel__cta { display: inline-flex; width: max-content; min-height: 52px; align-items: center; justify-content: center; margin-top: 30px; padding: 12px 32px; border-radius: 999px; color: #fff; background: #caa05c; box-shadow: 0 0 0 0 rgb(202 160 92 / 0%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; animation: franchise-support-cta-breathe 2.8s ease-in-out infinite; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
+.franchise-support-panel__cta { display: flex; width: max-content; min-height: 52px; align-items: center; justify-content: center; margin: 30px auto 0; padding: 12px 32px; border-radius: 999px; color: #fff; background: #caa05c; box-shadow: 0 0 0 0 rgb(202 160 92 / 0%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; animation: franchise-support-cta-breathe 2.8s ease-in-out infinite; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
 .franchise-support-panel__cta:hover { color: #1c1c1d; background: #fff; transform: translateY(-2px); }
 .franchise-support-panel__cta:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 @keyframes franchise-support-cta-breathe {
