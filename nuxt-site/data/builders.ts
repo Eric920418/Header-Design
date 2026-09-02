@@ -21,7 +21,4 @@ export const builderProjectCards = [
     logo: '/section-6/builders/sakura-kitchen-white.png',
     href: '/builders/sakura-kitchen',
   },
-  { type: 'coming-soon', title: 'Coming Soon', image: '/section-6/builders/team/antra-team-2.jpg' },
-  { type: 'coming-soon', title: 'Coming Soon', image: '/section-6/builders/team/antra-team-3.jpg' },
-  { type: 'coming-soon', title: 'Coming Soon', image: '/section-6/builders/team/antra-team-4.jpg' },
 ] as const

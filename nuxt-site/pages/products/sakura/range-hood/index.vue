@@ -22,7 +22,7 @@ useSeoMeta({
     <section class="sakura-series-hero hero-includes-header" aria-labelledby="sakura-series-title">
       <span class="sakura-series-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-series-hero__inner">
-        <h1 id="sakura-series-title">SAKURA Kitchen Appliances</h1>
+        <h1 id="sakura-series-title">Kitchen Appliances</h1>
         <nav aria-label="麵包屑" class="sakura-series-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>

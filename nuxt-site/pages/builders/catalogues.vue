@@ -1,37 +1,25 @@
 <script setup lang="ts">
-import { ArrowUpRight, X } from 'lucide-vue-next'
+import { ArrowUpRight } from 'lucide-vue-next'
 
 interface BuilderCatalogueCard {
   id: string
   title: string
   description: string
   cover: string
+  pdfUrl: string
   actionLabel: string
 }
 
 const catalogues: BuilderCatalogueCard[] = [
   {
     id: 'developer-2026',
-    title: 'Developer Catalogs',
+    title: '建商專區型錄',
     description: '建商專區型錄 2026',
     cover: '/section-6/builders/catalogues/developer-catalogue-2026.jpg',
+    pdfUrl: '/section-6/builders/catalogues/developer-catalogue-2026.pdf',
     actionLabel: '預覽',
   },
 ]
-
-const previewDialog = ref<HTMLDialogElement | null>(null)
-
-function openDeveloperPreview() {
-  previewDialog.value?.showModal()
-}
-
-function closeDeveloperPreview() {
-  previewDialog.value?.close()
-}
-
-function closeOnBackdrop(event: MouseEvent) {
-  if (event.target === previewDialog.value) closeDeveloperPreview()
-}
 
 useSeoMeta({
   title: '建商專區型錄｜SAKURA 整體廚房',
@@ -47,7 +35,7 @@ useSeoMeta({
     <section class="builder-catalogue-hero hero-includes-header" aria-labelledby="builder-catalogue-title">
       <span class="builder-catalogue-hero__overlay" aria-hidden="true" />
       <div class="builder-catalogue-hero__inner">
-        <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">建商專區型錄</h1>
+        <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">Developer Catalogues</h1>
         <nav v-reveal="{ anim: 'opalMoveUp', delay: 90 }" aria-label="麵包屑" class="builder-catalogue-hero__trail ev" data-ev="opalMoveUp" style="animation-delay:90ms">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -69,11 +57,12 @@ useSeoMeta({
             class="builder-catalogue-card"
           >
             <article>
-              <button
-                type="button"
+              <a
+                :href="catalogue.pdfUrl"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="builder-catalogue-card__link"
-                aria-label="預覽 2026 建商專區型錄；正式 PDF 尚待提供"
-                @click="openDeveloperPreview"
+                aria-label="開啟 2026 建商專區型錄 PDF"
               >
                 <span class="builder-catalogue-card__transition">
                   <span class="builder-catalogue-card__image builder-catalogue-card__image--developer">
@@ -88,41 +77,13 @@ useSeoMeta({
                 <span class="builder-catalogue-card__text">
                   <strong>{{ catalogue.title }}</strong>
                   <span>{{ catalogue.description }}</span>
-                  <small>正式 PDF 待甲方提供</small>
                 </span>
-              </button>
+              </a>
             </article>
           </li>
         </ul>
       </div>
     </section>
-
-    <dialog
-      ref="previewDialog"
-      class="builder-catalogue-dialog"
-      aria-labelledby="builder-catalogue-dialog-title"
-      @click="closeOnBackdrop"
-      @cancel.prevent="closeDeveloperPreview"
-      @keydown.esc="closeDeveloperPreview"
-    >
-      <div class="builder-catalogue-dialog__panel">
-        <button type="button" class="builder-catalogue-dialog__close" aria-label="關閉型錄預覽" autofocus @click="closeDeveloperPreview">
-          <X aria-hidden="true" />
-        </button>
-        <div class="builder-catalogue-dialog__cover">
-          <InternalCatalogueImage
-            src="/section-6/builders/catalogues/developer-catalogue-2026.jpg"
-            alt="2026 建商專區型錄封面預覽"
-          />
-        </div>
-        <div class="builder-catalogue-dialog__copy">
-          <span>Developer Catalogs</span>
-          <h2 id="builder-catalogue-dialog-title">建商專區型錄 2026</h2>
-          <p>目前 PPT 僅提供正式封面，尚未提供可公開的 PDF 檔案。取得甲方正式檔案後，這裡會直接提供線上開啟與下載。</p>
-          <strong role="status">PDF 尚待甲方提供，現在沒有建立假下載連結。</strong>
-        </div>
-      </div>
-    </dialog>
   </main>
 </template>
 
@@ -135,7 +96,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
 }
 
 .builder-catalogue-hero__overlay {
@@ -156,10 +117,10 @@ useSeoMeta({
 .builder-catalogue-hero h1 {
   margin: 0 0 35px;
   color: #fff;
-  font-family: var(--font-cjk-serif);
-  font-size: 80px;
-  font-weight: var(--font-cjk-serif-semibold, 600);
-  line-height: .9523809524;
+  font-family: var(--font-display);
+  font-size: 60px;
+  font-weight: 500;
+  line-height: 72px;
 }
 
 .builder-catalogue-hero__trail {
@@ -294,7 +255,6 @@ useSeoMeta({
 .builder-catalogue-card:first-child .builder-catalogue-card__text strong { word-spacing: .12em; }
 
 .builder-catalogue-card__text > span { display: block; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
-.builder-catalogue-card__text small { display: block; margin-top: 7px; color: #9f2f1f; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 
 .builder-catalogue-card__link:hover .builder-catalogue-card__shade,
 .builder-catalogue-card__link:focus-visible .builder-catalogue-card__shade { background: rgb(0 0 0 / 34%); }
@@ -306,92 +266,9 @@ useSeoMeta({
 .builder-catalogue-card__link:focus-visible .builder-catalogue-card__text strong { color: #caa05c; }
 .builder-catalogue-card__link:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; border-radius: 24px; }
 
-.builder-catalogue-dialog {
-  width: min(1120px, calc(100% - 60px));
-  max-width: none;
-  max-height: calc(100dvh - 60px);
-  margin: auto;
-  padding: 0;
-  overflow: visible;
-  border: 0;
-  border-radius: 24px;
-  outline: none;
-  color: #1c1c1d;
-  background: #f6f6f6;
-  box-shadow: 0 26px 80px rgb(0 0 0 / 38%);
-}
-
-.builder-catalogue-dialog::backdrop { background: rgb(16 8 1 / 76%); backdrop-filter: blur(8px); }
-
-.builder-catalogue-dialog__panel {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(280px, .8fr) minmax(330px, 1fr);
-  gap: 52px;
-  align-items: center;
-  max-height: calc(100dvh - 60px);
-  padding: 44px;
-  overflow: auto;
-}
-
-.builder-catalogue-dialog__panel:focus { outline: none; }
-
-.builder-catalogue-dialog__close {
-  position: absolute;
-  z-index: 3;
-  top: 18px;
-  right: 18px;
-  display: flex;
-  width: 48px;
-  height: 48px;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 50%;
-  color: #fff;
-  background: #1c1c1d;
-  cursor: pointer;
-  transition: color .3s ease, background-color .3s ease;
-}
-
-.builder-catalogue-dialog__close:hover,
-.builder-catalogue-dialog__close:focus-visible { color: #1c1c1d; background: #caa05c; }
-.builder-catalogue-dialog__close svg { width: 22px; height: 22px; }
-
-.builder-catalogue-dialog__cover {
-  aspect-ratio: .75;
-  overflow: hidden;
-  border-radius: 18px;
-  background: #79644f;
-}
-
-.builder-catalogue-dialog__cover :deep(.catalogue-image img) { object-fit: contain; }
-
-.builder-catalogue-dialog__copy > span {
-  color: #9f9fa4;
-  font-family: var(--font-cjk-sans);
-  font-size: 15px;
-  line-height: 22px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-}
-
-.builder-catalogue-dialog__copy h2 {
-  margin: 14px 0 0;
-  font-family: var(--font-cjk-serif);
-  font-size: 52px;
-  font-weight: var(--font-cjk-serif-semibold, 600);
-  line-height: 56px;
-}
-
-.builder-catalogue-dialog__copy p { margin: 24px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 27px; }
-.builder-catalogue-dialog__copy strong { display: block; margin-top: 24px; color: #9f2f1f; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
-
 @media (max-width: 1023px) {
   .builder-catalogue-projects { padding-block: 80px; }
   .builder-catalogue-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .builder-catalogue-dialog__panel { gap: 36px; padding: 36px; }
-  .builder-catalogue-dialog__copy h2 { font-size: 42px; line-height: 47px; }
 }
 
 @media (max-width: 767px) {
@@ -406,11 +283,6 @@ useSeoMeta({
   .builder-catalogue-card__arrow { width: 54px; height: 54px; }
   .builder-catalogue-card__text { padding-right: 72px; }
   .builder-catalogue-card__text strong { min-height: 0; font-size: 25px; line-height: 32px; }
-  .builder-catalogue-dialog { width: calc(100% - 30px); max-height: calc(100dvh - 30px); border-radius: 18px; }
-  .builder-catalogue-dialog__panel { grid-template-columns: 1fr; gap: 28px; max-height: calc(100dvh - 30px); padding: 58px 18px 24px; }
-  .builder-catalogue-dialog__cover { width: min(100%, 300px); margin-inline: auto; }
-  .builder-catalogue-dialog__copy h2 { font-size: 34px; line-height: 39px; }
-  .builder-catalogue-dialog__close { top: 12px; right: 12px; width: 42px; height: 42px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -418,8 +290,7 @@ useSeoMeta({
   .builder-catalogue-card__image :deep(img),
   .builder-catalogue-card__shade,
   .builder-catalogue-card__action,
-  .builder-catalogue-card__text strong,
-  .builder-catalogue-dialog__close { transition: none; }
+  .builder-catalogue-card__text strong { transition: none; }
   .builder-catalogue-card__link:hover .builder-catalogue-card__image :deep(img),
   .builder-catalogue-card__link:focus-visible .builder-catalogue-card__image :deep(img) { transform: none; }
 }

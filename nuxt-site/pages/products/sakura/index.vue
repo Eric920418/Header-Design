@@ -109,7 +109,7 @@ useSeoMeta({
     <section class="sakura-product-hero hero-includes-header" aria-labelledby="sakura-product-title">
       <span class="sakura-product-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-hero__inner">
-        <h1 id="sakura-product-title">SAKURA Kitchen Appliances</h1>
+        <h1 id="sakura-product-title">Kitchen Appliances</h1>
         <nav aria-label="麵包屑" class="sakura-product-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>

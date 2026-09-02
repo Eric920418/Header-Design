@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { AlertCircle, ArrowRight, LoaderCircle } from 'lucide-vue-next'
+import { ArrowRight, LoaderCircle } from 'lucide-vue-next'
 
 type FormKey = 'contactName' | 'phone' | 'company' | 'email'
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
 const config = useRuntimeConfig()
 const endpoint = computed(() => String(config.public.builderAppointmentEndpoint || '').trim())
-const serviceConfigured = computed(() => Boolean(endpoint.value))
 const formElement = ref<HTMLFormElement | null>(null)
 const submitState = ref<SubmitState>('idle')
 const notice = ref<{ title: string, message: string, detail?: string } | null>(null)
@@ -125,14 +124,6 @@ const submit = async () => {
       <h3 id="builder-form-heading">預約專人聯繫</h3>
     </header>
 
-    <div v-if="!serviceConfigured" class="builder-form__service" role="status">
-      <AlertCircle aria-hidden="true" />
-      <div>
-        <strong>線上送出服務正在串接中</strong>
-        <p>欄位與驗證可正常測試；正式端點設定前，本頁不會傳送或儲存任何個人資料。</p>
-      </div>
-    </div>
-
     <form ref="formElement" novalidate @submit.prevent="submit">
       <div class="builder-form__grid">
         <label>
@@ -188,10 +179,6 @@ const submit = async () => {
 .builder-form { padding: 52px 54px 58px; border-radius: 24px; background: #fff; box-shadow: 0 18px 70px rgb(28 28 29 / 8%); font-family: var(--font-cjk-sans); }
 .builder-form__header > span { color: #caa05c; font-family: var(--font-cjk-sans); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
 .builder-form__header h3 { margin: 10px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: var(--font-cjk-serif-semibold, 600); line-height: 48px; }
-.builder-form__service { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 13px; margin-top: 26px; padding: 17px 19px; border: 1px solid #e8c891; border-radius: 18px; color: #59585d; background: #fff9ed; }
-.builder-form__service > svg { width: 22px; height: 22px; color: #a97628; }
-.builder-form__service strong { color: #1c1c1d; }
-.builder-form__service p { margin: 4px 0 0; font-size: 14px; line-height: 22px; }
 .builder-form form { margin-top: 32px; }
 .builder-form__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 20px; }
 .builder-form label { display: block; min-width: 0; color: #1c1c1d; font-size: 14px; line-height: 22px; }

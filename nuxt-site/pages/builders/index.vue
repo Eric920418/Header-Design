@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight, Boxes, CircleCheckBig, Clock3, Factory, MapPin, QrCode, ShieldCheck, Workflow } from 'lucide-vue-next'
+import { ArrowRight, Check, Clock3, MapPin, Triangle } from 'lucide-vue-next'
 import { BUILDER_APPOINTMENT_HASH, builderPartners, builderProjectCards } from '~/data/builders'
 import { brandPavilions } from '~/data/brandPavilions'
 
@@ -14,15 +14,15 @@ useSeoMeta({
 const builderPartnerLoop = [...builderPartners, ...builderPartners]
 
 const strengths = [
-  { icon: Boxes, value: '45萬+', title: '設計模組', copy: '累積超過 45 萬組設計模組，提供建案多元選擇。' },
-  { icon: Factory, value: 'AI 智能', title: '廚衛工廠', copy: '全台大型 AI 智能廚衛工廠，強化量產與供貨穩定。' },
-  { icon: Workflow, value: '管理平台', title: '案件進度', copy: '獨家智能管理平台，讓案件進度與節點精準掌握。' },
+  { value: ['45萬+'], lines: ['設計模組', '累積超過', '多元選擇'], background: '/section-6/builders/capability-banners/catalog-background.png' },
+  { value: ['AI', '智能'], lines: ['廚衛工廠', '全台最大', '供貨穩定'], background: '/section-6/builders/capability-banners/factory-background.png' },
+  { value: ['管理', '平台'], lines: ['案件進度', '獨家智能', '精準掌握'], background: '/section-6/builders/capability-banners/management-background.png' },
 ]
 
 const services = [
-  { icon: CircleCheckBig, eyebrow: 'ONE-STOP', title: '專業銷講', copy: '從樣品屋到銷售話術，建立一致的廚房價值溝通。' },
-  { icon: ShieldCheck, eyebrow: 'NUMEROUS', title: '專業監工', copy: '串接丈量、排程與安裝，降低多方協作的資訊落差。' },
-  { icon: QrCode, eyebrow: 'EFFICIENT', title: '專人驗收', copy: '依案件節點完成驗收，並銜接後續產品服務。' },
+  { eyebrow: 'ONE-STOP', label: '一站式服務', title: '專業銷講', copy: ['舉辦住戶裝修講座', '加速建案銷售'] },
+  { eyebrow: 'NUMEROUS', label: '多樣產品選擇', title: '專屬監工', copy: ['透過專屬的即時監控系統', '完善管理工期'] },
+  { eyebrow: 'EFFICIENT', label: '輕鬆擁有', title: '專人驗收', copy: ['協助建案偕同驗收', '住戶安心放心'] },
 ]
 
 const activePavilionId = ref<(typeof brandPavilions)[number]['id']>('taipei')
@@ -82,10 +82,8 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
           <template v-for="(card, index) in builderProjectCards" :key="card.image">
             <NuxtLink
               v-if="card.type === 'project'"
-              v-reveal="{ anim: 'opalMoveUp' }"
-              data-ev="opalMoveUp"
               :to="card.href"
-              class="builders-team-card builders-team-card--project ev"
+              class="builders-team-card builders-team-card--project"
               aria-label="前往 SAKURA KITCHEN 建商整體廚房介紹頁"
             >
               <InternalBuilderImage :src="card.image" alt="SAKURA KITCHEN 建商整體廚房展示空間" />
@@ -107,6 +105,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
               <div class="builders-team-card__status"><span>{{ card.title }}</span><strong>{{ String(index + 1).padStart(2, '0') }}</strong></div>
             </article>
           </template>
+          <p v-reveal="{ anim: 'opalMoveUp', delay: 90 }" data-ev="opalMoveUp" class="builders-team__coming-soon ev">Coming Soon</p>
         </div>
       </div>
     </section>
@@ -114,34 +113,52 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
     <section class="builders-capability" aria-labelledby="builders-capability-title">
       <div class="builders-rail internal-rail-safe">
         <header class="builders-section-heading builders-section-heading--split">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Get In Touch" />
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Brands" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <h2 id="builders-capability-title">Have A Project In <span>Mind? Let’s</span><br />Make It Happen</h2>
             <p>櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。</p>
           </div>
         </header>
 
-        <div class="builders-strengths">
-          <article v-for="(item, index) in strengths" :key="item.title" v-reveal="{ anim: 'opalScaleUp', delay: index * 100 }" data-ev="opalScaleUp" class="builders-strength ev">
-            <component :is="item.icon" aria-hidden="true" />
-            <span>{{ item.value }}</span>
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.copy }}</p>
-          </article>
-        </div>
+        <div class="builders-capability__showcase">
+          <div class="builders-strengths">
+            <article
+              v-for="(item, index) in strengths"
+              :key="item.lines[0]"
+              v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }"
+              data-ev="opalMoveUp"
+              class="builders-strength ev"
+              :style="{ backgroundImage: `url(${item.background})` }"
+            >
+              <div class="builders-strength__content">
+                <h3>
+                  <span v-for="line in item.lines" :key="line">{{ line }}</span>
+                </h3>
+              </div>
+              <p class="builders-strength__slogan">
+                <span v-for="line in item.value" :key="line">{{ line }}</span>
+              </p>
+            </article>
+          </div>
 
-        <div class="builders-one">
-          <p>美好居家生活的創造者</p>
-          <strong>HOME in O.N.E.</strong>
-        </div>
+          <div class="builders-home-one">
+            <div class="builders-one">
+              <p>美好居家生活的創造者</p>
+              <strong>HOME in O.N.E</strong>
+            </div>
 
-        <div class="builders-services">
-          <article v-for="(service, index) in services" :key="service.title" v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }" data-ev="opalMoveUp" class="builders-service ev">
-            <component :is="service.icon" aria-hidden="true" />
-            <span>{{ service.eyebrow }}</span>
-            <h3>{{ service.title }}</h3>
-            <p>{{ service.copy }}</p>
-          </article>
+            <div class="builders-services">
+              <article v-for="(service, index) in services" :key="service.title" v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }" data-ev="opalMoveUp" class="builders-service ev">
+                <div class="builders-service__label">
+                  <Triangle aria-hidden="true" />
+                  <strong>{{ service.eyebrow }}</strong>
+                  <span>{{ service.label }}</span>
+                </div>
+                <h3><Check aria-hidden="true" />{{ service.title }}</h3>
+                <p><span v-for="line in service.copy" :key="line">{{ line }}</span></p>
+              </article>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -150,7 +167,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="builders-lifetime__heading ev">
           <InternalSectionPill class="builders-lifetime__pill">Lifetime Service</InternalSectionPill>
-          <h2 id="builders-lifetime-title">一鍵登錄 <span>終身服務</span></h2>
+          <h2 id="builders-lifetime-title">One-Click Registration <span>Lifetime Service</span></h2>
           <p>購買 SAKURA iCare 系列產品，掃描保證書專屬 QR Code，即可啟動智能化服務，銜接產品登錄、保固與後續服務。</p>
         </header>
         <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" data-ev="opalScaleUp" class="builders-lifetime__visual ev" style="animation-delay:120ms">
@@ -206,35 +223,36 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
                 <div><dt><MapPin aria-hidden="true" />地址</dt><dd>{{ activePavilion.address }}</dd></div>
                 <div><dt><Clock3 aria-hidden="true" />營業時間</dt><dd>{{ activePavilion.hours }}</dd></div>
               </dl>
-              <div class="builders-contact__tabs" role="tablist" aria-label="選擇集團品牌館">
-                <template v-for="(pavilion, index) in brandPavilions" :key="pavilion.id">
-                  <button
-                    :id="`builder-pavilion-tab-${pavilion.id}`"
-                    type="button"
-                    role="tab"
-                    :aria-selected="activePavilionId === pavilion.id"
-                    :aria-controls="`builder-pavilion-panel-${pavilion.id}`"
-                    :tabindex="activePavilionId === pavilion.id ? 0 : -1"
-                    @click="selectPavilion(pavilion.id)"
-                    @keydown="movePavilionFocus($event, index)"
-                  >
-                    {{ pavilion.name.replace('館', '') }}
-                  </button>
-                  <span v-if="index < brandPavilions.length - 1" aria-hidden="true">・</span>
-                </template>
-              </div>
             </div>
-            <Transition name="builders-pavilion" mode="out-in">
-              <div
-                :id="`builder-pavilion-panel-${activePavilion.id}`"
-                :key="activePavilion.id"
-                class="builders-contact__pavilion"
-                role="tabpanel"
-                :aria-labelledby="`builder-pavilion-tab-${activePavilion.id}`"
-              >
-                <InternalBuilderImage :src="activePavilion.image" :alt="activePavilion.alt" />
+            <div class="builders-contact__visual">
+              <div class="builders-contact__tabs" role="tablist" aria-label="選擇集團品牌館">
+                <button
+                  v-for="(pavilion, index) in brandPavilions"
+                  :id="`builder-pavilion-tab-${pavilion.id}`"
+                  :key="pavilion.id"
+                  type="button"
+                  role="tab"
+                  :aria-selected="activePavilionId === pavilion.id"
+                  :aria-controls="`builder-pavilion-panel-${pavilion.id}`"
+                  :tabindex="activePavilionId === pavilion.id ? 0 : -1"
+                  @click="selectPavilion(pavilion.id)"
+                  @keydown="movePavilionFocus($event, index)"
+                >
+                  {{ pavilion.name.replace('館', '') }}
+                </button>
               </div>
-            </Transition>
+              <Transition name="builders-pavilion" mode="out-in">
+                <div
+                  :id="`builder-pavilion-panel-${activePavilion.id}`"
+                  :key="activePavilion.id"
+                  class="builders-contact__pavilion"
+                  role="tabpanel"
+                  :aria-labelledby="`builder-pavilion-tab-${activePavilion.id}`"
+                >
+                  <InternalBuilderImage :src="activePavilion.image" :alt="activePavilion.alt" />
+                </div>
+              </Transition>
+            </div>
           </aside>
 
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="builders-contact__form ev">
@@ -266,7 +284,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-hero__inner { display: grid; grid-template-columns: 64% 36%; padding: 142px 30px 0; }
 .builders-hero h1 { max-width: 960px; margin: 22px 0 0; font-family: var(--font-display); font-size: clamp(72px, 7.28vw, 110px); font-weight: 400; line-height: 1; letter-spacing: -1px; }
 .builders-hero h1 span { color: #caa05c; }
-.builders-hero__aside { width: min(430px, 100%); margin: 102px 0 0 6px; }
+.builders-hero__aside { width: min(430px, 100%); align-self: end; margin: 0 0 16px 6px; }
 .builders-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-size: 20px; line-height: 31px; }
 .builders-hero__aside .builders-round-link { margin-top: 42px; }
 .builders-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -360px; overflow: hidden; border-radius: 24px; }
@@ -280,7 +298,9 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-section-heading--team { display: grid; grid-template-columns: 25% 48% 27%; align-items: end; margin-bottom: 60px; }
 .builders-section-heading--team > p { margin: 0 0 4px; }
 .builders-team__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; }
+.builders-team__coming-soon { display: grid; min-height: 100%; grid-column: 2 / -1; place-items: center; margin: 0; font-family: var(--font-display); font-size: clamp(36px, 3vw, 52px); font-weight: 600; }
 .builders-team-card { position: relative; display: block; min-width: 0; overflow: hidden; border-radius: 24px; color: inherit; background: #f6f6f6; text-decoration: none; }
+.builders-team-card--project { grid-column: 1; }
 .builders-team-card > :deep(.builder-image) { aspect-ratio: 4 / 5; }
 .builders-team-card:hover :deep(img) { transform: scale(1.035); }
 .builders-team-card:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
@@ -297,26 +317,33 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-team-card__project-status > svg { width: 36px; height: 36px; flex: none; padding: 9px; border-radius: 50%; color: #1c1c1d; background: #caa05c; transform: rotate(-45deg); transition: transform .35s ease; }
 .builders-team-card--project:hover .builders-team-card__project-status > svg,
 .builders-team-card--project:focus-visible .builders-team-card__project-status > svg { transform: rotate(0); }
-.builders-capability { padding: 130px 30px 140px; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
+.builders-capability { padding: 130px 30px 72px; background: #f6f6f6; }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-capability .builders-section-heading--split > div h2 { margin-top: 70px; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 17px; line-height: 27px; }
-.builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: 90px; }
-.builders-strength { display: flex; aspect-ratio: 1; flex-direction: column; align-items: center; justify-content: center; padding: 48px; border: 1px solid #caa05c; border-radius: 50%; text-align: center; background: rgb(255 255 255 / 86%); }
-.builders-strength > svg { width: 42px; height: 42px; color: #caa05c; stroke-width: 1.3; }
-.builders-strength > span { margin-top: 20px; color: #caa05c; font-family: var(--font-ui); font-size: 44px; line-height: 48px; }
-.builders-strength h3 { margin: 5px 0 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: var(--font-cjk-serif-semibold, 600); }
-.builders-strength p { max-width: 280px; margin: 15px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
-.builders-one { display: flex; flex-direction: column; align-items: center; margin-top: 72px; }
-.builders-one p { margin: 0 0 10px; color: #9f9fa4; font-size: 14px; letter-spacing: .08em; }
-.builders-one strong { display: inline-flex; min-height: 44px; align-items: center; padding: 9px 34px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-ui); font-size: 18px; font-weight: 400; letter-spacing: .16em; }
-.builders-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 44px; }
-.builders-service { padding: 40px; border-top: 1px solid #caa05c; background: #fff; }
-.builders-service > svg { width: 34px; height: 34px; color: #caa05c; stroke-width: 1.4; }
-.builders-service > span { display: block; margin-top: 30px; color: #9f9fa4; font-size: 11px; letter-spacing: .14em; }
-.builders-service h3 { margin: 8px 0 0; font-family: var(--font-display); font-size: 28px; font-weight: 400; }
-.builders-service p { margin: 13px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
-.builders-lifetime { padding: 130px 30px 140px; color: #1c1c1d; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
+.builders-capability__showcase { margin-top: 48px; padding: 30px 30px 64px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
+.builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
+.builders-strength { position: relative; display: flex; min-height: 186px; align-items: center; justify-content: space-between; gap: 24px; overflow: hidden; padding: 30px 28px 32px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #f9f9f9; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
+.builders-strength__content,
+.builders-strength__slogan { position: relative; z-index: 1; }
+.builders-strength h3 { display: flex; flex-direction: column; margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.12; white-space: nowrap; }
+.builders-strength h3 span:nth-child(2) { color: #caa05c; }
+.builders-strength__slogan { display: flex; min-width: 112px; flex-direction: column; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 44px; font-weight: var(--font-cjk-serif-semibold, 600); line-height: .98; white-space: nowrap; }
+.builders-home-one { width: min(1120px, 100%); margin: 58px auto 0; padding-top: 54px; border-top: 1px solid rgb(202 160 92 / 20%); }
+.builders-one { display: flex; flex-direction: column; align-items: center; }
+.builders-one p { margin: 0 0 16px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 42px; font-weight: 700; line-height: 1.25; }
+.builders-one strong { display: inline-flex; width: min(420px, 100%); min-height: 64px; align-items: center; justify-content: center; padding: 10px 28px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-ui); font-size: 28px; font-weight: 400; letter-spacing: .18em; white-space: nowrap; }
+.builders-services { display: grid; width: min(706px, 100%); grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 38px auto 0; }
+.builders-service { text-align: center; }
+.builders-service__label { position: relative; display: flex; min-height: 92px; flex-direction: column; align-items: center; justify-content: center; border: 2px solid rgb(202 160 92 / 72%); border-radius: 14px; color: #b99864; background: #fff; font-family: var(--font-cjk-sans); line-height: 1.12; }
+.builders-service__label > svg { position: absolute; top: -18px; left: 50%; width: 24px; height: 21px; color: #c4a574; fill: #c4a574; stroke-width: 0; transform: translateX(-50%); }
+.builders-service__label strong { font-size: 21px; font-weight: 500; }
+.builders-service__label span { margin-top: 4px; font-size: 19px; }
+.builders-service h3 { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 36px 0 0; font-family: var(--font-cjk-sans); font-size: 32px; font-weight: 700; line-height: 1.2; }
+.builders-service h3 > svg { width: 25px; height: 25px; flex: none; color: #c4a574; stroke-width: 4.5; }
+.builders-service p { display: flex; flex-direction: column; gap: 10px; margin: 13px 0 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 21px; line-height: 1.45; }
+.builders-service p span { white-space: nowrap; }
+.builders-lifetime { padding: 72px 30px 140px; color: #1c1c1d; background: #f6f6f6 url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
 .builders-lifetime__heading { width: min(920px, 100%); margin-inline: auto; text-align: center; }
 .builders-lifetime__pill { margin-inline: auto; }
 .builders-lifetime__heading h2 { margin-top: 24px; font-family: var(--font-cjk-serif); font-weight: var(--font-cjk-serif-semibold, 600); }
@@ -353,13 +380,11 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-contact__copy dt { display: flex; align-items: center; gap: 8px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 13px; }
 .builders-contact__copy dt svg { width: 17px; height: 17px; color: #caa05c; }
 .builders-contact__copy dd { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; }
-.builders-contact__tabs { display: flex; align-items: center; gap: 7px; margin-top: 28px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; }
-.builders-contact__tabs button { position: relative; padding: 0 0 4px; border: 0; color: rgb(202 160 92 / 68%); background: transparent; font: inherit; cursor: pointer; transition: color .3s ease; }
-.builders-contact__tabs button::after { position: absolute; right: 0; bottom: 0; left: 0; height: 1px; content: ''; background: #caa05c; transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
+.builders-contact__tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 20px; }
+.builders-contact__tabs button { min-height: 44px; padding: 10px 16px; border: 1px solid #e3e3e8; border-radius: 999px; color: #1c1c1d; background: #fff; font: inherit; cursor: pointer; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .builders-contact__tabs button:hover,
 .builders-contact__tabs button:focus-visible,
-.builders-contact__tabs button[aria-selected='true'] { color: #caa05c; }
-.builders-contact__tabs button[aria-selected='true']::after { transform: scaleX(1); }
+.builders-contact__tabs button[aria-selected='true'] { border-color: #caa05c; color: #1c1c1d; background: #caa05c; transform: translateY(-2px); }
 .builders-contact__tabs button:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
 .builders-contact__pavilion { overflow: hidden; border-radius: 24px; }
 .builders-contact__pavilion > :deep(.builder-image) { aspect-ratio: 1.18 / 1; border-radius: 24px; }
@@ -375,7 +400,9 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-section-heading--team { grid-template-columns: 23% 52% 25%; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 52px; line-height: 57px; }
-  .builders-strength { padding: 34px; }
+  .builders-strength { min-height: 186px; gap: 18px; padding: 28px 24px 30px; }
+  .builders-strength h3 { font-size: 20px; }
+  .builders-strength__slogan { min-width: 100px; font-size: 38px; }
   .builders-contact__aside { padding-right: 35px; }
 }
 
@@ -384,22 +411,30 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-rail { width: calc(100% - 60px); }
   .builders-hero { min-height: 730px; }
   .builders-hero__inner { grid-template-columns: 1fr; padding-top: 115px; }
-  .builders-hero__aside { margin-top: 42px; }
+  .builders-hero__aside { margin: 42px 0 0; }
   .builders-hero-media { height: 520px; margin-top: -240px; }
   .builders-team,
   .builders-capability,
   .builders-lifetime,
   .builders-partners,
   .builders-contact { padding-block: 96px; }
+  .builders-capability { padding-bottom: 56px; }
+  .builders-lifetime { padding-top: 56px; }
   .builders-section-heading--team,
   .builders-section-heading--split { grid-template-columns: 1fr; gap: 25px; }
   .builders-section-heading--team > p { max-width: 680px; }
   .builders-team__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .builders-strengths { gap: 22px; }
-  .builders-strength { padding: 25px; }
-  .builders-strength > span { font-size: 36px; line-height: 40px; }
-  .builders-services { gap: 20px; }
-  .builders-service { padding: 30px 25px; }
+  .builders-strength { gap: 12px; padding: 24px 18px 26px; }
+  .builders-strength h3 { font-size: 18px; }
+  .builders-strength__slogan { min-width: 88px; font-size: 32px; }
+  .builders-home-one { width: min(900px, 100%); }
+  .builders-services { gap: 24px; }
+  .builders-one p { font-size: 32px; }
+  .builders-service__label strong { font-size: 18px; }
+  .builders-service__label span { font-size: 16px; }
+  .builders-service h3 { font-size: 25px; }
+  .builders-service p { font-size: 17px; }
   .builders-contact__grid { grid-template-columns: 1fr; }
   .builders-contact__aside { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 30px; padding: 0 0 48px; }
 }
@@ -420,20 +455,33 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-lifetime,
   .builders-partners,
   .builders-contact { padding: 72px 15px; }
+  .builders-capability { padding-bottom: 40px; }
+  .builders-lifetime { padding-top: 48px; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 41px; line-height: 46px; }
   .builders-capability .builders-section-heading--split > div h2 { margin-top: 20px; }
   .builders-team__grid { grid-template-columns: 1fr; gap: 20px; }
+  .builders-team__coming-soon { min-height: 140px; grid-column: 1; }
   .builders-team-card > :deep(.builder-image) { aspect-ratio: 1 / 1.12; }
   .builders-strengths { grid-template-columns: 1fr; margin-top: 56px; }
-  .builders-strength { width: min(100%, 345px); margin-inline: auto; padding: 50px; }
-  .builders-services { grid-template-columns: 1fr; }
+  .builders-capability__showcase { padding: 18px 18px 48px; border-radius: 26px; }
+  .builders-capability__showcase .builders-strengths { margin-top: 0; }
+  .builders-strength { width: 100%; min-height: 170px; gap: 12px; margin-inline: auto; padding: 24px 16px 26px; }
+  .builders-strength h3 { font-size: 22px; }
+  .builders-strength__slogan { min-width: 104px; font-size: 42px; }
+  .builders-home-one { margin-top: 46px; padding-top: 42px; }
+  .builders-one p { font-size: 27px; text-align: center; }
+  .builders-one strong { min-height: 58px; padding-inline: 14px; font-size: 18px; letter-spacing: .12em; }
+  .builders-services { grid-template-columns: 1fr; gap: 46px; margin-top: 36px; }
+  .builders-service { width: min(330px, 100%); margin-inline: auto; }
   .builders-lifetime__visual { margin-top: 40px; border-radius: 18px; }
   .builders-partners { padding: 64px 0 72px; }
   .builders-partners__viewport { margin-top: 28px; }
   .builders-partner { width: 184px; height: 98px; padding: 20px 26px; }
   .builders-contact__aside { display: block; }
-  .builders-contact__pavilion { margin-top: 36px; }
+  .builders-contact__visual { margin-top: 36px; }
+  .builders-contact__tabs { gap: 8px; margin-bottom: 12px; font-size: 13px; }
+  .builders-contact__tabs button { min-height: 38px; padding: 8px 10px; }
   .builders-contact__copy dl div { grid-template-columns: 1fr; gap: 6px; }
 }
 

@@ -24,7 +24,7 @@ useSeoMeta({
     <section class="near-suction-hero hero-includes-header" aria-labelledby="near-suction-page-title">
       <span class="near-suction-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="near-suction-hero__inner">
-        <h1 id="near-suction-page-title">SAKURA Kitchen Appliances</h1>
+        <h1 id="near-suction-page-title">Kitchen Appliances</h1>
         <nav aria-label="麵包屑" class="near-suction-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -148,7 +148,7 @@ useSeoMeta({
 }
 .near-suction-hero__overlay { position: absolute; z-index: -1; inset: 0; background: #100801; opacity: .64; }
 .near-suction-hero__inner { width: min(1410px, calc(100% - 60px)); margin-inline: auto; padding: 138px 0 97px; text-align: center; }
-.near-suction-hero h1 { margin: 0 0 35px; color: #fff; font-family: var(--font-cjk-serif); font-size: 80px; font-weight: 500; line-height: .9523809524; }
+.near-suction-hero h1 { margin: 0 0 35px; color: #fff; font-family: var(--font-display); font-size: 80px; font-weight: 400; line-height: .9523809524; }
 .near-suction-hero__trail { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .near-suction-hero__trail a { color: inherit; transition: color .3s ease; }
 .near-suction-hero__trail a:hover,

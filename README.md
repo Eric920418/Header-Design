@@ -359,14 +359,14 @@
 
 ## 6.2.2 建商專區型錄（2026-08-15）
 
-- **最新 PPT 第 10 頁（2026-08-23）**：`/builders/catalogues` 改以 `2026.08.19_6.0合作專區_調整.pptx` 第 10 頁為最新真值；依投影片三組紅色刪除標記，頁面只保留新增的 `Developer Catalogs／建商專區型錄 2026`，舊版 `iPremium／Joyful／Premium／Harmony／Loft Chic／Elegant` 六本品牌系列型錄不再於建商專區渲染。一般品牌系列型錄仍維持既有 `/catalogues/kitchenware-catalog` 路由，避免兩種型錄資訊架構再次混用。
-- **字體、狀態與互動**：Hero 中文主標及卡片標題改為 Noto Serif TC SemiBold，卡片標題固定 25／34px；麵包屑、說明、紅色 PDF 狀態與預覽操作統一 Noto Sans TC 15px。正式 PDF 尚未由甲方提供，因此保留單一卡片的原生 Dialog 封面預覽並完整顯示「正式 PDF 待甲方提供」，不建立假下載連結；主標、麵包屑與卡片分層進場，卡片 Hover／Focus 維持模板的深色覆蓋、圖片縮放與圓形箭頭。
+- **最新 PPT 第 10 頁（2026-08-23）**：`/builders/catalogues` 改以 `2026.08.19_6.0合作專區_調整.pptx` 第 10 頁為最新真值；Hero 主標英文化為 `Developer Catalogues`，並與其他型錄頁共用松竹店背景、36% 構圖、64% 遮罩與 60px 英文標題規格，中文麵包屑保留。依投影片三組紅色刪除標記，頁面只保留新增的 `Developer Catalogs／建商專區型錄 2026`，舊版 `iPremium／Joyful／Premium／Harmony／Loft Chic／Elegant` 六本品牌系列型錄不再於建商專區渲染。一般品牌系列型錄仍維持既有 `/catalogues/kitchenware-catalog` 路由，避免兩種型錄資訊架構再次混用。
+- **字體、狀態與互動**：Hero 使用 Cal Sans 60／72px 英文主標，卡片標題維持 Noto Serif TC SemiBold 25／34px；麵包屑、說明與預覽操作使用 Noto Sans TC 15px。正式 PDF 已接入並由整張卡片直接開啟，舊 Dialog 與紅色待提供狀態已移除；主標、麵包屑與卡片分層進場，卡片 Hover／Focus 維持模板的深色覆蓋、圖片縮放與圓形箭頭。
 - **第 10 頁 Design QA（2026-08-23）**：最新簡報標註與 1440×1000 實作已合併於 `/private/tmp/builders-catalogues-slide10-design-qa.png` 核對；桌機與手機 390×844 均檢查 Hero、單一卡片、Footer 與 Dialog。卡片數量 1、圖片失敗 0、未完成 Reveal 0，兩種尺寸皆 `scrollWidth === innerWidth`。手機快捷列依頁面既有安全規則隱藏，預覽鈕常駐且不遮住標題；Dialog 開啟後焦點落在「關閉型錄預覽」，支援 Escape，狀態文案完整可見。沒有剩餘 P0／P1／P2 差異，最終結果：`passed`。
 - **建置驗證**：`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過；production build 只有專案既有的 Tailwind CSS v4 sourcemap warning，沒有第 10 頁新增的 compile error。
 - 新增正式 SSR 路由 `/builders/catalogues`，依 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第七頁實作；沿用 Antra Projects 01 的 360px 麵包屑 Hero、1410px 版心、3／2／1 欄型錄卡、24px 圓角與 Projects hover 節奏，並依 PPT 指示刪除篩選列。
 - **舊版紀錄（已由最新第 10 頁覆蓋）**：第七頁曾要求在本頁同時保留六本品牌系列型錄與新增建商型錄；2026-08-23 最新稿已明確把六本舊卡全部標示刪除，因此現行頁面不再沿用這項舊決策。
-- 2026 建商型錄封面直接取自 PPT 第七頁內嵌的 1241×1654 正式原圖，整理至 `public/section-6/builders/catalogues/developer-catalogue-2026.jpg`；Hover／Focus 採 Poliform 圖冊參考的深色覆蓋、預覽文字與右側箭頭，點擊後用原生 Dialog 顯示完整封面預覽。
-- PPT 沒有附建商型錄 PDF，因此頁面明確顯示「正式 PDF 待甲方提供」，Dialog 也說明沒有建立假下載；Header「建商專區型錄」及 6.2.1 的兩個產品型錄入口均維持 `/builders/catalogues`，一般「品牌系列型錄」仍走 `/catalogues/kitchenware-catalog`。
+- 2026 建商型錄封面直接取自 PPT 第七頁內嵌的 1241×1654 正式原圖，整理至 `public/section-6/builders/catalogues/developer-catalogue-2026.jpg`；卡片標題使用「建商專區型錄」。正式 78 頁 PDF 已放入 `public/section-6/builders/catalogues/developer-catalogue-2026.pdf`，Hover／Focus 維持深色覆蓋、預覽文字與右側箭頭，點擊卡片直接以新分頁開啟正式 PDF。
+- 已移除過時的「正式 PDF 待甲方提供」文字、假預覽 Dialog 與未提供說明；Header「建商專區型錄」及 6.2.1 的兩個產品型錄入口均維持 `/builders/catalogues`，一般「品牌系列型錄」仍走 `/catalogues/kitchenware-catalog`。
 - **舊版手機紀錄（已由最新第 10 頁覆蓋）**：舊版曾為右側快捷列預留 78px；現行手機頁依全站內容安全規則隱藏快捷列，卡片改用完整欄寬。Dialog 仍使用原生 top layer，支援關閉鈕、`cancel`／Escape 與點擊遮罩關閉；圖片失敗會在原卡片完整顯示素材資訊，reduced-motion 下停用縮放與位移。
 - 首輪 1280px QA 發現共用 Header 在 `xl` 斷點同時放大 Logo、導覽內距與外框內距，造成 Logo 壓到「品牌承諾」；完整桌面間距改由 1440px 才啟用，1024–1439px 維持既有 160px Logo 框與緊湊導覽，未改 60px 高度、字級或下拉互動。型錄 Dialog 另明確設為 viewport 置中，開啟時焦點直接落在關閉鈕，移除瀏覽器加在整個可捲動 panel 外的金色焦點框，同時保留關閉鈕的可見焦點環。
 - **舊版 Design QA（已由最新第 10 頁覆蓋）**：2026-08-15 曾驗收七張封面與六個品牌 PDF；該資料量及手機快捷列結論不再適用，現行驗收結果以上方「第 10 頁 Design QA」為準。
@@ -374,12 +374,12 @@
 ## 6.2.1 SAKURA KITCHEN 介紹頁（2026-08-15）
 
 - **最新 PPT 第 9 頁（2026-08-23）**：`/builders/sakura-kitchen` 改以 `2026.08.19_6.0合作專區_調整.pptx` 第 9 頁為最新真值，保留投影片指定的 Home／Virtual Tours 長頁結構，不重做另一套近似版。桌機 Header 與 Hero 間距校正為 20px；Hero 英文／中文 Logo 直接使用投影片內嵌的正式透明圖，不再把頁尾金色 Logo 透過 CSS 濾鏡偽裝成白色版本。品牌介紹、玻璃卡與 Hero 文案明確使用 Noto Sans TC，玻璃卡連結依註記改為 `Our Advantages` 並維持 `/about/advantage`。
-- **標題、文案與 CTA 校正**：兩組中文主標統一為 Noto Serif TC SemiBold 40／50px，承接全站 18px 以上襯線字 SemiBold 規則；說明段落、`EXPLORE OUR COLLECTIONS`、產品型錄與立即預約改為 Noto Sans TC 15px。Hero 圓形「立即預約」依 PPT 移除箭頭，保留模板色彩／透明度並加入金色雷達動畫；產品型錄與頁尾預約 CTA 則維持全站 60px 膠囊、40px 金色圓箭頭、雷達水波與 Hover 旋轉。標題、說明、全景圖、六張系列卡及 CTA 均分層使用既有 `opalMoveUp／opalScaleUp`，reduced-motion 下停止水波與轉場但內容立即可見。
+- **標題、文案與 CTA 校正**：品牌優勢中文主標維持 Noto Serif TC SemiBold 40／50px，系列主標改為 `Creating the Ideal Kitchen / for Every Family`，第二行保留金色強調；說明段落、`EXPLORE OUR COLLECTIONS`、產品型錄與立即預約使用 Noto Sans TC 15px。Hero 圓形「立即預約」依 PPT 移除箭頭，保留模板色彩／透明度並加入金色雷達動畫；產品型錄與頁尾預約 CTA 則維持全站 60px 膠囊、40px 金色圓箭頭、雷達水波與 Hover 旋轉。標題、說明、全景圖、六張系列卡及 CTA 均分層使用既有 `opalMoveUp／opalScaleUp`，reduced-motion 下停止水波與轉場但內容立即可見。
 - **第 9 頁最終 Design QA（2026-08-23）**：將 PPT 內嵌的 2880×6996 長頁參考與 1440×1000 實作首屏、逐段桌機截圖放進同一張比較圖核對；頁面維持 Hero、品牌優勢全景、系列六卡與 Footer 的模板順序，桌機 `scrollWidth === innerWidth === 1440`，390×844 手機 `scrollWidth === innerWidth === 390`，圖片失敗 0、未完成 reveal 0、唯一 `h1`。Hero 預約 CTA 實際導向 `/builders#appointment` 且定位成功、品牌優勢卡導向 `/about/advantage`、產品型錄以 `_blank`＋`noopener noreferrer` 開啟 `/builders/catalogues`；手機另在此頁隱藏會覆蓋主要內容的右側快捷列，最終結果 passed。
 - 新增正式路由 `/builders/sakura-kitchen`，依 `2026.08.14_6.0合作專區_櫻花整體廚房頁面開版.pptx` 第六頁與其中的 Antra Virtual Tours 參考頁重製；原 `/builders` 頁移至 `pages/builders/index.vue` 以建立正確父子路由，Header「建商專區」同步補上首頁、SAKURA KITCHEN 與型錄三項下拉導覽。
 - 2026-08-15 依畫面回饋重新逐項拆解第六頁：前版雖使用正式圖片，但把 Antra Virtual Tours 的 Hero 比例、右下玻璃導覽卡與低矮全景區塊改成自訂版型，並把產品型錄錯放進 Hero，判定不符合模板後已撤除。現行 Hero 直接沿用專案既有 Home 09 的 1410px／`2.203125:1`／24px 圓角舞台，右下玻璃導覽卡保留 PPT 指定的左圖右文模板結構，並連到本頁品牌優勢；立即預約維持左下圓形入口。
 - Hero、品牌優勢橫幅與六張品牌系列圖直接取自 PPT 第六頁內嵌的正式原圖；玻璃導覽卡依模板改為真實 HTML／CSS 元件，保留模板英文標題 `Project Excellence`，英文連結依最新第 9 頁更新為 `Our Advantages`，中段說明換成 PPT 指定的「源自於全台數百萬戶家庭生活研究與觀察」。文字可選取、整張可點擊並導向正式品牌優勢頁 `/about/advantage`。先前誤把 `Project Excellence` 參考圖當成正式網頁素材的作法已撤除，網站不再載入帶字卡片截圖。
-- 文案採用 PPT 指定的 700 萬用戶數據、45 萬套設計模組、AI 科技應用與家庭生活研究內容；品牌系列名稱使用 Libre Baskerville，Nuxt Google Fonts 載入設定已補齊 400／700 字重。
+- 文案採用 PPT 指定的 700 萬用戶數據、45 萬套設計模組、AI 科技應用與家庭生活研究內容；品牌優勢兩段正文的桌面版心由 970px 收窄為 760px，系列區共用文案寬度不受影響。品牌系列名稱使用 Libre Baskerville，Nuxt Google Fonts 載入設定已補齊 400／700 字重。
 - 品牌系列已依 PPT 素材與標示恢復為 `iChef`、`iFun`、`Loft Chic`、`iPremium`、`原色系列 01`、`原色系列 02`，順序、圖片與命名逐一對應；系列名改回 Virtual Tours 卡片中央覆蓋位置，不再使用錯誤的 AI Kitchen／Premium／Elegant 名稱或左下角自創排版。
 - Hero 與頁尾「立即預約」均導向 `/builders#appointment`，完成跨頁定位到 6.2-S1 預約表單；PPT 指定的唯一「產品型錄」入口移回低矮全景圖中央並以新分頁開啟正式 6.2.2 `/builders/catalogues`，Hero 不再重複放型錄入口。
 - RWD：桌面使用 1410px 單一模板版心、全景維持 `4:1` 低矮比例與三欄品牌圖；1024px 以下 Hero 改為 1.72:1、品牌圖兩欄，767px 以下改單欄並分離玻璃卡與預約圓鈕。所有圖片失敗會在原容器完整顯示檔案、用途與部署檢查提示，reduced-motion 下取消位移與 Hover transform。
@@ -1085,12 +1085,13 @@ final result: passed
 - **關於我們標題英文化（2026-08-31）**：`/about/introduce` Hero 主標與下方 section 膠囊小標均由「關於我們」改為 `About Us`；中文麵包屑維持原導覽語意。
 - **品牌紀事輪播調整（2026-08-31）**：`/about/introduce` 年份卡片桌面改為四張並排、平板三張並排，縮短水平間距；輪播改為每 3.5 秒自動循環，滑鼠停留、鍵盤聚焦及減少動態偏好時暫停；中小型桌面另保留右側安全區，避免卡片文字被懸浮服務按鈕遮擋。
 - **全站 Kitchen 文案統一（2026-08-31）**：啟用中的 Nuxt 頁面與共用元件內，所有使用者可見的 `Interior`／`interior` 字樣統一改為 `Kitchen`／`kitchen`；圖片資源檔名與程式識別名稱維持不變，避免破壞載入與樣式。
-- **SAKURA 廚電頁標題英文化（2026-08-31）**：`/products/sakura` 的 Hero 主標、麵包屑、頁面標題與 Open Graph 標題統一改為 `SAKURA Kitchen Appliances`；產品分類與內文維持中文。
+- **SAKURA 廚電頁標題英文化（2026-08-31）**：`/products/sakura` 的 Hero 主標簡化為 `Kitchen Appliances`；麵包屑、頁面標題與 Open Graph 標題維持完整品牌名稱 `SAKURA Kitchen Appliances`，產品分類與內文維持中文。
 - **SAKURA 商品分類卡片調整（2026-08-31）**：`/products/sakura` 所有商品分類圖片容器統一使用固定 4:3 比例、1px 淺灰邊線與 24px 圓角矩形外框（手機 18px）；依標註只保留 6 個 `SUKURA Products` 廚電分類、2 個 `Water Heater` 與 1 個 `Water Purifier／淨水設備`，共 9 張卡片，RO、SQC、熱飲機、淨熱飲與濾心等產品系列不再顯示於分類首頁。
+- **SAKURA 廚電分類原圖修正（2026-09-02）**：`/products/sakura` 前 6 張廚電分類圖改回 `/Users/eric/Desktop/SPA/KitchenBuy` 資料表所指向的櫻花官方透明背景主圖，移除先前 720×540 二次輸出檔內建的 `#f6f6f6` 上下灰帶；卡片 4:3 尺寸、產品比例與圓角外框不變。
 - **熱水器／淨水設備素材統一（2026-08-31）**：`/products/sakura` 最後三張分類圖改採 `/Users/eric/Desktop/SPA` 的正式素材來源：瓦斯熱水器與淨水設備使用 800×800 分類圖，電能熱水器使用 SPA 商品資料所引用的 390×390 SH-125 透明背景產品圖；移除舊素材內建的灰色上下條、不同留白及截斷畫布。
-- **SAKURA 商品卡片 Hover／系列 Hero（2026-08-31）**：`/products/sakura` 可點擊卡片沿用 `/products/sakura/range-hood` 的互動：Hover／鍵盤 focus 時出現深色遮罩，金色圓形箭頭由圖片正中央縮放旋正；手機維持右下固定 CTA。`/products/sakura/range-hood` Hero 主標、麵包屑、頁面標題與 Open Graph 標題同步改為 `SAKURA Kitchen Appliances`。
+- **SAKURA 商品卡片 Hover／系列 Hero（2026-08-31）**：`/products/sakura` 可點擊卡片沿用 `/products/sakura/range-hood` 的互動：Hover／鍵盤 focus 時出現深色遮罩，金色圓形箭頭由圖片正中央縮放旋正；手機維持右下固定 CTA。`/products/sakura/range-hood` Hero 主標簡化為 `Kitchen Appliances`，麵包屑、頁面標題與 Open Graph 標題維持完整品牌名稱 `SAKURA Kitchen Appliances`。
 - **除油煙機列表標題層級（2026-08-31）**：`/products/sakura/range-hood` 與 `/products/sakura/range-hood/near-suction` 的商品區標題統一為上方 13px `SUKURA Products` 小標、下方 30px 中文主標，移除所有頁面可見的 `Range Hood Series`；近吸頁中段「除油煙機系列」桌面同步調整為 30px。
-- **近吸系列下層同步（2026-09-01）**：`/products/sakura/range-hood/near-suction` 的 Hero 與麵包屑品牌名稱改為 `SAKURA Kitchen Appliances`；中段輪播改用上一層相同的全品類資料、滿寬標題線、48 秒連續移動與進場後才播放規則。下方型錄區同步改為單一英文 `Kitchen Product Catalogue`、標準金色 CTA Hover／雷達動畫，兩張型錄名稱改用 Noto Serif TC Medium。1280×720 瀏覽器實測父子層輪播均為 48 秒且進場後正常播放，子層水平溢位為 0、console error 為 0；CTA Hover 實測轉金、上移 2px、箭頭旋正，型錄標題為 Noto Serif TC 20px／500，最終結果：`passed`。
+- **近吸系列下層同步（2026-09-01）**：`/products/sakura/range-hood/near-suction` 的 Hero 主標簡化為 `Kitchen Appliances`，麵包屑維持完整品牌名稱 `SAKURA Kitchen Appliances`；Hero 字體同步上一層為 Cal Sans 80px，不再誤用 Noto Serif TC。中段輪播改用上一層相同的全品類資料、滿寬標題線、48 秒連續移動與進場後才播放規則。下方型錄區同步改為單一英文 `Kitchen Product Catalogue`、標準金色 CTA Hover／雷達動畫，兩張型錄名稱改用 Noto Serif TC Medium。1280×720 瀏覽器實測父子層輪播均為 48 秒且進場後正常播放，子層水平溢位為 0、console error 為 0；CTA Hover 實測轉金、上移 2px、箭頭旋正，型錄標題為 Noto Serif TC 20px／500，最終結果：`passed`。
 - **除油煙機系列卡片分隔線（2026-08-31）**：`/products/sakura/range-hood` 圖片與文字區之間的 1px 灰線不再延伸至卡片邊緣，桌機左右各內縮 24px、手機內縮 18px，避開圓角外框。
 - **除油煙機分類輪播進場修正（2026-08-31）**：`/products/sakura/range-hood` 的分類跑馬燈改由外層獨立播放 Reveal，內層循環軌道在區塊進入視窗並等待 650ms 後才啟動；兩套動畫不再共用進場時機或互相覆蓋，Hover 暫停與減少動態模式維持不變。
 - **除油煙機分類標題飾線（2026-08-31）**：`/products/sakura/range-hood` 的「SAKURA 廚電產品」標題左右裝飾線改為彈性填滿標題兩側至內容邊界，不再受固定最大寬度限制；手機維持 42px，避免窄螢幕擠壓標題。
@@ -1244,7 +1245,8 @@ final result: passed
 - **6.2-S1 預約表單（2026-08-23／新版 PPT 第 7 頁）**：`/builders#appointment` 保留 Antra Contact Us 原始雙欄比例與英文模板主標，依標註把 `GET IN TOUCH`、左側說明、地址／營業時間、館別切換與全部表單欄位統一為 Noto Sans TC；「櫻花集團 品牌館／全預約制」及「預約專人聯繫」改為 Noto Serif TC SemiBold，並刪除表單標題下方 PPT 指定移除的重複說明。台北／台中／高雄改為可操作的 16px Tab，點選與鍵盤左右鍵會同步更換正式品牌館照片、地址及營業時間；照片直接沿用 `5.2 集團品牌館` 已整理的三館正式素材，不再把舊版廚房局部圖當成品牌館照片。既有必填驗證、第一錯誤聚焦、未設定端點與完整送出錯誤仍完整保留在前端。
 - **6.2-S1 Design QA（2026-08-23）**：PPT 第 7 頁標註區與 1440×1000、DPR 1 的瀏覽器實作已合併為 `/private/tmp/builders-appointment-design-qa.png` 比對；桌機維持模板 42／58 雙欄、標題／卡片／影像比例與淺灰建築線稿背景，手機 390×844 改為自然單欄且 `scrollWidth === innerWidth`。字體 computed style 已確認兩個中文主標為 Noto Serif TC 600、館別 Tab 為 Noto Sans TC 16px、說明及表單欄位為 Noto Sans TC；三館切換均同步更新正式照片與資料，鍵盤右鍵可由台北移至台中。圖片載入、Reveal 終態、空白送出三項錯誤與聯絡人聚焦皆通過，未保留 P0／P1／P2 視覺差異，最終結果為 `passed`。
 - **6.2 建商專區整頁（2026-08-23／新版 PPT 第 8 頁）**：第 8 頁是 `/builders` 全頁規格，不是另一個 6.2.1 頁面；以投影片內嵌 Antra 長頁及 Home 05／07／01、Project Detail、Contact Us 標註為模板來源。Hero 改用甲方 `6-1developers-01banner.jpg` 正式圖，保留模板英文大標並讓「專人聯繫」直達本頁預約 Section；CTA 使用全站 60px 膠囊、40px 金色圓箭頭、雷達水波、箭頭旋轉與 Hover 填色。
-- **Home 07／能力／iCare／Home 01**：團隊四欄首張改為正式 SAKURA KITCHEN 專案卡、Logo 與 `/builders/sakura-kitchen` 入口，其餘三張依簡報維持 `Coming Soon`，不虛構人員資料。45 萬+ 設計模組、AI 智能工廠、管理平台與銷講／監工／驗收保留為可選取 HTML；「一鍵登錄 終身服務」改用甲方 `6-1developers-icare.png` 原圖，不再以自創深色資訊卡代替。九組正式合作建商 Logo 依 Home 01 改為雙排反向循環，Hover 暫停，reduced-motion 下改靜態 Grid，語意清單仍可被輔助技術讀取。
+- **建商 Hero 對齊微調（2026-09-01）**：`/builders` 右側「專人聯繫」CTA 底部依 `Kitchen Design` 字形的視覺底線上提 16px，不再只對齊標題行盒；1023px 以下恢復既有單欄間距。
+- **Home 07／能力／iCare／Home 01**：團隊區只保留最左側正式 SAKURA KITCHEN 專案卡、Logo 與 `/builders/sakura-kitchen` 入口；右側三欄移除人物卡，改為置中的 `Coming Soon`。45 萬+ 設計模組、AI 智能工廠、管理平台與銷講／監工／驗收保留為可選取 HTML；「一鍵登錄 終身服務」改用甲方 `6-1developers-icare.png` 原圖，不再以自創深色資訊卡代替。九組正式合作建商 Logo 依 Home 01 改為雙排反向循環，Hover 暫停，reduced-motion 下改靜態 Grid，語意清單仍可被輔助技術讀取。
 - **PPT 第 8 頁 Design QA／建置**：依專案只保留 README 的規則，本段取代額外的 `design-qa.md`。PPT 內嵌 505×2474px Antra 長頁與六個 1440×1000 實作 viewport 已放進同一張 `/private/tmp/builders-slide8-design-qa.png` 比對；模板留白區依投影片紅線補入正式建商內容，而不是自行填入 Antra 假資料。桌機 1440px 與手機 390px 皆無水平溢位、破圖、Nuxt 錯誤或未完成 Reveal；Hero CTA 正確落到 `#appointment`，空白送出顯示三個必填錯誤並聚焦聯絡人。手機 QA 發現的 iCare 主標末字孤行（P2）已改為完整「終身服務」詞組換行；Logo 輪播取得鍵盤焦點時會暫停。`pnpm --dir nuxt-site typecheck`、`NUXT_IGNORE_LOCK=1 pnpm --dir nuxt-site build` 與 `git diff --check` 均通過，production build 只有既有的 Tailwind CSS v4 sourcemap warning，最終結果：`passed`。
 - **預約 CTA 一致性修正（2026-08-15）**：6.2-S1「立即預約」移除獨有的黑底、18px gap、黑色箭頭與向上位移 Hover，改用全站內容型 CTA 真值：60px 高、`30 / 9 / 9px` 內距、灰色 64% 細框、15/22px 字級、40px 金色圓箭頭、初始 `-45deg` 與既有 2 秒雷達水波；Hover／鍵盤 Focus 後整顆填金、文字反白且箭頭轉正。手機維持內容寬度，不再把按鈕拉成滿欄。
 
@@ -1305,6 +1307,11 @@ final result: passed
 - **Design QA／建置**：2026-08-30 於 1280px 實測加盟頁文章主標為 Noto Serif TC 30/41px、SemiBold，三個場次標題為 20/30px、SemiBold；三張場次圖後才出現 128px QR 與「報名QR code」，歡迎短句及舊報名連結皆已移除。高雄品牌館仍使用指定台中品牌館麵包屑圖與 930px 雙欄段落。兩頁圖片破損 0、`scrollWidth === innerWidth`；390×844 手機同樣維持 30px 主標、20px 場次標題、128px QR、單欄品牌館段落且無水平溢位，console error／warning 0。
 
 ## Nuxt 3 — 全站內頁版面一致性（2026-08-21）
+
+- **建商能力卡回歸模板（2026-09-01）**：`/builders` 的 `Have A Project In Mind? Let’s Make It Happen` 能力卡改用原版三張 Banner 的完整背景構圖；只移除前景的型錄、金管與鋼條，保留淡灰圓角幾何、工程線稿與抽象圖形。版型維持無圓角、`#f9f9f9` 與 Flex 左文右標語，左側以 Noto Sans TC 顯示黑／金／黑三行大字，右側以 Noto Serif TC 顯示 `45萬+／AI 智能／管理平台`；手機維持同一左右結構的單欄 Banner。
+- **建商 HOME in O.N.E. 區塊（2026-09-01）**：依提供的 `IMG_1403.JPG` 重做為白底置中版型：42px 金色中文主標與 420×64px 膠囊置頂，三欄採 214×92px 金框分類、實心尖角、金色勾選標題與兩行黑色說明；文字更新為 `一站式服務／多樣產品選擇／輕鬆擁有`、`專業銷講／專屬監工／專人驗收` 及指定說明，移除原本的大白卡、頂部分隔線與建築線稿背景。
+- **建商能力 Section 視覺整合（2026-09-01）**：能力 Banner 與 `HOME in O.N.E` 收進同一張 36px 圓角展示底板，Section 統一使用其他內頁既有的 `#f6f6f6` 中性灰，展示底板改用中性低對比陰影，分類框維持純白；淡金僅保留在邊框、文字與 CTA。展示底板到 `One-Click Registration Lifetime Service` 標題的桌面交界留白由 270px 收為 144px，平板／手機同步按比例收斂。三張能力 Banner 為 22px 圓角，三個分類框為 14px 圓角，手機展示底板同步收為 26px 圓角，膠囊字級與字距會縮放且維持單行。
+- **建商團隊卡與聯絡區顯示修正（2026-09-01）**：保留最左側原本的 SAKURA KITCHEN 專案卡，固定在第一欄且不再受 Reveal 初始透明狀態影響；只有右側三欄是 `Coming Soon` 空白區。聯絡區的台北／台中／高雄切換改為平均排列在展館圖片外部上方的三顆膠囊 Tab，並移除表單上方「線上送出服務正在串接中」提示卡；未設定端點時送出後仍顯示完整錯誤資訊且不傳送資料。
 
 - **全站桌面捲動重量（2026-08-31）**：Lenis 慣性時間由 1.5 秒收為 1.2 秒，降低滾動拖尾與沉重感；滾輪距離、既有 expo ease-out、`prefers-reduced-motion` 保護及 992px 以下原生捲動皆不變。
 - **中文字重單一規格**：新增 `--font-weight-cjk-serif-emphasis: 600`；46 個正式內頁網址中，所有實際使用 Noto Serif TC、標準字級 18px 以上的中文標題、文章標題、卡名與產品名稱統一為 SemiBold。Noto Sans TC 正文、小於 18px 的文字與純英文 Cal Sans／Bodoni Moda／Libre Baskerville 不受影響；共用 Header 的「十大廚房系列」與隱私權頁標題同步修正。
