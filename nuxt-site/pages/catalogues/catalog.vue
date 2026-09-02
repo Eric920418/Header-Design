@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight, ChevronDown, ChevronRight, Minus, Plus } from 'lucide-vue-next'
+import { ArrowUpRight, ChevronDown, ChevronRight } from 'lucide-vue-next'
 import { PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES } from '~/data/productCatalogues'
 
 const activeCategoryIndex = ref(1)
@@ -149,12 +149,8 @@ useSeoMeta({
                 :aria-controls="`product-care-answer-${activeCategory.id}-${question.id}`"
                 @click="selectQuestion(index)"
               >
-                <span>Q{{ String(index + 1).padStart(2, '0') }}</span>
-                <strong>{{ question.question }}</strong>
-                <i aria-hidden="true">
-                  <Minus v-if="activeQuestionIndex === index" />
-                  <Plus v-else />
-                </i>
+                <span class="product-care-question__label"><span class="product-care-question__number">{{ String(index + 1).padStart(2, '0') }}</span>{{ question.question }}</span>
+                <span class="product-care-question__symbol" aria-hidden="true">{{ activeQuestionIndex === index ? '−' : '+' }}</span>
               </button>
               <div
                 v-show="activeQuestionIndex === index"
@@ -257,31 +253,26 @@ useSeoMeta({
 .product-care .internal-rail-safe { padding-inline: 43px; }
 .product-care__header { display: grid; grid-template-columns: 270px minmax(0, 1fr) minmax(260px, 300px); align-items: start; gap: 34px; margin-bottom: 52px; }
 .product-care__eyebrow { position: relative; display: inline-flex; width: fit-content; }
-.product-care__eyebrow::after { position: absolute; top: 50%; left: calc(100% + 16px); width: 104px; height: 1px; background: #e3e3e8; content: ''; }
-.product-care__header h2 { max-width: 650px; margin: -5px 0 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 56px; font-weight: 500; line-height: 66px; }
+.product-care__header h2 { max-width: 650px; margin: -5px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 600; line-height: 40px; }
 .product-care__header > p { margin: 4px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .product-care__layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 70px; align-items: start; }
 .product-care__filters { display: grid; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .product-care__filter { position: relative; display: block; min-width: 0; }
-.product-care__filter select { width: 100%; height: 64px; appearance: none; border: 1px solid transparent; border-radius: 999px; padding: 0 52px 0 24px; color: #59585d; background: #fff; font-family: var(--font-ui); font-size: 15px; line-height: 1; outline: 0; transition: border-color .3s ease, box-shadow .3s ease, color .3s ease; }
+.product-care__filter select { width: 100%; height: 64px; appearance: none; border: 1px solid transparent; border-radius: 999px; padding: 0 52px 0 24px; color: #59585d; background: #fff; font-family: var(--font-ui); font-size: 16px; line-height: 1; outline: 0; transition: border-color .3s ease, box-shadow .3s ease, color .3s ease; }
 .product-care__filter > svg { position: absolute; top: 50%; right: 22px; width: 17px; height: 17px; color: #59585d; pointer-events: none; transform: translateY(-50%); transition: color .3s ease, transform .3s ease; }
 .product-care__filter:hover select,
 .product-care__filter.is-active select { color: #1c1c1d; border-color: rgba(202,160,92,.5); }
 .product-care__filter:focus-within select { border-color: #caa05c; box-shadow: 0 0 0 3px rgba(202,160,92,.17); }
 .product-care__filter:focus-within > svg { color: #caa05c; transform: translateY(-50%) rotate(180deg); }
 .product-care__panel { padding-top: 54px; }
-.product-care__questions { border-top: 1px solid #e3e3e8; }
-.product-care-question { border-bottom: 1px solid #e3e3e8; }
-.product-care-question > button { display: grid; width: 100%; min-height: 78px; grid-template-columns: 48px minmax(0, 1fr) 40px; align-items: center; border: 0; padding: 0; color: #1c1c1d; background: transparent; text-align: left; }
-.product-care-question > button > span { color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 30px; }
-.product-care-question > button > strong { font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 500; line-height: 30px; }
-.product-care-question > button > i { display: flex; width: 36px; height: 36px; align-items: center; justify-content: flex-end; color: #1c1c1d; transition: color .3s ease; }
-.product-care-question > button > i svg { width: 18px; height: 18px; stroke-width: 1.5; }
-.product-care-question.is-active > button > i { color: #caa05c; }
-.product-care-question > button:hover > strong,
-.product-care-question > button:focus-visible > strong { color: #caa05c; }
+.product-care__questions { border-top: 1px solid rgb(159 159 164 / 24%); }
+.product-care-question { border-bottom: 1px solid rgb(159 159 164 / 24%); }
+.product-care-question > button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 24px; border: 0; padding: 18px 0; color: #1c1c1d; background: transparent; text-align: left; cursor: pointer; }
+.product-care-question__label { display: flex; min-width: 0; align-items: baseline; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 30px; }
+.product-care-question__number { flex: none; margin-right: 26px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 600; line-height: 30px; }
+.product-care-question__symbol { flex: none; color: #1c1c1d; font-family: var(--font-ui); font-size: 22px; line-height: 1; }
 .product-care-question > button:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
-.product-care-question__answer { padding: 0 40px 32px 48px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.product-care-question__answer { padding: 0 40px 32px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .product-care-question__answer > p { margin: 0; }
 .product-care-question__answer ul,
 .product-care-question__answer ol { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
@@ -316,7 +307,7 @@ useSeoMeta({
   .product-care { padding-block: 100px 115px; }
   .product-care__header { grid-template-columns: 150px minmax(0, 1fr); gap: 24px 30px; }
   .product-care__header > p { grid-column: 2; }
-  .product-care__header h2 { font-size: 60px; line-height: 64px; }
+  .product-care__header h2 { font-size: 30px; line-height: 40px; }
   .product-care__layout { grid-template-columns: 1fr; }
   .product-care__feature { position: static; }
 }
@@ -335,18 +326,17 @@ useSeoMeta({
   .product-care { padding: 82px 93px 92px 15px; }
   .product-care__header { grid-template-columns: 1fr; gap: 0; margin-bottom: 38px; }
   .product-care__header > p { grid-column: auto; }
-  .product-care__eyebrow::after { display: none; }
-  .product-care__header h2 { margin-top: 20px; font-size: 46px; line-height: 54px; }
+  .product-care__header h2 { margin-top: 20px; font-size: 30px; line-height: 40px; }
   .product-care__header > p { font-size: 15px; line-height: 24px; }
   .product-care__filters { grid-template-columns: 1fr; gap: 12px; }
-  .product-care__filter select { height: 58px; padding-inline: 20px 48px; font-size: 14px; }
+  .product-care__filter select { height: 58px; padding-inline: 20px 48px; font-size: 16px; }
   .product-care__layout { gap: 38px; }
   .product-care__panel { padding-top: 42px; }
-  .product-care-question > button { min-height: 78px; grid-template-columns: 42px minmax(0, 1fr) 34px; }
-  .product-care-question > button > span { font-size: 14px; }
-  .product-care-question > button > strong { font-size: 18px; line-height: 28px; }
-  .product-care-question > button > i { width: 31px; height: 31px; }
-  .product-care-question__answer { padding: 0 5px 25px 42px; }
+  .product-care-question > button { align-items: flex-start; gap: 16px; }
+  .product-care-question__label { font-size: 20px; line-height: 30px; }
+  .product-care-question__number { margin-right: 14px; font-size: 14px; }
+  .product-care-question__symbol { padding-top: 5px; }
+  .product-care-question__answer { padding: 0 0 26px 44px; }
   .product-care__media { border-radius: 18px; }
   .product-care__feature h3 { margin-top: 26px; font-size: 20px; line-height: 30px; }
 }
@@ -358,7 +348,6 @@ useSeoMeta({
   .product-catalogue-card__text strong,
   .product-care__filter select,
   .product-care__filter > svg,
-  .product-care-question > button > i,
   .product-care__media :deep(img),
   .product-care__media-arrow { transition: none; }
   .product-catalogue-card__link:hover .product-catalogue-card__image :deep(img),

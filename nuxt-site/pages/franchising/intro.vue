@@ -368,7 +368,6 @@ onBeforeUnmount(() => {
 .franchise-process h2,
 .franchise-news h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .franchise-about h2 { max-width: 822px; margin-bottom: 50px; }
-#franchise-marketing-title { font-family: var(--font-cjk-serif); font-weight: var(--font-cjk-serif-semibold, 600); letter-spacing: .02em; }
 .franchise-about h2 span,
 .franchise-advantages h2 span,
 .franchise-projects h2 span,
@@ -499,7 +498,7 @@ onBeforeUnmount(() => {
 .franchise-faq__promo h3 { width: min(310px, 100%); margin: 30px auto 20px; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 600; line-height: 35px; }
 .franchise-faq__promo h3 a { transition: color .3s ease; }
 .franchise-faq__promo h3 a:hover { color: #a57b38; }
-.franchise-faq__promo p { width: min(310px, 100%); margin: 0 auto; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.franchise-faq__promo p { width: min(310px, 100%); margin: 0 auto; color: #737278; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 
 .franchise-news { padding: 108px 30px 86px; background: #fff url('/section-6/franchise/antra-original/h5-bg02.png') top right / auto no-repeat; }
 .franchise-news h2 { max-width: 786px; margin-top: 28px; }

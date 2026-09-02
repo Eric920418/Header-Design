@@ -272,13 +272,13 @@ useSeoMeta({
 .about-services__item { border-top: 1px solid rgb(159 159 164 / 24%); }
 .about-services__item:last-child { border-bottom: 1px solid rgb(159 159 164 / 24%); }
 .about-services__list button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 0; border: 0; color: #1c1c1d; background: transparent; text-align: left; cursor: pointer; }
-.about-services__year { flex: none; margin-right: 26px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 30px; }
-.about-services__question { display: flex; min-width: 0; align-items: baseline; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 28px; }
+.about-services__year { flex: none; margin-right: 26px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 600; line-height: 30px; }
+.about-services__question { display: flex; min-width: 0; align-items: baseline; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 30px; }
 .about-services__plus { flex: none; color: #1c1c1d; font-family: var(--font-ui); font-size: 22px; line-height: 1; }
 .about-services__answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
 .about-services__answer.is-open { grid-template-rows: 1fr; }
 .about-services__answer > div { overflow: hidden; }
-.about-services__answer p { margin: 0; padding: 12px 40px 32px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.about-services__answer p { margin: 0; padding: 0 40px 32px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 
 .about-history { padding: 0 30px 120px; background: #fafafa; }
 .about-history__carousel { position: relative; }
@@ -371,7 +371,7 @@ useSeoMeta({
   .about-identity__heading h2 { font-size: 52px; line-height: 56px; }
   .about-services__visual { min-height: 540px; }
   .about-services__list { padding-left: 15px; }
-  .about-services__question { font-size: 18px; line-height: 28px; }
+  .about-services__question { font-size: 20px; line-height: 30px; }
   .about-values__stage { min-height: 680px; }
   .about-values__copy { padding: 0 22px 42px 28px; }
   .about-values__copy h3 { font-size: 23px; line-height: 29px; }
@@ -394,8 +394,8 @@ useSeoMeta({
   .about-services__visual { min-height: 500px; }
   .about-services__visual-copy { inset-inline: 25px; bottom: 25px; }
   .about-services__list { padding-left: 0; }
-  .about-services__list button { gap: 16px; }
-  .about-services__question { font-size: 18px; line-height: 24px; }
+  .about-services__list button { gap: 24px; }
+  .about-services__question { font-size: 20px; line-height: 30px; }
   .about-history { padding-bottom: 80px; }
   .about-history__card { flex-basis: 33.3333%; }
   .about-values__stage { min-height: 820px; }
@@ -416,11 +416,11 @@ useSeoMeta({
   .about-services__visual { min-height: 420px; }
   .about-services__visual-copy span { font-size: 30px; line-height: 35px; }
   .about-services__list { padding-top: 20px; }
-  .about-services__list button { align-items: flex-start; padding: 18px 0; }
-  .about-services__question { font-size: 18px; line-height: 28px; }
+  .about-services__list button { align-items: flex-start; gap: 16px; padding: 18px 0; }
+  .about-services__question { font-size: 20px; line-height: 30px; }
   .about-services__year { margin-right: 14px; font-size: 14px; }
   .about-services__plus { padding-top: 5px; }
-  .about-services__answer p { padding: 12px 0 26px 44px; }
+  .about-services__answer p { padding: 0 0 26px 44px; }
   .about-history { padding: 0 15px 65px; }
   .about-history__grid { margin-left: -18px; }
   .about-history__card { flex-basis: min(82vw, 300px); }
