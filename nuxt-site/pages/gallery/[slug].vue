@@ -169,7 +169,7 @@ useHead({
         <section class="case-detail-related" aria-labelledby="related-cases-title">
           <div class="case-detail-related__heading">
             <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="FEATURED PROJECTS" class="case-detail-related__label-wrap" />
-            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }">Take a look at our latest blog &amp; articles.</h2>
+            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }">Take a look at <span>our latest blog</span> &amp; articles.</h2>
           </div>
           <div ref="relatedViewport" class="case-detail-related__viewport" aria-label="相關案例輪播">
             <div class="case-detail-related__track">
@@ -271,6 +271,7 @@ useHead({
 .case-detail-related { margin-top: 0; padding-top: 100px; border-top: 1px solid #e3e3e8; }
 .case-detail-related__heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .case-detail-related__heading > h2 { padding: 64px 0 60px; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
+.case-detail-related__heading > h2 span { color: #caa05c; }
 .case-detail-related__viewport { overflow: hidden; }
 .case-detail-related__track { display: flex; gap: 30px; touch-action: pan-y pinch-zoom; }
 .case-detail-related__slide { min-width: 0; flex: 0 0 calc((100% - 60px) / 3); }
