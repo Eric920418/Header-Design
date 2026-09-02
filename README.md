@@ -1,6 +1,7 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+- **2026-09-02 建商能力區分層**：`/builders` 的能力數據與 `HOME in O.N.E` 服務內容由單一大白框拆成上下兩個獨立圓角容器，保留原有內容與背景圖，並統一陰影、邊框及響應式間距。
 - **2026-09-02 案例延伸標題配色**：`/gallery/[slug]` 的 `Take a look at our latest blog & articles.` 改為黑金混排，`our latest blog` 使用品牌金色，其餘文字維持黑色。
 - **2026-09-02 建商合作夥伴標題**：`/builders` Logo 輪播區小標由 `Our Website 75000+ VIP Customer` 精簡為 `OUR CLIENTS`，保留既有置中版面與字型規格。
 - **2026-09-02 全站細節校正**：商品型錄 Hero 改為 `Kitchen Product Catalogue`，保留中文麵包屑；保養分類改為三顆直接切換按鈕，「廚房產品保養」中心線精確對齊中間的「除油煙機」按鈕。產品型錄的 `Product`、加盟優勢的 `Success` 改為品牌金色，行銷卡內文固定 600 字重，品牌優勢三張文章卡同步縮短。建商頁 Hero 小標改為 `Property Developers`，設計師區恢復一張正式卡與三張同尺寸 `Coming Soon` 卡，兩處專案標題改於問號後分行；同時縮限舊的全域中文字重規則，讓 One-Click、Creating the Ideal Kitchen 與產品型錄等英文標題真正使用模板字型。SAKURA KITCHEN 型錄入口改用站內導航，確保切頁回到頁首。

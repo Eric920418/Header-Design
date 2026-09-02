@@ -331,15 +331,15 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-capability .builders-section-heading--split > div h2 { margin-top: 70px; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 17px; line-height: 27px; }
-.builders-capability__showcase { margin-top: 48px; padding: 30px 30px 64px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
-.builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
+.builders-capability__showcase { display: grid; gap: 32px; margin-top: 48px; }
+.builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; padding: 30px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
 .builders-strength { position: relative; display: flex; min-height: 186px; align-items: center; justify-content: space-between; gap: 24px; overflow: hidden; padding: 30px 28px 32px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #f9f9f9; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
 .builders-strength__content,
 .builders-strength__slogan { position: relative; z-index: 1; }
 .builders-strength h3 { display: flex; flex-direction: column; margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.12; white-space: nowrap; }
 .builders-strength h3 span:nth-child(2) { color: #caa05c; }
 .builders-strength__slogan { display: flex; min-width: 112px; flex-direction: column; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 44px; font-weight: var(--font-cjk-serif-semibold, 600); line-height: .98; white-space: nowrap; }
-.builders-home-one { width: min(1120px, 100%); margin: 58px auto 0; padding-top: 54px; border-top: 1px solid rgb(202 160 92 / 20%); }
+.builders-home-one { width: 100%; margin: 0; padding: 54px 30px 64px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
 .builders-one { display: flex; flex-direction: column; align-items: center; }
 .builders-one p { margin: 0 0 16px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 42px; font-weight: 700; line-height: 1.25; }
 .builders-one strong { display: inline-flex; width: min(420px, 100%); min-height: 64px; align-items: center; justify-content: center; padding: 10px 28px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-ui); font-size: 28px; font-weight: 400; letter-spacing: .18em; white-space: nowrap; }
@@ -438,7 +438,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-strength { gap: 12px; padding: 24px 18px 26px; }
   .builders-strength h3 { font-size: 18px; }
   .builders-strength__slogan { min-width: 88px; font-size: 32px; }
-  .builders-home-one { width: min(900px, 100%); }
+  .builders-home-one { width: 100%; }
   .builders-services { gap: 24px; }
   .builders-one p { font-size: 32px; }
   .builders-service__label strong { font-size: 18px; }
@@ -473,12 +473,12 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-team__grid { grid-template-columns: 1fr; gap: 20px; }
   .builders-team-card > :deep(.builder-image) { aspect-ratio: 1 / 1.12; }
   .builders-strengths { grid-template-columns: 1fr; margin-top: 56px; }
-  .builders-capability__showcase { padding: 18px 18px 48px; border-radius: 26px; }
-  .builders-capability__showcase .builders-strengths { margin-top: 0; }
+  .builders-capability__showcase { gap: 20px; }
+  .builders-capability__showcase .builders-strengths { margin-top: 0; padding: 18px; border-radius: 26px; }
   .builders-strength { width: 100%; min-height: 170px; gap: 12px; margin-inline: auto; padding: 24px 16px 26px; }
   .builders-strength h3 { font-size: 22px; }
   .builders-strength__slogan { min-width: 104px; font-size: 42px; }
-  .builders-home-one { margin-top: 46px; padding-top: 42px; }
+  .builders-home-one { margin: 0; padding: 42px 18px 48px; border-radius: 26px; }
   .builders-one p { font-size: 27px; text-align: center; }
   .builders-one strong { min-height: 58px; padding-inline: 14px; font-size: 18px; letter-spacing: .12em; }
   .builders-services { grid-template-columns: 1fr; gap: 46px; margin-top: 36px; }
