@@ -75,7 +75,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
     <section class="builders-team" aria-labelledby="builders-team-title">
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--team">
-          <InternalSectionPill>Our Team</InternalSectionPill>
+          <InternalSectionPill>OUR BRAND</InternalSectionPill>
           <h2 id="builders-team-title">Meet The <span>Experts Our</span><br />Kitchen Designers</h2>
         </header>
         <div class="builders-team__grid">
@@ -122,7 +122,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
     <section class="builders-capability" aria-labelledby="builders-capability-title">
       <div class="builders-rail internal-rail-safe">
         <header class="builders-section-heading builders-section-heading--split">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Brands" />
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="WHY SAKURA" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <h2 id="builders-capability-title">Have A Project In <span>Mind?</span><br /><span>Let’s</span> Make It Happen</h2>
             <p>櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。</p>
@@ -363,9 +363,10 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-lifetime__visual > :deep(.builder-image) { aspect-ratio: 16 / 9; background: #fff; }
 .builders-partners { overflow: hidden; padding: 86px 0 102px; background: #fff url('/section-6/franchise/antra-original/h1-bg02.png') bottom center / 100% auto no-repeat; }
 .builders-partners__rail { width: 100%; }
-.builders-partners h2 { margin: 0; color: #1c1c1d; font-family: var(--font-ui); font-size: 12px; font-weight: 400; line-height: 18px; letter-spacing: .01em; text-align: center; }
-.builders-partners h2 span { color: #caa05c; }
-.builders-partners__viewport { display: grid; gap: 0; margin-top: 36px; border-block: 1px solid #e3e3e8; }
+.builders-partners h2 { display: flex; width: min(1410px, calc(100% - 60px)); margin: 0 auto 62px; box-sizing: border-box; align-items: center; justify-content: center; gap: 24px; padding-inline: 43px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; text-align: center; }
+.builders-partners h2::before,
+.builders-partners h2::after { height: 1px; flex: 1 1 0; background: #d7d7db; content: ""; }
+.builders-partners__viewport { display: grid; gap: 0; border-block: 1px solid #e3e3e8; }
 .builders-partners__row { min-width: 0; overflow: hidden; border-bottom: 1px solid #e3e3e8; }
 .builders-partners__row:last-child { border-bottom: 0; }
 .builders-partners__track { display: flex; width: max-content; animation: builders-partners-marquee 34s linear infinite; will-change: transform; }
@@ -469,6 +470,9 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-lifetime { padding-top: 48px; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 41px; line-height: 46px; }
+  .builders-partners h2 { width: calc(100% - 30px); gap: 13px; margin-bottom: 42px; padding-inline: 0; font-size: 20px; line-height: 28px; }
+  .builders-partners h2::before,
+  .builders-partners h2::after { width: 42px; flex: none; }
   .builders-capability .builders-section-heading--split > div h2 { margin-top: 20px; }
   .builders-team__grid { grid-template-columns: 1fr; gap: 20px; }
   .builders-team-card > :deep(.builder-image) { aspect-ratio: 1 / 1.12; }
@@ -485,7 +489,6 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-service { width: min(330px, 100%); margin-inline: auto; }
   .builders-lifetime__visual { margin-top: 40px; border-radius: 18px; }
   .builders-partners { padding: 64px 0 72px; }
-  .builders-partners__viewport { margin-top: 28px; }
   .builders-partner { width: 184px; height: 98px; padding: 20px 26px; }
   .builders-contact__aside { display: block; }
   .builders-contact__visual { margin-top: 36px; }

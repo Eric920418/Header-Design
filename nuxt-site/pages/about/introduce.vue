@@ -211,7 +211,7 @@ useSeoMeta({
     <section class="about-identity" aria-labelledby="about-identity-title">
       <div class="about-identity__rail">
         <header class="about-identity__heading">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="專屬品牌辨識" data-ev="opalMoveRight" class="ev" />
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="DISTINCTIVE BRAND IDENTITY" data-ev="opalMoveRight" class="ev" />
           <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">
             Gallery Of Inspiring<br /><span>Kitchen</span> Designs
           </h2>
