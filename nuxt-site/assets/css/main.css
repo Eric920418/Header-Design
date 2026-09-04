@@ -14,6 +14,12 @@
 .hero-includes-header {
   margin-top: calc(-1 * var(--site-header-height));
 }
+
+@media (min-width: 1024px) {
+  .hero-includes-header:not(.hero-template-section, .product-detail-hero, .sakura-kitchen-hero-shell) h1:not(.sr-only) {
+    font-size: 80px !important;
+  }
+}
 :root {
   color-scheme: light;
 }

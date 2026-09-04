@@ -1,13 +1,14 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+- **2026-09-04 內頁 Hero 標題尺寸**：全站使用 `hero-includes-header` 的內頁 Hero 主標於桌機統一為 80px；首頁主視覺、產品詳情與純視覺型建商 Hero 不套用，手機與平板保留既有響應式尺寸，避免長標題溢出。
 - **2026-09-02 寬桌機導覽展開間距**：1440px 以上 Header 左右導覽選項欄距由最高 6px 放寬為 14–22px；左側選項向左、右側選項向右展開，中央 Logo 與搜尋按鈕位置維持不變，較窄桌機與手機導覽不受影響。
 - **2026-09-02 英文小標與合作建商標題**：`/about/introduce` 品牌辨識小標改為 `DISTINCTIVE BRAND IDENTITY`；`/builders` 的 `OUR TEAM`／`OUR BRANDS` 分別改為 `OUR BRAND`／`WHY SAKURA`。合作建商標題 `OUR CLIENTS` 完整沿用廚房產品內頁的左右細線、Serif TC 25/36px、英文 700 字重與置中排列，手機版同步縮為 20/28px。
 - **2026-09-02 建商能力區分層**：`/builders` 的能力數據與 `HOME in O.N.E` 服務內容由單一大白框拆成上下兩個獨立圓角容器，保留原有內容與背景圖，並統一陰影、邊框及響應式間距。
 - **2026-09-02 案例延伸標題配色**：`/gallery/[slug]` 的 `Take a look at our latest blog & articles.` 改為黑金混排，`our latest blog` 使用品牌金色，其餘文字維持黑色。
 - **2026-09-02 建商合作夥伴標題**：`/builders` Logo 輪播區小標由 `Our Website 75000+ VIP Customer` 精簡為 `OUR CLIENTS`，保留既有置中版面與字型規格。
 - **2026-09-02 全站細節校正**：商品型錄 Hero 改為 `Kitchen Product Catalogue`，保留中文麵包屑；保養分類改為三顆直接切換按鈕，「廚房產品保養」中心線精確對齊中間的「除油煙機」按鈕。產品型錄的 `Product`、加盟優勢的 `Success` 改為品牌金色，行銷卡內文固定 600 字重，品牌優勢三張文章卡同步縮短。建商頁 Hero 小標改為 `Property Developers`，設計師區恢復一張正式卡與三張同尺寸 `Coming Soon` 卡，兩處專案標題改於問號後分行；同時縮限舊的全域中文字重規則，讓 One-Click、Creating the Ideal Kitchen 與產品型錄等英文標題真正使用模板字型。SAKURA KITCHEN 型錄入口改用站內導航，確保切頁回到頁首。
-- **提案預覽密碼鎖（2026-09-04）**：全站頁面由 Nitro 伺服器中介層保護，未驗證訪客會導向 `/preview-access`；預設密碼已改為簡短的無空格格式。密碼經伺服器端 SHA-256 定長比對後，簽發包含絕對到期時間與 HMAC 簽章的 1 小時 HttpOnly Cookie。伺服器會拒絕過期或遭竄改的權杖，前端也會在到期、分頁重新取得焦點或切頁時立即導回密碼頁，不再只依賴瀏覽器刪除 Cookie。正式環境可用 `NUXT_PREVIEW_PASSWORD` 覆蓋；靜態圖片與 Nuxt 執行資源維持可載入，API 未授權時回傳完整 401 錯誤。
+- **提案預覽密碼鎖（2026-09-04）**：全站頁面由 Nitro 伺服器中介層保護，未驗證訪客會導向 `/preview-access`；預設密碼使用無空格且包含符號與年份後綴的格式。密碼經伺服器端 SHA-256 定長比對後，簽發包含絕對到期時間與 HMAC 簽章的 1 小時 HttpOnly Cookie。伺服器會拒絕過期或遭竄改的權杖，前端也會在到期、分頁重新取得焦點或切頁時立即導回密碼頁，不再只依賴瀏覽器刪除 Cookie。正式環境可用 `NUXT_PREVIEW_PASSWORD` 覆蓋；靜態圖片與 Nuxt 執行資源維持可載入，API 未授權時回傳完整 401 錯誤。
 
 ## 3.1 服務流程／FAQ（2026-08-30 調整）
 
