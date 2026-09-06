@@ -59,7 +59,7 @@ onBeforeUnmount(() => {
           Creative <span class="text-[#CAA05C]">Projects That Define</span> Our Style
         </h2>
         <p class="home-project-heading-description">
-          We specialize in transforming visions into reality. Explore our portfolio of innovative architectural and kitchen design projects crafted with precision.
+          櫻花用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間概念、並融合多元設計風格，與消費者一起打造符合每個家庭的理想廚房
         </p>
       </div>
     </div>

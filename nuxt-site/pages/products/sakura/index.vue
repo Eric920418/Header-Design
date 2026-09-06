@@ -113,7 +113,7 @@ useSeoMeta({
         <nav aria-label="麵包屑" class="sakura-product-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
-          <span aria-current="page">SAKURA Kitchen Appliances</span>
+          <span aria-current="page">SAKURA 廚電</span>
         </nav>
       </div>
     </section>

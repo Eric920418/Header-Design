@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NuxtLink } from '#components'
 import emblaCarouselVue from 'embla-carousel-vue'
 
 const services = [
@@ -29,10 +30,10 @@ onBeforeUnmount(() => timer && clearInterval(timer))
       </div>
       <div ref="emblaRef" class="cursor-grab overflow-hidden active:cursor-grabbing" @mouseenter="paused = true" @mouseleave="paused = false" @focusin="paused = true" @focusout="paused = false"><div class="-ml-[30px] flex">
         <div v-for="(service, index) in services" :key="service.n" v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }" class="min-w-0 flex-[0_0_100%] pl-[30px] min-[768px]:flex-[0_0_50%] min-[1201px]:flex-[0_0_33.333%]">
-          <article class="group/svc flex flex-col overflow-hidden rounded-[24px] bg-white p-[10px]" :class="service.captionTop ? 'min-[569px]:flex-col-reverse' : ''">
+          <component :is="service.n === '01' ? NuxtLink : 'article'" :to="service.n === '01' ? '/products/sakura' : undefined" class="group/svc flex flex-col overflow-hidden rounded-[24px] bg-white p-[10px]" :class="service.captionTop ? 'min-[569px]:flex-col-reverse' : ''">
             <div class="relative h-[250px] overflow-hidden rounded-[24px] md:h-[310px]"><img :src="service.img" :alt="service.alt" draggable="false" class="h-full w-full object-cover transition-transform duration-300 group-hover/svc:scale-110" /><span class="absolute inset-0 bg-black/[.11]" /></div>
             <div class="services-card-caption px-0 pb-[30px] pt-[20px] min-[768px]:px-[20px] min-[768px]:pb-[35px] min-[768px]:pt-[30px]"><div class="flex items-start justify-between"><h3 :aria-label="service.alt" class="mr-[30px] flex flex-1 items-center min-[768px]:mr-[10px] min-[881px]:mr-[30px] min-[1201px]:mr-[80px]"><img :src="service.logo" alt="" :class="service.logoClass" class="max-w-full shrink-0 brightness-0 opacity-[.89]" /></h3><span class="font-display text-[30px] leading-none text-[#E3E3E8]">{{ service.n }}</span></div><p class="mt-[10px] line-clamp-3 text-[16px] leading-[24px] text-[#9F9FA4] min-[768px]:mr-[70px] min-[768px]:mt-[23px]">{{ service.excerpt }}</p></div>
-          </article>
+          </component>
         </div>
       </div></div>
     </div>

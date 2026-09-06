@@ -177,7 +177,7 @@ export const storeCases: StoreCaseDetail[] = [
     address: '406臺中市北屯區軍功里松竹路一段763號',
     cover: '/section-3/store-songzhu.jpg',
     reservationUrl: 'https://lin.ee/xIPto4o',
-    images: case35Images,
+    images: [case35Images[8]!, ...case35Images.slice(0, 8)],
     meta: {
       style: '現代風',
       color: '石紋色',
@@ -234,7 +234,7 @@ export const storeCases: StoreCaseDetail[] = [
           '屋主表示，從他媽媽那一輩就一直是使用櫻花廚具，對櫻花品牌的信賴感已經悄悄植入心底。這次委託櫻花整體廚房台中松竹店，除了將屋主落實夢想的風格中島廚房，在材質運用、風格搭配都超越屋主期待。收納機能面向更做了全方位考量，讓屋主也能感受到SAKURA KITCHEN對於客戶的用心，在預算內達到最符合理想的設計。SAKURA KITCHEN 櫻花整體廚房作為全方位廚房解決專家，一站式整合品牌及服務，廚房成為喜愛聚會的屋主與親友相聚最佳地點，滿足自在生活美好時刻。',
           '轉載：2023年設計家',
         ],
-        images: [case35Images[8]!],
+        images: [case35Images[0]!],
         imageLayout: 'single',
         links: [
           {

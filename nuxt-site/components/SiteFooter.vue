@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ArrowUp } from 'lucide-vue-next'
 
-const footerSocialRight = ref('112px')
+const footerSocialLeft = ref('0px')
+const footerSocialGap = ref('48px')
 const footerSocialLinks = ref<HTMLElement | null>(null)
 const reducedMotion = useReducedMotion()
 let headerResizeObserver: ResizeObserver | null = null
@@ -16,18 +17,15 @@ function scrollToTop() {
 function alignSocialLinksWithHeader() {
   if (!import.meta.client || window.innerWidth < 1024) return
 
-  const anchor = document.querySelector<HTMLElement>('[data-footer-align-anchor="sakura-group"]')
-  if (!anchor) return
+  const builders = document.querySelector<HTMLElement>('[data-footer-align-anchor="builders"]')
+  const group = document.querySelector<HTMLElement>('[data-footer-align-anchor="sakura-group"]')
+  const container = footerSocialLinks.value?.offsetParent
+  if (!builders || !group || !(container instanceof HTMLElement)) return
 
-  const anchorRect = anchor.getBoundingClientRect()
-  const anchorPaddingRight = Number.parseFloat(window.getComputedStyle(anchor).paddingRight) || 0
-  const glyphRight = anchorRect.right - anchorPaddingRight
-  const containingBlock = footerSocialLinks.value?.offsetParent
-  const containingBlockRight = containingBlock instanceof HTMLElement
-    ? containingBlock.getBoundingClientRect().right
-    : window.innerWidth
-
-  footerSocialRight.value = `${Math.max(0, containingBlockRight - glyphRight)}px`
+  const left = builders.getBoundingClientRect().left
+  const iconWidth = footerSocialLinks.value?.firstElementChild?.getBoundingClientRect().width || 35
+  footerSocialLeft.value = `${left - container.getBoundingClientRect().left}px`
+  footerSocialGap.value = `${Math.max(16, group.getBoundingClientRect().left - left - iconWidth)}px`
 }
 
 onMounted(() => {
@@ -56,13 +54,13 @@ onBeforeUnmount(() => {
     <div aria-hidden class="absolute inset-0 bg-[url('/home-2026/footer/kitchen-background.webp')] bg-cover bg-center opacity-20" />
     <div class="relative z-10 mx-auto flex h-[220px] max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]">
       <nav aria-label="頁尾連結" class="flex flex-wrap items-center gap-x-10 gap-y-4 font-cjk-sans text-[15px] text-white/80 md:text-[18px]">
-        <NuxtLink to="#">網站地圖</NuxtLink>
-        <NuxtLink to="/privacy">隱私權政策</NuxtLink>
+        <NuxtLink to="/sitemap">網站地圖</NuxtLink>
+        <NuxtLink to="/privacy" target="_blank" rel="noopener noreferrer">隱私權政策</NuxtLink>
       </nav>
       <div
         ref="footerSocialLinks"
-        class="footer-social-links flex h-10 items-center gap-12 lg:absolute lg:top-[60px] lg:right-[var(--footer-social-right)]"
-        :style="{ '--footer-social-right': footerSocialRight }"
+        class="footer-social-links flex h-10 items-center gap-12 lg:absolute lg:top-[60px] lg:left-[var(--footer-social-left)] lg:gap-[var(--footer-social-gap)]"
+        :style="{ '--footer-social-left': footerSocialLeft, '--footer-social-gap': footerSocialGap }"
       >
         <a href="#" aria-label="數位展板" class="flex h-10 items-center"><img src="/icons/digital-board.png" alt="" class="h-[35px] w-auto" /></a>
         <a href="#" aria-label="YouTube" class="flex h-10 items-center"><img src="/icons/youtube.png" alt="" class="h-[40px] w-auto translate-y-[7px]" /></a>

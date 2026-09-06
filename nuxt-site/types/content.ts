@@ -122,9 +122,9 @@ export interface StoreCaseDetail extends StoreCaseSummary {
   reviews?: string[]
 }
 
-export type DesignInspirationForm = '一字型' | '一字型+中島' | '中島' | 'L型' | 'L型+中島' | 'ㄇ字型'
+export type DesignInspirationForm = '一字型' | '一字型+中島' | '中島' | 'L型' | 'L型+中島' | 'ㄇ字型' | 'ㄇ型+中島'
 
-export type DesignInspirationStyle = '鄉村風' | '美式古典風' | '工業風' | '日式簡約風' | '北歐風' | '現代風'
+export type DesignInspirationStyle = '鄉村風' | '美式風' | '工業風' | '輕奢風' | '北歐風' | '現代風'
 
 export interface DesignFilterOption<T extends string = string> {
   label: string

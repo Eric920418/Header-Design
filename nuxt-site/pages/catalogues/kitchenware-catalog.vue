@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ArrowUpRight, Download } from 'lucide-vue-next'
 import { KITCHEN_CATALOGUES } from '~/data/catalogues'
+import { KITCHEN_STYLES } from '~/data/kitchenStyles'
+
+const route = useRoute()
+const sourceSeries = computed(() => KITCHEN_STYLES.find(series => series.slug === route.query.series && series.route))
 
 useSeoMeta({
   title: '品牌系列型錄｜SAKURA 整體廚房',
@@ -16,10 +20,11 @@ useSeoMeta({
     <section data-hero-photo="songzhu" class="catalogue-hero hero-includes-header" aria-labelledby="catalogue-page-title">
       <span class="catalogue-hero__overlay" aria-hidden="true" />
       <div class="catalogue-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="catalogue-page-title">Kitchen Catalogues</h1>
+        <h1 id="catalogue-page-title">Series Catalogue</h1>
         <nav aria-label="麵包屑" class="catalogue-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
+          <template v-if="sourceSeries"><NuxtLink :to="sourceSeries.route!">{{ sourceSeries.zh }}</NuxtLink><span aria-hidden="true">/</span></template>
           <span aria-current="page">品牌系列型錄</span>
         </nav>
       </div>

@@ -16,7 +16,7 @@ useSeoMeta({ title: '隱私權政策｜SAKURA 整體廚房', description: '台�
 
 <template>
   <main>
-    <InternalPageHero title="隱私權政策" eyebrow="PRIVACY POLICY" />
+    <InternalPageHero class="privacy-hero" title="隱私權政策" eyebrow="PRIVACY POLICY" />
     <div class="bg-[#F6F6F6] py-20 sm:py-24 lg:py-[120px]">
       <article class="internal-rail-safe mx-auto w-[calc(100%_-_30px)] max-w-[980px] rounded-[24px] bg-white p-6 shadow-sm sm:w-[calc(100%_-_60px)] sm:p-12 lg:p-16">
         <p class="border-b border-[#E3E3E8] pb-8 text-[#59585D]">台灣櫻花股份有限公司隱私權條款</p>
@@ -30,3 +30,17 @@ useSeoMeta({ title: '隱私權政策｜SAKURA 整體廚房', description: '台�
     </div>
   </main>
 </template>
+
+<style scoped>
+/* 與加盟下載 Hero 的招牌留白、膠囊及標題行高合計一致，保留本頁原建築底圖。 */
+.privacy-hero,
+.privacy-hero :deep(.internal-hero__inner) { min-height: calc(var(--site-header-height) + max(8vw, 59.2px) + 236.4px); }
+.privacy-hero :deep(.internal-hero__inner) { padding-top: calc(var(--site-header-height) + 48px); padding-bottom: 48px; }
+.privacy-hero.hero-includes-header :deep(h1) { font-family: var(--font-cjk-serif); font-size: 38px !important; line-height: 1.2; }
+@media (min-width: 768px) and (max-width: 1023px) {
+  .privacy-hero, .privacy-hero :deep(.internal-hero__inner) { min-height: calc(var(--site-header-height) + max(8vw, 59.2px) + 158px + clamp(56.84px, 6.86vw, 94.08px)); }
+}
+@media (max-width: 767px) {
+  .privacy-hero, .privacy-hero :deep(.internal-hero__inner) { min-height: calc(var(--site-header-height) + max(8vw, 59.2px) + 198px); }
+}
+</style>

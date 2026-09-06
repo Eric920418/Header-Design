@@ -7,12 +7,14 @@ const props = withDefaults(defineProps<{
   flat?: boolean
   alt?: string
   autoplay?: boolean
+  comingSoon?: boolean
 }>(), {
   cover: '',
   aspect: '16 / 9',
   flat: false,
   alt: 'SAKURA 品牌承諾影片縮圖',
   autoplay: false,
+  comingSoon: false,
 })
 
 const videoId = 'wH374AF9wLI'
@@ -54,10 +56,11 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
   >
     <template v-if="state === 'idle'">
       <img :src="cover || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`" :alt="alt" class="h-full w-full object-cover" @error="failed" />
-      <button type="button" aria-label="播放 SAKURA 品牌承諾影片" class="antra-source-video-popup" @click="play">
+      <button type="button" :disabled="comingSoon" :aria-label="comingSoon ? '影片即將推出' : '播放 SAKURA 品牌承諾影片'" class="antra-source-video-popup" @click="play">
         <span class="antra-source-video-popup__radar" aria-hidden="true" />
         <Play class="relative ml-1 h-7 w-7 fill-current sm:h-8 sm:w-8" />
       </button>
+      <p v-if="comingSoon" class="absolute top-[calc(50%+34px)] sm:top-[calc(50%+66px)] left-0 w-full text-center font-display text-[clamp(24px,4vw,60px)] leading-none font-semibold text-white drop-shadow-lg">Coming Soon</p>
     </template>
     <template v-else-if="state === 'loading' || state === 'playing'">
       <iframe :src="`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`" title="SAKURA 品牌承諾影片" class="absolute inset-0 h-full w-full" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen @load="loaded" @error="failed" />
@@ -114,5 +117,9 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
 
 @media (prefers-reduced-motion: reduce) {
   .antra-source-video-popup__radar { animation: none; }
+}
+
+@media (max-width: 639px) {
+  .antra-source-video-popup:disabled { width: 48px; height: 48px; }
 }
 </style>

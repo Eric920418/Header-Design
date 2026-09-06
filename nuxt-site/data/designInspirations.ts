@@ -12,14 +12,15 @@ export const DESIGN_FORM_OPTIONS: DesignFilterOption<DesignInspirationForm>[] = 
   { label: 'L型', value: 'L型' },
   { label: 'L型+中島', value: 'L型+中島' },
   { label: 'ㄇ字型', value: 'ㄇ字型' },
+  { label: 'ㄇ型+中島', value: 'ㄇ型+中島' },
 ]
 
 export const DESIGN_STYLE_OPTIONS: DesignFilterOption<DesignInspirationStyle>[] = [
   { label: '全部風格', value: '' },
   { label: '鄉村風', value: '鄉村風' },
-  { label: '美式古典風', value: '美式古典風' },
+  { label: '美式風', value: '美式風' },
   { label: '工業風', value: '工業風' },
-  { label: '日式簡約風', value: '日式簡約風' },
+  { label: '輕奢風', value: '輕奢風' },
   { label: '北歐風', value: '北歐風' },
   { label: '現代風', value: '現代風' },
 ]

@@ -27,9 +27,9 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
       <InternalSectionPill>Straight From The Newsroom</InternalSectionPill>
       <h2>Take A Look At<br><em>Our Latest Blog</em><br>&amp; Articles!</h2>
       <p>Check out our latest blog posts and industry insights to stay informed about the latest trends, technologies, and project updates.</p>
-      <NuxtLink to="/knowledge" class="knowledge-related-home07__cta">
+      <NuxtLink to="/knowledge" class="knowledge-related-home07__cta site-content-cta">
         <span>Explore Blogs</span>
-        <i><ArrowUpRight aria-hidden="true" /></i>
+        <i class="site-cta-icon"><ArrowUpRight aria-hidden="true" /></i>
       </NuxtLink>
     </header>
 
@@ -250,8 +250,9 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
 
 .knowledge-related-home07__cta svg { width: 18px; height: 18px; }
 .knowledge-related-home07__cta:hover,
-.knowledge-related-home07__cta:focus-visible { border-color: #caa05c; color: #caa05c; }
-.knowledge-related-home07__cta:hover i { background: #1c1c1d; transform: translate(2px, -2px); }
+.knowledge-related-home07__cta:focus-visible { border-color: #caa05c; color: #fff; background: #caa05c; }
+.knowledge-related-home07__cta:hover i,
+.knowledge-related-home07__cta:focus-visible i { transform: rotate(45deg); }
 
 .knowledge-related-home07__card {
   display: block;

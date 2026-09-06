@@ -211,7 +211,8 @@ useSeoMeta({
   color: #59585d;
   background: transparent;
   font-family: var(--font-cjk-sans);
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 500;
   line-height: 26px;
   white-space: nowrap;
   cursor: pointer;
@@ -349,7 +350,7 @@ useSeoMeta({
   .antra-store-filter button {
     min-height: 32px;
     padding: 4px 16px;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .antra-store-gallery__result-count { margin-top: 28px; }

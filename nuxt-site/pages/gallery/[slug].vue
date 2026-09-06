@@ -71,7 +71,7 @@ useHead({
           <aside v-if="item.meta || item.contact" class="case-detail-sidebar" aria-label="案例規格與門市資訊">
             <div class="case-detail-sidebar__sticky">
               <a
-                :href="item.contact?.reservationUrl ?? item.reservationUrl"
+                href="https://pse.is/9kq37z"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="case-detail-booking site-content-cta group/cta"

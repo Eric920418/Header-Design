@@ -35,7 +35,8 @@ useSeoMeta({
     <section aria-label="SAKURA 品牌影片" class="antra-service-video">
       <div v-reveal="{ anim: 'opalScaleUp' }" class="antra-service-video__rail">
         <InternalBrandVideo
-          cover="/section-3/service-process/video-cover.jpg"
+          cover="/section-3/store-songzhu.jpg"
+          coming-soon
           aspect="1410 / 640"
           alt="SAKURA 整體廚房品牌影片封面"
           flat

@@ -5,7 +5,7 @@ type Store = { id: number; region: string; city: string; name: string; address: 
 type FlipState = { slot: number; previousId: number }
 
 const STORE_BOARD_ROWS = 4
-const STORE_FLIP_INTERVAL = 2200
+const STORE_FLIP_INTERVAL = 1400
 const STORE_FLIP_DURATION = 760
 
 const stores: Store[] = [
@@ -14,6 +14,10 @@ const stores: Store[] = [
   { id: 2, region: '北部', city: '臺北市', name: '民權店', address: '臺北市中山區民權東路二段68號', phone: '02-25371659' },
   { id: 3, region: '北部', city: '臺北市', name: '中山南京店', address: '臺北市中山區中山北路一段71號', phone: '02-25238868' },
   { id: 4, region: '北部', city: '臺北市', name: '八德店', address: '臺北市松山區八德路4段230號', phone: '02-27486733' },
+  { id: 5, region: '中部', city: '臺中市', name: '中港店', address: '臺中市西屯區臺灣大道四段872號', phone: '04-24650688' },
+  { id: 6, region: '中部', city: '臺中市', name: '松竹店', address: '臺中市北屯區松竹路一段763號', phone: '04-22397068' },
+  { id: 7, region: '中部', city: '臺中市', name: '台中復興店', address: '臺中市南區復興路二段87號', phone: '04-22658989' },
+  { id: 8, region: '中部', city: '臺中市', name: '博館店', address: '臺中市西屯區西屯路二段8-3號', phone: '04-23179966' },
 ]
 const regions: Record<string, string[]> = {
   北部: ['臺北市','新北市','基隆市','新竹市','桃園市','新竹縣','宜蘭縣'],

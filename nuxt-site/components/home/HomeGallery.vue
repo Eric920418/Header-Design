@@ -35,3 +35,9 @@ function pointerUp(event: PointerEvent) { if (dragStart.value === null) return; 
     </div><div data-gallery-controls class="gallery-case-controls mt-[30px] flex items-center justify-center gap-5 lg:mt-0"><button aria-label="上一張" class="flex h-[42px] w-[42px] items-center justify-center rounded-full border border-white/25 bg-black/20 text-white" @click="prev"><ArrowLeft class="h-[18px] w-[18px]" /></button><button aria-label="下一張" class="flex h-[42px] w-[42px] items-center justify-center rounded-full border border-white/25 bg-black/20 text-white" @click="next"><ArrowRight class="h-[18px] w-[18px]" /></button></div></div>
   </section>
 </template>
+
+<style scoped>
+.gallery-case-controls button { transition: background-color .3s ease, border-color .3s ease; }
+.gallery-case-controls button:hover,
+.gallery-case-controls button:focus-visible { background: #caa05c; border-color: #caa05c; color: #fff; }
+</style>

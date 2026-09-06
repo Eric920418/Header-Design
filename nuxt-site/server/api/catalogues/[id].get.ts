@@ -1,14 +1,17 @@
 import { KITCHEN_CATALOGUES } from '~/data/catalogues'
+import { PRODUCT_CATALOGUES } from '~/data/productCatalogues'
+
+const catalogues = [...KITCHEN_CATALOGUES, ...PRODUCT_CATALOGUES.map(item => ({ ...item, downloadFilename: `${item.id}.pdf` }))]
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id') || ''
-  const catalogue = KITCHEN_CATALOGUES.find(item => item.id === id)
+  const catalogue = catalogues.find(item => item.id === id)
 
   if (!catalogue) {
     throw createError({
       statusCode: 404,
       statusMessage: '找不到指定的型錄',
-      data: { id, availableIds: KITCHEN_CATALOGUES.map(item => item.id) },
+      data: { id, availableIds: catalogues.map(item => item.id) },
     })
   }
 

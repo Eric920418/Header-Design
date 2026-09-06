@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight, ChevronRight } from 'lucide-vue-next'
+import { ArrowUpRight, ChevronRight, Download } from 'lucide-vue-next'
 import { PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES } from '~/data/productCatalogues'
 
 const activeCategoryIndex = ref(1)
@@ -40,9 +40,11 @@ useSeoMeta({
     <section data-hero-photo="songzhu" class="product-catalogue-hero hero-includes-header" aria-labelledby="product-catalogue-title">
       <span class="product-catalogue-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="product-catalogue-hero__inner">
-        <h1 id="product-catalogue-title">Kitchen Product Catalogue</h1>
+        <h1 id="product-catalogue-title">Kitchen Catalogue</h1>
         <nav aria-label="麵包屑" class="product-catalogue-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
+          <span aria-hidden="true">/</span>
+          <NuxtLink to="/products/sakura">SAKURA 廚電</NuxtLink>
           <span aria-hidden="true">/</span>
           <span aria-current="page">廚房商品型錄</span>
         </nav>
@@ -73,15 +75,18 @@ useSeoMeta({
                   </span>
                   <span class="product-catalogue-card__shade" aria-hidden="true" />
                   <span class="product-catalogue-card__action" aria-hidden="true">
-                    <span>下載型錄</span>
+                    <span>預覽</span>
                     <span class="product-catalogue-card__arrow"><ArrowUpRight /></span>
                   </span>
                 </span>
-                <span class="product-catalogue-card__text">
-                  <strong>{{ catalogue.title }}</strong>
-                  <span>{{ catalogue.description }}</span>
-                </span>
               </a>
+              <div class="product-catalogue-card__text">
+                <div class="product-catalogue-card__title-row">
+                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong>{{ catalogue.title }}</strong></a>
+                  <a :href="`/api/catalogues/${catalogue.id}`" :download="`${catalogue.id}.pdf`" class="product-catalogue-card__download" :aria-label="`下載 PDF：${catalogue.title}`"><Download aria-hidden="true" /><span>下載</span></a>
+                </div>
+                <span>{{ catalogue.description }}</span>
+              </div>
             </article>
           </li>
         </ul>
@@ -91,9 +96,8 @@ useSeoMeta({
     <section class="product-care" aria-labelledby="product-care-title">
       <div class="product-catalogue-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="product-care__header">
-          <span class="product-care__eyebrow"><InternalSectionPill>Product Care Tips</InternalSectionPill></span>
-          <h2 id="product-care-title">廚房產品保養</h2>
-          <p>從選購、安裝到日常清潔，依產品分類快速查看實用重點。</p>
+          <InternalTemplateHeadingRail label="Popular Queries" class="product-care__eyebrow" />
+          <h2 id="product-care-title">Quick And Clear <span>Answers<br />To Your Key</span> Questions</h2>
         </header>
 
         <div class="product-care__layout">
@@ -172,7 +176,7 @@ useSeoMeta({
                 fit="cover"
                 error-title="產品保養圖片載入失敗"
               />
-              <span class="product-care__media-arrow" aria-hidden="true"><ChevronRight /></span>
+              <span class="product-care__media-arrow site-cta-icon" aria-hidden="true"><ChevronRight /></span>
             </a>
             <h3>{{ activeQuestion.question }}</h3>
             <p>{{ activeFeatureDescription }}</p>
@@ -204,7 +208,11 @@ useSeoMeta({
 .product-catalogue-hero__trail a:hover,
 .product-catalogue-hero__trail a:focus-visible { color: #caa05c; }
 
-.product-catalogue-projects { padding: 100px 30px 130px; background: #fafafa; }
+.product-catalogue-projects { padding: 100px 30px 130px; background: #fff; }
+.product-catalogue-card__title-row { display: flex; align-items: baseline; gap: 14px; justify-content: space-between; }
+.product-catalogue-card__download { display: inline-flex; flex: none; align-items: center; gap: 5px; color: #a87c3d; font-size: 14px; }
+.product-catalogue-card__download svg { width: 18px; height: 18px; }
+.product-catalogue-card__download:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .product-catalogue-projects .internal-rail-safe { padding-inline: 43px; }
 .product-catalogue-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 50px 30px; margin: 0; padding: 0; list-style: none; }
 .product-catalogue-card,
@@ -226,11 +234,11 @@ useSeoMeta({
 .product-catalogue-card__link:focus-visible .product-catalogue-card__image :deep(img) { transform: scale(1.035); }
 .product-catalogue-card__link:hover .product-catalogue-card__action,
 .product-catalogue-card__link:focus-visible .product-catalogue-card__action { opacity: 1; visibility: visible; transform: translateY(0); }
-.product-catalogue-card__link:hover .product-catalogue-card__text strong,
-.product-catalogue-card__link:focus-visible .product-catalogue-card__text strong { color: #caa05c; }
+.product-catalogue-card:hover .product-catalogue-card__text strong,
+.product-catalogue-card:focus-within .product-catalogue-card__text strong { color: #caa05c; }
 .product-catalogue-card__link:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; border-radius: 24px; }
 
-.product-care { padding: 116px 30px 138px; background: #fafafa; }
+.product-care { padding: 116px 30px 138px; background: #f6f6f6; }
 .product-care .internal-rail-safe { padding-inline: 43px; }
 .product-care__header { display: grid; grid-template-columns: 270px minmax(0, 1fr) minmax(260px, 300px); align-items: start; gap: 34px; margin-bottom: 52px; }
 .product-care__eyebrow { position: relative; display: inline-flex; width: fit-content; }
@@ -265,21 +273,17 @@ useSeoMeta({
 .product-care__media { position: relative; display: block; width: 100%; aspect-ratio: .8; overflow: hidden; border-radius: 22px; background: #e9e9ec; }
 .product-care__media :deep(.product-catalogue-asset) { width: 100%; height: 100%; }
 .product-care__media :deep(img) { object-position: top center; transition: transform .55s ease; }
-.product-care__media-arrow { position: absolute; right: 50%; bottom: 28px; display: flex; width: 58px; height: 58px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; color: #fff; background: rgba(28,28,29,.58); box-shadow: 0 8px 22px rgba(0,0,0,.18); backdrop-filter: blur(10px); transform: translateX(50%); transition: transform .35s ease, background-color .3s ease; }
+.product-care__media-arrow { position: absolute; right: 50%; top: 50%; display: flex; width: 58px; height: 58px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; color: #fff; background: rgba(28,28,29,.58); box-shadow: 0 8px 22px rgba(0,0,0,.18); backdrop-filter: blur(10px); transform: translate(50%, -50%); transition: transform .35s ease, background-color .3s ease; }
 .product-care__media-arrow svg { width: 34px; height: 34px; stroke-width: 2.2; }
 .product-care__media:hover :deep(img),
 .product-care__media:focus-visible :deep(img) { transform: scale(1.035); }
 .product-care__media:hover .product-care__media-arrow,
-.product-care__media:focus-visible .product-care__media-arrow { background: #caa05c; transform: translateX(58%); }
+.product-care__media:focus-visible .product-care__media-arrow { background: #caa05c; transform: translate(50%, -50%); }
 .product-care__media:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
 .product-care__feature h3 { margin: 30px 0 14px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 500; line-height: 30px; }
 .product-care__feature > p { margin: 0; color: #737278; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 
-@media (min-width: 1024px) {
-  .product-care__header { position: relative; grid-template-columns: minmax(0, 1fr) 260px; gap: 70px; }
-  .product-care__header h2 { position: absolute; left: calc((100% - 330px) / 2); transform: translateX(-50%); }
-  .product-care__header > p { grid-column: 2; }
-}
+
 
 @media (max-width: 1199px) {
   .product-care__layout { gap: 42px; }
@@ -336,4 +340,11 @@ useSeoMeta({
   .product-catalogue-card__link:hover .product-catalogue-card__image :deep(img),
   .product-catalogue-card__link:focus-visible .product-catalogue-card__image :deep(img) { transform: none; }
 }
+
+.product-care__header { grid-template-columns: 30% 66.6666%; align-items: start; gap: 0; }
+.product-care__eyebrow { display: block; width: auto; align-self: stretch; }
+.product-care__header h2 { position: static; max-width: 732px; justify-self: start; margin: 64px 0 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-align: left; transform: none; }
+.product-care__header h2 span { color: #caa05c; }
+@media (max-width: 1023px) { .product-care__header h2 { font-size: 36px; line-height: 42px; } }
+@media (max-width: 767px) { .product-care__header { grid-template-columns: 1fr; gap: 24px; } .product-care__header h2 { margin-top: 20px; font-size: 30px; line-height: 35px; } }
 </style>

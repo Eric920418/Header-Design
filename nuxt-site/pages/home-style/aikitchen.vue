@@ -218,7 +218,7 @@ useSeoMeta({
             <strong>{{ activeHeroStory.title }}</strong>
             <p>{{ activeHeroStory.description }}</p>
           </div>
-          <NuxtLink to="/catalogues/kitchenware-catalog" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
+          <NuxtLink to="/catalogues/kitchenware-catalog?series=aikitchen" target="_blank" rel="noopener noreferrer" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
             <span>品牌系列<br>型錄</span>
           </NuxtLink>
           <div class="ai-hero__story-controls" aria-label="AI Kitchen 功能輪播控制">
@@ -442,8 +442,8 @@ useSeoMeta({
 .ai-section-heading h2 { max-width: 900px; margin: 70px 0 0; font-size: 60px; line-height: 64px; text-transform: none; }
 .ai-section-heading h2 span, .ai-centered-heading h2 span { color: #caa05c; }
 .ai-intro__content { display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); gap: 24px; margin-top: 64px; padding-top: 44px; border-top: 1px solid #e3e3e8; }
-.ai-intro__content h3 { grid-column: 1; max-width: 520px; margin: 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; letter-spacing: .02em; text-transform: none; }
-.ai-intro__paragraphs { display: grid; grid-column: 3; gap: 14px; align-content: start; padding-top: 5px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.ai-intro__content h3 { grid-column: 1; max-width: 520px; margin: 0; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 500; line-height: 40px; letter-spacing: .02em; text-transform: none; }
+.ai-intro__paragraphs { display: grid; grid-column: 3; gap: 8px; align-content: start; padding-top: 5px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .ai-intro__paragraphs p { margin: 0; }
 
 .ai-suite-stage { display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); grid-template-rows: 420px; gap: 24px; margin-top: 60px; }

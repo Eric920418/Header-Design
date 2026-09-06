@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowLeft, ArrowRight, Download, X } from 'lucide-vue-next'
 import { PRODUCT_CATALOGUES } from '~/data/productCatalogues'
 import {
@@ -23,19 +24,17 @@ if (!resolvedProduct.value) {
 const product = computed<SakuraNearSuctionProduct>(() => resolvedProduct.value as SakuraNearSuctionProduct)
 const activeImageIndex = ref(0)
 const specificationsDialog = ref<HTMLDialogElement | null>(null)
-const relatedStart = ref(0)
+const [relatedViewport, relatedApi] = emblaCarouselVue({ loop: true, align: 'start' })
+const reducedMotion = useReducedMotion()
 const catalogueHighlights = PRODUCT_CATALOGUES.slice(0, 2)
 
 const activeImage = computed(() => product.value.gallery[activeImageIndex.value] ?? product.value.image)
 const relatedProducts = computed(() => SAKURA_NEAR_SUCTION_PRODUCTS.filter(item => item.id !== product.value.id))
-const visibleRelatedProducts = computed(() => {
-  const items = relatedProducts.value
-  return Array.from({ length: Math.min(4, items.length) }, (_, offset) => items[(relatedStart.value + offset) % items.length])
-})
+
 
 watch(() => product.value.id, () => {
   activeImageIndex.value = 0
-  relatedStart.value = 0
+  nextTick(() => relatedApi.value?.scrollTo(0, true))
 })
 
 function selectPreviousImage() {
@@ -49,8 +48,8 @@ function selectNextImage() {
 }
 
 function moveRelated(direction: number) {
-  const length = relatedProducts.value.length
-  if (length) relatedStart.value = (relatedStart.value + direction + length) % length
+  if (direction < 0) relatedApi.value?.scrollPrev(reducedMotion.value)
+  else relatedApi.value?.scrollNext(reducedMotion.value)
 }
 
 function openSpecifications() {
@@ -84,7 +83,7 @@ useSeoMeta({
         <nav aria-label="麵包屑" class="product-detail-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
-          <NuxtLink to="/products/sakura">SAKURA Kitchen Appliances</NuxtLink>
+          <NuxtLink to="/products/sakura">SAKURA 廚電</NuxtLink>
           <span aria-hidden="true">/</span>
           <NuxtLink to="/products/sakura/range-hood">除油煙機系列</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -190,8 +189,9 @@ useSeoMeta({
           </div>
         </div>
 
+        <div ref="relatedViewport" class="related-products__viewport">
         <ul class="related-products__grid">
-          <li v-for="item in visibleRelatedProducts" :key="item.id">
+          <li v-for="item in relatedProducts" :key="item.id">
             <NuxtLink :to="getSakuraNearSuctionProductRoute(item)" class="related-product-card">
               <span
                 class="related-product-card__image"
@@ -207,6 +207,7 @@ useSeoMeta({
             </NuxtLink>
           </li>
         </ul>
+        </div>
       </div>
     </section>
 
@@ -215,7 +216,7 @@ useSeoMeta({
         <div v-reveal="{ anim: 'opalMoveRight' }" class="product-catalogue__copy">
           <InternalSectionPill>SAKURA Product Catalogue</InternalSectionPill>
           <h2 id="product-catalogue-title">
-            <span>Kitchen Product Catalogue</span>
+            <span>Kitchen <em>Product</em> Catalogue</span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta product-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -248,7 +249,7 @@ useSeoMeta({
       @click="closeSpecificationsOnBackdrop"
       @cancel.prevent="closeSpecifications"
     >
-      <div class="product-specifications-dialog__panel">
+      <div class="product-specifications-dialog__panel" data-lenis-prevent>
         <div class="product-specifications-dialog__heading">
           <div>
             <span>{{ product.model }}</span>
@@ -355,7 +356,9 @@ useSeoMeta({
 .related-products__heading h2 { display: flex; margin: 11px 0 0; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .related-products__heading h2 strong { font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 500; line-height: 50px; }
 .related-products__controls { display: flex; flex: none; gap: 8px; padding-bottom: 5px; }
-.related-products__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; margin: 0; padding: 0; list-style: none; }
+.related-products__viewport { overflow: hidden; }
+.related-products__grid { display: flex; touch-action: pan-y pinch-zoom; margin: 0 0 0 -30px; padding: 0; list-style: none; }
+.related-products__grid > li { flex: 0 0 25%; min-width: 0; padding-left: 30px; }
 .related-product-card { display: block; min-width: 0; color: inherit; }
 .related-product-card:focus-visible { border-radius: 20px; outline: 2px solid #caa05c; outline-offset: 6px; }
 .related-product-card__image { display: block; overflow: hidden; aspect-ratio: 4 / 3; border-radius: 20px; background: #fff; }
@@ -377,6 +380,7 @@ useSeoMeta({
 
 .product-catalogue { padding: 120px 30px 130px; background: #fff; }
 .product-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
+.product-catalogue__copy h2 em { color: #caa05c; font-style: normal; }
 .product-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .product-catalogue__copy h2 span { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
 .product-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid #1c1c1d; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
@@ -398,7 +402,7 @@ useSeoMeta({
 .product-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #fafafa; }
 .product-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .product-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
-.product-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
+.product-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 28px; }
 .product-catalogue-card:hover .product-catalogue-card__cover :deep(img) { transform: scale(1.04); }
 
 .product-specifications-dialog { width: min(980px, calc(100% - 60px)); max-width: none; max-height: calc(100dvh - 60px); margin: auto; padding: 0; overflow: hidden; border: 0; border-radius: 24px; color: #59585d; background: #fafafa; box-shadow: 0 26px 80px rgb(0 0 0 / 38%); }
@@ -411,7 +415,7 @@ useSeoMeta({
 .product-specifications-dialog__heading button:hover { border-color: #caa05c; color: #fff; background: #caa05c; }
 .product-specifications-dialog__heading button:focus-visible { border-color: #caa05c; outline: 2px solid #caa05c; outline-offset: 3px; }
 .product-specifications-dialog__heading svg { width: 20px; height: 20px; }
-.product-specifications-dialog__table { overflow: auto; overscroll-behavior: contain; }
+.product-specifications-dialog__table { overflow: auto; overscroll-behavior-x: contain; }
 .product-specifications-list { display: grid; min-width: 620px; grid-template-columns: minmax(220px, .78fr) minmax(0, 1.22fr); margin: 0; border-top: 1px solid #d9d9de; border-left: 1px solid #d9d9de; }
 .product-specifications-list dt,
 .product-specifications-list dd { margin: 0; border-right: 1px solid #d9d9de; border-bottom: 1px solid #d9d9de; padding: 16px 18px; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
@@ -435,7 +439,7 @@ useSeoMeta({
   .product-catalogue { padding-block: 96px; }
   .related-products__heading h2 strong { font-size: 38px; line-height: 45px; }
   .product-catalogue__copy h2 span { font-size: 50px; line-height: 55px; }
-  .related-products__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap-block: 44px; }
+  .related-products__grid > li { flex-basis: 50%; }
   .product-catalogue__grid { gap: 42px; }
 }
 
@@ -455,7 +459,7 @@ useSeoMeta({
   .related-products { padding: 76px 15px 84px; }
   .related-products__heading { align-items: end; gap: 18px; margin-bottom: 38px; }
   .related-products__heading h2 strong { font-size: 34px; line-height: 42px; }
-  .related-products__grid { grid-template-columns: 1fr; gap: 42px; }
+  .related-products__grid > li { flex-basis: 100%; }
   .related-product-card__image { border-radius: 18px; }
   .related-product-card__copy strong { min-height: 0; }
   .product-catalogue { padding: 74px 15px 82px; }

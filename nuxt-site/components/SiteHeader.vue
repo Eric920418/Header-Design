@@ -14,7 +14,7 @@ const leftNav: NavItem[] = [
       { label: '品牌系列' },
       { label: '設計靈感', to: '/design-inspiration' },
       { label: '廚房裝修指南', to: '/knowledge' },
-      { label: '品牌系列型錄', to: '/catalogues/kitchenware-catalog' },
+      { label: '品牌系列型錄', to: '/catalogues/kitchenware-catalog', external: true },
     ],
   },
   {
@@ -100,6 +100,13 @@ function scheduleDesktopMenuClose() {
   }, 160)
 }
 
+function closeDesktopMenuOnScroll() {
+  clearDesktopMenuCloseTimer()
+  activeDesktopMenu.value = null
+}
+
+onMounted(() => window.addEventListener('scroll', closeDesktopMenuOnScroll, { passive: true }))
+
 function closeAllMenus() {
   clearDesktopMenuCloseTimer()
   activeDesktopMenu.value = null
@@ -118,6 +125,7 @@ function handleDesktopItemFocusOut(event: FocusEvent) {
 
 onBeforeUnmount(() => {
   clearDesktopMenuCloseTimer()
+  window.removeEventListener('scroll', closeDesktopMenuOnScroll)
 })
 
 function handleHeaderKeydown(event: KeyboardEvent) {
@@ -179,14 +187,14 @@ function handleHeaderClick(event: MouseEvent) {
                 @pointerleave="scheduleDesktopMenuClose"
               >
                 <div class="border-t border-black/5 bg-white shadow-2xl">
-                  <div class="mx-auto max-w-[1200px] px-[30px] py-8 xl:px-0">
+                  <div class="mx-auto max-w-[1200px] px-[30px] py-6 xl:px-0">
                     <div class="grid grid-cols-3 gap-[30px]">
                       <template v-for="card in item.mega" :key="card.label">
                         <NuxtLink v-if="card.to" :to="card.to" class="group/card block">
                           <div class="mb-4 flex h-[50px] items-center">
                             <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
                           </div>
-                          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
+                          <div class="relative aspect-[16/9] overflow-hidden rounded-2xl bg-[#1C1C1D]">
                             <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
                           </div>
                         </NuxtLink>
@@ -194,7 +202,7 @@ function handleHeaderClick(event: MouseEvent) {
                           <div class="mb-4 flex h-[50px] items-center">
                             <img :src="card.logo" :alt="card.label" class="h-[50px] w-[170px] object-contain object-left brightness-0" />
                           </div>
-                          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1C1C1D]">
+                          <div class="relative aspect-[16/9] overflow-hidden rounded-2xl bg-[#1C1C1D]">
                             <img :src="card.image" :alt="card.label" class="absolute inset-0 h-full w-full object-cover" />
                           </div>
                         </div>
@@ -244,6 +252,8 @@ function handleHeaderClick(event: MouseEvent) {
                             v-for="child in (item.children || []).slice(1)"
                             :key="child.label"
                             :to="child.to || '/'"
+                            :target="child.external ? '_blank' : undefined"
+                            :rel="child.external ? 'noopener noreferrer' : undefined"
                             class="flex items-center border-b border-[#E3E3E8] py-3 text-[14px] text-[#59585D] transition-colors hover:text-[#CAA05C]"
                           >
                             {{ child.label }}
@@ -294,7 +304,7 @@ function handleHeaderClick(event: MouseEvent) {
               @focusout="handleDesktopItemFocusOut"
             >
               <div v-if="item.children && item.to" class="flex h-[var(--site-header-height)] items-center whitespace-nowrap text-[15px] leading-[15px] text-white">
-                <NuxtLink :to="item.to" class="flex h-full items-center">{{ item.label }}</NuxtLink>
+                <NuxtLink :to="item.to" :data-footer-align-anchor="item.label === '建商專區' ? 'builders' : undefined" class="flex h-full items-center">{{ item.label }}</NuxtLink>
                 <button type="button" :aria-label="`展開${item.label}選單`" :aria-expanded="activeDesktopMenu === item.label" class="flex h-full items-center pl-1" @click="openDesktopMenu(item.label)">
                   <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" />
                 </button>

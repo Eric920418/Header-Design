@@ -26,7 +26,7 @@ useSeoMeta({
         <nav aria-label="麵包屑" class="sakura-series-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
-          <NuxtLink to="/products/sakura">SAKURA Kitchen Appliances</NuxtLink>
+          <NuxtLink to="/products/sakura">SAKURA 廚電</NuxtLink>
           <span aria-hidden="true">/</span>
           <span aria-current="page">除油煙機系列</span>
         </nav>
@@ -230,7 +230,7 @@ useSeoMeta({
 .sakura-series-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #fafafa; }
 .sakura-series-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .sakura-series-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
-.sakura-series-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
+.sakura-series-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 28px; }
 .sakura-series-catalogue-card:hover .sakura-series-catalogue-card__cover :deep(img) { transform: scale(1.04); }
 
 @media (max-width: 1023px) {

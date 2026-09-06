@@ -28,7 +28,7 @@ useSeoMeta({
         <nav aria-label="麵包屑" class="near-suction-hero__trail">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
-          <NuxtLink to="/products/sakura">SAKURA Kitchen Appliances</NuxtLink>
+          <NuxtLink to="/products/sakura">SAKURA 廚電</NuxtLink>
           <span aria-hidden="true">/</span>
           <NuxtLink to="/products/sakura/range-hood">除油煙機系列</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -105,7 +105,7 @@ useSeoMeta({
         <div v-reveal="{ anim: 'opalMoveRight' }" class="near-suction-catalogue__copy">
           <InternalSectionPill>SAKURA Product Catalogue</InternalSectionPill>
           <h2 id="near-suction-catalogue-title">
-            <span>Kitchen Product Catalogue</span>
+            <span>Kitchen <em>Product</em> Catalogue</span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta near-suction-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -134,6 +134,7 @@ useSeoMeta({
 </template>
 
 <style scoped>
+.near-suction-catalogue__copy h2 em { color: #caa05c; font-style: normal; }
 .near-suction-page { overflow: clip; color: #59585d; background: #fafafa; }
 .near-suction-rail { width: min(1410px, 100%); margin-inline: auto; box-sizing: border-box; }
 .near-suction-rail.internal-rail-safe { padding-inline: 43px; }
@@ -231,7 +232,7 @@ useSeoMeta({
 .near-suction-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #fafafa; }
 .near-suction-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .near-suction-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
-.near-suction-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
+.near-suction-catalogue-card h3 { margin: 7px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 28px; }
 .near-suction-catalogue-card:hover .near-suction-catalogue-card__cover :deep(img) { transform: scale(1.04); }
 
 @media (max-width: 1023px) {
