@@ -47,7 +47,7 @@ useSeoMeta({
 
 <template>
   <main>
-    <section class="antra-gallery-breadcrumb hero-includes-header" aria-labelledby="gallery-page-title">
+    <section data-hero-photo="songzhu" class="antra-gallery-breadcrumb hero-includes-header" aria-labelledby="gallery-page-title">
       <div class="antra-gallery-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-gallery-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="gallery-page-title">Stores</h1>

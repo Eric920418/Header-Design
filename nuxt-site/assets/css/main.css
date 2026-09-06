@@ -24,6 +24,79 @@
   color-scheme: light;
 }
 
+/* 招牌安全區：圖片依 Hero 寬度縮放，Logo 固定在導覽下方，文案從招牌下緣開始。 */
+section.hero-includes-header[data-hero-photo] {
+  --hero-photo-width: max(100vw, 740px);
+  --hero-logo-top: calc(var(--site-header-height) + 12px);
+  --hero-logo-height: max(8vw, 59.2px);
+  --hero-title-lift: 4px;
+  --hero-copy-top: calc(var(--hero-logo-top) + var(--hero-logo-height) + 16px - var(--hero-title-lift));
+  --hero-photo-y: calc(var(--hero-logo-top) - max(13vw, 96.2px));
+  min-height: 0;
+  padding: 0;
+  background-image: url('/section-3/store-songzhu.jpg');
+  background-size: var(--hero-photo-width) auto;
+  background-position: 88% var(--hero-photo-y);
+  background-attachment: scroll;
+  background-repeat: no-repeat;
+  background-color: #1c1c1d;
+}
+
+section.hero-includes-header[data-hero-photo="taichung"] {
+  --hero-photo-y: calc(var(--hero-logo-top) - max(40.8vw, 301.92px));
+  background-image: url('/section-5/brand-pavilion/pavilion-taichung.jpg');
+  background-position-x: left;
+}
+
+/* 同時支援原本以圖片元件載入的背景，保留載入錯誤提示。 */
+section.hero-includes-header[data-hero-photo] > [class*="__image"] {
+  position: absolute;
+  inset: var(--hero-photo-y) auto auto 0;
+  width: var(--hero-photo-width);
+  height: auto;
+  background: transparent;
+}
+
+section.hero-includes-header[data-hero-photo="songzhu"] > [class*="__image"] {
+  left: calc((100vw - var(--hero-photo-width)) * .88);
+}
+
+section.hero-includes-header[data-hero-photo] > [class*="__image"] img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transform: none;
+}
+
+section.hero-includes-header[data-hero-photo] > [class*="__overlay"] {
+  opacity: 1;
+  background: linear-gradient(to bottom, rgb(16 8 1 / 22%) var(--hero-logo-top), rgb(16 8 1 / 28%) calc(var(--hero-copy-top) - 28px), rgb(16 8 1 / 72%) var(--hero-copy-top));
+}
+
+section.hero-includes-header[data-hero-photo="taichung"] > [class*="__overlay"] {
+  background: linear-gradient(to bottom, rgb(16 8 1 / 22%) var(--hero-logo-top), rgb(16 8 1 / 28%) calc(var(--hero-copy-top) - 28px), rgb(16 8 1 / 72%) var(--hero-copy-top), #1c1c1d calc(var(--hero-logo-top) + max(24.2vw, 179.08px)));
+}
+
+section.hero-includes-header[data-hero-photo] > :is([class*="__inner"], nav) {
+  padding-block: var(--hero-copy-top) calc(32px + var(--hero-title-lift));
+}
+
+section.hero-includes-header[data-hero-photo] :is(h1, [class$="__title"]) {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 767px) {
+  section.hero-includes-header[data-hero-photo] > :is([class*="__inner"], nav) {
+    padding-bottom: calc(24px + var(--hero-title-lift));
+  }
+}
+
+@media (min-width: 1200px) {
+  section.hero-includes-header[data-hero-photo] {
+    --hero-title-lift: 12px;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }

@@ -39,7 +39,7 @@ useHead({
       'latest-detail-page--kaohsiung-brand-hall': isKaohsiungBrandHall,
     }"
   >
-    <section class="latest-detail-breadcrumb hero-includes-header" aria-label="最新消息麵包屑">
+    <section data-hero-photo="taichung" class="latest-detail-breadcrumb hero-includes-header" aria-label="最新消息麵包屑">
       <div class="latest-detail-breadcrumb__overlay" aria-hidden="true" />
       <div class="latest-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <p class="latest-detail-breadcrumb__title">NEWS</p>

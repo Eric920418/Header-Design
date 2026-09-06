@@ -9,7 +9,7 @@ useSeoMeta({
 
 <template>
   <main class="service-process-page">
-    <section class="antra-breadcrumb hero-includes-header" aria-labelledby="service-page-title">
+    <section data-hero-photo="taichung" class="antra-breadcrumb hero-includes-header" aria-labelledby="service-page-title">
       <div class="antra-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="service-page-title">Our Process</h1>

@@ -320,7 +320,8 @@ onBeforeUnmount(() => {
 <style scoped>
 .franchise-page { overflow: clip; color: #1c1c1d; background: #fafafa; }
 .source-rail-wide { width: min(1770px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
-.source-rail { width: min(1410px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
+.source-rail,
+.franchise-about > .source-rail-wide { width: min(1770px, 100%); margin-inline: auto; padding-right: 56px; box-sizing: border-box; }
 
 .source-round-link { position: relative; isolation: isolate; display: inline-flex; min-height: 52px; width: max-content; align-items: center; justify-content: center; gap: 11px; padding: 13px 21px; border: 1px solid rgb(255 255 255 / 22%); border-radius: 999px; color: #fff; font-family: var(--font-ui); font-size: 14px; line-height: 20px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .source-round-link::after { position: absolute; z-index: -1; right: 11px; width: 38px; height: 38px; pointer-events: none; border: 1px solid currentcolor; border-radius: 50%; opacity: 0; content: ""; animation: franchise-radar 2.6s ease-out infinite; }
@@ -585,13 +586,12 @@ onBeforeUnmount(() => {
 @media (max-width: 767px) {
   .franchise-page .internal-rail-safe { padding-right: 0; }
 
-  .franchise-process > .source-rail,
-  .franchise-faq > .source-rail {
+  .source-rail,
+  .franchise-about > .source-rail-wide {
     width: 100%;
     padding-right: 0;
   }
 
-  .source-rail,
   .source-rail-wide { width: calc(100% - 30px); }
   .source-round-link { width: 100%; }
   .franchise-hero { min-height: 660px; }

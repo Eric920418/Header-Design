@@ -31,7 +31,7 @@ useHead({
 
 <template>
   <main class="activity-detail-page">
-    <section class="activity-detail-breadcrumb hero-includes-header" aria-label="優惠活動麵包屑">
+    <section data-hero-photo="songzhu" class="activity-detail-breadcrumb hero-includes-header" aria-label="優惠活動麵包屑">
       <div class="activity-detail-breadcrumb__overlay" aria-hidden="true" />
       <div class="activity-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <p class="activity-detail-breadcrumb__title">Promotions</p>

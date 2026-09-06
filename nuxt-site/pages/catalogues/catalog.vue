@@ -37,7 +37,7 @@ useSeoMeta({
 
 <template>
   <main class="product-catalogue-page">
-    <section class="product-catalogue-hero hero-includes-header" aria-labelledby="product-catalogue-title">
+    <section data-hero-photo="songzhu" class="product-catalogue-hero hero-includes-header" aria-labelledby="product-catalogue-title">
       <span class="product-catalogue-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="product-catalogue-hero__inner">
         <h1 id="product-catalogue-title">Kitchen Product Catalogue</h1>

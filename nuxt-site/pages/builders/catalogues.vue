@@ -32,7 +32,7 @@ useSeoMeta({
 
 <template>
   <main class="builder-catalogue-page">
-    <section class="builder-catalogue-hero hero-includes-header" aria-labelledby="builder-catalogue-title">
+    <section data-hero-photo="songzhu" class="builder-catalogue-hero hero-includes-header" aria-labelledby="builder-catalogue-title">
       <span class="builder-catalogue-hero__overlay" aria-hidden="true" />
       <div class="builder-catalogue-hero__inner">
         <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">Developer Catalogues</h1>

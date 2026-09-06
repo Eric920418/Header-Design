@@ -14,7 +14,7 @@ useSeoMeta({
 
 <template>
   <main class="kitchen-guide-page">
-    <section class="kitchen-guide-hero hero-includes-header" aria-labelledby="kitchen-guide-page-title">
+    <section data-hero-photo="songzhu" class="kitchen-guide-hero hero-includes-header" aria-labelledby="kitchen-guide-page-title">
       <span class="kitchen-guide-hero__overlay" aria-hidden="true" />
       <div class="kitchen-guide-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="kitchen-guide-page-title">Kitchen Knowledge</h1>

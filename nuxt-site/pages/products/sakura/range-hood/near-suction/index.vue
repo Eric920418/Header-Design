@@ -21,7 +21,7 @@ useSeoMeta({
 
 <template>
   <main class="near-suction-page">
-    <section class="near-suction-hero hero-includes-header" aria-labelledby="near-suction-page-title">
+    <section data-hero-photo="songzhu" class="near-suction-hero hero-includes-header" aria-labelledby="near-suction-page-title">
       <span class="near-suction-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="near-suction-hero__inner">
         <h1 id="near-suction-page-title">Kitchen Appliances</h1>

@@ -54,7 +54,7 @@ onMounted(verifyBrochure)
 
 <template>
   <main class="franchise-download-page">
-    <section class="download-hero hero-includes-header" aria-labelledby="franchise-download-title">
+    <section data-hero-photo="songzhu" class="download-hero hero-includes-header" aria-labelledby="franchise-download-title">
       <InternalFranchiseImage
         src="/section-6/franchise/hero-store.jpg"
         alt="SAKURA KITCHEN 櫻花整體廚房加盟門市"

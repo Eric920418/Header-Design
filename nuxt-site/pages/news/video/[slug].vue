@@ -31,7 +31,7 @@ useHead({
 
 <template>
   <main class="media-detail-page">
-    <section class="media-detail-breadcrumb hero-includes-header" aria-label="媒體影音麵包屑">
+    <section data-hero-photo="songzhu" class="media-detail-breadcrumb hero-includes-header" aria-label="媒體影音麵包屑">
       <div class="media-detail-breadcrumb__overlay" aria-hidden="true" />
       <div class="media-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <p class="media-detail-breadcrumb__title">Media</p>

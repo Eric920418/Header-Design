@@ -276,7 +276,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 <style scoped>
 .builders-page { overflow: clip; color: #1c1c1d; background: #fff; }
 .builders-rail-wide { width: min(1770px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
-.builders-rail { width: min(1410px, calc(100% - 60px)); margin-inline: auto; box-sizing: border-box; }
+.builders-rail { width: min(1770px, 100%); margin-inline: auto; padding-right: 56px; box-sizing: border-box; }
 .builders-round-link { display: inline-flex; min-height: 60px; width: max-content; flex: none; align-items: center; justify-content: center; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgb(255 255 255 / 34%); border-radius: 999px; color: #fff; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .builders-round-link__icon { position: relative; isolation: isolate; display: inline-flex; width: 40px; height: 40px; flex: none; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: color .35s ease, background-color .35s ease, transform .5s ease; }
 .builders-round-link__icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; content: ''; background: #caa05c; animation: builders-cta-radar 2s ease-out infinite; }
@@ -418,8 +418,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 }
 
 @media (max-width: 1023px) {
-  .builders-rail-wide,
-  .builders-rail { width: calc(100% - 60px); }
+  .builders-rail-wide { width: calc(100% - 60px); }
   .builders-hero { min-height: 730px; }
   .builders-hero__inner { grid-template-columns: 1fr; padding-top: 115px; }
   .builders-hero__aside { margin: 42px 0 0; }
@@ -452,8 +451,8 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 
 @media (max-width: 767px) {
   .builders-page .internal-rail-safe { padding-right: 0; }
-  .builders-rail-wide,
-  .builders-rail { width: calc(100% - 30px); }
+  .builders-rail-wide { width: calc(100% - 30px); }
+  .builders-rail { width: 100%; }
   .builders-hero { min-height: 620px; }
   .builders-hero__inner { padding: 80px 0 0; }
   .builders-hero h1 { margin-top: 18px; font-size: clamp(47px, 13.8vw, 58px); line-height: 1.02; letter-spacing: -.02em; }

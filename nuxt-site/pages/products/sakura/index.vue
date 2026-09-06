@@ -106,7 +106,7 @@ useSeoMeta({
 
 <template>
   <main class="sakura-product-page">
-    <section class="sakura-product-hero hero-includes-header" aria-labelledby="sakura-product-title">
+    <section data-hero-photo="songzhu" class="sakura-product-hero hero-includes-header" aria-labelledby="sakura-product-title">
       <span class="sakura-product-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-hero__inner">
         <h1 id="sakura-product-title">Kitchen Appliances</h1>
