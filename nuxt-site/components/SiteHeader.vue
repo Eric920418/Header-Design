@@ -413,6 +413,7 @@ function handleHeaderClick(event: MouseEvent) {
 
 .site-header__desktop-search {
   position: relative;
+  left: 8px;
   grid-column: 5;
   display: flex;
   width: 40px;
@@ -450,6 +451,10 @@ function handleHeaderClick(event: MouseEvent) {
 }
 
 @media (min-width: 1440px) {
+  .site-header__desktop-search {
+    left: 40px;
+  }
+
   .site-header__nav-side {
     column-gap: clamp(14px, 1.25vw, 22px);
   }
