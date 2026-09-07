@@ -199,6 +199,8 @@ async function main() {
       ]) {
         await go(url)
         assert.match(await css(heading + ' span', 'fontFamily'), /Cal Sans/)
+        assert.equal(await css(heading + ' span', 'fontWeight'), '400', '型錄英文標題不可被中文標題 600 字重覆蓋')
+        assert.equal(await css(heading + ' em', 'fontWeight'), '400', 'Product 必須與同標題的模板字重一致')
         assert(await page.evaluate(() => document.fonts.check('60px "Cal Sans"')), '模板字型未載入')
         assert.equal(await css(heading + ' em', 'color'), 'rgb(202, 160, 92)')
         assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${url} ${width}px 溢出`)
