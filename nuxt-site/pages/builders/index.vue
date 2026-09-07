@@ -115,7 +115,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
           >
             <InternalBuilderImage :src="`/section-6/builders/team/coming-soon-${index}.png`" alt="即將推出的廚房品牌空間" />
             <span class="builders-team-card__shade" aria-hidden="true" />
-            <strong>Coming Soon</strong>
+            <strong>Coming<br />Soon</strong>
           </article>
         </div>
       </div>
@@ -143,7 +143,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
             >
               <h3>{{ item.lines[0] }}</h3>
               <div class="builders-strength__middle">
-                <p class="builders-strength__accent">{{ item.lines[1] }}</p>
+                <p class="builders-strength__accent"><span v-for="line in item.lines[1].split('\n')" :key="line">{{ line }}</span></p>
                 <p class="builders-strength__slogan">
                   <sup v-if="index === 0">+</sup>
                   <span v-for="line in item.value" :key="line">{{ line }}</span>
@@ -296,8 +296,8 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-hero__inner { display: grid; grid-template-columns: 64% 36%; padding: 142px 30px 0; }
 .builders-hero h1 { max-width: 960px; margin: 22px 0 0; font-family: var(--font-display); font-size: clamp(72px, 7.28vw, 110px); font-weight: 400; line-height: 1; letter-spacing: -1px; }
 .builders-hero h1 span { color: #caa05c; }
-.builders-hero__aside { width: min(430px, 100%); align-self: end; margin: 0 0 16px 6px; }
-.builders-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-size: 20px; line-height: 31px; }
+.builders-hero__aside { width: 100%; min-width: 0; align-self: end; margin: 0 0 16px 6px; }
+.builders-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-size: 16px; line-height: 27px; }
 .builders-hero__aside .builders-round-link { margin-top: 42px; }
 .builders-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -360px; overflow: hidden; border-radius: 24px; }
 .builders-hero-media :deep(img) { object-position: center 58%; }
@@ -314,11 +314,12 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-team-card--project { grid-column: 1; }
 .builders-team-card--coming-soon { display: grid; aspect-ratio: 4 / 5; place-items: center; background: #1c1c1d; }
 .builders-team-card--coming-soon > :deep(.builder-image) { position: absolute; inset: 0; height: 100%; }
-.builders-team-card--coming-soon strong { position: relative; z-index: 1; padding: 24px; color: #fff; font-family: var(--font-display); font-size: clamp(24px, 2vw, 34px); font-weight: 400; text-align: center; }
+.builders-team-card--coming-soon strong { position: relative; z-index: 1; padding: 24px; color: #fff; font-family: var(--font-display); font-size: clamp(32px, 3vw, 44px); font-weight: 400; line-height: 1.1; text-align: center; }
 .builders-team-card > :deep(.builder-image) { aspect-ratio: 4 / 5; }
 .builders-team-card:hover :deep(.builder-image img) { transform: scale(1.035); }
 .builders-team-card:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
 .builders-team-card__shade { position: absolute; inset: 0; background: rgb(16 8 1 / 42%); transition: background-color .35s ease; }
+.builders-team-card--coming-soon .builders-team-card__shade { background: rgb(0 0 0 / 60%); }
 .builders-team-card--project:hover .builders-team-card__shade,
 .builders-team-card--project:focus-visible .builders-team-card__shade { background: rgb(16 8 1 / 30%); }
 .builders-team-card__logo { position: absolute; top: 50%; left: 50%; width: min(190px, 62%); height: auto; transform: translate(-50%, -50%); }
@@ -337,12 +338,14 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .builders-capability__showcase { display: grid; gap: 32px; margin-top: 48px; }
 .builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; padding: 30px; border-radius: 36px; background: url('/section-6/franchise/antra-original/h1-bg01.png') bottom left / 100% auto no-repeat; }
-.builders-strength { position: relative; display: flex; min-height: 250px; flex-direction: column; align-items: stretch; gap: 12px; overflow: hidden; padding: 28px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #fff; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
+.builders-strength { --strength-scale: 1; --slogan-size: 54px; position: relative; display: flex; min-height: 250px; flex-direction: column; align-items: stretch; gap: 8px; overflow: hidden; padding: 28px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #fff; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
+.builders-strength:nth-child(2) { --slogan-size: 48px; }
+.builders-strength:nth-child(3) { --slogan-size: 44px; }
 .builders-strength h3,
 .builders-strength__footer { margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.25; }
 .builders-strength__middle { display: flex; flex: 1; align-items: center; justify-content: space-around; gap: 12px; color: #caa05c; }
-.builders-strength__accent { margin: 0; font-family: var(--font-cjk-serif); font-size: 36px; line-height: 1.15; white-space: pre-line; }
-.builders-strength__slogan { position: relative; display: flex; min-width: 0; flex-direction: column; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 52px; font-weight: 600; line-height: 1.05; white-space: nowrap; }
+.builders-strength__accent { display: flex; flex-direction: column; gap: 8px; margin: 0; font-family: var(--font-cjk-serif); font-size: 36px; line-height: 1.15; white-space: nowrap; }
+.builders-strength__slogan { position: relative; display: flex; min-width: 0; flex-direction: column; gap: 8px; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: calc(var(--slogan-size) * var(--strength-scale)); font-weight: 600; line-height: 1.05; white-space: nowrap; }
 .builders-strength__slogan sup { position: absolute; top: -.1em; right: -.6em; font-family: var(--font-cjk-sans); font-size: .5em; line-height: 1; }
 .builders-home-one { width: 100%; margin: 0; padding: 54px 30px 64px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
 .builders-one { display: flex; flex-direction: column; align-items: center; }
@@ -415,9 +418,8 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-section-heading--team { grid-template-columns: 23% 52% 25%; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 52px; line-height: 57px; }
-  .builders-strength { min-height: 186px; gap: 18px; padding: 28px 24px 30px; }
+  .builders-strength { --strength-scale: .72; min-height: 186px; padding: 28px 24px 30px; }
   .builders-strength h3 { font-size: 20px; }
-  .builders-strength__slogan { min-width: 100px; font-size: 38px; }
   .builders-contact__aside { padding-right: 35px; }
 }
 
@@ -439,10 +441,9 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-section-heading--team > p { max-width: 680px; }
   .builders-team__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .builders-strengths { gap: 22px; }
-  .builders-strength { gap: 12px; padding: 24px 18px 26px; }
+  .builders-strength { --strength-scale: .58; padding: 24px 18px 26px; }
   .builders-strength h3 { font-size: 18px; }
   .builders-strength__accent { flex: none; font-size: 24px; }
-  .builders-strength__slogan { min-width: 0; font-size: 30px; }
   .builders-home-one { width: 100%; }
   .builders-services { gap: 24px; }
   .builders-one p { font-size: 32px; }
@@ -462,7 +463,6 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-hero__inner { padding: 80px 0 0; }
   .builders-hero h1 { margin-top: 18px; font-size: clamp(47px, 13.8vw, 58px); line-height: 1.02; letter-spacing: -.02em; }
   .builders-hero__aside { margin: 35px 0 0; }
-  .builders-hero__aside p { font-size: 17px; line-height: 27px; }
   .builders-hero__aside .builders-round-link { margin-top: 27px; }
   .builders-hero-media { width: calc(100% - 30px); height: 310px; margin-top: -135px; border-radius: 18px; }
   .builders-team,
@@ -483,10 +483,9 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-strengths { grid-template-columns: 1fr; margin-top: 56px; }
   .builders-capability__showcase { gap: 20px; }
   .builders-capability__showcase .builders-strengths { margin-top: 0; padding: 18px; border-radius: 26px; }
-  .builders-strength { width: 100%; min-height: 170px; gap: 12px; margin-inline: auto; padding: 24px 16px 26px; }
+  .builders-strength { --strength-scale: .8; width: 100%; min-height: 170px; margin-inline: auto; padding: 24px 16px 26px; }
   .builders-strength h3 { font-size: 22px; }
   .builders-strength__accent { font-size: 36px; }
-  .builders-strength__slogan { min-width: 104px; font-size: 42px; }
   .builders-home-one { margin: 0; padding: 42px 18px 48px; border-radius: 26px; }
   .builders-one p { font-size: 27px; text-align: center; }
   .builders-one strong { min-height: 58px; padding-inline: 14px; font-size: 18px; letter-spacing: .12em; }

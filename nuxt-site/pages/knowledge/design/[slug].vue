@@ -360,11 +360,6 @@ useHead({
   font-family: var(--font-cjk-sans);
 }
 
-.knowledge-detail-page--ppt-article .knowledge-detail-breadcrumb {
-  background-image: url('/section-3/store-songzhu.jpg');
-  background-position: center 36%;
-}
-
 .knowledge-detail-page--ppt-article .knowledge-detail-breadcrumb__trail {
   font-family: var(--font-cjk-sans);
   font-size: 15px;

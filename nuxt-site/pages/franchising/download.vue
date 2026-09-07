@@ -80,6 +80,7 @@ onMounted(verifyBrochure)
         <header class="download-document__header">
           <div class="download-document__heading">
             <h2 id="franchise-document-title" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev"><span>櫻花整體廚房</span><br />加盟簡介</h2>
+            <InternalFranchiseImage class="download-document__logo" src="/section-6/franchise/sakura-kitchen-logo-gold.png" alt="SAKURA KITCHEN 櫻花整體廚房" fit="contain" />
           </div>
 
           <div class="download-document__summary">
@@ -208,14 +209,16 @@ onMounted(verifyBrochure)
 
 .download-document__heading h2 {
   margin: 0;
+  color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 38px;
+  font-size: 54px;
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -.035em;
 }
 
-.download-document__heading h2 span { color: #caa05c; }
+.download-document__heading h2 span { color: inherit; }
+.download-document__logo { width: min(360px, 100%); height: auto; aspect-ratio: 3156 / 245; margin-top: 32px; background: transparent; }
 .download-document__summary > p { max-width: 700px; margin: 4px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 18px; line-height: 31px; }
 
 .download-document__meta {

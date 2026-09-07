@@ -112,8 +112,8 @@ async function main() {
     await page.unroute('**/*')
     await go('/franchising/download')
     assert.equal(await css('#franchise-download-title', 'fontSize'), '64px')
-    assert.equal(await css('#franchise-document-title', 'fontSize'), '38px')
-    assert.equal(await css('#franchise-document-title span', 'color'), 'rgb(202, 160, 92)')
+    assert.equal(await css('#franchise-document-title', 'fontSize'), '54px')
+    assert.equal(await css('#franchise-document-title span', 'color'), 'rgb(28, 28, 29)')
     await shot('.download-document__header', '10-download')
     await go('/builders')
     await shot('.builders-team__grid', '11-brands')
@@ -156,11 +156,62 @@ async function main() {
       }
       await go('/builders')
       await shot('.builders-strengths', `${width}-strengths`)
-      assert(await page.locator('.builders-strength__accent').evaluateAll(elements => elements.every(e => e.getBoundingClientRect().height <= parseFloat(getComputedStyle(e).lineHeight) * 2 + 1)), '能力卡片中間文字應維持兩行')
+      assert(await page.locator('.builders-strength__accent').evaluateAll(elements => elements.every(e => e.getBoundingClientRect().height <= parseFloat(getComputedStyle(e).lineHeight) * 2 + 9)), '能力卡片中間文字應維持兩行及 8px 列距')
       await shot('.builders-home-one', `${width}-services`)
     }
+    // 9/7 新版：沿用既有元件，檢查真正呈現的字型、定位與窄版內容邊界。
+    for (const width of [1920, 1440, 1024, 768, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await go('/builders')
+      assert.equal(await css('.builders-hero__aside p', 'fontSize'), '16px')
+      if (width >= 1440) assert.equal((await rect('.builders-hero__aside p')).height, 27, '寬桌機說明應為一行')
+      assert.equal(await css('.builders-team-card--project .builders-team-card__shade', 'backgroundColor'), 'rgba(16, 8, 1, 0.42)')
+      assert.equal(await css('.builders-team-card--coming-soon .builders-team-card__shade', 'backgroundColor'), 'rgba(0, 0, 0, 0.6)')
+      assert.equal(await page.locator('.builders-team-card--coming-soon strong br').count(), 3)
+      assert.match(await css('.builders-team-card--coming-soon strong', 'fontFamily'), /Cal Sans/)
+      const sizes = await page.locator('.builders-strength__slogan').evaluateAll(elements => elements.map(e => parseFloat(getComputedStyle(e).fontSize)))
+      assert(sizes[0] > sizes[1] && sizes[1] > sizes[2], `${width}px 三欄字級沒有獨立縮放`)
+      assert.equal(await css('.builders-strength__accent', 'rowGap'), '8px')
+      await reveal('.builders-strengths')
+      assert(await page.locator('.builders-strength').evaluateAll(cards => cards.every(card => {
+        const box = card.getBoundingClientRect()
+        return [...card.querySelectorAll('.builders-strength__middle span, sup')].every(e => {
+          const r = e.getBoundingClientRect()
+          return r.left >= box.left && r.right <= box.right && r.bottom <= box.bottom
+        })
+      })), `${width}px 能力標語遭裁切`)
+      await shot('.builders-strengths', `0907-${width}-strengths`)
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px 建商頁溢出`)
+      await go('/franchising/download')
+      assert.equal(await css('#franchise-document-title', 'fontSize'), width < 768 ? '38px' : '54px')
+      assert.equal(await css('#franchise-document-title', 'fontWeight'), '600')
+      assert.match(await css('#franchise-document-title', 'fontFamily'), /Noto Serif TC/)
+      await reveal('.download-document__logo')
+      assert(await page.locator('.download-document__logo img').evaluate(img => img.complete && img.naturalWidth === 3156), '指定原始 Logo 未載入')
+      const logo = await rect('.download-document__logo img')
+      assert(Math.abs(logo.width / logo.height - 3156 / 245) < .02, 'Logo 被拉伸')
+      await shot('.download-document__header', `0907-${width}-download`)
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px 加盟下載頁溢出`)
+      for (const [url, heading] of [
+        ['/products/sakura/range-hood', '.sakura-series-catalogue__copy h2'],
+        ['/products/sakura/range-hood/near-suction', '.near-suction-catalogue__copy h2'],
+        ['/products/sakura/range-hood/near-suction/r7600', '.product-catalogue__copy h2'],
+      ]) {
+        await go(url)
+        assert.match(await css(heading + ' span', 'fontFamily'), /Cal Sans/)
+        assert(await page.evaluate(() => document.fonts.check('60px "Cal Sans"')), '模板字型未載入')
+        assert.equal(await css(heading + ' em', 'color'), 'rgb(202, 160, 92)')
+        assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${url} ${width}px 溢出`)
+      }
+    }
+    await go('/catalogues/kitchenware-catalog?series=aikitchen')
+    assert.equal(await page.locator('nav[aria-label="麵包屑"] a[href="/home-style/aikitchen"]').textContent(), 'AI廚房')
+    await go('/catalogues/kitchenware-catalog?series=unknown')
+    assert.equal(await page.locator('nav[aria-label="麵包屑"] a[href="/home-style/aikitchen"]').count(), 0)
+    await go('/catalogues/kitchenware-catalog')
+    assert.equal(await page.locator('nav[aria-label="麵包屑"] a[href="/home-style/aikitchen"]').count(), 0)
     assert.deepEqual(errors, [], '前端執行錯誤')
-    console.log('新版 18 頁 PPT：互動、排版、下載與響應式檢查通過')
+    console.log('9/5 與 9/7 PPT：互動、排版、下載與響應式檢查通過')
   } finally { await browser.close() }
 }
 main().catch(e => { console.error(e); process.exitCode = 1 })

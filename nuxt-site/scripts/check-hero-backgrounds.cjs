@@ -17,7 +17,7 @@ const { join } = require('node:path')
     assert.equal(login.status(), 200, 'Preview login failed')
     const page = await context.newPage()
     const screenshots = mkdtempSync(join(tmpdir(), 'sakura-hero-'))
-    const routes = ['/service-process', '/about/introduce', '/catalogues/catalog', '/products/sakura', '/gallery', '/builders/catalogues', '/news', '/franchising/download', '/gallery/case10', '/knowledge/design/systemcabinet', '/products/sakura/range-hood/near-suction/r7600']
+    const routes = ['/service-process', '/about/introduce', '/catalogues/catalog', '/products/sakura', '/gallery', '/builders/catalogues', '/news', '/franchising/download', '/gallery/case10', '/knowledge/design/systemcabinet', '/knowledge/design/kitchen-outlet-planning', '/knowledge/design/knowledge31', '/products/sakura/range-hood/near-suction/r7600']
     for (const width of [320, 390, 768, 1024, 1440, 1920, 2560]) {
       await page.setViewportSize({ width, height: 900 })
       for (const route of routes) {
