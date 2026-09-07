@@ -417,6 +417,13 @@ onBeforeUnmount(() => {
 .franchise-post__features > li > :deep(.franchise-image) { width: 34px; height: 34px; background: transparent; }
 .franchise-post__features span { color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 20px; }
 
+@media (min-width: 1025px) {
+  .franchise-post-grid { grid-template-rows: auto auto auto 1fr auto; row-gap: 0; }
+  .franchise-post { display: grid; grid-row: span 5; grid-template-rows: subgrid; }
+  .franchise-post__content { display: grid; grid-row: span 4; grid-template-rows: subgrid; }
+  .franchise-post__features { margin-top: 0; align-content: start; }
+}
+
 .franchise-projects { padding: 97px 30px 108px; background: #fafafa url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
 .source-split-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
 .source-split-heading > div:last-child { padding-left: 58px; }

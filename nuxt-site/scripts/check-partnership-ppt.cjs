@@ -66,6 +66,19 @@ async function main() {
     await page.waitForTimeout(300)
     assert.notEqual(await css('.home-project-track', 'transform'), before, '首頁系列箭頭未移動')
     await go('/franchising/intro')
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    for (const width of [1920, 1440, 1280, 1025]) {
+      await page.setViewportSize({ width, height: 1000 })
+      assert(await page.locator('.franchise-post-grid').evaluateAll(groups => groups.length === 3 && groups.every(group => {
+        const cards = [...group.querySelectorAll('.franchise-post')]
+        return ['.franchise-post__content', '.franchise-post__content p', '.franchise-post__features'].every(selector => {
+          const [left, right] = cards.map(card => card.querySelector(selector).getBoundingClientRect())
+          return Math.abs(left.top - right.top) < 1 && Math.abs(left.height - right.height) < 1
+        })
+      })), `${width}px 加盟優勢內文與圖示列必須等高對齊`)
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
     await shot('.franchise-advantages__layout', '05-advantages')
     assert.equal(await page.locator('#franchise-advantage-title span').textContent(), 'Success Starts')
     assert.equal(await css('#franchise-advantage-title span', 'color'), 'rgb(202, 160, 92)')
