@@ -31,6 +31,7 @@ async function main() {
       await page.waitForTimeout(900)
       await element.screenshot({ path: path.join(output, `${name}.png`) })
     }
+    if (process.env.CHECK_FOOTER_ONLY !== '1') {
     await go('/')
     assert(await page.locator('a[href="/design-inspiration?style=%E8%BC%95%E5%A5%A2%E9%A2%A8"]').count(), '首頁輕奢分類連結')
     assert(await page.locator('a.group\\/svc[href="/products/sakura"]').count(), '首頁廚電入口')
@@ -47,6 +48,9 @@ async function main() {
     await page.getByLabel('選擇城市').selectOption('臺中市')
     for (const name of ['中港店', '松竹店', '台中復興店', '博館店']) assert(await page.getByText(name, { exact: true }).count(), name)
     await screenshot('#contact', '07-stores')
+    } else {
+      await go('/')
+    }
     await screenshot('footer', '09-footer')
     const alignment = await page.evaluate(() => {
       const x = selector => document.querySelector(selector).getBoundingClientRect().left
@@ -54,9 +58,41 @@ async function main() {
     })
     assert(alignment.every(delta => Math.abs(delta) < 2), `頁尾對齊 ${alignment}`)
     assert.equal(await page.locator('footer a[href="/privacy"]').getAttribute('target'), '_blank')
-    await go('/sitemap')
-    for (const href of await page.locator('nav[aria-label="網站地圖"] a').evaluateAll(items => items.map(item => item.getAttribute('href')))) {
+    const retiredSitemap = await context.request.get(base + '/sitemap', { maxRedirects: 0 })
+    assert.equal(retiredSitemap.status(), 301)
+    assert.equal(retiredSitemap.headers().location, '/#footer-navigation')
+    assert.equal(await page.locator('a[href="/sitemap"]').count(), 0)
+    const sitemapToggle = page.getByRole('button', { name: '網站地圖', exact: true })
+    for (const width of [1440, 768, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      assert.equal(await sitemapToggle.getAttribute('aria-expanded'), 'false')
+      assert.equal(await page.locator('#footer-sitemap').isVisible(), false)
+      await sitemapToggle.focus()
+      await page.keyboard.press('Enter')
+      assert.equal(await sitemapToggle.getAttribute('aria-expanded'), 'true')
+      assert.equal(await page.locator('#footer-sitemap').isVisible(), true)
+      assert.equal(await page.locator('#footer-sitemap h2').count(), 6)
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px Footer 溢出`)
+      assert(await page.locator('#footer-sitemap a').evaluateAll(links => links.every(link => link.getBoundingClientRect().right <= innerWidth - 75)), `${width}px 頁尾連結被右側浮動按鈕遮住`)
+      await screenshot('footer', `footer-sitemap-${width}`)
+      await sitemapToggle.focus()
+      await page.keyboard.press('Space')
+      assert.equal(await page.locator('#footer-sitemap').isVisible(), false)
+    }
+    await sitemapToggle.click()
+    for (const href of await page.locator('#footer-sitemap a').evaluateAll(items => items.map(item => item.getAttribute('href')))) {
       assert.equal((await context.request.get(base + href)).status(), 200, `網站地圖 ${href}`)
+    }
+    await sitemapToggle.click()
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await go('/sitemap')
+    assert.equal(new URL(page.url()).pathname, '/')
+    assert.equal(new URL(page.url()).hash, '#footer-navigation')
+    assert.equal(await page.getByRole('heading', { name: 'Site Map', exact: true }).count(), 0)
+    if (process.env.CHECK_FOOTER_ONLY === '1') {
+      assert.deepEqual(errors, [], 'Footer 前端執行錯誤')
+      console.log('Footer：三種寬度、鍵盤展開收合、全部分類連結及舊網址重新導向通過')
+      return
     }
     await go('/design-inspiration?style=輕奢風')
     assert.equal(await page.locator('#design-style').inputValue(), '輕奢風')

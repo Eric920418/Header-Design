@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { ArrowUp } from 'lucide-vue-next'
+import { ArrowUp, ChevronDown } from 'lucide-vue-next'
+
+const sitemapOpen = ref(false)
+const sitemapGroups = [
+  { title: '設計案例', links: [['品牌系列・AI 廚房', '/home-style/aikitchen'], ['設計靈感', '/design-inspiration'], ['廚房裝修指南', '/knowledge'], ['品牌系列型錄', '/catalogues/kitchenware-catalog']] },
+  { title: '廚房產品', links: [['SAKURA 廚電', '/products/sakura'], ['除油煙機系列', '/products/sakura/range-hood'], ['近吸系列', '/products/sakura/range-hood/near-suction'], ['廚房商品型錄', '/catalogues/catalog']] },
+  { title: '門市與服務', links: [['服務流程', '/service-process'], ['案例門市', '/gallery']] },
+  { title: '優惠消息', links: [['優惠消息', '/news']] },
+  { title: '品牌承諾', links: [['品牌優勢', '/about/advantage'], ['品牌館', '/about/exhibition'], ['關於櫻花', '/about/introduce']] },
+  { title: '合作專區', links: [['我要加盟', '/franchising/intro'], ['加盟資料下載', '/franchising/download'], ['建商專區', '/builders'], ['建商整體廚房', '/builders/sakura-kitchen'], ['建商專區型錄', '/builders/catalogues']] },
+]
 
 const footerSocialLeft = ref('0px')
 const footerSocialGap = ref('48px')
@@ -50,11 +60,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <footer class="relative h-[390px] w-full overflow-hidden bg-[#1C1C1D] text-white lg:h-[600px]">
+  <footer id="footer-navigation" class="relative w-full overflow-hidden bg-[#1C1C1D] text-white">
     <div aria-hidden class="absolute inset-0 bg-[url('/home-2026/footer/kitchen-background.webp')] bg-cover bg-center opacity-20" />
-    <div class="relative z-10 mx-auto flex h-[220px] max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]">
+    <div class="relative z-10 mx-auto flex max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]" :class="sitemapOpen ? 'h-[144px] lg:h-[120px]' : 'h-[220px]'">
       <nav aria-label="頁尾連結" class="flex flex-wrap items-center gap-x-10 gap-y-4 font-cjk-sans text-[15px] text-white/80 md:text-[18px]">
-        <NuxtLink to="/sitemap">網站地圖</NuxtLink>
+        <button type="button" class="flex items-center gap-2 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4" :aria-expanded="sitemapOpen" aria-controls="footer-sitemap" @click="sitemapOpen = !sitemapOpen">
+          網站地圖<ChevronDown aria-hidden="true" class="h-4 w-4" :class="{ 'rotate-180': sitemapOpen }" />
+        </button>
         <NuxtLink to="/privacy" target="_blank" rel="noopener noreferrer">隱私權政策</NuxtLink>
       </nav>
       <div
@@ -66,10 +78,20 @@ onBeforeUnmount(() => {
         <a href="#" aria-label="YouTube" class="flex h-10 items-center"><img src="/icons/youtube.png" alt="" class="h-[40px] w-auto translate-y-[7px]" /></a>
       </div>
     </div>
+    <nav v-show="sitemapOpen" id="footer-sitemap" aria-label="網站地圖" class="relative z-10 mx-auto grid max-w-[1410px] grid-cols-2 gap-x-6 gap-y-8 pb-12 pr-[86px] pl-[15px] font-cjk-sans md:grid-cols-3 md:pl-[30px] lg:grid-cols-6">
+      <section v-for="group in sitemapGroups" :key="group.title" class="min-w-0">
+        <h2 class="mb-4 text-[17px] font-semibold text-[#CAA05C]">{{ group.title }}</h2>
+        <ul class="space-y-3">
+          <li v-for="[label, to] in group.links" :key="to"><NuxtLink :to="to!" class="text-[14px] leading-6 text-white/80 underline-offset-4 hover:text-[#CAA05C] hover:underline focus-visible:outline-2">{{ label }}</NuxtLink></li>
+        </ul>
+      </section>
+    </nav>
     <div class="relative z-10 flex h-[70px] items-center justify-center whitespace-nowrap border-y border-white/10 px-[10px] text-center font-cjk-sans text-[11px] text-white/65 sm:px-[85px] sm:text-[13px] md:text-[16px]">
       <span>Copyright ©&nbsp;</span><span class="text-[#CAA05C]">Taiwan Sakura Corporation.</span><span>&nbsp;All rights reserved</span>
     </div>
-    <img src="/home-2026/footer/sakura-kitchen.png" alt="SAKURA Kitchen" class="absolute bottom-[30px] left-1/2 z-10 w-[calc(100%-30px)] max-w-[1410px] -translate-x-1/2 object-contain object-bottom" />
+    <div class="relative h-[100px] lg:h-[310px]">
+      <img src="/home-2026/footer/sakura-kitchen.png" alt="SAKURA Kitchen" class="absolute bottom-[30px] left-1/2 z-10 w-[calc(100%-30px)] max-w-[1410px] -translate-x-1/2 object-contain object-bottom" />
+    </div>
   </footer>
   <button
     type="button"
