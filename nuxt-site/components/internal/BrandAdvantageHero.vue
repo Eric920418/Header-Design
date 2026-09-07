@@ -1,20 +1,39 @@
 <script setup lang="ts">
 import { ArrowDown } from 'lucide-vue-next'
+
+const copy = ref<HTMLElement | null>(null)
+const pavilionLabel = ref<HTMLElement | null>(null)
+const scrollButton = ref<HTMLAnchorElement | null>(null)
+let alignmentObserver: ResizeObserver | undefined
+
+function alignScrollButton() {
+  if (!copy.value || !pavilionLabel.value || !scrollButton.value) return
+  const label = pavilionLabel.value.getBoundingClientRect()
+  scrollButton.value.style.marginLeft = `${label.left + label.width / 2 - copy.value.getBoundingClientRect().left - scrollButton.value.offsetWidth / 2}px`
+}
+
+onMounted(() => {
+  alignmentObserver = new ResizeObserver(alignScrollButton)
+  alignmentObserver.observe(copy.value!)
+  alignmentObserver.observe(pavilionLabel.value!)
+  alignScrollButton()
+})
+onBeforeUnmount(() => alignmentObserver?.disconnect())
 </script>
 
 <template>
   <section class="brand-h8-hero hero-includes-header" aria-labelledby="brand-h8-title">
     <div class="brand-h8-intro">
       <div class="brand-h8-intro__rail">
-        <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
+        <div ref="copy" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
           <InternalSectionPill>OUR COMMITMENT</InternalSectionPill>
           <h1 id="brand-h8-title">Find Your<br /><span>Inspired<br />Kitchen</span> Design</h1>
           <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
             <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
-            <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span>集團品牌館</span></NuxtLink>
+            <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span ref="pavilionLabel">集團品牌館</span></NuxtLink>
             <NuxtLink to="/about/introduce"><b aria-hidden="true">。</b><span>關於我們</span></NuxtLink>
           </nav>
-          <a href="#brand-family-title" class="brand-h8-scroll hero-start-project" aria-label="向下查看品牌優勢內容">
+          <a ref="scrollButton" href="#brand-family-title" class="brand-h8-scroll hero-start-project" aria-label="向下查看品牌優勢內容">
             <ArrowDown aria-hidden="true" />
           </a>
         </div>
@@ -44,7 +63,7 @@ import { ArrowDown } from 'lucide-vue-next'
 
 <style scoped>
 .brand-h8-hero { overflow: hidden; background: #fafafa; }
-.brand-h8-intro { position: relative; padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #fafafa 50% 100%); }
+.brand-h8-intro { position: relative; padding: 104px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #fafafa 50% 100%); }
 .brand-h8-intro::before { position: absolute; inset: -25% 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), url('/section-3/store-chengde.jpg') center bottom / cover no-repeat; content: ''; pointer-events: none; }
 .brand-h8-intro__rail { position: relative; display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
@@ -78,12 +97,12 @@ import { ArrowDown } from 'lucide-vue-next'
 }
 
 @media (max-width: 1366px) {
-  .brand-h8-intro { padding-top: 140px; padding-bottom: 350px; }
+  .brand-h8-intro { padding-bottom: 350px; }
   .brand-h8-copy h1 { font-size: 70px; line-height: 70px; }
 }
 
 @media (max-width: 1024px) {
-  .brand-h8-intro { padding: 100px 30px 0; background: #fafafa; }
+  .brand-h8-intro { padding: 92px 30px 0; background: #fafafa; }
   .brand-h8-intro::before { display: none; }
   .brand-h8-intro__rail { grid-template-columns: 1fr; }
   .brand-h8-copy { text-align: center; }
@@ -96,7 +115,7 @@ import { ArrowDown } from 'lucide-vue-next'
 }
 
 @media (max-width: 767px) {
-  .brand-h8-intro { padding: 90px 15px 0; }
+  .brand-h8-intro { padding: 84px 15px 0; }
   .brand-h8-copy h1 { margin-bottom: 30px; font-size: 40px; line-height: 45px; }
   .brand-h8-nav { display: grid; grid-template-columns: 1fr; }
   .brand-h8-nav > * { padding: 10px 0; }

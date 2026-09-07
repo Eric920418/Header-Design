@@ -36,8 +36,15 @@ async function main() {
     assert.equal(await css('.latest-detail-cover img', 'objectFit'), 'cover')
     await shot('.latest-detail-cover', '01-news')
     await go('/about/advantage')
-    const nav = await rect('.brand-h8-nav'), arrow = await rect('.brand-h8-scroll')
-    assert(Math.abs(center(nav) - center(arrow)) < 2, '品牌導覽箭頭未置中')
+    const pavilion = await rect('.brand-h8-nav a[href="/about/exhibition"] span'), arrow = await rect('.brand-h8-scroll')
+    assert(Math.abs(center(pavilion) - center(arrow)) < 2, '箭頭必須對齊集團品牌館文字，而非整排導覽中心')
+    for (const width of [1920, 1366, 1024, 768, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await page.waitForTimeout(200)
+      assert(Math.abs(center(await rect('.brand-h8-nav a[href="/about/exhibition"] span')) - center(await rect('.brand-h8-scroll'))) < 2, `${width}px 集團品牌館箭頭偏移`)
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    assert.equal(await css('.brand-h8-intro', 'paddingTop'), '104px')
     await shot('.brand-h8-intro', '02-brand-hero')
     await go('/about/introduce')
     await shot('.about-services__panel', '03-history')
