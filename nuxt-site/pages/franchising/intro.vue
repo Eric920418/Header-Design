@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight, Download } from 'lucide-vue-next'
+import { ArrowRight, ChevronRight, Download } from 'lucide-vue-next'
 import {
   FRANCHISE_FORM_URL,
   franchiseAdvantages,
@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
         <div class="franchise-advantages__layout">
           <header v-reveal="{ anim: 'opalMoveRight' }" class="franchise-advantages__intro">
             <InternalSectionPill>Franchise Advantages</InternalSectionPill>
-            <h2 id="franchise-advantage-title">Franchise <span>Success</span> Starts Here</h2>
+            <h2 id="franchise-advantage-title">Franchise <span>Success Starts</span> Here</h2>
             <p>從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。</p>
             <strong aria-hidden="true">{{ String(activeAdvantageGroup + 1).padStart(2, '0') }}</strong>
           </header>
@@ -200,9 +200,9 @@ onBeforeUnmount(() => {
     <section class="franchise-projects elementor-1bcdd25" aria-labelledby="franchise-marketing-title">
       <div class="source-rail internal-rail-safe">
         <header class="source-split-heading">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Projects" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="CELEBRITY STORIES" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <h2 id="franchise-marketing-title">Powerful Marketing</h2>
+            <h2 id="franchise-marketing-title">Celebrity <span>Stories That</span> Inspire<br /><span>Beautiful</span> Living</h2>
             <p>集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。</p>
           </div>
         </header>
@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
                 </h3>
                 <p>{{ item.detail.split('！').slice(1).join('！') }}</p>
               </div>
-              <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 260 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="franchise-support-panel__cta">我要加盟</NuxtLink>
+              <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 260 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="franchise-support-panel__cta site-content-cta"><span>我要加盟</span><span class="site-cta-icon"><ArrowRight aria-hidden="true" /></span></NuxtLink>
             </div>
           </article>
 
@@ -293,6 +293,7 @@ onBeforeUnmount(() => {
           <aside v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" data-ev="opalMoveLeft" class="franchise-faq__promo ev">
             <NuxtLink to="/franchising/download" target="_blank" rel="noopener" class="franchise-faq__promo-image" aria-label="在新分頁開啟加盟資料下載頁">
               <InternalFranchiseImage src="/section-6/franchise/franchise-download-cover.png" alt="櫻花整體廚房加盟資料封面" fit="contain" />
+              <span class="franchise-faq__promo-arrow site-cta-icon" aria-hidden="true"><ChevronRight /></span>
             </NuxtLink>
             <h3><NuxtLink to="/franchising/download" target="_blank" rel="noopener">加盟資料下載</NuxtLink></h3>
             <p>報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！</p>
@@ -411,7 +412,7 @@ onBeforeUnmount(() => {
 .franchise-post__content > span { color: #caa05c; font-size: 12px; line-height: 20px; }
 .franchise-post h3 { margin: 5px 0 0; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 600; line-height: 34px; }
 .franchise-post p { margin: 11px 0 14px; color: #59585d; font-family: var(--font-ui); font-size: 15px; line-height: 23px; }
-.franchise-post__features { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: auto 0 0; padding: 12px 0 0; border-top: 1px solid #e3e3e8; list-style: none; }
+.franchise-post__features { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 12px; margin: auto 0 0; padding: 12px 0 0; border-top: 1px solid #e3e3e8; list-style: none; }
 .franchise-post__features li { display: flex; min-width: 0; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
 .franchise-post__features > li > :deep(.franchise-image) { width: 34px; height: 34px; background: transparent; }
 .franchise-post__features span { color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 20px; }
@@ -419,7 +420,7 @@ onBeforeUnmount(() => {
 .franchise-projects { padding: 97px 30px 108px; background: #fafafa url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
 .source-split-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
 .source-split-heading > div:last-child { padding-left: 58px; }
-.source-split-heading h2 { max-width: 620px; margin-top: 65px; }
+.source-split-heading h2 { max-width: 100%; margin-top: 65px; }
 .source-split-heading p { max-width: 636px; margin: 30px 0 0; color: #59585d; font-size: 16px; line-height: 25px; }
 .franchise-project-track { display: flex; gap: 30px; overflow-x: auto; overscroll-behavior-inline: contain; padding: 0 0 12px; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .franchise-marquees:focus-visible,
@@ -451,7 +452,7 @@ onBeforeUnmount(() => {
 .franchise-process__rail-scroll:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; }
 .franchise-process__rail { width: 100%; min-height: 251px; background: transparent; }
 .franchise-process__rail :deep(img) { object-position: center; }
-.franchise-process__details { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); width: min(1100px, 100%); min-height: 520px; margin: 42px auto 0; overflow: hidden; border: 1px solid rgb(227 227 232 / 82%); box-shadow: 0 18px 50px rgb(28 28 29 / 7%); }
+.franchise-process__details { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); width: min(1100px, 100%); min-height: 520px; margin: 42px auto 0; overflow: hidden; border: 1px solid rgb(227 227 232 / 82%); border-radius: 24px; box-shadow: 0 18px 50px rgb(28 28 29 / 7%); }
 .franchise-support-panel { position: relative; isolation: isolate; overflow: hidden; padding: 48px 44px 44px; color: #fff; background: url('/section-6/franchise/hero-store.jpg') center / cover no-repeat; }
 .franchise-support-panel__shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(135deg, rgb(25 24 23 / 94%), rgb(28 28 29 / 78%)); }
 .franchise-support-panel__content { position: relative; z-index: 1; }
@@ -459,13 +460,14 @@ onBeforeUnmount(() => {
 .franchise-support-item h3 { margin: 0; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 27px; }
 .franchise-support-item h3 span { color: #caa05c; }
 .franchise-support-item p { margin: 5px 0 0; color: rgb(255 255 255 / 72%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
-.franchise-support-panel__cta { display: flex; width: max-content; min-height: 52px; align-items: center; justify-content: center; margin: 30px auto 0; padding: 12px 32px; border-radius: 999px; color: #fff; background: #caa05c; box-shadow: 0 0 0 0 rgb(202 160 92 / 0%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; animation: franchise-support-cta-breathe 2.8s ease-in-out infinite; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
-.franchise-support-panel__cta:hover { color: #1c1c1d; background: #fff; transform: translateY(-2px); }
+.franchise-support-panel__cta { display: flex; width: max-content; min-height: 60px; align-items: center; gap: 8px; margin: 30px auto 0; padding: 9px 9px 9px 30px; border: 1px solid rgb(255 255 255 / 60%); border-radius: 999px; color: #fff; background: transparent; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; transition: background-color .3s ease; }
+.franchise-support-panel__cta .site-cta-icon { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 50%; background: #caa05c; transform: rotate(-45deg); transition: transform .3s ease; }
+.franchise-support-panel__cta svg { width: 20px; height: 20px; }
+.franchise-support-panel__cta:hover,
+.franchise-support-panel__cta:focus-visible { background: #caa05c; }
+.franchise-support-panel__cta:hover .site-cta-icon,
+.franchise-support-panel__cta:focus-visible .site-cta-icon { transform: rotate(0); }
 .franchise-support-panel__cta:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
-@keyframes franchise-support-cta-breathe {
-  0%, 100% { box-shadow: 0 0 0 0 rgb(202 160 92 / 0%); }
-  50% { box-shadow: 0 0 0 7px rgb(202 160 92 / 20%); }
-}
 .franchise-qualification-panel { padding: 48px 44px; background: rgb(255 255 255 / 92%); }
 .franchise-qualification-panel > h3 { margin: 0 0 24px; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 600; line-height: 35px; }
 .franchise-qualification-item { display: grid; grid-template-columns: 52px 1fr; gap: 20px; align-items: start; padding: 20px 0; border-top: 1px solid #e3e3e8; }
@@ -492,7 +494,11 @@ onBeforeUnmount(() => {
 .franchise-faq__panel > div { overflow: hidden; }
 .franchise-faq__panel p { width: min(100%, 832px); margin: 0; padding: 0 40px 32px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .franchise-faq__promo { min-width: 0; padding-left: 100px; color: #1c1c1d; text-align: center; }
-.franchise-faq__promo-image { display: block; overflow: hidden; border-radius: 24px; background: #fff; }
+.franchise-faq__promo-image { position: relative; display: block; overflow: hidden; border-radius: 24px; background: #fff; }
+.franchise-faq__promo-arrow { position: absolute; top: 50%; left: 50%; display: grid; width: 58px; height: 58px; place-items: center; border: 1px solid rgb(255 255 255 / 22%); border-radius: 50%; color: #fff; background: rgb(28 28 29 / 58%); backdrop-filter: blur(10px); transform: translate(-50%, -50%); }
+.franchise-faq__promo-arrow svg { width: 34px; height: 34px; }
+.franchise-faq__promo-image:hover .franchise-faq__promo-arrow,
+.franchise-faq__promo-image:focus-visible .franchise-faq__promo-arrow { background: #caa05c; }
 .franchise-faq__promo-image :deep(.franchise-image) { width: 100%; aspect-ratio: 774 / 1074; background: #fff; }
 .franchise-faq__promo-image :deep(img) { transition: transform .5s ease; }
 .franchise-faq__promo-image:hover :deep(img) { transform: scale(1.025); }
@@ -565,7 +571,6 @@ onBeforeUnmount(() => {
   .franchise-advantage-scene { min-height: auto; padding: 0 0 55px; }
   .franchise-advantage-scene:last-child { padding-bottom: 0; }
   .franchise-post-grid { grid-template-columns: 1fr; gap: 40px; }
-  .franchise-post__features { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .project-block { min-width: calc((100% - 30px) / 2); }
   .project-block:nth-child(3n + 2) { transform: none; }
   .project-block:nth-child(even) { transform: translateY(35px); }
@@ -633,7 +638,7 @@ onBeforeUnmount(() => {
   .franchise-advantage-scene { padding-bottom: 44px; }
   .franchise-post-grid { grid-template-columns: 1fr; gap: 40px; }
   .franchise-post h3 { font-size: 25px; line-height: 31px; }
-  .franchise-post__features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .franchise-post__features { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .source-split-heading { grid-template-columns: 1fr; margin-bottom: 38px; }
   .source-split-heading > div:last-child { padding: 0; }

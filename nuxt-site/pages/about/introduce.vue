@@ -30,6 +30,13 @@ function openIdentity(index: number) {
   identityLightboxOpen.value = true
 }
 
+function scrollIdentity(direction: number) {
+  const track = identityTrack.value
+  const card = track?.querySelector<HTMLElement>('.about-identity__card')
+  if (!track || !card) return
+  track.scrollBy({ left: direction * (card.offsetWidth + parseFloat(getComputedStyle(track).gap)), behavior: reducedMotion.value ? 'instant' : 'smooth' })
+}
+
 function closeIdentity() {
   identityLightboxOpen.value = false
 }
@@ -219,7 +226,8 @@ useSeoMeta({
 
         <p class="about-identity__description">櫻花整體廚房之廚具，除於門板張貼SAKURA KITCHEN之品牌銘板外，亦會於下列地方標示 SAKURA Logo</p>
 
-        <div ref="identityTrack" class="about-identity__grid" role="region" aria-label="SAKURA 品牌辨識圖片輪播" tabindex="0" @scroll.passive="updateIdentityProgress">
+        <div class="about-identity__carousel">
+        <div ref="identityTrack" class="about-identity__grid" role="region" aria-label="SAKURA 品牌辨識圖片輪播" tabindex="0" @scroll.passive="updateIdentityProgress" @keydown.left.prevent="scrollIdentity(-1)" @keydown.right.prevent="scrollIdentity(1)">
           <article
             v-for="(identity, index) in brandIdentities"
             :key="identity.id"
@@ -234,6 +242,9 @@ useSeoMeta({
             </button>
             <h3>{{ identity.title }}</h3>
           </article>
+        </div>
+        <button type="button" class="about-identity__nav about-identity__nav--previous" aria-label="上一張品牌辨識" :disabled="identityScrollRatio <= .001" @click="scrollIdentity(-1)"><ChevronLeft aria-hidden="true" /></button>
+        <button type="button" class="about-identity__nav about-identity__nav--next" aria-label="下一張品牌辨識" :disabled="identityScrollRatio >= .999 || identityViewportRatio >= 1" @click="scrollIdentity(1)"><ChevronRight aria-hidden="true" /></button>
         </div>
         <div class="about-identity__progress" aria-hidden="true"><span :style="identityProgressStyle" /></div>
       </div>
@@ -272,13 +283,13 @@ useSeoMeta({
 .about-services__item { border-top: 1px solid rgb(159 159 164 / 24%); }
 .about-services__item:last-child { border-bottom: 1px solid rgb(159 159 164 / 24%); }
 .about-services__list button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 0; border: 0; color: #1c1c1d; background: transparent; text-align: left; cursor: pointer; }
-.about-services__year { flex: none; margin-right: 26px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 600; line-height: 30px; }
+.about-services__year { width: 40px; flex: none; margin-right: 26px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 600; line-height: 30px; }
 .about-services__question { display: flex; min-width: 0; align-items: baseline; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 30px; }
 .about-services__plus { flex: none; color: #1c1c1d; font-family: var(--font-ui); font-size: 22px; line-height: 1; }
 .about-services__answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
 .about-services__answer.is-open { grid-template-rows: 1fr; }
 .about-services__answer > div { overflow: hidden; }
-.about-services__answer p { margin: 0; padding: 0 40px 32px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
+.about-services__answer p { margin: 0; padding: 0 40px 32px 66px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 
 .about-history { padding: 0 30px 120px; background: #fafafa; }
 .about-history__carousel { position: relative; }
@@ -334,7 +345,14 @@ useSeoMeta({
 .about-identity__description { width: min(930px, 100%); margin: -25px auto 52px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 26px; text-align: center; }
 .about-identity__grid { display: flex; gap: 30px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; scroll-snap-type: x mandatory; }
 .about-identity__grid::-webkit-scrollbar { display: none; }
-.about-identity__card { min-width: 0; flex: 0 0 calc((100% - 120px) / 5); scroll-snap-align: start; }
+.about-identity__card { min-width: 0; flex: 0 0 calc((100% - 90px) / 4); scroll-snap-align: start; }
+.about-identity__carousel { position: relative; }
+.about-identity__nav { position: absolute; z-index: 2; top: calc(50% - 24px); display: grid; width: 48px; height: 48px; place-items: center; border: 1px solid rgb(255 255 255 / 70%); border-radius: 50%; color: #fff; background: rgb(28 28 29 / 70%); cursor: pointer; }
+.about-identity__nav--previous { left: 12px; }
+.about-identity__nav--next { right: 12px; }
+.about-identity__nav:disabled { opacity: .35; cursor: default; }
+.about-identity__nav:not(:disabled):hover,
+.about-identity__nav:focus-visible { background: #caa05c; outline: 2px solid #fff; outline-offset: 2px; }
 .about-identity__media { position: relative; display: block; width: 100%; overflow: hidden; border: 0; padding: 0; border-radius: 24px; background: #e3e3e8; cursor: zoom-in; text-align: left; }
 .about-identity__media::after { position: absolute; inset: 0; content: ""; background: rgb(0 0 0 / 50%); opacity: 0; transition: opacity .5s ease; }
 .about-identity__image { width: 100%; aspect-ratio: 660 / 800; border-radius: 24px; }
@@ -367,8 +385,7 @@ useSeoMeta({
 .identity-lightbox__nav:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 
 @media (max-width: 1366px) {
-  .about-services__heading h2,
-  .about-identity__heading h2 { font-size: 52px; line-height: 56px; }
+  .about-services__heading h2 { font-size: 52px; line-height: 56px; }
   .about-services__visual { min-height: 540px; }
   .about-services__list { padding-left: 15px; }
   .about-services__question { font-size: 20px; line-height: 30px; }
@@ -376,7 +393,7 @@ useSeoMeta({
   .about-values__copy { padding: 0 22px 42px 28px; }
   .about-values__copy h3 { font-size: 23px; line-height: 29px; }
   .about-identity__grid { gap: 24px; }
-  .about-identity__card { flex-basis: calc((100% - 96px) / 5); }
+  .about-identity__card { flex-basis: calc((100% - 72px) / 4); }
 }
 
 @media (min-width: 768px) and (max-width: 1600px) {
@@ -418,9 +435,9 @@ useSeoMeta({
   .about-services__list { padding-top: 20px; }
   .about-services__list button { align-items: flex-start; gap: 16px; padding: 18px 0; }
   .about-services__question { font-size: 20px; line-height: 30px; }
-  .about-services__year { margin-right: 14px; font-size: 14px; }
+  .about-services__year { width: 34px; margin-right: 14px; font-size: 14px; }
   .about-services__plus { padding-top: 5px; }
-  .about-services__answer p { padding: 0 0 26px 44px; }
+  .about-services__answer p { padding: 0 0 26px 48px; }
   .about-history { padding: 0 15px 65px; }
   .about-history__grid { margin-left: -18px; }
   .about-history__card { flex-basis: min(82vw, 300px); }

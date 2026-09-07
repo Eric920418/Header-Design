@@ -79,11 +79,11 @@ onMounted(verifyBrochure)
       <div class="download-rail">
         <header class="download-document__header">
           <div class="download-document__heading">
-            <h2 id="franchise-document-title" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev">櫻花整體廚房<br /><span>加盟簡介</span></h2>
+            <h2 id="franchise-document-title" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev"><span>櫻花整體廚房</span><br />加盟簡介</h2>
           </div>
 
           <div class="download-document__summary">
-            <p v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">兩頁雙面六折頁，完整收錄櫻花品牌實力、總部支援、加盟準備金、資格條件與七階段加盟流程。</p>
+            <p v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">完整收錄櫻花品牌實力、總部支援、加盟準備金、資格條件與七階段加盟流程。</p>
             <dl v-reveal="{ anim: 'opalMoveUp', delay: 90 }" data-ev="opalMoveUp" class="download-document__meta ev">
               <div><dt>格式</dt><dd>PDF</dd></div>
               <div><dt>頁數</dt><dd>2 頁</dd></div>
@@ -174,11 +174,11 @@ onMounted(verifyBrochure)
   padding: 148px 86px 76px 0;
 }
 
-.download-hero h1 {
+.download-hero.hero-includes-header h1 {
   margin: 28px 0 30px;
   color: #fff;
   font-family: var(--font-cjk-serif);
-  font-size: clamp(58px, 7vw, 96px);
+  font-size: 64px !important;
   font-weight: 600;
   line-height: .98;
   letter-spacing: -.035em;
@@ -209,9 +209,9 @@ onMounted(verifyBrochure)
 .download-document__heading h2 {
   margin: 0;
   font-family: var(--font-cjk-serif);
-  font-size: clamp(52px, 5.4vw, 78px);
+  font-size: 38px;
   font-weight: 600;
-  line-height: 1.02;
+  line-height: 1.25;
   letter-spacing: -.035em;
 }
 
@@ -293,10 +293,10 @@ onMounted(verifyBrochure)
 @media (max-width: 767px) {
   .download-hero { min-height: 288px; }
   .download-hero__inner { width: calc(100% - 30px); padding-block: 54px 48px; }
-  .download-hero h1 { margin-block: 24px; font-size: 48px; line-height: 52px; }
+  .download-hero.hero-includes-header h1 { margin-block: 24px; font-size: 38px !important; line-height: 46px; }
   .download-document { padding: 64px 15px 76px; background-size: 52%; }
   .download-document__header { gap: 34px; padding-bottom: 52px; }
-  .download-document__heading h2 { font-size: 43px; line-height: 47px; }
+  .download-document__heading h2 { font-size: 38px; line-height: 47px; }
   .download-document__summary > p { font-size: 16px; line-height: 27px; }
   .download-document__meta { gap: 10px; margin-top: 30px; }
   .download-document__meta dd { font-size: 18px; }

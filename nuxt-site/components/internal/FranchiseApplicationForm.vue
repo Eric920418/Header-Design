@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AlertCircle, ArrowRight, ExternalLink, LoaderCircle, Plus } from 'lucide-vue-next'
+import { ArrowRight, ExternalLink, LoaderCircle, Plus } from 'lucide-vue-next'
 import { FRANCHISE_OFFICIAL_FORM_URL } from '~/data/franchise'
 
 type FormKey = 'name' | 'email' | 'phone' | 'experience' | 'budget' | 'area' | 'timeline' | 'consent'
@@ -7,7 +7,6 @@ type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
 const config = useRuntimeConfig()
 const endpoint = computed(() => String(config.public.franchiseApplicationEndpoint || '').trim())
-const serviceConfigured = computed(() => Boolean(endpoint.value))
 const formElement = ref<HTMLFormElement | null>(null)
 const submitState = ref<SubmitState>('idle')
 const notice = ref<{ title: string, message: string, detail?: string } | null>(null)
@@ -147,15 +146,6 @@ const submit = async () => {
       <p>所有欄位皆為必填；送出前請再次確認聯絡方式與加盟規劃。</p>
     </header>
 
-    <div v-if="!serviceConfigured" class="application-form__service" role="status">
-      <AlertCircle aria-hidden="true" />
-      <div>
-        <strong>線上送出服務正在串接中</strong>
-        <p>本頁目前只提供欄位與驗證測試，不會傳送或儲存個人資料。</p>
-        <a :href="FRANCHISE_OFFICIAL_FORM_URL" target="_blank" rel="noopener noreferrer">前往現行官方申請表 <ExternalLink aria-hidden="true" /></a>
-      </div>
-    </div>
-
     <form ref="formElement" novalidate @submit.prevent="submit">
       <div class="application-form__identity">
         <label>
@@ -261,24 +251,7 @@ const submit = async () => {
 .application-form__header h2 { margin: 10px 0 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 48px; }
 .application-form__header p { margin: 9px 0 0; color: #59585d; font-size: 15px; line-height: 24px; }
 
-.application-form__service {
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
-  gap: 13px;
-  margin-top: 28px;
-  padding: 18px 20px;
-  border: 1px solid #e8c891;
-  border-radius: 18px;
-  color: #59585d;
-  background: #fff9ed;
-}
-
-.application-form__service > svg { width: 22px; height: 22px; margin-top: 1px; color: #a97628; }
-.application-form__service strong { color: #1c1c1d; }
-.application-form__service p { margin: 4px 0 0; font-size: 14px; line-height: 22px; }
-.application-form__service a,
 .application-form__notice > a { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; color: #9a6c27; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
-.application-form__service a svg,
 .application-form__notice > a svg { width: 15px; height: 15px; }
 
 .application-form form { margin-top: 38px; }

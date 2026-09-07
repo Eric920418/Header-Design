@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import emblaCarouselVue from 'embla-carousel-vue'
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { KITCHEN_STYLES, type KitchenStyle } from '~/data/kitchenStyles'
 
 const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false })
@@ -64,17 +65,13 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div v-reveal="{ anim: 'opalMoveLeft', delay: 400 }" class="home-project-carousel-reveal">
+    <div v-reveal="{ anim: 'opalMoveLeft', delay: 400 }" class="home-project-carousel-reveal relative" @mouseenter="pause" @mouseleave="unpause" @focusin="pause" @focusout="unpause">
       <div
         ref="emblaRef"
         role="region"
         aria-label="廚房系列輪播"
         tabindex="0"
         class="home-project-carousel cursor-grab overflow-hidden bg-transparent outline-none active:cursor-grabbing"
-        @mouseenter="pause"
-        @mouseleave="unpause"
-        @focusin="pause"
-        @focusout="unpause"
         @keydown="handleCarouselKeydown"
       >
         <div class="home-project-track flex">
@@ -100,6 +97,17 @@ onBeforeUnmount(() => {
           </NuxtLink>
         </div>
       </div>
+      <button type="button" class="home-project-nav home-project-nav--previous" aria-label="上一個廚房系列" @click="emblaApi?.scrollPrev()"><ChevronLeft aria-hidden="true" /></button>
+      <button type="button" class="home-project-nav home-project-nav--next" aria-label="下一個廚房系列" @click="emblaApi?.scrollNext()"><ChevronRight aria-hidden="true" /></button>
     </div>
   </section>
 </template>
+
+<style scoped>
+.home-project-nav { position: absolute; z-index: 3; top: 50%; display: grid; width: 48px; height: 48px; place-items: center; border: 1px solid rgb(255 255 255 / 70%); border-radius: 50%; color: #fff; background: rgb(28 28 29 / 70%); transform: translateY(-50%); cursor: pointer; }
+.home-project-nav--previous { left: 16px; }
+.home-project-nav--next { right: 86px; }
+.home-project-nav:hover,
+.home-project-nav:focus-visible { background: #caa05c; outline: 2px solid #fff; outline-offset: 2px; }
+@media (max-width: 767px) { .home-project-nav--next { right: 16px; } }
+</style>

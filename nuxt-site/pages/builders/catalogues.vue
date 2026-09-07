@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight } from 'lucide-vue-next'
+import { ArrowUpRight, Download } from 'lucide-vue-next'
 
 interface BuilderCatalogueCard {
   id: string
@@ -23,7 +23,7 @@ const catalogues: BuilderCatalogueCard[] = [
 
 useSeoMeta({
   title: '建商專區型錄｜SAKURA 整體廚房',
-  description: '預覽 SAKURA KITCHEN 2026 建商專區型錄；正式 PDF 將於甲方提供後開放。',
+  description: '預覽並下載 SAKURA KITCHEN 2026 建商專區型錄。',
   ogTitle: '建商專區型錄｜SAKURA 整體廚房',
   ogDescription: 'SAKURA KITCHEN 建商合作型錄。',
   ogImage: '/section-6/builders/catalogues/developer-catalogue-2026.jpg',
@@ -35,7 +35,7 @@ useSeoMeta({
     <section data-hero-photo="songzhu" class="builder-catalogue-hero hero-includes-header" aria-labelledby="builder-catalogue-title">
       <span class="builder-catalogue-hero__overlay" aria-hidden="true" />
       <div class="builder-catalogue-hero__inner">
-        <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">Developer Catalogues</h1>
+        <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">Developer Catalogue</h1>
         <nav v-reveal="{ anim: 'opalMoveUp', delay: 90 }" aria-label="麵包屑" class="builder-catalogue-hero__trail ev" data-ev="opalMoveUp" style="animation-delay:90ms">
           <NuxtLink to="/">首頁</NuxtLink>
           <span aria-hidden="true">/</span>
@@ -74,11 +74,14 @@ useSeoMeta({
                     <span class="builder-catalogue-card__arrow"><ArrowUpRight /></span>
                   </span>
                 </span>
-                <span class="builder-catalogue-card__text">
-                  <strong>{{ catalogue.title }}</strong>
-                  <span>{{ catalogue.description }}</span>
-                </span>
               </a>
+              <div class="builder-catalogue-card__text">
+                <div class="builder-catalogue-card__title-row">
+                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong>{{ catalogue.title }}</strong></a>
+                  <a :href="catalogue.pdfUrl" download="SAKURA-建商專區型錄-2026.pdf" class="builder-catalogue-card__download" aria-label="下載建商專區型錄 PDF"><Download aria-hidden="true" /><span>下載</span></a>
+                </div>
+                <span>{{ catalogue.description }}</span>
+              </div>
             </article>
           </li>
         </ul>
@@ -239,6 +242,11 @@ useSeoMeta({
   display: block;
   padding-top: 23px;
 }
+.builder-catalogue-card__title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.builder-catalogue-card__download { display: inline-flex; align-items: center; gap: 6px; flex: none; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; }
+.builder-catalogue-card__download svg { width: 18px; height: 18px; }
+.builder-catalogue-card__text a:hover,
+.builder-catalogue-card__text a:focus-visible { color: #caa05c; }
 
 .builder-catalogue-card__text strong {
   display: block;

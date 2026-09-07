@@ -45,7 +45,7 @@ import { ArrowDown } from 'lucide-vue-next'
 <style scoped>
 .brand-h8-hero { overflow: hidden; background: #fafafa; }
 .brand-h8-intro { position: relative; padding: 165px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #fafafa 50% 100%); }
-.brand-h8-intro::before { position: absolute; inset: 0 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), url('/section-3/store-chengde.jpg') center / cover no-repeat; content: ''; pointer-events: none; }
+.brand-h8-intro::before { position: absolute; inset: -25% 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), url('/section-3/store-chengde.jpg') center bottom / cover no-repeat; content: ''; pointer-events: none; }
 .brand-h8-intro__rail { position: relative; display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
 .brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: 100px; font-weight: 400; line-height: 100px; letter-spacing: -.01em; text-transform: capitalize; }
@@ -58,7 +58,7 @@ import { ArrowDown } from 'lucide-vue-next'
 .brand-h8-nav b { color: #caa05c; }
 .brand-h8-nav a[aria-current="page"] span { color: #1c1c1d; }
 .brand-h8-nav > span[aria-disabled="true"] { opacity: .55; }
-.brand-h8-scroll { display: flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin: 38px 0 0 calc(50% - 27px); border: 1px solid rgb(202 160 92 / 35%); border-radius: 50%; background: #caa05c; color: #fff; box-shadow: 0 14px 30px rgb(28 28 29 / 12%); transition: transform .35s ease, box-shadow .35s ease; }
+.brand-h8-scroll { display: flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin: 38px 0 0 calc(min(570px, 100%) / 2 - 27px); border: 1px solid rgb(202 160 92 / 35%); border-radius: 50%; background: #caa05c; color: #fff; box-shadow: 0 14px 30px rgb(28 28 29 / 12%); transition: transform .35s ease, box-shadow .35s ease; }
 .brand-h8-scroll svg { width: 18px; height: 18px; stroke-width: 1.8; }
 .brand-h8-scroll:hover { transform: translateY(4px); box-shadow: 0 8px 18px rgb(28 28 29 / 16%); }
 .brand-h8-aside { display: flex; min-width: 0; flex-direction: column; align-items: flex-end; gap: 30px; padding-right: 74px; }

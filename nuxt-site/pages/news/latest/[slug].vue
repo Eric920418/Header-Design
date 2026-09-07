@@ -285,6 +285,12 @@ useHead({
 
 .latest-detail-cover :deep(.antra-news-image img) { display: block; object-fit: contain; }
 
+/* 原圖上下各含 50px 白邊；只裁掉這張照片的內建留白。 */
+.latest-detail-page--kaohsiung-brand-hall .latest-detail-cover { aspect-ratio: 1170 / 780; }
+.latest-detail-page--kaohsiung-brand-hall .latest-detail-cover :deep(.antra-news-image),
+.latest-detail-page--kaohsiung-brand-hall .latest-detail-cover :deep(img) { height: 100%; }
+.latest-detail-page--kaohsiung-brand-hall .latest-detail-cover :deep(img) { object-fit: cover; }
+
 .latest-detail-body { width: min(930px, 100%); margin: 0 auto; }
 
 .latest-detail-section { margin: 0; }

@@ -2,12 +2,12 @@
 import { ArrowRight } from 'lucide-vue-next'
 
 const series = [
-  { name: 'iChef', image: '/section-6/builders/sakura-kitchen/series-01.jpeg' },
-  { name: 'iFun', image: '/section-6/builders/sakura-kitchen/series-02.jpeg' },
-  { name: 'Loft Chic', image: '/section-6/builders/sakura-kitchen/series-03.jpeg' },
-  { name: 'iPremium', image: '/section-6/builders/hero-kitchen.jpeg' },
-  { name: '原色系列 01', image: '/section-6/builders/sakura-kitchen/series-05.jpeg' },
-  { name: '原色系列 02', image: '/section-6/builders/sakura-kitchen/series-06.jpeg' },
+  { name: 'iChef', image: '/section-6/builders/sakura-kitchen/series-01.webp' },
+  { name: 'iFun', image: '/section-6/builders/sakura-kitchen/series-02.webp' },
+  { name: 'Loft Chic', image: '/section-6/builders/sakura-kitchen/series-03.webp' },
+  { name: 'iPremium', image: '/section-6/builders/hero-kitchen.webp' },
+  { name: '原色系列 01', image: '/section-6/builders/sakura-kitchen/series-05.webp' },
+  { name: '原色系列 02', image: '/section-6/builders/sakura-kitchen/series-06.webp' },
 ]
 
 useSeoMeta({
@@ -15,16 +15,16 @@ useSeoMeta({
   description: 'SAKURA KITCHEN 以數據、設計模組與品牌資源，為建案提供全方位整體廚房解決方案。',
   ogTitle: 'SAKURA KITCHEN｜建商專區',
   ogDescription: '從品牌優勢到多元廚房系列，認識 SAKURA KITCHEN 的建案整體廚房解決方案。',
-  ogImage: '/section-6/builders/sakura-kitchen/hero.jpeg',
+  ogImage: '/section-6/builders/sakura-kitchen/hero.webp',
 })
 </script>
 
 <template>
   <main class="sakura-kitchen-page">
     <section class="sakura-kitchen-hero-shell hero-includes-header" aria-labelledby="sakura-kitchen-title">
-      <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="sakura-kitchen-hero ev">
+      <div class="sakura-kitchen-hero">
         <InternalBuilderImage
-          src="/section-6/builders/sakura-kitchen/hero.jpeg"
+          src="/section-6/builders/sakura-kitchen/hero.webp"
           alt="SAKURA KITCHEN 酒紅色櫥櫃與中島廚房"
           eager
           class="sakura-kitchen-hero__image"
@@ -51,7 +51,7 @@ useSeoMeta({
             />
           </span>
           <span class="sakura-kitchen-hero__project-card-copy">
-            <strong>Project Excellence</strong>
+            <strong>Brand Commitment</strong>
             <span>源自於全台數百萬戶家庭生活研究與觀察</span>
             <span class="sakura-kitchen-hero__project-card-link">Our Advantages</span>
           </span>
@@ -71,7 +71,7 @@ useSeoMeta({
 
         <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" data-ev="opalScaleUp" class="sakura-kitchen-panorama ev" style="animation-delay:120ms">
           <InternalBuilderImage
-            src="/section-6/builders/sakura-kitchen/brand-advantage.jpeg"
+            src="/section-6/builders/sakura-kitchen/brand-advantage.webp"
             alt="SAKURA KITCHEN 酒紅色櫥櫃與大型料理中島"
           />
           <span class="sakura-kitchen-panorama__shade" aria-hidden="true" />
@@ -170,7 +170,7 @@ useSeoMeta({
 
 .sakura-kitchen-series { padding: 112px 30px 130px; background: #fff; }
 .sakura-kitchen-heading--series { width: min(1020px, 100%); }
-.sakura-kitchen-heading--series h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: -.02em; }
+.sakura-kitchen-heading--series h2 { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .sakura-kitchen-series__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 68px; }
 .sakura-kitchen-series__card { position: relative; min-width: 0; aspect-ratio: 1.45 / 1; overflow: hidden; border-radius: 24px; background: #1c1c1d; }
 .sakura-kitchen-series__card :deep(.builder-image) { position: absolute; inset: 0; }
@@ -201,6 +201,7 @@ useSeoMeta({
   .sakura-kitchen-hero__booking { left: 34px; }
   .sakura-kitchen-hero__project-card { right: 78px; bottom: 24px; width: min(380px, 42%); }
   .sakura-kitchen-heading h2 { font-size: 40px; line-height: 50px; }
+  .sakura-kitchen-heading--series h2 { font-size: 36px; line-height: 42px; }
   .sakura-kitchen-series__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -223,6 +224,7 @@ useSeoMeta({
   .sakura-kitchen-advantage { padding: 70px 15px 80px; }
   .sakura-kitchen-series { padding: 78px 15px 80px; }
   .sakura-kitchen-heading h2 { font-size: 34px; line-height: 43px; }
+  .sakura-kitchen-heading--series h2 { font-size: 30px; line-height: 35px; }
   .sakura-kitchen-heading__copy { margin-top: 20px; text-align: left; }
   .sakura-kitchen-heading__copy p { font-size: 15px; line-height: 24px; }
   .sakura-kitchen-panorama { min-height: 330px; aspect-ratio: auto; margin-top: 42px; border-radius: 18px; }

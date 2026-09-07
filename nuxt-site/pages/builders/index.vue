@@ -14,9 +14,9 @@ useSeoMeta({
 const builderPartnerLoop = [...builderPartners, ...builderPartners]
 
 const strengths = [
-  { value: ['45萬+'], lines: ['設計模組', '累積超過', '多元選擇'], background: '/section-6/builders/capability-banners/catalog-background.png' },
-  { value: ['AI', '智能'], lines: ['廚衛工廠', '全台最大', '供貨穩定'], background: '/section-6/builders/capability-banners/factory-background.png' },
-  { value: ['管理', '平台'], lines: ['案件進度', '獨家智能', '精準掌握'], background: '/section-6/builders/capability-banners/management-background.png' },
+  { value: ['45萬'], lines: ['設計模組', '累積\n超過', '多元選擇'], background: '/section-6/builders/capability-banners/catalog-background.png' },
+  { value: ['AI', '智能'], lines: ['廚衛工廠', '全台\n最大', '供貨穩定'], background: '/section-6/builders/capability-banners/factory-background.png' },
+  { value: ['管理', '平台'], lines: ['案件進度', '獨家\n智能', '精準掌握'], background: '/section-6/builders/capability-banners/management-background.png' },
 ]
 
 const services = [
@@ -113,6 +113,8 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
             class="builders-team-card builders-team-card--coming-soon ev"
             :style="{ animationDelay: `${index * 90}ms` }"
           >
+            <InternalBuilderImage :src="`/section-6/builders/team/coming-soon-${index}.png`" alt="即將推出的廚房品牌空間" />
+            <span class="builders-team-card__shade" aria-hidden="true" />
             <strong>Coming Soon</strong>
           </article>
         </div>
@@ -134,19 +136,20 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
             <article
               v-for="(item, index) in strengths"
               :key="item.lines[0]"
-              v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }"
+              v-reveal="{ anim: index === 0 ? 'opalMoveRight' : index === 2 ? 'opalMoveLeft' : 'opalMoveUp', delay: index * 100 }"
               data-ev="opalMoveUp"
               class="builders-strength ev"
               :style="{ backgroundImage: `url(${item.background})` }"
             >
-              <div class="builders-strength__content">
-                <h3>
-                  <span v-for="line in item.lines" :key="line">{{ line }}</span>
-                </h3>
+              <h3>{{ item.lines[0] }}</h3>
+              <div class="builders-strength__middle">
+                <p class="builders-strength__accent">{{ item.lines[1] }}</p>
+                <p class="builders-strength__slogan">
+                  <sup v-if="index === 0">+</sup>
+                  <span v-for="line in item.value" :key="line">{{ line }}</span>
+                </p>
               </div>
-              <p class="builders-strength__slogan">
-                <span v-for="line in item.value" :key="line">{{ line }}</span>
-              </p>
+              <p class="builders-strength__footer">{{ item.lines[2] }}</p>
             </article>
           </div>
 
@@ -309,15 +312,16 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-team__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; }
 .builders-team-card { position: relative; display: block; min-width: 0; overflow: hidden; border-radius: 24px; color: inherit; background: #fafafa; text-decoration: none; }
 .builders-team-card--project { grid-column: 1; }
-.builders-team-card--coming-soon { display: grid; aspect-ratio: 4 / 5; place-items: center; border: 1px solid #e3e3e8; background: #fafafa url('/section-6/franchise/antra-original/h5-bg02.png') center / cover no-repeat; }
-.builders-team-card--coming-soon strong { padding: 24px; font-family: var(--font-display); font-size: clamp(24px, 2vw, 34px); font-weight: 400; text-align: center; }
+.builders-team-card--coming-soon { display: grid; aspect-ratio: 4 / 5; place-items: center; background: #1c1c1d; }
+.builders-team-card--coming-soon > :deep(.builder-image) { position: absolute; inset: 0; height: 100%; }
+.builders-team-card--coming-soon strong { position: relative; z-index: 1; padding: 24px; color: #fff; font-family: var(--font-display); font-size: clamp(24px, 2vw, 34px); font-weight: 400; text-align: center; }
 .builders-team-card > :deep(.builder-image) { aspect-ratio: 4 / 5; }
-.builders-team-card:hover :deep(img) { transform: scale(1.035); }
+.builders-team-card:hover :deep(.builder-image img) { transform: scale(1.035); }
 .builders-team-card:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
 .builders-team-card__shade { position: absolute; inset: 0; background: rgb(16 8 1 / 42%); transition: background-color .35s ease; }
 .builders-team-card--project:hover .builders-team-card__shade,
 .builders-team-card--project:focus-visible .builders-team-card__shade { background: rgb(16 8 1 / 30%); }
-.builders-team-card__logo { position: absolute; top: 50%; left: 50%; width: min(190px, 62%); height: auto; transform: translate(-50%, -64%); }
+.builders-team-card__logo { position: absolute; top: 50%; left: 50%; width: min(190px, 62%); height: auto; transform: translate(-50%, -50%); }
 .builders-team-card__status { position: absolute; inset: auto 14px 14px; display: flex; min-height: 54px; align-items: center; justify-content: space-between; padding: 10px 12px 10px 18px; border-radius: 999px; color: #fff; background: rgb(28 28 29 / 84%); backdrop-filter: blur(14px); }
 .builders-team-card__status span { font-family: var(--font-ui); font-size: 17px; }
 .builders-team-card__status strong { display: flex; width: 34px; height: 34px; align-items: center; justify-content: center; border-radius: 50%; color: #1c1c1d; background: #caa05c; font-size: 12px; }
@@ -327,32 +331,32 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-team-card__project-status > svg { width: 36px; height: 36px; flex: none; padding: 9px; border-radius: 50%; color: #1c1c1d; background: #caa05c; transform: rotate(-45deg); transition: transform .35s ease; }
 .builders-team-card--project:hover .builders-team-card__project-status > svg,
 .builders-team-card--project:focus-visible .builders-team-card__project-status > svg { transform: rotate(0); }
-.builders-capability { padding: 130px 30px 72px; background: #fafafa; }
+.builders-capability { padding: 130px 30px 72px; background: linear-gradient(#f6f6f6, #fafafa); }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-capability .builders-section-heading--split > div h2 { margin-top: 70px; }
-.builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 17px; line-height: 27px; }
+.builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .builders-capability__showcase { display: grid; gap: 32px; margin-top: 48px; }
-.builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; padding: 30px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
-.builders-strength { position: relative; display: flex; min-height: 186px; align-items: center; justify-content: space-between; gap: 24px; overflow: hidden; padding: 30px 28px 32px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #f9f9f9; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
-.builders-strength__content,
-.builders-strength__slogan { position: relative; z-index: 1; }
-.builders-strength h3 { display: flex; flex-direction: column; margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.12; white-space: nowrap; }
-.builders-strength h3 span:nth-child(2) { color: #caa05c; }
-.builders-strength__slogan { display: flex; min-width: 112px; flex-direction: column; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 44px; font-weight: var(--font-cjk-serif-semibold, 600); line-height: .98; white-space: nowrap; }
+.builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; padding: 30px; border-radius: 36px; background: url('/section-6/franchise/antra-original/h1-bg01.png') bottom left / 100% auto no-repeat; }
+.builders-strength { position: relative; display: flex; min-height: 250px; flex-direction: column; align-items: stretch; gap: 12px; overflow: hidden; padding: 28px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #fff; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
+.builders-strength h3,
+.builders-strength__footer { margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.25; }
+.builders-strength__middle { display: flex; flex: 1; align-items: center; justify-content: space-around; gap: 12px; color: #caa05c; }
+.builders-strength__accent { margin: 0; font-family: var(--font-cjk-serif); font-size: 36px; line-height: 1.15; white-space: pre-line; }
+.builders-strength__slogan { position: relative; display: flex; min-width: 0; flex-direction: column; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 52px; font-weight: 600; line-height: 1.05; white-space: nowrap; }
+.builders-strength__slogan sup { position: absolute; top: -.1em; right: -.6em; font-family: var(--font-cjk-sans); font-size: .5em; line-height: 1; }
 .builders-home-one { width: 100%; margin: 0; padding: 54px 30px 64px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
 .builders-one { display: flex; flex-direction: column; align-items: center; }
 .builders-one p { margin: 0 0 16px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 42px; font-weight: 700; line-height: 1.25; }
 .builders-one strong { display: inline-flex; width: min(420px, 100%); min-height: 64px; align-items: center; justify-content: center; padding: 10px 28px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-ui); font-size: 28px; font-weight: 400; letter-spacing: .18em; white-space: nowrap; }
-.builders-services { display: grid; width: min(706px, 100%); grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 38px auto 0; }
+.builders-services { display: grid; width: min(960px, 100%); grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 38px auto 0; }
 .builders-service { text-align: center; }
 .builders-service__label { position: relative; display: flex; min-height: 92px; flex-direction: column; align-items: center; justify-content: center; border: 2px solid rgb(202 160 92 / 72%); border-radius: 14px; color: #b99864; background: #fff; font-family: var(--font-cjk-sans); line-height: 1.12; }
 .builders-service__label > svg { position: absolute; top: -18px; left: 50%; width: 24px; height: 21px; color: #c4a574; fill: #c4a574; stroke-width: 0; transform: translateX(-50%); }
 .builders-service__label strong { font-size: 21px; font-weight: 500; }
 .builders-service__label span { margin-top: 4px; font-size: 19px; }
-.builders-service h3 { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 36px 0 0; font-family: var(--font-cjk-sans); font-size: 32px; font-weight: 700; line-height: 1.2; }
-.builders-service h3 > svg { width: 25px; height: 25px; flex: none; color: #c4a574; stroke-width: 4.5; }
-.builders-service p { display: flex; flex-direction: column; gap: 10px; margin: 13px 0 0; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 21px; line-height: 1.45; }
-.builders-service p span { white-space: nowrap; }
+.builders-service h3 { position: relative; width: max-content; max-width: 100%; margin: 36px auto 0; font-family: var(--font-cjk-serif); font-size: 32px; font-weight: 600; line-height: 1.2; }
+.builders-service h3 > svg { position: absolute; right: calc(100% + 10px); top: 50%; width: 25px; height: 25px; color: #c4a574; stroke-width: 4.5; transform: translateY(-50%); }
+.builders-service p { display: flex; flex-direction: column; gap: 8px; margin: 16px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 21px; line-height: 1.45; }
 .builders-lifetime { padding: 72px 30px 140px; color: #1c1c1d; background: #fafafa url('/section-6/franchise/antra-original/h1-bg01-1.png') bottom center / 100% auto no-repeat; }
 .builders-lifetime__heading { width: min(920px, 100%); margin-inline: auto; text-align: center; }
 .builders-lifetime__pill { margin-inline: auto; }
@@ -395,7 +399,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-contact__tabs button { min-height: 44px; padding: 10px 16px; border: 1px solid #e3e3e8; border-radius: 999px; color: #1c1c1d; background: #fff; font: inherit; cursor: pointer; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .builders-contact__tabs button:hover,
 .builders-contact__tabs button:focus-visible,
-.builders-contact__tabs button[aria-selected='true'] { border-color: #caa05c; color: #1c1c1d; background: #caa05c; transform: translateY(-2px); }
+.builders-contact__tabs button[aria-selected='true'] { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
 .builders-contact__tabs button:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
 .builders-contact__pavilion { overflow: hidden; border-radius: 24px; }
 .builders-contact__pavilion > :deep(.builder-image) { aspect-ratio: 1.18 / 1; border-radius: 24px; }
@@ -437,7 +441,8 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-strengths { gap: 22px; }
   .builders-strength { gap: 12px; padding: 24px 18px 26px; }
   .builders-strength h3 { font-size: 18px; }
-  .builders-strength__slogan { min-width: 88px; font-size: 32px; }
+  .builders-strength__accent { flex: none; font-size: 24px; }
+  .builders-strength__slogan { min-width: 0; font-size: 30px; }
   .builders-home-one { width: 100%; }
   .builders-services { gap: 24px; }
   .builders-one p { font-size: 32px; }
@@ -480,6 +485,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-capability__showcase .builders-strengths { margin-top: 0; padding: 18px; border-radius: 26px; }
   .builders-strength { width: 100%; min-height: 170px; gap: 12px; margin-inline: auto; padding: 24px 16px 26px; }
   .builders-strength h3 { font-size: 22px; }
+  .builders-strength__accent { font-size: 36px; }
   .builders-strength__slogan { min-width: 104px; font-size: 42px; }
   .builders-home-one { margin: 0; padding: 42px 18px 48px; border-radius: 26px; }
   .builders-one p { font-size: 27px; text-align: center; }
@@ -504,7 +510,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
   .builders-round-link:focus-visible { transform: none; }
   .builders-round-link:hover .builders-round-link__icon,
   .builders-round-link:focus-visible .builders-round-link__icon { transform: rotate(-45deg); }
-  .builders-team-card:hover :deep(img) { transform: none; }
+  .builders-team-card:hover :deep(.builder-image img) { transform: none; }
   .builders-team-card__shade,
   .builders-team-card__project-status > svg { transition: none; }
   .builders-team-card--project:hover .builders-team-card__project-status > svg,
