@@ -66,11 +66,13 @@ onMounted(verifyBrochure)
         <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" tone="dark" class="ev">Franchise Information</InternalSectionPill>
         <h1 id="franchise-download-title" v-reveal="{ anim: 'opalMoveUp', delay: 80 }" data-ev="opalMoveUp" class="ev">加盟資料下載</h1>
         <nav v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" aria-label="麵包屑" class="download-hero__trail ev">
-          <NuxtLink to="/">首頁</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <NuxtLink to="/franchising/intro">我要加盟</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">加盟資料下載</span>
+          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "我要加盟", to: "/franchising/intro" }, { label: "加盟資料下載" }]' v-slot="{ items, follow }">
+            <template v-for="(item, index) in items" :key="index">
+              <span v-if="index" aria-hidden="true">/</span>
+              <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
+              <span v-else aria-current="page">{{ item.label }}</span>
+            </template>
+          </InternalSmartBreadcrumb>
         </nav>
       </div>
     </section>

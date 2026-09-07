@@ -40,9 +40,13 @@ useHead({
     <section data-hero-photo="songzhu" class="knowledge-article-breadcrumb hero-includes-header" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-article-breadcrumb__overlay" aria-hidden="true" />
       <nav class="knowledge-article-breadcrumb__trail" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
-        <NuxtLink to="/">首頁</NuxtLink>
-        <span aria-hidden="true">/</span>
-        <NuxtLink to="/knowledge" aria-current="page">廚房裝修指南</NuxtLink>
+        <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "廚房裝修指南", to: "/knowledge" }]' v-slot="{ items, follow }">
+          <template v-for="(item, index) in items" :key="index">
+            <span v-if="index" aria-hidden="true">/</span>
+            <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
+            <span v-else aria-current="page">{{ item.label }}</span>
+          </template>
+        </InternalSmartBreadcrumb>
       </nav>
     </section>
 

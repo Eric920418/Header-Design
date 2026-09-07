@@ -9,11 +9,13 @@ const parentRoute = computed(() => fromDesignInspiration.value ? '/design-inspir
   <section data-hero-photo="songzhu" class="case-breadcrumb-hero hero-includes-header" aria-label="案例門市麵包屑">
     <div class="case-breadcrumb-hero__overlay" aria-hidden="true" />
     <nav aria-label="麵包屑" class="case-breadcrumb-hero__trail" v-reveal="{ anim: 'opalMoveUp' }">
-      <NuxtLink to="/">首頁</NuxtLink>
-      <span aria-hidden="true">/</span>
-      <NuxtLink :to="parentRoute">{{ parentLabel }}</NuxtLink>
-      <span aria-hidden="true">/</span>
-      <span aria-current="page">門市案例</span>
+      <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: parentLabel, to: parentRoute }, { label: "門市案例" }]' v-slot="{ items, follow }">
+        <template v-for="(item, index) in items" :key="index">
+          <span v-if="index" aria-hidden="true">/</span>
+          <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
+          <span v-else aria-current="page">{{ item.label }}</span>
+        </template>
+      </InternalSmartBreadcrumb>
     </nav>
   </section>
 </template>

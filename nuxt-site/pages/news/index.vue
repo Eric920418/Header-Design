@@ -23,7 +23,13 @@ useSeoMeta({
       <div class="antra-news-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="news-page-title">Updates</h1>
         <nav aria-label="麵包屑" class="antra-news-breadcrumb__trail">
-          <NuxtLink to="/">首頁</NuxtLink><span aria-hidden="true">/</span><span aria-current="page">優惠消息</span>
+          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "優惠消息" }]' v-slot="{ items, follow }">
+            <template v-for="(item, index) in items" :key="index">
+              <span v-if="index" aria-hidden="true">/</span>
+              <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
+              <span v-else aria-current="page">{{ item.label }}</span>
+            </template>
+          </InternalSmartBreadcrumb>
         </nav>
       </div>
     </section>

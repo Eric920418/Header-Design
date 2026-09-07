@@ -1,6 +1,13 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-09-07 既有麵包屑依實際來源返回
+
+- 僅調整既有 24 處麵包屑，共用 renderless `InternalSmartBreadcrumb`，保留各頁原有 nav、字型、樣式及動畫，沒有新增區塊。可靠站內來源存在時顯示「首頁／實際上一頁／目前頁面」，來源名稱取自該頁標題；首頁與同名分類不重複顯示。較長的來源標題在窄螢幕自然換行。
+- 分頁自己的原生 History state 記錄來源名稱、完整 query／hash 與位置；一般返回使用原歷史項目，不把 A→B 的返回變成 B→A→B 循環。篩選與錨點變化不當成新的上一頁；重新整理、瀏覽器前進後退保留各自來源。
+- 首頁連結永遠回首頁；沒有可信來源（直接開啟、新分頁、外站進入、密碼頁）時使用原分類路徑，保留既有 `from`／`series` 來源提示。不新增外站跳轉，不讀取瀏覽器私有歷史，不改動登入機制。不推送、不部署。
+- 驗證：`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 通過；`nuxt-site/scripts/check-smart-breadcrumbs.cjs` 實測 24 個對應頁面在 1440／390px 的麵包屑無溢出，篩選結果、跨分類來源、錨點、重新整理、前進後退、無循環返回、Enter／新分頁、原分類與 series 回退、外站／登入／無效來源拒絕全部通過，無前端或 hydration 錯誤。長來源手機換行已截圖目視確認。重跑需提供 `PREVIEW_PASSWORD`，並讓 Node 可載入既有 Playwright（本機透過 `NODE_PATH` 使用工具環境，未新增套件）。本機 `127.0.0.1:3018` 包含修改；Vercel 尚未更新。
+
 ## 2026-09-07 網站地圖回歸 Footer
 
 - 依合約範圍移除 `nuxt-site/pages/sitemap.vue`，不再提供獨立 Site Map Hero／頁面；舊 `/sitemap` 網址以 301 轉至首頁 Footer，避免已分享的連結變成死路。

@@ -22,10 +22,13 @@ useSeoMeta({
       <div class="catalogue-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="catalogue-page-title">Series Catalogue</h1>
         <nav aria-label="麵包屑" class="catalogue-hero__trail">
-          <NuxtLink to="/">首頁</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <template v-if="sourceSeries"><NuxtLink :to="sourceSeries.route!">{{ sourceSeries.zh }}</NuxtLink><span aria-hidden="true">/</span></template>
-          <span aria-current="page">品牌系列型錄</span>
+          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, ...(sourceSeries ? [{ label: sourceSeries.zh, to: sourceSeries.route! }] : []), { label: "品牌系列型錄" }]' v-slot="{ items, follow }">
+            <template v-for="(item, index) in items" :key="index">
+              <span v-if="index" aria-hidden="true">/</span>
+              <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
+              <span v-else aria-current="page">{{ item.label }}</span>
+            </template>
+          </InternalSmartBreadcrumb>
         </nav>
       </div>
     </section>

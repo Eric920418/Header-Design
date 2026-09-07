@@ -111,9 +111,13 @@ useSeoMeta({
       <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-hero__inner">
         <h1 id="sakura-product-title">Kitchen Appliances</h1>
         <nav aria-label="麵包屑" class="sakura-product-hero__trail">
-          <NuxtLink to="/">首頁</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">SAKURA 廚電</span>
+          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "SAKURA 廚電" }]' v-slot="{ items, follow }">
+            <template v-for="(item, index) in items" :key="index">
+              <span v-if="index" aria-hidden="true">/</span>
+              <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
+              <span v-else aria-current="page">{{ item.label }}</span>
+            </template>
+          </InternalSmartBreadcrumb>
         </nav>
       </div>
     </section>
