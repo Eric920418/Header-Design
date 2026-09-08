@@ -77,6 +77,37 @@ async function main() {
     }
     await page.setViewportSize({ width: 1440, height: 1000 })
 
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await go('/knowledge')
+      await click(page.locator('main a[href="/knowledge/design/systemcabinet"]:visible').first())
+      const firstArticle = new URL(page.url()).pathname
+      const hierarchy = ['首頁', '廚房裝修指南']
+      const articleTrail = async () => {
+        assert.deepEqual(await nav().locator('a:not(.breadcrumb-source-return), span:not([aria-hidden])').allTextContents(), hierarchy)
+        assert.equal(await nav().getByRole('link', { name: '廚房裝修指南', exact: true }).getAttribute('href'), '/knowledge')
+      }
+      await articleTrail()
+      assert.equal(await nav().locator('.breadcrumb-source-return').count(), 0)
+      await click(page.locator('a.knowledge-related-home07__card, a.knowledge-related__card').first())
+      const secondArticle = page.url()
+      await articleTrail()
+      const back = nav().getByRole('link', { name: '返回上一頁', exact: true })
+      assert.equal(await back.getAttribute('href'), firstArticle)
+      await page.reload(); await settled(); await articleTrail()
+      const beforeReturn = await state()
+      await back.focus(); await page.keyboard.press('Enter')
+      await page.waitForURL(base + firstArticle); await settled(); await articleTrail()
+      assert.equal((await state()).length, beforeReturn.length)
+      await page.goForward(); await settled(); await articleTrail()
+      assert.equal(page.url(), secondArticle)
+      assert.equal(await back.getAttribute('href'), firstArticle)
+      await click(nav().getByRole('link', { name: '廚房裝修指南', exact: true }))
+      assert.equal(page.url(), base + '/knowledge')
+      console.log(`PASS ${width}px 指南列表／延伸文章分類一致、獨立返回、重新整理與前進後退`)
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 })
+
     await go('/gallery')
     await click(page.getByRole('button', { name: '北部', exact: true }))
     const filtered = new URL(page.url()).pathname + new URL(page.url()).search

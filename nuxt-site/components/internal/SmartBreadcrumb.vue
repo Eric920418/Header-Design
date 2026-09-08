@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BreadcrumbLink } from '~/composables/useBreadcrumbSource'
 
-const props = defineProps<{ fallback: BreadcrumbLink[] }>()
+const props = defineProps<{ fallback: BreadcrumbLink[], preserveHierarchy?: boolean }>()
 const route = useRoute()
 const router = useRouter()
 const entry = useBreadcrumbSource()
@@ -11,12 +11,19 @@ onMounted(() => { mounted.value = true })
 const source = computed(() => mounted.value && entry.value?.current === route.fullPath ? entry.value.source : null)
 const items = computed<BreadcrumbLink[]>(() => {
   const current = props.fallback.at(-1)
-  if (!source.value || !current) return props.fallback
+  if (props.preserveHierarchy || !source.value || !current) return props.fallback
   return [
     { label: '首頁', to: '/' },
     ...(router.resolve(source.value.to).path === '/' ? [] : [{ label: source.value.label, to: source.value.to }]),
     ...(source.value.label === current.label && source.value.to !== '/' ? [] : [{ label: current.label }]),
   ]
+})
+// A previous article is a return destination, not a parent category.
+const separateReturn = computed(() => {
+  const previous = source.value
+  if (!props.preserveHierarchy || !previous) return null
+  return props.fallback.some(item => item.to && router.resolve(item.to).path === router.resolve(previous.to).path)
+    ? null : previous
 })
 
 function follow(event: MouseEvent, item: BreadcrumbLink) {
@@ -33,8 +40,12 @@ function follow(event: MouseEvent, item: BreadcrumbLink) {
 </script>
 
 <template>
-  <!-- Renderless: each existing nav keeps its scoped CSS, layout and animation. -->
+  <!-- Existing navs keep their scoped layout; an opt-in return is separate from the hierarchy. -->
   <slot :items="items" :follow="follow" />
+  <NuxtLink v-if="separateReturn" class="breadcrumb-source-return" :to="separateReturn.to"
+    :title="`返回：${separateReturn.label}`" @click.capture="follow($event, separateReturn)">
+    <span aria-hidden="true">← </span>返回上一頁
+  </NuxtLink>
 </template>
 
 <style>
@@ -42,4 +53,7 @@ function follow(event: MouseEvent, item: BreadcrumbLink) {
 nav[aria-label="麵包屑"] { flex-wrap: wrap; }
 nav[aria-label="麵包屑"] > a,
 nav[aria-label="麵包屑"] > span { max-width: 100%; overflow-wrap: anywhere; }
+.breadcrumb-source-return { margin-inline-start: 1em; color: inherit; }
+.breadcrumb-source-return:hover,
+.breadcrumb-source-return:focus-visible { color: #caa05c; }
 </style>

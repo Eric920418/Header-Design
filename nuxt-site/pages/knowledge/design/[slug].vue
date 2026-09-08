@@ -45,7 +45,7 @@ useHead({
     <section :data-hero-photo="usesPptArticleTemplate ? 'songzhu' : undefined" class="knowledge-detail-breadcrumb hero-includes-header" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-detail-breadcrumb__overlay" aria-hidden="true" />
       <nav class="knowledge-detail-breadcrumb__trail" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
-        <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "廚房裝修指南", to: "/knowledge" }]' v-slot="{ items, follow }">
+        <InternalSmartBreadcrumb preserve-hierarchy :fallback='[{ label: "首頁", to: "/" }, { label: "廚房裝修指南", to: "/knowledge" }]' v-slot="{ items, follow }">
           <template v-for="(item, index) in items" :key="index">
             <span v-if="index" aria-hidden="true">/</span>
             <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
