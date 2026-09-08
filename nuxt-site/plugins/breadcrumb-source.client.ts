@@ -1,4 +1,5 @@
 import { readBreadcrumbSource, type BreadcrumbEntry, type BreadcrumbSource } from '~/composables/useBreadcrumbSource'
+import { isNavigationFailure, NavigationFailureType } from 'vue-router'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const router = useRouter()
@@ -16,13 +17,15 @@ export default defineNuxtPlugin((nuxtApp) => {
     return route.matched.length > 0 && path !== '/preview-access' && path !== '/sitemap'
   }
   const restore = (current: string): BreadcrumbSource | null => {
-    const saved = window.history.state?.[key] as BreadcrumbEntry | undefined
+    // Older entries did not distinguish global navigation from content links.
+    const saved = window.history.state?.sakuraBreadcrumbVersion === 2
+      ? window.history.state[key] as BreadcrumbEntry | undefined : undefined
     const source = saved?.current === current ? readBreadcrumbSource(saved.source) : null
     return source && allowed(source.to) && router.resolve(source.to).path !== router.resolve(current).path ? source : null
   }
   const save = (current: string, source: BreadcrumbSource | null) => {
     const value = { current, source }
-    window.history.replaceState({ ...window.history.state, [key]: value }, '')
+    window.history.replaceState({ ...window.history.state, sakuraBreadcrumbVersion: 2, [key]: value }, '')
     entry.value = value
   }
 
@@ -33,6 +36,29 @@ export default defineNuxtPlugin((nuxtApp) => {
     ready = true
   })
   window.addEventListener('popstate', () => { traversing = true })
+
+  // Store the entry kind with this navigation, not in a timing-dependent "next click" flag.
+  document.addEventListener('click', (event) => {
+    if (!ready || event.defaultPrevented || event.button !== 0
+      || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    const link = event.target instanceof Element ? event.target.closest('a') : null
+    if (!link?.closest('[data-breadcrumb-root]') || link.hasAttribute('download')
+      || (link.target && link.target !== '_self') || link.getAttribute('href')?.startsWith('#')) return
+    const url = new URL(link.href)
+    if (url.origin !== window.location.origin) return
+    const destination = router.resolve(url.pathname + url.search + url.hash)
+    if (!allowed(destination.fullPath)) return
+    event.preventDefault()
+    router.push({ path: destination.path, query: destination.query, hash: destination.hash, state: { sakuraBreadcrumbRoot: true } })
+      .then((failure) => {
+        // Clicking the current page in the menu should also discard its old content source.
+        if (isNavigationFailure(failure, NavigationFailureType.duplicated)) {
+          window.history.replaceState({ ...window.history.state, sakuraBreadcrumbRoot: true }, '')
+          save(router.currentRoute.value.fullPath, null)
+        }
+      })
+      .catch(error => { showError(error) })
+  }, true)
 
   router.beforeEach((_to, from) => {
     if (!ready) return
@@ -51,6 +77,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     let source: BreadcrumbSource | null = null
     if (allowed(to.fullPath)) {
       if (wasTraversal) source = restore(to.fullPath)
+      else if (window.history.state?.sakuraBreadcrumbRoot === true) source = null
       // Filters, anchors and replace() aren't a new preceding page.
       else if (to.path === from.path || window.history.state?.position === position) source = previous
       else source = leaving

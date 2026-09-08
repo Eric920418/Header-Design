@@ -16,11 +16,15 @@ async function main() {
     const nav = () => page.locator('nav[aria-label="麵包屑"]')
     const state = () => page.evaluate(() => ({ ...history.state, length: history.length }))
     const settled = async () => {
-      await page.waitForFunction(() => document.querySelector('#__nuxt')?.__vue_app__?.config.globalProperties.$nuxt?.isHydrating === false && history.state?.sakuraBreadcrumb?.current === location.pathname + location.search + location.hash)
+      await page.waitForFunction(() => {
+        const app = document.querySelector('#__nuxt')?.__vue_app__?.config.globalProperties.$nuxt
+        const current = location.pathname + location.search + location.hash
+        return app?.isHydrating === false && app._route.fullPath === current && history.state?.sakuraBreadcrumb?.current === current
+      })
       await page.waitForTimeout(500)
     }
     const go = async path => {
-      assert.equal((await page.goto(base + path)).status(), 200, path)
+      assert.equal((await page.goto(base + path, { waitUntil: 'domcontentloaded' })).status(), 200, path)
       await settled()
     }
     const click = async locator => {
@@ -40,6 +44,38 @@ async function main() {
       assert.equal(await nav().locator('a').nth(1).getAttribute('href'), to)
       if (label) assert.equal(await nav().locator('a').nth(1).textContent(), label)
     }
+
+    const header = async (menu, path, keyboard = false) => {
+      await page.evaluate(() => scrollTo(0, 0))
+      // Header intentionally closes menus on scroll; finish scrolling before opening one.
+      await page.waitForTimeout(300)
+      const root = page.locator('header.fixed')
+      if (page.viewportSize().width < 1024) await root.getByRole('button', { name: '開啟選單', exact: true }).click()
+      await root.getByRole('button', { name: menu, exact: true }).click()
+      const link = root.locator(`a[href="${path}"]:visible`).first()
+      if (keyboard) { await link.focus(); await page.keyboard.press('Enter') }
+      else await link.click()
+      await page.waitForURL(base + path)
+      await settled()
+    }
+    const rootIs = async label => {
+      await nav().locator('span[aria-current="page"]').filter({ hasText: label }).waitFor()
+      assert.equal((await state()).sakuraBreadcrumb.source, null, '主選單進入不應記錄剛才瀏覽的頁面')
+      assert.deepEqual(await nav().locator('a, span:not([aria-hidden])').allTextContents(), ['首頁', label])
+    }
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await go('/products/sakura/range-hood/near-suction/r7600')
+      await header('廚房產品', '/products/sakura')
+      await rootIs('SAKURA 廚電')
+      await header('設計案例', '/knowledge', width === 1440)
+      await rootIs('廚房裝修指南')
+      await page.reload(); await settled(); await rootIs('廚房裝修指南')
+      await page.goBack(); await settled(); await rootIs('SAKURA 廚電')
+      await page.goForward(); await settled(); await rootIs('廚房裝修指南')
+      console.log(`PASS ${width}px Header 新入口、重新整理、前進後退`)
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 })
 
     await go('/gallery')
     await click(page.getByRole('button', { name: '北部', exact: true }))
@@ -63,7 +99,8 @@ async function main() {
     console.log('PASS 篩選來源、重新整理、前進後退及無循環返回')
 
     await go('/design-inspiration')
-    await footer('/products/sakura')
+    await click(page.locator('main .design-project-card__image-link').first())
+    const inspirationCase = page.url()
     await sourceIs('/design-inspiration', '設計靈感')
     await nav().locator('a').nth(1).focus()
     await page.keyboard.press('Enter')
@@ -71,14 +108,14 @@ async function main() {
     await settled()
     await nav().locator('span[aria-current="page"]').filter({ hasText: '設計靈感' }).waitFor()
     assert.equal(new URL(page.url()).pathname, '/design-inspiration')
-    await footer('/products/sakura')
+    await click(page.locator('main .design-project-card__image-link').first())
     const popupPromise = context.waitForEvent('page')
     await nav().locator('a').nth(1).click({ modifiers: ['ControlOrMeta'] })
     const popup = await popupPromise
     await popup.waitForLoadState('domcontentloaded')
     assert.equal(new URL(popup.url()).pathname, '/design-inspiration')
     await popup.close()
-    assert.equal(new URL(page.url()).pathname, '/products/sakura', '新分頁不能帶走原頁')
+    assert.equal(page.url(), inspirationCase, '新分頁不能帶走原頁')
     await click(nav().getByRole('link', { name: '首頁', exact: true }))
     assert.equal(new URL(page.url()).pathname, '/')
     console.log('PASS 跨分類真實來源、鍵盤、新分頁及固定首頁')
@@ -86,24 +123,42 @@ async function main() {
     await go('/builders')
     assert.equal(await nav().count(), 0, '無麵包屑頁面不能新增區塊')
     await footer('/products/sakura')
-    await sourceIs('/builders', '建商專區')
+    await rootIs('SAKURA 廚電')
+    console.log('PASS Footer 新入口不繼承剛才的頁面')
 
-    await go('/franchising/intro#introduction')
-    await footer('/franchising/download')
-    await sourceIs('/franchising/intro#introduction')
+    await go('/gallery#footer-navigation')
+    await click(page.locator('.antra-store-grid a').first())
+    await sourceIs('/gallery#footer-navigation')
     await click(nav().locator('a').nth(1))
-    assert.equal(new URL(page.url()).hash, '#introduction')
+    assert.equal(new URL(page.url()).hash, '#footer-navigation')
 
-    await go('/knowledge/design/kitchen-outlet-planning')
+    await go('/gallery/case10')
     const articleTitle = (await page.title()).split('｜')[0]
-    await footer('/about/introduce')
-    await sourceIs('/knowledge/design/kitchen-outlet-planning', articleTitle)
+    await click(page.locator('.case-detail-navigation__next'))
+    await sourceIs('/gallery/case10', articleTitle)
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
       assert(await nav().evaluate(el => el.scrollWidth <= el.clientWidth + 1), `${width}px 長來源標題不可溢出`)
       if (process.env.BREADCRUMB_SCREENSHOT_DIR) await nav().screenshot({ path: `${process.env.BREADCRUMB_SCREENSHOT_DIR}/breadcrumb-${width}.png` })
     }
     await page.setViewportSize({ width: 1440, height: 1000 })
+
+    await go('/knowledge/design/kitchen-outlet-planning')
+    await click(page.locator('.knowledge-detail__meta a[href="/knowledge"]'))
+    await sourceIs('/knowledge/design/kitchen-outlet-planning')
+    await header('設計案例', '/knowledge')
+    await rootIs('廚房裝修指南')
+    await page.reload(); await settled(); await rootIs('廚房裝修指南')
+    console.log('PASS Header 重選同一頁也會清除舊來源')
+
+    await page.evaluate(() => {
+      const old = { ...history.state }
+      delete old.sakuraBreadcrumbVersion
+      old.sakuraBreadcrumb = { current: location.pathname, source: { to: '/products/sakura', label: 'SAKURA Kitchen Appliances', position: 1 } }
+      history.replaceState(old, '')
+    })
+    await page.reload(); await settled(); await rootIs('廚房裝修指南')
+    console.log('PASS 舊版無入口區分的歷史紀錄失效')
 
     await go('/products/sakura/range-hood/near-suction/r7600')
     assert.equal((await state()).sakuraBreadcrumb.source, null)

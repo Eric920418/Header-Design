@@ -1,6 +1,13 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-09-08 主選單入口的麵包屑
+
+- Header（包含桌面下拉／大型選單及手機選單）與 Footer 是全站導覽入口，應使用目的頁原分類，不把剛才瀏覽的產品或文章當成內容來源；內容卡片進入仍保留實際來源與篩選條件。這項規則修正下方 9/7 將所有站內路由切換都當成來源的做法。
+- 根因：`breadcrumb-source.client.ts` 原本未辨識連結入口，將主選單切頁誤當內容來源。現在 Header／Footer 標記 `data-breadcrumb-root`，共用程式將入口資訊隨 Vue Router 的 history state 寫入目的頁，不用容易殘留的「下一次點擊」旗標；原網址、query／hash、外站連結與新分頁操作保留。同頁重選也清除來源，舊版沒有入口資訊的歷史紀錄重新整理後不再採用。
+- 依 investigate 除錯流程，先以 R7600 → Header「SAKURA 廚電」重現失敗斷言（錯誤來源為 `R7600 近吸除油煙機`），再修共用判斷。`scripts/check-smart-breadcrumbs.cjs` 驗證 1440／390px Header 與手機選單、Enter、Footer、同頁重選、舊紀錄失效、重新整理及前進後退全部通過；內容卡片來源、篩選、錨點、長標題與 24 頁麵包屑無溢出／前端／hydration 錯誤。`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 及 `git diff --check` 通過。
+- 回歸測試需等待 Nuxt 的延後頁面路由 `_route` 完成更新，不能只看網址或原生 history；Header 本來會在切頁／捲動時關閉，過早開選單會造成假失敗。狀態：本機 DONE；未 push、未部署，線上版本不在本輪驗收結果內。所有紀錄僅維護本 README。
+
 ## 2026-09-07 近吸系列型錄標題與上層一致
 
 - 實測除油煙機系列的型錄標題是 Cal Sans／400，近吸系列與產品詳細頁則被共用「中文襯線標題」規則的 `!important` 誤加粗到 600。從該規則移除這兩個英文型錄標題選擇器，恢復既有模板字重，未改字級、版型、文案及 Product 的品牌金色。

@@ -148,6 +148,7 @@ function handleHeaderClick(event: MouseEvent) {
 
 <template>
   <header
+    data-breadcrumb-root
     class="fixed inset-x-0 top-0 z-[100] h-[var(--site-header-height)] font-cjk-sans"
     :class="{ 'header-keyboard-navigation': keyboardNavigation }"
     @keydown.capture="handleHeaderKeydown"

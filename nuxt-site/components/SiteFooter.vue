@@ -60,7 +60,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <footer id="footer-navigation" class="relative w-full overflow-hidden bg-[#1C1C1D] text-white">
+  <footer id="footer-navigation" data-breadcrumb-root class="relative w-full overflow-hidden bg-[#1C1C1D] text-white">
     <div aria-hidden class="absolute inset-0 bg-[url('/home-2026/footer/kitchen-background.webp')] bg-cover bg-center opacity-20" />
     <div class="relative z-10 mx-auto flex max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]" :class="sitemapOpen ? 'h-[144px] lg:h-[120px]' : 'h-[220px]'">
       <nav aria-label="頁尾連結" class="flex flex-wrap items-center gap-x-10 gap-y-4 font-cjk-sans text-[15px] text-white/80 md:text-[18px]">
