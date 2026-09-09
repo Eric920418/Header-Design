@@ -133,7 +133,11 @@ async function main() {
     assert.deepEqual(await rect('.builders-team-card__logo'), logoBefore, 'Logo hover 位移')
     assert.equal(await css('.builders-team-card--coming-soon strong', 'color'), 'rgb(255, 255, 255)')
     await shot('.builders-strengths', '12-strengths')
-    assert.equal(await css('.builders-capability', 'backgroundColor'), 'rgb(246, 246, 246)')
+    assert.equal(await css('.builders-capability', 'backgroundColor'), 'rgb(231, 231, 231)')
+    assert(await page.locator('.builders-strength').evaluateAll(cards => cards.length === 3 && cards.every(card => {
+      const style = getComputedStyle(card)
+      return style.backgroundColor === 'rgb(255, 255, 255)' && style.backgroundImage.includes('rgba(255, 255, 255, 0.6)')
+    })), '能力卡片應維持白底並淡化底圖，與較深灰底區分')
     assert.equal(await css('.builders-strength:nth-child(2) .builders-strength__accent', 'textAlign'), 'center')
     assert.equal(await css('.builders-strength:nth-child(2) .builders-strength__accent', 'fontWeight'), '600')
     await shot('.builders-home-one', '13-home-one')
