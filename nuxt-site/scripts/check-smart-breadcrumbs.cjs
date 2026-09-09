@@ -73,6 +73,44 @@ async function main() {
       assert.equal((await state()).sakuraBreadcrumb.source, null, '主選單進入不應記錄剛才瀏覽的頁面')
       assert.deepEqual(await nav().locator('a, span:not([aria-hidden])').allTextContents(), ['首頁', label])
     }
+    const trail = () => nav().locator('a, span:not([aria-hidden])').evaluateAll(elements => elements.map(el => ({ label: el.textContent, to: el.getAttribute('href') })))
+    const newsSource = '/news/activities/2025_ro_water_sp'
+    const productRoot = '/products/sakura/range-hood/near-suction'
+    const fixedRoutes = ['/news', '/news/activities', '/news/activities/2025KC', '/news/latest', '/news/latest/kaohsiung_opening', '/news/video', '/news/video/american_urban', '/products/sakura', '/products/sakura/range-hood', productRoot, productRoot + '/r7615', '/catalogues/catalog']
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      for (const path of fixedRoutes) {
+        await go(path)
+        const original = await trail()
+        const isProduct = path === productRoot + '/r7615'
+        await go(isProduct ? productRoot + '/r7600' : newsSource)
+        if (isProduct || path === '/news/activities/2025KC') {
+          await scrollToBottom()
+          await click(page.locator(isProduct ? '.related-product-card[href$="/r7615"]' : '.activity-related__card[href$="/2025KC"]').first())
+        } else {
+          await page.evaluate(path => { void document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router.push(path) }, path)
+          await page.waitForURL(base + path, { waitUntil: 'domcontentloaded' })
+          await settled()
+        }
+        assert((await state()).sakuraBreadcrumb.source, '必須帶有上一頁來源才能驗證分類不受影響')
+        assert.deepEqual(await trail(), original, `${width}px ${path} 必須維持原本分類與連結`)
+        assert.equal(await page.locator('.breadcrumb-source-return').count(), 0)
+        await assertAtTop('固定分類頁面跳轉')
+        if (isProduct || path === '/news/activities/2025KC') {
+          if (!isProduct) assert.deepEqual(original.map(item => item.label), ['首頁', '優惠消息', '優惠活動'])
+          await page.reload(); await settled()
+          assert.deepEqual(await trail(), original)
+          await page.goBack(); await settled()
+          await page.goForward(); await settled()
+          assert.deepEqual(await trail(), original)
+          const category = isProduct ? productRoot : '/news/activities'
+          await click(nav().locator(`a[href="${category}"]`))
+          assert.equal(page.url(), base + category)
+          await assertAtTop('固定分類麵包屑')
+        }
+      }
+      console.log(`PASS ${width}px 消息／商品／型錄 12 頁固定分類；推薦卡、重新整理、前進後退與分類返回`)
+    }
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
       await go('/products/sakura/range-hood/near-suction/r7600')
