@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { pathToFileURL } from 'node:url'
 
-export const PREVIEW_ACCESS_TTL_MS = 60 * 60 * 1000
+export const PREVIEW_ACCESS_TTL_MS = 3 * 60 * 60 * 1000
 
 const signExpiry = (expiresAt: number, secret: string) => createHmac('sha256', secret)
   .update(`sakura-preview:${expiresAt}`)
@@ -30,6 +30,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const { expiresAt, token } = createPreviewAccessToken(secret, now)
   const tamperedToken = `${expiresAt + PREVIEW_ACCESS_TTL_MS}.${token.split('.')[1]}`
 
+  if (expiresAt - now !== 10_800_000) throw new Error('預覽登入有效時間必須為 3 小時。')
+  if (!isPreviewAccessTokenValid(token, secret, now + 60 * 60 * 1000)) throw new Error('預覽登入不應在 1 小時後失效。')
   if (!isPreviewAccessTokenValid(token, secret, expiresAt - 1)) throw new Error('有效的預覽權杖遭拒。')
   if (isPreviewAccessTokenValid(token, secret, expiresAt)) throw new Error('過期的預覽權杖仍被接受。')
   if (isPreviewAccessTokenValid(tamperedToken, secret, now)) throw new Error('遭竄改的預覽權杖仍被接受。')

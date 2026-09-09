@@ -1,6 +1,6 @@
 import { createHash, timingSafeEqual } from 'node:crypto'
 import { createError, readBody, setCookie } from 'h3'
-import { createPreviewAccessToken } from '../utils/previewAccess'
+import { createPreviewAccessToken, PREVIEW_ACCESS_TTL_MS } from '../utils/previewAccess'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ password?: unknown }>(event)
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60,
+    maxAge: PREVIEW_ACCESS_TTL_MS / 1000,
     path: '/',
   } as const
 
