@@ -338,12 +338,14 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .builders-capability__showcase { display: grid; gap: 32px; margin-top: 48px; }
 .builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; padding: 30px; border-radius: 36px; background: url('/section-6/franchise/antra-original/h1-bg01.png') bottom left / 100% auto no-repeat; }
-.builders-strength { --strength-scale: 1; --slogan-size: 54px; position: relative; display: flex; min-height: 250px; flex-direction: column; align-items: stretch; gap: 8px; overflow: hidden; padding: 28px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #fff; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
+.builders-strength { --strength-scale: 1; --slogan-size: 54px; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto; min-height: 250px; gap: 8px 12px; overflow: hidden; padding: 28px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #fff; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
 .builders-strength:nth-child(2) { --slogan-size: 48px; }
 .builders-strength:nth-child(3) { --slogan-size: 44px; }
 .builders-strength h3,
-.builders-strength__footer { margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.25; }
-.builders-strength__middle { display: flex; flex: 1; align-items: center; justify-content: space-around; gap: 12px; color: #caa05c; }
+.builders-strength__footer { grid-column: 1; justify-self: center; margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.25; white-space: nowrap; text-align: center; }
+.builders-strength__middle { display: contents; color: #caa05c; }
+.builders-strength__accent { grid-column: 1; grid-row: 2; align-self: center; justify-self: center; }
+.builders-strength__slogan { grid-column: 2; grid-row: 2; align-self: center; justify-self: center; }
 .builders-strength__accent { display: flex; flex-direction: column; gap: 8px; margin: 0; font-family: var(--font-cjk-serif); font-size: 36px; line-height: 1.15; white-space: nowrap; }
 .builders-strength:nth-child(2) .builders-strength__accent { align-items: center; font-weight: 600; text-align: center; }
 .builders-strength__slogan { position: relative; display: flex; min-width: 0; flex-direction: column; gap: 8px; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: calc(var(--slogan-size) * var(--strength-scale)); font-weight: 600; line-height: 1.05; white-space: nowrap; }

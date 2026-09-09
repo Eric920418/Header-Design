@@ -140,6 +140,10 @@ async function main() {
     })), '能力卡片應維持白底並淡化底圖，與較深灰底區分')
     assert.equal(await css('.builders-strength:nth-child(2) .builders-strength__accent', 'textAlign'), 'center')
     assert.equal(await css('.builders-strength:nth-child(2) .builders-strength__accent', 'fontWeight'), '600')
+    assert(await page.locator('.builders-strength').evaluateAll(cards => cards.every(card => {
+      const center = selector => { const r = card.querySelector(selector).getBoundingClientRect(); return r.left + r.width / 2 }
+      return ['h3', '.builders-strength__footer'].every(selector => Math.abs(center(selector) - center('.builders-strength__accent')) < 1)
+    })), '卡片上下黑字必須與左側金字垂直置中對齊')
     await shot('.builders-home-one', '13-home-one')
     assert.match(await css('.builders-service h3', 'fontFamily'), /Noto Serif TC/)
     assert.equal(await css('.builders-service p', 'color'), 'rgb(89, 88, 93)')
@@ -149,6 +153,10 @@ async function main() {
     await page.getByRole('tab', { name: '台中', exact: true }).click()
     assert.equal(await css('.builders-contact__tabs [aria-selected="true"]', 'color'), 'rgb(255, 255, 255)')
     await go('/builders/sakura-kitchen')
+    const bookingLinks = page.locator('.sakura-kitchen-hero__booking, .sakura-kitchen-content-cta')
+    assert.equal(await bookingLinks.count(), 3)
+    assert.deepEqual(await bookingLinks.evaluateAll(links => links.map(link => link.getAttribute('href'))), Array(3).fill('/builders#appointment'))
+    assert.equal(await page.locator('.sakura-kitchen-panorama .sakura-kitchen-content-cta > span').first().textContent(), '立即預約')
     assert.equal(await page.locator('.sakura-kitchen-hero.ev').count(), 0)
     assert.match(await page.locator('.sakura-kitchen-hero__image img').getAttribute('src'), /hero.webp$/)
     assert.equal(await page.locator('.sakura-kitchen-hero__project-card strong').textContent(), 'Brand Commitment')

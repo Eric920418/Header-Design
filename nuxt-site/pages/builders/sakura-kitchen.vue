@@ -76,10 +76,10 @@ useSeoMeta({
           />
           <span class="sakura-kitchen-panorama__shade" aria-hidden="true" />
           <NuxtLink
-            to="/builders/catalogues"
+            to="/builders#appointment"
             class="site-content-cta sakura-kitchen-content-cta sakura-kitchen-content-cta--photo"
           >
-            <span>產品型錄</span>
+            <span>立即預約</span>
             <span class="site-cta-icon sakura-kitchen-content-cta__icon"><ArrowRight aria-hidden="true" /></span>
           </NuxtLink>
         </div>
