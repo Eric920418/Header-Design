@@ -34,6 +34,7 @@ async function main() {
       await settled()
     }
     const scrollToBottom = async () => {
+      await page.keyboard.press('Shift') // Start a new interaction before setup scrolling.
       await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight))
       await page.waitForTimeout(100)
       assert(await page.evaluate(() => scrollY > 1), '測試頁面必須能向下捲動')

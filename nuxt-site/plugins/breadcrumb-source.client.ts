@@ -24,7 +24,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     return source && allowed(source.to) && router.resolve(source.to).path !== router.resolve(current).path ? source : null
   }
   const save = (current: string, source: BreadcrumbSource | null) => {
-    const value = { current, source }
+    const value = { current, source: readBreadcrumbSource(source) }
     window.history.replaceState({ ...window.history.state, sakuraBreadcrumbVersion: 2, [key]: value }, '')
     entry.value = value
   }
