@@ -140,6 +140,7 @@ async function main() {
     })), '能力卡片應維持白底並淡化底圖，與較深灰底區分')
     assert.equal(await css('.builders-strength:nth-child(2) .builders-strength__accent', 'textAlign'), 'center')
     assert.equal(await css('.builders-strength:nth-child(2) .builders-strength__accent', 'fontWeight'), '600')
+    assert.equal(await css('.builders-strength:nth-child(2) .builders-strength__slogan', 'textAlign'), 'center')
     assert(await page.locator('.builders-strength').evaluateAll(cards => cards.every(card => {
       const center = selector => { const r = card.querySelector(selector).getBoundingClientRect(); return r.left + r.width / 2 }
       return ['h3', '.builders-strength__footer'].every(selector => Math.abs(center(selector) - center('.builders-strength__accent')) < 1)
@@ -196,6 +197,8 @@ async function main() {
       assert.equal(await page.locator('.builders-team-card--coming-soon strong br').count(), 3)
       assert.match(await css('.builders-team-card--coming-soon strong', 'fontFamily'), /Cal Sans/)
       const sizes = await page.locator('.builders-strength__slogan').evaluateAll(elements => elements.map(e => parseFloat(getComputedStyle(e).fontSize)))
+      assert(Math.abs(parseFloat(await css('.builders-strength__number', 'fontSize')) - sizes[0] * 1.2) < .1)
+      assert(Math.abs(parseFloat(await css('.builders-strength__slogan sup', 'fontSize')) - sizes[0] * .65) < .1)
       assert(sizes[0] > sizes[1] && sizes[1] > sizes[2], `${width}px 三欄字級沒有獨立縮放`)
       assert.equal(await css('.builders-strength__accent', 'rowGap'), '8px')
       await reveal('.builders-strengths')

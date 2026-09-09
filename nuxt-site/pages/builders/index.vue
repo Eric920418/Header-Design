@@ -14,7 +14,7 @@ useSeoMeta({
 const builderPartnerLoop = [...builderPartners, ...builderPartners]
 
 const strengths = [
-  { value: ['45萬'], lines: ['設計模組', '累積\n超過', '多元選擇'], background: '/section-6/builders/capability-banners/catalog-background.png' },
+  { value: ['45', '萬'], lines: ['設計模組', '累積\n超過', '多元選擇'], background: '/section-6/builders/capability-banners/catalog-background.png' },
   { value: ['AI', '智能'], lines: ['廚衛工廠', '全台\n最大', '供貨穩定'], background: '/section-6/builders/capability-banners/factory-background.png' },
   { value: ['管理', '平台'], lines: ['案件進度', '獨家\n智能', '精準掌握'], background: '/section-6/builders/capability-banners/management-background.png' },
 ]
@@ -146,7 +146,8 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
                 <p class="builders-strength__accent"><span v-for="line in item.lines[1].split('\n')" :key="line">{{ line }}</span></p>
                 <p class="builders-strength__slogan">
                   <sup v-if="index === 0">+</sup>
-                  <span v-for="line in item.value" :key="line">{{ line }}</span>
+                  <span v-if="index === 0"><span class="builders-strength__number">{{ item.value[0] }}</span>{{ item.value[1] }}</span>
+                  <template v-else><span v-for="line in item.value" :key="line">{{ line }}</span></template>
                 </p>
               </div>
               <p class="builders-strength__footer">{{ item.lines[2] }}</p>
@@ -349,7 +350,9 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-strength__accent { display: flex; flex-direction: column; gap: 8px; margin: 0; font-family: var(--font-cjk-serif); font-size: 36px; line-height: 1.15; white-space: nowrap; }
 .builders-strength:nth-child(2) .builders-strength__accent { align-items: center; font-weight: 600; text-align: center; }
 .builders-strength__slogan { position: relative; display: flex; min-width: 0; flex-direction: column; gap: 8px; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: calc(var(--slogan-size) * var(--strength-scale)); font-weight: 600; line-height: 1.05; white-space: nowrap; }
-.builders-strength__slogan sup { position: absolute; top: -.1em; right: -.6em; font-family: var(--font-cjk-sans); font-size: .5em; line-height: 1; }
+.builders-strength__number { font-size: 1.2em; }
+.builders-strength__slogan sup { position: absolute; top: -.1em; right: -.6em; font-family: var(--font-cjk-sans); font-size: .65em; line-height: 1; }
+.builders-strength:nth-child(2) .builders-strength__slogan { text-align: center; }
 .builders-home-one { width: 100%; margin: 0; padding: 54px 30px 64px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
 .builders-one { display: flex; flex-direction: column; align-items: center; }
 .builders-one p { margin: 0 0 16px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 42px; font-weight: 700; line-height: 1.25; }
