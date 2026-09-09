@@ -33,6 +33,15 @@ async function main() {
       await page.waitForURL(url => url.href !== before)
       await settled()
     }
+    const scrollToBottom = async () => {
+      await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight))
+      await page.waitForTimeout(100)
+      assert(await page.evaluate(() => scrollY > 1), '測試頁面必須能向下捲動')
+    }
+    const assertAtTop = async label => {
+      const top = await page.evaluate(() => scrollY)
+      assert(top <= 1, `${label} 應從頁面頂端開始，實際 scrollY=${top}`)
+    }
     const footer = async path => {
       const toggle = page.getByRole('button', { name: '網站地圖', exact: true })
       if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click()
@@ -80,7 +89,9 @@ async function main() {
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
       await go('/knowledge')
+      await scrollToBottom()
       await click(page.locator('main a[href="/knowledge/design/systemcabinet"]:visible').first())
+      await assertAtTop('文章卡片跳轉')
       const firstArticle = new URL(page.url()).pathname
       const hierarchy = ['首頁', '廚房裝修指南']
       const articleTrail = async () => {
@@ -89,7 +100,9 @@ async function main() {
       }
       await articleTrail()
       assert.equal(await nav().locator('.breadcrumb-source-return').count(), 0)
+      await scrollToBottom()
       await click(page.locator('a.knowledge-related-home07__card, a.knowledge-related__card').first())
+      await assertAtTop('推薦文章跳轉')
       const secondArticle = page.url()
       await articleTrail()
       const back = nav().getByRole('link', { name: '返回上一頁', exact: true })
@@ -98,8 +111,10 @@ async function main() {
       const beforeReturn = await state()
       await back.focus(); await page.keyboard.press('Enter')
       await page.waitForURL(base + firstArticle); await settled(); await articleTrail()
+      await assertAtTop('麵包屑返回')
       assert.equal((await state()).length, beforeReturn.length)
       await page.goForward(); await settled(); await articleTrail()
+      await assertAtTop('瀏覽器前進')
       assert.equal(page.url(), secondArticle)
       assert.equal(await back.getAttribute('href'), firstArticle)
       await click(nav().getByRole('link', { name: '廚房裝修指南', exact: true }))

@@ -1,6 +1,11 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-09-09 全站頁面跳轉頂端檢查
+
+- `nuxt-site/app/router.options.ts` 直接覆寫 Nuxt 的路由落點並忽略歷史 `savedPosition`，取代較晚執行、會被 Nuxt 內建邏輯覆蓋的 client 外掛；卡片、推薦文章、麵包屑、上一頁／下一頁與瀏覽器前進後退等跨頁跳轉一律從頂端開始，明確的 `#錨點` 仍前往指定區塊。
+- `nuxt-site/scripts/check-smart-breadcrumbs.cjs` 新增文章卡片、推薦文章、麵包屑返回與瀏覽器前進的捲動落點回歸，防止全站導覽再次保留舊位置。
+
 ## 2026-09-09「2026.09.08 版面調整」
 
 - `/privacy` 與 `/franchising/download` 的 Hero 主標依簡報改為 `Privacy Policy`、`Franchise Information`，桌機使用模板 Cal Sans 80px／400；中文麵包屑與 SEO 標題保留，平板與手機維持縮小字級，避免長英文溢出。
