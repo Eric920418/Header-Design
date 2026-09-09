@@ -8,9 +8,15 @@ const entry = useBreadcrumbSource()
 // Nuxt's root can mount before an async page finishes hydrating.
 const mounted = ref(false)
 onMounted(() => { mounted.value = true })
-// News and kitchen products use category ancestors, never the previous article/product.
-const fixedHierarchy = computed(() => /^\/(news|products)(\/|$)/.test(route.path) || route.path.replace(/\/$/, '') === '/catalogues/catalog')
-const source = computed(() => !fixedHierarchy.value && mounted.value && entry.value?.current === route.fullPath ? entry.value.source : null)
+// News, guides and kitchen products use categories, never the previous article/product.
+const fixedHierarchy = computed(() => /^\/(news|products|knowledge)(\/|$)/.test(route.path) || route.path.replace(/\/$/, '') === '/catalogues/catalog')
+const source = computed(() => {
+  const previous = !fixedHierarchy.value && mounted.value && entry.value?.current === route.fullPath ? entry.value.source : null
+  // Case details accept their parent list (including filters), never another case as an ancestor.
+  if (previous && /^\/gallery\/[^/]+\/?$/.test(route.path)
+    && !props.fallback.some(item => item.to && item.to !== '/' && router.resolve(item.to).path === router.resolve(previous.to).path)) return null
+  return previous
+})
 const items = computed<BreadcrumbLink[]>(() => {
   const current = props.fallback.at(-1)
   if (props.preserveHierarchy || !source.value || !current) return props.fallback

@@ -74,6 +74,41 @@ async function main() {
       assert.deepEqual(await nav().locator('a, span:not([aria-hidden])').allTextContents(), ['首頁', label])
     }
     const trail = () => nav().locator('a, span:not([aria-hidden])').evaluateAll(elements => elements.map(el => ({ label: el.textContent, to: el.getAttribute('href') })))
+    await go('/knowledge/design/kitchen-outlet-planning')
+    await click(page.locator('.knowledge-detail__meta a[href="/knowledge"]'))
+    assert.deepEqual((await trail()).map(item => item.label), ['首頁', '廚房裝修指南'], '文章返回列表不得插入文章標題')
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      for (const suffix of ['', '?from=inspiration']) {
+        const parent = suffix ? '/design-inspiration' : '/gallery'
+        const expected = ['首頁', suffix ? '設計靈感' : '案例門市', '門市案例']
+        const assertCaseTrail = async () => {
+          assert.deepEqual((await trail()).map(item => item.label), expected)
+          assert.equal(await nav().locator('a').nth(1).getAttribute('href'), parent)
+          assert.equal(await page.locator('.breadcrumb-source-return').count(), 0)
+        }
+        await go('/gallery/case10' + suffix)
+        await assertCaseTrail()
+        for (const slug of ['case56', 'case35', 'case10']) {
+          await scrollToBottom()
+          const target = '/gallery/' + slug + suffix
+          await click(page.locator(`.case-recommendation-card h3 a[href="${target}"]`).first())
+          assert((await state()).sakuraBreadcrumb.source?.to.startsWith('/gallery/case'), '必須由另一案例進入')
+          await assertCaseTrail()
+          await assertAtTop('推薦案例跳轉')
+          await page.reload(); await settled(); await assertCaseTrail()
+          await page.goBack(); await settled()
+          await page.goForward(); await settled(); await assertCaseTrail()
+        }
+        await scrollToBottom()
+        await click(page.locator('.case-detail-navigation__next'))
+        await assertCaseTrail()
+        await click(nav().locator(`a[href="${parent}"]`))
+        assert.equal(page.url(), base + parent)
+        await assertAtTop('案例分類返回')
+      }
+      console.log(`PASS ${width}px 三案例推薦／下一篇固定分類、設計靈感來源、重整與前進後退`)
+    }
     const newsSource = '/news/activities/2025_ro_water_sp'
     const productRoot = '/products/sakura/range-hood/near-suction'
     const fixedRoutes = ['/news', '/news/activities', '/news/activities/2025KC', '/news/latest', '/news/latest/kaohsiung_opening', '/news/video', '/news/video/american_urban', '/products/sakura', '/products/sakura/range-hood', productRoot, productRoot + '/r7615', '/catalogues/catalog']
@@ -136,6 +171,7 @@ async function main() {
       const articleTrail = async () => {
         assert.deepEqual(await nav().locator('a:not(.breadcrumb-source-return), span:not([aria-hidden])').allTextContents(), hierarchy)
         assert.equal(await nav().getByRole('link', { name: '廚房裝修指南', exact: true }).getAttribute('href'), '/knowledge')
+        assert.equal(await page.locator('.breadcrumb-source-return').count(), 0, '指南只保留原分類，不新增上一頁連結')
       }
       await articleTrail()
       assert.equal(await nav().locator('.breadcrumb-source-return').count(), 0)
@@ -144,21 +180,23 @@ async function main() {
       await assertAtTop('推薦文章跳轉')
       const secondArticle = page.url()
       await articleTrail()
-      const back = nav().getByRole('link', { name: '返回上一頁', exact: true })
-      assert.equal(await back.getAttribute('href'), firstArticle)
       await page.reload(); await settled(); await articleTrail()
       const beforeReturn = await state()
-      await back.focus(); await page.keyboard.press('Enter')
+      await page.goBack()
       await page.waitForURL(base + firstArticle); await settled(); await articleTrail()
-      await assertAtTop('麵包屑返回')
+      await assertAtTop('指南瀏覽器返回')
       assert.equal((await state()).length, beforeReturn.length)
       await page.goForward(); await settled(); await articleTrail()
       await assertAtTop('瀏覽器前進')
       assert.equal(page.url(), secondArticle)
-      assert.equal(await back.getAttribute('href'), firstArticle)
-      await click(nav().getByRole('link', { name: '廚房裝修指南', exact: true }))
+      await nav().getByRole('link', { name: '廚房裝修指南', exact: true }).focus()
+      await page.keyboard.press('Enter')
+      await page.waitForURL(base + '/knowledge'); await settled()
       assert.equal(page.url(), base + '/knowledge')
-      console.log(`PASS ${width}px 指南列表／延伸文章分類一致、獨立返回、重新整理與前進後退`)
+      assert.deepEqual((await trail()).map(item => item.label), hierarchy)
+      assert.equal(await page.locator('.breadcrumb-source-return').count(), 0)
+      await assertAtTop('指南分類返回')
+      console.log(`PASS ${width}px 指南列表／延伸文章固定分類、無額外返回連結、鍵盤返回分類、重整與前進後退`)
     }
     await page.setViewportSize({ width: 1440, height: 1000 })
 
@@ -218,9 +256,9 @@ async function main() {
     assert.equal(new URL(page.url()).hash, '#footer-navigation')
 
     await go('/gallery/case10')
-    const articleTitle = (await page.title()).split('｜')[0]
+    await scrollToBottom()
     await click(page.locator('.case-detail-navigation__next'))
-    await sourceIs('/gallery/case10', articleTitle)
+    assert.deepEqual((await trail()).map(item => item.label), ['首頁', '案例門市', '門市案例'])
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
       assert(await nav().evaluate(el => el.scrollWidth <= el.clientWidth + 1), `${width}px 長來源標題不可溢出`)
@@ -230,7 +268,7 @@ async function main() {
 
     await go('/knowledge/design/kitchen-outlet-planning')
     await click(page.locator('.knowledge-detail__meta a[href="/knowledge"]'))
-    await sourceIs('/knowledge/design/kitchen-outlet-planning')
+    assert.deepEqual((await trail()).map(item => item.label), ['首頁', '廚房裝修指南'])
     await header('設計案例', '/knowledge')
     await rootIs('廚房裝修指南')
     await page.reload(); await settled(); await rootIs('廚房裝修指南')
