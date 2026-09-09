@@ -332,7 +332,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-team-card__project-status > svg { width: 36px; height: 36px; flex: none; padding: 9px; border-radius: 50%; color: #1c1c1d; background: #caa05c; transform: rotate(-45deg); transition: transform .35s ease; }
 .builders-team-card--project:hover .builders-team-card__project-status > svg,
 .builders-team-card--project:focus-visible .builders-team-card__project-status > svg { transform: rotate(0); }
-.builders-capability { padding: 130px 30px 72px; background: linear-gradient(#f6f6f6, #fafafa); }
+.builders-capability { padding: 130px 30px 72px; background: #f6f6f6; }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-capability .builders-section-heading--split > div h2 { margin-top: 70px; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
@@ -345,6 +345,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-strength__footer { margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.25; }
 .builders-strength__middle { display: flex; flex: 1; align-items: center; justify-content: space-around; gap: 12px; color: #caa05c; }
 .builders-strength__accent { display: flex; flex-direction: column; gap: 8px; margin: 0; font-family: var(--font-cjk-serif); font-size: 36px; line-height: 1.15; white-space: nowrap; }
+.builders-strength:nth-child(2) .builders-strength__accent { align-items: center; font-weight: 600; text-align: center; }
 .builders-strength__slogan { position: relative; display: flex; min-width: 0; flex-direction: column; gap: 8px; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: calc(var(--slogan-size) * var(--strength-scale)); font-weight: 600; line-height: 1.05; white-space: nowrap; }
 .builders-strength__slogan sup { position: absolute; top: -.1em; right: -.6em; font-family: var(--font-cjk-sans); font-size: .5em; line-height: 1; }
 .builders-home-one { width: 100%; margin: 0; padding: 54px 30px 64px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }

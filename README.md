@@ -1,6 +1,12 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-09-09「2026.09.08 版面調整」
+
+- `/privacy` 與 `/franchising/download` 的 Hero 主標依簡報改為 `Privacy Policy`、`Franchise Information`，桌機使用模板 Cal Sans 80px／400；中文麵包屑與 SEO 標題保留，平板與手機維持縮小字級，避免長英文溢出。
+- `/builders` 能力區改為純 `rgb(246, 246, 246)` 背景；PPT 明確標註的「全台／最大」維持兩行並置中、字重 600，其餘三張能力卡內容與版型不動。
+- `/builders/sakura-kitchen` 的 `for Every Family` 移除誤套的中文襯線強調規則，沿用同一標題既有的模板 Cal Sans／400。回歸檢查沿用 `nuxt-site/scripts/check-partnership-ppt.cjs`，不新增套件或文件。
+
 ## 2026-09-08 指南文章分類與來源返回
 
 - 修正文章把實際來源誤排成分類上層的問題：文章頁維持「首頁／廚房裝修指南」，分類連結永遠前往指南列表；來源不是既有分類時，原導覽內另提供「返回上一頁」連結，不把文章冒充分類。沿用原生 history 返回，保留重新整理、鍵盤與新分頁行為，不新增麵包屑區塊，不更動其他頁面的來源規則。

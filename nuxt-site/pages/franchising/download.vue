@@ -64,7 +64,7 @@ onMounted(verifyBrochure)
       <span class="download-hero__overlay" aria-hidden="true" />
       <div class="download-hero__inner">
         <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" tone="dark" class="ev">Franchise Information</InternalSectionPill>
-        <h1 id="franchise-download-title" v-reveal="{ anim: 'opalMoveUp', delay: 80 }" data-ev="opalMoveUp" class="ev">加盟資料下載</h1>
+        <h1 id="franchise-download-title" v-reveal="{ anim: 'opalMoveUp', delay: 80 }" data-ev="opalMoveUp" class="ev">Franchise Information</h1>
         <nav v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" aria-label="麵包屑" class="download-hero__trail ev">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "我要加盟", to: "/franchising/intro" }, { label: "加盟資料下載" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -180,10 +180,10 @@ onMounted(verifyBrochure)
 .download-hero.hero-includes-header h1 {
   margin: 28px 0 30px;
   color: #fff;
-  font-family: var(--font-cjk-serif);
-  font-size: 64px !important;
-  font-weight: 600;
-  line-height: .98;
+  font-family: var(--font-display);
+  font-size: 80px !important;
+  font-weight: 400;
+  line-height: 1;
   letter-spacing: -.035em;
 }
 
@@ -290,6 +290,7 @@ onMounted(verifyBrochure)
   .download-hero__inner,
   .download-rail { padding-right: 0; }
   .download-hero__inner { padding-top: 132px; }
+  .download-hero.hero-includes-header h1 { font-size: clamp(56px, 7vw, 72px) !important; }
   .download-document { padding-block: 86px 100px; }
   .download-document__header { grid-template-columns: 1fr; gap: 42px; }
   .download-document__heading h2 { max-width: 680px; }

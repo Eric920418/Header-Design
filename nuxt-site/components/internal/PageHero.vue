@@ -4,6 +4,7 @@ withDefaults(defineProps<{
   eyebrow?: string
   background?: string
   parentLabel?: string
+  breadcrumbLabel?: string
   headingTag?: 'h1' | 'p'
 }>(), {
   eyebrow: 'SAKURA KITCHEN',
@@ -22,7 +23,7 @@ withDefaults(defineProps<{
         <InternalSectionPill tone="dark">{{ eyebrow }}</InternalSectionPill>
         <component :is="headingTag" class="mt-6 max-w-[1000px] font-display text-[54px] font-semibold leading-[.96] sm:text-[78px] lg:text-[110px]">{{ title }}</component>
         <nav aria-label="麵包屑" class="mt-8 flex items-center gap-2 text-sm text-white/75 sm:text-base">
-          <InternalSmartBreadcrumb :fallback='[{ label: parentLabel, to: "/" }, { label: title }]' v-slot="{ items, follow }">
+          <InternalSmartBreadcrumb :fallback='[{ label: parentLabel, to: "/" }, { label: breadcrumbLabel || title }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" class="transition-colors hover:text-[#CAA05C] focus-visible:text-[#CAA05C]" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
