@@ -111,7 +111,7 @@ async function main() {
     }
     const newsSource = '/news/activities/2025_ro_water_sp'
     const productRoot = '/products/sakura/range-hood/near-suction'
-    const fixedRoutes = ['/news', '/news/activities', '/news/activities/2025KC', '/news/latest', '/news/latest/kaohsiung_opening', '/news/video', '/news/video/american_urban', '/products/sakura', '/products/sakura/range-hood', productRoot, productRoot + '/r7615', '/catalogues/catalog']
+    const fixedRoutes = ['/news', '/news/activities', '/news/activities/2025KC', '/news/latest', '/news/latest/kaohsiung_opening', '/news/video', '/news/video/american_urban', '/products/sakura', '/products/sakura/range-hood', productRoot, productRoot + '/r7615', '/catalogues/catalog', '/knowledge', '/knowledge/design/systemcabinet', '/knowledge/design/kitchen-outlet-planning', '/knowledge/design/knowledge31']
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
       for (const path of fixedRoutes) {
@@ -144,7 +144,7 @@ async function main() {
           await assertAtTop('固定分類麵包屑')
         }
       }
-      console.log(`PASS ${width}px 消息／商品／型錄 12 頁固定分類；推薦卡、重新整理、前進後退與分類返回`)
+      console.log(`PASS ${width}px 消息／商品／型錄／指南 ${fixedRoutes.length} 頁固定分類；推薦卡、重新整理、前進後退與分類返回`)
     }
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
