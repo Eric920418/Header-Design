@@ -74,6 +74,48 @@ async function main() {
       assert.deepEqual(await nav().locator('a, span:not([aria-hidden])').allTextContents(), ['首頁', label])
     }
     const trail = () => nav().locator('a, span:not([aria-hidden])').evaluateAll(elements => elements.map(el => ({ label: el.textContent, to: el.getAttribute('href') })))
+    const push = async path => {
+      await page.evaluate(path => { void document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router.push(path) }, path)
+      await page.waitForURL(base + path)
+      await settled()
+    }
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await go('/knowledge/design/systemcabinet')
+      await page.keyboard.press('Shift')
+      await click(page.locator('main a[href="/catalogues/kitchenware-catalog"]').first())
+      assert.deepEqual((await trail()).map(item => item.label), ['首頁', '品牌系列型錄'], '文章正文連到型錄不能把文章當成父分類')
+      await go('/about/advantage')
+      await click(page.locator('main a[href="/about/introduce"]').first())
+      assert.deepEqual((await trail()).map(item => item.label), ['首頁', '關於我們'], '品牌優勢不是關於我們的父分類')
+      console.log(`PASS ${width}px 指南正文至型錄、品牌優勢至關於我們維持分類`)
+    }
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      for (const [parent, label, suffix] of [['/design-inspiration', '設計靈感', '?from=inspiration'], ['/gallery', '案例門市', '']]) {
+        const assertListTrail = async () => assert.deepEqual(await trail(), [{ label: '首頁', to: '/' }, { label, to: null }], '案例返回列表不得插入案例長標題')
+        await go('/gallery/case10' + suffix)
+        await click(nav().locator(`a[href="${parent}"]`))
+        await assertListTrail(); await assertAtTop('案例返回列表')
+        await page.reload(); await settled(); await assertListTrail()
+        await page.goBack(); await settled()
+        await page.goForward(); await settled(); await assertListTrail()
+      }
+      console.log(`PASS ${width}px 案例返回設計靈感／案例門市列表、重整與前進後退不帶案例標題`)
+      await go('/design-inspiration')
+      await page.locator('#design-style').selectOption('工業風')
+      await click(page.locator('.design-projects-filter__submit'))
+      const filteredInspiration = new URL(page.url()).pathname + new URL(page.url()).search
+      await click(page.locator('main .design-project-card__image-link').first())
+      await sourceIs(filteredInspiration, '設計靈感')
+      const beforeReturn = await state()
+      await click(nav().locator('a').nth(1))
+      assert.equal(page.url(), base + filteredInspiration)
+      assert.equal(await page.locator('#design-style').inputValue(), '工業風')
+      assert.deepEqual((await trail()).map(item => item.label), ['首頁', '設計靈感'])
+      assert.equal((await state()).length, beforeReturn.length, '篩選列表返回不能新增歷史')
+      console.log(`PASS ${width}px 設計靈感篩選後案例返回保留風格、分類與歷史`)
+    }
     await go('/knowledge/design/kitchen-outlet-planning')
     await click(page.locator('.knowledge-detail__meta a[href="/knowledge"]'))
     assert.deepEqual((await trail()).map(item => item.label), ['首頁', '廚房裝修指南'], '文章返回列表不得插入文章標題')
@@ -105,6 +147,7 @@ async function main() {
         await assertCaseTrail()
         await click(nav().locator(`a[href="${parent}"]`))
         assert.equal(page.url(), base + parent)
+        assert.deepEqual((await trail()).map(item => item.label), expected.slice(0, 2), '推薦案例返回列表不得插入案例長標題')
         await assertAtTop('案例分類返回')
       }
       console.log(`PASS ${width}px 三案例推薦／下一篇固定分類、設計靈感來源、重整與前進後退`)
@@ -231,6 +274,7 @@ async function main() {
     await settled()
     await nav().locator('span[aria-current="page"]').filter({ hasText: '設計靈感' }).waitFor()
     assert.equal(new URL(page.url()).pathname, '/design-inspiration')
+    assert.deepEqual((await trail()).map(item => item.label), ['首頁', '設計靈感'])
     await click(page.locator('main .design-project-card__image-link').first())
     const popupPromise = context.waitForEvent('page')
     await nav().locator('a').nth(1).click({ modifiers: ['ControlOrMeta'] })
@@ -295,22 +339,52 @@ async function main() {
     }
     console.log('PASS 無來源分類回退、既有 series 提示、無效或外站／登入來源拒絕')
 
-    const routes = ['/privacy', '/service-process', '/about/introduce', '/gallery', '/gallery/case10', '/design-inspiration', '/knowledge', '/knowledge/design/systemcabinet', '/knowledge/design/kitchen-outlet-planning', '/news', '/news/latest', '/news/latest/kaohsiung_opening', '/news/activities', '/news/activities/2025KC', '/news/video', '/news/video/american_urban', '/franchising/download', '/builders/catalogues', '/catalogues/catalog', '/catalogues/kitchenware-catalog', '/products/sakura', '/products/sakura/range-hood', '/products/sakura/range-hood/near-suction', '/products/sakura/range-hood/near-suction/r7600']
+    // Discover new pages automatically, instead of maintaining another exception list.
+    await go('/')
+    const routes = new Set(await page.evaluate(() => document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router.getRoutes()
+      .map(route => route.path).filter(path => !path.includes(':') && !['/preview-access', '/sitemap'].includes(path))))
+    routes.add('/catalogues/kitchenware-catalog?series=aikitchen')
+    let breadcrumbPages = 0
     for (const path of routes) {
       await go(path)
-      await nav().waitFor({ state: 'visible' })
-      assert.equal(await nav().count(), 1, path)
+      for (const linked of await page.evaluate(() => {
+        const router = document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router
+        return [...document.querySelectorAll('a[href]')].map(a => new URL(a.href)).filter(url => url.origin === location.origin
+          && !['/preview-access', '/sitemap'].includes(url.pathname) && router.resolve(url.pathname).matched.length)
+          .map(url => url.pathname + (url.pathname.startsWith('/gallery/') && url.searchParams.get('from') === 'inspiration' ? '?from=inspiration' : ''))
+      })) routes.add(linked)
+      const original = await trail()
+      if (original.length) breadcrumbPages++
+      assert.equal(await nav().count(), original.length ? 1 : 0, path)
+      const parent = original.find(item => item.to && item.to !== '/')
+      if (parent) {
+        // Even a valid parent's SEO/history title cannot rename or flatten the hierarchy.
+        await page.evaluate(to => history.replaceState({ ...history.state, sakuraBreadcrumb: {
+          current: location.pathname + location.search + location.hash,
+          source: { to, label: '父頁的另一個長 SEO 標題，不是分類名稱', position: 1 },
+        } }, ''), parent.to)
+        await page.reload(); await settled()
+        assert.deepEqual(await trail(), original, `${path} 合法父頁來源也不能改寫分類名稱或層數`)
+      }
       for (const width of [1440, 390]) {
         await page.setViewportSize({ width, height: 1000 })
-        assert(await nav().evaluate(el => [...el.querySelectorAll('a,span')].every(child => {
+        const unrelated = path.startsWith('/gallery/case10') ? '/gallery/case56' : '/gallery/case10'
+        await push(unrelated)
+        await push(path)
+        assert((await state()).sakuraBreadcrumb.source, '必須由站內頁面跳轉，不能只測直接開啟')
+        assert.deepEqual(await trail(), original, `${path} ${width}px 不能由上一頁改寫分類、名稱或連結`)
+        assert.equal(await page.locator('.breadcrumb-source-return').count(), 0)
+        await assertAtTop(`${path} 全站跨頁檢查`)
+        if (original.length) assert(await nav().evaluate(el => [...el.querySelectorAll('a,span')].every(child => {
           const r = child.getBoundingClientRect()
           return r.left >= -1 && r.right <= innerWidth + 1
         })), `${path} ${width}px 麵包屑溢出`)
       }
       await page.setViewportSize({ width: 1440, height: 1000 })
+      console.log(`PASS 全站分類不變 ${path}`)
     }
     assert.deepEqual(errors, [])
-    console.log(`PASS ${routes.length} 頁桌機／手機既有麵包屑；無前端或 hydration 錯誤`)
+    console.log(`PASS 自動發現 ${routes.size} 個網址（${breadcrumbPages} 個有麵包屑），桌機／手機跨頁分類不變；無前端或 hydration 錯誤`)
   } finally { await browser.close() }
 }
 main().catch(error => { console.error(error); process.exitCode = 1 })

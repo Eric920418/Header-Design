@@ -8,30 +8,16 @@ const entry = useBreadcrumbSource()
 // Nuxt's root can mount before an async page finishes hydrating.
 const mounted = ref(false)
 onMounted(() => { mounted.value = true })
-// News, guides and kitchen products use categories, never the previous article/product.
-const fixedHierarchy = computed(() => /^\/(news|products|knowledge)(\/|$)/.test(route.path) || route.path.replace(/\/$/, '') === '/catalogues/catalog')
+// History may restore a known parent's filters, never define the page hierarchy or labels.
 const source = computed(() => {
-  const previous = !fixedHierarchy.value && mounted.value && entry.value?.current === route.fullPath ? entry.value.source : null
-  // Case details accept their parent list (including filters), never another case as an ancestor.
-  if (previous && /^\/gallery\/[^/]+\/?$/.test(route.path)
-    && !props.fallback.some(item => item.to && item.to !== '/' && router.resolve(item.to).path === router.resolve(previous.to).path)) return null
-  return previous
+  const previous = !props.preserveHierarchy && mounted.value && entry.value?.current === route.fullPath ? entry.value.source : null
+  return previous && props.fallback.some(item => item.to && item.to !== '/' && router.resolve(item.to).path === router.resolve(previous.to).path)
+    ? previous : null
 })
 const items = computed<BreadcrumbLink[]>(() => {
-  const current = props.fallback.at(-1)
-  if (props.preserveHierarchy || !source.value || !current) return props.fallback
-  return [
-    { label: '首頁', to: '/' },
-    ...(router.resolve(source.value.to).path === '/' ? [] : [{ label: source.value.label, to: source.value.to }]),
-    ...(source.value.label === current.label && source.value.to !== '/' ? [] : [{ label: current.label }]),
-  ]
-})
-// A previous article is a return destination, not a parent category.
-const separateReturn = computed(() => {
   const previous = source.value
-  if (!props.preserveHierarchy || !previous) return null
-  return props.fallback.some(item => item.to && router.resolve(item.to).path === router.resolve(previous.to).path)
-    ? null : previous
+  return props.fallback.map(item => previous && item.to && item.to !== '/' && router.resolve(item.to).path === router.resolve(previous.to).path
+    ? { ...item, to: previous.to } : item)
 })
 
 function follow(event: MouseEvent, item: BreadcrumbLink) {
@@ -48,20 +34,13 @@ function follow(event: MouseEvent, item: BreadcrumbLink) {
 </script>
 
 <template>
-  <!-- Existing navs keep their scoped layout; an opt-in return is separate from the hierarchy. -->
+  <!-- Each page owns its hierarchy and keeps its existing scoped layout. -->
   <slot :items="items" :follow="follow" />
-  <NuxtLink v-if="separateReturn" class="breadcrumb-source-return" :to="separateReturn.to"
-    :title="`返回：${separateReturn.label}`" @click.capture="follow($event, separateReturn)">
-    <span aria-hidden="true">← </span>返回上一頁
-  </NuxtLink>
 </template>
 
 <style>
-/* Actual article names can be longer than the former fixed category labels. */
+/* Long current-page labels still need to fit narrow screens. */
 nav[aria-label="麵包屑"] { flex-wrap: wrap; }
 nav[aria-label="麵包屑"] > a,
 nav[aria-label="麵包屑"] > span { max-width: 100%; overflow-wrap: anywhere; }
-.breadcrumb-source-return { margin-inline-start: 1em; color: inherit; }
-.breadcrumb-source-return:hover,
-.breadcrumb-source-return:focus-visible { color: #caa05c; }
 </style>
