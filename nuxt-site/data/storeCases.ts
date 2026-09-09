@@ -20,6 +20,10 @@ const mapSearchUrl = (address: string) =>
 const case10Images = caseImages('case10', 3, 10)
 const case56Images = caseImages('case56', 3, 12)
 const case35Images = caseImages('case35', 3, 11)
+// 客戶補交的高解析首圖；使用日期檔名避開舊圖快取。
+case10Images[0] = '/section-3/cases/case10/case10_content_asset_03_20260904.webp'
+case56Images[1] = '/section-3/cases/case56/case56_content_asset_04_20260904.webp'
+case35Images[8] = '/section-3/cases/case35/case35_content_asset_11_20260904.webp'
 const case10Review = '新家使用櫻花系統廚具，我們還自費換購洗碗機。接待的紀先生專業又親切，來安裝時跟技師合作無間很迅速就完成！完工後也很熱心回答各種疑問，還會溫馨提醒該注意的眉角，值得五星好評'
 
 export const storeCases: StoreCaseDetail[] = [
