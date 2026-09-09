@@ -332,7 +332,7 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-team-card__project-status > svg { width: 36px; height: 36px; flex: none; padding: 9px; border-radius: 50%; color: #1c1c1d; background: #caa05c; transform: rotate(-45deg); transition: transform .35s ease; }
 .builders-team-card--project:hover .builders-team-card__project-status > svg,
 .builders-team-card--project:focus-visible .builders-team-card__project-status > svg { transform: rotate(0); }
-.builders-capability { padding: 130px 30px 72px; background: #f2f2f2; }
+.builders-capability { padding: 130px 30px 72px; background: #f6f6f6; }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-capability .builders-section-heading--split > div h2 { margin-top: 70px; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }

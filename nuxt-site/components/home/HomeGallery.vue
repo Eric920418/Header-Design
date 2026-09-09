@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 
-const cases = ['/home-2026/gallery/yuan-aifei.jpg','/home-2026/gallery/old-house-kitchen.jpg','/home-2026/gallery/custom-kitchen.jpg']
+const cases = [
+  '/section-3/cases/case10/case10_content_asset_03_20260904.webp',
+  '/section-3/cases/case56/case56_content_asset_04_20260904.webp',
+  '/section-3/cases/case35/case35_content_asset_11_20260904.webp',
+]
 const active = ref(0)
 const paused = ref(false)
 const reduced = useReducedMotion()
