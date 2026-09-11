@@ -36,7 +36,7 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
-    previewPassword: '520VANLAN@2026',
+    previewPassword: '520VANLAN',
     public: {
       googleMapsApiKey: '',
       franchiseApplicationEndpoint: '',
