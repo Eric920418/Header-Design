@@ -1,6 +1,11 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-09-13 首頁更多設計 CTA
+
+- 首頁 `Kitchen Design / SHOWROOM PROJECTS` 區塊「更多設計」由 `/gallery` 改連至 `/design-inspiration`；沿用既有 Nuxt 站內導覽，保留文字、樣式、輪播及其他案例入口。本次未推送或部署。
+- 本機 1440／390px 實際點擊皆進入設計靈感，跳轉後立即及等待後 `scrollY=0`、麵包屑為「首頁／設計靈感」，無 JavaScript 錯誤；開發型別檢查及 `git diff --check` 通過。本次僅檢查此 CTA，未重跑全站回歸或正式建置。
+
 ## 2026-09-13 Footer 外部連結
 
 - 共用 Footer「數位展板」連至 `https://board.sakura-kitchenlife.com.tw/`，「YouTube」連至 `https://www.youtube.com/channel/UCvI2keNeq7WKawIU5ct1h9A`；兩者使用原生外部連結、`target="_blank"` 及 `rel="noopener noreferrer"`，保留圖示、尺寸、排版與原網站分頁。
