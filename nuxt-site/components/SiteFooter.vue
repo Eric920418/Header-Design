@@ -74,8 +74,8 @@ onBeforeUnmount(() => {
         class="footer-social-links flex h-10 items-center gap-12 lg:absolute lg:top-[60px] lg:left-[var(--footer-social-left)] lg:gap-[var(--footer-social-gap)]"
         :style="{ '--footer-social-left': footerSocialLeft, '--footer-social-gap': footerSocialGap }"
       >
-        <a href="#" aria-label="數位展板" class="flex h-10 items-center"><img src="/icons/digital-board.png" alt="" class="h-[35px] w-auto" /></a>
-        <a href="#" aria-label="YouTube" class="flex h-10 items-center"><img src="/icons/youtube.png" alt="" class="h-[40px] w-auto translate-y-[7px]" /></a>
+        <a href="https://board.sakura-kitchenlife.com.tw/" target="_blank" rel="noopener noreferrer" aria-label="數位展板" class="flex h-10 items-center"><img src="/icons/digital-board.png" alt="" class="h-[35px] w-auto" /></a>
+        <a href="https://www.youtube.com/channel/UCvI2keNeq7WKawIU5ct1h9A" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="flex h-10 items-center"><img src="/icons/youtube.png" alt="" class="h-[40px] w-auto translate-y-[7px]" /></a>
       </div>
     </div>
     <nav v-show="sitemapOpen" id="footer-sitemap" aria-label="網站地圖" class="relative z-10 mx-auto grid max-w-[1410px] grid-cols-2 gap-x-6 gap-y-8 pb-12 pr-[86px] pl-[15px] font-cjk-sans md:grid-cols-3 md:pl-[30px] lg:grid-cols-6">

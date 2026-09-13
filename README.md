@@ -1,6 +1,12 @@
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-09-13 Footer 外部連結
+
+- 共用 Footer「數位展板」連至 `https://board.sakura-kitchenlife.com.tw/`，「YouTube」連至 `https://www.youtube.com/channel/UCvI2keNeq7WKawIU5ct1h9A`；兩者使用原生外部連結、`target="_blank"` 及 `rel="noopener noreferrer"`，保留圖示、尺寸、排版與原網站分頁。
+- 本機 1440／390px 於首頁及設計靈感內頁實際點擊兩個 Footer 連結，共 8 次皆另開指定網址、`window.opener` 為 null，原分頁網址不變；無 JavaScript 錯誤，`git diff --check` 通過。測試攔截外站回應以驗證導向與分頁行為，未驗證外站內容或可用性；本次未重跑正式建置或全站版面回歸。
+- 「重新開啟網站回首頁」需求仍待使用者確認，本次未實作；本次未推送或部署。
+
 ## 2026-09-11 更新預覽密碼
 
 - 依需求更新預覽預設密碼，移除原符號與年份後綴；保留登入後固定 3 小時到期、簽章驗證與 Cookie 安全設定。修改密碼後，原密碼簽發的登入權杖不再通過伺服器驗證，需重新登入。
