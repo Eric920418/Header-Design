@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const primaryItem = {
-  href: '/gallery',
+  href: '/design-inspiration',
   icon: '/floating-icons/case.png',
-  label: '案例門市',
+  label: '設計案例',
 }
 
 const serviceItems = [
@@ -58,6 +58,7 @@ onBeforeUnmount(() => {
           <img :src="item.icon" alt="" class="block w-14 sm:w-[58px]" />
         </a>
       </template>
+      <button type="button" disabled title="拍立配連結待提供" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 font-['Noto_Sans_TC'] text-xs text-white sm:h-[74px] sm:w-[74px]">拍立配</button>
     </div>
   </aside>
 </template>

@@ -66,9 +66,9 @@ onBeforeUnmount(() => timer && clearInterval(timer))
     <div class="hero-template-bottom z-20 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
       <div class="hero-template-cta h-[120px] w-[120px] shrink-0">
         <div v-reveal="{ anim: 'fadeIn', delay: 900, duration: 'slow' }" class="h-full w-full rounded-[200px] backdrop-blur-[58px]">
-          <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" class="hero-start-project group/hero-cta relative flex h-full w-full items-center justify-center overflow-hidden rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center text-[18px] leading-[24px] text-white transition-colors hover:text-[#CAA05C]">
-            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-display transition-opacity duration-300 group-hover/hero-cta:opacity-0 group-focus-visible/hero-cta:opacity-0">Start<br />Project</span>
-            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-cjk-sans opacity-0 transition-opacity duration-300 group-hover/hero-cta:opacity-100 group-focus-visible/hero-cta:opacity-100">設計靈感</span>
+          <NuxtLink to="/design-inspiration" aria-label="探索設計案例" class="hero-start-project group/hero-cta relative flex h-full w-full items-center justify-center overflow-hidden rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center text-[18px] leading-[24px] text-white transition-colors hover:text-[#CAA05C]">
+            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-cjk-sans transition-opacity duration-300 group-hover/hero-cta:opacity-0 group-focus-visible/hero-cta:opacity-0">探索<br />設計案例</span>
+            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-cjk-sans opacity-0 transition-opacity duration-300 group-hover/hero-cta:opacity-100 group-focus-visible/hero-cta:opacity-100">探索<br />設計案例</span>
           </NuxtLink>
         </div>
       </div>
@@ -88,14 +88,14 @@ onBeforeUnmount(() => timer && clearInterval(timer))
                 <NuxtLink v-if="style.available && style.route" :to="style.route" class="flex items-center justify-between gap-3 whitespace-nowrap border-l-2 border-transparent py-2 pl-6 pr-4 text-[15px] text-white transition-colors hover:border-[#CAA05C] hover:bg-white/5 hover:text-[#CAA05C]" @click="seriesOpen = false">
                   <span>{{ style.zh }}</span><span class="text-[10px] uppercase text-white/55">{{ style.en }}</span>
                 </NuxtLink>
-                <button v-else type="button" class="flex w-full items-center justify-between gap-3 whitespace-nowrap border-l-2 border-transparent py-2 pl-6 pr-4 text-left text-[15px] text-white transition-colors hover:border-[#CAA05C] hover:bg-white/5 hover:text-[#CAA05C]" @click="seriesOpen = false">
+                <button v-else type="button" class="flex w-full cursor-pointer items-center justify-between gap-3 whitespace-nowrap border-l-2 border-transparent py-2 pl-6 pr-4 text-left text-[15px] text-white transition-colors hover:border-[#CAA05C] hover:bg-white/5 hover:text-[#CAA05C]" @click="seriesOpen = false">
                   <span>{{ style.zh }}</span><span class="max-w-[78px] truncate text-[10px] uppercase text-white/55">{{ style.en }}</span>
                 </button>
               </li>
             </ul>
           </div>
         </div>
-        <button type="button" aria-controls="hero-kitchen-series" :aria-expanded="seriesOpen" :aria-label="seriesOpen ? '收合品牌系列選單' : '展開品牌系列選單'" class="flex h-36 w-10 flex-col items-center justify-center gap-2 rounded-r-2xl border border-white/10 bg-[rgba(0,0,0,.55)] text-white/85 backdrop-blur-md transition-all duration-500 hover:text-[#CAA05C]" :class="seriesOpen ? 'translate-x-[210px]' : ''" @click="seriesOpen = !seriesOpen">
+        <button type="button" aria-controls="hero-kitchen-series" :aria-expanded="seriesOpen" :aria-label="seriesOpen ? '收合品牌系列選單' : '展開品牌系列選單'" class="flex h-36 w-10 cursor-pointer flex-col items-center justify-center gap-2 rounded-r-2xl border border-white/10 bg-[rgba(0,0,0,.55)] text-white/85 backdrop-blur-md transition-all duration-500 hover:text-[#CAA05C]" :class="seriesOpen ? 'translate-x-[210px]' : ''" @click="seriesOpen = !seriesOpen">
           <ChevronRight class="h-5 w-5 transition-transform" :class="seriesOpen ? 'rotate-180' : ''" /><span class="writing-vertical text-base tracking-[.3em]">品牌系列</span>
         </button>
       </div>
