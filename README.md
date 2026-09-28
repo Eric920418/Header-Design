@@ -1,5 +1,214 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-09-28 案例門市卡片按鈕
+
+- `/gallery` 門市卡片按鈕由「預約門市」改為「查看門市」，保留各自 `/gallery/:slug` 連結、樣式與動畫；其他真正的預約入口不變。本機修改，未部署。
+
+## 2026-09-28 服務流程介紹標題
+
+- `/service-process` 介紹區標題改為「從設計到實現，打造理想廚房」＋「Bringing Your Dream Kitchen to Life」。中文獨立一行，沿用既有中文字型；保留英文金色強調、響應式尺寸、區塊版型與進場動畫。Hero `Our Process`、說明內文與流程內容不變。本機修改，未部署。
+
+## 2026-09-28 淨水設備分類標題
+
+- `/products/sakura/category/9` 商品列表區的英文標題由 `SAKURA Kitchen Appliances` 改為 `Smart Appliances for Better Living`。保留原樣式與動畫，上方 Hero `Kitchen Appliances`、中文分類名稱與其他分類不變。`check-product-covers.mjs` 加入此頁及相鄰分類的 SSR 標題檢查。本機修改，未部署。
+
+## 2026-09-28 商品分類封面對照 SPA 修正
+
+- 修正原本直接取分類下第一項商品作封面的問題：淨水設備、龍頭、水槽、收納五金、門板、檯面使用 SPA `frontend/public/menu-*` 的六張專用分類封面，原檔複製至 `public/products/categories/`；不再用濾芯、皂液器或單色色樣代表整類產品。
+- 其餘分類沿 SPA 的分類 Sort 順序向下找商品主圖，保持品牌隔離並排除明確標記的配件／情境圖；三品牌共用選圖邏輯。僅分類封面改變，商品內頁圖集、資料庫、數量、連結及排序不變。分類卡片維持原版型，圖片完整 contain 並補上留白，避免產品貼邊。
+- 本機修改，未部署；SPA 原始專案及資料庫不修改。
+- 驗證通過：`pnpm typecheck`、`node nuxt-site/scripts/check-product-covers.mjs`（唯讀測試，不寫資料庫），涵蓋三品牌 32 張分類封面 HTTP／SSR、分類連結、子分類選圖、六張本機素材內容及原產品總數。瀏覽器確認 SAKURA 16 張圖片均載入，1280px 桌機及 390px 手機使用 contain 留白、無水平溢出。
+
+## 2026-09-28 SAKURA 介紹區中英文主標修正
+
+- `/products/sakura` 的介紹區大標改為「廚房產品」＋「Elevate Your Kitchen with SAKURA」；中文不再只放在小標籤，移入同一個 h2 並獨立一行，使用既有中文字型。移除該區重複的中文小標籤，保留英文金色強調與進場動畫。上方 Hero `Kitchen Appliances`、SVAGO／TEKA 文案均不變。本機修改，未部署。
+
+## 2026-09-28 商品 Hero 標題統一
+
+- 三品牌 SAKURA／SVAGO／TEKA 的品牌頁、全部商品與分類列表（含舊 SAKURA 除油煙機網址），Hero 大標統一為 `Kitchen Appliances`，移除品牌前綴。僅修改兩個共用 Hero 的文字，保留樣式、動畫、麵包屑及下方區塊文案；商品詳情原本沒有這段 Hero 大標，不另新增。本機修改，未部署。
+
+## 2026-09-28 產品系列跑馬燈連結
+
+- 商品列表下方的品牌／產品系列文字改為整個項目可點擊的 NuxtLink，直接沿用資料庫分類 route 導向對應產品列表；三品牌共用，不導回品牌總覽。保留原尺寸、顏色及 Hover 持續播放，加入手指游標與鍵盤焦點框；無縫輪播的複製組仍可滑鼠點擊，但不重複進入 Tab 順序。本機修改，未部署。
+- `check-products.mjs` 加入三品牌跑馬燈 SSR 驗證：每個系列與複製組都必須連到自己的分類列表，複製組不重複進入鍵盤順序。
+- 驗證通過：型別檢查、三品牌系列連結及 847 項商品回歸；瀏覽器實測「歐化系列」導向 `/products/sakura/category/29`、顯示 7 項且 `scrollY=0`，跑馬燈維持 running、游標為 pointer。
+
+## 2026-09-28 三品牌商品資料串接（本機）
+
+- 使用 SPA `KitchenBuy/` 2026-03-19 快照，原檔複製至非公開 `private/kitchen-buy/`；只解析 literal INSERT，絕不執行來源 DROP／ALTER。與 SPA 相同採「展板」通路，避免混入另一通路重複資料；原始混合通路快照保留。SPA 專案與資料庫不修改、不部署。
+- 在既有獨立 `127.0.0.1:14333/SakuraWebsiteDev` 新增八張 `sync.BuyKitchen*` 表，共用伺服器端唯讀連線。先 `node --env-file=.env.design-db.local nuxt-site/scripts/product-db.mjs init`，再 `node --env-file=.env.design-db.local nuxt-site/scripts/product-db.mjs import`；`inspect` 只檢查快照。匯入使用原有獨立 INSERT 帳號、SERIALIZABLE 交易，相同資料跳過、衝突整批回滾、不 UPDATE／DELETE。
+- 上游規格表同一 ID 包含多項規格及尺寸版本，因此保留原始 id，另以完整資料列 SHA-256 作 rowKey；只去掉完全相同資料列，不依 ID 丟棄其他規格。其餘表沿用來源 ID／複合關聯鍵。價格、附件與規格僅呈現來源實際存在的內容，不以別款商品補缺漏。
+- 三品牌共 **847 項：SAKURA 749、SVAGO 60、TEKA 38**（包括五金／板材等 SPA 產品，不等於 847 款廚電）。八表 Classes／Products／Features／ProductClass／ProductFeatures／ProductPrices／ProductProperties／PublicFiles 匯入數為 **226／879／1150／2282／2713／539／6632／2288**；Products 中另有 Electrolux 32 項，API 不開放該品牌。來源 46 筆跨通路／缺項分類關聯原樣保留，網站依 SPA 使用的產品分類路徑及實際品牌成員產生可用分類。
+- `/products/{sakura,svago,teka}` 共用原 SAKURA 品牌版型；`/all`、`/category/:category` 為每頁 12 筆的搜尋／分類列表，`/item/:id` 共用原商品內頁、圖集、特色、價格、規格對話框、官方附件及相關商品。SAKURA 舊除油煙機／近吸／型號網址保留。首頁品牌卡片、跑馬燈、選單及 Footer 連結已接入；型錄預覽依品牌選用櫻花或進口廚電型錄。固定分類麵包屑，返回列表保留搜尋及頁碼，不加入上一個商品名稱。
+- 唯讀 API：`GET /api/products/:brand/categories`、`GET /api/products/:brand/items?category=&q=&page=1`、`GET /api/products/:brand/items/:id`。查詢綁定參數、品牌隔離，非法參數 400、不存在商品／分類 404；資料庫失敗沿用已遮蔽機密的 503 原因及重試畫面，不回退舊靜態資料。圖片／附件限官方 HTTPS 來源。舊 `public.sakuraProductEndpoint` 不再供商品頁使用。
+- 驗證指令：`node --env-file=.env.design-db.local nuxt-site/scripts/check-products.mjs --assets`。八表筆數、重複匯入零新增、衝突交易回滾、唯讀拒絕寫入、原 25 筆設計案例、三品牌全部分頁／分類／847 個內頁／規格比對及舊網址均通過；2,202 個不重複外部圖片／附件 HTTP 檢查零失敗。型別檢查及正式建置通過（既有 Tailwind sourcemap 警告仍在）。
+- **來源缺項不等於串接失敗**：SAKURA 有 1 項無圖片、375 項無特色、388 項無正價售價、64 項無規格、421 項無附件；SVAGO 有 8 項無規格、2 項無附件；TEKA 有 12 項無附件。前端顯示缺項／洽門市提示。此為 SQL 快照匯入後由官網 MSSQL 提供資料，**不是即時同步 SPA**；後續快照更新須先審核衝突，不自動覆寫。正式公開前須確認展板通路商品的上架範圍及可連線 MSSQL，本次不部署。
+- 響應式保留既有 SAKURA 版型，長尺寸／型號允許換行，避免手機上擠壓價格；手機規格表兩欄自動換行，不需橫向捲動才能讀取完整內容。
+- 商品分頁／搜尋變更只改 query，原路由原本略過這類捲動重設；共用 router 現在針對商品 `page`／`q` 變更回到頁首，其他頁的 query 與錨點行為不變。
+- 既有 `check-route-scroll.cjs` 更新商品 ID 連結，加入三品牌分頁→商品→返回第二頁的回歸情境。
+- 瀏覽器實測 1280px 桌機／390px 手機：SVAGO 列表→內頁→規格→返回搜尋（VEG）條件保留，TEKA 圖片／手機規格表／分頁無橫向溢出，修正後分頁 `scrollY=0`。不存在商品前端顯示 404 與原因；另啟隔離正式建置程序以錯誤 DB 連接埠模擬斷線，品牌頁／列表／內頁／API 均回 503、原因及重試可見，不改動正常資料庫。測試程序已停止，正常預覽維持 `http://localhost:3100`。
+
+## 2026-09-28 SAKURA 廚房產品文案
+
+- `/products/sakura` 介紹區塊的小標改為「廚房產品」，主標改為「Elevate Your Kitchen with SAKURA」。沿用原金色強調、版型及進場動畫；不修改加盟頁的同名舊標題。僅本機修改，尚未部署。
+
+## 2026-09-28 十個品牌系列完整內頁
+
+- `/home-style/{aikitchen,basic-plus,clever,loft-chic,joyful,premium,elegant,chef,country,harmony}` 共用原 AI Kitchen 的 Hero、套系／特色圖集、板材顏色、iCare 預約、廚電推薦及案例區塊。Hero 整體布局保留待確認；標題改為各系列名稱，沿用首頁 `hero-template-title` 字型／斷點與每 5 秒重啟的 `hero-copy-cycle` 動畫，減少動態偏好下停播。
+- AI Kitchen 原資料保留於 `data/kitchenSeries.ts`；其餘九系列依櫻花正式網站各品牌頁於 2026-09-28 取得的內容，保存於 `data/kitchenSeriesContent.json`，每筆附來源 URL。Hero 使用已提供的 10BN 圖片，其他圖片使用官方來源；沒有捏造規格或複製 AI 套系。來源未提供個別廚電連結者使用靜態卡片，已有外部產品連結者另開分頁；五金型錄保留原連結。
+- Basic+、Clever、Country 官方未提供推薦案例，保留推薦區塊並顯示空狀態與設計靈感入口。所有系列保留立即預約 SAKURA iCare；首頁 Hero、品牌卡片、Header 及系列抽屜已啟用對應內頁。未知系列回傳 404，跨系列重新建立頁面狀態，避免沿用前一個系列內容。
+- 本次僅本機修改、不部署、不修改 SPA 或資料庫。驗證指令：`pnpm typecheck`、`pnpm build`、`node nuxt-site/scripts/check-kitchen-series.mjs`。
+- 驗證完成：十頁 SSR、未知系列 404、215 個圖片來源（本機檔案存在／外部 HTTP 圖片回應；加上 `--images` 可重跑外部檢查）、套系鍵盤操作及動畫回歸。瀏覽器實測 1280px 桌機與 390px 手機、巧域切換潮派後 `scrollY=0` 且套系重設、五金型錄另開分頁與無橫向溢出。型別檢查與正式建置通過；建置仍有 Tailwind sourcemap 警告，不影響產出。只有一張 Hero 圖片時停用前後切換按鈕，標題動畫仍依首頁週期播放。
+
+## 2026-09-28 設計靈感 MSSQL 串接
+
+- 本次以 SPA DesignCloud 快照建立獨立 `SakuraWebsiteDev` 開發資料庫；容器使用 `compose.design-db.yml`，僅綁定 `127.0.0.1:14333`，不共用或修改 SPA 資料。Apple Silicon 的 SQL Server 2022 amd64 模擬環境需通過啟動驗證才能進行匯入；本次不部署。
+
+### 本機啟動與匯入
+
+1. 安裝 Node.js 22+、pnpm、Docker Desktop。將根目錄 `.env.design-db.example` 複製為 `.env.design-db.local`，填入三組不同的強密碼；此檔已被 Git 忽略。本機已完成設定，**不要覆蓋現有環境檔或重設既有帳號密碼**。
+2. 在專案根目錄執行：
+
+   ```sh
+   pnpm install
+   docker compose --env-file .env.design-db.local -f compose.design-db.yml up -d
+   docker compose --env-file .env.design-db.local -f compose.design-db.yml logs --tail 30
+   pnpm --dir nuxt-site db:init
+   pnpm --dir nuxt-site db:import
+   ```
+
+3. 按 `nuxt-site/.env.example` 將 `NUXT_DESIGN_DB_*` 加到既有 `nuxt-site/.env`，保留 Google Maps 等其他設定。`NUXT_DESIGN_DB_PASSWORD` 使用 `WEBSITE_DB_READER_PASSWORD`，不使用 SA／匯入帳號。這些設定只在 Nuxt 伺服器端；修改後重啟 `pnpm dev --port 3100`。本機預覽為 `http://localhost:3100/design-inspiration`，仍需原有提案預覽密碼。
+4. 停用只執行 `docker compose --env-file .env.design-db.local -f compose.design-db.yml stop`，重啟使用 `start`。資料存於獨立 volume `sakura-website-dev_website-sql-data`；**不要使用 `down -v` 或刪除 volume**。
+
+### 資料與權限
+
+- 五份來源為 SPA `DesignCloud/` 的 2026-02-11 SQL 快照，保留於根目錄 `private/design-cloud/`，不放 `public/`、不打包進前端。只解析 allowlist 資料表、欄位及 INSERT literal，原檔的 DROP／CREATE／ALTER 絕不執行。來源中 PDF、CaseFile 記錄為維持關聯原樣匯入，但網站 API **只公開 Image**，不提供報價或 ZIP 下載。
+- `db:init` 只建立缺少的 `SakuraWebsiteDev`／`sync` 表／帳號與 nullable `Tags.Sort`，不清空資料、不重設既有登入。ID 與 FK 保留；中文字串用 Unicode，案例說明用 `nvarchar(max)` 避免截斷來源長文。
+- `sakura_website_import` 只有 sync SELECT／INSERT；`sakura_website_reader` 只有 sync SELECT。兩者均禁止 UPDATE／DELETE／ALTER；SA 僅供本機初始化及驗收臨時資料。所有帳密留在被忽略的環境檔。
+- 匯入器只接受 `127.0.0.1:14333/SakuraWebsiteDev`，每批使用 SERIALIZABLE 交易：相同 ID 且內容相同跳過；不同內容列出 ID／衝突欄位並整批回滾；不覆寫、不刪除、不使用 data-loss 指令。預期案例／標籤／關聯／檔案／屬性依序為 **25／46／200／182／200**。只在這份固定開發快照執行驗收，不針對正式庫。
+
+### API 與頁面
+
+- `GET /api/design-inspiration/filters`、`GET /api/design-inspiration/cases?form=&style=&page=1`、`GET /api/design-inspiration/cases/:id`；固定 9 筆一頁，名稱＋ID 排序，型式與風格交集。僅 `IsWebsite=1` 可見，不受 `IsBoard` 限制。清理標籤尾端空白，接受舊 `ㄇ型+中島` 別名。重複參數、非法頁碼／未知篩選回 400，未公開／不存在 ID 回 404，連線／查詢錯誤回 503 並顯示已遮蔽機密的原因與重試按鈕。
+- 列表保留原 Hero／卡片版型，改為 25 筆設計案例，說明最多兩行；內頁 `/design-inspiration/:id` 使用原案例輪播、實際八項規格與說明。固定麵包屑「首頁／設計靈感／設計案例」，返回連結保留篩選／頁碼。SSR 讀取，不用舊靜態門市故事掩蓋連線失敗；原 `/gallery` 門市案例繼續保留。
+- 移除設計靈感專用的舊靜態列表／型別，門市故事本體 `data/storeCases.ts` 保留。共用案例輪播的縮圖改為僅橫向捲動縮圖列，避免 `scrollIntoView` 初始化時帶動整頁；不改門市案例視覺。
+
+### 驗收與部署限制
+
+```sh
+pnpm --dir nuxt-site test:design-db
+pnpm typecheck
+pnpm build
+```
+
+- `test:design-db` 驗證解析、筆數、重複匯入、衝突／外鍵失敗回滾、FK、最小權限、API 9／9／7 分頁、42 種篩選交集、空集合／400／404、25 筆內頁、未公開／IsBoard=0、SSR 與密碼未外洩。預設測試 `http://localhost:3100`，可設 `PREVIEW_URL`／`PREVIEW_PASSWORD`；只短暫新增並清理隨機 ID 的驗收資料，不修改原 25 筆案例。既有 `check-route-scroll.cjs`、`check-smart-breadcrumbs.cjs` 已補新內頁驗證（需原有 Playwright 測試環境，本次未跑全站迴圈，改以瀏覽器實際操作相關路徑）。
+- 已通過本機 SQL Server 2022 Developer CU27 啟動與連線、匯入筆數及上述資料庫／API 測試；132 個圖片 URL HEAD 均為有效圖片。桌機 1280px／手機 390px 檢查列表、圖片、8 項規格、輪播、麵包屑及跳轉頂端；無水平溢出。型別檢查與正式建置通過。
+- 正式建置以 Node server 本機啟動後也通過完整 `test:design-db`。另實際停止／重啟獨立官網容器：前端顯示 `HTTP 503 / ESOCKET` 與原因，點「重新載入」恢復 9 筆第二頁卡片；手機分頁進入案例再點麵包屑返回，仍是第 2 頁且 `scrollY=0`，桌機風格篩選返回也保留。原 `/gallery/case56` 標題、版面及頂端定位正常。
+- 本機已驗證但未部署；**Vercel 無法連到開發者電腦的 localhost**。正式部署前必須配置可連線的 MSSQL／憑證／防火牆及唯讀帳號，正式環境 `NUXT_DESIGN_DB_TRUST_SERVER_CERTIFICATE=false`。Docker amd64 在 Apple Silicon 的模擬執行不屬 Microsoft 官方支援環境，不作正式主機；不使用已退役 SQL Edge。
+
+## 2026-09-28 全站輪播 Hover 複查
+
+- AI Kitchen 最後的推薦設計案例輪播原已在 Hover 時持續播放，本機停留 4.5 秒確認滑至下一張。掃描 Nuxt 站的輪播與跑馬燈後，發現首頁門市名單翻牌仍在 Hover 時暫停；已移除這兩個滑鼠進出暫停事件，讓四個標籤在懸停時也持續翻牌。本機重測 Hover 4.2 秒後門市標籤確實更換；`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。鍵盤焦點暫停、系統減少動態效果及其他輪播原有的拖曳處理不變。本次未部署。
+
+## 2026-09-28 AI Kitchen 廚電推薦標題
+
+- AI Kitchen 廚電推薦區塊的小標由 `Kitchen Appliances` 改為「廚房電器推薦」，主標由電子報佔位文案 `Join Our Newsletter Stay Up To Date` 改為 `Explore Our Kitchen Appliances`；保留兩行版型、動畫與推薦商品卡片。本機預覽確認雙語標題與五張商品卡片正常顯示；`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。本次未部署。
+
+## 2026-09-28 AI Kitchen 板材色卡預約 CTA
+
+- 板材色卡下方新增獨立的置中「立即預約」CTA 區塊，沿用全站圓角文字＋金色箭頭的按鈕樣式；點擊以新分頁開啟指定的 `https://pse.is/9kq37z`，並加上 `noopener noreferrer`。短網址目前轉向 SAKURA iCare 登入頁，但轉址所帶 token 的到期時間為 2026-05-27，已過期；同一短網址也用在案例內頁，若預約流程失效，需由對方提供新的有效連結。本機確認按鈕位於六張色卡下方、游標為手指、連結具備 `_blank` 與安全屬性，頁面無主控台錯誤；`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。本次未部署。
+
+## 2026-09-28 AI Kitchen 板材顏色標題
+
+- AI Kitchen 板材顏色區塊的小標由 `Material Selection` 改為「板材顏色選擇」，主標由 `Gallery Of Inspiring Kitchen Designs` 改為 `Explore Our Color Collection`；沿用原本兩行標題、字級、動畫及圖片卡片。本機預覽確認小標、主標與六張色卡正常顯示，`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。本次未部署。
+
+## 2026-09-28 AI Kitchen 去小標後位置
+
+- 移除 Hero 小標後，主標與 CTA 維持移除前的原位置；原標籤高度實測為 32px，於桌機及手機標題上距補回同等空間，不把標籤或隱藏文字留在 DOM。本機桌機實測主標 top=174px、CTA top=352.8px，與保留原標籤時完全一致；`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。本次未部署。
+
+## 2026-09-28 AI Kitchen Hero CTA 動畫
+
+- AI Kitchen 首屏圓形 CTA 改用首頁 Hero 相同的 900ms 延遲、慢速淡入；動畫改掛在實際 DOM 容器上，修正原本掛於 `NuxtLink` 卻未生效的問題。解除按鈕裁切，讓既有共用金色水波能完整向外擴散。保留 AI Kitchen 原有的文案、尺寸、位置與 Hover 換字／填色。本機確認按鈕位置仍為原座標、動畫標記與水波正常；`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 通過。本次未部署。
+
+## 2026-09-28 AI Kitchen Hero 小標
+
+- `/home-style/aikitchen` 的 Hero 移除 `Trusted Design Partner` 小標籤，其餘標題、CTA 與區塊內容保持不變。本機預覽確認小標消失、主標與 CTA 正常顯示；`pnpm --dir nuxt-site typecheck` 與 `git diff --check` 通過。本次未部署。
+
+## 2026-09-28 首頁門市翻牌與游標
+
+- 未篩選、未手動選店時，右側四張門市卡片依序輪流翻牌，不再固定保留預設的承德店；若翻到目前選取的門市，翻牌完成後同步更新地圖標記。選擇區域或手動點選門市後，保留選取卡片，避免查看地圖時突然換店。可點選卡片明確顯示手指游標。本機連續觀察五次翻牌，四個位置均有更換；卡片及文字區的游標皆為 `pointer`，頁面無主控台錯誤。`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。本次未部署。
+
+## 2026-09-28 首頁門市地圖標記外連
+
+- 首頁門市地圖的黑色「S」標記改為可點擊，以新分頁在 Google Maps 定位目前選取門市的地址；標記標題同步顯示門市名稱，游標為手指。右側門市卡片仍只負責切換地圖，不改原操作；快速切換門市時忽略較舊的定位回應，避免標記與連結指向不同門市。原本試用「門市名稱＋地址」搜尋，但民權店會停在搜尋列表，故改用地址定位；若須保證開啟每間店的商家資料頁，需取得各店 Place ID 或官方 Maps 分享連結。本次未部署。
+- 本機實測承德與松竹切換後標記名稱同步更新；點擊松竹標記另開 Google Maps 並定位至松竹路一段 763 號，民權路二段 68 號亦以地址查詢確認可定位。`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。
+
+## 2026-09-28 首頁門市區塊標題
+
+- 首頁 `STORE LOCATOR` 區塊主標由 `Have a Project in Mind? Let’s Make It Happen` 改為「櫻花整體廚房／全台門市據點」兩行，第一行黑色、第二行金色；改用既有中文襯線標題字型與強調字重。建商專區的同類英文標題不屬此首頁區塊，未更動。本次未部署。
+
+## 2026-09-28 全站可點選區塊游標
+
+- 共用樣式將可點選的連結、按鈕、選單、分頁、表單選項及關聯標籤顯示為手指游標；停用項目不套用，原有拖曳／放大游標保留。僅調整游標，不改連結或點擊行為。
+- 本機抽查首頁、設計靈感列表、廚電列表、優惠活動列表、品牌介紹及後台：可用連結／按鈕均為手指；品牌介紹的六個放大圖片鈕保留更明確的放大游標，首頁停用「拍立配」維持預設游標。`pnpm --dir nuxt-site build` 與 `git diff --check` 通過；本次未部署。
+
+## 2026-09-28 首頁品牌承諾標題
+
+- 首頁品牌承諾區塊的小標由 `Brand Commitment` 改為「品牌承諾」，主標由 `SAKURA has created exceptional` 改為 `Why SAKURA KITCHEN`；保留原本黑金分色、版型與內文。本次未部署。
+
+## 2026-09-27 首頁設計案例輪播導向
+
+- 「設計案例」主背景圖與兩張縮圖依序對應安康 `case10`、承德 `case56`、松竹 `case35` 的現有案例內頁；圖片及箭頭改用手指游標。內容容器讓出背景空白處的點擊層，保留標題、CTA、縮圖與箭頭各自的操作；拖曳縮圖仍只切換輪播、不誤觸導覽，鍵盤 Enter 仍可開啟連結。背景自動輪播不因滑鼠 Hover 暫停，只在按住背景／縮圖時暫停，避免點擊期間換張；減少動態效果偏好仍生效。既有路由捲動回歸腳本納入首頁案例縮圖跳轉。本次未部署。
+- 本機瀏覽器確認背景空白處、縮圖及箭頭游標皆為手指；停留標題超過一個 3.2 秒週期後背景仍換張。實際點擊背景進入承德 `case56`，縮圖分別進入安康 `case10`、松竹 `case35`；拖曳只換圖、不跳頁。`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、回歸腳本語法及 `git diff --check` 通過；未重跑完整路由捲動回歸。
+
+## 2026-09-27 首頁設計案例佔位文案
+
+- 移除「設計案例」標題下方的 `Lorem ipsum` 英文佔位段落及不再使用的專屬樣式；保留 `SHOWROOM PROJECTS` 分類標籤、標題、輪播與「更多設計」CTA。段落移除後 CTA 自然上移，不新增空白佔位。本機預覽確認文案消失、CTA 可見，`pnpm --dir nuxt-site typecheck` 與 `git diff --check` 通過；本次未部署。
+
+## 2026-09-27 首頁設計案例標題
+
+- 首頁原 `Kitchen Design` 區塊標題改為「設計案例」，使用既有中文襯線標題字型；原標題尺寸、區塊位置、案例輪播及「更多設計」連結不變。本機預覽確認標題正常顯示，`pnpm --dir nuxt-site typecheck` 與 `git diff --check` 通過。本次未部署。
+
+## 2026-09-27 首頁品牌 Logo 跑馬燈
+
+- 廚房產品下方跑馬燈移除 TLK Kitchens 與 SAKURA Home，加入沿用網站頁首素材的 SAKURA KITCHEN。SAKURA 連至 `/products/sakura` 廚電列表，SAKURA KITCHEN 連至 `/home-style/aikitchen`；可點區域涵蓋 Logo 周圍原有留白，方便在移動中點選。四款 Logo 改為重複五組並調整位移週期，避免 4K 寬螢幕露白，同時維持原本跑動速度與樣式。
+- 本站目前沒有 TEKA、SVAGO 列表頁；其 Logo 暫時保留但不連到不存在的頁面，待確認確切網址或建頁內容後補上連結。本機瀏覽器確認四款 Logo 順序、兩個已存在頁面的導向及動畫週期；`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。本次未部署。
+
+## 2026-09-27 首頁廚房產品卡片文案
+
+- 首頁「廚房產品」三張卡片依序以指定的 SAKURA、SVAGO、TEKA 中文文案取代原英文範本；移除舊三行截斷，確保較窄版面也顯示完整文案。文案改用既有正文灰色，手機版右側預留浮動按鈕寬度，避免句尾被遮住；圖片、品牌順序、卡片連結與整體版型不變。本次未部署。
+
+## 2026-09-27 首頁廚房產品主標
+
+- 首頁 `KITCHEN PRODUCTS` 區塊主標由 `Explore Our Comprehensive Kitchen Design Services` 改為「廚房產品」；維持原本白色／金色分段、各斷點字級與區塊版型，改用既有中文襯線標題字型與 600 字重，避免英文標題樣式直接套到中文。本次未部署。
+
+## 2026-09-27 首頁品牌系列中文字型
+
+- 「品牌系列」由英文模板標題改為中文後，原本仍使用 `font-display` 與 400 字重，視覺偏細。已改用全站既有的中文襯線標題字型與強調字重，微調行高、字距；保留標題字級、黑金分色與區塊版型。本機預覽確認，尚未部署。
+
+## 2026-09-27 全站輪播 Hover 行為
+
+- 首頁風格、品牌系列、廚房商品、門市案例、品牌家族、關於我們品牌紀事與 AI 廚房推薦案例輪播，及產品分類、建商合作、加盟頁跑馬燈，均改為滑鼠懸停時持續播放；原有播放間隔與切換動畫不變。
+- 保留鍵盤焦點暫停、手動拖曳後停播（原本有此行為的輪播）、系統「減少動態效果」設定及產品跑馬燈進入可視範圍才播放的邏輯。首頁門市名單當時因可點選而保留懸停暫停，已於 2026-09-28 補齊持續翻牌。本次未部署。
+- 本機實測品牌系列輪播在 Hover 且未取得鍵盤焦點時持續換張，近吸系列產品跑馬燈在 Hover 時的播放狀態仍為 `running`；`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。
+
+## 2026-09-27 首頁品牌系列標題與內文
+
+- 首頁原 `Creative Projects That Define Our Style` 區塊主標改為「品牌系列」，沿用原標題的黑色與金色分段樣式；同區塊英文小標同步由 `FEATURED PROJECTS` 改為 `BRAND SERIES`，避免標示不一致。底部引言改為「櫻花整體廚房用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間概念、並融合多元設計風格，與消費者一起打造符合每個家庭的理想廚房」。本機預覽與 `pnpm --dir nuxt-site typecheck` 已確認；本次未部署。
+
+## 2026-09-27 首頁風格跑馬燈圖片對應
+
+- 首頁 Hero 下方六種風格的懸浮預覽改用 `提案後新增用圖/0.0首頁/10BN-搭配風格` 對應圖片，重用前次匯入的 `public/home-2026/hero/10bn/*.webp`，不重複存檔：現代風→Chef、輕奢風→Clever／Premium、北歐風→Joyful、工業風→Loft Chic、美式風→Elegant、鄉村風→Country。僅輕奢風在兩張同風格圖片間輪替，其餘固定顯示；圖示、文字、設計靈感篩選連結及跑馬燈版型不變。本機逐項焦點測試六種風格圖片均對應正確，輕奢風輪替正常；手機預覽隱藏且最終無水平溢出，`pnpm --dir nuxt-site typecheck` 與 `pnpm --dir nuxt-site build` 通過。本次未部署。
+
+## 2026-09-27 首頁品牌系列 Hero 素材
+
+- 依 `提案後新增用圖/0.0首頁/10BN-搭配風格` 的 1–10 編號圖片，轉為 1920px 以下的 WebP 放在 `public/home-2026/hero/10bn/`；首頁 Hero 輪播改為 10 張，文字採 `品牌系列-10BN介紹文案.docx` 的對應系列段落，沿用原版型與轉場。為避免十張圖同時下載，僅預載下一張。本機確認圖片正常載入、無水平溢出，`pnpm --dir nuxt-site typecheck` 與 `pnpm --dir nuxt-site build` 通過。
+- 本站目前只有 `/home-style/aikitchen` 一個品牌系列內頁，其餘九頁尚未建置；已向使用者確認連結處理方式，未建立虛構連結。本次未部署。
+
+## 2026-09-27 拍立配浮動圖示
+
+- 從使用者提供的 `提案後新增用圖/0.0首頁/拍立配icon.svg` 找到專用白色圖示，原圖已含「拍立配」文字；加入 `public/floating-icons/pailipei.svg`，替換臨時純文字標籤，維持右側灰色按鈕列與原圖完整比例。目標連結尚未提供，按鈕仍停用；本次未部署。本機預覽已確認圖示顯示正常、檔案可讀取，`pnpm --dir nuxt-site typecheck` 通過。
+
 ## 2026-09-27 右側懸浮拍立配標籤
 
 - 右側懸浮快捷列的兩顆灰色服務按鈕下方新增等寬灰色「拍立配」標籤，先以停用按鈕呈現；icon 與目標連結待提供後再啟用，避免暫時導向錯誤頁面。沿用原有懸浮位置與捲動行為，本次未部署。

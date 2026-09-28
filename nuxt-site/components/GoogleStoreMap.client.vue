@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ address: string; focus?: boolean }>()
+const props = defineProps<{ address: string; name: string; focus?: boolean }>()
 const config = useRuntimeConfig()
 const container = ref<HTMLElement | null>(null)
 const error = ref('')
@@ -80,14 +80,20 @@ function locate(address: string) {
     if (!marker) {
       marker = new maps.Marker({
         map,
-        title: address,
+        title: `在 Google 地圖查看${props.name}`,
+        cursor: 'pointer',
         icon: {
           url: MARKER_SVG,
           scaledSize: new maps.Size(40, 52),
           anchor: new maps.Point(20, 52),
         },
       })
+      marker.addListener('click', () => {
+        const query = encodeURIComponent(props.address)
+        window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank', 'noopener,noreferrer')
+      })
     }
+    marker.setTitle(`在 Google 地圖查看${props.name}`)
     marker.setPosition(location)
     if (props.focus) {
       map.panTo(location)
@@ -99,6 +105,7 @@ function locate(address: string) {
   const cached = cache.get(address)
   if (cached) return place(cached)
   new maps.Geocoder().geocode({ address, region: 'TW' }, (results: any[], status: string) => {
+    if (address !== props.address) return
     if (status !== 'OK' || !results?.[0]) { error.value = `門市地址定位失敗（${status}）：請確認地址與 Geocoding API 設定。`; return }
     const point = results[0].geometry.location
     const location = { lat: point.lat(), lng: point.lng() }

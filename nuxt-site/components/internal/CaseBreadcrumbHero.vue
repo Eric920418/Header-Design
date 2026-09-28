@@ -1,15 +1,16 @@
 <script setup lang="ts">
+const props = defineProps<{ designListUrl?: string }>()
 const route = useRoute()
-const fromDesignInspiration = computed(() => route.query.from === 'inspiration')
+const fromDesignInspiration = computed(() => Boolean(props.designListUrl) || route.query.from === 'inspiration')
 const parentLabel = computed(() => fromDesignInspiration.value ? '設計靈感' : '案例門市')
-const parentRoute = computed(() => fromDesignInspiration.value ? '/design-inspiration' : '/gallery')
+const parentRoute = computed(() => props.designListUrl || (fromDesignInspiration.value ? '/design-inspiration' : '/gallery'))
 </script>
 
 <template>
-  <section data-hero-photo="songzhu" class="case-breadcrumb-hero hero-includes-header" aria-label="案例門市麵包屑">
+  <section data-hero-photo="songzhu" class="case-breadcrumb-hero hero-includes-header" :aria-label="designListUrl ? '設計案例麵包屑' : '案例門市麵包屑'">
     <div class="case-breadcrumb-hero__overlay" aria-hidden="true" />
     <nav aria-label="麵包屑" class="case-breadcrumb-hero__trail" v-reveal="{ anim: 'opalMoveUp' }">
-      <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: parentLabel, to: parentRoute }, { label: "門市案例" }]' v-slot="{ items, follow }">
+      <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: parentLabel, to: parentRoute }, { label: designListUrl ? "設計案例" : "門市案例" }]' v-slot="{ items, follow }">
         <template v-for="(item, index) in items" :key="index">
           <span v-if="index" aria-hidden="true">/</span>
           <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>

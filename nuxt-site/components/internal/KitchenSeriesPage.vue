@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { NuxtLink } from '#components'
 import emblaCarouselVue from 'embla-carousel-vue'
-import { Check, ChevronLeft, ChevronRight, Plus } from 'lucide-vue-next'
-import { AI_KITCHEN_PAGE } from '~/data/kitchenSeries'
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Plus } from 'lucide-vue-next'
+import type { KitchenSeriesPageData } from '~/data/kitchenSeries'
 import { KITCHEN_STYLES } from '~/data/kitchenStyles'
 
-const data = AI_KITCHEN_PAGE
+const { data } = defineProps<{ data: KitchenSeriesPageData }>()
 const reducedMotion = useReducedMotion()
 const currentHero = ref(0)
 const previousHero = ref(0)
@@ -16,7 +17,7 @@ const casesInteracted = ref(false)
 const seriesOpen = ref(false)
 const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false, duration: 24 })
 
-const heroStories = [
+const heroStories = data.slug === 'aikitchen' ? [
   {
     eyebrow: 'AI Cabinet',
     title: '感應閘門櫃',
@@ -32,15 +33,15 @@ const heroStories = [
     title: '廚下手掃可調光 LED 照明',
     description: '輕輕揮手即可控制燈光開關與亮度，讓備餐、清潔與夜間使用更直覺便利。',
   },
-]
+] : data.heroSlides.map(() => ({ eyebrow: data.name, title: data.intro.title, description: data.intro.paragraphs.join(' ') }))
 
 const activeSuite = computed(() => data.suites[activeSuiteIndex.value]!)
 const activeSuiteImages = computed(() => activeSuite.value.images)
 const activeSuitePrimaryImage = computed(() => activeSuiteImages.value[activeSuiteImageIndex.value]!)
 const activeSuiteSecondaryImage = computed(() => activeSuiteImages.value[(activeSuiteImageIndex.value + 1) % activeSuiteImages.value.length]!)
 const activeHeroStory = computed(() => heroStories[currentHero.value]!)
-const visibleEquipment = data.equipment.slice(0, 5)
-const casesLoop = computed(() => [...data.cases, ...data.cases])
+const visibleEquipment = data.equipment
+const casesLoop = computed(() => data.cases.length > 1 ? [...data.cases, ...data.cases] : data.cases)
 let heroTimer: ReturnType<typeof setInterval> | undefined
 let casesTimer: ReturnType<typeof setInterval> | undefined
 let stopMotionWatch: (() => void) | undefined
@@ -60,6 +61,17 @@ function activateSuite(index: number) {
   if (index === activeSuiteIndex.value) return
   activeSuiteIndex.value = index
   activeSuiteImageIndex.value = 0
+}
+
+function handleSuiteKeydown(event: KeyboardEvent) {
+  const last = data.suites.length - 1
+  const next = event.key === 'ArrowDown' ? (activeSuiteIndex.value + 1) % data.suites.length
+    : event.key === 'ArrowUp' ? (activeSuiteIndex.value + last) % data.suites.length
+    : event.key === 'Home' ? 0 : event.key === 'End' ? last : undefined
+  if (next === undefined) return
+  event.preventDefault()
+  activateSuite(next)
+  nextTick(() => document.getElementById(`suite-tab-${activeSuite.value.id}`)?.focus({ preventScroll: true }))
 }
 
 function showPreviousSuiteImage() {
@@ -170,11 +182,11 @@ onBeforeUnmount(() => {
 })
 
 useSeoMeta({
-  title: 'AI Kitchen AI廚房｜櫻花整體廚房',
-  description: 'SAKURA AI KITCHEN，以智能科技、創新美學與便利機能，翻轉廚房烹飪體驗。',
-  ogTitle: 'AI Kitchen AI廚房｜櫻花整體廚房',
-  ogDescription: '突破未來格局，開啟廚房智高點。探索 i Fun、i Chef、i Loft Chic、i Premium 四套系。',
-  ogImage: data.heroSlides[2],
+  title: `${data.name}｜櫻花整體廚房`,
+  description: data.intro.paragraphs.join(' '),
+  ogTitle: `${data.name}｜櫻花整體廚房`,
+  ogDescription: data.intro.title,
+  ogImage: data.heroSlides[0],
 })
 </script>
 
@@ -186,28 +198,29 @@ useSeoMeta({
       </div>
       <div class="absolute inset-0 bg-[#6f6d69]" aria-hidden="true" />
       <div v-if="heroTransition > 0" class="absolute inset-0 overflow-hidden">
-        <InternalBrandImage :src="data.heroSlides[previousHero]" alt="AI Kitchen 廚房空間" eager class="hero-page1-image-settled h-full w-full" />
+        <InternalBrandImage :src="data.heroSlides[previousHero]" :alt="`${data.name} 廚房空間`" eager class="hero-page1-image-settled h-full w-full" />
       </div>
       <div :key="`mask-${heroTransition}-${currentHero}`" class="hero-page1-image-layer hero-page1-image-layer-masked">
-        <InternalBrandImage :src="data.heroSlides[currentHero]" alt="AI Kitchen 輪播轉場圖片" eager class="hero-page1-image-active h-full w-full" />
+        <InternalBrandImage :src="data.heroSlides[currentHero]" :alt="`${data.name} 輪播轉場圖片`" eager class="hero-page1-image-active h-full w-full" />
         <span class="absolute inset-0 bg-[rgba(16,8,1,.46)]" aria-hidden="true" />
       </div>
       <div :key="`final-${heroTransition}-${currentHero}`" class="hero-page1-image-layer hero-page1-image-layer-final">
-        <InternalBrandImage :src="data.heroSlides[currentHero]" alt="AI Kitchen 廚房空間" eager class="hero-page1-image-active h-full w-full" />
+        <InternalBrandImage :src="data.heroSlides[currentHero]" :alt="`${data.name} 廚房空間`" eager class="hero-page1-image-active h-full w-full" />
       </div>
       <span class="absolute inset-0 z-[3] bg-gradient-to-r from-black/55 via-black/15 to-black/10" aria-hidden="true" />
       <span class="absolute inset-x-0 bottom-0 z-[3] h-[45%] bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true" />
 
       <div class="ai-hero__inner">
-        <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" tone="dark" class="ai-hero__eyebrow">Trusted Design Partner</InternalSectionPill>
-        <h1 id="ai-kitchen-hero-title" v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="ai-hero__title">
-          Find Your Inspired<br><span class="text-[#caa05c]">Kitchen Design</span>
-        </h1>
+        <div :key="`title-${heroTransition}`" class="hero-slide-copy ai-hero__title-slot">
+          <h1 id="ai-kitchen-hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ data.name }}</h1>
+        </div>
 
-        <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" v-reveal="{ anim: 'opalScaleUp', delay: 220 }" class="hero-start-project ai-hero__cta">
-          <span>Start<br>Project</span>
-          <span class="ai-hero__cta-label--hover" aria-hidden="true">設計靈感</span>
-        </NuxtLink>
+        <div v-reveal="{ anim: 'fadeIn', delay: 900, duration: 'slow' }" class="inline-block">
+          <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" class="hero-start-project ai-hero__cta">
+            <span>Start<br>Project</span>
+            <span class="ai-hero__cta-label--hover" aria-hidden="true">設計靈感</span>
+          </NuxtLink>
+        </div>
 
         <div class="ai-hero__bottom">
           <span :key="`story-thumb-${currentHero}`" class="ai-hero__story-thumb">
@@ -218,12 +231,12 @@ useSeoMeta({
             <strong>{{ activeHeroStory.title }}</strong>
             <p>{{ activeHeroStory.description }}</p>
           </div>
-          <NuxtLink to="/catalogues/kitchenware-catalog?series=aikitchen" target="_blank" rel="noopener noreferrer" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
+          <NuxtLink :to="`/catalogues/kitchenware-catalog?series=${data.slug}`" target="_blank" rel="noopener noreferrer" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
             <span>品牌系列<br>型錄</span>
           </NuxtLink>
-          <div class="ai-hero__story-controls" aria-label="AI Kitchen 功能輪播控制">
-            <button type="button" aria-label="上一項 AI Kitchen 功能" @click="showHero(currentHero - 1)"><ChevronLeft /></button>
-            <button type="button" aria-label="下一項 AI Kitchen 功能" @click="showHero(currentHero + 1)"><ChevronRight /></button>
+          <div class="ai-hero__story-controls" :aria-label="`${data.name} 輪播控制`">
+            <button type="button" :disabled="data.heroSlides.length < 2" aria-label="上一張品牌圖片" @click="showHero(currentHero - 1)"><ChevronLeft /></button>
+            <button type="button" :disabled="data.heroSlides.length < 2" aria-label="下一張品牌圖片" @click="showHero(currentHero + 1)"><ChevronRight /></button>
           </div>
         </div>
       </div>
@@ -270,7 +283,7 @@ useSeoMeta({
           </div>
 
           <div class="ai-suite-center">
-            <div class="ai-suite-tabs" role="tablist" aria-label="AI Kitchen 四套系">
+            <div class="ai-suite-tabs" role="tablist" :aria-label="`${data.name} 套系與特色`" aria-orientation="vertical" @keydown="handleSuiteKeydown">
               <button
                 v-for="(suite, index) in data.suites"
                 :id="`suite-tab-${suite.id}`"
@@ -288,7 +301,7 @@ useSeoMeta({
                 <span>{{ suite.name }}</span>
               </button>
             </div>
-            <div class="ai-suite-controls" aria-label="AI Kitchen 套系圖片切換">
+            <div class="ai-suite-controls" aria-label="套系圖片切換">
               <button type="button" :disabled="activeSuiteImages.length < 2" :aria-label="`上一張 ${activeSuite.name} 圖片`" @click="showPreviousSuiteImage"><ChevronLeft aria-hidden="true" /></button>
               <span aria-live="polite">{{ formatGalleryNumber(activeSuiteImageIndex + 1) }} / {{ formatGalleryNumber(activeSuiteImages.length) }}</span>
               <button type="button" :disabled="activeSuiteImages.length < 2" :aria-label="`下一張 ${activeSuite.name} 圖片`" @click="showNextSuiteImage"><ChevronRight aria-hidden="true" /></button>
@@ -302,6 +315,7 @@ useSeoMeta({
           role="tabpanel"
           :aria-labelledby="`suite-tab-${activeSuite.id}`"
           class="ai-suite-details"
+          :class="{ 'ai-suite-details--two-columns': !activeSuite.equipment.length }"
         >
           <div>
             <span class="ai-suite-details__number">0{{ activeSuiteIndex + 1 }}</span>
@@ -310,8 +324,9 @@ useSeoMeta({
           </div>
           <div>
             <p v-for="description in activeSuite.descriptions" :key="description" class="ai-suite-details__description">{{ description }}</p>
+            <a v-for="link in activeSuite.links" :key="link.url" :href="link.url" target="_blank" rel="noopener noreferrer" class="text-[#8d6b35] underline">{{ link.label }}（另開分頁）</a>
           </div>
-          <div>
+          <div v-if="activeSuite.equipment.length">
             <p class="ai-suite-details__equipment-title">廚電配備</p>
             <ul>
               <li v-for="item in activeSuite.equipment" :key="item">{{ item }}</li>
@@ -324,8 +339,8 @@ useSeoMeta({
     <section aria-labelledby="finish-heading" class="ai-finishes">
       <div class="page-container">
         <div class="ai-centered-heading">
-          <p v-reveal="{ anim: 'opalMoveUp' }">Material Selection</p>
-          <h2 id="finish-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Gallery Of Inspiring<br><span>Kitchen Designs</span></h2>
+          <p v-reveal="{ anim: 'opalMoveUp' }">板材顏色選擇</p>
+          <h2 id="finish-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Explore Our<br><span>Color Collection</span></h2>
         </div>
         <div class="ai-finishes__grid">
           <article v-for="(finish, index) in data.finishes" :key="finish.code" v-reveal="{ anim: 'opalMoveUp', delay: index * 70 }">
@@ -341,22 +356,28 @@ useSeoMeta({
             </div>
           </article>
         </div>
+        <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="mt-10 flex justify-center border-t border-[#E3E3E8] pt-8 md:mt-16 md:pt-10">
+          <a href="https://pse.is/9kq37z" target="_blank" rel="noopener noreferrer" aria-label="立即預約，另開 SAKURA iCare 分頁" class="site-content-cta group/cta inline-flex h-[60px] items-center gap-2 rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white focus-visible:border-[#CAA05C] focus-visible:bg-[#CAA05C] focus-visible:text-white">
+            <span class="font-cjk-sans text-[15px]">立即預約</span>
+            <span class="site-cta-icon flex h-10 w-10 -rotate-45 items-center justify-center rounded-full bg-[#CAA05C] text-white transition-transform group-hover/cta:rotate-0 group-focus-visible/cta:rotate-0"><ArrowRight aria-hidden="true" class="h-5 w-5" /></span>
+          </a>
+        </div>
       </div>
     </section>
 
     <section aria-labelledby="equipment-heading" class="ai-equipment">
       <div class="page-container">
         <div class="ai-centered-heading ai-centered-heading--compact">
-          <p v-reveal="{ anim: 'opalMoveUp' }">Kitchen Appliances</p>
-          <h2 id="equipment-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Join Our Newsletter<br><span>Stay Up To Date</span></h2>
+          <p v-reveal="{ anim: 'opalMoveUp' }">廚房電器推薦</p>
+          <h2 id="equipment-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Explore Our<br><span>Kitchen Appliances</span></h2>
         </div>
-        <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="ai-equipment__grid" aria-label="AI Kitchen 推薦廚電">
+        <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="ai-equipment__grid" :aria-label="`${data.name} 推薦廚電`">
           <article v-for="equipment in visibleEquipment" :key="equipment.model" class="ai-equipment__item">
-            <NuxtLink :to="equipment.route" class="ai-equipment__card" :aria-label="`查看 ${equipment.model} ${equipment.name}`">
+            <component :is="equipment.route ? NuxtLink : 'div'" :to="equipment.route || undefined" :target="equipment.route.startsWith('https://') ? '_blank' : undefined" :rel="equipment.route.startsWith('https://') ? 'noopener noreferrer' : undefined" class="ai-equipment__card" :aria-label="equipment.route ? `查看 ${equipment.model} ${equipment.name}` : undefined">
               <InternalBrandImage :src="equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
               <h3><span>{{ equipment.model }}</span>{{ equipment.name }}</h3>
-              <span class="ai-equipment__action" aria-hidden="true"><Plus /></span>
-            </NuxtLink>
+              <span v-if="equipment.route" class="ai-equipment__action" aria-hidden="true"><Plus /></span>
+            </component>
           </article>
         </div>
       </div>
@@ -369,13 +390,12 @@ useSeoMeta({
           <h2 id="cases-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 90 }">Take A Look At <span>Our Latest Blog</span> &amp; Articles.</h2>
         </div>
         <div
+          v-if="data.cases.length"
           ref="casesViewport"
           class="ai-cases__viewport"
           aria-roledescription="carousel"
           aria-label="推薦設計案例"
           tabindex="0"
-          @mouseenter="casesPaused = true"
-          @mouseleave="casesPaused = false"
           @focusin="casesPaused = true"
           @focusout="casesPaused = false"
           @keydown="handleCasesKeydown"
@@ -395,6 +415,10 @@ useSeoMeta({
             </div>
           </div>
         </div>
+        <div v-else class="rounded-3xl bg-[#fafafa] p-10 text-center font-cjk-sans">
+          <p>此系列目前尚無公開推薦案例。</p>
+          <NuxtLink to="/design-inspiration" class="mt-5 inline-flex rounded-full border border-[#caa05c] px-8 py-3 hover:bg-[#caa05c] hover:text-white">探索設計靈感</NuxtLink>
+        </div>
       </div>
     </section>
   </main>
@@ -404,8 +428,9 @@ useSeoMeta({
 .ai-kitchen-page { overflow: clip; background: #fff; color: #1c1c1d; }
 .ai-hero { position: relative; height: 840px; overflow: hidden; background: #6f6d69; color: #fff; }
 .ai-hero__inner { position: relative; z-index: 5; width: min(1584px, calc(100% - 60px)); height: 100%; margin-inline: auto; padding-top: 118px; }
-.ai-hero__title { margin-top: 24px; max-width: 1100px; font-size: clamp(74px, 7.9vw, 130px); line-height: .93; letter-spacing: -.035em; text-transform: none; }
-.ai-hero__cta { position: relative; display: inline-flex; width: 120px; height: 120px; overflow: hidden; align-items: center; justify-content: center; margin: 30px 0 0 30px; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
+.ai-hero__title-slot { margin-top: 56px; min-height: 242px; }
+.ai-hero__title-slot h1 { max-width: 100%; text-transform: none; }
+.ai-hero__cta { position: relative; display: inline-flex; width: 120px; height: 120px; overflow: visible; align-items: center; justify-content: center; margin: 30px 0 0 30px; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
 .ai-hero__cta > span { position: absolute; z-index: 2; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 15px; line-height: 19px; transition: opacity .3s ease; }
 .ai-hero__cta > .ai-hero__cta-label--hover { opacity: 0; font-family: var(--font-cjk-sans); }
 .ai-hero__cta:hover, .ai-hero__cta:focus-visible { border-color: #caa05c; background: #caa05c; }
@@ -423,6 +448,7 @@ useSeoMeta({
 .ai-hero__story-controls button { display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border: 1px solid rgb(255 255 255 / 24%); border-radius: 50%; color: #fff; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
 .ai-hero__story-controls button:hover, .ai-hero__story-controls button:focus-visible { border-color: #caa05c; color: #1c1c1d; background: #caa05c; }
 .ai-hero__story-controls svg { width: 17px; height: 17px; }
+.ai-hero__story-controls button:disabled { opacity: .35; cursor: default; pointer-events: none; }
 .ai-hero__watermark { position: absolute; z-index: 4; right: max(30px, calc((100vw - 1584px) / 2)); bottom: -90px; color: rgb(255 255 255 / 10%); font-family: var(--font-display); font-size: clamp(190px, 18vw, 320px); line-height: .8; pointer-events: none; }
 @keyframes ai-story-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
@@ -460,7 +486,7 @@ useSeoMeta({
 .ai-suite-tabs button.is-active::after { transform: scaleX(1); }
 .ai-suite-tabs__icon { display: flex; width: 24px; height: 24px; align-items: center; justify-content: center; border-radius: 7px; background: #caa05c; color: #fff; }
 .ai-suite-tabs__icon svg { width: 14px; height: 14px; }
-.ai-suite-tabs button > span:last-child { font-family: "Bodoni Moda", serif; font-size: 18px; line-height: 24px; }
+.ai-suite-tabs button > span:last-child { font-family: "Bodoni Moda", var(--font-cjk-sans), serif; font-size: 18px; line-height: 24px; }
 .ai-suite-controls { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .ai-suite-controls button { display: inline-flex; width: 42px; height: 42px; flex: 0 0 auto; align-items: center; justify-content: center; border: 1px solid #d8d8dc; border-radius: 50%; color: #1c1c1d; background: #fff; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .ai-suite-controls button:hover, .ai-suite-controls button:focus-visible { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
@@ -471,6 +497,7 @@ useSeoMeta({
 .ai-suite-details__number { color: #e3e3e8; font-family: var(--font-display); font-size: 54px; line-height: 1; }
 .ai-suite-details__name { margin: -18px 0 20px 42px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .ai-suite-details h3 { margin: 6px 0 0; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 30px; text-transform: none; }
+.ai-suite-details--two-columns { grid-template-columns: 1fr 2fr; }
 .ai-suite-details > div:nth-child(2) { display: flex; flex-direction: column; align-self: start; justify-content: flex-start; padding-top: 49px; text-align: left; }
 .ai-suite-details__description { margin: 0 0 12px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; text-wrap: pretty; }
 .ai-suite-details__equipment-title { margin: 0 0 14px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 28px; }
@@ -554,7 +581,7 @@ useSeoMeta({
 @media (max-width: 1024px) {
   .ai-hero { height: 720px; }
   .ai-hero__inner { padding-top: 80px; }
-  .ai-hero__title { font-size: clamp(64px, 9.5vw, 96px); }
+  .ai-hero__title-slot { min-height: 188px; }
   .ai-hero__cta { width: 105px; height: 105px; margin-top: 24px; }
   .ai-series-drawer { display: none; }
   .ai-section-heading h2, .ai-centered-heading h2 { font-size: 48px; line-height: 53px; }
@@ -579,7 +606,7 @@ useSeoMeta({
 @media (max-width: 767px) {
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
-  .ai-hero__title { margin-top: 18px; font-size: clamp(44px, 13vw, 68px); line-height: .98; }
+  .ai-hero__title-slot { margin-top: 50px; min-height: 134px; }
   .ai-hero__cta { width: 82px; height: 82px; margin-top: 22px; margin-left: 15px; }
   .ai-hero__cta > span { font-size: 13px; line-height: 16px; }
   .ai-hero__bottom { right: 0; bottom: 18px; min-height: 236px; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; border-radius: 18px; padding: 14px; }
@@ -621,7 +648,7 @@ useSeoMeta({
 }
 
 @media (max-width: 390px) {
-  .ai-hero__title { font-size: 42px; }
+  .ai-hero__title-slot { min-height: 83px; }
   .ai-suite-stage { grid-template-rows: auto 220px; }
   .ai-suite-tabs button { grid-template-columns: 24px 1fr; gap: 7px; }
   .ai-suite-tabs__icon { width: 22px; height: 22px; }

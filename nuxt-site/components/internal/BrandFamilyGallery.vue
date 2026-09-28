@@ -3,13 +3,12 @@ import emblaCarouselVue from 'embla-carousel-vue'
 import { brandFamilies } from '~/data/brandAdvantage'
 
 const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'start' })
-const paused = ref(false)
 const reduced = useReducedMotion()
 let timer: ReturnType<typeof setInterval> | undefined
 
 watch([emblaApi, reduced], ([api, isReduced]) => {
   if (timer) clearInterval(timer)
-  if (api && !isReduced) timer = setInterval(() => { if (!paused.value) api.scrollNext() }, 4000)
+  if (api && !isReduced) timer = setInterval(() => api.scrollNext(), 4000)
 }, { immediate: true })
 
 onBeforeUnmount(() => timer && clearInterval(timer))
@@ -17,7 +16,7 @@ onBeforeUnmount(() => timer && clearInterval(timer))
 
 <template>
   <div v-reveal="{ anim: 'opalMoveLeft', delay: 400 }" data-ev="opalMoveLeft" class="brand-family-reveal ev" style="animation-delay:400ms">
-    <div ref="emblaRef" class="brand-family-viewport" @mouseenter="paused = true" @mouseleave="paused = false">
+    <div ref="emblaRef" class="brand-family-viewport">
       <div class="brand-family-track">
         <article v-for="family in brandFamilies" :key="family.id" class="brand-family-slide">
           <InternalBrandImage :src="family.image" :alt="`${family.title} ${family.englishTitle}`" class="brand-family-image" />

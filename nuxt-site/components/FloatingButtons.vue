@@ -58,7 +58,7 @@ onBeforeUnmount(() => {
           <img :src="item.icon" alt="" class="block w-14 sm:w-[58px]" />
         </a>
       </template>
-      <button type="button" disabled title="拍立配連結待提供" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 font-['Noto_Sans_TC'] text-xs text-white sm:h-[74px] sm:w-[74px]">拍立配</button>
+      <button type="button" disabled aria-label="拍立配" title="拍立配連結待提供" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 sm:h-[74px] sm:w-[74px]"><img src="/floating-icons/pailipei.svg" alt="" class="block h-[70px] w-[70px]" /></button>
     </div>
   </aside>
 </template>

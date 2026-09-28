@@ -8,8 +8,8 @@ import { ArrowRight } from 'lucide-vue-next'
     <div class="what-we-do-layout relative z-10 mx-auto grid max-w-[1410px] items-center">
       <div class="what-we-do-copy min-w-0">
         <div class="what-we-do-heading">
-          <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" class="mb-[20px]">Brand Commitment</InternalSectionPill>
-          <h2 id="what-we-do-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="what-we-do-title mx-auto max-w-[560px] font-display capitalize text-[#1C1C1D]">SAKURA has <span class="text-[#CAA05C]">created exceptional</span></h2>
+          <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" class="mb-[20px]">品牌承諾</InternalSectionPill>
+          <h2 id="what-we-do-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="what-we-do-title mx-auto max-w-[560px] font-display text-[#1C1C1D]">Why <span class="text-[#CAA05C]">SAKURA KITCHEN</span></h2>
         </div>
         <div v-reveal="{ anim: 'opalMoveUp', delay: 180 }" class="what-we-do-description mx-auto max-w-[645px]">
           <h3 class="font-cjk-serif text-[30px] font-semibold leading-[42px] text-[#1C1C1D]">打造符合每個家庭的理想廚房</h3>

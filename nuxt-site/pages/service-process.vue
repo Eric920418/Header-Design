@@ -30,7 +30,10 @@ useSeoMeta({
         <header class="antra-service-intro__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Service Process" />
           <div v-reveal="{ anim: 'opalMoveLeft' }">
-            <h2 id="service-intro-title">Description <span>Architecture<br />Process</span> For Exceptional Results.</h2>
+            <h2 id="service-intro-title">
+              <b class="service-intro-chinese-title">從設計到實現，打造理想廚房</b>
+              Bringing Your <span>Dream Kitchen</span> to Life
+            </h2>
             <p>堅持用專業的服務，依照您的需求提供設計，希望以更完整、更貼心的服務，讓您最滿意。</p>
           </div>
         </header>
@@ -134,6 +137,7 @@ useSeoMeta({
 }
 
 .antra-service-intro h2 span { color: #caa05c; }
+.service-intro-chinese-title { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-weight: 500; line-height: 1.3; }
 
 .antra-service-intro p {
   width: min(766px, 100%);

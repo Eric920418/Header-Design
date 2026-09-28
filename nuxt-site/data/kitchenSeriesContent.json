@@ -1,0 +1,1530 @@
+[
+  {
+    "slug": "basic-plus",
+    "name": "Basic+",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/mujibasicplus",
+    "heroSlides": [
+      "/home-2026/hero/10bn/basic-plus.webp"
+    ],
+    "intro": {
+      "title": "Basic+ with MUJI RENOVATION | 在生活的基本上 加上一點讓使用者更願意靠近的貼心",
+      "paragraphs": [
+        "Basic+ 廚房系列，以生活的基本為出發，",
+        "整合 MUJI RENOVATION 的空間觀察與 SAKURA 的廚房專業，打造更貼近日常的料理環境。",
+        "+ 透過模組化結構、可移動櫃體與對應 MUJI 收納用品的模組設計，使廚房依需求自由調整；",
+        "易清潔材質與俐落線條，維持空間的潔淨感；合理的選配與價格，讓打造理想廚房更無負擔。",
+        "Basic+ 不追求複雜，而是在生活的基本上，再加上一點讓使用者更願意靠近的貼心。",
+        "*Basic+ 為指定門市販售商品，如需諮詢販售門市，請電洽客服專線：0800-021-818"
+      ]
+    },
+    "suites": [
+      {
+        "id": "basic-plus-1",
+        "name": "好感生活 · Basic",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_MUJI%20Basic+/Gemini_Generated_Image_m88mtgm88mtgm88m_%E4%BF%AE.png",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_MUJI%20Basic+/Gemini_Generated_Image_mbh6wfmbh6wfmbh6_%E4%BF%AE.png",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_MUJI%20Basic+/Gemini_Generated_Image_gssla1gssla1gssl_%E4%BF%AE.png"
+        ],
+        "headlines": [],
+        "descriptions": [
+          "模組收納：彈性組合、自由搭配",
+          "容易清潔：保持潔淨的舒適感",
+          "物有所值：「好感生活」具象化"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "basic-plus-2",
+        "name": "場景轉換 · Plus",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_MUJI%20Basic+/Gemini_Generated_Image_v1o1emv1o1emv1o1_%E4%BF%AE.png",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_MUJI%20Basic+/Gemini_Generated_Image_qgi6mcqgi6mcqgi6_%E4%BF%AE.png",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_MUJI%20Basic+/Gemini_Generated_Image_k49qwwk49qwwk49q_%E4%BF%AE.png"
+        ],
+        "headlines": [],
+        "descriptions": [
+          "可變設計：隨生活場景轉換",
+          "延伸檯面：擴充使用空間"
+        ],
+        "equipment": [],
+        "links": []
+      }
+    ],
+    "finishes": [
+      {
+        "code": "K513D",
+        "name": "岩灰",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/K513D_%E5%B2%A9%E7%81%B0.jpg"
+      },
+      {
+        "code": "K515D",
+        "name": "玄米",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/K515D_%E7%8E%84%E7%B1%B3.jpg"
+      },
+      {
+        "code": "K540D",
+        "name": "瓷白",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/K540D_+.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "EG2250G",
+        "name": "單口IH感應爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/EG2250G.png",
+        "route": ""
+      },
+      {
+        "model": "G2112G",
+        "name": "單口併爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/G2112G.jpg",
+        "route": ""
+      },
+      {
+        "model": "R605",
+        "name": "輕巧型除油煙機(半/全隱藏式) - 小宅系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/R605.jpg",
+        "route": ""
+      },
+      {
+        "model": "EG2501GC",
+        "name": "雙口IH感應爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/EG2501GC.jpg",
+        "route": ""
+      },
+      {
+        "model": "R610HS",
+        "name": "隱藏除油煙機- 小宅系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/R610HS.jpg",
+        "route": ""
+      }
+    ],
+    "cases": []
+  },
+  {
+    "slug": "clever",
+    "name": "Clever Kitchen",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/cleverkitchen",
+    "heroSlides": [
+      "/home-2026/hero/10bn/clever.webp"
+    ],
+    "intro": {
+      "title": "極致收納 在廚房",
+      "paragraphs": [
+        "高坪效、高質感的廚房最佳解",
+        "你是否渴望一個既能收納得宜，",
+        "又能展現生活美感的廚房？",
+        "「巧」凝聚設計的思維與生活靈感，",
+        "「域」開展廚居空間的延伸與自在。",
+        "巧域廚房，把有限化為無限，以坪效為基礎，以美型為靈魂，",
+        "讓收納的秩序與設計的質感並行，為日常開啟全新的生活風景。"
+      ]
+    },
+    "suites": [
+      {
+        "id": "clever-1",
+        "name": "巧納 · Extra Capacity",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/A.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0057.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0044.jpg"
+        ],
+        "headlines": [
+          "足元抽，開啟收納的更多可能"
+        ],
+        "descriptions": [
+          "足元抽系統",
+          "首次登場，提升收納效能",
+          "聰明三層分類邏輯，打造更順手的收納體驗；",
+          "上層雙抽可收納常用器皿與餐具，",
+          "底層足元抽則靈活安放低頻使用物品，",
+          "依循人體工學設計，貼近台灣家庭的日常使用節奏。",
+          "活用踢腳隱藏空間，收納容量提升20%；",
+          "搭配隱藏式調整腳，讓安裝更精準、細節更到位。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "clever-2",
+        "name": "巧思 · Smarter Space",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/A1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0014.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0027.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0005.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0050.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0038.jpg"
+        ],
+        "headlines": [
+          "藏細節，極致收納的完美展現"
+        ],
+        "descriptions": [
+          "複合式規劃，構築井然有序的生活節奏",
+          "以細膩的分類與分層設計，",
+          "讓器具與日常小物各得其所。",
+          "靈活分隔結構，延展更多使用情境，",
+          "讓收納不只是功能，更是一種生活的從容。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "clever-3",
+        "name": "巧心 · Lasting Style",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/F.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0022_resize.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0059_resize.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Clever/0062.jpg"
+        ],
+        "headlines": [
+          "微輕奢，演繹廚居的簡約美學"
+        ],
+        "descriptions": [
+          "光韻之間，勾勒廚居的優雅輪廓",
+          "以馥麗金為主調，營造低調奢雅的氛圍，",
+          "鋁框玻璃門透映微光，映出空間的層次感，",
+          "陶瓷塗裝J型門板，延展細緻手感，",
+          "平移桌靈活轉化，讓生活在軌跡之間緩緩流動。"
+        ],
+        "equipment": [],
+        "links": []
+      }
+    ],
+    "finishes": [
+      {
+        "code": "D8419",
+        "name": "馥麗金",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8419.jpg"
+      },
+      {
+        "code": "D8418",
+        "name": "石墨黑",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8418.jpg"
+      },
+      {
+        "code": "D8417",
+        "name": "赭岩紅",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8417.jpg"
+      },
+      {
+        "code": "D8416",
+        "name": "松針綠",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8416.jpg"
+      },
+      {
+        "code": "D8415",
+        "name": "摩卡棕",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8415.jpg"
+      },
+      {
+        "code": "D8414",
+        "name": "磐石灰",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8414.jpg"
+      },
+      {
+        "code": "D8413",
+        "name": "晨霧藍",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8413.jpg"
+      },
+      {
+        "code": "D8412",
+        "name": "暖砂米",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8412.jpg"
+      },
+      {
+        "code": "D8411",
+        "name": "樺木灰",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8411.jpg"
+      },
+      {
+        "code": "D8410",
+        "name": "雪絨白",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D8410.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "EG2350GB",
+        "name": "雙口IH感應爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/EG2350G_re.jpg",
+        "route": ""
+      },
+      {
+        "model": "VE7770A",
+        "name": "全嵌式自動開門洗碗機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/VE7700A_re.jpg",
+        "route": ""
+      },
+      {
+        "model": "Q7585BL",
+        "name": "智能升降烘碗機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/Q7585B_re.jpg",
+        "route": ""
+      },
+      {
+        "model": "DR7397XL",
+        "name": "近吸除油煙機 - 渦輪變頻 AI風控系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/DR7397_re.jpg",
+        "route": ""
+      },
+      {
+        "model": "G2926G",
+        "name": "智能雙炫火二口玻璃面爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/G2926G.jpg",
+        "route": ""
+      }
+    ],
+    "cases": []
+  },
+  {
+    "slug": "loft-chic",
+    "name": "Loft Chic Kitchen",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/loftchic",
+    "heroSlides": [
+      "/home-2026/hero/10bn/loft-chic.webp"
+    ],
+    "intro": {
+      "title": "品味浪漫 在廚房",
+      "paragraphs": [
+        "忙碌的都市生活中，退去俗世的華而不實 在這裏",
+        "自在擁有清新的空氣 在這裏，集結多元的機能型態 在這裏",
+        "質感體現在各個角落 品味生活的浪漫，原來這麼愜意"
+      ]
+    },
+    "suites": [
+      {
+        "id": "loft-chic-1",
+        "name": "零距離 · Flexible",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Loftchic/01Flexible-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Loftchic/01Flexible-2.jpg"
+        ],
+        "headlines": [
+          "以一字型結合中島的疊加設計，來拓展空間的使用彈性"
+        ],
+        "descriptions": [
+          "讓隨心的烹調、三五小酌、優雅的下午茶時光再也不受限制！ 從此，空間零距離；你我的心，也零距離。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "loft-chic-2",
+        "name": "享生活 · Enjoyable",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Loftchic/02Enjoyable-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Loftchic/02Enjoyable-2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Loftchic/02Enjoyable-3.jpg"
+        ],
+        "headlines": [
+          "感受空間魅力氛圍，享受生活美好時刻"
+        ],
+        "descriptions": [
+          "在這裏，能自在擁有清新的空氣； 在這裏，能集結多元的機能型態； 你會發現不凡享受、細緻生活原來這麼愜意。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "loft-chic-3",
+        "name": "愛時尚 · Fashion",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Loftchic/03Fashion-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Loftchic/03Fashion-3.jpg"
+        ],
+        "headlines": [
+          "有型有款簡約時尚風格，呈現生活美學品味"
+        ],
+        "descriptions": [
+          "開放收納、襯托真我；質感混搭、跨界融合， 品味體現在各個角落，時尚風潮操之在我。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "loft-chic-4",
+        "name": "五金配備 · Sink & Faucet",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Loftchic/LOFT_SINK_FAUCET_V3.jpg"
+        ],
+        "headlines": [
+          "水槽與水龍頭完美演出，加倍料理效益"
+        ],
+        "descriptions": [
+          "龍頭：LFD_3033 廚房無鉛立式龍頭",
+          "水槽：SF-750 不鏽鋼手工方形槽",
+          "更多產品資訊，請點選「型錄」參看"
+        ],
+        "equipment": [],
+        "links": [
+          {
+            "label": "「型錄」",
+            "url": "https://www.sakura-kitchenlife.com.tw/uploads/files/shares/Catalogue/DM_2023_SINK_FAUCET_HANDLE_20240227REV.pdf"
+          }
+        ]
+      }
+    ],
+    "finishes": [
+      {
+        "code": "D2520",
+        "name": "璀璨金",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2520.jpg"
+      },
+      {
+        "code": "D2510",
+        "name": "銀灰清水模",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2510.jpg"
+      },
+      {
+        "code": "D2509",
+        "name": "紅橡木裂紋",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2509.jpg"
+      },
+      {
+        "code": "D2508",
+        "name": "白橡木裂紋",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2508.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "Q7693",
+        "name": "全平面玻璃觸控落地式烘碗機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/Q7693.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7362"
+      },
+      {
+        "model": "G2928G",
+        "name": "智能雙炫火二口玻璃檯面爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/G2928G.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7357"
+      },
+      {
+        "model": "DR7790A",
+        "name": "歐化除油煙機-渦輪變頻 環吸系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/DR7790A.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7316"
+      }
+    ],
+    "cases": [
+      {
+        "title": "打造夢想中島吧檯廚房，共享親子同樂時光",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case49/_DSC3443.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case50"
+      },
+      {
+        "title": "量身打造型男夢想廚房!輕奢中島展社交魅力",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case29/SAKURA_1013_03.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case35"
+      },
+      {
+        "title": "一日的好精神，就從廚房開始",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case45/A230605-6-1.png",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case45"
+      },
+      {
+        "title": "袁艾菲與老公結婚二周年甜蜜獻禮！讓愛增溫的法寶，藏在簡約的櫻花美廚細節裡",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case10/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case10"
+      },
+      {
+        "title": "質感廚居工業浪潮",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case12/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case12"
+      },
+      {
+        "title": "老宅變身工業風 改造集大成廚居場域！",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case16/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case16"
+      },
+      {
+        "title": "老廚房大翻修 變身個性Loft風",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case18/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case18"
+      },
+      {
+        "title": "個性工業風單身宅",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case14/1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/rcase14"
+      },
+      {
+        "title": "開放式廚房 家的浪漫發電機",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case21/01.JPG",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case21"
+      },
+      {
+        "title": "整併機能、靈活隔間，打造實用小宅",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case13/1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/rcase13"
+      }
+    ]
+  },
+  {
+    "slug": "joyful",
+    "name": "Joyful Kitchen",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/joyful",
+    "heroSlides": [
+      "/home-2026/hero/10bn/joyful.webp"
+    ],
+    "intro": {
+      "title": "幸福享樂 在廚房",
+      "paragraphs": [
+        "讓廚房成為親子歡樂成長的樂園",
+        "魔法般的童趣創意巧思，讓餐廚空間充滿驚奇",
+        "你從這裡變出美食，我在這裡盡情歡笑",
+        "廚房是我們一同成長、創造歡笑與回憶的魔法樂園！"
+      ]
+    },
+    "suites": [
+      {
+        "id": "joyful-1",
+        "name": "父母安心 · Reassuring",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/01Reassuring-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/01Reassuring-2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/01Reassuring-3.jpg"
+        ],
+        "headlines": [
+          "暖心角落，串連居家生活點滴"
+        ],
+        "descriptions": [
+          "透過精心細微的貼心設計，打造共享的居家樂園 這裡不再是禁地，而是家中最安心溫暖的角落 讓廚房充滿和諧氛圍與多元用途，在這裡我們一同安心成長創造歡笑"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "joyful-2",
+        "name": "友善寶貝 · Friendly",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/02Friendly-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/02Friendly-2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/02Friendly-3.jpg"
+        ],
+        "headlines": [
+          "專屬設計，體貼每個成長時刻"
+        ],
+        "descriptions": [
+          "用心營造創意收納讓廚房空間超越想像 這裡不僅是大人料理的魔法天地 也是伴我成長的繽紛樂園 在這裡我們一同歡笑，創造生活美好時刻"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "joyful-3",
+        "name": "溫馨和樂 · Warm",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/03Warm-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/03Warm-2.jpg"
+        ],
+        "headlines": [
+          "溫馨氛圍，擁抱居家美好生活"
+        ],
+        "descriptions": [
+          "貼心打造家中最溫暖的空間，在這裡盡情享受相聚的溫度 注入歡笑的魔法，凝聚著幸福好食光，伴隨孩子成長的記憶 讓廚房成為幸福記憶的寶藏箱，收藏著我們的幸福"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "joyful-4",
+        "name": "五金配備 · Sink & Faucet",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Joyful/JOYFUL_SINK_FAUCET.jpg"
+        ],
+        "headlines": [
+          "水槽與水龍頭完美演出，加倍料理效益"
+        ],
+        "descriptions": [
+          "龍頭：無鉛伸縮龍頭",
+          "水槽：JB760W 人造石水槽",
+          "更多產品資訊，請點選「型錄」參看"
+        ],
+        "equipment": [],
+        "links": [
+          {
+            "label": "「型錄」",
+            "url": "https://www.sakura-kitchenlife.com.tw/uploads/files/shares/Catalogue/DM_2023_SINK_FAUCET_HANDLE_20240227REV.pdf"
+          }
+        ]
+      }
+    ],
+    "finishes": [
+      {
+        "code": "D2526",
+        "name": "北歐櫸木",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2526.jpg"
+      },
+      {
+        "code": "D2513",
+        "name": "冰島白橡",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2513.jpg"
+      },
+      {
+        "code": "D2503",
+        "name": "天然橡木",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2503.jpg"
+      },
+      {
+        "code": "D1182",
+        "name": "靜謐藍灰",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D1182.jpg"
+      },
+      {
+        "code": "D1181",
+        "name": "輕甜粉漾",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D1181.jpg"
+      },
+      {
+        "code": "D1180",
+        "name": "瓷釉綠",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D1180.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "EG2350G",
+        "name": "雙口IH感應爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/EG2350.png",
+        "route": "https://www.sakura.com.tw/Product/Content/8030"
+      },
+      {
+        "model": "P0583",
+        "name": "廚下雙溫淨熱飲",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/P0583.png",
+        "route": "https://www.sakura.com.tw/Product/Content/8080"
+      },
+      {
+        "model": "Q7697L",
+        "name": "全平面雙熱風循環落地式烘碗機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/Q7697L.png",
+        "route": "https://www.sakura.com.tw/Product/Content/7819"
+      },
+      {
+        "model": "DR7786B",
+        "name": "歐化除油煙機-渦輪變頻 環吸系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/DR7786B.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7989"
+      },
+      {
+        "model": "R7653",
+        "name": "近吸除油煙機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/R7653.png",
+        "route": "https://www.sakura.com.tw/Product/Content/8085"
+      }
+    ],
+    "cases": [
+      {
+        "title": "高顏值X儀式感 人見人愛的美型好廚",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case25/01.png",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case31"
+      },
+      {
+        "title": "最高質感的親子時光！Quality time in Kitchen",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case26/01.png",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case32"
+      },
+      {
+        "title": "一份愛的禮物！獻上收納與電器兼修現代美廚 ，實現溫馨親子生活的儀式感",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case09/01.png",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case09"
+      },
+      {
+        "title": "實現優質奢華北歐風！ 設計師推薦美型電器、超強開放式廚房收納眉角",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case13/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case13"
+      },
+      {
+        "title": "打開幸褔的美味關係 食尚主播張宇",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case20/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case20"
+      }
+    ]
+  },
+  {
+    "slug": "premium",
+    "name": "Premium Kitchen",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/premium",
+    "heroSlides": [
+      "/home-2026/hero/10bn/premium.webp"
+    ],
+    "intro": {
+      "title": "成就不凡 在廚房",
+      "paragraphs": [
+        "簡約洗鍊，寫意奢華品味",
+        "舒朗大器的開放式設計，打開客餐廚界線，盡享流動的生活饗宴寬闊中島空間與精品般的逸品展櫃，伴隨智慧科技從容料理無論氣派社交宴請、私密親友小聚都優雅盡興，怡然自在"
+      ]
+    },
+    "suites": [
+      {
+        "id": "premium-1",
+        "name": "典藏 · Classic",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/01Classic-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/01Classic-2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/01Classic-3.jpg"
+        ],
+        "headlines": [
+          "美學光影氣勢非凡，詮釋高端氣息"
+        ],
+        "descriptions": [
+          "大器堆疊高櫃量體 成就磅礡氣勢， 時尚光氛究極之美 形塑空間質感。 細節品質的極致講究，烘托品味蒐藏的精品質感， 展現無可取代的尊榮氣度與空間美學。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "premium-2",
+        "name": "氣度 · Grandness",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/02GRANDNESS-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/02GRANDNESS-2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/02GRANDNESS-3.jpg"
+        ],
+        "headlines": [
+          "寬闊中島恢弘尺度，串連情感流動"
+        ],
+        "descriptions": [
+          "開闊中島凝聚空間新核心， 打通客餐廚疆界，展開遼闊視野的生活風景。 輕食烹飪機能與吧檯空間規劃， 同時滿足料理備餐、私廚聚會與吧檯小酌等社交場景。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "premium-3",
+        "name": "創新 · Innovation",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/03INNOVATION-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/03INNOVATION-2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/03INNOVATION-3.jpg"
+        ],
+        "headlines": [
+          "科技塑造智慧生活　蘊涵舒適質感"
+        ],
+        "descriptions": [
+          "以智慧科技重新詮釋餐廚生活體驗， 從創新智能的廚房電器至系統廚具， 打造美好生活質感及十足便利。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "premium-4",
+        "name": "五金配備 · Sink & Faucet",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Premium/PREMIUM_SINK_FAUCET.jpg"
+        ],
+        "headlines": [
+          "水槽與水龍頭完美演出，加倍料理效益"
+        ],
+        "descriptions": [
+          "龍頭：無鉛伸縮龍頭",
+          "水槽：C10-5001 花崗岩水槽",
+          "更多產品資訊，請點選「型錄」參看"
+        ],
+        "equipment": [],
+        "links": [
+          {
+            "label": "「型錄」",
+            "url": "https://www.sakura-kitchenlife.com.tw/uploads/files/shares/Catalogue/DM_2023_SINK_FAUCET_HANDLE_20240227REV.pdf"
+          }
+        ]
+      }
+    ],
+    "finishes": [
+      {
+        "code": "D0751",
+        "name": "齋浦爾紅",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D0751.jpg"
+      },
+      {
+        "code": "D0754",
+        "name": "摩洛哥藍",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D0754.jpg"
+      },
+      {
+        "code": "D0750",
+        "name": "湖水綠",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D0750.jpg"
+      },
+      {
+        "code": "D0718",
+        "name": "倫敦灰",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D0718.jpg"
+      },
+      {
+        "code": "D0032",
+        "name": "科斯白",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D0032.jpg"
+      },
+      {
+        "code": "D0720",
+        "name": "亞光黑",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D0720.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "P0231",
+        "name": "RO淨水器",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/P0231.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7707"
+      },
+      {
+        "model": "Q7697L",
+        "name": "全平面雙熱風循環落地式烘碗機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/Q7697L.png",
+        "route": "https://www.sakura.com.tw/Product/Content/7819"
+      },
+      {
+        "model": "G2928G",
+        "name": "智能雙炫火二口玻璃檯面爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/G2928G.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7357"
+      },
+      {
+        "model": "DR7796SXL",
+        "name": "歐化除油煙機-渦輪變頻 AI風控系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/DR7796SXL.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7887"
+      }
+    ],
+    "cases": [
+      {
+        "title": "企業主的黑白調輕奢廚房 三代人共享天倫之樂",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case53/_DSC0415-%E5%B7%B2%E5%A2%9E%E5%BC%B7-NR.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case54"
+      },
+      {
+        "title": "品味優雅的小夫妻餐廚空間",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case48/A231128-32.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case48"
+      },
+      {
+        "title": "現代親子共伴設計，體貼母親的暖心廚居",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case47/_DSC2708.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case47"
+      },
+      {
+        "title": "30年廚房翻修(廚房新(心)關係)",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case42/A230630-4_1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case42"
+      },
+      {
+        "title": "三世代共融 展演生活美學",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case06/1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case40"
+      },
+      {
+        "title": "質感廚具打造精緻夫妻生活",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case27/01.png",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case33"
+      },
+      {
+        "title": "細膩雕琢 貼心規劃　小家庭的溫馨廚房方案",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case02/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case02"
+      },
+      {
+        "title": "科技大叔為愛打造智能餐廚空間",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case04/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case38"
+      },
+      {
+        "title": "奢華新設計 對稱美學的極致饗宴",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case33/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/rcase33"
+      },
+      {
+        "title": "自在愜意的私人招待所",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case08/1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case41"
+      },
+      {
+        "title": "形塑識別品味 平衡社交與生活",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case03/1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case37"
+      },
+      {
+        "title": "自在遊走的品味領域",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case01/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/rcase01"
+      }
+    ]
+  },
+  {
+    "slug": "elegant",
+    "name": "Elegant Kitchen",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/elegant",
+    "heroSlides": [
+      "/home-2026/hero/10bn/elegant.webp"
+    ],
+    "intro": {
+      "title": "臻萃美緻 在廚房",
+      "paragraphs": [
+        "美式古典風格的細節表現，展現細膩典雅的美緻氛圍",
+        "細量生活型態需求，探索空間效能的無限可能",
+        "打造機能美學，讓美型廚房也兼備收納功能"
+      ]
+    },
+    "suites": [
+      {
+        "id": "elegant-1",
+        "name": "品味 · Stylish",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Elegant/01Stylish_1.jpg"
+        ],
+        "headlines": [
+          "兼具品味蒐藏的實用展示"
+        ],
+        "descriptions": [
+          "透過餐檯、層板、邊櫃，恰如其分的木質元素，增添空間溫潤質感； 格子窗玻璃櫃與造型飾框側邊開放櫃，兼顧了空間的美觀實用， 讓雅緻細膩的美式風格，兼具品味蒐藏的實用展示陳列功能。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "elegant-2",
+        "name": "內蘊 · Implication",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Elegant/02Implication_1.jpg"
+        ],
+        "headlines": [
+          "美感獨具的現代廚房，兼備收納及使用效率"
+        ],
+        "descriptions": [
+          "以生活為優先，滿足最多樣型態的家庭使用習慣為考量， 配置完善的功能五金，為你啟發更多收納創意與靈感的機能美學， 讓美感獨具的現代廚房，也能兼備收納及使用效率。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "elegant-3",
+        "name": "美緻 · Concinnity",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Elegant/03Concinnity_1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Elegant/03Concinnity_2.jpg"
+        ],
+        "headlines": [
+          "都會感十足的美式風格"
+        ],
+        "descriptions": [
+          "全新獨創的門板，擁有細膩門框、搭配著白色壓紋設計，展現獨具優雅的立體美緻風格 處處點綴著把手、線板、柱花等經典元素，透過對稱式平衡美學設計手法 揉合出都會感十足的美式風格"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "elegant-4",
+        "name": "五金配備 · Sink & Faucet",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Elegant/ELEGANT_SINK_FAUCET.jpg"
+        ],
+        "headlines": [
+          "水槽與水龍頭完美演出，加倍料理效益"
+        ],
+        "descriptions": [
+          "龍頭：無鉛伸縮龍頭",
+          "水槽：C10-5001 花崗岩水槽",
+          "更多產品資訊，請點選「型錄」參看"
+        ],
+        "equipment": [],
+        "links": [
+          {
+            "label": "「型錄」",
+            "url": "https://www.sakura-kitchenlife.com.tw/uploads/files/shares/Catalogue/DM_2023_SINK_FAUCET_HANDLE_20240227REV.pdf"
+          }
+        ]
+      }
+    ],
+    "finishes": [
+      {
+        "code": "",
+        "name": "D41703",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D41703.jpg"
+      },
+      {
+        "code": "",
+        "name": "D9717",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D9717.jpg"
+      },
+      {
+        "code": "",
+        "name": "D7781R",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D7781R.jpg"
+      },
+      {
+        "code": "",
+        "name": "D5712R",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D5712R.jpg"
+      },
+      {
+        "code": "",
+        "name": "D4706",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D4706.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "E8890",
+        "name": "嵌入式微波蒸烤箱",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/E8890.jpg",
+        "route": ""
+      },
+      {
+        "model": "P0231",
+        "name": "RO淨水器",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/P0231.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7707"
+      },
+      {
+        "model": "Q7693",
+        "name": "全平面玻璃觸控落地式烘碗機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/Q7693.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7362"
+      },
+      {
+        "model": "G2926G",
+        "name": "智能雙炫火二口玻璃面爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/G2926G.jpg",
+        "route": ""
+      },
+      {
+        "model": "DR7790A",
+        "name": "歐化除油煙機-渦輪變頻 環吸系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/DR7790A.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7316"
+      }
+    ],
+    "cases": [
+      {
+        "title": "雅緻細膩的美式廚房 烘培出幸福滋味",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case46/SAKURA_1214-57.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case46"
+      },
+      {
+        "title": "打造港灣優雅的烹飪勝地",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case30/A230601-18-1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case36"
+      },
+      {
+        "title": "三代同堂感情加溫，凝聚家的美味關係",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case28/SAKURA_1013_21.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case34"
+      },
+      {
+        "title": "遠離塵囂度假潮！融合多元收納與優質電器 訂製自然風味台東美廚",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case07/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case07"
+      },
+      {
+        "title": "當代廚房的白色協奏",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case15/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case15"
+      },
+      {
+        "title": "從食癒到場域細節的廚居未來進行式",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case19/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case19"
+      },
+      {
+        "title": "享生活的白色品味",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/rendercase/case02/1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/rcase02"
+      }
+    ]
+  },
+  {
+    "slug": "chef",
+    "name": "Chef Kitchen",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/chef",
+    "heroSlides": [
+      "/home-2026/hero/10bn/chef.webp"
+    ],
+    "intro": {
+      "title": "心滿藝足 在廚房",
+      "paragraphs": [
+        "你的精湛廚藝，當然需要能盡情揮灑、事半功倍的廚房利器",
+        "最符合您烹飪習慣的大廚廚房",
+        "不僅擁有高效專業的廚房電器和隨拿即用的收納規劃，更具備由內而外好清理、健康安心不費力的完美便利",
+        "量身打造的高低差檯面，讓做菜不再是件腰痠吊手的苦差事",
+        "中西式或家常菜的各式工具，更能收好收滿、井然有序",
+        "連最不想面對的清理善後，都有著不勞您費心的體貼心意",
+        "與你一起攜手盡情揮灑廚神般的完美煮藝",
+        "調味出滿滿的廚藝、滿滿的心意，與滿滿的愜意~"
+      ]
+    },
+    "suites": [
+      {
+        "id": "chef-1",
+        "name": "省點力 好清心 · Easy to Clean",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/01Easy-to-clean-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/01Easy-to-clean-3.jpg"
+        ],
+        "headlines": [
+          "省點力 好清心"
+        ],
+        "descriptions": [
+          "精選門板、壁板、水槽、廚房電器 兼具出色機能和易清特點 省時省力、省出清心好時光"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "chef-2",
+        "name": "簡單用 更便利 · Simple to Use",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/02Simple-to-use-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/02Simple-to-use-2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/02Simple-to-use-4.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/02Simple-to-use-3.jpg"
+        ],
+        "headlines": [
+          "簡單用 更便利"
+        ],
+        "descriptions": [
+          "簡單卻不簡單的貼心聰明設計 讓備料、烹飪煮食過程中操作更便利順手、事半功倍"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "chef-3",
+        "name": "體貼你 最安心 · Design for Health",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/03Design-for-health-1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/03Design-for-health-2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/03Design-for-health-3.jpg"
+        ],
+        "headlines": [
+          "體貼你 最安心"
+        ],
+        "descriptions": [
+          "專業人體工學設計 無毒材質選用 有形無形、照顧全家人健康"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "chef-4",
+        "name": "五金配備 · Sink & Faucet",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Chef/CHEF_SINK_FAUCET.jpg"
+        ],
+        "headlines": [
+          "水槽與水龍頭完美演出，加倍料理效益"
+        ],
+        "descriptions": [
+          "龍頭：LFD-0211_2 無鉛伸縮水龍頭",
+          "水槽：SKL605R 不鏽鋼水槽",
+          "更多產品資訊，請點選「型錄」參看"
+        ],
+        "equipment": [],
+        "links": [
+          {
+            "label": "「型錄」",
+            "url": "https://www.sakura-kitchenlife.com.tw/uploads/files/shares/Catalogue/DM_2023_SINK_FAUCET_HANDLE_20240227REV.pdf"
+          }
+        ]
+      }
+    ],
+    "finishes": [
+      {
+        "code": "D2517",
+        "name": "摩卡梣木",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2517.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "P0583",
+        "name": "廚下雙溫淨熱飲",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/P0583.png",
+        "route": "https://www.sakura.com.tw/Product/Content/8080"
+      },
+      {
+        "model": "G2928G",
+        "name": "智能雙炫火二口玻璃檯面爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/G2928G.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7357"
+      },
+      {
+        "model": "DR7786B",
+        "name": "歐化除油煙機-渦輪變頻 環吸系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/DR7786B.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7989"
+      },
+      {
+        "model": "R7653",
+        "name": "近吸除油煙機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/R7653.png",
+        "route": "https://www.sakura.com.tw/Product/Content/8085"
+      }
+    ],
+    "cases": [
+      {
+        "title": "打造喵星人當家的夢幻廚房",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case43/A230911-7-1.png",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case43"
+      }
+    ]
+  },
+  {
+    "slug": "country",
+    "name": "Country Kitchen",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/country",
+    "heroSlides": [
+      "/home-2026/hero/10bn/country.webp"
+    ],
+    "intro": {
+      "title": "鄉村慢活 在廚房",
+      "paragraphs": [
+        "色彩豐富的染色實木，搭配古典工藝曲線",
+        "清新溫潤的鄉村氣息，明亮整個廚房空間",
+        "讓你工作之餘，可以細細品嚐生活裡的每一刻"
+      ]
+    },
+    "suites": [
+      {
+        "id": "country-1",
+        "name": "實木門板 · Woody",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Country/01Woody_1.jpg"
+        ],
+        "headlines": [
+          "實木門板"
+        ],
+        "descriptions": [
+          "橡木厚實觸感和天然紋理 展現溫馨質樸調性"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "country-2",
+        "name": "明亮色調 · Brightness",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Country/02Brightness_2.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Country/02Brightness_1.jpg"
+        ],
+        "headlines": [
+          "明亮色調"
+        ],
+        "descriptions": [
+          "自然色系高彩度的原木染色色調 呈現熱情與活力的鄉村風格"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "country-3",
+        "name": "雅緻工藝 · Refined",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Country/03Refined_1.jpg",
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Country/03Refined_2.jpg"
+        ],
+        "headlines": [
+          "雅緻工藝"
+        ],
+        "descriptions": [
+          "融合鄉村風格和生活概念 手感打造各式收納機能"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "country-4",
+        "name": "五金配備 · Sink & Faucet",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series_Country/COUNTRY_SINK_FAUCET.jpg"
+        ],
+        "headlines": [
+          "水槽與水龍頭完美演出，加倍料理效益"
+        ],
+        "descriptions": [
+          "地櫃",
+          "龍頭：LFD-0211_2 無鉛伸縮龍頭",
+          "水槽：C10-5001 花崗岩水槽",
+          "中島",
+          "龍頭：FK-5640 仿古立式龍頭",
+          "水槽：C10-5001 花崗岩水槽",
+          "更多產品資訊，請點選「型錄」參看"
+        ],
+        "equipment": [],
+        "links": [
+          {
+            "label": "「型錄」",
+            "url": "https://www.sakura-kitchenlife.com.tw/uploads/files/shares/Catalogue/DM_2023_SINK_FAUCET_HANDLE_20240227REV.pdf"
+          }
+        ]
+      }
+    ],
+    "finishes": [
+      {
+        "code": "EA12",
+        "name": "田園黃",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA12.jpg"
+      },
+      {
+        "code": "EA11",
+        "name": "森林綠",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA11.jpg"
+      },
+      {
+        "code": "EA10",
+        "name": "湖水綠",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA10.jpg"
+      },
+      {
+        "code": "EA09",
+        "name": "童話藍",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA09.jpg"
+      },
+      {
+        "code": "EA08",
+        "name": "實木棕",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA08.jpg"
+      },
+      {
+        "code": "EA07",
+        "name": "海洋藍",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA07.jpg"
+      },
+      {
+        "code": "EA06",
+        "name": "天空藍",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA06.jpg"
+      },
+      {
+        "code": "EA02",
+        "name": "雅致米",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA02.jpg"
+      },
+      {
+        "code": "EA01",
+        "name": "經典白",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/EA01.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "P0583",
+        "name": "廚下雙溫淨熱飲",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/P0583.png",
+        "route": "https://www.sakura.com.tw/Product/Content/8080"
+      },
+      {
+        "model": "E8890",
+        "name": "嵌入式微波蒸烤箱",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/E8890.jpg",
+        "route": ""
+      },
+      {
+        "model": "G2928G",
+        "name": "智能雙炫火二口玻璃檯面爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/G2928G.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7357"
+      },
+      {
+        "model": "DR7796SXL",
+        "name": "歐化除油煙機-渦輪變頻 AI風控系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/DR7796SXL.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7887"
+      }
+    ],
+    "cases": []
+  },
+  {
+    "slug": "harmony",
+    "name": "Harmony Kitchen",
+    "source": "https://www.sakura-kitchenlife.com.tw/home-style/harmony",
+    "heroSlides": [
+      "/home-2026/hero/10bn/harmony.webp"
+    ],
+    "intro": {
+      "title": "天倫團聚 在廚房",
+      "paragraphs": [
+        "在同一個空間下滿足不同世代需求",
+        "因應不同使用習慣又保有各自空間",
+        "全家團聚共享歡樂用餐時光！"
+      ]
+    },
+    "suites": [
+      {
+        "id": "harmony-1",
+        "name": "高效 · Efficiently",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Harmony/01Efficiently.jpg"
+        ],
+        "headlines": [
+          "多工收納設計，滿足多人口使用機能"
+        ],
+        "descriptions": [
+          "可存放各種大小鍋具及多工使用的3D收納櫃/瀝水盤，多樣化的廚櫃設計，滿足每個人的使用需求，省時省力、高效不費心。"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "harmony-2",
+        "name": "適齡 · Suitable",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Harmony/02Suitable.jpg"
+        ],
+        "headlines": [
+          "考量全家人使用便利及行動安全"
+        ],
+        "descriptions": [
+          "規劃安心的動線、安全的配置及實用便利等全方位考量， 讓不同年齡層也可以在同一空間下共同料理"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "harmony-3",
+        "name": "融合 · Blending",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Harmony/03Blending.jpg"
+        ],
+        "headlines": [
+          "透過石紋及搭配木紋 融入大器更顯氣派"
+        ],
+        "descriptions": [
+          "考量多元的煮食習慣、喜愛的設計風格 以團聚為象徵，融合全家人的喜好，規劃出專屬於三代同堂的廚房"
+        ],
+        "equipment": [],
+        "links": []
+      },
+      {
+        "id": "harmony-4",
+        "name": "五金配備 · Sink & Faucet",
+        "images": [
+          "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/Series-Harmony/HARMONY_SINK_FAUCET.jpg"
+        ],
+        "headlines": [
+          "水槽與水龍頭完美演出，加倍料理效益"
+        ],
+        "descriptions": [
+          "龍頭：LFD-0211_2 無鉛伸縮龍頭",
+          "水槽：SKL166 不鏽鋼單槽水槽",
+          "更多產品資訊，請點選「型錄」參看"
+        ],
+        "equipment": [],
+        "links": [
+          {
+            "label": "「型錄」",
+            "url": "https://www.sakura-kitchenlife.com.tw/uploads/files/shares/Catalogue/DM_2023_SINK_FAUCET_HANDLE_20240227REV.pdf"
+          }
+        ]
+      }
+    ],
+    "finishes": [
+      {
+        "code": "D2529",
+        "name": "自然胡桃木",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D2529.jpg"
+      },
+      {
+        "code": "D3504",
+        "name": "泥灰岩",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D3504.jpg"
+      },
+      {
+        "code": "D3503",
+        "name": "白雲岩",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/color/D3503.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "model": "P0231",
+        "name": "RO淨水器",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/P0231.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7707"
+      },
+      {
+        "model": "Q7697L",
+        "name": "全平面雙熱風循環落地式烘碗機",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/Q7697L.png",
+        "route": "https://www.sakura.com.tw/Product/Content/7819"
+      },
+      {
+        "model": "G2932AG",
+        "name": "三口雙炫火玻璃檯面爐",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/G2932AG.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7368"
+      },
+      {
+        "model": "R7765S",
+        "name": "歐化除油煙機-環吸系列",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/equipment/R7765S.jpg",
+        "route": "https://www.sakura.com.tw/Product/Content/7662"
+      }
+    ],
+    "cases": [
+      {
+        "title": "現代風機能美廚大公開，開放式廚房烹煮、收納一氣呵成沒煩惱",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case01/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case01"
+      },
+      {
+        "title": "簡約北歐風民宿內的渡假廚房",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case44/A230927-1-1.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case44"
+      },
+      {
+        "title": "開放設計 多元規劃　凝聚家族情感溫馨廚房",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case05/01.png",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case05"
+      },
+      {
+        "title": "傳統三合院 老宅新生 凝聚家族情感的開放式廚房",
+        "excerpt": "",
+        "image": "https://www.sakura-kitchenlife.com.tw/uploads/photos/shares/case/case17/01.jpg",
+        "url": "https://www.sakura-kitchenlife.com.tw/gallery/case17"
+      }
+    ]
+  }
+]

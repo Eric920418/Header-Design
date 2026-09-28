@@ -36,6 +36,7 @@ const flipState = ref<FlipState | null>(null)
 const reducedMotion = useReducedMotion()
 let flipTimer: ReturnType<typeof setTimeout> | undefined
 let flipFinishTimer: ReturnType<typeof setTimeout> | undefined
+let nextFlipSlot = 0
 
 const filtered = computed(() => stores.filter(store => (!region.value || store.region === region.value) && (!city.value || store.city === city.value)))
 const filteredKey = computed(() => filtered.value.map(store => store.id).join(','))
@@ -49,6 +50,7 @@ watch(filteredKey, () => {
   const list = filtered.value
   if (!list.some(store => store.id === selected.value)) selected.value = list[0]?.id ?? stores[0].id
   displayedIds.value = list.slice(0, STORE_BOARD_ROWS).map(store => store.id)
+  nextFlipSlot = 0
   flipState.value = null
   clearFlipTimers()
   nextTick(scheduleFlip)
@@ -86,21 +88,23 @@ function runFlip() {
   if (boardPaused.value || reducedMotion.value || flipState.value) return
 
   const candidates = filtered.value.filter(store => !displayedIds.value.includes(store.id))
+  const keepSelected = focused.value || Boolean(region.value || city.value)
   const replaceableSlots = displayedIds.value
     .map((id, index) => ({ id, index }))
-    .filter(({ id }) => id !== selected.value)
+    .filter(({ id }) => !keepSelected || id !== selected.value)
 
   if (!candidates.length || !replaceableSlots.length) {
     scheduleFlip()
     return
   }
 
-  const target = replaceableSlots[Math.floor(Math.random() * replaceableSlots.length)]!
+  const target = replaceableSlots[nextFlipSlot++ % replaceableSlots.length]!
   const replacement = candidates[Math.floor(Math.random() * candidates.length)]!
   flipState.value = { slot: target.index, previousId: target.id }
   displayedIds.value = displayedIds.value.map((id, index) => index === target.index ? replacement.id : id)
 
   flipFinishTimer = setTimeout(() => {
+    if (!keepSelected && selected.value === target.id) selected.value = replacement.id
     flipState.value = null
     flipFinishTimer = undefined
     scheduleFlip()
@@ -124,9 +128,9 @@ function handleBoardFocusOut(event: FocusEvent) {
 <template>
   <section id="contact" aria-labelledby="store-location-heading" class="store-location-section relative overflow-hidden bg-[#fafafa] py-[60px]">
     <div class="mx-auto w-full max-w-[1512px] pl-5 pr-[88px] sm:pl-8 sm:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
-      <div class="relative mb-[60px]"><div class="grid grid-cols-1 items-start lg:grid-cols-[minmax(260px,424px)_minmax(0,1fr)] lg:pt-[46px]"><div class="mb-5 lg:mb-0"><InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }">STORE LOCATOR</InternalSectionPill></div><h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="max-w-[661px] font-display text-[42px] leading-[46px] text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:text-[60px] xl:leading-[64px]">Have a Project in <span class="text-[#CAA05C]">Mind?<br />Let’s Make</span> It Happen</h2></div></div>
+      <div class="relative mb-[60px]"><div class="grid grid-cols-1 items-start lg:grid-cols-[minmax(260px,424px)_minmax(0,1fr)] lg:pt-[46px]"><div class="mb-5 lg:mb-0"><InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }">STORE LOCATOR</InternalSectionPill></div><h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="max-w-[661px] font-cjk-serif text-[42px] font-semibold leading-[46px] text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:text-[60px] xl:leading-[64px]">櫻花整體廚房<br /><span class="text-[#CAA05C]">全台門市據點</span></h2></div></div>
       <div class="flex min-w-0 flex-col gap-8 lg:flex-row">
-        <div v-reveal="{ anim: 'opalMoveRight', delay: 180 }" class="flex w-full min-w-0 flex-col lg:w-[62%] lg:shrink-0"><div class="h-[var(--store-map-h)] overflow-hidden rounded-3xl bg-[#F6F6F6] shadow-sm lg:min-h-[var(--store-map-h)] lg:flex-1"><GoogleStoreMap :address="visible.address" :focus="focused" /></div></div>
+        <div v-reveal="{ anim: 'opalMoveRight', delay: 180 }" class="flex w-full min-w-0 flex-col lg:w-[62%] lg:shrink-0"><div class="h-[var(--store-map-h)] overflow-hidden rounded-3xl bg-[#F6F6F6] shadow-sm lg:min-h-[var(--store-map-h)] lg:flex-1"><GoogleStoreMap :address="visible.address" :name="visible.name" :focus="focused" /></div></div>
         <div class="min-w-0 flex-1">
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 180 }" class="store-location-filters mb-4 grid gap-2 sm:gap-3">
             <button type="button" class="store-location-locate flex h-[52px] min-w-0 items-center justify-between whitespace-nowrap rounded-full border border-[rgba(159,159,164,.25)] bg-white px-5 font-cjk-sans text-[15px] text-[#1C1C1D]"><span>我的位置</span><LocateFixed class="h-[22px] w-[22px] text-[#CAA05C]" /></button>
@@ -136,8 +140,6 @@ function handleBoardFocusOut(event: FocusEvent) {
           <div
             v-reveal="{ anim: 'storeGroupReveal' }"
             class="store-board-list space-y-3 font-cjk-sans"
-            @mouseenter="setBoardPaused(true)"
-            @mouseleave="setBoardPaused(false)"
             @focusin="setBoardPaused(true)"
             @focusout="handleBoardFocusOut"
           >
@@ -148,7 +150,7 @@ function handleBoardFocusOut(event: FocusEvent) {
                 :key="index"
                 type="button"
                 :aria-label="`查看${store.name}：${store.address}`"
-                class="store-board-entry store-board-slot relative h-[122px] w-full rounded-2xl text-left outline-none sm:h-[100px] lg:h-[118px] xl:h-[100px]"
+                class="store-board-entry store-board-slot relative h-[122px] w-full cursor-pointer rounded-2xl text-left outline-none sm:h-[100px] lg:h-[118px] xl:h-[100px]"
                 :style="{ animationDelay: `${index * 100}ms` }"
                 @click="selected = store.id; focused = true"
               >

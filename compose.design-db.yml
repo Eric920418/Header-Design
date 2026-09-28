@@ -1,0 +1,15 @@
+name: sakura-website-dev
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${WEBSITE_DB_SA_PASSWORD:?Use --env-file .env.design-db.local}
+    ports:
+      - '127.0.0.1:14333:1433'
+    volumes:
+      - website-sql-data:/var/opt/mssql
+volumes:
+  website-sql-data:

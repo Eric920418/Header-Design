@@ -1,90 +1,52 @@
 <script setup lang="ts">
 import { ArrowRight, SlidersHorizontal } from 'lucide-vue-next'
-import {
-  DESIGN_FORM_OPTIONS,
-  DESIGN_INSPIRATION_CASES,
-  DESIGN_STYLE_OPTIONS,
-} from '~/data/designInspirations'
-import type { DesignInspirationForm, DesignInspirationStyle } from '~/types/content'
+import type { DesignCasePage, DesignFilters } from '~/types/designCloud'
 
 const route = useRoute()
 const router = useRouter()
-const pageSize = 9
-const validForms = new Set(DESIGN_FORM_OPTIONS.map(item => item.value).filter(Boolean))
-const validStyles = new Set(DESIGN_STYLE_OPTIONS.map(item => item.value).filter(Boolean))
-
 const queryString = (value: unknown) => typeof value === 'string' ? value : ''
-
-const selectedForm = computed<'' | DesignInspirationForm>(() => {
-  const value = queryString(route.query.form) as DesignInspirationForm
-  return validForms.has(value) ? value : ''
+const selectedForm = computed(() => {
+  const form = queryString(route.query.form)
+  return form === 'ㄇ型+中島' ? 'ㄇ字型+中島' : form
 })
-
-const selectedStyle = computed<'' | DesignInspirationStyle>(() => {
-  const value = queryString(route.query.style) as DesignInspirationStyle
-  return validStyles.has(value) ? value : ''
-})
-
-const draftForm = ref<'' | DesignInspirationForm>(selectedForm.value)
-const draftStyle = ref<'' | DesignInspirationStyle>(selectedStyle.value)
-
+const selectedStyle = computed(() => queryString(route.query.style))
+const draftForm = ref(selectedForm.value)
+const draftStyle = ref(selectedStyle.value)
 watch([selectedForm, selectedStyle], ([form, style]) => {
   draftForm.value = form
   draftStyle.value = style
 })
 
-const filteredCases = computed(() => DESIGN_INSPIRATION_CASES.filter(item =>
-  (!selectedForm.value || item.form === selectedForm.value)
-  && (!selectedStyle.value || item.style === selectedStyle.value),
-))
-
-const totalPages = computed(() => Math.max(1, Math.ceil(filteredCases.value.length / pageSize)))
-const requestedPage = computed(() => {
-  const value = Number.parseInt(queryString(route.query.page), 10)
-  return Number.isFinite(value) && value > 0 ? value : 1
-})
-const currentPage = computed(() => Math.min(requestedPage.value, totalPages.value))
-const paginatedCases = computed(() => {
-  const start = (currentPage.value - 1) * pageSize
-  return filteredCases.value.slice(start, start + pageSize)
-})
+const query = computed(() => ({ form: route.query.form ?? '', style: route.query.style ?? '', page: route.query.page ?? '1' }))
+const { data: filters, error: filterError, status: filterStatus, refresh: refreshFilters } = await useFetch<DesignFilters>('/api/design-inspiration/filters')
+const { data: result, error: casesError, status: casesStatus, refresh: refreshCases } = await useFetch<DesignCasePage>('/api/design-inspiration/cases', { query })
+const loading = computed(() => filterStatus.value === 'pending' || casesStatus.value === 'pending')
+const error = computed(() => filterError.value || casesError.value)
+const currentPage = computed(() => result.value?.page ?? 1)
+const totalPages = computed(() => result.value?.totalPages ?? 0)
+const paginatedCases = computed(() => result.value?.items ?? [])
+const detailRoute = (id: string) => ({ path: `/design-inspiration/${id}`, query: { ...route.query } })
+async function retry() { await Promise.all([refreshFilters(), refreshCases()]) }
 
 async function applyFilters() {
-  const query = { ...route.query }
-  delete query.form
-  delete query.style
-  delete query.page
+  const query: Record<string, string> = {}
   if (draftForm.value) query.form = draftForm.value
   if (draftStyle.value) query.style = draftStyle.value
-  await router.push({ path: route.path, query })
+  await router.push({ path: '/design-inspiration', query })
 }
-
 async function goToPage(page: number) {
   const query = { ...route.query }
   if (page > 1) query.page = String(page)
   else delete query.page
   await router.push({ path: route.path, query })
+  if (import.meta.client) window.scrollTo({ top: 0, behavior: 'instant' })
 }
-
-onMounted(() => {
-  const hasInvalidForm = Boolean(queryString(route.query.form)) && !selectedForm.value
-  const hasInvalidStyle = Boolean(queryString(route.query.style)) && !selectedStyle.value
-  const hasInvalidPage = requestedPage.value !== currentPage.value
-  if (!hasInvalidForm && !hasInvalidStyle && !hasInvalidPage) return
-
-  const query = { ...route.query }
-  if (hasInvalidForm) delete query.form
-  if (hasInvalidStyle) delete query.style
-  if (hasInvalidPage || currentPage.value === 1) delete query.page
-  void router.replace({ path: route.path, query })
-})
 
 useSeoMeta({
   title: '設計靈感｜SAKURA 整體廚房',
   description: '依設計型式與設計風格探索 SAKURA 整體廚房真實案例，找到適合家的廚房靈感。',
   ogTitle: '設計靈感｜SAKURA 整體廚房',
-  ogDescription: '工業風、北歐風與現代風整體廚房案例。',
-  ogImage: DESIGN_INSPIRATION_CASES[0]?.cover,
+  ogImage: () => result.value?.items[0]?.cover ?? undefined,
 })
 </script>
 
@@ -115,7 +77,8 @@ useSeoMeta({
             <label for="design-form" class="sr-only">設計型式</label>
             <div class="design-projects-filter__select">
               <select id="design-form" v-model="draftForm" name="form">
-                <option v-for="option in DESIGN_FORM_OPTIONS" :key="option.label" :value="option.value">{{ option.label }}</option>
+                <option value="">全部型式</option>
+                <option v-for="option in filters?.forms" :key="option" :value="option">{{ option }}</option>
               </select>
             </div>
           </div>
@@ -124,7 +87,8 @@ useSeoMeta({
             <label for="design-style" class="sr-only">設計風格</label>
             <div class="design-projects-filter__select">
               <select id="design-style" v-model="draftStyle" name="style">
-                <option v-for="option in DESIGN_STYLE_OPTIONS" :key="option.label" :value="option.value">{{ option.label }}</option>
+                <option value="">全部風格</option>
+                <option v-for="option in filters?.styles" :key="option" :value="option">{{ option }}</option>
               </select>
             </div>
           </div>
@@ -135,17 +99,18 @@ useSeoMeta({
           </button>
         </form>
 
-        <p class="sr-only" aria-live="polite">共 {{ filteredCases.length }} 筆符合條件的設計案例</p>
+        <p v-if="!loading && !error" class="sr-only" aria-live="polite">共 {{ result?.total ?? 0 }} 筆符合條件的設計案例</p>
 
+        <InternalDesignLoadState :pending="loading" :error="error" @retry="retry" />
         <ul
-          v-if="paginatedCases.length"
+          v-if="!loading && !error && paginatedCases.length"
           :key="`projects-${selectedForm}-${selectedStyle}-${currentPage}`"
           class="design-projects-grid"
           aria-label="設計案例"
         >
           <li
             v-for="(item, index) in paginatedCases"
-            :key="item.slug"
+            :key="item.id"
             v-reveal="{ anim: 'opalMoveUp', delay: Math.min(index * 80, 240) }"
             class="design-project-card"
           >
@@ -155,22 +120,22 @@ useSeoMeta({
                   <span>{{ item.form }}</span>
                   <span>{{ item.style }}</span>
                 </div>
-                <NuxtLink :to="item.detailRoute" class="design-project-card__image-link" :aria-label="`查看案例：${item.title}`">
-                  <InternalCaseImage :src="item.cover" :alt="item.coverAlt" class="design-project-card__image" />
+                <NuxtLink :to="detailRoute(item.id)" class="design-project-card__image-link" :aria-label="`查看案例：${item.title}`">
+                  <InternalCaseImage v-if="item.cover" :src="item.cover" :alt="item.title" class="design-project-card__image" />
                   <span class="design-project-card__shade" aria-hidden="true" />
                   <span class="design-project-card__view" aria-hidden="true">View</span>
                 </NuxtLink>
               </div>
               <div class="design-project-card__text">
-                <h2><NuxtLink :to="item.detailRoute">{{ item.title }}</NuxtLink></h2>
-                <p>{{ item.storeName }}</p>
+                <h2><NuxtLink :to="detailRoute(item.id)">{{ item.title }}</NuxtLink></h2>
+                <p>{{ item.description }}</p>
               </div>
             </article>
           </li>
         </ul>
 
         <div
-          v-else
+          v-else-if="!loading && !error"
           :key="`empty-${selectedForm}-${selectedStyle}`"
           v-reveal="{ anim: 'opalMoveUp' }"
           class="design-projects-empty"
@@ -182,7 +147,7 @@ useSeoMeta({
           <button type="button" @click="draftForm = ''; draftStyle = ''; applyFilters()">查看全部案例</button>
         </div>
 
-        <nav v-if="filteredCases.length" class="design-projects-pagination" aria-label="案例分頁">
+        <nav v-if="!loading && !error && result?.total" class="design-projects-pagination" aria-label="案例分頁">
           <button
             v-for="page in totalPages"
             :key="page"
@@ -451,7 +416,7 @@ useSeoMeta({
 }
 
 .design-project-card__text h2 a:hover { color: #caa05c; }
-.design-project-card__text p { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
+.design-project-card__text p { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
 
 .design-projects-empty {
   display: flex;

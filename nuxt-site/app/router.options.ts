@@ -7,7 +7,8 @@ const scrollBehavior: RouterScrollBehavior = async (to, from) => {
   pendingScrollReset?.abort()
   const toPath = to.path.replace(/\/$/, '')
   const fromPath = from.path.replace(/\/$/, '')
-  if (toPath === fromPath && !to.hash && !from.hash) return false
+  const productListChanged = toPath.startsWith('/products/') && (to.query.page !== from.query.page || to.query.q !== from.query.q)
+  if (toPath === fromPath && !to.hash && !from.hash && !productListChanged) return false
 
   const router = useRouter()
   // Page-mounted effects (including ScrollTrigger.refresh) must finish before the final position.

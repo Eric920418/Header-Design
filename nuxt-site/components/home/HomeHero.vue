@@ -4,19 +4,64 @@ import { KITCHEN_STYLES } from '~/data/kitchenStyles'
 
 const slides = [
   {
-    image: '/home-2026/hero/ai-kitchen.jpg',
-    title: 'Premium',
-    description: '舒朗大器的開放式設計，打開客餐廚界線，盡享流動的生活饗宴。寬闊中島空間與精品般的逸品展櫃，伴隨智慧科技從容料理。無論氣派社交宴請、私密親友小聚都優雅盡興，怡然自在。',
+    image: '/home-2026/hero/10bn/aikitchen.webp',
+    title: 'AI Kitchen',
+    description: '不僅是一個烹飪的場所，更是廚房的未來，一個包含智能、創新美學和便利性的烹飪聖地，翻轉廚房烹飪體驗，開啟AI KITCHEN新淨界',
+    route: '/home-style/aikitchen',
   },
   {
-    image: '/home-2026/hero/clever-kitchen.jpg',
-    title: 'Clever',
-    description: '你是否渴望一個既能收納得宜，又能展現生活美感的廚房？「巧」凝聚設計的思維與生活靈感，「域」開展廚居空間的延伸與自在。巧域廚房，把有限化為無限，以坪效為基礎，以美型為靈魂，讓收納的秩序與設計的質感並行，為日常開啟全新的生活風景。',
+    image: '/home-2026/hero/10bn/clever.webp',
+    route: '/home-style/clever',
+    title: 'Clever Kitchen',
+    description: '把有限化為無限，以坪效為基礎，以美型為靈魂，讓收納的秩序與設計的質感並行，為日常開啟全新的生活風景。',
   },
   {
-    image: '/home-2026/hero/basic-plus.jpg',
+    image: '/home-2026/hero/10bn/basic-plus.webp',
+    route: '/home-style/basic-plus',
     title: 'Basic +',
-    description: 'Basic+ 廚房系列，以生活的基本為出發，整合 MUJI RENOVATION 的空間觀察與 SAKURA 的廚房專業，打造更貼近日常的料理環境。',
+    description: '以生活的基本為出發，整合 MUJI RENOVATION 的空間觀察與 SAKURA 的廚房專業，打造更貼近日常的料理環境。',
+  },
+  {
+    image: '/home-2026/hero/10bn/loft-chic.webp',
+    route: '/home-style/loft-chic',
+    title: 'Loft Chic',
+    description: '忙碌的都市生活中，退去俗世的華而不實，自在擁有清新的空氣，集結多元的機能型態，質感體現在各個角落，品味生活的浪漫，原來這麼愜意',
+  },
+  {
+    image: '/home-2026/hero/10bn/joyful.webp',
+    route: '/home-style/joyful',
+    title: 'Joyful',
+    description: '讓廚房成為親子歡樂成長的樂園，魔法般的童趣創意巧思，讓餐廚空間充滿驚奇，你從這裡變出美食，我在這裡盡情歡笑，廚房是我們一同成長、創造歡笑與回憶的魔法樂園！',
+  },
+  {
+    image: '/home-2026/hero/10bn/premium.webp',
+    route: '/home-style/premium',
+    title: 'Premium',
+    description: '舒朗大器的開放式設計，打開客餐廚界線，盡享流動的生活饗宴，寬闊中島空間與精品般的逸品展櫃，伴隨智慧科技從容料理，無論氣派社交宴請、私密親友小聚都優雅盡興，怡然自在',
+  },
+  {
+    image: '/home-2026/hero/10bn/elegant.webp',
+    route: '/home-style/elegant',
+    title: 'Elegant',
+    description: '美式古典風格的細節表現，展現細膩典雅的美緻氛圍，細量生活型態需求，探索空間效能的無限可能，打造機能美學，讓美型廚房也兼備收納功能',
+  },
+  {
+    image: '/home-2026/hero/10bn/chef.webp',
+    route: '/home-style/chef',
+    title: 'Chef',
+    description: '最符合您烹飪習慣的大廚廚房，不僅擁有高效專業的廚房電器和隨拿即用的收納規劃，更具備由內而外好清理、健康安心不費力的完美便利',
+  },
+  {
+    image: '/home-2026/hero/10bn/country.webp',
+    route: '/home-style/country',
+    title: 'Country',
+    description: '色彩豐富的染色實木，搭配古典工藝曲線，清新溫潤的鄉村氣息，明亮整個廚房空間，讓你工作之餘，可以細細品嚐生活裡的每一刻',
+  },
+  {
+    image: '/home-2026/hero/10bn/harmony.webp',
+    route: '/home-style/harmony',
+    title: 'Harmony',
+    description: '在同一個空間下滿足不同世代需求，因應不同使用習慣又保有各自空間，全家團聚共享歡樂用餐時光！',
   },
 ]
 const seriesOpen = ref(false)
@@ -38,7 +83,7 @@ onBeforeUnmount(() => timer && clearInterval(timer))
 
 <template>
   <section class="hero-template-section hero-includes-header relative w-full overflow-hidden bg-[#9F9FA4]" aria-labelledby="hero-title">
-    <div class="hidden" aria-hidden="true"><img v-for="slide in slides" :key="slide.image" :src="slide.image" alt="" /></div>
+    <div class="hidden" aria-hidden="true"><img :src="slides[(activeSlide + 1) % slides.length].image" alt="" /></div>
     <!-- Antra Home 01 / Slider Revolution `slidingoverlaydown` + `double`：
          暗色新圖先向下揭幕，原色新圖延遲 333ms 再覆蓋。 -->
     <div :key="`hero-${activeSlide}`" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
@@ -51,8 +96,9 @@ onBeforeUnmount(() => timer && clearInterval(timer))
       <span class="hero-page1-image-layer hero-page1-image-layer-final"><img :src="slides[activeSlide].image" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" /></span>
     </div>
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,.42)_42%,rgba(0,0,0,.86)_100%)]" />
+    <NuxtLink v-if="slides[activeSlide].route" :to="slides[activeSlide].route" :aria-label="`前往 ${slides[activeSlide].title} 品牌系列內頁`" class="absolute inset-0 z-[4] cursor-pointer focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-white" />
 
-    <div class="hero-template-top translate-y-[24px] z-10 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
+    <div class="hero-template-top pointer-events-none translate-y-[24px] z-10 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
       <div :key="`hero-copy-${activeSlide}`" class="hero-slide-copy">
         <div>
           <div aria-hidden="true" class="mb-[20px] h-[30px]" />

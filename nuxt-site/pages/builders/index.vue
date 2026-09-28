@@ -384,7 +384,6 @@ const movePavilionFocus = (event: KeyboardEvent, currentIndex: number) => {
 .builders-partners__row:last-child { border-bottom: 0; }
 .builders-partners__track { display: flex; width: max-content; animation: builders-partners-marquee 34s linear infinite; will-change: transform; }
 .builders-partners__row--reverse .builders-partners__track { animation-direction: reverse; animation-duration: 39s; }
-.builders-partners__viewport:hover .builders-partners__track,
 .builders-partners__viewport:focus-within .builders-partners__track { animation-play-state: paused; }
 .builders-partners__viewport:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
 .builders-partner { width: clamp(210px, 16.6vw, 300px); height: 118px; flex: none; padding: 24px 34px; border-right: 1px solid #e3e3e8; background: rgb(255 255 255 / 82%); }

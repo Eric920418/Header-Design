@@ -100,14 +100,21 @@ async function main() {
       }
 
       const product = '/products/sakura/range-hood/near-suction'
+      for (const brand of ['sakura', 'svago', 'teka']) {
+        await push(`/products/${brand}/all`)
+        await click('.product-pagination a[href$="page=2"]', `${brand} 商品下一頁`)
+        await click('.near-suction-product-card', `${brand} 第二頁 → 商品`)
+        await click('.product-detail-page a[href*="/all?"]', `${brand} 返回列表保留頁碼`)
+        assert.equal(new URL(page.url()).searchParams.get('page'), '2')
+      }
       await push(product)
-      await click('.near-suction-product-card[href$="/r7615"]', '商品列表 → R7615')
-      await click('.related-product-card[href$="/r7600"]', '推薦商品 → R7600')
-      await click('.related-product-card[href$="/r7615"]', '推薦商品 → R7615')
+      await click('.near-suction-product-card[href*="/item/81932"]', '商品列表 → R7615')
+      await click('.related-product-card[href$="/item/80794"]', '推薦商品 → R7600')
+      await click('.related-product-card[href$="/item/81932"]', '推薦商品 → R7615')
       await wheel(); await page.goBack(); await settled(); await atTop('商品瀏覽器後退')
       await wheel(); await page.goForward(); await settled(); await atTop('商品瀏覽器前進')
-      await click(`nav[aria-label="麵包屑"] a[href="${product}"]`, '商品麵包屑返回分類')
-      await click('.near-suction-product-card[href$="/r7615"]', '分類返回商品')
+      await click('nav[aria-label="麵包屑"] a[href="/products/sakura/category/83205"]', '商品麵包屑返回分類')
+      await click('.near-suction-product-card[href*="/item/81932"]', '分類返回商品')
       await click('.product-catalogue__cta', '商品型錄下載入口')
       await push('/news/activities')
       await click('.antra-activity-post__link', '優惠活動卡片')
@@ -119,7 +126,11 @@ async function main() {
       await push('/gallery')
       await click('.antra-store-grid a', '案例門市卡片')
       await click('.case-detail-navigation__next', '案例下一篇')
-      for (const selector of ['#kitchen-series a[href="/home-style/aikitchen"]', '[aria-labelledby="services-heading"] a[href="/products/sakura"]', '#brand-promise a']) {
+      await push('/design-inspiration?page=2')
+      await click('.design-project-card__image-link', '設計靈感第二頁 → 資料庫案例')
+      await click('nav[aria-label="麵包屑"] a:not([href="/"])', '資料庫案例 → 保留頁碼返回')
+      assert.equal(new URL(page.url()).searchParams.get('page'), '2')
+      for (const selector of ['#kitchen-series a[href="/home-style/aikitchen"]', '[aria-labelledby="services-heading"] a[href="/products/sakura"]', '.gallery-case-row a[href^="/gallery/"]', '#brand-promise a']) {
         await push('/')
         await click(selector, `首頁 ${selector}`)
       }

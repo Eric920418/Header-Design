@@ -53,19 +53,19 @@ onBeforeUnmount(() => {
   <section id="kitchen-series" aria-labelledby="home-project-heading" class="home-project-section relative z-10 bg-[#F6F6F6]">
     <div class="home-project-heading mx-auto grid max-w-[1470px] grid-cols-1 px-[15px] md:px-[30px] min-[768px]:grid-cols-[30%_70%]">
       <div v-reveal="{ anim: 'opalMoveRight' }">
-        <InternalTemplateHeadingRail label="FEATURED PROJECTS" source="home9" />
+        <InternalTemplateHeadingRail label="BRAND SERIES" source="home9" />
       </div>
       <div v-reveal="{ anim: 'opalMoveLeft' }" class="home-project-heading-copy">
         <h2 id="home-project-heading" class="home-project-title">
-          Creative <span class="text-[#CAA05C]">Projects That Define</span> Our Style
+          品牌<span class="text-[#CAA05C]">系列</span>
         </h2>
         <p class="home-project-heading-description">
-          櫻花用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間概念、並融合多元設計風格，與消費者一起打造符合每個家庭的理想廚房
+          櫻花整體廚房用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間概念、並融合多元設計風格，與消費者一起打造符合每個家庭的理想廚房
         </p>
       </div>
     </div>
 
-    <div v-reveal="{ anim: 'opalMoveLeft', delay: 400 }" class="home-project-carousel-reveal relative" @mouseenter="pause" @mouseleave="unpause" @focusin="pause" @focusout="unpause">
+    <div v-reveal="{ anim: 'opalMoveLeft', delay: 400 }" class="home-project-carousel-reveal relative" @focusin="pause" @focusout="unpause">
       <div
         ref="emblaRef"
         role="region"

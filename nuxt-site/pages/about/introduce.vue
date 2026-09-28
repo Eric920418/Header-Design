@@ -147,7 +147,7 @@ useSeoMeta({
 
     <section class="about-history" aria-label="櫻花整體廚房品牌紀事">
       <div class="about-rail">
-        <div class="about-history__carousel" @mouseenter="historyPaused = true" @mouseleave="historyPaused = false" @focusin="historyPaused = true" @focusout="historyPaused = false">
+        <div class="about-history__carousel" @focusin="historyPaused = true" @focusout="historyPaused = false">
           <div ref="historyEmblaRef" class="about-history__viewport" role="region" aria-label="櫻花整體廚房品牌紀事輪播" tabindex="0" @keydown.left.prevent="historyEmblaApi?.scrollPrev()" @keydown.right.prevent="historyEmblaApi?.scrollNext()">
             <div class="about-history__grid">
               <article

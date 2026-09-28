@@ -108,6 +108,8 @@ async function main() {
       const filteredInspiration = new URL(page.url()).pathname + new URL(page.url()).search
       await click(page.locator('main .design-project-card__image-link').first())
       await sourceIs(filteredInspiration, '設計靈感')
+      assert.deepEqual((await trail()).map(item => item.label), ['首頁', '設計靈感', '設計案例'])
+      assert.equal(await page.locator('.design-case-layout dl > div').count(), 8)
       const beforeReturn = await state()
       await click(nav().locator('a').nth(1))
       assert.equal(page.url(), base + filteredInspiration)

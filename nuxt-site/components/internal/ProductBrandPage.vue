@@ -1,107 +1,14 @@
 <script setup lang="ts">
-import { ArrowRight, Database, RefreshCw } from 'lucide-vue-next'
-import { SAKURA_PRODUCT_GROUPS } from '~/data/sakuraProducts'
-import type { SakuraProductCategory, SakuraProductGroup } from '~/data/sakuraProducts'
+import { ArrowRight } from 'lucide-vue-next'
+import { PRODUCT_BRANDS } from '~/data/productBrands'
+import type { ProductBrand, ProductCategories } from '~/types/products'
 
-const runtimeConfig = useRuntimeConfig()
-const productEndpoint = String(runtimeConfig.public.sakuraProductEndpoint || '').trim()
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
-
-function parseProductGroups(payload: unknown): SakuraProductGroup[] {
-  const rawGroups = Array.isArray(payload)
-    ? payload
-    : isRecord(payload) && Array.isArray(payload.data)
-      ? payload.data
-      : null
-
-  if (!rawGroups) {
-    throw new Error('商品 API 格式錯誤：預期回傳陣列，或包含 data 陣列的物件。')
-  }
-
-  return rawGroups.map((rawGroup, groupIndex) => {
-    if (!isRecord(rawGroup) || typeof rawGroup.id !== 'string' || typeof rawGroup.label !== 'string' || !Array.isArray(rawGroup.categories)) {
-      throw new Error(`商品 API 格式錯誤：第 ${groupIndex + 1} 個分類群組缺少 id、label 或 categories。`)
-    }
-
-    const groupLabel = rawGroup.label
-    const categories: SakuraProductCategory[] = rawGroup.categories.map((rawCategory, categoryIndex) => {
-      if (
-        !isRecord(rawCategory)
-        || typeof rawCategory.id !== 'string'
-        || typeof rawCategory.title !== 'string'
-        || typeof rawCategory.image !== 'string'
-      ) {
-        throw new Error(`商品 API 格式錯誤：${groupLabel} 的第 ${categoryIndex + 1} 筆分類缺少 id、title 或 image。`)
-      }
-
-      return {
-        id: rawCategory.id,
-        title: rawCategory.title,
-        groupLabel: typeof rawCategory.groupLabel === 'string' ? rawCategory.groupLabel : groupLabel,
-        image: rawCategory.image,
-        route: typeof rawCategory.route === 'string' ? rawCategory.route : undefined,
-      }
-    })
-
-    return { id: rawGroup.id, label: groupLabel, categories }
-  })
-}
-
-const {
-  data: remoteGroups,
-  error: productSourceError,
-  status: productSourceStatus,
-  refresh: refreshProducts,
-} = await useAsyncData<SakuraProductGroup[]>(
-  'sakura-product-categories',
-  async () => {
-    if (!productEndpoint) return []
-    const payload = await $fetch<unknown>(productEndpoint)
-    return parseProductGroups(payload)
-  },
-  { default: () => [] },
-)
-
-const productGroups = computed(() => remoteGroups.value?.length ? remoteGroups.value : SAKURA_PRODUCT_GROUPS)
-const productCategories = computed(() => productGroups.value.flatMap((group) => {
-  if (group.id === 'kitchen-appliances') {
-    return group.categories.map(category => ({ ...category, groupLabel: 'SUKURA Products' }))
-  }
-  if (group.id === 'water-heaters') {
-    return group.categories.map(category => ({ ...category, groupLabel: 'Water Heater' }))
-  }
-  if (group.id === 'water-purifiers') {
-    const category = group.categories[0]
-    return category ? [{ ...category, title: '淨水設備', groupLabel: 'Water Purifier' }] : []
-  }
-  return group.categories
-}))
-const usingSnapshot = computed(() => Boolean(productSourceError.value) || Boolean(productEndpoint && !remoteGroups.value?.length))
-const sourceStatusTitle = computed(() => productSourceError.value ? '商品資料讀取失敗' : '商品資料介接狀態')
-const sourceStatusMessage = computed(() => {
-  if (productSourceError.value) {
-    return `${productSourceError.value.message}；端點：${productEndpoint}。目前改顯示 PPT 第二頁可核對的分類快照。`
-  }
-  if (!remoteGroups.value?.length) {
-    return `商品 API 沒有回傳任何分類；端點：${productEndpoint}。目前改顯示 PPT 第二頁可核對的分類快照。`
-  }
-  return ''
-})
-
-function retryProducts() {
-  void refreshProducts()
-}
-
-useSeoMeta({
-  title: 'SAKURA Kitchen Appliances｜SAKURA 整體廚房',
-  description: '瀏覽 SAKURA 廚電、熱水器與淨水設備共 9 個商品分類。',
-  ogTitle: 'SAKURA Kitchen Appliances｜SAKURA 整體廚房',
-  ogDescription: 'SAKURA 廚電、熱水器與淨水設備商品分類。',
-  ogImage: '/services/sakura-product.png',
-})
+const { brand } = defineProps<{ brand: ProductBrand }>()
+const info = PRODUCT_BRANDS[brand]
+const { data, error, status, refresh } = await useFetch<ProductCategories>(`/api/products/${brand}/categories`)
+const productCategories = computed(() => data.value?.categories ?? [])
+if (import.meta.server && error.value) setResponseStatus(error.value.statusCode ?? 500)
+useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, description: info.description, ogImage: info.image })
 </script>
 
 <template>
@@ -111,7 +18,7 @@ useSeoMeta({
       <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-hero__inner">
         <h1 id="sakura-product-title">Kitchen Appliances</h1>
         <nav aria-label="麵包屑" class="sakura-product-hero__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "SAKURA 廚電" }]' v-slot="{ items, follow }">
+          <InternalSmartBreadcrumb :fallback="[{ label: '首頁', to: '/' }, { label: info.label }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
@@ -125,74 +32,51 @@ useSeoMeta({
     <section class="sakura-product-story" aria-labelledby="sakura-product-story-title">
       <div class="sakura-product-story__rail internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-story__copy">
-          <InternalSectionPill class="sakura-product-story__eyebrow">Kitchen Appliance</InternalSectionPill>
+          <InternalSectionPill v-if="brand !== 'sakura'" class="sakura-product-story__eyebrow">廚房產品</InternalSectionPill>
           <h2 id="sakura-product-story-title">
-            Behind <span>Every Statistic Pulses</span> A Human Story
+            <b v-if="brand === 'sakura'" class="sakura-product-story__chinese-title">廚房產品</b>
+            Elevate Your <span>Kitchen with {{ info.name }}</span>
           </h2>
-          <p>SAKURA 從廚房日常出發，整合烹調、清潔、熱水與淨水設備，讓每一項產品分類都回到真實家庭的使用需求。</p>
+          <p>{{ info.description }}</p>
         </div>
         <div v-reveal="{ anim: 'opalMoveUp', delay: 120 }" class="sakura-product-story__image">
-          <InternalProductCategoryImage src="/services/sakura-product.png" alt="SAKURA 廚電與整體廚房展示" />
+          <InternalProductCategoryImage :src="info.image" :alt="`${info.name} 廚房產品展示`" />
         </div>
       </div>
     </section>
 
-    <section
-      v-if="usingSnapshot"
-      class="sakura-product-source"
-      :aria-labelledby="productSourceError ? 'sakura-source-error-title' : 'sakura-source-status-title'"
-      :role="productSourceError ? 'alert' : 'status'"
-    >
-      <div class="sakura-product-source__rail internal-rail-safe">
-        <Database aria-hidden="true" />
-        <div>
-          <h2 :id="productSourceError ? 'sakura-source-error-title' : 'sakura-source-status-title'">{{ sourceStatusTitle }}</h2>
-          <p>{{ sourceStatusMessage }}</p>
-        </div>
-        <button
-          v-if="productEndpoint && productSourceError"
-          type="button"
-          :disabled="productSourceStatus === 'pending'"
-          @click="retryProducts"
-        >
-          <RefreshCw aria-hidden="true" :class="{ 'is-loading': productSourceStatus === 'pending' }" />
-          {{ productSourceStatus === 'pending' ? '重新讀取中' : '重新讀取' }}
-        </button>
-      </div>
-    </section>
+    <div class="page-container mb-10">
+      <nav class="mb-6 flex flex-wrap gap-5" aria-label="切換廚電品牌">
+        <NuxtLink v-for="(item, slug) in PRODUCT_BRANDS" :key="slug" :to="`/products/${slug}`" :aria-current="brand === slug ? 'page' : undefined" class="rounded-full border border-[#caa05c] px-6 py-3 hover:bg-[#caa05c] hover:text-white">{{ item.name }}</NuxtLink>
+      </nav>
+      <InternalDesignLoadState label="商品分類" :pending="status === 'pending'" :error="error" @retry="refresh()" />
+      <NuxtLink v-if="data && !error" :to="`/products/${brand}/all`" class="inline-block rounded-full bg-[#1c1c1d] px-7 py-3 text-white">查看全部 {{ data.total }} 項產品／搜尋型號</NuxtLink>
+    </div>
 
-    <section class="sakura-product-list" aria-labelledby="sakura-product-list-title">
+    <section v-if="data && !error" class="sakura-product-list" aria-labelledby="sakura-product-list-title">
       <div class="sakura-product-list__rail internal-rail-safe">
-        <h2 id="sakura-product-list-title" class="sr-only">SAKURA 廚電商品分類</h2>
-        <ul class="sakura-product-grid" aria-label="SAKURA 廚電商品分類">
+        <h2 id="sakura-product-list-title" class="sr-only">廚房產品分類</h2>
+        <ul class="sakura-product-grid" aria-label="廚房產品分類">
           <li
             v-for="(category, index) in productCategories"
             :key="category.id"
             v-reveal="{ anim: 'opalMoveUp', delay: Math.min(index * 60, 240) }"
             class="sakura-product-card"
           >
-            <NuxtLink v-if="category.route" :to="category.route" class="sakura-product-card__link" :aria-label="`查看${category.title}系列`">
+            <NuxtLink  :to="category.route" class="sakura-product-card__link" :aria-label="`查看${category.title}系列`">
               <article>
                 <div class="sakura-product-card__image">
-                  <InternalProductCategoryImage :src="category.image" :alt="`${category.title}代表商品`" />
+                  <InternalProductCategoryImage v-if="category.image" :src="category.image" :alt="`${category.title}代表商品`" />
+                  <span v-else class="flex h-full items-center justify-center p-6">此分類尚未提供圖片</span>
                   <span class="sakura-product-card__shade" aria-hidden="true" />
                   <span class="sakura-product-card__arrow" aria-hidden="true"><ArrowRight /></span>
                 </div>
                 <div class="sakura-product-card__text">
-                  <span>{{ category.groupLabel }}</span>
+                  <span>{{ info.name }} · {{ category.count }} 項產品</span>
                   <h3>{{ category.title }}</h3>
                 </div>
               </article>
             </NuxtLink>
-            <article v-else>
-              <div class="sakura-product-card__image">
-                <InternalProductCategoryImage :src="category.image" :alt="`${category.title}代表商品`" />
-              </div>
-              <div class="sakura-product-card__text">
-                <span>{{ category.groupLabel }}</span>
-                <h3>{{ category.title }}</h3>
-              </div>
-            </article>
           </li>
         </ul>
       </div>
@@ -283,6 +167,7 @@ useSeoMeta({
 }
 
 .sakura-product-story h2 span { color: #caa05c; }
+.sakura-product-story__chinese-title { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-weight: 500; line-height: 1.2; }
 .sakura-product-story__copy > p:last-child { max-width: 610px; margin: 0; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; }
 
 .sakura-product-story__image {
@@ -349,7 +234,7 @@ useSeoMeta({
   background: #fff;
 }
 
-.sakura-product-card__image :deep(img) { transition: transform .55s ease; }
+.sakura-product-card__image :deep(img) { padding: clamp(16px, 2vw, 28px); transition: transform .55s ease; }
 .sakura-product-card__shade { position: absolute; inset: 0; background: rgb(0 0 0 / 42%); opacity: 0; transition: opacity .4s ease; }
 .sakura-product-card__arrow {
   position: absolute;

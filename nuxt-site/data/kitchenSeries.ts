@@ -1,10 +1,13 @@
+import seriesContent from './kitchenSeriesContent.json'
+
 export type KitchenSuite = {
   id: string
   name: string
   images: string[]
-  headlines: [string, string]
+  headlines: string[]
   descriptions: string[]
   equipment: string[]
+  links?: { label: string; url: string }[]
 }
 
 export type KitchenFinish = {
@@ -28,6 +31,7 @@ export type KitchenCase = {
 }
 
 export type KitchenSeriesPageData = {
+  source?: string
   slug: string
   name: string
   heroSlides: string[]
@@ -169,3 +173,5 @@ export const AI_KITCHEN_PAGE: KitchenSeriesPageData = {
     },
   ],
 }
+
+export const KITCHEN_SERIES_PAGES: KitchenSeriesPageData[] = [AI_KITCHEN_PAGE, ...seriesContent]

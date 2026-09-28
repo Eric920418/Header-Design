@@ -36,6 +36,10 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    designDb: {
+      server: '', port: 14333, database: '', user: '', password: '',
+      encrypt: true, trustServerCertificate: false,
+    },
     previewPassword: '520VANLAN@2026',
     public: {
       googleMapsApiKey: '',

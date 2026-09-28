@@ -21,8 +21,8 @@ const leftNav: NavItem[] = [
     label: '廚房產品',
     mega: [
       { label: 'SAKURA 廚電', image: '/products/sakura.jpg', logo: '/home-2026/logos/sakura.svg', to: '/products/sakura' },
-      { label: 'SVAGO', image: '/products/svago.jpg', logo: '/home-2026/logos/svago.svg' },
-      { label: 'TEKA', image: '/products/teka.jpg', logo: '/home-2026/logos/teka.svg' },
+      { label: 'SVAGO', image: '/products/svago.jpg', logo: '/home-2026/logos/svago.svg', to: '/products/svago' },
+      { label: 'TEKA', image: '/products/teka.jpg', logo: '/home-2026/logos/teka.svg', to: '/products/teka' },
     ],
   },
   {

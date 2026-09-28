@@ -10,7 +10,14 @@ const thumbnailList = ref<HTMLElement | null>(null)
 const update = () => {
   selected.value = api.value?.selectedScrollSnap() ?? 0
   const button = thumbnailList.value?.querySelector<HTMLElement>(`[data-thumbnail="${selected.value}"]`)
-  button?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
+  // Only move the thumbnail rail; scrollIntoView also scrolls the entire page on mount.
+  const rail = thumbnailList.value
+  if (button && rail) {
+    const delta = button.getBoundingClientRect().left - rail.getBoundingClientRect().left
+    if (delta < 0 || delta + button.offsetWidth > rail.clientWidth) {
+      rail.scrollTo({ left: rail.scrollLeft + delta, behavior: 'smooth' })
+    }
+  }
 }
 
 watch(api, (value, oldValue) => {

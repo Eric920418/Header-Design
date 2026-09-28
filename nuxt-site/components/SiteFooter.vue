@@ -4,7 +4,7 @@ import { ArrowUp, ChevronDown } from 'lucide-vue-next'
 const sitemapOpen = ref(false)
 const sitemapGroups = [
   { title: '設計案例', links: [['品牌系列・AI 廚房', '/home-style/aikitchen'], ['設計靈感', '/design-inspiration'], ['廚房裝修指南', '/knowledge'], ['品牌系列型錄', '/catalogues/kitchenware-catalog']] },
-  { title: '廚房產品', links: [['SAKURA 廚電', '/products/sakura'], ['除油煙機系列', '/products/sakura/range-hood'], ['近吸系列', '/products/sakura/range-hood/near-suction'], ['廚房商品型錄', '/catalogues/catalog']] },
+  { title: '廚房產品', links: [['SAKURA 廚電', '/products/sakura'], ['SVAGO', '/products/svago'], ['TEKA', '/products/teka'], ['除油煙機系列', '/products/sakura/range-hood'], ['近吸系列', '/products/sakura/range-hood/near-suction'], ['廚房商品型錄', '/catalogues/catalog']] },
   { title: '門市與服務', links: [['服務流程', '/service-process'], ['案例門市', '/gallery']] },
   { title: '優惠消息', links: [['優惠消息', '/news']] },
   { title: '品牌承諾', links: [['品牌優勢', '/about/advantage'], ['品牌館', '/about/exhibition'], ['關於櫻花', '/about/introduce']] },

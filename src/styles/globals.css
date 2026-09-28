@@ -184,6 +184,18 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  a[href]:not([aria-disabled="true"]),
+  button:not(:disabled):not([aria-disabled="true"]),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="link"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  summary,
+  select:not(:disabled),
+  input:is([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="image"]):not(:disabled),
+  label[for] {
+    cursor: pointer;
+  }
 }
 
 /**
@@ -497,10 +509,11 @@ body {
   max-width: 639px;
   margin: 0 0 30px;
   color: #1c1c1d;
-  font-family: var(--font-display);
+  font-family: var(--font-cjk-serif);
   font-size: 30px;
-  font-weight: 400;
-  line-height: 1.066666;
+  font-weight: var(--font-weight-cjk-serif-emphasis);
+  line-height: 1.2;
+  letter-spacing: .02em;
 }
 .home-project-heading-description {
   width: 100%;
@@ -703,18 +716,18 @@ body {
   display: none;
 }
 
-/* Services 品牌 Logo 跑馬燈：內容重複四組，位移一組(-25%)無縫循環；
-   四組可完整覆蓋 4K viewport，位移距離仍是 1550px，故 16s 速度不變。 */
+/* Services 品牌 Logo 跑馬燈：四款 Logo 重複五組，位移一組(-20%)無縫循環；
+   五組可完整覆蓋 4K viewport，1240px / 12.8s 維持原本跑動速度。 */
 @keyframes marquee {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-25%);
+    transform: translateX(-20%);
   }
 }
 .animate-marquee {
-  animation: marquee 16s linear infinite;
+  animation: marquee 12.8s linear infinite;
 }
 
 /* Services 卡片等高：不用混合 named / arbitrary breakpoint utilities，
@@ -779,10 +792,6 @@ body {
   font-size: 40px;
   line-height: 45px;
 }
-.gallery-description {
-  margin-right: auto;
-  margin-left: auto;
-}
 .gallery-case-row {
   width: 100%;
   min-width: 0;
@@ -839,10 +848,6 @@ body {
     min-height: 200px;
     font-size: 76px;
     line-height: 90px;
-  }
-  .gallery-description {
-    margin-right: 0;
-    margin-left: 0;
   }
   .gallery-case-row {
     flex: 1 1 0%;

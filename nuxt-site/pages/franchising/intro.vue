@@ -392,7 +392,6 @@ onBeforeUnmount(() => {
 .franchise-marquee__track { display: flex; width: max-content; align-items: center; animation: franchise-marquee 38s linear infinite; }
 .franchise-marquee--reverse .franchise-marquee__track { animation-direction: reverse; animation-duration: 34s; }
 .franchise-marquee__track > :deep(.franchise-image) { width: auto; height: 180px; flex: none; background: transparent; }
-.franchise-marquees:hover .franchise-marquee__track,
 .franchise-marquees:focus-within .franchise-marquee__track { animation-play-state: paused; }
 
 .franchise-advantages { padding: 0 30px; background: #fafafa url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat; }
