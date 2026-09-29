@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { faqGroups } from '~/data/service'
+import { faqGroups as cmsSeed_faqGroups } from '~/data/service'
 import type { FaqGroup } from '~/types/content'
+const { faqGroups } = await useCmsResource('data-service', { faqGroups: cmsSeed_faqGroups })
+
 
 const props = withDefaults(defineProps<{
   groups?: FaqGroup[]
   sectionId?: string
   safeRail?: boolean
 }>(), {
-  groups: () => faqGroups,
   sectionId: 'faq-title',
   safeRail: false,
 })
 
-const openId = ref<string | null>(props.groups[0] ? `${props.groups[0].id}-0` : null)
+const groups = computed(() => props.groups ?? faqGroups)
+const openId = ref<string | null>(groups.value[0] ? `${groups.value[0].id}-0` : null)
 const toggle = (id: string) => openId.value = openId.value === id ? null : id
 </script>
 

@@ -1,7 +1,12 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-gallery-slug-', {"metaLabels":{"style":"設計風格","color":"設計顏色","series":"設計系列","form":"設計形式","size":"設計尺寸","kitchenArea":"廚房坪數","budget":"廚具預算","countertop":"檯面材質","household":"家的組成","designer":"設計師"},"copy":{"field1":"https://pse.is/9kq37z","text2":"到店預約","text3":"案例規格","text4":"門市資訊","text5":"LINE 諮詢","text6":"Google Map","text7":"Previous Post","text8":"Next Post","text9":"顧客評論","text10":"Take a look at ","text11":"our latest blog","text12":" & articles."},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowLeft, ArrowRight, CalendarClock, MapPin, Phone, UserRound } from 'lucide-vue-next'
-import { getStoreCase, storeCases } from '~/data/storeCases'
+import { storeCases as cmsSeed_storeCases } from '~/data/storeCases'
+const { storeCases } = await useCmsResource('data-storeCases', { storeCases: cmsSeed_storeCases })
+const getStoreCase = (slug: string) => storeCases.find(item => item.slug === slug)
+
 
 const route = useRoute()
 const slug = String(route.params.slug)
@@ -15,18 +20,7 @@ const index = storeCases.findIndex(entry => entry.slug === item.slug)
 const previous = storeCases[(index - 1 + storeCases.length) % storeCases.length]!
 const next = storeCases[(index + 1) % storeCases.length]!
 
-const metaLabels: Record<string, string> = {
-  style: '設計風格',
-  color: '設計顏色',
-  series: '設計系列',
-  form: '設計形式',
-  size: '設計尺寸',
-  kitchenArea: '廚房坪數',
-  budget: '廚具預算',
-  countertop: '檯面材質',
-  household: '家的組成',
-  designer: '設計師',
-}
+const metaLabels: Record<string, string> = cmsCopy.metaLabels
 
 const metaOrder = ['style', 'color', 'series', 'form', 'size', 'kitchenArea', 'budget', 'countertop', 'household', 'designer']
 const metaEntries = metaOrder
@@ -51,9 +45,11 @@ useSeoMeta({
 useHead({
   link: [{ rel: 'canonical', href: `/gallery/${item.slug}` }],
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="case-detail-page">
     <InternalCaseBreadcrumbHero />
 
@@ -71,18 +67,18 @@ useHead({
           <aside v-if="item.meta || item.contact" class="case-detail-sidebar" aria-label="案例規格與門市資訊">
             <div class="case-detail-sidebar__sticky">
               <a
-                href="https://pse.is/9kq37z"
+                :href="cmsCopy.copy.field1"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="case-detail-booking site-content-cta group/cta"
                 v-reveal="{ anim: 'opalMoveLeft' }"
               >
-                <span>到店預約</span>
+                <span>{{ cmsCopy.copy.text2 }}</span>
                 <span class="site-cta-icon"><ArrowRight aria-hidden="true" /></span>
               </a>
 
               <section v-if="metaEntries.length" class="case-detail-widget" aria-labelledby="case-spec-title" v-reveal="{ anim: 'opalMoveLeft', delay: 80 }">
-                <h2 id="case-spec-title">案例規格</h2>
+                <h2 id="case-spec-title">{{ cmsCopy.copy.text3 }}</h2>
                 <dl class="case-detail-specs">
                   <div v-for="([key, value]) in metaEntries" :key="key">
                     <dt>{{ metaLabels[key] ?? key }}</dt>
@@ -92,7 +88,7 @@ useHead({
               </section>
 
               <section v-if="item.contact" class="case-detail-widget" aria-labelledby="case-store-title" v-reveal="{ anim: 'opalMoveLeft', delay: 160 }">
-                <h2 id="case-store-title">門市資訊</h2>
+                <h2 id="case-store-title">{{ cmsCopy.copy.text4 }}</h2>
                 <h3>{{ item.contact.name }}</h3>
                 <ul class="case-detail-contact-list">
                   <li v-if="item.contact.hours"><CalendarClock aria-hidden="true" /><span>{{ item.contact.hours }}</span></li>
@@ -100,8 +96,8 @@ useHead({
                   <li v-if="item.contact.address"><MapPin aria-hidden="true" /><span>{{ item.contact.address }}</span></li>
                 </ul>
                 <div class="case-detail-contact-links">
-                  <a v-if="item.contact.lineUrl" :href="item.contact.lineUrl" target="_blank" rel="noopener noreferrer">LINE 諮詢</a>
-                  <a v-if="item.contact.mapUrl" :href="item.contact.mapUrl" target="_blank" rel="noopener noreferrer">Google Map</a>
+                  <a v-if="item.contact.lineUrl" :href="item.contact.lineUrl" target="_blank" rel="noopener noreferrer">{{ cmsCopy.copy.text5 }}</a>
+                  <a v-if="item.contact.mapUrl" :href="item.contact.mapUrl" target="_blank" rel="noopener noreferrer">{{ cmsCopy.copy.text6 }}</a>
                 </div>
 
                 <InternalCaseMap
@@ -146,17 +142,17 @@ useHead({
 
           <nav aria-label="前後案例" class="case-detail-navigation" v-reveal="{ anim: 'opalMoveUp' }">
             <NuxtLink :to="detailRoute(previous.slug)" class="case-detail-navigation__previous">
-              <span><ArrowLeft aria-hidden="true" />Previous Post</span>
+              <span><ArrowLeft aria-hidden="true" />{{ cmsCopy.copy.text7 }}</span>
               <strong>{{ previous.title }}</strong>
             </NuxtLink>
             <NuxtLink :to="detailRoute(next.slug)" class="case-detail-navigation__next">
-              <span>Next Post<ArrowRight aria-hidden="true" /></span>
+              <span>{{ cmsCopy.copy.text8 }}<ArrowRight aria-hidden="true" /></span>
               <strong>{{ next.title }}</strong>
             </NuxtLink>
           </nav>
 
           <section v-if="item.reviews?.length" class="case-detail-reviews" aria-labelledby="case-reviews-title" v-reveal="{ anim: 'opalMoveUp' }">
-            <h2 id="case-reviews-title">顧客評論</h2>
+            <h2 id="case-reviews-title">{{ cmsCopy.copy.text9 }}</h2>
             <ol class="case-detail-review-list">
               <li v-for="(review, reviewIndex) in item.reviews" :key="reviewIndex">
                 <span class="case-detail-review-avatar" aria-hidden="true"><UserRound /></span>
@@ -169,7 +165,7 @@ useHead({
         <section class="case-detail-related" aria-labelledby="related-cases-title">
           <div class="case-detail-related__heading">
             <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="FEATURED PROJECTS" class="case-detail-related__label-wrap" />
-            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }">Take a look at <span>our latest blog</span> &amp; articles.</h2>
+            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }">{{ cmsCopy.copy.text10 }}<span>{{ cmsCopy.copy.text11 }}</span>{{ cmsCopy.copy.text12 }}</h2>
           </div>
           <div ref="relatedViewport" class="case-detail-related__viewport" aria-label="相關案例輪播">
             <div class="case-detail-related__track">
@@ -187,6 +183,7 @@ useHead({
       </div>
     </section>
   </main>
+</template>
 </template>
 
 <style scoped>

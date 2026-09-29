@@ -1,15 +1,14 @@
 <script setup lang="ts">
+const cmsVisuals=await useCmsResource('site-visuals',{"images":{"asset_7692def0":"/section-3/store-songzhu.jpg","asset_7a7fece6":"/section-6/franchise/antra-original/h5-bg1.png","asset_39582b0b":"/section-6/franchise/antra-original/h5-bg02.png","asset_18ed1982":"/section-6/franchise/antra-original/h1-bg01.png","asset_52e702e4":"/section-6/franchise/antra-original/h1-bg01-1.png","asset_d0922f9d":"/section-6/franchise/antra-original/h1-bg02.png","asset_82b9dd3e":"/section-6/franchise/antra-original/h1-bg05.png","asset_38bb39f2":"/section-6/franchise/antra-original/h6-bg-3.png","asset_b3dcb152":"/section-6/builders/builder-hero.jpg","asset_1795db00":"/section-6/franchise/hero-store.jpg","asset_98d304fd":"/section-3/service-process/breadcrumb-df.jpg","asset_44761f00":"/section-5/brand-pavilion/pavilion-taichung.jpg","asset_9b0c0f62":"/home-2026/footer/kitchen-background.webp","asset_73c853de":"/services/h6-bg-2.jpg","asset_809f4bbe":"/section-3/store-chengde.jpg","asset_daa09d8d":"/section-5/brand-pavilion/banner.jpg","asset_10b5a86c":"/home-2026/brand-commitment-opening-frame.webp"},"brandVideoId":"wH374AF9wLI","franchiseVideoId":"sAuAjtpvZYk"})
+
+const cmsCopy = await useCmsResource('view-pages-franchising-intro', {"copy":{"field1":"/section-6/franchise/hero-building.jpg","field2":"SAKURA KITCHEN 櫻花整體廚房門市建築外觀","text3":"FRANCHISE WITH US","text4":"Find Your Inspired ","text5":"Kitchen Design","text6":"為什麼選擇加盟櫻花整體廚房？","text7":"台灣櫻花陪伴消費者超過四十六年，在台灣家庭的滲透率超過73%，使用櫻花產品或服務的家庭總數超過700萬戶。","text8":"不僅連續36年獲得理想品牌，更穩坐熱水器、除油煙機、瓦斯爐三冠王寶座。","text9":"立即申請加盟 ","field10":"/section-6/franchise/hero-store.jpg","field11":"SAKURA KITCHEN 櫻花整體廚房加盟門市","field12":"/franchising/download","text13":" 加盟資料下載","text14":"We Shape ","text15":"Kitchen Designs, Crafting","text16":" Timeless and Inspiring Spaces","field17":"SAKURA KITCHEN Store Manager Stories","field18":"/section-6/franchise/marquee-1.webp","field19":"SAKURA KITCHEN 加盟夥伴與門市成果","field20":"/section-6/franchise/marquee-1.webp","field21":"","field22":"/section-6/franchise/marquee-2.webp","field23":"SAKURA KITCHEN 品牌活動與設計成果","field24":"/section-6/franchise/marquee-2.webp","field25":"","text26":"Franchise Advantages","text27":"Franchise ","text28":"Success Starts","text29":" Here","text30":"從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。","text31":" · SAKURA","text32":"Subscribe To The Newsletter","text33":"Franchise ","text34":"With SAKURA","text35":"從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！","text36":"快來了解加盟金、補助金，填寫表單 ","text37":"Celebrity ","text38":"Stories That","text39":" Inspire","text40":"Beautiful","text41":" Living","text42":"集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。","text43":"加盟流程與辦法","field44":"/section-6/franchise/franchise-process.svg","field45":"加盟諮詢、資格審核、商圈與店址評估、營運計畫確認、簽約與店面規劃、教育訓練與實習、開幕與持續輔導七步流程","text46":"我要加盟","text47":"加盟資格與條件","text48":" Quick And Clear ","text49":"Answers","text50":" To Your Key","text51":" Questions ","field52":"/franchising/download","field53":"/section-6/franchise/franchise-download-cover.png","field54":"櫻花整體廚房加盟資料封面","field55":"/franchising/download","text56":"加盟資料下載","text57":"報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！","text58":"Franchise Information","text59":"Behind ","text60":"Every Statistic Pulses","text61":" A Human Story","field62":"/news/latest","text63":"查看更多 "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowRight, ChevronRight, Download } from 'lucide-vue-next'
-import {
-  FRANCHISE_FORM_URL,
-  franchiseAdvantages,
-  franchiseFaqItems,
-  franchiseMarketingStories,
-  franchiseQualifications,
-  franchiseSupportHighlights,
-  franchiseTestimonials,
-} from '~/data/franchise'
-import { newsArticles } from '~/data/news'
+import { FRANCHISE_FORM_URL as cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages as cmsSeed_franchiseAdvantages, franchiseFaqItems as cmsSeed_franchiseFaqItems, franchiseMarketingStories as cmsSeed_franchiseMarketingStories, franchiseQualifications as cmsSeed_franchiseQualifications, franchiseSupportHighlights as cmsSeed_franchiseSupportHighlights, franchiseTestimonials as cmsSeed_franchiseTestimonials,  } from '~/data/franchise'
+import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
+const { FRANCHISE_FORM_URL, franchiseAdvantages, franchiseFaqItems, franchiseMarketingStories, franchiseQualifications, franchiseSupportHighlights, franchiseTestimonials } = await useCmsResource('data-franchise', { FRANCHISE_FORM_URL: cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages: cmsSeed_franchiseAdvantages, franchiseFaqItems: cmsSeed_franchiseFaqItems, franchiseMarketingStories: cmsSeed_franchiseMarketingStories, franchiseQualifications: cmsSeed_franchiseQualifications, franchiseSupportHighlights: cmsSeed_franchiseSupportHighlights, franchiseTestimonials: cmsSeed_franchiseTestimonials })
+const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
+
 
 useSeoMeta({
   title: '我要加盟｜SAKURA 整體廚房',
@@ -74,25 +73,27 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', updateActiveAdvantage)
   window.removeEventListener('resize', updateActiveAdvantage)
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="franchise-page">
     <!-- Antra Home 05 / Banner Top / Elementor container 15c08dc -->
     <section id="introduction" class="franchise-hero hero-includes-header elementor-15c08dc" aria-labelledby="franchise-page-title">
-      <InternalFranchiseImage src="/section-6/franchise/hero-building.jpg" alt="SAKURA KITCHEN 櫻花整體廚房門市建築外觀" eager class="franchise-hero__background" />
+      <InternalFranchiseImage :src="cmsCopy.copy.field1" :alt="cmsCopy.copy.field2" eager class="franchise-hero__background" />
       <span class="franchise-hero__overlay" aria-hidden="true" />
       <div class="source-rail-wide franchise-hero__inner internal-rail-safe">
         <div class="franchise-hero__grid">
           <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev">
-            <InternalSectionPill tone="dark">FRANCHISE WITH US</InternalSectionPill>
-            <h1 id="franchise-page-title">Find Your Inspired <span>Kitchen Design</span></h1>
+            <InternalSectionPill tone="dark">{{ cmsCopy.copy.text3 }}</InternalSectionPill>
+            <h1 id="franchise-page-title">{{ cmsCopy.copy.text4 }}<span>{{ cmsCopy.copy.text5 }}</span></h1>
           </div>
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="franchise-hero__aside ev">
-            <h2>為什麼選擇加盟櫻花整體廚房？</h2>
-            <p>台灣櫻花陪伴消費者超過四十六年，在台灣家庭的滲透率超過73%，使用櫻花產品或服務的家庭總數超過700萬戶。</p>
-            <p>不僅連續36年獲得理想品牌，更穩坐熱水器、除油煙機、瓦斯爐三冠王寶座。</p>
-            <NuxtLink :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">立即申請加盟 <ArrowRight aria-hidden="true" /></NuxtLink>
+            <h2>{{ cmsCopy.copy.text6 }}</h2>
+            <p>{{ cmsCopy.copy.text7 }}</p>
+            <p>{{ cmsCopy.copy.text8 }}</p>
+            <NuxtLink :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">{{ cmsCopy.copy.text9 }}<ArrowRight aria-hidden="true" /></NuxtLink>
           </div>
         </div>
       </div>
@@ -100,7 +101,7 @@ onBeforeUnmount(() => {
 
     <!-- Antra Home 05 / Image Top / Elementor container 729c843 -->
     <div v-reveal="{ anim: 'opalMoveUp', delay: 260 }" data-ev="opalMoveUp" class="source-rail-wide franchise-hero-media elementor-729c843 ev">
-      <InternalFranchiseImage src="/section-6/franchise/hero-store.jpg" alt="SAKURA KITCHEN 櫻花整體廚房加盟門市" eager />
+      <InternalFranchiseImage :src="cmsCopy.copy.field10" :alt="cmsCopy.copy.field11" eager />
     </div>
 
     <!-- Antra Home 05 / About Antra / Elementor container df512f3 -->
@@ -109,14 +110,14 @@ onBeforeUnmount(() => {
         <div class="franchise-about__grid">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Partners" source="home5" class="source-heading-rail">
             <template #actions>
-              <NuxtLink to="/franchising/download" target="_blank" rel="noopener" class="source-round-link source-round-link--outline"><Download aria-hidden="true" /> 加盟資料下載</NuxtLink>
+              <NuxtLink :to="cmsCopy.copy.field12" target="_blank" rel="noopener" class="source-round-link source-round-link--outline"><Download aria-hidden="true" />{{ cmsCopy.copy.text13 }}</NuxtLink>
             </template>
           </InternalTemplateHeadingRail>
 
           <div class="franchise-about__content">
-            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">We Shape <span>Kitchen Designs, Crafting</span> Timeless and Inspiring Spaces</h2>
+            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">{{ cmsCopy.copy.text14 }}<span>{{ cmsCopy.copy.text15 }}</span>{{ cmsCopy.copy.text16 }}</h2>
             <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="franchise-about__video ev">
-              <InternalFranchiseVideo video-id="sAuAjtpvZYk" title="SAKURA KITCHEN Store Manager Stories" />
+              <InternalFranchiseVideo :video-id="cmsVisuals.franchiseVideoId" :title="cmsCopy.copy.field17" />
             </div>
 
             <div class="franchise-testimonials">
@@ -134,14 +135,14 @@ onBeforeUnmount(() => {
         <div v-reveal="{ anim: 'opalScaleUp' }" class="franchise-marquees" tabindex="0" aria-label="SAKURA KITCHEN 加盟夥伴與品牌成果影像，聚焦時暫停移動">
           <div class="franchise-marquee">
             <div class="franchise-marquee__track">
-              <InternalFranchiseImage src="/section-6/franchise/marquee-1.webp" alt="SAKURA KITCHEN 加盟夥伴與門市成果" fit="contain" />
-              <InternalFranchiseImage src="/section-6/franchise/marquee-1.webp" alt="" fit="contain" aria-hidden="true" />
+              <InternalFranchiseImage :src="cmsCopy.copy.field18" :alt="cmsCopy.copy.field19" fit="contain" />
+              <InternalFranchiseImage :src="cmsCopy.copy.field20" :alt="cmsCopy.copy.field21" fit="contain" aria-hidden="true" />
             </div>
           </div>
           <div class="franchise-marquee franchise-marquee--reverse">
             <div class="franchise-marquee__track">
-              <InternalFranchiseImage src="/section-6/franchise/marquee-2.webp" alt="SAKURA KITCHEN 品牌活動與設計成果" fit="contain" />
-              <InternalFranchiseImage src="/section-6/franchise/marquee-2.webp" alt="" fit="contain" aria-hidden="true" />
+              <InternalFranchiseImage :src="cmsCopy.copy.field22" :alt="cmsCopy.copy.field23" fit="contain" />
+              <InternalFranchiseImage :src="cmsCopy.copy.field24" :alt="cmsCopy.copy.field25" fit="contain" aria-hidden="true" />
             </div>
           </div>
         </div>
@@ -153,9 +154,9 @@ onBeforeUnmount(() => {
       <div class="source-rail internal-rail-safe">
         <div class="franchise-advantages__layout">
           <header v-reveal="{ anim: 'opalMoveRight' }" class="franchise-advantages__intro">
-            <InternalSectionPill>Franchise Advantages</InternalSectionPill>
-            <h2 id="franchise-advantage-title">Franchise <span>Success Starts</span> Here</h2>
-            <p>從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。</p>
+            <InternalSectionPill>{{ cmsCopy.copy.text26 }}</InternalSectionPill>
+            <h2 id="franchise-advantage-title">{{ cmsCopy.copy.text27 }}<span>{{ cmsCopy.copy.text28 }}</span>{{ cmsCopy.copy.text29 }}</h2>
+            <p>{{ cmsCopy.copy.text30 }}</p>
             <strong aria-hidden="true">{{ String(activeAdvantageGroup + 1).padStart(2, '0') }}</strong>
           </header>
 
@@ -168,7 +169,7 @@ onBeforeUnmount(() => {
                     <span v-if="advantage.badge">{{ advantage.badge }}</span>
                   </div>
                   <div class="franchise-post__content">
-                    <span v-reveal="{ anim: 'opalMoveUp' }">{{ advantage.number }} · SAKURA</span>
+                    <span v-reveal="{ anim: 'opalMoveUp' }">{{ advantage.number }}{{ cmsCopy.copy.text31 }}</span>
                     <h3 v-reveal="{ anim: 'opalMoveUp', delay: 60 }">{{ advantage.title }}</h3>
                     <p v-reveal="{ anim: 'opalMoveUp', delay: 100 }">{{ advantage.summary }}</p>
                     <ul v-reveal="{ anim: 'opalMoveUp', delay: 140 }" class="franchise-post__features" :aria-label="`${advantage.title}重點`">
@@ -189,10 +190,10 @@ onBeforeUnmount(() => {
     <!-- Antra Home 07 / Newsletter / Elementor container 8ca2535 -->
     <section class="franchise-newsletter elementor-8ca2535" aria-labelledby="franchise-conversion-title">
       <div class="franchise-newsletter__content">
-        <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" tone="dark">Subscribe To The Newsletter</InternalSectionPill>
-        <h2 id="franchise-conversion-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }">Franchise <span>With SAKURA</span></h2>
-        <p v-reveal="{ anim: 'opalMoveUp', delay: 120 }">從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！</p>
-        <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 170 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--news">快來了解加盟金、補助金，填寫表單 <ArrowRight aria-hidden="true" /></NuxtLink>
+        <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" tone="dark">{{ cmsCopy.copy.text32 }}</InternalSectionPill>
+        <h2 id="franchise-conversion-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }">{{ cmsCopy.copy.text33 }}<span>{{ cmsCopy.copy.text34 }}</span></h2>
+        <p v-reveal="{ anim: 'opalMoveUp', delay: 120 }">{{ cmsCopy.copy.text35 }}</p>
+        <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 170 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--news">{{ cmsCopy.copy.text36 }}<ArrowRight aria-hidden="true" /></NuxtLink>
       </div>
     </section>
 
@@ -202,8 +203,8 @@ onBeforeUnmount(() => {
         <header class="source-split-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="CELEBRITY STORIES" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <h2 id="franchise-marketing-title">Celebrity <span>Stories That</span> Inspire<br /><span>Beautiful</span> Living</h2>
-            <p>集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。</p>
+            <h2 id="franchise-marketing-title">{{ cmsCopy.copy.text37 }}<span>{{ cmsCopy.copy.text38 }}</span>{{ cmsCopy.copy.text39 }}<br /><span>{{ cmsCopy.copy.text40 }}</span>{{ cmsCopy.copy.text41 }}</h2>
+            <p>{{ cmsCopy.copy.text42 }}</p>
           </div>
         </header>
 
@@ -228,10 +229,10 @@ onBeforeUnmount(() => {
     <section id="franchise-process" class="franchise-process elementor-ef444c3" aria-labelledby="franchise-process-title">
       <div class="source-rail internal-rail-safe">
         <header class="franchise-process__heading">
-          <h2 id="franchise-process-title" v-reveal="{ anim: 'opalMoveUp' }">加盟流程與辦法</h2>
+          <h2 id="franchise-process-title" v-reveal="{ anim: 'opalMoveUp' }">{{ cmsCopy.copy.text43 }}</h2>
         </header>
         <div v-reveal="{ anim: 'opalScaleUp', delay: 70 }" class="franchise-process__rail-scroll" tabindex="0" aria-label="七步加盟流程，可橫向捲動查看">
-          <InternalFranchiseImage src="/section-6/franchise/franchise-process.svg" alt="加盟諮詢、資格審核、商圈與店址評估、營運計畫確認、簽約與店面規劃、教育訓練與實習、開幕與持續輔導七步流程" fit="contain" class="franchise-process__rail" />
+          <InternalFranchiseImage :src="cmsCopy.copy.field44" :alt="cmsCopy.copy.field45" fit="contain" class="franchise-process__rail" />
         </div>
 
         <div class="franchise-process__details">
@@ -245,12 +246,12 @@ onBeforeUnmount(() => {
                 </h3>
                 <p>{{ item.detail.split('！').slice(1).join('！') }}</p>
               </div>
-              <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 260 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="franchise-support-panel__cta site-content-cta"><span>我要加盟</span><span class="site-cta-icon"><ArrowRight aria-hidden="true" /></span></NuxtLink>
+              <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 260 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="franchise-support-panel__cta site-content-cta"><span>{{ cmsCopy.copy.text46 }}</span><span class="site-cta-icon"><ArrowRight aria-hidden="true" /></span></NuxtLink>
             </div>
           </article>
 
           <article v-reveal="{ anim: 'opalMoveLeft', delay: 90 }" class="franchise-qualification-panel">
-            <h3>加盟資格與條件</h3>
+            <h3>{{ cmsCopy.copy.text47 }}</h3>
             <div class="franchise-qualification-list">
               <div v-for="(item, index) in franchiseQualifications" :key="item.title" v-reveal="{ anim: 'opalMoveUp', delay: index * 65 }" class="franchise-qualification-item">
                 <InternalFranchiseImage :src="item.icon" :alt="`${item.title}圖示`" fit="contain" />
@@ -272,9 +273,7 @@ onBeforeUnmount(() => {
             data-ev="opalMoveRight"
             class="franchise-faq__heading-rail ev"
           />
-          <h2 id="franchise-faq-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">
-            Quick And Clear <span>Answers<br /> To Your Key</span> Questions
-          </h2>
+          <h2 id="franchise-faq-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text48 }}<span>{{ cmsCopy.copy.text49 }}<br />{{ cmsCopy.copy.text50 }}</span>{{ cmsCopy.copy.text51 }}</h2>
         </header>
 
         <div class="franchise-faq__body">
@@ -291,12 +290,12 @@ onBeforeUnmount(() => {
           </div>
 
           <aside v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" data-ev="opalMoveLeft" class="franchise-faq__promo ev">
-            <NuxtLink to="/franchising/download" target="_blank" rel="noopener" class="franchise-faq__promo-image" aria-label="在新分頁開啟加盟資料下載頁">
-              <InternalFranchiseImage src="/section-6/franchise/franchise-download-cover.png" alt="櫻花整體廚房加盟資料封面" fit="contain" />
+            <NuxtLink :to="cmsCopy.copy.field52" target="_blank" rel="noopener" class="franchise-faq__promo-image" aria-label="在新分頁開啟加盟資料下載頁">
+              <InternalFranchiseImage :src="cmsCopy.copy.field53" :alt="cmsCopy.copy.field54" fit="contain" />
               <span class="franchise-faq__promo-arrow site-cta-icon" aria-hidden="true"><ChevronRight /></span>
             </NuxtLink>
-            <h3><NuxtLink to="/franchising/download" target="_blank" rel="noopener">加盟資料下載</NuxtLink></h3>
-            <p>報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！</p>
+            <h3><NuxtLink :to="cmsCopy.copy.field55" target="_blank" rel="noopener">{{ cmsCopy.copy.text56 }}</NuxtLink></h3>
+            <p>{{ cmsCopy.copy.text57 }}</p>
           </aside>
         </div>
       </div>
@@ -305,17 +304,18 @@ onBeforeUnmount(() => {
     <!-- Antra Home 05 / Trusted Experience / Elementor container 836324d -->
     <section id="franchise-news" class="franchise-news elementor-836324d" aria-labelledby="franchise-news-title">
       <div class="source-rail internal-rail-safe">
-        <InternalSectionPill>Franchise Information</InternalSectionPill>
-        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }">Behind <span>Every Statistic Pulses</span> A Human Story</h2>
+        <InternalSectionPill>{{ cmsCopy.copy.text58 }}</InternalSectionPill>
+        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }">{{ cmsCopy.copy.text59 }}<span>{{ cmsCopy.copy.text60 }}</span>{{ cmsCopy.copy.text61 }}</h2>
         <div class="franchise-news__list">
           <NuxtLink v-for="article in franchiseNews" :key="article.id" :to="article.legacyPath" class="franchise-news-row">
             <i aria-hidden="true" /><h3>{{ article.title }}</h3><ArrowRight aria-hidden="true" />
           </NuxtLink>
         </div>
-        <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" class="franchise-news__more"><NuxtLink to="/news/latest" class="source-round-link source-round-link--news">查看更多 <ArrowRight aria-hidden="true" /></NuxtLink></div>
+        <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" class="franchise-news__more"><NuxtLink :to="cmsCopy.copy.field62" class="source-round-link source-round-link--news">{{ cmsCopy.copy.text63 }}<ArrowRight aria-hidden="true" /></NuxtLink></div>
       </div>
     </section>
   </main>
+</template>
 </template>
 
 <style scoped>
@@ -357,7 +357,7 @@ onBeforeUnmount(() => {
 .franchise-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -400px; overflow: hidden; border-radius: 24px; }
 .franchise-hero-media :deep(img) { object-position: center 55%; }
 
-.franchise-about { padding: 124px 30px 0; background: #fff url('/section-6/franchise/antra-original/h6-bg-3.png') top right / auto no-repeat; }
+.franchise-about { padding: 124px 30px 0; background: #fff var(--cms-image-asset_38bb39f2, url('/section-6/franchise/antra-original/h6-bg-3.png')) top right / auto no-repeat; }
 .franchise-about::after { position: absolute; pointer-events: none; content: ""; }
 .franchise-about__grid { display: grid; grid-template-columns: 30% 70%; }
 .source-heading-rail { min-height: 100%; }
@@ -387,14 +387,14 @@ onBeforeUnmount(() => {
 .franchise-testimonial__person span { display: block; }
 .franchise-testimonial__person strong { font-family: var(--font-ui); font-size: 16px; font-weight: 400; }
 .franchise-testimonial__person span { margin-top: 4px; color: #9f9fa4; font-size: 12px; }
-.franchise-marquees { display: grid; gap: 15px; margin-inline: calc(50% - 50vw); padding: 14px 0 88px; overflow: hidden; background: url('/section-6/franchise/antra-original/h5-bg1.png') bottom left / auto no-repeat; }
+.franchise-marquees { display: grid; gap: 15px; margin-inline: calc(50% - 50vw); padding: 14px 0 88px; overflow: hidden; background: var(--cms-image-asset_7a7fece6, url('/section-6/franchise/antra-original/h5-bg1.png')) bottom left / auto no-repeat; }
 .franchise-marquee { width: 100%; overflow: hidden; }
 .franchise-marquee__track { display: flex; width: max-content; align-items: center; animation: franchise-marquee 38s linear infinite; }
 .franchise-marquee--reverse .franchise-marquee__track { animation-direction: reverse; animation-duration: 34s; }
 .franchise-marquee__track > :deep(.franchise-image) { width: auto; height: 180px; flex: none; background: transparent; }
 .franchise-marquees:focus-within .franchise-marquee__track { animation-play-state: paused; }
 
-.franchise-advantages { padding: 0 30px; background: #fafafa url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat; }
+.franchise-advantages { padding: 0 30px; background: #fafafa var(--cms-image-asset_82b9dd3e, url('/section-6/franchise/antra-original/h1-bg05.png')) top right / auto no-repeat; }
 .franchise-advantages__layout { display: grid; grid-template-columns: 30% 70%; gap: 0; }
 .franchise-advantages__intro { position: sticky; top: var(--site-header-height, 60px); display: flex; min-height: calc(100vh - var(--site-header-height, 60px)); align-self: start; flex-direction: column; justify-content: center; padding: 38px 58px 38px 0; }
 .franchise-advantages__intro h2 { margin-top: 28px; }
@@ -423,7 +423,7 @@ onBeforeUnmount(() => {
   .franchise-post__features { margin-top: 0; align-content: start; }
 }
 
-.franchise-projects { padding: 97px 30px 108px; background: #fafafa url('/section-6/franchise/antra-original/h1-bg02.png') top right / auto no-repeat; }
+.franchise-projects { padding: 97px 30px 108px; background: #fafafa var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) top right / auto no-repeat; }
 .source-split-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
 .source-split-heading > div:last-child { padding-left: 58px; }
 .source-split-heading h2 { max-width: 100%; margin-top: 65px; }
@@ -444,14 +444,14 @@ onBeforeUnmount(() => {
 .project-block__content { min-height: 122px; padding: 20px 22px 24px; }
 .project-block__content p { margin: 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 600; line-height: 30px; }
 
-.franchise-newsletter { position: relative; isolation: isolate; display: grid; width: min(1770px, calc(100% - 60px)); min-height: 600px; place-items: center; margin: 110px auto 0; overflow: hidden; padding: 110px 30px 120px; border-radius: 26px; color: #fff; text-align: center; background: linear-gradient(180deg, rgb(15 14 13 / 35%), rgb(15 14 13 / 88%)), url('/section-6/builders/builder-hero.jpg') center 58% / cover no-repeat; }
+.franchise-newsletter { position: relative; isolation: isolate; display: grid; width: min(1770px, calc(100% - 60px)); min-height: 600px; place-items: center; margin: 110px auto 0; overflow: hidden; padding: 110px 30px 120px; border-radius: 26px; color: #fff; text-align: center; background: linear-gradient(180deg, rgb(15 14 13 / 35%), rgb(15 14 13 / 88%)), var(--cms-image-asset_b3dcb152, url('/section-6/builders/builder-hero.jpg')) center 58% / cover no-repeat; }
 .franchise-newsletter::before { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgb(255 255 255 / 3%), rgb(0 0 0 / 26%)); content: ""; }
 .franchise-newsletter__content { display: flex; max-width: 760px; flex-direction: column; align-items: center; }
 .franchise-newsletter h2 { max-width: 650px; margin-top: 20px; }
 .franchise-newsletter p { max-width: 720px; margin: 30px 0 0; color: rgb(255 255 255 / 82%); font-family: var(--font-ui); font-size: 15px; line-height: 24px; }
 .franchise-newsletter .source-round-link { margin-top: 38px; }
 
-.franchise-process { padding: 92px 30px 118px; background: #fff url('/section-6/franchise/antra-original/h1-bg01-1.png') center / cover no-repeat; }
+.franchise-process { padding: 92px 30px 118px; background: #fff var(--cms-image-asset_52e702e4, url('/section-6/franchise/antra-original/h1-bg01-1.png')) center / cover no-repeat; }
 .franchise-process__heading { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .franchise-process h2 { margin: 0; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 600; line-height: 40px; letter-spacing: .04em; }
 .franchise-process__rail-scroll { width: 100%; margin-top: 34px; }
@@ -459,7 +459,7 @@ onBeforeUnmount(() => {
 .franchise-process__rail { width: 100%; min-height: 251px; background: transparent; }
 .franchise-process__rail :deep(img) { object-position: center; }
 .franchise-process__details { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); width: min(1100px, 100%); min-height: 520px; margin: 42px auto 0; overflow: hidden; border: 1px solid rgb(227 227 232 / 82%); border-radius: 24px; box-shadow: 0 18px 50px rgb(28 28 29 / 7%); }
-.franchise-support-panel { position: relative; isolation: isolate; overflow: hidden; padding: 48px 44px 44px; color: #fff; background: url('/section-6/franchise/hero-store.jpg') center / cover no-repeat; }
+.franchise-support-panel { position: relative; isolation: isolate; overflow: hidden; padding: 48px 44px 44px; color: #fff; background: var(--cms-image-asset_1795db00, url('/section-6/franchise/hero-store.jpg')) center / cover no-repeat; }
 .franchise-support-panel__shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(135deg, rgb(25 24 23 / 94%), rgb(28 28 29 / 78%)); }
 .franchise-support-panel__content { position: relative; z-index: 1; }
 .franchise-support-item + .franchise-support-item { margin-top: 24px; }
@@ -513,7 +513,7 @@ onBeforeUnmount(() => {
 .franchise-faq__promo h3 a:hover { color: #a57b38; }
 .franchise-faq__promo p { width: min(310px, 100%); margin: 0 auto; color: #737278; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 
-.franchise-news { padding: 108px 30px 86px; background: #fff url('/section-6/franchise/antra-original/h5-bg02.png') top right / auto no-repeat; }
+.franchise-news { padding: 108px 30px 86px; background: #fff var(--cms-image-asset_39582b0b, url('/section-6/franchise/antra-original/h5-bg02.png')) top right / auto no-repeat; }
 .franchise-news h2 { max-width: 786px; margin-top: 28px; }
 .franchise-news__list { margin-top: 60px; border-top: 1px solid #e3e3e8; }
 .franchise-news-row { display: grid; grid-template-columns: 14px 1fr 46px; gap: 18px; align-items: center; min-height: 84px; border-bottom: 1px solid #e3e3e8; }

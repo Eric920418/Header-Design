@@ -1,4 +1,5 @@
 import sql from 'mssql'
+import {randomUUID} from 'node:crypto'
 import { createError, type H3Event } from 'h3'
 
 let connection: Promise<sql.ConnectionPool> | undefined
@@ -20,17 +21,15 @@ export async function withDesignDb<T>(event: H3Event, run: (pool: sql.Connection
     return await run(await connection)
   } catch (error: any) {
     if (error.statusCode && error.statusCode < 500) throw error
-    const code = String(error.data?.code ?? error.code ?? 'DB_QUERY_FAILED')
-    let reason = String(error.message ?? '資料庫查詢失敗')
-    if (config.password) reason = reason.split(config.password).join('[已遮蔽]')
-    reason = reason.replace(/(password|pwd)\s*[=:]\s*[^;\s]+/gi, '$1=[已遮蔽]')
-    throw createError({ statusCode: 503, statusMessage: 'Design database unavailable', message: reason, data: { code, reason } })
+    const traceId=randomUUID();console.error(`[SAKURA ${traceId}]`,error)
+    const reason='網站資料暫時無法讀取，請重試或將追蹤編號提供給管理員。'
+    throw createError({statusCode:503,message:reason,data:{code:'CONTENT_UNAVAILABLE',reason,traceId}})
   }
 }
 
 export function designQuery(query: Record<string, unknown>) {
   for (const key of Object.keys(query)) {
-    if (!['form', 'style', 'page'].includes(key)) throw createError({ statusCode: 400, message: `不支援參數：${key}` })
+    if (!['form', 'style', 'page', 'cmsPreview'].includes(key)) throw createError({ statusCode: 400, message: `不支援參數：${key}` })
     if (typeof query[key] !== 'string') throw createError({ statusCode: 400, message: `${key} 必須是單一字串` })
   }
   let form = String(query.form ?? '').trim()

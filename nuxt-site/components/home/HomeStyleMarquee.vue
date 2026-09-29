@@ -1,14 +1,9 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-components-home-HomeStyleMarquee', {"styles":[{"zh":"現代風","en":"Modern","logo":"/brand-logos/5.svg","images":["/home-2026/hero/10bn/chef.webp"]},{"zh":"輕奢風","en":"Modern Luxury","logo":"/brand-logos/6.svg","images":["/home-2026/hero/10bn/clever.webp","/home-2026/hero/10bn/premium.webp"]},{"zh":"北歐風","en":"Scandinavian","logo":"/brand-logos/4.svg","images":["/home-2026/hero/10bn/joyful.webp"]},{"zh":"工業風","en":"Industrial","logo":"/brand-logos/3.svg","images":["/home-2026/hero/10bn/loft-chic.webp"]},{"zh":"美式風","en":"American","logo":"/brand-logos/1.svg","images":["/home-2026/hero/10bn/elegant.webp"]},{"zh":"鄉村風","en":"Country","logo":"/brand-logos/2.svg","images":["/home-2026/hero/10bn/country.webp"]}],"copy":{"field1":"","field2":"body"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import emblaCarouselVue from 'embla-carousel-vue'
 
-const styles = [
-  { zh: '現代風', en: 'Modern', logo: '/brand-logos/5.svg', images: ['/home-2026/hero/10bn/chef.webp'] },
-  { zh: '輕奢風', en: 'Modern Luxury', logo: '/brand-logos/6.svg', images: ['/home-2026/hero/10bn/clever.webp', '/home-2026/hero/10bn/premium.webp'] },
-  { zh: '北歐風', en: 'Scandinavian', logo: '/brand-logos/4.svg', images: ['/home-2026/hero/10bn/joyful.webp'] },
-  { zh: '工業風', en: 'Industrial', logo: '/brand-logos/3.svg', images: ['/home-2026/hero/10bn/loft-chic.webp'] },
-  { zh: '美式風', en: 'American', logo: '/brand-logos/1.svg', images: ['/home-2026/hero/10bn/elegant.webp'] },
-  { zh: '鄉村風', en: 'Country', logo: '/brand-logos/2.svg', images: ['/home-2026/hero/10bn/country.webp'] },
-]
+const styles = cmsCopy.styles
 const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'start', duration: 25 })
 const preview = ref<{ left: number; top: number; title: string; images: string[] } | null>(null)
 const previewIndex = ref(0)
@@ -37,20 +32,23 @@ watch([emblaApi, reduced], ([api, isReduced]) => {
 }, { immediate: true })
 
 onBeforeUnmount(() => { if (autoplay) clearInterval(autoplay); if (previewTimer) clearInterval(previewTimer) })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <section aria-label="廚房風格" aria-roledescription="carousel" class="group/brands overflow-hidden bg-[#fafafa] px-[15px] py-3 md:px-[30px] md:py-4" @mouseleave="preview = null">
     <div class="mx-auto w-full max-w-[1770px]">
       <div ref="emblaRef" class="h-[62px] overflow-hidden"><div class="flex h-[62px] touch-pan-y">
         <template v-for="setIndex in 3" :key="setIndex"><div v-for="(item, index) in styles" :key="`${setIndex}-${item.en}`" class="brand-carousel-slide group/item mr-[120px] flex h-[62px] min-w-0 shrink-0 items-center justify-center overflow-visible">
           <NuxtLink :to="{ path: '/design-inspiration', query: { style: item.zh } }" :tabindex="setIndex > 1 ? -1 : undefined" class="flex h-[62px] shrink-0 items-center justify-center gap-4 p-[2px]" @mouseenter="showPreview($event, index, item.zh)" @focus="showPreview($event, index, item.zh)" @mouseleave="preview = null" @blur="preview = null">
-            <img :src="item.logo" alt="" draggable="false" class="h-[58px] w-auto transition-[filter,opacity] duration-300 group-hover/brands:opacity-50 group-hover/brands:grayscale group-hover/item:!opacity-100 group-hover/item:!grayscale-0" />
+            <img :src="item.logo" :alt="cmsCopy.copy.field1" draggable="false" class="h-[58px] w-auto transition-[filter,opacity] duration-300 group-hover/brands:opacity-50 group-hover/brands:grayscale group-hover/item:!opacity-100 group-hover/item:!grayscale-0" />
             <span class="shrink-0 leading-tight text-[#59585D] transition-colors group-hover/item:text-[#CAA05C]"><span class="block text-[15px] font-bold">{{ item.zh }}</span><span class="block text-[13px] tracking-wide">{{ item.en }}</span></span>
           </NuxtLink>
         </div></template>
       </div></div>
     </div>
-    <Teleport to="body"><div v-if="preview" aria-hidden="true" class="pointer-events-none fixed z-[95] hidden w-[240px] overflow-hidden rounded-[14px] border border-white/30 bg-[#1C1C1D] p-1 shadow-[0_18px_45px_rgba(0,0,0,.38)] md:block" :style="{ left: `${preview.left}px`, top: `${preview.top}px`, transform: 'translateX(-50%)' }"><div class="h-[148px] overflow-hidden rounded-[10px]"><img :src="preview.images[previewIndex]" :alt="preview.title" class="style-preview-image h-full w-full object-cover" /></div></div></Teleport>
+    <Teleport :to="cmsCopy.copy.field2"><div v-if="preview" aria-hidden="true" class="pointer-events-none fixed z-[95] hidden w-[240px] overflow-hidden rounded-[14px] border border-white/30 bg-[#1C1C1D] p-1 shadow-[0_18px_45px_rgba(0,0,0,.38)] md:block" :style="{ left: `${preview.left}px`, top: `${preview.top}px`, transform: 'translateX(-50%)' }"><div class="h-[148px] overflow-hidden rounded-[10px]"><img :src="preview.images[previewIndex]" :alt="preview.title" class="style-preview-image h-full w-full object-cover" /></div></div></Teleport>
   </section>
+</template>
 </template>

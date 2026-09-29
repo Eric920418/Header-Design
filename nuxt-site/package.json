@@ -11,7 +11,15 @@
     "build": "nuxt build",
     "preview": "nuxt preview",
     "typecheck": "nuxt typecheck",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "cms:init": "node --env-file=../.env.design-db.local --env-file=.env scripts/cms-db.mjs init",
+    "cms:seed": "node --env-file=.env scripts/cms-db.mjs seed",
+    "cms:assets": "node --env-file=.env scripts/cms-assets.mjs",
+    "cms:admin": "node --env-file=.env scripts/cms-db.mjs create-admin",
+    "cms:reset": "node --env-file=.env scripts/cms-db.mjs reset-password",
+    "cms:backup": "node --env-file=.env scripts/cms-db.mjs backup",
+    "cms:restore": "node --env-file=../.env.design-db.local --env-file=.env scripts/cms-db.mjs restore",
+    "test:cms": "node --env-file=.env scripts/check-cms.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
@@ -21,6 +29,8 @@
     "lucide-vue-next": "^0.487.0",
     "mssql": "^12.7.2",
     "nuxt": "3.21.10",
+    "pdf-lib": "^1.17.1",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.2.1",
     "vue": "^3.5.0",
     "vue-router": "^4.5.0"

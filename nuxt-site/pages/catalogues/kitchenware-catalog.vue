@@ -1,7 +1,12 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-catalogues-kitchenware-catalog', {"copy":{"text1":"Series Catalogue","text2":"八款品牌系列產品型錄","text3":"預覽","text4":"下載"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowUpRight, Download } from 'lucide-vue-next'
-import { KITCHEN_CATALOGUES } from '~/data/catalogues'
-import { KITCHEN_STYLES } from '~/data/kitchenStyles'
+import { KITCHEN_CATALOGUES as cmsSeed_KITCHEN_CATALOGUES } from '~/data/catalogues'
+import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
+const { KITCHEN_CATALOGUES } = await useCmsResource('data-catalogues', { KITCHEN_CATALOGUES: cmsSeed_KITCHEN_CATALOGUES })
+const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
+
 
 const route = useRoute()
 const sourceSeries = computed(() => KITCHEN_STYLES.find(series => series.slug === route.query.series && series.route))
@@ -13,14 +18,16 @@ useSeoMeta({
   ogDescription: '瀏覽並下載八款 SAKURA 整體廚房系列產品型錄。',
   ogImage: KITCHEN_CATALOGUES[0]?.cover,
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="catalogue-page">
     <section data-hero-photo="songzhu" class="catalogue-hero hero-includes-header" aria-labelledby="catalogue-page-title">
       <span class="catalogue-hero__overlay" aria-hidden="true" />
       <div class="catalogue-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="catalogue-page-title">Series Catalogue</h1>
+        <h1 id="catalogue-page-title">{{ cmsCopy.copy.text1 }}</h1>
         <nav aria-label="麵包屑" class="catalogue-hero__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, ...(sourceSeries ? [{ label: sourceSeries.zh, to: sourceSeries.route! }] : []), { label: "品牌系列型錄" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -35,7 +42,7 @@ useSeoMeta({
 
     <section class="catalogue-projects" aria-labelledby="catalogue-list-title">
       <div class="catalogue-projects__rail internal-rail-safe">
-        <h2 id="catalogue-list-title" class="sr-only">八款品牌系列產品型錄</h2>
+        <h2 id="catalogue-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
         <ul class="catalogue-grid" aria-label="品牌系列型錄清單">
           <li
             v-for="(catalogue, index) in KITCHEN_CATALOGUES"
@@ -57,7 +64,7 @@ useSeoMeta({
                   </span>
                   <span class="catalogue-card__shade" aria-hidden="true" />
                   <span class="catalogue-card__action" aria-hidden="true">
-                    <span>預覽</span>
+                    <span>{{ cmsCopy.copy.text3 }}</span>
                     <span class="catalogue-card__arrow"><ArrowUpRight /></span>
                   </span>
                 </span>
@@ -74,7 +81,7 @@ useSeoMeta({
                     :aria-label="`下載 PDF：${catalogue.title}`"
                   >
                     <Download aria-hidden="true" />
-                    <span>下載</span>
+                    <span>{{ cmsCopy.copy.text4 }}</span>
                   </a>
                 </div>
                 <span>{{ catalogue.description }}</span>
@@ -86,6 +93,7 @@ useSeoMeta({
     </section>
   </main>
 </template>
+</template>
 
 <style scoped>
 .catalogue-page { color: #59585d; background: #fafafa; }
@@ -96,7 +104,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 36% / cover no-repeat fixed;
 }
 
 .catalogue-hero__overlay {

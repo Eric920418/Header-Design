@@ -1,6 +1,10 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-catalogues-catalog', {"copy":{"text1":"Kitchen Catalogue","text2":"五大廚房商品型錄","text3":"預覽","text4":"下載","text5":"Quick And Clear ","text6":"Answers","text7":"To Your Key","text8":" Questions","text9":"Step ","text10":"清潔小撇步"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowUpRight, ChevronRight, Download } from 'lucide-vue-next'
-import { PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES } from '~/data/productCatalogues'
+import { PRODUCT_CARE_CATEGORIES as cmsSeed_PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES as cmsSeed_PRODUCT_CATALOGUES } from '~/data/productCatalogues'
+const { PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES } = await useCmsResource('data-productCatalogues', { PRODUCT_CARE_CATEGORIES: cmsSeed_PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES: cmsSeed_PRODUCT_CATALOGUES })
+
 
 const activeCategoryIndex = ref(1)
 const activeQuestionIndex = ref(0)
@@ -33,14 +37,16 @@ useSeoMeta({
   ogDescription: '五大廚房商品型錄與瓦斯爐、除油煙機、烘碗機及洗碗機保養指南。',
   ogImage: PRODUCT_CATALOGUES[0]?.cover,
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="product-catalogue-page">
     <section data-hero-photo="songzhu" class="product-catalogue-hero hero-includes-header" aria-labelledby="product-catalogue-title">
       <span class="product-catalogue-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="product-catalogue-hero__inner">
-        <h1 id="product-catalogue-title">Kitchen Catalogue</h1>
+        <h1 id="product-catalogue-title">{{ cmsCopy.copy.text1 }}</h1>
         <nav aria-label="麵包屑" class="product-catalogue-hero__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "SAKURA 廚電", to: "/products/sakura" }, { label: "廚房商品型錄" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -55,7 +61,7 @@ useSeoMeta({
 
     <section class="product-catalogue-projects" aria-labelledby="product-catalogue-list-title">
       <div class="product-catalogue-rail internal-rail-safe">
-        <h2 id="product-catalogue-list-title" class="sr-only">五大廚房商品型錄</h2>
+        <h2 id="product-catalogue-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
         <ul class="product-catalogue-grid" aria-label="廚房商品型錄清單">
           <li
             v-for="(catalogue, index) in PRODUCT_CATALOGUES"
@@ -77,7 +83,7 @@ useSeoMeta({
                   </span>
                   <span class="product-catalogue-card__shade" aria-hidden="true" />
                   <span class="product-catalogue-card__action" aria-hidden="true">
-                    <span>預覽</span>
+                    <span>{{ cmsCopy.copy.text3 }}</span>
                     <span class="product-catalogue-card__arrow"><ArrowUpRight /></span>
                   </span>
                 </span>
@@ -85,7 +91,7 @@ useSeoMeta({
               <div class="product-catalogue-card__text">
                 <div class="product-catalogue-card__title-row">
                   <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong>{{ catalogue.title }}</strong></a>
-                  <a :href="`/api/catalogues/${catalogue.id}`" :download="`${catalogue.id}.pdf`" class="product-catalogue-card__download" :aria-label="`下載 PDF：${catalogue.title}`"><Download aria-hidden="true" /><span>下載</span></a>
+                  <a :href="`/api/catalogues/${catalogue.id}`" :download="`${catalogue.id}.pdf`" class="product-catalogue-card__download" :aria-label="`下載 PDF：${catalogue.title}`"><Download aria-hidden="true" /><span>{{ cmsCopy.copy.text4 }}</span></a>
                 </div>
                 <span>{{ catalogue.description }}</span>
               </div>
@@ -99,7 +105,7 @@ useSeoMeta({
       <div class="product-catalogue-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="product-care__header">
           <InternalTemplateHeadingRail label="Popular Queries" class="product-care__eyebrow" />
-          <h2 id="product-care-title">Quick And Clear <span>Answers<br />To Your Key</span> Questions</h2>
+          <h2 id="product-care-title">{{ cmsCopy.copy.text5 }}<span>{{ cmsCopy.copy.text6 }}<br />{{ cmsCopy.copy.text7 }}</span>{{ cmsCopy.copy.text8 }}</h2>
         </header>
 
         <div class="product-care__layout">
@@ -153,10 +159,10 @@ useSeoMeta({
                 </ul>
                 <ol v-if="question.steps?.length">
                   <li v-for="(step, stepIndex) in question.steps" :key="step">
-                    <span>Step {{ stepIndex + 1 }}</span>{{ step }}
+                    <span>{{ cmsCopy.copy.text9 }}{{ stepIndex + 1 }}</span>{{ step }}
                   </li>
                 </ol>
-                <p v-if="question.tip" class="product-care-question__tip"><strong>清潔小撇步</strong>{{ question.tip }}</p>
+                <p v-if="question.tip" class="product-care-question__tip"><strong>{{ cmsCopy.copy.text10 }}</strong>{{ question.tip }}</p>
               </div>
                 </article>
               </div>
@@ -188,6 +194,7 @@ useSeoMeta({
     </section>
   </main>
 </template>
+</template>
 
 <style scoped>
 .product-catalogue-page { overflow: clip; color: #59585d; background: #fafafa; }
@@ -199,7 +206,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 68% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 68% / cover no-repeat fixed;
 }
 
 .product-catalogue-hero__overlay { position: absolute; z-index: -1; inset: 0; background: #100801; opacity: .64; }

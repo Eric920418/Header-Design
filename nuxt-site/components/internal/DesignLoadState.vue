@@ -10,7 +10,7 @@ const code = computed(() => props.error?.data?.data?.code)
   <div v-if="pending" class="design-load-state" role="status" aria-live="polite">正在讀取{{ label }}…</div>
   <div v-else-if="error" class="design-load-state" role="alert">
     <h2>無法載入{{ label }}（HTTP {{ status }}{{ code ? ` / ${code}` : '' }}）</h2>
-    <p>{{ reason }}</p>
+    <p>{{ reason }}</p><p v-if="error?.data?.data?.traceId">追蹤編號：{{ error.data.data.traceId }}</p>
     <button type="button" @click="$emit('retry')">重新載入</button>
   </div>
 </template>

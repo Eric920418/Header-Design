@@ -1,18 +1,24 @@
 <script setup lang="ts">
+const cmsVisuals=await useCmsResource('site-visuals',{"images":{"asset_7692def0":"/section-3/store-songzhu.jpg","asset_7a7fece6":"/section-6/franchise/antra-original/h5-bg1.png","asset_39582b0b":"/section-6/franchise/antra-original/h5-bg02.png","asset_18ed1982":"/section-6/franchise/antra-original/h1-bg01.png","asset_52e702e4":"/section-6/franchise/antra-original/h1-bg01-1.png","asset_d0922f9d":"/section-6/franchise/antra-original/h1-bg02.png","asset_82b9dd3e":"/section-6/franchise/antra-original/h1-bg05.png","asset_38bb39f2":"/section-6/franchise/antra-original/h6-bg-3.png","asset_b3dcb152":"/section-6/builders/builder-hero.jpg","asset_1795db00":"/section-6/franchise/hero-store.jpg","asset_98d304fd":"/section-3/service-process/breadcrumb-df.jpg","asset_44761f00":"/section-5/brand-pavilion/pavilion-taichung.jpg","asset_9b0c0f62":"/home-2026/footer/kitchen-background.webp","asset_73c853de":"/services/h6-bg-2.jpg","asset_809f4bbe":"/section-3/store-chengde.jpg","asset_daa09d8d":"/section-5/brand-pavilion/banner.jpg","asset_10b5a86c":"/home-2026/brand-commitment-opening-frame.webp"},"brandVideoId":"wH374AF9wLI","franchiseVideoId":"sAuAjtpvZYk"})
+
+const cmsCopy = await useCmsResource('view-pages-service-process', {"copy":{"text1":"Our Process","text2":"從設計到實現，打造理想廚房","text3":" Bringing Your ","text4":"Dream Kitchen","text5":" to Life ","text6":"堅持用專業的服務，依照您的需求提供設計，希望以更完整、更貼心的服務，讓您最滿意。","field7":"SAKURA 整體廚房品牌影片封面"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 useSeoMeta({
   title: '服務流程｜SAKURA 整體廚房',
   description: '了解 SAKURA 整體廚房從專業諮詢、到府丈量、量身設計到完工驗收與售後服務的完整流程。',
   ogTitle: '服務流程｜SAKURA 整體廚房',
   ogDescription: '八步完成理想廚房，並解答服務、售後、原廠認證與品質保證常見問題。',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="service-process-page">
     <section data-hero-photo="taichung" class="antra-breadcrumb hero-includes-header" aria-labelledby="service-page-title">
       <div class="antra-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="service-page-title">Our Process</h1>
+        <h1 id="service-page-title">{{ cmsCopy.copy.text1 }}</h1>
         <nav aria-label="麵包屑" class="antra-breadcrumb__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "服務流程" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -31,10 +37,8 @@ useSeoMeta({
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Service Process" />
           <div v-reveal="{ anim: 'opalMoveLeft' }">
             <h2 id="service-intro-title">
-              <b class="service-intro-chinese-title">從設計到實現，打造理想廚房</b>
-              Bringing Your <span>Dream Kitchen</span> to Life
-            </h2>
-            <p>堅持用專業的服務，依照您的需求提供設計，希望以更完整、更貼心的服務，讓您最滿意。</p>
+              <b class="service-intro-chinese-title">{{ cmsCopy.copy.text2 }}</b>{{ cmsCopy.copy.text3 }}<span>{{ cmsCopy.copy.text4 }}</span>{{ cmsCopy.copy.text5 }}</h2>
+            <p>{{ cmsCopy.copy.text6 }}</p>
           </div>
         </header>
         <InternalServiceFlow />
@@ -44,10 +48,10 @@ useSeoMeta({
     <section aria-label="SAKURA 品牌影片" class="antra-service-video">
       <div v-reveal="{ anim: 'opalScaleUp' }" class="antra-service-video__rail">
         <InternalBrandVideo
-          cover="/section-3/store-songzhu.jpg"
+          :cover="cmsVisuals.images.asset_7692def0"
           coming-soon
           aspect="1410 / 640"
-          alt="SAKURA 整體廚房品牌影片封面"
+          :alt="cmsCopy.copy.field7"
           flat
         />
       </div>
@@ -56,6 +60,7 @@ useSeoMeta({
     <InternalFaqAccordion safe-rail />
   </main>
 </template>
+</template>
 
 <style scoped>
 .antra-breadcrumb {
@@ -63,7 +68,7 @@ useSeoMeta({
   isolation: isolate;
   min-height: 360px;
   overflow: hidden;
-  background: url('/section-5/brand-pavilion/pavilion-taichung.jpg') center 61% / cover no-repeat;
+  background: var(--cms-image-asset_44761f00, url('/section-5/brand-pavilion/pavilion-taichung.jpg')) center 61% / cover no-repeat;
   color: #fff;
 }
 

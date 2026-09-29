@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { newsArticles, recentNewsArticles } from '~/data/news'
+const cmsCopy = await useCmsResource('view-pages-news-index', {"newsCategories":[{"label":"優惠活動","to":"/news/activities"},{"label":"最新消息","to":"/news/latest"},{"label":"媒體影音","to":"/news/video"}],"copy":{"text1":"Updates","text2":"優惠消息文章列表","text3":"優惠消息","text4":"最新文章"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
-const newsCategories = [
-  { label: '優惠活動', to: '/news/activities' },
-  { label: '最新消息', to: '/news/latest' },
-  { label: '媒體影音', to: '/news/video' },
-]
+import { newsArticles as cmsSeed_newsArticles, recentNewsArticles as cmsSeed_recentNewsArticles } from '~/data/news'
+const { newsArticles, recentNewsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles, recentNewsArticles: cmsSeed_recentNewsArticles })
+
+
+const newsCategories = cmsCopy.newsCategories
 
 useSeoMeta({
   title: '優惠消息｜SAKURA 整體廚房',
@@ -14,14 +14,16 @@ useSeoMeta({
   ogDescription: 'SAKURA 整體廚房優惠活動、最新消息與媒體影音總覽。',
   ogImage: '/section-4/news/latest-franchise-seminar-2026.jpg',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="antra-news-page">
     <section data-hero-photo="songzhu" class="antra-news-breadcrumb hero-includes-header" aria-labelledby="news-page-title">
       <div class="antra-news-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-news-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="news-page-title">Updates</h1>
+        <h1 id="news-page-title">{{ cmsCopy.copy.text1 }}</h1>
         <nav aria-label="麵包屑" class="antra-news-breadcrumb__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "優惠消息" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -38,7 +40,7 @@ useSeoMeta({
       <div class="antra-news-index__rail">
         <div class="antra-news-layout">
           <div class="antra-news-content">
-            <h2 id="news-list-title" class="sr-only">優惠消息文章列表</h2>
+            <h2 id="news-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
             <div class="antra-news-list">
               <article
                 v-for="(article, index) in newsArticles"
@@ -76,7 +78,7 @@ useSeoMeta({
 
           <aside class="antra-news-sidebar" aria-label="優惠消息側欄">
             <section class="antra-news-widget antra-news-widget--tags" aria-labelledby="news-tags-title" v-reveal="{ anim: 'opalMoveLeft' }">
-              <h2 id="news-tags-title">優惠消息</h2>
+              <h2 id="news-tags-title">{{ cmsCopy.copy.text3 }}</h2>
               <div class="antra-news-widget__tags" aria-label="文章分類標籤">
                 <NuxtLink
                   v-for="category in newsCategories"
@@ -90,7 +92,7 @@ useSeoMeta({
             </section>
 
             <section class="antra-news-widget antra-news-widget--recent" aria-labelledby="sidebar-recent-title" v-reveal="{ anim: 'opalMoveLeft', delay: 80 }">
-              <h2 id="sidebar-recent-title">最新文章</h2>
+              <h2 id="sidebar-recent-title">{{ cmsCopy.copy.text4 }}</h2>
               <ol>
                 <li v-for="article in recentNewsArticles" :key="article.id">
                   <NuxtLink
@@ -113,6 +115,7 @@ useSeoMeta({
     </section>
   </main>
 </template>
+</template>
 
 <style scoped>
 .antra-news-breadcrumb {
@@ -121,7 +124,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 48% / cover no-repeat fixed;
 }
 
 .antra-news-breadcrumb__overlay {

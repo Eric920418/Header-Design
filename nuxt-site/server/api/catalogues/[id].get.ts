@@ -1,23 +1,24 @@
-import { KITCHEN_CATALOGUES } from '~/data/catalogues'
-import { PRODUCT_CATALOGUES } from '~/data/productCatalogues'
-
-const catalogues = [...KITCHEN_CATALOGUES, ...PRODUCT_CATALOGUES.map(item => ({ ...item, downloadFilename: `${item.id}.pdf` }))]
-
+import {readContent} from '../../cms/content.mjs'
 export default defineEventHandler(async (event) => {
+  const catalogues=[...(await readContent('data-catalogues')).KITCHEN_CATALOGUES,...(await readContent('data-productCatalogues')).PRODUCT_CATALOGUES.map((item:any)=>({...item,downloadFilename:`${item.id}.pdf`}))]
   const id = getRouterParam(event, 'id') || ''
-  const catalogue = catalogues.find(item => item.id === id)
+  const catalogue = catalogues.find((item:any) => item.id === id)
 
   if (!catalogue) {
     throw createError({
       statusCode: 404,
       statusMessage: '找不到指定的型錄',
-      data: { id, availableIds: catalogues.map(item => item.id) },
+      data: { id, availableIds: catalogues.map((item:any) => item.id) },
     })
   }
 
+  if(/^\/media\/[a-f0-9-]{36}$/i.test(catalogue.pdfUrl))return sendRedirect(event,catalogue.pdfUrl,302)
+  const source=new URL(catalogue.pdfUrl)
+  if(source.protocol!=='https:'||source.hostname!=='www.sakura-kitchenlife.com.tw'||source.username||source.password)throw createError({statusCode:400,message:'型錄僅支援媒體庫 PDF 或櫻花官方型錄來源'})
   let upstream: Response
   try {
     upstream = await fetch(catalogue.pdfUrl, {
+      redirect: 'error',
       headers: {
         Accept: 'application/pdf',
         Referer: 'https://www.sakura-kitchenlife.com.tw/',
@@ -55,7 +56,7 @@ export default defineEventHandler(async (event) => {
   const signature = new TextDecoder().decode(bytes.slice(0, 5))
   const upstreamContentType = upstream.headers.get('content-type') || ''
 
-  if (signature !== '%PDF-' && !upstreamContentType.includes('application/pdf')) {
+  if (signature !== '%PDF-') {
     throw createError({
       statusCode: 502,
       statusMessage: '型錄來源未回傳 PDF',
@@ -70,9 +71,9 @@ export default defineEventHandler(async (event) => {
 
   setResponseHeaders(event, {
     'Content-Type': 'application/pdf',
-    'Content-Disposition': `attachment; filename="${catalogue.downloadFilename}"`,
+    'Content-Disposition': `attachment; filename="${String(catalogue.downloadFilename).replace(/[^a-zA-Z0-9_.-]/g,'_')}"`,
     'Content-Length': String(bytes.byteLength),
-    'Cache-Control': 'public, max-age=3600',
+    'Cache-Control': 'no-store',
     'X-Content-Type-Options': 'nosniff',
   })
 

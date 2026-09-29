@@ -337,3 +337,40 @@
 @media (prefers-reduced-motion: reduce) {
   .cms *, .cms *::before, .cms *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+/* Persisted CMS forms reuse the original admin palette. */
+.cms .cms-login {max-width:440px;margin:6vh auto;padding:24px;}
+.cms .cms-login h1 {font-size:24px;font-weight:700;margin-bottom:20px;}
+.cms.cms-auth .cms-shell {margin-left:0;}
+.cms :is(input,textarea,select) {font-family:var(--cms-font);}
+.cms button:disabled {opacity:.45;cursor:not-allowed;transform:none;}
+.cms .cms-resource-row {display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:14px 16px;border-bottom:1px solid var(--cms-line);text-align:left;overflow-wrap:anywhere;}
+.cms .cms-resource-row:hover {background:var(--cms-tint);}
+.cms .cms-resource-row small {display:block;color:var(--cms-muted);margin-top:4px;}
+.cms .cms-resource-form {padding:20px;}
+.cms .cms-fields {display:grid;gap:16px;border:0;min-width:0;margin:0;padding:0;}
+.cms .cms-fields legend {font-weight:700;margin:12px 0;}
+.cms .cms-fields .cms-fields {padding:14px;border:1px solid var(--cms-line);border-radius:6px;}
+.cms .cms-field :is(input,textarea),.cms .cms-search select,.cms .cms-content-tools select,.cms .cms-media-tools select {width:100%;padding:9px 10px;border:1px solid var(--cms-line);border-radius:5px;background:white;color:var(--cms-ink);font-size:14px;}
+.cms .cms-field label {display:grid;gap:6px;}
+.cms .cms-field-thumbnail {width:160px;max-height:100px;object-fit:contain;}
+.cms .cms-array {border:1px solid var(--cms-line);border-radius:6px;min-width:0;}
+.cms .cms-array-row {border-top:1px solid var(--cms-line);padding:12px;}
+.cms .cms-array-row summary {cursor:pointer;overflow-wrap:anywhere;}
+.cms .cms-array-row[open]>.cms-actions {margin:12px 0;}
+.cms .cms-checkbox {display:flex;align-items:center;gap:8px;}
+.cms .cms-checkbox input {width:18px;height:18px;accent-color:var(--cms-gold);}
+.cms .cms-history {margin-top:16px;padding:16px;}
+.cms .cms-history summary {cursor:pointer;}
+.cms .cms-history-row {display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--cms-line);}
+.cms .cms-editor-meta {display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;}
+.cms .cms-live-preview {display:block;width:100%;height:65vh;border:1px solid var(--cms-line);margin:12px auto 0;background:white;}
+.cms .cms-live-mobile {max-width:390px;}
+.cms .cms-home-tabs {gap:6px;margin-bottom:18px;}
+.cms .cms-pagination {margin-top:16px;align-items:center;}
+.cms .cms-pdf-tile {display:grid;place-items:center;height:100%;font-size:28px;}
+.cms .cms-inbox-detail {display:grid;grid-template-columns:110px 1fr;gap:10px;overflow-wrap:anywhere;}
+.cms .cms-inbox-detail dt {color:var(--cms-muted);}
+.cms .cms-sidebar .cms-profile + .cms-visit {margin-top:0;padding-block:12px;}
+@media(max-width:600px){.cms .cms-resource-form{padding:12px}.cms .cms-resource-row{flex-wrap:wrap}.cms .cms-field :is(input,textarea){font-size:16px}.cms .cms-heading .cms-actions{flex-wrap:wrap}.cms .cms-history-row{flex-wrap:wrap}}
+
+.cms .cms-sidebar > .cms-button {color:var(--cms-ink);}

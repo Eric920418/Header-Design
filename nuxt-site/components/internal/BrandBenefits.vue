@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { brandBenefits } from '~/data/brandAdvantage'
+import { brandBenefits as cmsSeed_brandBenefits } from '~/data/brandAdvantage'
+const { brandBenefits } = await useCmsResource('data-brandAdvantage', { brandBenefits: cmsSeed_brandBenefits })
+
 
 const storyRef = ref<HTMLElement | null>(null)
 const scrollStoryActive = ref(false)

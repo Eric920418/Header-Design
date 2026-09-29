@@ -1,17 +1,7 @@
 <script setup lang="ts">
-import { Upload, ArrowUpRight } from 'lucide-vue-next'
-import { ADMIN_MEDIA, type AdminMedia } from '~/data/adminDemo'
-definePageMeta({ layout: 'admin' })
-useSeoMeta({ title: '媒體庫｜SAKURA Content Studio' })
-const selected = ref<AdminMedia | null>(null)
-const notice = ref('')
+definePageMeta({layout:'admin'})
+const {api,message}=useCmsAdmin(),selected=ref<any>(null),error=ref(''),notice=ref(''),busy=ref(false),uploadInput=ref<HTMLInputElement|null>(null)
+async function upload(event:Event){const file=(event.target as HTMLInputElement).files?.[0];if(!file)return;error.value='';notice.value='';busy.value=true;try{const form=new FormData();form.append('file',file);await api('media',{method:'POST',body:form});await refreshNuxtData('cms-media');notice.value='素材已上傳。'}catch(e){error.value=message(e)}finally{busy.value=false;(event.target as HTMLInputElement).value=''}}
+async function save(archive=false){error.value='';busy.value=true;try{await api('media',{method:'PATCH',body:{...selected.value,archived:archive}});selected.value=null;await refreshNuxtData('cms-media');notice.value=archive?'素材已封存。':'素材資料已儲存。'}catch(e){error.value=message(e)}finally{busy.value=false}}
 </script>
-
-<template>
-  <div class="cms-page">
-    <div class="cms-heading"><h1>媒體庫 <span class="cms-count">{{ ADMIN_MEDIA.length }}</span></h1><button type="button" class="cms-button cms-button-dark" @click="notice = '「上傳素材」為提案操作示意，本次不會開啟檔案、上傳或儲存任何資料。'"><Upload :size="17" />上傳素材</button></div>
-    <p v-if="notice" class="cms-notice" role="status">{{ notice }}</p>
-    <AdminMediaGrid @select="selected = $event" />
-    <AdminDialog :open="Boolean(selected)" title="素材詳情" wide @close="selected = null"><div v-if="selected" class="cms-media-detail"><AdminImage :src="selected.src" :alt="selected.alt" /><div><h2>{{ selected.name }}</h2><dl><dt>素材分類</dt><dd>{{ selected.category }}</dd><dt>替代文字</dt><dd>{{ selected.alt }}</dd><dt>檔案格式</dt><dd>JPG</dd><dt>素材路徑</dt><dd>{{ selected.src }}</dd></dl><NuxtLink to="/admin/home" class="cms-button cms-button-dark" @click="selected = null">前往首頁編輯 <ArrowUpRight :size="16" /></NuxtLink></div></div></AdminDialog>
-  </div>
-</template>
+<template><div class="cms-page"><div class="cms-heading"><h1>媒體庫</h1><button class="cms-button cms-button-gold" :disabled="busy" @click="uploadInput?.click()">{{ busy?'處理中…':'上傳素材' }}</button><input ref="uploadInput" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" class="cms-sr-only" aria-label="上傳素材檔案" @change="upload" /></div><p class="cms-muted">JPEG／PNG／WebP 最大 10MB；PDF 最大 30MB。</p><p v-if="error&&!selected" class="cms-error" role="alert">{{ error }}</p><p v-if="notice" class="cms-notice" role="status">{{ notice }}</p><AdminMediaGrid @select="selected={...$event}" /><AdminDialog :open="!!selected" title="素材詳情" @close="selected=null"><form v-if="selected" class="cms-form" @submit.prevent="save()"><p v-if="error" class="cms-error" role="alert">{{ error }}</p><AdminImage v-if="selected.mime!=='application/pdf'" :src="selected.src" :alt="selected.alt||selected.name" /><label>名稱<input v-model="selected.name" required maxlength="255" /></label><label>替代文字<input v-model="selected.alt" maxlength="500" /></label><label>分類<input v-model="selected.category" maxlength="80" /></label><p>引用位置：{{ selected.uses.map((u:any)=>u.title).join('、')||'尚未引用' }}</p><div class="cms-actions"><button class="cms-button cms-button-gold" :disabled="busy">儲存</button><button type="button" class="cms-button" :disabled="busy||selected.uses.length>0" @click="save(true)">封存</button></div></form></AdminDialog></div></template>

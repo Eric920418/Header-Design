@@ -1,6 +1,10 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-gallery-index', {"copy":{"text1":"Stores","text2":"依地區篩選案例門市","text3":"區域","text4":"全部","text5":"縣市","text6":" 間案例門市","text7":"此區域尚無案例資料","text8":"目前沒有符合條件的正式案例，請選擇其他區域或縣市。","text9":"查看全部案例"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { MapPin } from 'lucide-vue-next'
-import { regionCities, storeCaseSummaries } from '~/data/storeCases'
+import { regionCities as cmsSeed_regionCities, storeCaseSummaries as cmsSeed_storeCaseSummaries } from '~/data/storeCases'
+const { regionCities, storeCaseSummaries } = await useCmsResource('data-storeCases', { regionCities: cmsSeed_regionCities, storeCaseSummaries: cmsSeed_storeCaseSummaries })
+
 
 const route = useRoute()
 const router = useRouter()
@@ -43,14 +47,16 @@ useSeoMeta({
   ogTitle: '案例門市｜SAKURA 整體廚房',
   ogDescription: '安康店、承德店與松竹店的真實整體廚房案例。',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main>
     <section data-hero-photo="songzhu" class="antra-gallery-breadcrumb hero-includes-header" aria-labelledby="gallery-page-title">
       <div class="antra-gallery-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-gallery-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="gallery-page-title">Stores</h1>
+        <h1 id="gallery-page-title">{{ cmsCopy.copy.text1 }}</h1>
         <nav aria-label="麵包屑" class="antra-gallery-breadcrumb__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "案例門市" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -65,26 +71,26 @@ useSeoMeta({
 
     <section aria-labelledby="gallery-filter-title" class="antra-store-gallery">
       <div class="antra-store-gallery__rail internal-rail-safe">
-        <h2 id="gallery-filter-title" class="sr-only">依地區篩選案例門市</h2>
+        <h2 id="gallery-filter-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
 
         <div class="antra-store-filter" aria-label="案例門市篩選" v-reveal="{ anim: 'opalMoveUp' }">
           <div class="antra-store-filter__row">
-            <span class="antra-store-filter__label">區域</span>
+            <span class="antra-store-filter__label">{{ cmsCopy.copy.text3 }}</span>
             <div class="antra-store-filter__options" role="group" aria-label="選擇區域">
-              <button type="button" :aria-pressed="selectedRegion === ''" :class="{ 'is-active': selectedRegion === '' }" @click="selectRegion('')">全部</button>
+              <button type="button" :aria-pressed="selectedRegion === ''" :class="{ 'is-active': selectedRegion === '' }" @click="selectRegion('')">{{ cmsCopy.copy.text4 }}</button>
               <button v-for="region in regions" :key="region" type="button" :aria-pressed="selectedRegion === region" :class="{ 'is-active': selectedRegion === region }" @click="selectRegion(region)">{{ region }}</button>
             </div>
           </div>
 
           <div v-if="selectedRegion" class="antra-store-filter__row antra-store-filter__row--cities">
-            <span class="antra-store-filter__label">縣市</span>
+            <span class="antra-store-filter__label">{{ cmsCopy.copy.text5 }}</span>
             <div class="antra-store-filter__options" role="group" :aria-label="`${selectedRegion}縣市`">
               <button v-for="city in availableCities" :key="city" type="button" :aria-pressed="selectedCity === city" :class="{ 'is-active': selectedCity === city }" @click="selectCity(city)">{{ city }}</button>
             </div>
           </div>
         </div>
 
-        <div aria-live="polite" class="antra-store-gallery__result-count" v-reveal="{ anim: 'opalMoveUp', delay: 80 }">{{ filteredCases.length }} 間案例門市</div>
+        <div aria-live="polite" class="antra-store-gallery__result-count" v-reveal="{ anim: 'opalMoveUp', delay: 80 }">{{ filteredCases.length }}{{ cmsCopy.copy.text6 }}</div>
 
         <div
           v-if="filteredCases.length"
@@ -104,14 +110,15 @@ useSeoMeta({
         >
           <MapPin aria-hidden="true" />
           <div>
-            <h2>此區域尚無案例資料</h2>
-            <p>目前沒有符合條件的正式案例，請選擇其他區域或縣市。</p>
+            <h2>{{ cmsCopy.copy.text7 }}</h2>
+            <p>{{ cmsCopy.copy.text8 }}</p>
           </div>
-          <button type="button" @click="updateFilters()">查看全部案例</button>
+          <button type="button" @click="updateFilters()">{{ cmsCopy.copy.text9 }}</button>
         </div>
       </div>
     </section>
   </main>
+</template>
 </template>
 
 <style scoped>
@@ -120,7 +127,7 @@ useSeoMeta({
   isolation: isolate;
   min-height: 360px;
   overflow: hidden;
-  background: url('/section-3/store-songzhu.jpg') center 45% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 45% / cover no-repeat fixed;
   color: #fff;
 }
 

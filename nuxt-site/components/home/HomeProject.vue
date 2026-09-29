@@ -1,7 +1,11 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-components-home-HomeProject', {"copy":{"text1":" 品牌","text2":"系列","text3":" 櫻花整體廚房用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間概念、並融合多元設計風格，與消費者一起打造符合每個家庭的理想廚房 "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import { KITCHEN_STYLES, type KitchenStyle } from '~/data/kitchenStyles'
+import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES, type KitchenStyle } from '~/data/kitchenStyles'
+const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
+
 
 const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false })
 const dragging = ref(false)
@@ -47,21 +51,20 @@ onBeforeUnmount(() => {
   if (timer) clearInterval(timer)
   if (resume) clearTimeout(resume)
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <section id="kitchen-series" aria-labelledby="home-project-heading" class="home-project-section relative z-10 bg-[#F6F6F6]">
     <div class="home-project-heading mx-auto grid max-w-[1470px] grid-cols-1 px-[15px] md:px-[30px] min-[768px]:grid-cols-[30%_70%]">
       <div v-reveal="{ anim: 'opalMoveRight' }">
         <InternalTemplateHeadingRail label="BRAND SERIES" source="home9" />
       </div>
       <div v-reveal="{ anim: 'opalMoveLeft' }" class="home-project-heading-copy">
-        <h2 id="home-project-heading" class="home-project-title">
-          品牌<span class="text-[#CAA05C]">系列</span>
+        <h2 id="home-project-heading" class="home-project-title">{{ cmsCopy.copy.text1 }}<span class="text-[#CAA05C]">{{ cmsCopy.copy.text2 }}</span>
         </h2>
-        <p class="home-project-heading-description">
-          櫻花整體廚房用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間概念、並融合多元設計風格，與消費者一起打造符合每個家庭的理想廚房
-        </p>
+        <p class="home-project-heading-description">{{ cmsCopy.copy.text3 }}</p>
       </div>
     </div>
 
@@ -101,6 +104,7 @@ onBeforeUnmount(() => {
       <button type="button" class="home-project-nav home-project-nav--next" aria-label="下一個廚房系列" @click="emblaApi?.scrollNext()"><ChevronRight aria-hidden="true" /></button>
     </div>
   </section>
+</template>
 </template>
 
 <style scoped>

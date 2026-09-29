@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
+const cmsCopy = await useCmsResource('view-pages-knowledge-index', {"copy":{"text1":"Kitchen Knowledge","text2":" Take A Look At ","text3":"Our Latest Blog","text4":" & Articles. "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
+import { KITCHEN_GUIDE_ARTICLES as cmsSeed_KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
+const { KITCHEN_GUIDE_ARTICLES } = await useCmsResource('data-kitchenGuides', { KITCHEN_GUIDE_ARTICLES: cmsSeed_KITCHEN_GUIDE_ARTICLES })
+
 
 const featuredArticle = KITCHEN_GUIDE_ARTICLES[0]!
 
@@ -10,14 +14,16 @@ useSeoMeta({
   ogDescription: '廚房系統櫃、插座配置與中島餐桌的實用規劃知識。',
   ogImage: featuredArticle.cover,
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="kitchen-guide-page">
     <section data-hero-photo="songzhu" class="kitchen-guide-hero hero-includes-header" aria-labelledby="kitchen-guide-page-title">
       <span class="kitchen-guide-hero__overlay" aria-hidden="true" />
       <div class="kitchen-guide-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="kitchen-guide-page-title">Kitchen Knowledge</h1>
+        <h1 id="kitchen-guide-page-title">{{ cmsCopy.copy.text1 }}</h1>
         <nav aria-label="麵包屑" class="kitchen-guide-hero__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "廚房裝修指南" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -34,9 +40,7 @@ useSeoMeta({
       <div class="kitchen-guide-newsroom__rail">
         <header class="kitchen-guide-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Straight From The Newsroom" class="kitchen-guide-heading__label" />
-          <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            Take A Look At <span>Our Latest Blog</span> &amp; Articles.
-          </h2>
+          <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">{{ cmsCopy.copy.text2 }}<span>{{ cmsCopy.copy.text3 }}</span>{{ cmsCopy.copy.text4 }}</h2>
         </header>
 
         <div class="kitchen-guide-posts">
@@ -74,6 +78,7 @@ useSeoMeta({
     </section>
   </main>
 </template>
+</template>
 
 <style scoped>
 .kitchen-guide-page {
@@ -88,7 +93,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 36% / cover no-repeat fixed;
 }
 
 .kitchen-guide-hero__overlay {

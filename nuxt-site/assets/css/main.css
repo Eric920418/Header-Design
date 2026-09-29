@@ -34,7 +34,7 @@ section.hero-includes-header[data-hero-photo] {
   --hero-photo-y: calc(var(--hero-logo-top) - max(13vw, 96.2px));
   min-height: 0;
   padding: 0;
-  background-image: url('/section-3/store-songzhu.jpg');
+  background-image: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg'));
   background-size: var(--hero-photo-width) auto;
   background-position: 88% var(--hero-photo-y);
   background-attachment: scroll;
@@ -44,7 +44,7 @@ section.hero-includes-header[data-hero-photo] {
 
 section.hero-includes-header[data-hero-photo="taichung"] {
   --hero-photo-y: calc(var(--hero-logo-top) - max(40.8vw, 301.92px));
-  background-image: url('/section-5/brand-pavilion/pavilion-taichung.jpg');
+  background-image: var(--cms-image-asset_44761f00, url('/section-5/brand-pavilion/pavilion-taichung.jpg'));
   background-position-x: left;
 }
 

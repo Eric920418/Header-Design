@@ -1,3 +1,4 @@
+import {cmsCatalog,applyCatalog} from './cmsCatalog'
 import sql from 'mssql'
 import { createError, type H3Event } from 'h3'
 import { isProductBrand } from '~/data/productBrands'
@@ -16,7 +17,7 @@ export function requireProductBrand(value: unknown): ProductBrand {
   return value
 }
 export function productQuery(query: Record<string, unknown>) {
-  for (const key of Object.keys(query)) if (!['page','category','q'].includes(key) || typeof query[key] !== 'string') throw createError({ statusCode: 400, message: `不支援或重複參數：${key}` })
+  for (const key of Object.keys(query)) if (!['page','category','q','cmsPreview'].includes(key) || typeof query[key] !== 'string') throw createError({ statusCode: 400, message: `不支援或重複參數：${key}` })
   const page = String(query.page ?? '1'), category = String(query.category ?? ''), q = String(query.q ?? '').trim()
   if (!/^[1-9]\d{0,5}$/.test(page) || (category && !/^[1-9]\d{0,8}$/.test(category)) || q.length > 100) throw createError({ statusCode: 400, message: 'page／category 必須是正整數；搜尋最多 100 字' })
   return { page: Number(page), category: category ? Number(category) : null, q }
@@ -32,8 +33,9 @@ export async function productCatalog(event: H3Event, brand: ProductBrand) {
        ORDER BY CASE WHEN f.type='main' THEN 0 WHEN f.url LIKE N'%情境%' THEN 3 WHEN f.url LIKE N'%部件%' OR f.url LIKE N'%提籠%' OR f.url LIKE N'%排水管%' OR f.url LIKE N'%下水器%' THEN 2 ELSE 1 END,COALESCE(f.sort,2147483647),f.id) AS image,
       (SELECT MIN(price) FROM sync.BuyKitchenProductPrices WHERE product_id=p.id AND price>0) AS price
       FROM sync.BuyKitchenProducts p WHERE p.channel=N'展板' AND p.Brand=@brand ORDER BY p.name,p.model,p.id`)).recordset
-    const items: ProductSummary[] = rows.map(row => ({ id: row.id, model: row.model.trim(), title: row.title.trim(), image: fileUrl(row.image), price: row.price,
+    const sourceItems: ProductSummary[] = rows.map(row => ({ id: row.id, model: row.model.trim(), title: row.title.trim(), image: fileUrl(row.image), price: row.price,
       route: `/products/${brand}/item/${row.id}`, classIds: String(row.classPath ?? '').split(',').filter(id => /^\d+$/.test(id.trim())).map(Number) }))
+    const items = applyCatalog(sourceItems, await cmsCatalog(brand,event))
     const classes = (await pool.query("SELECT id,parent_id,name,description,sort FROM sync.BuyKitchenClasses WHERE channel=N'展板' ORDER BY sort,id")).recordset
     const categories: ProductCategory[] = classes.map(row => {
       const members = items.filter(item => item.classIds.includes(row.id))

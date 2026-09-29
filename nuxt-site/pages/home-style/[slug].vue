@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { KITCHEN_SERIES_PAGES } from '~/data/kitchenSeries'
+import { KITCHEN_SERIES_PAGES as cmsSeed_KITCHEN_SERIES_PAGES } from '~/data/kitchenSeries'
+const { KITCHEN_SERIES_PAGES } = await useCmsResource('data-kitchenSeries', { KITCHEN_SERIES_PAGES: cmsSeed_KITCHEN_SERIES_PAGES })
+
 
 definePageMeta({ key: route => route.path })
 const route = useRoute()

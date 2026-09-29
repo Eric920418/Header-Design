@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-builders-catalogues', {"catalogues":[{"id":"developer-2026","title":"建商專區型錄","description":"建商專區型錄 2026","cover":"/section-6/builders/catalogues/developer-catalogue-2026.jpg","pdfUrl":"/section-6/builders/catalogues/developer-catalogue-2026.pdf","actionLabel":"預覽"}],"copy":{"text1":"Developer Catalogue","text2":"建商專區與品牌系列型錄","text3":"下載"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowUpRight, Download } from 'lucide-vue-next'
 
 interface BuilderCatalogueCard {
@@ -10,16 +12,7 @@ interface BuilderCatalogueCard {
   actionLabel: string
 }
 
-const catalogues: BuilderCatalogueCard[] = [
-  {
-    id: 'developer-2026',
-    title: '建商專區型錄',
-    description: '建商專區型錄 2026',
-    cover: '/section-6/builders/catalogues/developer-catalogue-2026.jpg',
-    pdfUrl: '/section-6/builders/catalogues/developer-catalogue-2026.pdf',
-    actionLabel: '預覽',
-  },
-]
+const catalogues: BuilderCatalogueCard[] = cmsCopy.catalogues
 
 useSeoMeta({
   title: '建商專區型錄｜SAKURA 整體廚房',
@@ -28,14 +21,16 @@ useSeoMeta({
   ogDescription: 'SAKURA KITCHEN 建商合作型錄。',
   ogImage: '/section-6/builders/catalogues/developer-catalogue-2026.jpg',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="builder-catalogue-page">
     <section data-hero-photo="songzhu" class="builder-catalogue-hero hero-includes-header" aria-labelledby="builder-catalogue-title">
       <span class="builder-catalogue-hero__overlay" aria-hidden="true" />
       <div class="builder-catalogue-hero__inner">
-        <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">Developer Catalogue</h1>
+        <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text1 }}</h1>
         <nav v-reveal="{ anim: 'opalMoveUp', delay: 90 }" aria-label="麵包屑" class="builder-catalogue-hero__trail ev" data-ev="opalMoveUp" style="animation-delay:90ms">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "建商專區", to: "/builders" }, { label: "建商專區型錄" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -50,7 +45,7 @@ useSeoMeta({
 
     <section class="builder-catalogue-projects" aria-labelledby="builder-catalogue-list-title">
       <div class="builder-catalogue-projects__rail internal-rail-safe">
-        <h2 id="builder-catalogue-list-title" class="sr-only">建商專區與品牌系列型錄</h2>
+        <h2 id="builder-catalogue-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
         <ul class="builder-catalogue-grid" aria-label="建商專區型錄清單">
           <li
             v-for="(catalogue, index) in catalogues"
@@ -80,7 +75,7 @@ useSeoMeta({
               <div class="builder-catalogue-card__text">
                 <div class="builder-catalogue-card__title-row">
                   <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong>{{ catalogue.title }}</strong></a>
-                  <a :href="catalogue.pdfUrl" download="SAKURA-建商專區型錄-2026.pdf" class="builder-catalogue-card__download" aria-label="下載建商專區型錄 PDF"><Download aria-hidden="true" /><span>下載</span></a>
+                  <a :href="catalogue.pdfUrl" download="SAKURA-建商專區型錄-2026.pdf" class="builder-catalogue-card__download" aria-label="下載建商專區型錄 PDF"><Download aria-hidden="true" /><span>{{ cmsCopy.copy.text3 }}</span></a>
                 </div>
                 <span>{{ catalogue.description }}</span>
               </div>
@@ -90,6 +85,7 @@ useSeoMeta({
       </div>
     </section>
   </main>
+</template>
 </template>
 
 <style scoped>
@@ -101,7 +97,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 36% / cover no-repeat fixed;
 }
 
 .builder-catalogue-hero__overlay {

@@ -1,69 +1,12 @@
 <script setup lang="ts">
-import { ChevronRight } from 'lucide-vue-next'
-import { KITCHEN_STYLES } from '~/data/kitchenStyles'
+const cmsCopy = await useCmsResource('view-components-home-HomeHero', {"slides":[{"image":"/home-2026/hero/10bn/aikitchen.webp","title":"AI Kitchen","description":"不僅是一個烹飪的場所，更是廚房的未來，一個包含智能、創新美學和便利性的烹飪聖地，翻轉廚房烹飪體驗，開啟AI KITCHEN新淨界","route":"/home-style/aikitchen"},{"image":"/home-2026/hero/10bn/clever.webp","route":"/home-style/clever","title":"Clever Kitchen","description":"把有限化為無限，以坪效為基礎，以美型為靈魂，讓收納的秩序與設計的質感並行，為日常開啟全新的生活風景。"},{"image":"/home-2026/hero/10bn/basic-plus.webp","route":"/home-style/basic-plus","title":"Basic +","description":"以生活的基本為出發，整合 MUJI RENOVATION 的空間觀察與 SAKURA 的廚房專業，打造更貼近日常的料理環境。"},{"image":"/home-2026/hero/10bn/loft-chic.webp","route":"/home-style/loft-chic","title":"Loft Chic","description":"忙碌的都市生活中，退去俗世的華而不實，自在擁有清新的空氣，集結多元的機能型態，質感體現在各個角落，品味生活的浪漫，原來這麼愜意"},{"image":"/home-2026/hero/10bn/joyful.webp","route":"/home-style/joyful","title":"Joyful","description":"讓廚房成為親子歡樂成長的樂園，魔法般的童趣創意巧思，讓餐廚空間充滿驚奇，你從這裡變出美食，我在這裡盡情歡笑，廚房是我們一同成長、創造歡笑與回憶的魔法樂園！"},{"image":"/home-2026/hero/10bn/premium.webp","route":"/home-style/premium","title":"Premium","description":"舒朗大器的開放式設計，打開客餐廚界線，盡享流動的生活饗宴，寬闊中島空間與精品般的逸品展櫃，伴隨智慧科技從容料理，無論氣派社交宴請、私密親友小聚都優雅盡興，怡然自在"},{"image":"/home-2026/hero/10bn/elegant.webp","route":"/home-style/elegant","title":"Elegant","description":"美式古典風格的細節表現，展現細膩典雅的美緻氛圍，細量生活型態需求，探索空間效能的無限可能，打造機能美學，讓美型廚房也兼備收納功能"},{"image":"/home-2026/hero/10bn/chef.webp","route":"/home-style/chef","title":"Chef","description":"最符合您烹飪習慣的大廚廚房，不僅擁有高效專業的廚房電器和隨拿即用的收納規劃，更具備由內而外好清理、健康安心不費力的完美便利"},{"image":"/home-2026/hero/10bn/country.webp","route":"/home-style/country","title":"Country","description":"色彩豐富的染色實木，搭配古典工藝曲線，清新溫潤的鄉村氣息，明亮整個廚房空間，讓你工作之餘，可以細細品嚐生活裡的每一刻"},{"image":"/home-2026/hero/10bn/harmony.webp","route":"/home-style/harmony","title":"Harmony","description":"在同一個空間下滿足不同世代需求，因應不同使用習慣又保有各自空間，全家團聚共享歡樂用餐時光！"}],"copy":{"field1":"","field2":"","field3":"","field4":"","field5":"/design-inspiration","text6":"探索","text7":"設計案例","text8":"探索","text9":"設計案例","text10":"Kitchen","text11":"品牌系列"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
-const slides = [
-  {
-    image: '/home-2026/hero/10bn/aikitchen.webp',
-    title: 'AI Kitchen',
-    description: '不僅是一個烹飪的場所，更是廚房的未來，一個包含智能、創新美學和便利性的烹飪聖地，翻轉廚房烹飪體驗，開啟AI KITCHEN新淨界',
-    route: '/home-style/aikitchen',
-  },
-  {
-    image: '/home-2026/hero/10bn/clever.webp',
-    route: '/home-style/clever',
-    title: 'Clever Kitchen',
-    description: '把有限化為無限，以坪效為基礎，以美型為靈魂，讓收納的秩序與設計的質感並行，為日常開啟全新的生活風景。',
-  },
-  {
-    image: '/home-2026/hero/10bn/basic-plus.webp',
-    route: '/home-style/basic-plus',
-    title: 'Basic +',
-    description: '以生活的基本為出發，整合 MUJI RENOVATION 的空間觀察與 SAKURA 的廚房專業，打造更貼近日常的料理環境。',
-  },
-  {
-    image: '/home-2026/hero/10bn/loft-chic.webp',
-    route: '/home-style/loft-chic',
-    title: 'Loft Chic',
-    description: '忙碌的都市生活中，退去俗世的華而不實，自在擁有清新的空氣，集結多元的機能型態，質感體現在各個角落，品味生活的浪漫，原來這麼愜意',
-  },
-  {
-    image: '/home-2026/hero/10bn/joyful.webp',
-    route: '/home-style/joyful',
-    title: 'Joyful',
-    description: '讓廚房成為親子歡樂成長的樂園，魔法般的童趣創意巧思，讓餐廚空間充滿驚奇，你從這裡變出美食，我在這裡盡情歡笑，廚房是我們一同成長、創造歡笑與回憶的魔法樂園！',
-  },
-  {
-    image: '/home-2026/hero/10bn/premium.webp',
-    route: '/home-style/premium',
-    title: 'Premium',
-    description: '舒朗大器的開放式設計，打開客餐廚界線，盡享流動的生活饗宴，寬闊中島空間與精品般的逸品展櫃，伴隨智慧科技從容料理，無論氣派社交宴請、私密親友小聚都優雅盡興，怡然自在',
-  },
-  {
-    image: '/home-2026/hero/10bn/elegant.webp',
-    route: '/home-style/elegant',
-    title: 'Elegant',
-    description: '美式古典風格的細節表現，展現細膩典雅的美緻氛圍，細量生活型態需求，探索空間效能的無限可能，打造機能美學，讓美型廚房也兼備收納功能',
-  },
-  {
-    image: '/home-2026/hero/10bn/chef.webp',
-    route: '/home-style/chef',
-    title: 'Chef',
-    description: '最符合您烹飪習慣的大廚廚房，不僅擁有高效專業的廚房電器和隨拿即用的收納規劃，更具備由內而外好清理、健康安心不費力的完美便利',
-  },
-  {
-    image: '/home-2026/hero/10bn/country.webp',
-    route: '/home-style/country',
-    title: 'Country',
-    description: '色彩豐富的染色實木，搭配古典工藝曲線，清新溫潤的鄉村氣息，明亮整個廚房空間，讓你工作之餘，可以細細品嚐生活裡的每一刻',
-  },
-  {
-    image: '/home-2026/hero/10bn/harmony.webp',
-    route: '/home-style/harmony',
-    title: 'Harmony',
-    description: '在同一個空間下滿足不同世代需求，因應不同使用習慣又保有各自空間，全家團聚共享歡樂用餐時光！',
-  },
-]
+import { ChevronRight } from 'lucide-vue-next'
+import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
+const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
+
+
+const slides = cmsCopy.slides
 const seriesOpen = ref(false)
 const activeSlide = ref(0)
 const previousSlide = ref<number | null>(null)
@@ -79,21 +22,23 @@ watch(reduced, (value) => {
   }, 5000)
 }, { immediate: true })
 onBeforeUnmount(() => timer && clearInterval(timer))
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <section class="hero-template-section hero-includes-header relative w-full overflow-hidden bg-[#9F9FA4]" aria-labelledby="hero-title">
-    <div class="hidden" aria-hidden="true"><img :src="slides[(activeSlide + 1) % slides.length].image" alt="" /></div>
+    <div class="hidden" aria-hidden="true"><img :src="slides[(activeSlide + 1) % slides.length].image" :alt="cmsCopy.copy.field1" /></div>
     <!-- Antra Home 01 / Slider Revolution `slidingoverlaydown` + `double`：
          暗色新圖先向下揭幕，原色新圖延遲 333ms 再覆蓋。 -->
     <div :key="`hero-${activeSlide}`" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
       <span v-if="previousSlide === null" class="absolute inset-0 bg-[#9F9FA4]" />
-      <img v-else :src="slides[previousSlide].image" alt="" class="hero-page1-image-settled absolute inset-0 h-full w-full object-cover object-center" />
+      <img v-else :src="slides[previousSlide].image" :alt="cmsCopy.copy.field2" class="hero-page1-image-settled absolute inset-0 h-full w-full object-cover object-center" />
       <span class="hero-page1-image-layer hero-page1-image-layer-masked">
-        <img :src="slides[activeSlide].image" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" />
+        <img :src="slides[activeSlide].image" :alt="cmsCopy.copy.field3" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" />
         <span class="absolute inset-0 bg-[rgba(16,8,1,0.46)]" />
       </span>
-      <span class="hero-page1-image-layer hero-page1-image-layer-final"><img :src="slides[activeSlide].image" alt="" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" /></span>
+      <span class="hero-page1-image-layer hero-page1-image-layer-final"><img :src="slides[activeSlide].image" :alt="cmsCopy.copy.field4" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" /></span>
     </div>
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,.42)_42%,rgba(0,0,0,.86)_100%)]" />
     <NuxtLink v-if="slides[activeSlide].route" :to="slides[activeSlide].route" :aria-label="`前往 ${slides[activeSlide].title} 品牌系列內頁`" class="absolute inset-0 z-[4] cursor-pointer focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-white" />
@@ -112,15 +57,15 @@ onBeforeUnmount(() => timer && clearInterval(timer))
     <div class="hero-template-bottom z-20 transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
       <div class="hero-template-cta h-[120px] w-[120px] shrink-0">
         <div v-reveal="{ anim: 'fadeIn', delay: 900, duration: 'slow' }" class="h-full w-full rounded-[200px] backdrop-blur-[58px]">
-          <NuxtLink to="/design-inspiration" aria-label="探索設計案例" class="hero-start-project group/hero-cta relative flex h-full w-full items-center justify-center overflow-hidden rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center text-[18px] leading-[24px] text-white transition-colors hover:text-[#CAA05C]">
-            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-cjk-sans transition-opacity duration-300 group-hover/hero-cta:opacity-0 group-focus-visible/hero-cta:opacity-0">探索<br />設計案例</span>
-            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-cjk-sans opacity-0 transition-opacity duration-300 group-hover/hero-cta:opacity-100 group-focus-visible/hero-cta:opacity-100">探索<br />設計案例</span>
+          <NuxtLink :to="cmsCopy.copy.field5" aria-label="探索設計案例" class="hero-start-project group/hero-cta relative flex h-full w-full items-center justify-center overflow-hidden rounded-[100px] border border-[#FFFFFF12] bg-[#5C5C5C75] text-center text-[18px] leading-[24px] text-white transition-colors hover:text-[#CAA05C]">
+            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-cjk-sans transition-opacity duration-300 group-hover/hero-cta:opacity-0 group-focus-visible/hero-cta:opacity-0">{{ cmsCopy.copy.text6 }}<br />{{ cmsCopy.copy.text7 }}</span>
+            <span aria-hidden="true" class="absolute inset-0 z-[1] flex items-center justify-center font-cjk-sans opacity-0 transition-opacity duration-300 group-hover/hero-cta:opacity-100 group-focus-visible/hero-cta:opacity-100">{{ cmsCopy.copy.text8 }}<br />{{ cmsCopy.copy.text9 }}</span>
           </NuxtLink>
         </div>
       </div>
       <div class="hero-template-watermark-slot pointer-events-none">
         <div class="hero-template-watermark select-none whitespace-nowrap text-right font-display opacity-[0.64]">
-          <div v-reveal="{ anim: 'fadeInUp', delay: 250 }"><span aria-hidden="true" class="block bg-[linear-gradient(180deg,#CAA05C_14.9%,rgba(159,159,164,0)_80.95%)] bg-clip-text text-transparent">Kitchen</span></div>
+          <div v-reveal="{ anim: 'fadeInUp', delay: 250 }"><span aria-hidden="true" class="block bg-[linear-gradient(180deg,#CAA05C_14.9%,rgba(159,159,164,0)_80.95%)] bg-clip-text text-transparent">{{ cmsCopy.copy.text10 }}</span></div>
         </div>
       </div>
     </div>
@@ -142,9 +87,10 @@ onBeforeUnmount(() => timer && clearInterval(timer))
           </div>
         </div>
         <button type="button" aria-controls="hero-kitchen-series" :aria-expanded="seriesOpen" :aria-label="seriesOpen ? '收合品牌系列選單' : '展開品牌系列選單'" class="flex h-36 w-10 cursor-pointer flex-col items-center justify-center gap-2 rounded-r-2xl border border-white/10 bg-[rgba(0,0,0,.55)] text-white/85 backdrop-blur-md transition-all duration-500 hover:text-[#CAA05C]" :class="seriesOpen ? 'translate-x-[210px]' : ''" @click="seriesOpen = !seriesOpen">
-          <ChevronRight class="h-5 w-5 transition-transform" :class="seriesOpen ? 'rotate-180' : ''" /><span class="writing-vertical text-base tracking-[.3em]">品牌系列</span>
+          <ChevronRight class="h-5 w-5 transition-transform" :class="seriesOpen ? 'rotate-180' : ''" /><span class="writing-vertical text-base tracking-[.3em]">{{ cmsCopy.copy.text11 }}</span>
         </button>
       </div>
     </div>
   </section>
+</template>
 </template>

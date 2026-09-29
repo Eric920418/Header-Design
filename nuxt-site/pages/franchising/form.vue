@@ -1,6 +1,10 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-franchising-form', {"copy":{"text1":"Franchise Application","text2":"申請加盟","text3":"請留下您的聯絡方式，我們會立即提供您完整的加盟資訊。","field4":"/franchising/download","text5":" 加盟資料下載 "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { Download } from 'lucide-vue-next'
-import { FRANCHISE_BROCHURE_URL } from '~/data/franchise'
+import { FRANCHISE_BROCHURE_URL as cmsSeed_FRANCHISE_BROCHURE_URL } from '~/data/franchise'
+const { FRANCHISE_BROCHURE_URL } = await useCmsResource('data-franchise', { FRANCHISE_BROCHURE_URL: cmsSeed_FRANCHISE_BROCHURE_URL })
+
 
 useSeoMeta({
   title: '加盟申請表｜SAKURA 整體廚房',
@@ -9,19 +13,20 @@ useSeoMeta({
   ogDescription: '留下您的聯絡方式與加盟規劃，了解 SAKURA KITCHEN 加盟資訊。',
   ogImage: '/section-6/franchise/hero-store.jpg',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="franchise-application-page">
     <section class="franchise-application" aria-labelledby="franchise-application-title">
       <div class="franchise-application__rail">
         <header class="franchise-application__header">
-          <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">Franchise Application</InternalSectionPill>
-          <h1 id="franchise-application-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev">申請加盟</h1>
-          <p v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" class="ev">請留下您的聯絡方式，我們會立即提供您完整的加盟資訊。</p>
+          <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text1 }}</InternalSectionPill>
+          <h1 id="franchise-application-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text2 }}</h1>
+          <p v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text3 }}</p>
           <div v-reveal="{ anim: 'opalScaleUp', delay: 210 }" data-ev="opalScaleUp" class="franchise-application__download-reveal ev">
-            <NuxtLink to="/franchising/download" target="_blank" rel="noopener" class="franchise-application__download">
-              加盟資料下載 <Download aria-hidden="true" />
+            <NuxtLink :to="cmsCopy.copy.field4" target="_blank" rel="noopener" class="franchise-application__download">{{ cmsCopy.copy.text5 }}<Download aria-hidden="true" />
             </NuxtLink>
           </div>
         </header>
@@ -33,6 +38,7 @@ useSeoMeta({
     </section>
   </main>
 </template>
+</template>
 
 <style scoped>
 .franchise-application-page { overflow: clip; color: #1c1c1d; background: #fafafa; }
@@ -40,7 +46,7 @@ useSeoMeta({
 .franchise-application {
   min-height: 1150px;
   padding: 96px 30px 130px;
-  background: #fafafa url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat;
+  background: #fafafa var(--cms-image-asset_82b9dd3e, url('/section-6/franchise/antra-original/h1-bg05.png')) top right / auto no-repeat;
 }
 
 .franchise-application__rail { width: min(930px, 100%); margin-inline: auto; }

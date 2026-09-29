@@ -1,29 +1,9 @@
 <script setup lang="ts">
-import { ArrowUpRight, ArrowRight, Plus, PanelsTopLeft, Files, Image, Pencil, Clock3 } from 'lucide-vue-next'
-import { ADMIN_CONTENT, ADMIN_MEDIA } from '~/data/adminDemo'
-definePageMeta({ layout: 'admin' })
-useSeoMeta({ title: '工作台總覽｜SAKURA Content Studio' })
-const drafts = ADMIN_CONTENT.filter(item => item.status === '草稿')
-const metrics = [
-  { value: String(ADMIN_CONTENT.filter(item => item.status === '已發布').length).padStart(2, '0'), label: '已發布內容', icon: Files, to: '/admin/content?status=published' },
-  { value: String(drafts.length).padStart(2, '0'), label: '待完成草稿', icon: Pencil, to: '/admin/content?status=draft' },
-  { value: String(ADMIN_MEDIA.length).padStart(2, '0'), label: '品牌影像素材', icon: Image, to: '/admin/media' },
-]
+definePageMeta({layout:'admin'})
+const {api,session}=useCmsAdmin()
+const {data:docs,error:loadError}=await useAsyncData<any[]>('cms-overview',()=>api('documents'))
+const drafts=computed(()=>(docs.value||[]).filter(d=>d.draftId!==d.publishedId))
+const recent=computed(()=>(docs.value||[]).toSorted((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0,8))
+const {data:inbox}=await useAsyncData<any[]>('cms-inbox-count',()=>session.value?.role==='admin'?api('inbox'):Promise.resolve([]))
 </script>
-
-<template>
-  <div class="cms-page">
-    <div class="cms-heading"><h1>工作台總覽</h1><NuxtLink to="/admin/content?new=1" class="cms-button cms-button-gold"><Plus :size="17" />新增內容</NuxtLink></div>
-    <div class="cms-metrics">
-      <NuxtLink v-for="metric in metrics" :key="metric.label" :to="metric.to" class="cms-metric"><div><span class="cms-metric-label"><component :is="metric.icon" :size="16" />{{ metric.label }}</span><strong>{{ metric.value }}</strong></div><ArrowUpRight :size="17" /></NuxtLink>
-    </div>
-    <div class="cms-overview-feature">
-      <div class="cms-cover-story"><AdminImage src="/home-2026/hero/ai-kitchen.jpg" alt="SAKURA 精品廚房主視覺預覽" /><div class="cms-cover-shade" /><div class="cms-cover-copy"><h2>首頁主視覺</h2><NuxtLink to="/admin/home" class="cms-cover-link">編輯首頁 <ArrowUpRight :size="19" /></NuxtLink></div></div>
-      <div class="cms-feature-aside"><h2>快捷操作</h2><div class="cms-quick-links"><NuxtLink to="/admin/home"><PanelsTopLeft :size="20" /><span>首頁管理</span><ArrowUpRight :size="18" /></NuxtLink><NuxtLink to="/admin/content?new=1"><Plus :size="20" /><span>新增內容</span><ArrowUpRight :size="18" /></NuxtLink><NuxtLink to="/admin/media"><Image :size="20" /><span>媒體庫</span><ArrowUpRight :size="18" /></NuxtLink></div></div>
-    </div>
-    <div class="cms-overview-bottom">
-      <section class="cms-panel cms-recent"><div class="cms-section-heading"><h2>最近編輯</h2><NuxtLink to="/admin/content" class="cms-text-link">所有內容 <ArrowRight :size="16" /></NuxtLink></div><NuxtLink v-for="item in ADMIN_CONTENT.slice(0, 3)" :key="item.id" :to="`/admin/content?edit=${item.id}`" class="cms-recent-row"><AdminImage :src="item.image" :alt="item.title" /><div><span class="cms-muted">{{ item.category }}</span><h3>{{ item.title }}</h3></div><span class="cms-status" :class="item.status === '草稿' ? 'draft' : 'published'">{{ item.status }}</span><span class="cms-date">{{ item.date }}</span><ArrowUpRight :size="17" /></NuxtLink></section>
-      <section class="cms-panel cms-drafts"><div class="cms-section-heading"><h2>待完成草稿 <span class="cms-count">{{ drafts.length }}</span></h2><Clock3 :size="18" /></div><NuxtLink v-for="item in drafts" :key="item.id" :to="`/admin/content?edit=${item.id}`" class="cms-draft-row"><span class="cms-draft-dot" /><div><h3>{{ item.title }}</h3><span class="cms-muted">{{ item.category }} · {{ item.date }}</span></div><ArrowRight :size="17" /></NuxtLink></section>
-    </div>
-  </div>
-</template>
+<template><div class="cms-page"><p v-if="loadError" class="cms-error" role="alert">{{ useCmsAdmin().message(loadError) }}</p><div class="cms-heading"><h1>工作台總覽</h1><NuxtLink to="/admin/home" class="cms-button cms-button-gold">編輯首頁</NuxtLink></div><div class="cms-metrics"><NuxtLink to="/admin/content" class="cms-metric"><div>網站內容<strong>{{ docs?.length||0 }}</strong></div></NuxtLink><NuxtLink to="/admin/content" class="cms-metric"><div>待發布草稿<strong>{{ drafts.length }}</strong></div></NuxtLink><NuxtLink v-if="session?.role==='admin'" to="/admin/inbox" class="cms-metric"><div>待處理收件<strong>{{ inbox?.filter(i=>i.status==='待處理').length||0 }}</strong></div></NuxtLink></div><div class="cms-overview-bottom"><section class="cms-panel"><div class="cms-section-heading"><h2>最近編輯</h2></div><NuxtLink v-for="d in recent" :key="d.id" :to="{path:'/admin/content',query:{edit:d.id}}" class="cms-resource-row"><strong>{{ d.title }}</strong><span>{{ new Date(d.updatedAt).toLocaleDateString('zh-TW') }}</span></NuxtLink></section><section class="cms-panel"><div class="cms-section-heading"><h2>待發布草稿</h2></div><NuxtLink v-for="d in drafts.slice(0,8)" :key="d.id" :to="{path:'/admin/content',query:{edit:d.id}}" class="cms-resource-row">{{ d.title }}</NuxtLink><p v-if="!drafts.length" class="cms-empty">目前沒有待發布草稿</p></section></div></div></template>

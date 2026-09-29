@@ -1,7 +1,11 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-about-introduce', {"copy":{"text1":" Explore Our Comprehensive","text2":"Kitchen Design","text3":" Services ","field4":"","text5":"SAKURA 品牌承諾","text6":" Gallery Of Inspiring","text7":"Kitchen","text8":" Designs ","text9":"櫻花整體廚房之廚具，除於門板張貼SAKURA KITCHEN之品牌銘板外，亦會於下列地方標示 SAKURA Logo","field10":"body"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-vue-next'
-import { brandHistory, brandHistoryHighlights, brandIdentities, brandValues } from '~/data/aboutUs'
+import { brandHistory as cmsSeed_brandHistory, brandHistoryHighlights as cmsSeed_brandHistoryHighlights, brandIdentities as cmsSeed_brandIdentities, brandValues as cmsSeed_brandValues } from '~/data/aboutUs'
+const { brandHistory, brandHistoryHighlights, brandIdentities, brandValues } = await useCmsResource('data-aboutUs', { brandHistory: cmsSeed_brandHistory, brandHistoryHighlights: cmsSeed_brandHistoryHighlights, brandIdentities: cmsSeed_brandIdentities, brandValues: cmsSeed_brandValues })
+
 
 const activeHistoryYear = ref<(typeof brandHistoryHighlights)[number]['year']>('1978')
 const activeHistory = computed(() => brandHistoryHighlights.find(item => item.year === activeHistoryYear.value) ?? brandHistoryHighlights[0]!)
@@ -83,9 +87,11 @@ useSeoMeta({
   ogDescription: '從專業設計、品牌整合到永久免費安心健檢，了解 SAKURA 整體廚房如何陪伴台灣家庭打造理想廚房。',
   ogImage: '/section-5/about-us/banner-kitchen.jpg',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="about-us-page">
     <InternalAboutUsHero />
 
@@ -93,9 +99,7 @@ useSeoMeta({
       <div class="about-rail">
         <header class="about-services__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="About Us" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">
-            Explore Our Comprehensive<br /><span>Kitchen Design</span> Services
-          </h2>
+          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text1 }}<br /><span>{{ cmsCopy.copy.text2 }}</span>{{ cmsCopy.copy.text3 }}</h2>
         </header>
 
         <div class="about-services__panel">
@@ -160,7 +164,7 @@ useSeoMeta({
               >
                 <InternalBrandImage :src="item.image" :alt="`${item.year} 年品牌記事`" class="about-history__image" />
                 <div class="about-history__content">
-                  <span class="about-history__icon-slot"><img v-if="item.icon" :src="item.icon" alt="" aria-hidden="true" class="about-history__icon" /></span>
+                  <span class="about-history__icon-slot"><img v-if="item.icon" :src="item.icon" :alt="cmsCopy.copy.field4" aria-hidden="true" class="about-history__icon" /></span>
                   <span class="about-history__year">{{ item.year }}</span>
                   <p>{{ item.description }}</p>
                 </div>
@@ -174,7 +178,7 @@ useSeoMeta({
     </section>
 
     <section class="about-values elementor-widget-antra-banner-process" aria-labelledby="about-values-title">
-      <h2 id="about-values-title" class="sr-only">SAKURA 品牌承諾</h2>
+      <h2 id="about-values-title" class="sr-only">{{ cmsCopy.copy.text5 }}</h2>
       <div data-ev="opalScaleUp">
         <div class="about-values__stage">
           <div class="about-values__image-list" aria-hidden="true">
@@ -219,12 +223,10 @@ useSeoMeta({
       <div class="about-identity__rail">
         <header class="about-identity__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="DISTINCTIVE BRAND IDENTITY" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">
-            Gallery Of Inspiring<br /><span>Kitchen</span> Designs
-          </h2>
+          <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text6 }}<br /><span>{{ cmsCopy.copy.text7 }}</span>{{ cmsCopy.copy.text8 }}</h2>
         </header>
 
-        <p class="about-identity__description">櫻花整體廚房之廚具，除於門板張貼SAKURA KITCHEN之品牌銘板外，亦會於下列地方標示 SAKURA Logo</p>
+        <p class="about-identity__description">{{ cmsCopy.copy.text9 }}</p>
 
         <div class="about-identity__carousel">
         <div ref="identityTrack" class="about-identity__grid" role="region" aria-label="SAKURA 品牌辨識圖片輪播" tabindex="0" @scroll.passive="updateIdentityProgress" @keydown.left.prevent="scrollIdentity(-1)" @keydown.right.prevent="scrollIdentity(1)">
@@ -250,7 +252,7 @@ useSeoMeta({
       </div>
     </section>
 
-    <Teleport to="body">
+    <Teleport :to="cmsCopy.copy.field10">
       <div v-if="identityLightboxOpen" class="identity-lightbox" role="dialog" aria-modal="true" :aria-label="`${activeIdentity.title} 放大圖片`" @click.self="closeIdentity">
         <button type="button" class="identity-lightbox__close" aria-label="關閉放大圖片" @click="closeIdentity"><X /></button>
         <button type="button" class="identity-lightbox__nav identity-lightbox__nav--previous" aria-label="上一張品牌辨識圖片" @click="shiftIdentity(-1)"><ChevronLeft /></button>
@@ -262,6 +264,7 @@ useSeoMeta({
       </div>
     </Teleport>
   </main>
+</template>
 </template>
 
 <style scoped>

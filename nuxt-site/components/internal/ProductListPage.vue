@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ArrowRight } from 'lucide-vue-next'
-import { PRODUCT_CATALOGUES } from '~/data/productCatalogues'
-import { PRODUCT_BRANDS } from '~/data/productBrands'
+import { PRODUCT_CATALOGUES as cmsSeed_PRODUCT_CATALOGUES } from '~/data/productCatalogues'
+import { PRODUCT_BRANDS as cmsSeed_PRODUCT_BRANDS } from '~/data/productBrands'
 import type { ProductBrand, ProductList } from '~/types/products'
+const { PRODUCT_CATALOGUES } = await useCmsResource('data-productCatalogues', { PRODUCT_CATALOGUES: cmsSeed_PRODUCT_CATALOGUES })
+const { PRODUCT_BRANDS } = await useCmsResource('data-productBrands', { PRODUCT_BRANDS: cmsSeed_PRODUCT_BRANDS })
+
 
 const { brand, category } = defineProps<{ brand: ProductBrand; category?: number }>()
 const info = PRODUCT_BRANDS[brand]
 const route = useRoute()
 const query = computed(() => ({ ...(category ? { category } : {}), page: route.query.page ?? '1', q: route.query.q ?? '' }))
-const { data, error, status, refresh } = await useFetch<ProductList>(`/api/products/${brand}/items`, { query })
+const { data, error, status, refresh } = await useFetch<ProductList>(`/api/products/${brand}/items`, { query:computed(()=>({...query.value,...(useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview}:{})})) })
 const search = ref(typeof route.query.q === 'string' ? route.query.q : '')
 watch(() => route.query.q, q => { search.value = typeof q === 'string' ? q : '' })
 const heading = computed(() => data.value?.category?.title ?? `${info.name} 全部產品`)
@@ -181,7 +184,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 68% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 68% / cover no-repeat fixed;
 }
 .near-suction-hero__overlay { position: absolute; z-index: -1; inset: 0; background: #100801; opacity: .64; }
 .near-suction-hero__inner { width: min(1410px, calc(100% - 60px)); margin-inline: auto; padding: 138px 0 97px; text-align: center; }

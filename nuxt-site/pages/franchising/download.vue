@@ -1,6 +1,10 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-franchising-download', {"brochurePages":[{"number":"01","label":"封面與外頁","image":"/section-6/franchise/franchising-info-outside.webp","alt":"櫻花整體廚房加盟簡介封面、封底與外頁"},{"number":"02","label":"品牌優勢與加盟辦法","image":"/section-6/franchise/franchising-info-inside.webp","alt":"櫻花整體廚房加盟簡介內頁，包含總部優勢、加盟辦法與流程"}],"copy":{"field1":"/section-6/franchise/hero-store.jpg","field2":"SAKURA KITCHEN 櫻花整體廚房加盟門市","text3":"Franchise Information","text4":"Franchise Information","text5":"櫻花整體廚房","text6":"加盟簡介","field7":"/section-6/franchise/sakura-kitchen-logo-gold.png","field8":"SAKURA KITCHEN 櫻花整體廚房","text9":"完整收錄櫻花品牌實力、總部支援、加盟準備金、資格條件與七階段加盟流程。","text10":"格式","text11":"PDF","text12":"頁數","text13":"2 頁","text14":"檔案大小","text15":"8.0 MB","text16":"線上預覽","text17":"下載 PDF ","text18":"正在確認 PDF 檔案…","text19":"加盟資料 PDF 載入失敗","text20":"重新檢查檔案","text21":"PAGE ","field22":"/franchising/intro","text23":"返回我要加盟"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowRight, Download, ExternalLink, FileText } from 'lucide-vue-next'
-import { FRANCHISE_BROCHURE_URL } from '~/data/franchise'
+import { FRANCHISE_BROCHURE_URL as cmsSeed_FRANCHISE_BROCHURE_URL } from '~/data/franchise'
+const { FRANCHISE_BROCHURE_URL } = await useCmsResource('data-franchise', { FRANCHISE_BROCHURE_URL: cmsSeed_FRANCHISE_BROCHURE_URL })
+
 
 useSeoMeta({
   title: '加盟資料下載｜SAKURA 整體廚房',
@@ -13,20 +17,7 @@ useSeoMeta({
 const brochureStatus = ref<'checking' | 'ready' | 'error'>('checking')
 const brochureError = ref('')
 
-const brochurePages = [
-  {
-    number: '01',
-    label: '封面與外頁',
-    image: '/section-6/franchise/franchising-info-outside.webp',
-    alt: '櫻花整體廚房加盟簡介封面、封底與外頁',
-  },
-  {
-    number: '02',
-    label: '品牌優勢與加盟辦法',
-    image: '/section-6/franchise/franchising-info-inside.webp',
-    alt: '櫻花整體廚房加盟簡介內頁，包含總部優勢、加盟辦法與流程',
-  },
-]
+const brochurePages = cmsCopy.brochurePages
 
 const verifyBrochure = async () => {
   brochureStatus.value = 'checking'
@@ -50,21 +41,23 @@ const guardBrochureLink = (event: MouseEvent) => {
 }
 
 onMounted(verifyBrochure)
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="franchise-download-page">
     <section data-hero-photo="songzhu" class="download-hero hero-includes-header" aria-labelledby="franchise-download-title">
       <InternalFranchiseImage
-        src="/section-6/franchise/hero-store.jpg"
-        alt="SAKURA KITCHEN 櫻花整體廚房加盟門市"
+        :src="cmsCopy.copy.field1"
+        :alt="cmsCopy.copy.field2"
         eager
         class="download-hero__image"
       />
       <span class="download-hero__overlay" aria-hidden="true" />
       <div class="download-hero__inner">
-        <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" tone="dark" class="ev">Franchise Information</InternalSectionPill>
-        <h1 id="franchise-download-title" v-reveal="{ anim: 'opalMoveUp', delay: 80 }" data-ev="opalMoveUp" class="ev">Franchise Information</h1>
+        <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" tone="dark" class="ev">{{ cmsCopy.copy.text3 }}</InternalSectionPill>
+        <h1 id="franchise-download-title" v-reveal="{ anim: 'opalMoveUp', delay: 80 }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text4 }}</h1>
         <nav v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" aria-label="麵包屑" class="download-hero__trail ev">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "我要加盟", to: "/franchising/intro" }, { label: "加盟資料下載" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -81,16 +74,16 @@ onMounted(verifyBrochure)
       <div class="download-rail">
         <header class="download-document__header">
           <div class="download-document__heading">
-            <h2 id="franchise-document-title" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev"><span>櫻花整體廚房</span><br />加盟簡介</h2>
-            <InternalFranchiseImage class="download-document__logo" src="/section-6/franchise/sakura-kitchen-logo-gold.png" alt="SAKURA KITCHEN 櫻花整體廚房" fit="contain" />
+            <h2 id="franchise-document-title" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev"><span>{{ cmsCopy.copy.text5 }}</span><br />{{ cmsCopy.copy.text6 }}</h2>
+            <InternalFranchiseImage class="download-document__logo" :src="cmsCopy.copy.field7" :alt="cmsCopy.copy.field8" fit="contain" />
           </div>
 
           <div class="download-document__summary">
-            <p v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">完整收錄櫻花品牌實力、總部支援、加盟準備金、資格條件與七階段加盟流程。</p>
+            <p v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text9 }}</p>
             <dl v-reveal="{ anim: 'opalMoveUp', delay: 90 }" data-ev="opalMoveUp" class="download-document__meta ev">
-              <div><dt>格式</dt><dd>PDF</dd></div>
-              <div><dt>頁數</dt><dd>2 頁</dd></div>
-              <div><dt>檔案大小</dt><dd>8.0 MB</dd></div>
+              <div><dt>{{ cmsCopy.copy.text10 }}</dt><dd>{{ cmsCopy.copy.text11 }}</dd></div>
+              <div><dt>{{ cmsCopy.copy.text12 }}</dt><dd>{{ cmsCopy.copy.text13 }}</dd></div>
+              <div><dt>{{ cmsCopy.copy.text14 }}</dt><dd>{{ cmsCopy.copy.text15 }}</dd></div>
             </dl>
 
             <div v-reveal="{ anim: 'opalScaleUp', delay: 150 }" data-ev="opalScaleUp" class="download-document__actions ev">
@@ -103,7 +96,7 @@ onMounted(verifyBrochure)
                 :aria-disabled="brochureStatus !== 'ready'"
                 @click="guardBrochureLink"
               >
-                <FileText aria-hidden="true" />線上預覽<ExternalLink aria-hidden="true" />
+                <FileText aria-hidden="true" />{{ cmsCopy.copy.text16 }}<ExternalLink aria-hidden="true" />
               </a>
               <a
                 :href="FRANCHISE_BROCHURE_URL"
@@ -113,16 +106,15 @@ onMounted(verifyBrochure)
                 :aria-disabled="brochureStatus !== 'ready'"
                 @click="guardBrochureLink"
               >
-                <Download aria-hidden="true" />下載 PDF
-              </a>
+                <Download aria-hidden="true" />{{ cmsCopy.copy.text17 }}</a>
             </div>
 
-            <p v-if="brochureStatus === 'checking'" class="download-document__status" role="status">正在確認 PDF 檔案…</p>
+            <p v-if="brochureStatus === 'checking'" class="download-document__status" role="status">{{ cmsCopy.copy.text18 }}</p>
             <div v-else-if="brochureStatus === 'error'" class="download-document__error" role="alert">
-              <strong>加盟資料 PDF 載入失敗</strong>
+              <strong>{{ cmsCopy.copy.text19 }}</strong>
               <span>{{ brochureError }}</span>
               <code>{{ FRANCHISE_BROCHURE_URL }}</code>
-              <button type="button" @click="verifyBrochure">重新檢查檔案</button>
+              <button type="button" @click="verifyBrochure">{{ cmsCopy.copy.text20 }}</button>
             </div>
           </div>
         </header>
@@ -138,19 +130,20 @@ onMounted(verifyBrochure)
             <div class="download-preview__sheet">
               <InternalFranchiseImage :src="page.image" :alt="page.alt" fit="contain" />
             </div>
-            <div class="download-preview__caption"><span>PAGE {{ page.number }}</span></div>
+            <div class="download-preview__caption"><span>{{ cmsCopy.copy.text21 }}{{ page.number }}</span></div>
           </article>
         </div>
 
         <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="download-document__back ev">
-          <NuxtLink to="/franchising/intro" class="site-content-cta download-back-cta group/cta">
-            <span>返回我要加盟</span>
+          <NuxtLink :to="cmsCopy.copy.field22" class="site-content-cta download-back-cta group/cta">
+            <span>{{ cmsCopy.copy.text23 }}</span>
             <span class="site-cta-icon download-back-cta__icon"><ArrowRight aria-hidden="true" /></span>
           </NuxtLink>
         </div>
       </div>
     </section>
   </main>
+</template>
 </template>
 
 <style scoped>
@@ -195,7 +188,7 @@ onMounted(verifyBrochure)
 
 .download-document {
   padding: 110px 30px 126px;
-  background: #fafafa url('/section-6/franchise/antra-original/h1-bg05.png') top right / auto no-repeat;
+  background: #fafafa var(--cms-image-asset_82b9dd3e, url('/section-6/franchise/antra-original/h1-bg05.png')) top right / auto no-repeat;
 }
 
 .download-rail { width: min(1410px, 100%); margin-inline: auto; padding-right: 86px; }

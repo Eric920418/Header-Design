@@ -1,5 +1,72 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-09-29 正式 CMS（本機版本）
+
+後台入口 `/admin`；本機正式建置驗收入口 `http://localhost:3120/admin`，原開發入口為 `http://localhost:3100/admin`。提案密碼仍保留；通過提案保護後，另以 CMS 帳號登入。此版本需要 Node 伺服器與 MSSQL，不能以純靜態網站部署。
+
+### 操作與資料範圍
+
+- 59 個編輯資源涵蓋首頁 8 個區塊、10 個廚房系列、消息／活動／影音、知識文章、門市／品牌館／設計案例、品牌介紹、服務／FAQ、加盟／建案、型錄與全站設定。資料庫保留 65 個資源，包含 6 個舊資料介面的相容版本；後台不顯示相容版本。
+- 依固定結構編輯文字、圖片、連結、SEO、顯示與項目順序。集合中可新增、移除、搜尋及分頁，圖片集逐張使用媒體選擇器；來源商品／案例僅可設定上架、推薦與排序，新匯入來源項目會出現在管理介面，原名稱／規格／價格／圖片不回寫。
+- 以「內容區域」為儲存及發布單位；同區域列表與內文原子發布。草稿不影響官網；預覽儲存後直接開啟同一套官網元件，可選擇內頁。版本還原產生新草稿，管理員另行發布。下架使資料 API 不再公開；單一項目可從集合移除或取消上架，再發布。全站共用資料下架會影響所有引用頁面，隱藏單一版面請使用「顯示此區塊」。
+- 首次匯入是官網原始內容，沒有後台假資料。297 個既有素材已登錄媒體庫；新的圖片經 Sharp 解碼並轉為 WebP，PDF 使用 pdf-lib 解析驗證。圖片上限 10MB、PDF 上限 30MB；影片接受 HTTPS YouTube 連結或影片 ID，伺服器驗證網域並轉成固定 ID。僅被目前發布版本引用的上傳素材可匿名讀取，歷史／草稿引用素材不能封存，不提供永久刪除。
+- 管理員管理帳號、發布／下架、版本還原、收件與留言；編輯者只能編輯草稿、上傳及預覽。8 小時工作階段存於 MSSQL，HttpOnly／SameSite Cookie、同來源及 CSRF 檢查、登入限速；停用／重設撤銷所有工作階段，最後一位管理員不能停用或降級。
+- 加盟與建案表單真正入庫，保留同意版本／時間，以冪等識別碼避免重複建單。失敗保留輸入；收件有四種處理狀態與內部備註。留言待審核，公開結果僅含姓名、留言及日期。
+- 欄位、權限與 409 衝突訊息在前端呈現，包含追蹤編號；連線資訊、密碼與伺服器堆疊只留伺服器日誌。全站錯誤頁不依賴 CMS 讀取，資料庫失聯時仍能顯示安全訊息與追蹤編號。後台使用原生捲動及 Noto Sans TC，沿用官網黑／金／白色系。
+
+### 初始化與帳號
+
+以下命令從專案根目錄執行。沿用 `.env.design-db.local` 的本機 SQL 管理連線及 `nuxt-site/.env` 的來源唯讀連線；管理連線只用於建置 schema／還原，Web 應用不使用 SA。
+
+```sh
+pnpm --dir nuxt-site cms:init
+pnpm --dir nuxt-site cms:seed
+pnpm --dir nuxt-site cms:assets
+pnpm --dir nuxt-site dev --port 3100
+```
+
+`cms:init` 只新增 `cms` schema／必要資料表與 `sakura_website_cms` 帳號，權限為 `cms` CRUD + `sync` SELECT，保留原有帳號。CMS 密碼與儲存目錄追加至忽略版本控制的 `nuxt-site/.env`。`cms:seed` 相同基準內容跳過、保留所有使用者版本；可更新程式定義的欄位結構與介面標題。基準內容不同會整批回滾並列出衝突 ID，不覆蓋、不清表。不可直接修改 seed 後強制重匯既有資料；正式內容請透過後台編輯。
+
+設定 `CMS_ADMIN_EMAIL`、`CMS_ADMIN_PASSWORD` 環境變數後執行 `pnpm --dir nuxt-site cms:admin` 建立首位管理員；救援使用 `cms:reset`，會撤銷工作階段且要求首次變更密碼。密碼須 12–128 字，採 Node scrypt 雜湊。後續帳號從後台建立，無郵件找回密碼。
+
+本機管理員為 `admin@sakura.local`；臨時密碼只存於 `/Users/eric/.sakura-cms/local-admin.env`（權限 600，版本庫外），首次登入必須變更。驗收帳號在交付前停用。不要把這個憑證檔加入 Git。
+
+### 持久化、備份與隔離還原
+
+- `CMS_DB_USER`／`CMS_DB_PASSWORD`：CMS 專用登入。`CMS_DB_DATABASE` 可覆寫 CMS 資料庫，預設沿用 `NUXT_DESIGN_DB_DATABASE`；來源商品仍由 `NUXT_DESIGN_DB_*` 唯讀連線讀取。
+- `CMS_MEDIA_DIR`：預設 `/Users/eric/.sakura-cms/media`，必須是建置目錄與版本庫以外的持久化絕對目錄；重啟不會清除。建議僅伺服器帳號可讀寫。
+- 備份包含 CMS 內容／版本／媒體／帳號／收件／留言／操作紀錄及檔案；不備份工作階段、限速紀錄與 SPA 唯讀來源。來源資料由原有匯入與備份流程管理，CMS 不修改來源。
+
+```sh
+pnpm --dir nuxt-site cms:backup /absolute/path/to/new-backup
+CMS_RESTORE_DATABASE=SakuraCmsRestore_example pnpm --dir nuxt-site cms:restore /absolute/path/to/new-backup
+```
+
+備份路徑必須全新；預設建立在 `~/.sakura-cms/backup-<timestamp>`，目錄權限 700、資料檔 600。還原只允許全新的 `SakuraCmsRestore_*` 資料庫，拒絕覆寫既有資料庫及素材目錄；還原逐表比對筆數，逐素材比對 SHA-256。切換驗證時設 `CMS_DB_DATABASE` 與還原命令輸出的 `CMS_MEDIA_DIR`，來源連線保持唯讀。本輪備份位於 `/Users/eric/.sakura-cms/acceptance-backup-20260929`，已還原至 `SakuraCmsRestore_acceptance_20260929`。使用 `scripts/check-cms-restore.mjs` 啟動自行管理的 3141 埠隔離伺服器，驗證登入、首次改密碼、最後管理員保護、發布內容與素材雜湊；測試只改隔離帳號密碼，因此每次須使用新還原環境。執行前設定 `CMS_RESTORE_DATABASE`、備份中的 `CMS_ADMIN_EMAIL`／`CMS_ADMIN_PASSWORD`，並以備份路徑作為參數。正式環境未變更；正式主機備份排程、加密保存、保存期限與災難復原切換於主機交接設定。
+
+### 驗證與限制
+
+```sh
+pnpm typecheck
+pnpm build
+PREVIEW_URL=http://localhost:3120 pnpm --dir nuxt-site test:cms
+# 僅在本機驗收資料庫：暫時發布測試文章／案例及商品下架，完成後依版本還原原始內容。
+CMS_TEST_REAL_CONTENT=1 PREVIEW_URL=http://localhost:3120 pnpm --dir nuxt-site test:cms
+TEST_BASE_URL=http://localhost:3120 node nuxt-site/scripts/check-kitchen-series.mjs
+TEST_BASE_URL=http://localhost:3120 node nuxt-site/scripts/check-product-covers.mjs
+# 本機正式建置啟動（另開終端）
+cd nuxt-site
+PORT=3120 HOST=127.0.0.1 node --env-file=.env .output/server/index.mjs
+```
+
+本輪通過：`pnpm typecheck`、`pnpm build`、41 個官網 SSR 路由、65 個內容 API、10 個系列與 215 張來源圖片、三品牌商品封面與總數回歸。受控瀏覽器實際驗證四種寬度的後台與首頁、搜尋／篩選／編輯／選圖／草稿預覽／發布、未儲存提醒、失敗保留輸入與追蹤編號、Escape／焦點返回；無水平溢出與 hydration 錯誤。減少動畫規則與動態偏好切換已實作；保留腳本的模擬環境檢查。
+
+API 檢查自建並清除當次測試帳號、素材、收件及留言；預設只操作測試文件。擴充模式拒絕覆蓋已有未發布工作的正式資源，還原也使用版本條件，不靜默覆蓋並行編輯。驗證包含登入／角色／CSRF、私人草稿與素材、發布／下架／還原／409、三種圖片及 PDF、偽裝與超限拒絕、重複表單、留言審核、帳號重設與停用、工作階段撤銷、重跑匯入與衝突回滾，以及來源筆數／checksum 不變。並行儲存以同一 revision 同時送出兩次，驗證只有一次成功、另一次回傳 409。
+
+`nuxt-site/scripts/check-admin.cjs` 保留可重跑的瀏覽器檢查；使用既有 Playwright 安裝（`NODE_PATH`），設定 `PREVIEW_URL`、`PREVIEW_PASSWORD`、`CMS_TEST_EMAIL`、`CMS_TEST_PASSWORD`。測試帳號須已完成首次改密碼；編輯測試只定位已展開的項目，避免與其他隱藏欄位混淆。腳本涵蓋搜尋／篩選、編輯、預覽、媒體選擇、焦點返回、減少動畫與 1440／1024／768／390px；截圖寫到系統暫存目錄。本輪互動驗收透過受控瀏覽器實際操作，未由終端執行 Playwright 腳本。
+
+正式主機尚未部署、不寄信、不串外部 CRM、不回寫 SPA；也未提供自由拖拉版型、外部影片上傳或永久刪除。部署需 Node 執行環境、MSSQL 連線、HTTPS、持久化媒體目錄與備份排程，不能把舊 Vite 靜態部署設定直接當成正式 CMS 主機。Google Maps 現有 Marker 棄用警告仍存在，未影響本次 CMS 功能。
+
 ## 2026-09-28 案例門市卡片按鈕
 
 - `/gallery` 門市卡片按鈕由「預約門市」改為「查看門市」，保留各自 `/gallery/:slug` 連結、樣式與動畫；其他真正的預約入口不變。本機修改，未部署。

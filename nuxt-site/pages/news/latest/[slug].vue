@@ -1,7 +1,12 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-news-latest-slug-', {"copy":{"text1":"NEWS","field2":"/news","text3":"優惠消息","field4":"/news/latest","text5":"最新消息","text6":" 報名QR code ","field7":"/news/activities","text8":"優惠活動","field9":"/news/latest","text10":"最新消息","field11":"/news/video","text12":"媒體影音"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { Camera, Images, PlaySquare } from 'lucide-vue-next'
-import { latestArticleDetails } from '~/data/latestArticles'
-import { newsArticles } from '~/data/news'
+import { latestArticleDetails as cmsSeed_latestArticleDetails } from '~/data/latestArticles'
+import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
+const { latestArticleDetails } = await useCmsResource('data-latestArticles', { latestArticleDetails: cmsSeed_latestArticleDetails })
+const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
+
 
 const route = useRoute()
 const slug = String(route.params.slug)
@@ -29,9 +34,11 @@ useSeoMeta({
 useHead({
   link: [{ rel: 'canonical', href: article.legacyPath }],
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main
     class="latest-detail-page"
     :class="{
@@ -42,7 +49,7 @@ useHead({
     <section data-hero-photo="taichung" class="latest-detail-breadcrumb hero-includes-header" aria-label="最新消息麵包屑">
       <div class="latest-detail-breadcrumb__overlay" aria-hidden="true" />
       <div class="latest-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <p class="latest-detail-breadcrumb__title">NEWS</p>
+        <p class="latest-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>
         <nav aria-label="麵包屑" class="latest-detail-breadcrumb__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "優惠消息", to: "/news" }, { label: "最新消息", to: "/news/latest" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -60,8 +67,8 @@ useHead({
         <header class="latest-detail-header entry-header" v-reveal="{ anim: 'opalMoveUp' }">
           <div class="latest-detail-meta entry-meta-top">
             <span class="categories-link">
-              <NuxtLink to="/news">優惠消息</NuxtLink>
-              <NuxtLink to="/news/latest">最新消息</NuxtLink>
+              <NuxtLink :to="cmsCopy.copy.field2">{{ cmsCopy.copy.text3 }}</NuxtLink>
+              <NuxtLink :to="cmsCopy.copy.field4">{{ cmsCopy.copy.text5 }}</NuxtLink>
             </span>
             <span class="posted-on">
               <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
@@ -126,16 +133,14 @@ useHead({
               <p
                 v-if="isFranchiseSeminar && sectionIndex === 3"
                 class="latest-detail-franchise-qr-label"
-              >
-                報名QR code
-              </p>
+              >{{ cmsCopy.copy.text6 }}</p>
             </section>
           </template>
 
           <nav class="latest-detail-categories" aria-label="優惠消息分類" v-reveal="{ anim: 'opalMoveUp' }">
-            <NuxtLink to="/news/activities"><Camera aria-hidden="true" />優惠活動</NuxtLink>
-            <NuxtLink to="/news/latest" aria-current="page"><Images aria-hidden="true" />最新消息</NuxtLink>
-            <NuxtLink to="/news/video"><PlaySquare aria-hidden="true" />媒體影音</NuxtLink>
+            <NuxtLink :to="cmsCopy.copy.field7"><Camera aria-hidden="true" />{{ cmsCopy.copy.text8 }}</NuxtLink>
+            <NuxtLink :to="cmsCopy.copy.field9" aria-current="page"><Images aria-hidden="true" />{{ cmsCopy.copy.text10 }}</NuxtLink>
+            <NuxtLink :to="cmsCopy.copy.field11"><PlaySquare aria-hidden="true" />{{ cmsCopy.copy.text12 }}</NuxtLink>
           </nav>
         </div>
       </div>
@@ -143,6 +148,7 @@ useHead({
 
     <InternalLatestRelatedCarousel :articles="latestArticles" :current-id="article.id" />
   </main>
+</template>
 </template>
 
 <style scoped>
@@ -154,7 +160,7 @@ useHead({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-5/brand-pavilion/pavilion-taichung.jpg') center 88% / cover no-repeat;
+  background: var(--cms-image-asset_44761f00, url('/section-5/brand-pavilion/pavilion-taichung.jpg')) center 88% / cover no-repeat;
 }
 
 .latest-detail-breadcrumb__overlay {

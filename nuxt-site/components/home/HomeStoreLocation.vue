@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-components-home-HomeStoreLocation', {"stores":[{"id":0,"region":"北部","city":"臺北市","name":"承德店","address":"臺北市士林區承德路四段238號","phone":"02-28839919"},{"id":1,"region":"北部","city":"臺北市","name":"石牌店","address":"臺北市北投區石牌路一段68號","phone":"02-28218500"},{"id":2,"region":"北部","city":"臺北市","name":"民權店","address":"臺北市中山區民權東路二段68號","phone":"02-25371659"},{"id":3,"region":"北部","city":"臺北市","name":"中山南京店","address":"臺北市中山區中山北路一段71號","phone":"02-25238868"},{"id":4,"region":"北部","city":"臺北市","name":"八德店","address":"臺北市松山區八德路4段230號","phone":"02-27486733"},{"id":5,"region":"中部","city":"臺中市","name":"中港店","address":"臺中市西屯區臺灣大道四段872號","phone":"04-24650688"},{"id":6,"region":"中部","city":"臺中市","name":"松竹店","address":"臺中市北屯區松竹路一段763號","phone":"04-22397068"},{"id":7,"region":"中部","city":"臺中市","name":"台中復興店","address":"臺中市南區復興路二段87號","phone":"04-22658989"},{"id":8,"region":"中部","city":"臺中市","name":"博館店","address":"臺中市西屯區西屯路二段8-3號","phone":"04-23179966"}],"regions":{"北部":["臺北市","新北市","基隆市","新竹市","桃園市","新竹縣","宜蘭縣"],"中部":["臺中市","苗栗縣","彰化縣","南投縣","雲林縣"],"南部":["高雄市","臺南市","嘉義市","嘉義縣","屏東縣","澎湖縣"],"東部":["花蓮縣","臺東縣"],"離島":["金門縣","連江縣"]},"copy":{"text1":"STORE LOCATOR","text2":"櫻花整體廚房","text3":"全台門市據點","text4":"我的位置","text5":"此區域尚無門市資料。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ChevronDown, LocateFixed } from 'lucide-vue-next'
 
 type Store = { id: number; region: string; city: string; name: string; address: string; phone: string }
@@ -8,24 +10,8 @@ const STORE_BOARD_ROWS = 4
 const STORE_FLIP_INTERVAL = 1400
 const STORE_FLIP_DURATION = 760
 
-const stores: Store[] = [
-  { id: 0, region: '北部', city: '臺北市', name: '承德店', address: '臺北市士林區承德路四段238號', phone: '02-28839919' },
-  { id: 1, region: '北部', city: '臺北市', name: '石牌店', address: '臺北市北投區石牌路一段68號', phone: '02-28218500' },
-  { id: 2, region: '北部', city: '臺北市', name: '民權店', address: '臺北市中山區民權東路二段68號', phone: '02-25371659' },
-  { id: 3, region: '北部', city: '臺北市', name: '中山南京店', address: '臺北市中山區中山北路一段71號', phone: '02-25238868' },
-  { id: 4, region: '北部', city: '臺北市', name: '八德店', address: '臺北市松山區八德路4段230號', phone: '02-27486733' },
-  { id: 5, region: '中部', city: '臺中市', name: '中港店', address: '臺中市西屯區臺灣大道四段872號', phone: '04-24650688' },
-  { id: 6, region: '中部', city: '臺中市', name: '松竹店', address: '臺中市北屯區松竹路一段763號', phone: '04-22397068' },
-  { id: 7, region: '中部', city: '臺中市', name: '台中復興店', address: '臺中市南區復興路二段87號', phone: '04-22658989' },
-  { id: 8, region: '中部', city: '臺中市', name: '博館店', address: '臺中市西屯區西屯路二段8-3號', phone: '04-23179966' },
-]
-const regions: Record<string, string[]> = {
-  北部: ['臺北市','新北市','基隆市','新竹市','桃園市','新竹縣','宜蘭縣'],
-  中部: ['臺中市','苗栗縣','彰化縣','南投縣','雲林縣'],
-  南部: ['高雄市','臺南市','嘉義市','嘉義縣','屏東縣','澎湖縣'],
-  東部: ['花蓮縣','臺東縣'],
-  離島: ['金門縣','連江縣'],
-}
+const stores: Store[] = cmsCopy.stores
+const regions: Record<string, string[]> = cmsCopy.regions
 const region = ref('')
 const city = ref('')
 const selected = ref(0)
@@ -123,17 +109,19 @@ function setBoardPaused(value: boolean) {
 function handleBoardFocusOut(event: FocusEvent) {
   if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) setBoardPaused(false)
 }
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <section id="contact" aria-labelledby="store-location-heading" class="store-location-section relative overflow-hidden bg-[#fafafa] py-[60px]">
     <div class="mx-auto w-full max-w-[1512px] pl-5 pr-[88px] sm:pl-8 sm:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
-      <div class="relative mb-[60px]"><div class="grid grid-cols-1 items-start lg:grid-cols-[minmax(260px,424px)_minmax(0,1fr)] lg:pt-[46px]"><div class="mb-5 lg:mb-0"><InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }">STORE LOCATOR</InternalSectionPill></div><h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="max-w-[661px] font-cjk-serif text-[42px] font-semibold leading-[46px] text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:text-[60px] xl:leading-[64px]">櫻花整體廚房<br /><span class="text-[#CAA05C]">全台門市據點</span></h2></div></div>
+      <div class="relative mb-[60px]"><div class="grid grid-cols-1 items-start lg:grid-cols-[minmax(260px,424px)_minmax(0,1fr)] lg:pt-[46px]"><div class="mb-5 lg:mb-0"><InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }">{{ cmsCopy.copy.text1 }}</InternalSectionPill></div><h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="max-w-[661px] font-cjk-serif text-[42px] font-semibold leading-[46px] text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:text-[60px] xl:leading-[64px]">{{ cmsCopy.copy.text2 }}<br /><span class="text-[#CAA05C]">{{ cmsCopy.copy.text3 }}</span></h2></div></div>
       <div class="flex min-w-0 flex-col gap-8 lg:flex-row">
         <div v-reveal="{ anim: 'opalMoveRight', delay: 180 }" class="flex w-full min-w-0 flex-col lg:w-[62%] lg:shrink-0"><div class="h-[var(--store-map-h)] overflow-hidden rounded-3xl bg-[#F6F6F6] shadow-sm lg:min-h-[var(--store-map-h)] lg:flex-1"><GoogleStoreMap :address="visible.address" :name="visible.name" :focus="focused" /></div></div>
         <div class="min-w-0 flex-1">
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 180 }" class="store-location-filters mb-4 grid gap-2 sm:gap-3">
-            <button type="button" class="store-location-locate flex h-[52px] min-w-0 items-center justify-between whitespace-nowrap rounded-full border border-[rgba(159,159,164,.25)] bg-white px-5 font-cjk-sans text-[15px] text-[#1C1C1D]"><span>我的位置</span><LocateFixed class="h-[22px] w-[22px] text-[#CAA05C]" /></button>
+            <button type="button" class="store-location-locate flex h-[52px] min-w-0 items-center justify-between whitespace-nowrap rounded-full border border-[rgba(159,159,164,.25)] bg-white px-5 font-cjk-sans text-[15px] text-[#1C1C1D]"><span>{{ cmsCopy.copy.text4 }}</span><LocateFixed class="h-[22px] w-[22px] text-[#CAA05C]" /></button>
             <div class="relative min-w-0"><select v-model="region" aria-label="選擇區域" class="store-location-select h-[52px] w-full appearance-none whitespace-nowrap rounded-full border border-[rgba(159,159,164,.25)] bg-white pl-5 pr-10 font-cjk-sans text-[15px] text-[#1C1C1D]"><option value="">選擇區域</option><option v-for="name in Object.keys(regions)" :key="name" :value="name">{{ name }}</option></select><ChevronDown class="store-location-select-chevron pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#59585D]" /></div>
             <div class="relative min-w-0"><select v-model="city" aria-label="選擇城市" :disabled="!region" class="store-location-select h-[52px] w-full appearance-none whitespace-nowrap rounded-full border border-[rgba(159,159,164,.25)] pl-5 pr-10 font-cjk-sans text-[15px]" :class="region ? 'bg-white text-[#1C1C1D]' : 'cursor-not-allowed bg-[#F6F6F6] text-[#9F9FA4]'"><option value="">選擇城市</option><option v-for="name in regions[region] || []" :key="name" :value="name">{{ name }}</option></select><ChevronDown class="store-location-select-chevron pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#59585D]" /></div>
           </div>
@@ -143,7 +131,7 @@ function handleBoardFocusOut(event: FocusEvent) {
             @focusin="setBoardPaused(true)"
             @focusout="handleBoardFocusOut"
           >
-            <div v-if="!filtered.length" class="rounded-2xl border border-[#E3E3E8] bg-white px-6 py-10 text-center text-[#59585D]">此區域尚無門市資料。</div>
+            <div v-if="!filtered.length" class="rounded-2xl border border-[#E3E3E8] bg-white px-6 py-10 text-center text-[#59585D]">{{ cmsCopy.copy.text5 }}</div>
             <template v-else>
               <button
                 v-for="(store, index) in displayedStores"
@@ -190,4 +178,5 @@ function handleBoardFocusOut(event: FocusEvent) {
       </div>
     </div>
   </section>
+</template>
 </template>

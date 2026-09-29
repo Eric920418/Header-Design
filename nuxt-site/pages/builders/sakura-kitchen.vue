@@ -1,14 +1,9 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-builders-sakura-kitchen', {"series":[{"name":"iChef","image":"/section-6/builders/sakura-kitchen/series-01.webp"},{"name":"iFun","image":"/section-6/builders/sakura-kitchen/series-02.webp"},{"name":"Loft Chic","image":"/section-6/builders/sakura-kitchen/series-03.webp"},{"name":"iPremium","image":"/section-6/builders/hero-kitchen.webp"},{"name":"原色系列 01","image":"/section-6/builders/sakura-kitchen/series-05.webp"},{"name":"原色系列 02","image":"/section-6/builders/sakura-kitchen/series-06.webp"}],"copy":{"field1":"/section-6/builders/sakura-kitchen/hero.webp","field2":"SAKURA KITCHEN 酒紅色櫥櫃與中島廚房","text3":"SAKURA KITCHEN 櫻花整體廚房","field4":"/section-6/builders/sakura-kitchen/logo-en.png","field5":"SAKURA KITCHEN","field6":"/section-6/builders/sakura-kitchen/logo-zh.png","field7":"櫻花整體廚房","text8":"櫻花整體廚房提供全方位廚房解決方案，一站整合品牌資源，以專業解決廚房使用痛點，以美學勾勒夢想廚房藍圖。","field9":"/builders#appointment","text10":"立即","text11":"預約","field12":"/about/advantage","field13":"/section-6/builders/sakura-kitchen/brand-advantage-link.jpg","field14":"SAKURA KITCHEN 白色整體廚房空間","text15":"Brand Commitment","text16":"源自於全台數百萬戶家庭生活研究與觀察","text17":"Our Advantages","text18":"突破未來格局，","text19":"開啟廚房智高點","text20":"憑藉多年累積的數據和服務經驗，櫻花整體廚房提供全方位廚房解決方案，一站整合品牌資源，以專業解決廚房使用痛點，以美學勾勒夢想廚房藍圖。","text21":"700 萬用戶使用數據、45 萬套設計模組，海量大數據 AI 運算，深化 AI 科技的應用，精準掌握廚房使用需求打造更智能、更貼心的產品，滿足不斷變化的家庭需求。","field22":"/section-6/builders/sakura-kitchen/brand-advantage.webp","field23":"SAKURA KITCHEN 酒紅色櫥櫃與大型料理中島","field24":"/builders#appointment","text25":"立即預約","text26":"EXPLORE OUR COLLECTIONS","text27":"Creating the Ideal Kitchen","text28":"for Every Family","text29":"源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。","field30":"/builders#appointment","text31":"立即預約"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowRight } from 'lucide-vue-next'
 
-const series = [
-  { name: 'iChef', image: '/section-6/builders/sakura-kitchen/series-01.webp' },
-  { name: 'iFun', image: '/section-6/builders/sakura-kitchen/series-02.webp' },
-  { name: 'Loft Chic', image: '/section-6/builders/sakura-kitchen/series-03.webp' },
-  { name: 'iPremium', image: '/section-6/builders/hero-kitchen.webp' },
-  { name: '原色系列 01', image: '/section-6/builders/sakura-kitchen/series-05.webp' },
-  { name: '原色系列 02', image: '/section-6/builders/sakura-kitchen/series-06.webp' },
-]
+const series = cmsCopy.series
 
 useSeoMeta({
   title: 'SAKURA KITCHEN｜建商專區',
@@ -17,43 +12,45 @@ useSeoMeta({
   ogDescription: '從品牌優勢到多元廚房系列，認識 SAKURA KITCHEN 的建案整體廚房解決方案。',
   ogImage: '/section-6/builders/sakura-kitchen/hero.webp',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="sakura-kitchen-page">
     <section class="sakura-kitchen-hero-shell hero-includes-header" aria-labelledby="sakura-kitchen-title">
       <div class="sakura-kitchen-hero">
         <InternalBuilderImage
-          src="/section-6/builders/sakura-kitchen/hero.webp"
-          alt="SAKURA KITCHEN 酒紅色櫥櫃與中島廚房"
+          :src="cmsCopy.copy.field1"
+          :alt="cmsCopy.copy.field2"
           eager
           class="sakura-kitchen-hero__image"
         />
         <span class="sakura-kitchen-hero__shade" aria-hidden="true" />
 
         <div class="sakura-kitchen-hero__brand">
-          <h1 id="sakura-kitchen-title" class="sr-only">SAKURA KITCHEN 櫻花整體廚房</h1>
-          <img src="/section-6/builders/sakura-kitchen/logo-en.png" alt="SAKURA KITCHEN" class="sakura-kitchen-hero__logo" />
-          <img src="/section-6/builders/sakura-kitchen/logo-zh.png" alt="櫻花整體廚房" class="sakura-kitchen-hero__logo-zh" />
-          <p class="sakura-kitchen-hero__description">櫻花整體廚房提供全方位廚房解決方案，一站整合品牌資源，以專業解決廚房使用痛點，以美學勾勒夢想廚房藍圖。</p>
+          <h1 id="sakura-kitchen-title" class="sr-only">{{ cmsCopy.copy.text3 }}</h1>
+          <img :src="cmsCopy.copy.field4" :alt="cmsCopy.copy.field5" class="sakura-kitchen-hero__logo" />
+          <img :src="cmsCopy.copy.field6" :alt="cmsCopy.copy.field7" class="sakura-kitchen-hero__logo-zh" />
+          <p class="sakura-kitchen-hero__description">{{ cmsCopy.copy.text8 }}</p>
         </div>
 
-        <NuxtLink to="/builders#appointment" class="sakura-kitchen-hero__booking" aria-label="立即預約建商服務">
-          <span>立即<br />預約</span>
+        <NuxtLink :to="cmsCopy.copy.field9" class="sakura-kitchen-hero__booking" aria-label="立即預約建商服務">
+          <span>{{ cmsCopy.copy.text10 }}<br />{{ cmsCopy.copy.text11 }}</span>
         </NuxtLink>
 
-        <NuxtLink to="/about/advantage" class="sakura-kitchen-hero__project-card" aria-label="前往品牌優勢">
+        <NuxtLink :to="cmsCopy.copy.field12" class="sakura-kitchen-hero__project-card" aria-label="前往品牌優勢">
           <span class="sakura-kitchen-hero__project-card-thumb">
             <InternalBuilderImage
-              src="/section-6/builders/sakura-kitchen/brand-advantage-link.jpg"
-              alt="SAKURA KITCHEN 白色整體廚房空間"
+              :src="cmsCopy.copy.field13"
+              :alt="cmsCopy.copy.field14"
               class="sakura-kitchen-hero__project-card-image"
             />
           </span>
           <span class="sakura-kitchen-hero__project-card-copy">
-            <strong>Brand Commitment</strong>
-            <span>源自於全台數百萬戶家庭生活研究與觀察</span>
-            <span class="sakura-kitchen-hero__project-card-link">Our Advantages</span>
+            <strong>{{ cmsCopy.copy.text15 }}</strong>
+            <span>{{ cmsCopy.copy.text16 }}</span>
+            <span class="sakura-kitchen-hero__project-card-link">{{ cmsCopy.copy.text17 }}</span>
           </span>
         </NuxtLink>
       </div>
@@ -62,24 +59,24 @@ useSeoMeta({
     <section id="brand-advantage" class="sakura-kitchen-advantage" aria-labelledby="sakura-kitchen-advantage-title">
       <div class="sakura-kitchen-rail">
         <header class="sakura-kitchen-heading">
-          <h2 id="sakura-kitchen-advantage-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">突破未來格局，<br /><em>開啟廚房智高點</em></h2>
+          <h2 id="sakura-kitchen-advantage-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text18 }}<br /><em>{{ cmsCopy.copy.text19 }}</em></h2>
           <div v-reveal="{ anim: 'opalMoveUp', delay: 100 }" data-ev="opalMoveUp" class="sakura-kitchen-heading__copy ev" style="animation-delay:100ms">
-            <p>憑藉多年累積的數據和服務經驗，櫻花整體廚房提供全方位廚房解決方案，一站整合品牌資源，以專業解決廚房使用痛點，以美學勾勒夢想廚房藍圖。</p>
-            <p>700 萬用戶使用數據、45 萬套設計模組，海量大數據 AI 運算，深化 AI 科技的應用，精準掌握廚房使用需求打造更智能、更貼心的產品，滿足不斷變化的家庭需求。</p>
+            <p>{{ cmsCopy.copy.text20 }}</p>
+            <p>{{ cmsCopy.copy.text21 }}</p>
           </div>
         </header>
 
         <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" data-ev="opalScaleUp" class="sakura-kitchen-panorama ev" style="animation-delay:120ms">
           <InternalBuilderImage
-            src="/section-6/builders/sakura-kitchen/brand-advantage.webp"
-            alt="SAKURA KITCHEN 酒紅色櫥櫃與大型料理中島"
+            :src="cmsCopy.copy.field22"
+            :alt="cmsCopy.copy.field23"
           />
           <span class="sakura-kitchen-panorama__shade" aria-hidden="true" />
           <NuxtLink
-            to="/builders#appointment"
+            :to="cmsCopy.copy.field24"
             class="site-content-cta sakura-kitchen-content-cta sakura-kitchen-content-cta--photo"
           >
-            <span>立即預約</span>
+            <span>{{ cmsCopy.copy.text25 }}</span>
             <span class="site-cta-icon sakura-kitchen-content-cta__icon"><ArrowRight aria-hidden="true" /></span>
           </NuxtLink>
         </div>
@@ -89,10 +86,10 @@ useSeoMeta({
     <section class="sakura-kitchen-series" aria-labelledby="sakura-kitchen-series-title">
       <div class="sakura-kitchen-rail internal-rail-safe">
         <header class="sakura-kitchen-heading sakura-kitchen-heading--series">
-          <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="sakura-kitchen-heading__kicker ev">EXPLORE OUR COLLECTIONS</InternalSectionPill>
-          <h2 id="sakura-kitchen-series-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev" style="animation-delay:70ms">Creating the Ideal Kitchen<br /><em>for Every Family</em></h2>
+          <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="sakura-kitchen-heading__kicker ev">{{ cmsCopy.copy.text26 }}</InternalSectionPill>
+          <h2 id="sakura-kitchen-series-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev" style="animation-delay:70ms">{{ cmsCopy.copy.text27 }}<br /><em>{{ cmsCopy.copy.text28 }}</em></h2>
           <div v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" class="sakura-kitchen-heading__copy ev" style="animation-delay:140ms">
-            <p>源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。</p>
+            <p>{{ cmsCopy.copy.text29 }}</p>
           </div>
         </header>
 
@@ -112,14 +109,15 @@ useSeoMeta({
         </div>
 
         <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" data-ev="opalMoveUp" class="sakura-kitchen-series__cta ev" style="animation-delay:160ms">
-          <NuxtLink to="/builders#appointment" class="site-content-cta sakura-kitchen-content-cta">
-            <span>立即預約</span>
+          <NuxtLink :to="cmsCopy.copy.field30" class="site-content-cta sakura-kitchen-content-cta">
+            <span>{{ cmsCopy.copy.text31 }}</span>
             <span class="site-cta-icon sakura-kitchen-content-cta__icon"><ArrowRight aria-hidden="true" /></span>
           </NuxtLink>
         </div>
       </div>
     </section>
   </main>
+</template>
 </template>
 
 <style scoped>

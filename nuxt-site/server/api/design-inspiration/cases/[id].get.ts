@@ -1,10 +1,14 @@
+import {cmsCatalog,cmsCases} from '../../../utils/cmsCatalog'
 import sql from 'mssql'
 import type { DesignCaseDetail } from '~/types/designCloud'
 import { caseSelect, withDesignDb } from '../../../utils/designCloud'
 
-export default defineEventHandler(event => {
-  const id = getRouterParam(event, 'id') ?? ''
+export default defineEventHandler(async event => {
+  const id = (getRouterParam(event, 'id') ?? '').toLowerCase()
   if (!/^[a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12}$/i.test(id)) throw createError({ statusCode: 400, message: '案例 ID 格式錯誤，必須是 UUID' })
+  const custom=(await cmsCases(event)).find(i=>i.id===id)
+  if(custom)return custom
+  if((await cmsCatalog('cases',event)).items.some(i=>i.id===id&&!i.enabled))throw createError({statusCode:404,message:'案例已下架'})
   return withDesignDb(event, async pool => {
     const result = await pool.request().input('id', sql.VarChar(80), id).query(`
       ${caseSelect} WHERE c.id=@id AND c.isWebsite=1;

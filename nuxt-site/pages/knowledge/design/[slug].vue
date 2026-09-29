@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { KITCHEN_GUIDE_DETAILS } from '~/data/kitchenGuideDetails'
-import { KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
+const cmsCopy = await useCmsResource('view-pages-knowledge-design-slug-', {"copy":{"field1":"/knowledge","text2":"廚房裝修指南"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
+import { KITCHEN_GUIDE_DETAILS as cmsSeed_KITCHEN_GUIDE_DETAILS } from '~/data/kitchenGuideDetails'
+import { KITCHEN_GUIDE_ARTICLES as cmsSeed_KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
+const { KITCHEN_GUIDE_DETAILS } = await useCmsResource('data-kitchenGuideDetails', { KITCHEN_GUIDE_DETAILS: cmsSeed_KITCHEN_GUIDE_DETAILS })
+const { KITCHEN_GUIDE_ARTICLES } = await useCmsResource('data-kitchenGuides', { KITCHEN_GUIDE_ARTICLES: cmsSeed_KITCHEN_GUIDE_ARTICLES })
+
 
 const route = useRoute()
 const slug = String(route.params.slug)
@@ -31,9 +36,11 @@ useSeoMeta({
 useHead({
   link: [{ rel: 'canonical', href: article.legacyUrl }],
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main
     class="knowledge-detail-page"
     :class="{
@@ -58,7 +65,7 @@ useHead({
     <article class="knowledge-detail" :aria-labelledby="`knowledge-detail-title-${article.id}`">
       <header class="knowledge-detail__header" v-reveal="{ anim: 'opalMoveUp' }">
         <div class="knowledge-detail__meta">
-          <NuxtLink to="/knowledge">廚房裝修指南</NuxtLink>
+          <NuxtLink :to="cmsCopy.copy.field1">{{ cmsCopy.copy.text2 }}</NuxtLink>
           <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
         </div>
         <h1 :id="`knowledge-detail-title-${article.id}`">{{ article.title }}</h1>
@@ -128,6 +135,7 @@ useHead({
     />
   </main>
 </template>
+</template>
 
 <style scoped>
 .knowledge-detail-page {
@@ -144,7 +152,7 @@ useHead({
   padding: 30px;
   place-items: center;
   color: #fff;
-  background: url('/section-3/service-process/breadcrumb-df.jpg') center / cover no-repeat fixed;
+  background: var(--cms-image-asset_98d304fd, url('/section-3/service-process/breadcrumb-df.jpg')) center / cover no-repeat fixed;
 }
 
 .knowledge-detail-breadcrumb__overlay {

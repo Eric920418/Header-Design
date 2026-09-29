@@ -1,6 +1,10 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-about-exhibition', {"copy":{"text1":" 以人為主的體驗融入整體空間設計中，完整打造家庭生活場域，創造空間通透感，營造宛如現代美術館般之空間氛圍。 ","text2":"Understanding The Fundamentals","text3":"享受、交流、體驗","text4":"透過鏡面延伸感打破空間框架限制、以天花格柵創造無邊際之視覺效果，家人間的生活交流互動體現於居家空間內，空間氛圍以「六感體驗」為主軸，體驗生活就是一門藝術的感官饗宴。","field5":"/section-5/brand-pavilion/interior-main.jpg","field6":"集團品牌館客廳與廚房展示空間","field7":"/section-5/brand-pavilion/interior-gallery.png","field8":"集團品牌館多元空間展示","text9":"Gallery Of Inspiring ","text10":"Kitchen","text11":" Designs","text12":"地址","text13":"營業時間","text14":"Important Information & Guidelines","text15":"注意事項"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { Clock3, MapPin } from 'lucide-vue-next'
-import { brandPavilions, pavilionNotice } from '~/data/brandPavilions'
+import { brandPavilions as cmsSeed_brandPavilions, pavilionNotice as cmsSeed_pavilionNotice } from '~/data/brandPavilions'
+const { brandPavilions, pavilionNotice } = await useCmsResource('data-brandPavilions', { brandPavilions: cmsSeed_brandPavilions, pavilionNotice: cmsSeed_pavilionNotice })
+
 
 const activePavilionId = ref<(typeof brandPavilions)[number]['id']>('taipei')
 const activePavilion = computed(() => brandPavilions.find(item => item.id === activePavilionId.value) ?? brandPavilions[0]!)
@@ -12,38 +16,38 @@ useSeoMeta({
   ogDescription: '查看 SAKURA 集團品牌館的空間理念、三館地址、營業時間與預約參觀注意事項。',
   ogImage: '/section-5/brand-pavilion/banner.jpg',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="pavilion-single-page">
     <InternalBrandPavilionHero />
 
     <article class="pavilion-single-post antra-style-post-2">
       <div class="single-content">
         <div class="entry-content">
-          <p v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-lead ev">
-            以人為主的體驗融入整體空間設計中，完整打造家庭生活場域，創造空間通透感，營造宛如現代美術館般之空間氛圍。
-          </p>
+          <p v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-lead ev">{{ cmsCopy.copy.text1 }}</p>
 
           <section v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-copy-block ev" aria-labelledby="pavilion-fundamentals-title">
-            <h2 id="pavilion-fundamentals-title">Understanding The Fundamentals</h2>
-            <h3>享受、交流、體驗</h3>
-            <p>透過鏡面延伸感打破空間框架限制、以天花格柵創造無邊際之視覺效果，家人間的生活交流互動體現於居家空間內，空間氛圍以「六感體驗」為主軸，體驗生活就是一門藝術的感官饗宴。</p>
+            <h2 id="pavilion-fundamentals-title">{{ cmsCopy.copy.text2 }}</h2>
+            <h3>{{ cmsCopy.copy.text3 }}</h3>
+            <p>{{ cmsCopy.copy.text4 }}</p>
           </section>
 
           <div class="image-content pavilion-image-row" data-elementor-columns-tablet="2" data-elementor-columns-mobile="1">
             <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="column-item ev">
-              <InternalBrandImage src="/section-5/brand-pavilion/interior-main.jpg" alt="集團品牌館客廳與廚房展示空間" />
+              <InternalBrandImage :src="cmsCopy.copy.field5" :alt="cmsCopy.copy.field6" />
             </div>
             <div v-reveal="{ anim: 'opalScaleUp', delay: 100 }" data-ev="opalScaleUp" class="column-item ev" style="animation-delay:100ms">
-              <InternalBrandImage src="/section-5/brand-pavilion/interior-gallery.png" alt="集團品牌館多元空間展示" fit="contain" />
+              <InternalBrandImage :src="cmsCopy.copy.field7" :alt="cmsCopy.copy.field8" fit="contain" />
             </div>
           </div>
 
           <section class="pavilion-gallery" aria-labelledby="pavilion-gallery-title">
             <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
               <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Gallery" />
-              <h2 id="pavilion-gallery-title">Gallery Of Inspiring <span>Kitchen</span> Designs</h2>
+              <h2 id="pavilion-gallery-title">{{ cmsCopy.copy.text9 }}<span>{{ cmsCopy.copy.text10 }}</span>{{ cmsCopy.copy.text11 }}</h2>
             </header>
 
             <div v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-filter ev" role="tablist" aria-label="選擇集團品牌館">
@@ -76,16 +80,16 @@ useSeoMeta({
               <div class="project-text-box">
                 <h3>{{ activePavilion.name }}</h3>
                 <dl>
-                  <div><dt><MapPin aria-hidden="true" />地址</dt><dd>{{ activePavilion.address }}</dd></div>
-                  <div><dt><Clock3 aria-hidden="true" />營業時間</dt><dd>{{ activePavilion.hours }}</dd></div>
+                  <div><dt><MapPin aria-hidden="true" />{{ cmsCopy.copy.text12 }}</dt><dd>{{ activePavilion.address }}</dd></div>
+                  <div><dt><Clock3 aria-hidden="true" />{{ cmsCopy.copy.text13 }}</dt><dd>{{ activePavilion.hours }}</dd></div>
                 </dl>
               </div>
             </div>
           </section>
 
           <section v-reveal="{ anim: 'opalMoveUp' }" class="pavilion-copy-block pavilion-copy-block--last" aria-labelledby="pavilion-styles-title">
-            <h2 id="pavilion-styles-title">Important Information &amp; Guidelines</h2>
-            <h3 class="pavilion-notes-title">注意事項</h3>
+            <h2 id="pavilion-styles-title">{{ cmsCopy.copy.text14 }}</h2>
+            <h3 class="pavilion-notes-title">{{ cmsCopy.copy.text15 }}</h3>
             <ol class="pavilion-notes">
               <li v-for="(notice, index) in pavilionNotice" :key="notice">
                 <span>{{ String(index + 1).padStart(2, '0') }}</span>
@@ -97,6 +101,7 @@ useSeoMeta({
       </div>
     </article>
   </main>
+</template>
 </template>
 
 <style scoped>

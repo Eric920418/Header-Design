@@ -3,7 +3,9 @@ import { NuxtLink } from '#components'
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Plus } from 'lucide-vue-next'
 import type { KitchenSeriesPageData } from '~/data/kitchenSeries'
-import { KITCHEN_STYLES } from '~/data/kitchenStyles'
+import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
+const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
+
 
 const { data } = defineProps<{ data: KitchenSeriesPageData }>()
 const reducedMotion = useReducedMotion()

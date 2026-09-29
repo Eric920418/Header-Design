@@ -1,24 +1,20 @@
 <script setup lang="ts">
-import {
-  systemCabinetCaseStudies,
-  systemCabinetImportance,
-  systemCabinetMaterials,
-  systemCabinetSelectionSteps,
-} from '~/data/kitchenSystemCabinet'
-import { KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
+const cmsCopy = await useCmsResource('view-pages-knowledge-design-systemcabinet', {"designStyleLinks":[{"label":"北歐風","to":"/design-inspiration?style=北歐風"},{"label":"現代風","to":"/design-inspiration?style=現代風"},{"label":"工業風","to":"/design-inspiration?style=工業風"}],"kitchenSeriesLinks":["鄉村","童樂","閤樂","臻美","潮派","君璽","大廚"],"copy":{"field1":"/knowledge","text2":"廚房裝修指南","text3":"廚房系統櫃材質重要嗎？4大重點告訴你！","text4":"廚房系統櫃材質有哪些？常見5大板材比較","text5":"塑合板、木芯板、密集板、美耐板與實木的基材、優缺點及用途比較","text6":"材質","text7":"手機與窄螢幕可左右滑動查看完整比較內容。","text8":"廚房系統櫃材質如何挑選？7步驟教你輕鬆選！","text9":"為了幫助你有條不紊地為自家廚房，選出最適合的系統櫃材質，以下用7大挑選步驟說明，讓你學會如何從預算到美學，從耐用度到環保安心選擇，一次搞定！","text10":" 色彩與紋理：根據家中風格（","text11":"等），挑選合適的木紋、石紋、亮面或霧面烤漆材質，營造統一氛圍。 ","text12":"門板造型：平面簡約、線條雕刻或格柵式鄉村風，各自展現不同氛圍，可依個人喜好與整體搭配做決定。","text13":" 門板顏色推薦：","field14":"/#kitchen-series","text15":"廚房系統櫃材質案例推薦","text16":"SAKURA KITCHEN","text17":"在廚房系統櫃材質的選擇上，始終堅持品質與安心兼具。從主打的MFC塑合板到頂級的FENIX奈米門板、自製的極晶門板，皆展現出對細節的高度重視。並搭配台灣櫻花自製封邊工藝與多道驗證測試，其耐用性與安全性更勝一籌。想了解更多廚房材質案例分享？那就快去看看","field18":"/catalogues/kitchenware-catalog","text19":"廚房系列型錄","text20":"吧！"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
+import { systemCabinetCaseStudies as cmsSeed_systemCabinetCaseStudies, systemCabinetImportance as cmsSeed_systemCabinetImportance, systemCabinetMaterials as cmsSeed_systemCabinetMaterials, systemCabinetSelectionSteps as cmsSeed_systemCabinetSelectionSteps,  } from '~/data/kitchenSystemCabinet'
+import { KITCHEN_GUIDE_ARTICLES as cmsSeed_KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
+const { systemCabinetCaseStudies, systemCabinetImportance, systemCabinetMaterials, systemCabinetSelectionSteps } = await useCmsResource('data-kitchenSystemCabinet', { systemCabinetCaseStudies: cmsSeed_systemCabinetCaseStudies, systemCabinetImportance: cmsSeed_systemCabinetImportance, systemCabinetMaterials: cmsSeed_systemCabinetMaterials, systemCabinetSelectionSteps: cmsSeed_systemCabinetSelectionSteps })
+const { KITCHEN_GUIDE_ARTICLES } = await useCmsResource('data-kitchenGuides', { KITCHEN_GUIDE_ARTICLES: cmsSeed_KITCHEN_GUIDE_ARTICLES })
+
 
 const article = KITCHEN_GUIDE_ARTICLES.find(entry => entry.id === 'systemcabinet')!
 const relatedGuideArticles = KITCHEN_GUIDE_ARTICLES
   .filter(entry => entry.id !== article.id)
   .map(entry => ({ ...entry, categoryLabel: '廚房裝修指南' }))
 
-const designStyleLinks = [
-  { label: '北歐風', to: '/design-inspiration?style=北歐風' },
-  { label: '現代風', to: '/design-inspiration?style=現代風' },
-  { label: '工業風', to: '/design-inspiration?style=工業風' },
-]
+const designStyleLinks = cmsCopy.designStyleLinks
 
-const kitchenSeriesLinks = ['鄉村', '童樂', '閤樂', '臻美', '潮派', '君璽', '大廚']
+const kitchenSeriesLinks = cmsCopy.kitchenSeriesLinks
 
 useSeoMeta({
   title: `${article.title}｜SAKURA 整體廚房`,
@@ -33,9 +29,11 @@ useSeoMeta({
 useHead({
   link: [{ rel: 'canonical', href: article.legacyUrl }],
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="knowledge-article-page">
     <section data-hero-photo="songzhu" class="knowledge-article-breadcrumb hero-includes-header" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-article-breadcrumb__overlay" aria-hidden="true" />
@@ -53,7 +51,7 @@ useHead({
     <article class="knowledge-article" aria-labelledby="system-cabinet-title">
       <header class="knowledge-article__header" v-reveal="{ anim: 'opalMoveUp' }">
         <div class="knowledge-article__meta">
-          <NuxtLink to="/knowledge">廚房裝修指南</NuxtLink>
+          <NuxtLink :to="cmsCopy.copy.field1">{{ cmsCopy.copy.text2 }}</NuxtLink>
           <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
         </div>
         <h1 id="system-cabinet-title">{{ article.title }}</h1>
@@ -65,7 +63,7 @@ useHead({
 
       <div class="knowledge-article__content">
         <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
-          <h2>廚房系統櫃材質重要嗎？4大重點告訴你！</h2>
+          <h2>{{ cmsCopy.copy.text3 }}</h2>
           <p>{{ article.excerpt }}</p>
 
           <div v-for="point in systemCabinetImportance" :key="point.title" class="knowledge-copy-block__point">
@@ -75,13 +73,13 @@ useHead({
         </section>
 
         <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
-          <h2>廚房系統櫃材質有哪些？常見5大板材比較</h2>
+          <h2>{{ cmsCopy.copy.text4 }}</h2>
           <div class="knowledge-material-table" tabindex="0" role="region" aria-label="常見五大廚房系統櫃板材比較表">
             <table>
-              <caption>塑合板、木芯板、密集板、美耐板與實木的基材、優缺點及用途比較</caption>
+              <caption>{{ cmsCopy.copy.text5 }}</caption>
               <thead>
                 <tr>
-                  <th scope="col">材質</th>
+                  <th scope="col">{{ cmsCopy.copy.text6 }}</th>
                   <th v-for="column in systemCabinetMaterials.columns" :key="column" scope="col">{{ column }}</th>
                 </tr>
               </thead>
@@ -93,23 +91,20 @@ useHead({
               </tbody>
             </table>
           </div>
-          <p class="knowledge-material-table__hint">手機與窄螢幕可左右滑動查看完整比較內容。</p>
+          <p class="knowledge-material-table__hint">{{ cmsCopy.copy.text7 }}</p>
         </section>
 
         <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
-          <h2>廚房系統櫃材質如何挑選？7步驟教你輕鬆選！</h2>
-          <p>為了幫助你有條不紊地為自家廚房，選出最適合的系統櫃材質，以下用7大挑選步驟說明，讓你學會如何從預算到美學，從耐用度到環保安心選擇，一次搞定！</p>
+          <h2>{{ cmsCopy.copy.text8 }}</h2>
+          <p>{{ cmsCopy.copy.text9 }}</p>
 
           <div v-for="step in systemCabinetSelectionSteps" :key="step.title" class="knowledge-copy-block__point">
             <h3>{{ step.title }}</h3>
             <ul>
               <template v-if="step.title.startsWith('STEP6')">
-                <li>
-                  色彩與紋理：根據家中風格（<template v-for="(style, styleIndex) in designStyleLinks" :key="style.label"><NuxtLink :to="style.to"><strong>{{ style.label }}</strong></NuxtLink><span v-if="styleIndex < designStyleLinks.length - 1">、</span></template>等），挑選合適的木紋、石紋、亮面或霧面烤漆材質，營造統一氛圍。
-                </li>
-                <li>門板造型：平面簡約、線條雕刻或格柵式鄉村風，各自展現不同氛圍，可依個人喜好與整體搭配做決定。</li>
-                <li>
-                  門板顏色推薦：<template v-for="(series, seriesIndex) in kitchenSeriesLinks" :key="series"><NuxtLink to="/#kitchen-series"><strong>{{ series }}</strong></NuxtLink><span v-if="seriesIndex < kitchenSeriesLinks.length - 1">、</span></template>。
+                <li>{{ cmsCopy.copy.text10 }}<template v-for="(style, styleIndex) in designStyleLinks" :key="style.label"><NuxtLink :to="style.to"><strong>{{ style.label }}</strong></NuxtLink><span v-if="styleIndex < designStyleLinks.length - 1">、</span></template>{{ cmsCopy.copy.text11 }}</li>
+                <li>{{ cmsCopy.copy.text12 }}</li>
+                <li>{{ cmsCopy.copy.text13 }}<template v-for="(series, seriesIndex) in kitchenSeriesLinks" :key="series"><NuxtLink :to="cmsCopy.copy.field14"><strong>{{ series }}</strong></NuxtLink><span v-if="seriesIndex < kitchenSeriesLinks.length - 1">、</span></template>。
                 </li>
               </template>
               <template v-else>
@@ -120,7 +115,7 @@ useHead({
         </section>
 
         <section class="knowledge-copy-block knowledge-case-section" aria-labelledby="system-cabinet-cases" v-reveal="{ anim: 'opalMoveUp' }">
-          <h2 id="system-cabinet-cases">廚房系統櫃材質案例推薦</h2>
+          <h2 id="system-cabinet-cases">{{ cmsCopy.copy.text15 }}</h2>
 
           <article v-for="(caseStudy, caseIndex) in systemCabinetCaseStudies" :key="caseStudy.title" class="knowledge-case">
             <h3>
@@ -143,7 +138,7 @@ useHead({
         </section>
 
         <section class="knowledge-copy-block knowledge-article__closing" v-reveal="{ anim: 'opalMoveUp' }">
-          <p><strong>SAKURA KITCHEN</strong>在廚房系統櫃材質的選擇上，始終堅持品質與安心兼具。從主打的MFC塑合板到頂級的FENIX奈米門板、自製的極晶門板，皆展現出對細節的高度重視。並搭配台灣櫻花自製封邊工藝與多道驗證測試，其耐用性與安全性更勝一籌。想了解更多廚房材質案例分享？那就快去看看<NuxtLink to="/catalogues/kitchenware-catalog"><strong>廚房系列型錄</strong></NuxtLink>吧！</p>
+          <p><strong>{{ cmsCopy.copy.text16 }}</strong>{{ cmsCopy.copy.text17 }}<NuxtLink :to="cmsCopy.copy.field18"><strong>{{ cmsCopy.copy.text19 }}</strong></NuxtLink>{{ cmsCopy.copy.text20 }}</p>
         </section>
 
       </div>
@@ -151,6 +146,7 @@ useHead({
 
     <InternalKnowledgeRelatedCarousel :articles="relatedGuideArticles" variant="home07" />
   </main>
+</template>
 </template>
 
 <style scoped>
@@ -170,7 +166,7 @@ useHead({
   padding: 0 30px;
   place-items: center;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 36% / cover no-repeat fixed;
 }
 
 .knowledge-article-breadcrumb__overlay {

@@ -1,15 +1,10 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-components-SiteFooter', {"sitemapGroups":[{"title":"設計案例","links":[["品牌系列・AI 廚房","/home-style/aikitchen"],["設計靈感","/design-inspiration"],["廚房裝修指南","/knowledge"],["品牌系列型錄","/catalogues/kitchenware-catalog"]]},{"title":"廚房產品","links":[["SAKURA 廚電","/products/sakura"],["SVAGO","/products/svago"],["TEKA","/products/teka"],["除油煙機系列","/products/sakura/range-hood"],["近吸系列","/products/sakura/range-hood/near-suction"],["廚房商品型錄","/catalogues/catalog"]]},{"title":"門市與服務","links":[["服務流程","/service-process"],["案例門市","/gallery"]]},{"title":"優惠消息","links":[["優惠消息","/news"]]},{"title":"品牌承諾","links":[["品牌優勢","/about/advantage"],["品牌館","/about/exhibition"],["關於櫻花","/about/introduce"]]},{"title":"合作專區","links":[["我要加盟","/franchising/intro"],["加盟資料下載","/franchising/download"],["建商專區","/builders"],["建商整體廚房","/builders/sakura-kitchen"],["建商專區型錄","/builders/catalogues"]]}],"copy":{"text1":" 網站地圖","field2":"/privacy","text3":"隱私權政策","field4":"https://board.sakura-kitchenlife.com.tw/","field5":"/icons/digital-board.png","field6":"","field7":"https://www.youtube.com/channel/UCvI2keNeq7WKawIU5ct1h9A","field8":"/icons/youtube.png","field9":"","text10":"Copyright © ","text11":"Taiwan Sakura Corporation.","text12":" All rights reserved","field13":"/home-2026/footer/sakura-kitchen.png","field14":"SAKURA Kitchen"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowUp, ChevronDown } from 'lucide-vue-next'
 
 const sitemapOpen = ref(false)
-const sitemapGroups = [
-  { title: '設計案例', links: [['品牌系列・AI 廚房', '/home-style/aikitchen'], ['設計靈感', '/design-inspiration'], ['廚房裝修指南', '/knowledge'], ['品牌系列型錄', '/catalogues/kitchenware-catalog']] },
-  { title: '廚房產品', links: [['SAKURA 廚電', '/products/sakura'], ['SVAGO', '/products/svago'], ['TEKA', '/products/teka'], ['除油煙機系列', '/products/sakura/range-hood'], ['近吸系列', '/products/sakura/range-hood/near-suction'], ['廚房商品型錄', '/catalogues/catalog']] },
-  { title: '門市與服務', links: [['服務流程', '/service-process'], ['案例門市', '/gallery']] },
-  { title: '優惠消息', links: [['優惠消息', '/news']] },
-  { title: '品牌承諾', links: [['品牌優勢', '/about/advantage'], ['品牌館', '/about/exhibition'], ['關於櫻花', '/about/introduce']] },
-  { title: '合作專區', links: [['我要加盟', '/franchising/intro'], ['加盟資料下載', '/franchising/download'], ['建商專區', '/builders'], ['建商整體廚房', '/builders/sakura-kitchen'], ['建商專區型錄', '/builders/catalogues']] },
-]
+const sitemapGroups = cmsCopy.sitemapGroups
 
 const footerSocialLeft = ref('0px')
 const footerSocialGap = ref('48px')
@@ -57,25 +52,26 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', alignSocialLinksWithHeader)
   headerResizeObserver?.disconnect()
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <footer id="footer-navigation" data-breadcrumb-root class="relative w-full overflow-hidden bg-[#1C1C1D] text-white">
-    <div aria-hidden class="absolute inset-0 bg-[url('/home-2026/footer/kitchen-background.webp')] bg-cover bg-center opacity-20" />
+    <div aria-hidden class="absolute inset-0 bg-[var(--cms-image-asset_9b0c0f62, url('/home-2026/footer/kitchen-background.webp'))] bg-cover bg-center opacity-20" />
     <div class="relative z-10 mx-auto flex max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]" :class="sitemapOpen ? 'h-[144px] lg:h-[120px]' : 'h-[220px]'">
       <nav aria-label="頁尾連結" class="flex flex-wrap items-center gap-x-10 gap-y-4 font-cjk-sans text-[15px] text-white/80 md:text-[18px]">
-        <button type="button" class="flex items-center gap-2 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4" :aria-expanded="sitemapOpen" aria-controls="footer-sitemap" @click="sitemapOpen = !sitemapOpen">
-          網站地圖<ChevronDown aria-hidden="true" class="h-4 w-4" :class="{ 'rotate-180': sitemapOpen }" />
+        <button type="button" class="flex items-center gap-2 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4" :aria-expanded="sitemapOpen" aria-controls="footer-sitemap" @click="sitemapOpen = !sitemapOpen">{{ cmsCopy.copy.text1 }}<ChevronDown aria-hidden="true" class="h-4 w-4" :class="{ 'rotate-180': sitemapOpen }" />
         </button>
-        <NuxtLink to="/privacy" target="_blank" rel="noopener noreferrer">隱私權政策</NuxtLink>
+        <NuxtLink :to="cmsCopy.copy.field2" target="_blank" rel="noopener noreferrer">{{ cmsCopy.copy.text3 }}</NuxtLink>
       </nav>
       <div
         ref="footerSocialLinks"
         class="footer-social-links flex h-10 items-center gap-12 lg:absolute lg:top-[60px] lg:left-[var(--footer-social-left)] lg:gap-[var(--footer-social-gap)]"
         :style="{ '--footer-social-left': footerSocialLeft, '--footer-social-gap': footerSocialGap }"
       >
-        <a href="https://board.sakura-kitchenlife.com.tw/" target="_blank" rel="noopener noreferrer" aria-label="數位展板" class="flex h-10 items-center"><img src="/icons/digital-board.png" alt="" class="h-[35px] w-auto" /></a>
-        <a href="https://www.youtube.com/channel/UCvI2keNeq7WKawIU5ct1h9A" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="flex h-10 items-center"><img src="/icons/youtube.png" alt="" class="h-[40px] w-auto translate-y-[7px]" /></a>
+        <a :href="cmsCopy.copy.field4" target="_blank" rel="noopener noreferrer" aria-label="數位展板" class="flex h-10 items-center"><img :src="cmsCopy.copy.field5" :alt="cmsCopy.copy.field6" class="h-[35px] w-auto" /></a>
+        <a :href="cmsCopy.copy.field7" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="flex h-10 items-center"><img :src="cmsCopy.copy.field8" :alt="cmsCopy.copy.field9" class="h-[40px] w-auto translate-y-[7px]" /></a>
       </div>
     </div>
     <nav v-show="sitemapOpen" id="footer-sitemap" aria-label="網站地圖" class="relative z-10 mx-auto grid max-w-[1410px] grid-cols-2 gap-x-6 gap-y-8 pb-12 pr-[86px] pl-[15px] font-cjk-sans md:grid-cols-3 md:pl-[30px] lg:grid-cols-6">
@@ -87,10 +83,10 @@ onBeforeUnmount(() => {
       </section>
     </nav>
     <div class="relative z-10 flex h-[70px] items-center justify-center whitespace-nowrap border-y border-white/10 px-[10px] text-center font-cjk-sans text-[11px] text-white/65 sm:px-[85px] sm:text-[13px] md:text-[16px]">
-      <span>Copyright ©&nbsp;</span><span class="text-[#CAA05C]">Taiwan Sakura Corporation.</span><span>&nbsp;All rights reserved</span>
+      <span>{{ cmsCopy.copy.text10 }}</span><span class="text-[#CAA05C]">{{ cmsCopy.copy.text11 }}</span><span>{{ cmsCopy.copy.text12 }}</span>
     </div>
     <div class="relative h-[100px] lg:h-[310px]">
-      <img src="/home-2026/footer/sakura-kitchen.png" alt="SAKURA Kitchen" class="absolute bottom-[30px] left-1/2 z-10 w-[calc(100%-30px)] max-w-[1410px] -translate-x-1/2 object-contain object-bottom" />
+      <img :src="cmsCopy.copy.field13" :alt="cmsCopy.copy.field14" class="absolute bottom-[30px] left-1/2 z-10 w-[calc(100%-30px)] max-w-[1410px] -translate-x-1/2 object-contain object-bottom" />
     </div>
   </footer>
   <button
@@ -101,4 +97,5 @@ onBeforeUnmount(() => {
   >
     <ArrowUp class="h-5 w-5" aria-hidden="true" />
   </button>
+</template>
 </template>

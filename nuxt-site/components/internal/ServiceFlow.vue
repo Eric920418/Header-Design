@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { serviceSteps } from '~/data/service'
+import { serviceSteps as cmsSeed_serviceSteps } from '~/data/service'
+const { serviceSteps } = await useCmsResource('data-service', { serviceSteps: cmsSeed_serviceSteps })
+
 
 const expanded = ref<string | null>(null)
 

@@ -27,7 +27,7 @@ const parentRoute = computed(() => props.designListUrl || (fromDesignInspiration
   isolation: isolate;
   overflow: hidden;
   padding: 207px 30px 139px;
-  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 48% / cover no-repeat fixed;
   color: #fff;
 }
 

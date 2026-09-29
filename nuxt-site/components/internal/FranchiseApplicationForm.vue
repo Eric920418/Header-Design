@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ArrowRight, ExternalLink, LoaderCircle, Plus } from 'lucide-vue-next'
-import { FRANCHISE_OFFICIAL_FORM_URL } from '~/data/franchise'
+import { FRANCHISE_OFFICIAL_FORM_URL as cmsSeed_FRANCHISE_OFFICIAL_FORM_URL } from '~/data/franchise'
+const { FRANCHISE_OFFICIAL_FORM_URL } = await useCmsResource('data-franchise', { FRANCHISE_OFFICIAL_FORM_URL: cmsSeed_FRANCHISE_OFFICIAL_FORM_URL })
+
 
 type FormKey = 'name' | 'email' | 'phone' | 'experience' | 'budget' | 'area' | 'timeline' | 'consent'
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
 const config = useRuntimeConfig()
-const endpoint = computed(() => String(config.public.franchiseApplicationEndpoint || '').trim())
+const endpoint = computed(() => '/api/forms/franchise')
+const requestKey = ref('')
 const formElement = ref<HTMLFormElement | null>(null)
 const submitState = ref<SubmitState>('idle')
 const notice = ref<{ title: string, message: string, detail?: string } | null>(null)
@@ -21,6 +24,8 @@ const form = reactive({
   timeline: '',
   consent: false,
 })
+
+watch(form,()=>{if(submitState.value!=='submitting')requestKey.value=''}, {deep:true})
 
 const errors = reactive<Record<FormKey, string>>({
   name: '',
@@ -60,12 +65,7 @@ const focusFirstError = async () => {
   formElement.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
 }
 
-const formatSubmitError = (error: unknown) => {
-  if (!(error instanceof Error)) return String(error)
-  const responseError = error as Error & { status?: number, statusCode?: number, statusText?: string }
-  const status = responseError.statusCode || responseError.status
-  return [status ? `HTTP ${status}` : '', responseError.statusText || '', `${error.name}: ${error.message}`].filter(Boolean).join(' · ')
-}
+const formatSubmitError = (error: unknown) => useCmsAdmin().message(error)
 
 const resetForm = () => {
   form.name = ''
@@ -80,6 +80,7 @@ const resetForm = () => {
 }
 
 const submit = async () => {
+  if(submitState.value==='submitting')return
   notice.value = null
   submitState.value = 'idle'
 
@@ -88,7 +89,7 @@ const submit = async () => {
     notice.value = {
       title: '申請資料尚未完成',
       message: '請修正表單中標示的必填欄位後再送出。',
-      detail: 'ValidationError: one or more required fields are invalid.',
+      detail: '請確認必填欄位，並勾選資料使用同意。',
     }
     await focusFirstError()
     return
@@ -105,10 +106,12 @@ const submit = async () => {
   }
 
   submitState.value = 'submitting'
+  if (!requestKey.value) requestKey.value = crypto.randomUUID()
 
   try {
     await $fetch(endpoint.value, {
       method: 'POST',
+      headers: { 'Idempotency-Key': requestKey.value },
       body: {
         name: form.name.trim(),
         email: form.email.trim(),
@@ -121,6 +124,7 @@ const submit = async () => {
       },
     })
     submitState.value = 'success'
+    requestKey.value = ''
     notice.value = {
       title: '申請資料已送出',
       message: '感謝您的申請，櫻花整體廚房將依您留下的聯絡方式與您聯繫。',
@@ -131,8 +135,8 @@ const submit = async () => {
     submitState.value = 'error'
     notice.value = {
       title: '申請資料送出失敗',
-      message: '後台沒有完成接收，輸入內容未在本頁儲存。請稍後重試或改用現行官方申請表。',
-      detail: `${formatSubmitError(error)} · Endpoint: ${endpoint.value}`,
+      message: '目前無法確認接收結果，已保留輸入。請重試，相同送出不會重複建單。請稍後重試或改用現行官方申請表。',
+      detail: formatSubmitError(error),
     }
   }
 }
@@ -150,17 +154,17 @@ const submit = async () => {
       <div class="application-form__identity">
         <label>
           <span>消費者姓名 *</span>
-          <input v-model="form.name" name="name" type="text" autocomplete="name" :aria-invalid="Boolean(errors.name)" aria-describedby="application-name-error" @blur="validateField('name')" />
+          <input :disabled="submitState === 'submitting'" v-model="form.name" name="name" type="text" autocomplete="name" :aria-invalid="Boolean(errors.name)" aria-describedby="application-name-error" @blur="validateField('name')" />
           <small v-if="errors.name" id="application-name-error">{{ errors.name }}</small>
         </label>
         <label>
           <span>電子郵件 *</span>
-          <input v-model="form.email" name="email" type="email" inputmode="email" autocomplete="email" :aria-invalid="Boolean(errors.email)" aria-describedby="application-email-error" @blur="validateField('email')" />
+          <input :disabled="submitState === 'submitting'" v-model="form.email" name="email" type="email" inputmode="email" autocomplete="email" :aria-invalid="Boolean(errors.email)" aria-describedby="application-email-error" @blur="validateField('email')" />
           <small v-if="errors.email" id="application-email-error">{{ errors.email }}</small>
         </label>
         <label>
           <span>聯絡電話 *</span>
-          <input v-model="form.phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" :aria-invalid="Boolean(errors.phone)" aria-describedby="application-phone-error" @blur="validateField('phone')" />
+          <input :disabled="submitState === 'submitting'" v-model="form.phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" :aria-invalid="Boolean(errors.phone)" aria-describedby="application-phone-error" @blur="validateField('phone')" />
           <small v-if="errors.phone" id="application-phone-error">{{ errors.phone }}</small>
         </label>
       </div>
@@ -171,8 +175,8 @@ const submit = async () => {
         <div class="application-field application-field--experience" :aria-invalid="Boolean(errors.experience)" aria-describedby="application-experience-error">
           <span>您有過創業或經營加盟店的經驗嗎？ *</span>
           <div class="application-form__radios">
-            <label><input v-model="form.experience" type="radio" name="experience" value="是" @change="validateField('experience')" /><span>是</span></label>
-            <label><input v-model="form.experience" type="radio" name="experience" value="否" @change="validateField('experience')" /><span>否</span></label>
+            <label><input :disabled="submitState === 'submitting'" v-model="form.experience" type="radio" name="experience" value="是" @change="validateField('experience')" /><span>是</span></label>
+            <label><input :disabled="submitState === 'submitting'" v-model="form.experience" type="radio" name="experience" value="否" @change="validateField('experience')" /><span>否</span></label>
           </div>
           <small v-if="errors.experience" id="application-experience-error">{{ errors.experience }}</small>
         </div>
@@ -180,7 +184,7 @@ const submit = async () => {
         <label class="application-field">
           <span>您預計投入多少創業資本？ *</span>
           <span class="application-select">
-            <select v-model="form.budget" name="budget" :aria-invalid="Boolean(errors.budget)" aria-describedby="application-budget-error" @blur="validateField('budget')" @change="validateField('budget')">
+            <select :disabled="submitState === 'submitting'" v-model="form.budget" name="budget" :aria-invalid="Boolean(errors.budget)" aria-describedby="application-budget-error" @blur="validateField('budget')" @change="validateField('budget')">
               <option value="" disabled>預計投入的預算</option>
               <option v-for="option in budgetOptions" :key="option" :value="option">{{ option }}</option>
             </select>
@@ -191,14 +195,14 @@ const submit = async () => {
 
         <label class="application-field">
           <span>您希望開店的地區是？ *</span>
-          <input v-model="form.area" name="area" type="text" autocomplete="address-level2" placeholder="（城市／區域）" :aria-invalid="Boolean(errors.area)" aria-describedby="application-area-error" @blur="validateField('area')" />
+          <input :disabled="submitState === 'submitting'" v-model="form.area" name="area" type="text" autocomplete="address-level2" placeholder="（城市／區域）" :aria-invalid="Boolean(errors.area)" aria-describedby="application-area-error" @blur="validateField('area')" />
           <small v-if="errors.area" id="application-area-error">{{ errors.area }}</small>
         </label>
 
         <label class="application-field">
           <span>請問您預計多久後創業？ *</span>
           <span class="application-select">
-            <select v-model="form.timeline" name="timeline" :aria-invalid="Boolean(errors.timeline)" aria-describedby="application-timeline-error" @blur="validateField('timeline')" @change="validateField('timeline')">
+            <select :disabled="submitState === 'submitting'" v-model="form.timeline" name="timeline" :aria-invalid="Boolean(errors.timeline)" aria-describedby="application-timeline-error" @blur="validateField('timeline')" @change="validateField('timeline')">
               <option value="" disabled>預計多久後創業</option>
               <option v-for="option in timelineOptions" :key="option" :value="option">{{ option }}</option>
             </select>
@@ -209,7 +213,7 @@ const submit = async () => {
       </fieldset>
 
       <label class="application-form__consent">
-        <input v-model="form.consent" name="consent" type="checkbox" :aria-invalid="Boolean(errors.consent)" aria-describedby="application-consent-error" @change="validateField('consent')" />
+        <input :disabled="submitState === 'submitting'" v-model="form.consent" name="consent" type="checkbox" :aria-invalid="Boolean(errors.consent)" aria-describedby="application-consent-error" @change="validateField('consent')" />
         <span>本人已完整審閱及清楚知悉、瞭解並同意台灣櫻花股份有限公司 <NuxtLink to="/privacy" target="_blank">【個人資料運用告知聲明】</NuxtLink></span>
         <small v-if="errors.consent" id="application-consent-error">{{ errors.consent }}</small>
       </label>

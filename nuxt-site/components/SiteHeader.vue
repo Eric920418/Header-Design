@@ -1,73 +1,18 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-components-SiteHeader', {"leftNav":[{"label":"設計案例","seriesMega":true,"children":[{"label":"品牌系列"},{"label":"設計靈感","to":"/design-inspiration"},{"label":"廚房裝修指南","to":"/knowledge"},{"label":"品牌系列型錄","to":"/catalogues/kitchenware-catalog","external":true}]},{"label":"廚房產品","mega":[{"label":"SAKURA 廚電","image":"/products/sakura.jpg","logo":"/home-2026/logos/sakura.svg","to":"/products/sakura"},{"label":"SVAGO","image":"/products/svago.jpg","logo":"/home-2026/logos/svago.svg","to":"/products/svago"},{"label":"TEKA","image":"/products/teka.jpg","logo":"/home-2026/logos/teka.svg","to":"/products/teka"}]},{"label":"門市與服務","children":[{"label":"服務流程","to":"/service-process"},{"label":"案例門市","to":"/gallery"},{"label":"到府丈量","to":"https://www.sakura-kitchenlife.com.tw/measuring","external":true},{"label":"客服中心","to":"https://icare.sakura.com.tw","external":true}]},{"label":"優惠消息","to":"/news","children":[{"label":"優惠活動","to":"/news/activities"},{"label":"最新消息","to":"/news/latest"},{"label":"媒體影音","to":"/news/video"}]}],"rightNav":[{"label":"品牌承諾","children":[{"label":"品牌優勢","to":"/about/advantage"},{"label":"集團品牌館","to":"/about/exhibition"},{"label":"關於我們","to":"/about/introduce"}]},{"label":"我要加盟","to":"/franchising/intro","children":[{"label":"加盟介紹","to":"/franchising/intro#introduction"},{"label":"加盟優勢","to":"/franchising/intro#advantages"},{"label":"加盟金與流程","to":"/franchising/intro#franchise-process"},{"label":"加盟Q&A","to":"/franchising/intro#franchise-faq"}]},{"label":"建商專區","to":"/builders","children":[{"label":"建商專區首頁","to":"/builders"},{"label":"SAKURA KITCHEN","to":"/builders/sakura-kitchen"},{"label":"建商專區型錄","to":"/builders/catalogues"}]},{"label":"櫻花集團","to":"https://www.sakura.com.tw/"}],"copy":{"field1":"/catalogues/catalog","text2":" 廚房商品型錄 ","text3":"Design Inspiration","text4":"品牌系列","text5":"Kitchen Series","text6":"品牌系列","text7":"目前開放 AI Kitchen","text8":"尚未開放","field9":"/","field10":"/home-2026/logos/sakura-kitchen-horizontal.svg","field11":"SAKURA Kitchen","field12":"/","field13":"/home-2026/logos/sakura-kitchen-horizontal.svg","field14":"SAKURA Kitchen","text15":"總覽","text16":"品牌系列","text17":"尚未開放","text18":"・尚未開放","field19":"/catalogues/catalog","text20":"廚房商品型錄","text21":"站內搜尋"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowRight, ChevronDown, Menu, Search, X } from 'lucide-vue-next'
-import { KITCHEN_STYLES } from '~/data/kitchenStyles'
+import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
+const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
+
 
 type NavChild = { label: string; to?: string; external?: boolean; disabled?: boolean }
 type MegaCard = { label: string; image: string; logo: string; to?: string }
 type NavItem = { label: string; to?: string; children?: NavChild[]; mega?: MegaCard[]; seriesMega?: boolean }
 
-const leftNav: NavItem[] = [
-  {
-    label: '設計案例',
-    seriesMega: true,
-    children: [
-      { label: '品牌系列' },
-      { label: '設計靈感', to: '/design-inspiration' },
-      { label: '廚房裝修指南', to: '/knowledge' },
-      { label: '品牌系列型錄', to: '/catalogues/kitchenware-catalog', external: true },
-    ],
-  },
-  {
-    label: '廚房產品',
-    mega: [
-      { label: 'SAKURA 廚電', image: '/products/sakura.jpg', logo: '/home-2026/logos/sakura.svg', to: '/products/sakura' },
-      { label: 'SVAGO', image: '/products/svago.jpg', logo: '/home-2026/logos/svago.svg', to: '/products/svago' },
-      { label: 'TEKA', image: '/products/teka.jpg', logo: '/home-2026/logos/teka.svg', to: '/products/teka' },
-    ],
-  },
-  {
-    label: '門市與服務',
-    children: [
-      { label: '服務流程', to: '/service-process' },
-      { label: '案例門市', to: '/gallery' },
-      { label: '到府丈量', to: 'https://www.sakura-kitchenlife.com.tw/measuring', external: true },
-      { label: '客服中心', to: 'https://icare.sakura.com.tw', external: true },
-    ],
-  },
-  {
-    label: '優惠消息',
-    to: '/news',
-    children: [
-      { label: '優惠活動', to: '/news/activities' },
-      { label: '最新消息', to: '/news/latest' },
-      { label: '媒體影音', to: '/news/video' },
-    ],
-  },
-]
+const leftNav: NavItem[] = cmsCopy.leftNav
 
-const rightNav: NavItem[] = [
-  { label: '品牌承諾', children: [{ label: '品牌優勢', to: '/about/advantage' }, { label: '集團品牌館', to: '/about/exhibition' }, { label: '關於我們', to: '/about/introduce' }] },
-  {
-    label: '我要加盟',
-    to: '/franchising/intro',
-    children: [
-      { label: '加盟介紹', to: '/franchising/intro#introduction' },
-      { label: '加盟優勢', to: '/franchising/intro#advantages' },
-      { label: '加盟金與流程', to: '/franchising/intro#franchise-process' },
-      { label: '加盟Q&A', to: '/franchising/intro#franchise-faq' },
-    ],
-  },
-  {
-    label: '建商專區',
-    to: '/builders',
-    children: [
-      { label: '建商專區首頁', to: '/builders' },
-      { label: 'SAKURA KITCHEN', to: '/builders/sakura-kitchen' },
-      { label: '建商專區型錄', to: '/builders/catalogues' },
-    ],
-  },
-  { label: '櫻花集團', to: 'https://www.sakura.com.tw/' },
-]
+const rightNav: NavItem[] = cmsCopy.rightNav
 
 const mobileOpen = ref(false)
 const searchOpen = ref(false)
@@ -144,9 +89,11 @@ function handleHeaderClick(event: MouseEvent) {
   const target = event.target
   if (target instanceof HTMLElement && target.closest('a')) closeAllMenus()
 }
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <header
     data-breadcrumb-root
     class="fixed inset-x-0 top-0 z-[100] h-[var(--site-header-height)] font-cjk-sans"
@@ -209,8 +156,7 @@ function handleHeaderClick(event: MouseEvent) {
                         </div>
                       </template>
                     </div>
-                    <NuxtLink to="/catalogues/catalog" class="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] transition-colors hover:text-[#CAA05C]">
-                      廚房商品型錄 <ArrowRight class="h-4 w-4" />
+                    <NuxtLink :to="cmsCopy.copy.field1" class="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] transition-colors hover:text-[#CAA05C]">{{ cmsCopy.copy.text2 }}<ArrowRight class="h-4 w-4" />
                     </NuxtLink>
                   </div>
                 </div>
@@ -243,9 +189,9 @@ function handleHeaderClick(event: MouseEvent) {
                   <div class="mx-auto max-w-[1512px] px-5 py-7 xl:px-12">
                     <div class="grid grid-cols-[210px_minmax(0,1fr)] gap-7 xl:grid-cols-[230px_minmax(0,1fr)] xl:gap-10">
                       <div class="border-r border-[#E3E3E8] pr-7 xl:pr-10">
-                        <p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Design Inspiration</p>
+                        <p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">{{ cmsCopy.copy.text3 }}</p>
                         <h2 class="mt-1 flex items-center gap-3 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">
-                          <span>品牌系列</span>
+                          <span>{{ cmsCopy.copy.text4 }}</span>
                           <ArrowRight aria-hidden="true" class="h-5 w-5 text-[#CAA05C]" />
                         </h2>
                         <nav aria-label="設計案例分類" class="mt-5 border-t border-[#E3E3E8] pt-2">
@@ -264,8 +210,8 @@ function handleHeaderClick(event: MouseEvent) {
 
                       <div class="min-w-0">
                         <div class="mb-3 flex items-end justify-between">
-                          <div><p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">Kitchen Series</p><h2 class="mt-1 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">品牌系列</h2></div>
-                          <p class="text-xs text-[#9F9FA4]">目前開放 AI Kitchen</p>
+                          <div><p class="text-[11px] uppercase tracking-[0.18em] text-[#9F9FA4]">{{ cmsCopy.copy.text5 }}</p><h2 class="mt-1 font-display text-[24px] font-semibold leading-[30px] text-[#1C1C1D]">{{ cmsCopy.copy.text6 }}</h2></div>
+                          <p class="text-xs text-[#9F9FA4]">{{ cmsCopy.copy.text7 }}</p>
                         </div>
                         <div class="grid grid-cols-5 gap-3 xl:gap-4">
                           <template v-for="style in KITCHEN_STYLES" :key="style.slug">
@@ -277,7 +223,7 @@ function handleHeaderClick(event: MouseEvent) {
                             <div v-else aria-disabled="true" class="relative aspect-[16/10] cursor-not-allowed overflow-hidden rounded-xl bg-[#1C1C1D] opacity-55">
                               <img :src="style.image" :alt="style.zh" class="absolute inset-0 h-full w-full object-cover grayscale" />
                               <span class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
-                              <span class="absolute right-2 top-2 rounded-full border border-white/30 px-2 py-0.5 text-[9px] text-white/70">尚未開放</span>
+                              <span class="absolute right-2 top-2 rounded-full border border-white/30 px-2 py-0.5 text-[9px] text-white/70">{{ cmsCopy.copy.text8 }}</span>
                               <span class="absolute inset-x-0 bottom-0 p-3 text-white"><span class="block text-[15px]">{{ style.zh }}</span><span class="block truncate text-[11px] text-white/70">{{ style.en }}</span></span>
                             </div>
                           </template>
@@ -290,8 +236,8 @@ function handleHeaderClick(event: MouseEvent) {
             </div>
           </div>
 
-          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="site-header__desktop-logo flex w-[160px] shrink-0 items-center justify-center min-[1200px]:w-[266px]">
-            <img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA Kitchen" width="266" height="21" class="h-auto w-full object-contain" />
+          <NuxtLink :to="cmsCopy.copy.field9" aria-label="SAKURA Kitchen 首頁" class="site-header__desktop-logo flex w-[160px] shrink-0 items-center justify-center min-[1200px]:w-[266px]">
+            <img :src="cmsCopy.copy.field10" :alt="cmsCopy.copy.field11" width="266" height="21" class="h-auto w-full object-contain" />
           </NuxtLink>
 
           <div class="site-header__nav-side site-header__nav-side--right">
@@ -337,7 +283,7 @@ function handleHeaderClick(event: MouseEvent) {
         </nav>
 
         <div class="flex w-full items-center justify-between lg:hidden">
-          <NuxtLink to="/" aria-label="SAKURA Kitchen 首頁" class="w-[184px]"><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA Kitchen" width="266" height="21" class="h-auto w-full" /></NuxtLink>
+          <NuxtLink :to="cmsCopy.copy.field12" aria-label="SAKURA Kitchen 首頁" class="w-[184px]"><img :src="cmsCopy.copy.field13" :alt="cmsCopy.copy.field14" width="266" height="21" class="h-auto w-full" /></NuxtLink>
           <div class="flex items-center gap-5 text-white"><button type="button" aria-label="搜尋" class="flex h-10 w-10 items-center justify-center" @click="searchOpen = true"><Search class="h-[15px] w-[15px]" /></button><button :aria-label="mobileOpen ? '關閉選單' : '開啟選單'" @click="mobileOpen = !mobileOpen"><X v-if="mobileOpen" class="h-7 w-7" /><Menu v-else class="h-7 w-7" /></button></div>
         </div>
       </div>
@@ -349,15 +295,15 @@ function handleHeaderClick(event: MouseEvent) {
         <NuxtLink v-else :to="item.to || '#'" class="block px-6 py-4">{{ item.label }}</NuxtLink>
         <div v-if="expanded === index" class="bg-white/5 px-8 py-2">
           <template v-if="item.children">
-            <NuxtLink v-if="item.to" :to="item.to" class="block py-3 text-sm text-[#CAA05C]">{{ item.label }}總覽</NuxtLink>
+            <NuxtLink v-if="item.to" :to="item.to" class="block py-3 text-sm text-[#CAA05C]">{{ item.label }}{{ cmsCopy.copy.text15 }}</NuxtLink>
             <template v-if="item.seriesMega">
-              <p class="pb-2 pt-3 text-xs uppercase tracking-[.16em] text-[#CAA05C]">品牌系列</p>
+              <p class="pb-2 pt-3 text-xs uppercase tracking-[.16em] text-[#CAA05C]">{{ cmsCopy.copy.text16 }}</p>
               <template v-for="style in KITCHEN_STYLES" :key="style.slug">
                 <NuxtLink v-if="style.available && style.route" :to="style.route" class="flex items-center justify-between py-3 text-sm text-white">
                   <span>{{ style.zh }}</span><span class="text-xs text-white/55">{{ style.en }}</span>
                 </NuxtLink>
                 <span v-else aria-disabled="true" class="flex cursor-not-allowed items-center justify-between py-3 text-sm text-white/35">
-                  <span>{{ style.zh }}</span><span class="text-xs">尚未開放</span>
+                  <span>{{ style.zh }}</span><span class="text-xs">{{ cmsCopy.copy.text17 }}</span>
                 </span>
               </template>
             </template>
@@ -370,9 +316,9 @@ function handleHeaderClick(event: MouseEvent) {
           <template v-else>
             <template v-for="card in item.mega" :key="card.label">
               <NuxtLink v-if="card.to" :to="card.to" class="block py-3 text-sm text-white/80">{{ card.label }}</NuxtLink>
-              <span v-else aria-disabled="true" class="block cursor-not-allowed py-3 text-sm text-white/35">{{ card.label }}・尚未開放</span>
+              <span v-else aria-disabled="true" class="block cursor-not-allowed py-3 text-sm text-white/35">{{ card.label }}{{ cmsCopy.copy.text18 }}</span>
             </template>
-            <NuxtLink to="/catalogues/catalog" class="block py-3 text-sm text-[#CAA05C]">廚房商品型錄</NuxtLink>
+            <NuxtLink :to="cmsCopy.copy.field19" class="block py-3 text-sm text-[#CAA05C]">{{ cmsCopy.copy.text20 }}</NuxtLink>
           </template>
         </div>
       </div>
@@ -380,11 +326,12 @@ function handleHeaderClick(event: MouseEvent) {
 
     <div v-if="searchOpen" class="fixed inset-0 z-[120] flex items-start justify-center bg-black/70 px-5 pt-[18vh] backdrop-blur-md" @click.self="searchOpen = false">
       <form class="flex w-full max-w-3xl items-center gap-3 rounded-full bg-white p-3 pl-7" @submit.prevent="searchOpen = false">
-        <label for="site-search" class="sr-only">站內搜尋</label><input id="site-search" autofocus type="search" placeholder="搜尋 SAKURA Kitchen" class="min-w-0 flex-1 bg-transparent text-lg text-[#1C1C1D] outline-none" /><button class="flex h-12 w-12 items-center justify-center rounded-full bg-[#CAA05C] text-white" aria-label="送出搜尋"><Search /></button>
+        <label for="site-search" class="sr-only">{{ cmsCopy.copy.text21 }}</label><input id="site-search" autofocus type="search" placeholder="搜尋 SAKURA Kitchen" class="min-w-0 flex-1 bg-transparent text-lg text-[#1C1C1D] outline-none" /><button class="flex h-12 w-12 items-center justify-center rounded-full bg-[#CAA05C] text-white" aria-label="送出搜尋"><Search /></button>
       </form>
       <button aria-label="關閉搜尋" class="absolute right-6 top-6 text-white" @click="searchOpen = false"><X class="h-8 w-8" /></button>
     </div>
   </header>
+</template>
 </template>
 
 <style scoped>

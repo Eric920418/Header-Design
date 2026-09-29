@@ -1,7 +1,12 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-news-activities-slug-', {"copy":{"text1":"Promotions","field2":"/news","text3":"優惠消息","field4":"/news/activities","text5":"優惠活動","field6":"/news/activities","text7":"優惠活動","field8":"/news/latest","text9":"最新消息","field10":"/news/video","text11":"媒體影音"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { Camera, Images, PlaySquare } from 'lucide-vue-next'
-import { activityArticleDetails } from '~/data/activityArticles'
-import { newsArticles } from '~/data/news'
+import { activityArticleDetails as cmsSeed_activityArticleDetails } from '~/data/activityArticles'
+import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
+const { activityArticleDetails } = await useCmsResource('data-activityArticles', { activityArticleDetails: cmsSeed_activityArticleDetails })
+const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
+
 
 const route = useRoute()
 const slug = String(route.params.slug)
@@ -27,14 +32,16 @@ useSeoMeta({
 useHead({
   link: [{ rel: 'canonical', href: article.legacyPath }],
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="activity-detail-page">
     <section data-hero-photo="songzhu" class="activity-detail-breadcrumb hero-includes-header" aria-label="優惠活動麵包屑">
       <div class="activity-detail-breadcrumb__overlay" aria-hidden="true" />
       <div class="activity-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <p class="activity-detail-breadcrumb__title">Promotions</p>
+        <p class="activity-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>
         <nav aria-label="麵包屑" class="activity-detail-breadcrumb__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "優惠消息", to: "/news" }, { label: "優惠活動", to: "/news/activities" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -52,8 +59,8 @@ useHead({
         <header class="activity-detail-header entry-header" v-reveal="{ anim: 'opalMoveUp' }">
           <div class="activity-detail-meta entry-meta-top">
             <span class="categories-link">
-              <NuxtLink to="/news">優惠消息</NuxtLink>
-              <NuxtLink to="/news/activities">優惠活動</NuxtLink>
+              <NuxtLink :to="cmsCopy.copy.field2">{{ cmsCopy.copy.text3 }}</NuxtLink>
+              <NuxtLink :to="cmsCopy.copy.field4">{{ cmsCopy.copy.text5 }}</NuxtLink>
             </span>
             <span class="posted-on">
               <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
@@ -102,9 +109,9 @@ useHead({
           </template>
 
           <nav class="activity-detail-categories" aria-label="優惠消息分類" v-reveal="{ anim: 'opalMoveUp' }">
-            <NuxtLink to="/news/activities" aria-current="page"><Camera aria-hidden="true" />優惠活動</NuxtLink>
-            <NuxtLink to="/news/latest"><Images aria-hidden="true" />最新消息</NuxtLink>
-            <NuxtLink to="/news/video"><PlaySquare aria-hidden="true" />媒體影音</NuxtLink>
+            <NuxtLink :to="cmsCopy.copy.field6" aria-current="page"><Camera aria-hidden="true" />{{ cmsCopy.copy.text7 }}</NuxtLink>
+            <NuxtLink :to="cmsCopy.copy.field8"><Images aria-hidden="true" />{{ cmsCopy.copy.text9 }}</NuxtLink>
+            <NuxtLink :to="cmsCopy.copy.field10"><PlaySquare aria-hidden="true" />{{ cmsCopy.copy.text11 }}</NuxtLink>
           </nav>
         </div>
       </div>
@@ -112,6 +119,7 @@ useHead({
 
     <InternalActivityRelatedCarousel :articles="activityArticles" :current-id="article.id" />
   </main>
+</template>
 </template>
 
 <style scoped>
@@ -126,7 +134,7 @@ useHead({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 48% / cover no-repeat fixed;
 }
 
 .activity-detail-breadcrumb__overlay {

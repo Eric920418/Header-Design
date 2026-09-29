@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowLeft, ArrowRight, Download, X } from 'lucide-vue-next'
-import { PRODUCT_CATALOGUES } from '~/data/productCatalogues'
-import { PRODUCT_BRANDS } from '~/data/productBrands'
+import { PRODUCT_CATALOGUES as cmsSeed_PRODUCT_CATALOGUES } from '~/data/productCatalogues'
+import { PRODUCT_BRANDS as cmsSeed_PRODUCT_BRANDS } from '~/data/productBrands'
 import type { ProductBrand, ProductDetail } from '~/types/products'
+const { PRODUCT_CATALOGUES } = await useCmsResource('data-productCatalogues', { PRODUCT_CATALOGUES: cmsSeed_PRODUCT_CATALOGUES })
+const { PRODUCT_BRANDS } = await useCmsResource('data-productBrands', { PRODUCT_BRANDS: cmsSeed_PRODUCT_BRANDS })
+
 
 const { brand, identifier } = defineProps<{ brand: ProductBrand; identifier: string }>()
 const info = PRODUCT_BRANDS[brand]
 const route = useRoute()
-const { data: product, error, status, refresh } = await useFetch<ProductDetail>(`/api/products/${brand}/items/${encodeURIComponent(identifier)}`)
+const { data: product, error, status, refresh } = await useFetch<ProductDetail>(`/api/products/${brand}/items/${encodeURIComponent(identifier)}`, {query:useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview}:{}})
 if (import.meta.server && error.value) setResponseStatus(error.value.statusCode ?? 500)
 const listPath = computed(() => {
   const id = Number(route.query.category)
@@ -284,7 +287,7 @@ useSeoMeta({
   isolation: isolate;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 48% / cover no-repeat fixed;
 }
 .product-detail-hero__overlay { position: absolute; z-index: -1; inset: 0; background: #100801; opacity: .64; }
 .product-detail-hero__inner { width: min(1410px, calc(100% - 60px)); margin-inline: auto; padding: 207px 0 139px; text-align: center; }

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import emblaCarouselVue from 'embla-carousel-vue'
-import { brandFamilies } from '~/data/brandAdvantage'
+import { brandFamilies as cmsSeed_brandFamilies } from '~/data/brandAdvantage'
+const { brandFamilies } = await useCmsResource('data-brandAdvantage', { brandFamilies: cmsSeed_brandFamilies })
+
 
 const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'start' })
 const reduced = useReducedMotion()

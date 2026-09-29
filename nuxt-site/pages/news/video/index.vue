@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { newsArticles } from '~/data/news'
+const cmsCopy = await useCmsResource('view-pages-news-video-index', {"copy":{"text1":"Media","text2":"媒體影音文章列表"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
+import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
+const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
+
 
 const videoArticles = newsArticles.filter(article => article.category === 'video')
 
@@ -10,14 +14,16 @@ useSeoMeta({
   ogDescription: 'SAKURA 整體廚房媒體影音列表。',
   ogImage: videoArticles[0]?.cover,
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="antra-video-page">
     <section data-hero-photo="songzhu" class="antra-video-breadcrumb hero-includes-header" aria-labelledby="video-page-title">
       <div class="antra-video-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-video-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="video-page-title">Media</h1>
+        <h1 id="video-page-title">{{ cmsCopy.copy.text1 }}</h1>
         <nav aria-label="麵包屑" class="antra-video-breadcrumb__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "優惠消息", to: "/news" }, { label: "媒體影音" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -32,7 +38,7 @@ useSeoMeta({
 
     <section aria-labelledby="video-list-title" class="antra-video-index">
       <div class="antra-video-index__rail">
-        <h2 id="video-list-title" class="sr-only">媒體影音文章列表</h2>
+        <h2 id="video-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
         <div class="antra-video-grid">
           <article
             v-for="(article, index) in videoArticles"
@@ -65,6 +71,7 @@ useSeoMeta({
     </section>
   </main>
 </template>
+</template>
 
 <style scoped>
 .antra-video-breadcrumb {
@@ -73,7 +80,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 48% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 48% / cover no-repeat fixed;
 }
 
 .antra-video-breadcrumb__overlay {

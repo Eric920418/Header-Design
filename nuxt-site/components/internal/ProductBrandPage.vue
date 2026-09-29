@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ArrowRight } from 'lucide-vue-next'
-import { PRODUCT_BRANDS } from '~/data/productBrands'
+import { PRODUCT_BRANDS as cmsSeed_PRODUCT_BRANDS } from '~/data/productBrands'
 import type { ProductBrand, ProductCategories } from '~/types/products'
+const { PRODUCT_BRANDS } = await useCmsResource('data-productBrands', { PRODUCT_BRANDS: cmsSeed_PRODUCT_BRANDS })
+
 
 const { brand } = defineProps<{ brand: ProductBrand }>()
 const info = PRODUCT_BRANDS[brand]
-const { data, error, status, refresh } = await useFetch<ProductCategories>(`/api/products/${brand}/categories`)
+const { data, error, status, refresh } = await useFetch<ProductCategories>(`/api/products/${brand}/categories`, {query:useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview}:{}})
 const productCategories = computed(() => data.value?.categories ?? [])
 if (import.meta.server && error.value) setResponseStatus(error.value.statusCode ?? 500)
 useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, description: info.description, ogImage: info.image })
@@ -93,7 +95,7 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 68% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 68% / cover no-repeat fixed;
 }
 
 .sakura-product-hero__overlay {

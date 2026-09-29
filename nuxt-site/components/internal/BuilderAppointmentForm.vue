@@ -5,7 +5,8 @@ type FormKey = 'contactName' | 'phone' | 'company' | 'email'
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
 const config = useRuntimeConfig()
-const endpoint = computed(() => String(config.public.builderAppointmentEndpoint || '').trim())
+const endpoint = computed(() => '/api/forms/builder-appointment')
+const requestKey = ref('')
 const formElement = ref<HTMLFormElement | null>(null)
 const submitState = ref<SubmitState>('idle')
 const notice = ref<{ title: string, message: string, detail?: string } | null>(null)
@@ -16,7 +17,10 @@ const form = reactive({
   company: '',
   email: '',
   note: '',
+  consent: false,
 })
+
+watch(form,()=>{if(submitState.value!=='submitting')requestKey.value=''}, {deep:true})
 
 const errors = reactive<Record<FormKey, string>>({
   contactName: '',
@@ -45,12 +49,7 @@ const focusFirstError = async () => {
   formElement.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
 }
 
-const formatSubmitError = (error: unknown) => {
-  if (!(error instanceof Error)) return String(error)
-  const responseError = error as Error & { status?: number, statusCode?: number, statusText?: string }
-  const status = responseError.statusCode || responseError.status
-  return [status ? `HTTP ${status}` : '', responseError.statusText || '', `${error.name}: ${error.message}`].filter(Boolean).join(' · ')
-}
+const formatSubmitError = (error: unknown) => useCmsAdmin().message(error)
 
 const resetForm = () => {
   form.contactName = ''
@@ -58,19 +57,21 @@ const resetForm = () => {
   form.company = ''
   form.email = ''
   form.note = ''
+  form.consent = false
   ;(Object.keys(errors) as FormKey[]).forEach((key) => { errors[key] = '' })
 }
 
 const submit = async () => {
+  if(submitState.value==='submitting')return
   notice.value = null
   submitState.value = 'idle'
 
-  if (!validate()) {
+  if (!validate() || !form.consent) {
     submitState.value = 'error'
     notice.value = {
       title: '預約資料尚未完成',
       message: '請修正表單中標示的必填欄位後再送出。',
-      detail: 'ValidationError: one or more required fields are invalid.',
+      detail: '請確認必填欄位，並勾選資料使用同意。',
     }
     await focusFirstError()
     return
@@ -87,19 +88,23 @@ const submit = async () => {
   }
 
   submitState.value = 'submitting'
+  if (!requestKey.value) requestKey.value = crypto.randomUUID()
 
   try {
     await $fetch(endpoint.value, {
       method: 'POST',
+      headers: { 'Idempotency-Key': requestKey.value },
       body: {
         contactName: form.contactName.trim(),
         phone: form.phone.trim(),
         company: form.company.trim(),
-        email: form.email.trim() || null,
-        note: form.note.trim() || null,
+        email: form.email.trim(),
+        note: form.note.trim(),
+        consent: form.consent,
       },
     })
     submitState.value = 'success'
+    requestKey.value = ''
     notice.value = {
       title: '預約資料已送出',
       message: '感謝您的預約，櫻花整體廚房將依您留下的聯絡方式與您聯繫。',
@@ -110,8 +115,8 @@ const submit = async () => {
     submitState.value = 'error'
     notice.value = {
       title: '預約資料送出失敗',
-      message: '後台沒有完成接收，輸入內容未在本頁儲存。請稍後重試。',
-      detail: `${formatSubmitError(error)} · Endpoint: ${endpoint.value}`,
+      message: '目前無法確認接收結果，已保留輸入。請重試，相同送出不會重複建單。請稍後重試。',
+      detail: formatSubmitError(error),
     }
   }
 }
@@ -128,30 +133,31 @@ const submit = async () => {
       <div class="builder-form__grid">
         <label>
           <span>聯絡人（必填）</span>
-          <input v-model="form.contactName" name="contactName" type="text" autocomplete="name" placeholder="請輸入姓名" :aria-invalid="Boolean(errors.contactName)" aria-describedby="builder-contact-name-error" @blur="validateField('contactName')" />
+          <input :disabled="submitState === 'submitting'" v-model="form.contactName" name="contactName" type="text" autocomplete="name" placeholder="請輸入姓名" :aria-invalid="Boolean(errors.contactName)" aria-describedby="builder-contact-name-error" @blur="validateField('contactName')" />
           <small v-if="errors.contactName" id="builder-contact-name-error">{{ errors.contactName }}</small>
         </label>
         <label>
           <span>聯絡電話（必填）</span>
-          <input v-model="form.phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="請輸入聯絡電話" :aria-invalid="Boolean(errors.phone)" aria-describedby="builder-phone-error" @blur="validateField('phone')" />
+          <input :disabled="submitState === 'submitting'" v-model="form.phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="請輸入聯絡電話" :aria-invalid="Boolean(errors.phone)" aria-describedby="builder-phone-error" @blur="validateField('phone')" />
           <small v-if="errors.phone" id="builder-phone-error">{{ errors.phone }}</small>
         </label>
         <label>
           <span>建設公司（必填）</span>
-          <input v-model="form.company" name="company" type="text" autocomplete="organization" placeholder="請輸入公司名稱" :aria-invalid="Boolean(errors.company)" aria-describedby="builder-company-error" @blur="validateField('company')" />
+          <input :disabled="submitState === 'submitting'" v-model="form.company" name="company" type="text" autocomplete="organization" placeholder="請輸入公司名稱" :aria-invalid="Boolean(errors.company)" aria-describedby="builder-company-error" @blur="validateField('company')" />
           <small v-if="errors.company" id="builder-company-error">{{ errors.company }}</small>
         </label>
         <label>
           <span>電子信箱</span>
-          <input v-model="form.email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" :aria-invalid="Boolean(errors.email)" aria-describedby="builder-email-error" @blur="validateField('email')" />
+          <input :disabled="submitState === 'submitting'" v-model="form.email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" :aria-invalid="Boolean(errors.email)" aria-describedby="builder-email-error" @blur="validateField('email')" />
           <small v-if="errors.email" id="builder-email-error">{{ errors.email }}</small>
         </label>
         <label class="builder-form__note">
           <span>備註</span>
-          <textarea v-model="form.note" name="note" rows="5" placeholder="可填寫建案地點、戶數、預計時程或希望了解的服務" />
+          <textarea :disabled="submitState === 'submitting'" v-model="form.note" name="note" rows="5" placeholder="可填寫建案地點、戶數、預計時程或希望了解的服務" />
         </label>
       </div>
 
+      <label><input :disabled="submitState === 'submitting'" v-model="form.consent" type="checkbox" required /> 我已閱讀隱私權政策，同意提供資料供預約聯繫使用。</label>
       <div class="builder-form__submit-row">
         <button type="submit" class="site-content-cta" :disabled="submitState === 'submitting'">
           <span>{{ submitState === 'submitting' ? '送出中' : '立即預約' }}</span>

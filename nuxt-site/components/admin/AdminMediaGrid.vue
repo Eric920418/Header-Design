@@ -1,21 +1,10 @@
 <script setup lang="ts">
-import { Check, Search, ArrowUpRight } from 'lucide-vue-next'
-import { ADMIN_MEDIA, type AdminMedia } from '~/data/adminDemo'
-defineProps<{ selected?: string; picking?: boolean }>()
-const emit = defineEmits<{ select: [media: AdminMedia] }>()
-const category = ref('全部素材')
-const query = ref('')
-const categories = ['全部素材', '首頁主視覺', '設計案例', '品牌消息']
-const filtered = computed(() => ADMIN_MEDIA.filter(item => (category.value === '全部素材' || item.category === category.value) && item.name.includes(query.value.trim())))
+const props=defineProps<{selected?:string;picking?:boolean;kind?:'image'|'pdf'}>()
+const emit=defineEmits<{select:[media:any]}>()
+const {api,message}=useCmsAdmin(),query=ref(''),category=ref('全部'),page=ref(1)
+const {data:media,error}=await useAsyncData<any[]>('cms-media',()=>api('media'))
+const categories=computed(()=>['全部',...new Set((media.value||[]).filter(i=>!i.archived).map(i=>i.category))])
+const filtered=computed(()=>(media.value||[]).filter(i=>!i.archived&&(!props.kind||(props.kind==='pdf'?i.mime==='application/pdf':i.mime.startsWith('image/')))&&(category.value==='全部'||i.category===category.value)&&`${i.name} ${i.alt}`.includes(query.value)))
+watch([query,category],()=>page.value=1)
 </script>
-
-<template>
-  <div class="cms-media-tools"><div class="cms-tabs" aria-label="素材分類"><button v-for="item in categories" :key="item" type="button" :class="{ active: category === item }" :aria-pressed="category === item" @click="category = item">{{ item }}</button></div><label class="cms-search"><Search :size="16" /><input v-model="query" aria-label="搜尋素材" placeholder="搜尋素材名稱" /></label></div>
-  <div class="cms-media-grid">
-    <button v-for="item in filtered" :key="item.id" type="button" class="cms-media-card" :class="{ selected: selected === item.src }" :aria-label="`${picking ? '選擇' : '檢視'} ${item.name}`" @click="emit('select', item)">
-      <div class="cms-media-photo"><AdminImage :src="item.src" :alt="item.alt" /><span v-if="selected === item.src" class="cms-media-check"><Check :size="16" /></span><span v-else class="cms-media-arrow"><ArrowUpRight :size="19" /></span></div>
-      <div class="cms-media-caption"><strong>{{ item.name }}</strong><span>{{ item.category }}<span>JPG</span></span></div>
-    </button>
-  </div>
-  <p v-if="!filtered.length" class="cms-empty" role="status">沒有符合的素材，請試試其他名稱或分類。</p>
-</template>
+<template><div class="cms-media-tools"><label class="cms-search"><input v-model="query" aria-label="搜尋素材" placeholder="搜尋素材名稱" /></label><select v-model="category" aria-label="素材分類"><option v-for="c in categories" :key="c">{{ c }}</option></select></div><p v-if="error" class="cms-error" role="alert">{{ message(error) }}</p><div class="cms-media-grid"><button v-for="item in filtered.slice((page-1)*12,page*12)" :key="item.id" class="cms-media-card" :class="{selected:selected===item.src}" :aria-label="`${picking?'選擇':'檢視'} ${item.name}`" @click="emit('select',item)"><div class="cms-media-photo"><AdminImage v-if="item.mime!=='application/pdf'" :src="item.src" :alt="item.alt||item.name" /><span v-else class="cms-pdf-tile">PDF</span></div><div class="cms-media-caption"><strong>{{ item.name }}</strong><span>{{ item.category }}</span></div></button></div><p v-if="!filtered.length" class="cms-empty">尚無素材或沒有符合的項目。可在媒體庫上傳圖片與 PDF。</p><div v-if="filtered.length>12" class="cms-actions cms-pagination"><button class="cms-button" :disabled="page===1" @click="page--">上一頁</button><span>{{ page }}</span><button class="cms-button" :disabled="page*12>=filtered.length" @click="page++">下一頁</button></div></template>

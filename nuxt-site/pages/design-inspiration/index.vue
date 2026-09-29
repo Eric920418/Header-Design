@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const cmsCopy = await useCmsResource('view-pages-design-inspiration-index', {"copy":{"text1":"Inspiration","text2":"篩選設計靈感案例","text3":"設計型式","text4":"設計風格","text5":"Filter","text6":"共 ","text7":" 筆符合條件的設計案例","text8":"View","text9":"目前沒有符合條件的設計案例","text10":"請調整設計型式或設計風格，再重新篩選。","text11":"查看全部案例"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
 import { ArrowRight, SlidersHorizontal } from 'lucide-vue-next'
 import type { DesignCasePage, DesignFilters } from '~/types/designCloud'
 
@@ -17,8 +19,8 @@ watch([selectedForm, selectedStyle], ([form, style]) => {
   draftStyle.value = style
 })
 
-const query = computed(() => ({ form: route.query.form ?? '', style: route.query.style ?? '', page: route.query.page ?? '1' }))
-const { data: filters, error: filterError, status: filterStatus, refresh: refreshFilters } = await useFetch<DesignFilters>('/api/design-inspiration/filters')
+const query = computed(() => ({ ...(route.query.cmsPreview?{cmsPreview:route.query.cmsPreview}:{}), form: route.query.form ?? '', style: route.query.style ?? '', page: route.query.page ?? '1' }))
+const { data: filters, error: filterError, status: filterStatus, refresh: refreshFilters } = await useFetch<DesignFilters>('/api/design-inspiration/filters',{query:computed(()=>route.query.cmsPreview?{cmsPreview:route.query.cmsPreview}:{})})
 const { data: result, error: casesError, status: casesStatus, refresh: refreshCases } = await useFetch<DesignCasePage>('/api/design-inspiration/cases', { query })
 const loading = computed(() => filterStatus.value === 'pending' || casesStatus.value === 'pending')
 const error = computed(() => filterError.value || casesError.value)
@@ -48,14 +50,16 @@ useSeoMeta({
   ogTitle: '設計靈感｜SAKURA 整體廚房',
   ogImage: () => result.value?.items[0]?.cover ?? undefined,
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="design-inspiration-page">
     <section data-hero-photo="songzhu" class="design-projects-hero hero-includes-header" aria-labelledby="design-projects-title">
       <span class="design-projects-hero__overlay" aria-hidden="true" />
       <div class="design-projects-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
-        <h1 id="design-projects-title">Inspiration</h1>
+        <h1 id="design-projects-title">{{ cmsCopy.copy.text1 }}</h1>
         <nav aria-label="麵包屑" class="design-projects-hero__trail">
           <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "設計靈感" }]' v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
@@ -70,11 +74,11 @@ useSeoMeta({
 
     <section aria-labelledby="design-projects-filter-title" class="design-projects-section">
       <div class="design-projects-rail internal-rail-safe">
-        <h2 id="design-projects-filter-title" class="sr-only">篩選設計靈感案例</h2>
+        <h2 id="design-projects-filter-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
 
         <form class="design-projects-filter" v-reveal="{ anim: 'opalMoveUp' }" @submit.prevent="applyFilters">
           <div class="design-projects-filter__field">
-            <label for="design-form" class="sr-only">設計型式</label>
+            <label for="design-form" class="sr-only">{{ cmsCopy.copy.text3 }}</label>
             <div class="design-projects-filter__select">
               <select id="design-form" v-model="draftForm" name="form">
                 <option value="">全部型式</option>
@@ -84,7 +88,7 @@ useSeoMeta({
           </div>
 
           <div class="design-projects-filter__field">
-            <label for="design-style" class="sr-only">設計風格</label>
+            <label for="design-style" class="sr-only">{{ cmsCopy.copy.text4 }}</label>
             <div class="design-projects-filter__select">
               <select id="design-style" v-model="draftStyle" name="style">
                 <option value="">全部風格</option>
@@ -94,12 +98,12 @@ useSeoMeta({
           </div>
 
           <button type="submit" class="design-projects-filter__submit">
-            <span>Filter</span>
+            <span>{{ cmsCopy.copy.text5 }}</span>
             <span class="design-projects-filter__submit-icon"><ArrowRight aria-hidden="true" /></span>
           </button>
         </form>
 
-        <p v-if="!loading && !error" class="sr-only" aria-live="polite">共 {{ result?.total ?? 0 }} 筆符合條件的設計案例</p>
+        <p v-if="!loading && !error" class="sr-only" aria-live="polite">{{ cmsCopy.copy.text6 }}{{ result?.total ?? 0 }}{{ cmsCopy.copy.text7 }}</p>
 
         <InternalDesignLoadState :pending="loading" :error="error" @retry="retry" />
         <ul
@@ -123,7 +127,7 @@ useSeoMeta({
                 <NuxtLink :to="detailRoute(item.id)" class="design-project-card__image-link" :aria-label="`查看案例：${item.title}`">
                   <InternalCaseImage v-if="item.cover" :src="item.cover" :alt="item.title" class="design-project-card__image" />
                   <span class="design-project-card__shade" aria-hidden="true" />
-                  <span class="design-project-card__view" aria-hidden="true">View</span>
+                  <span class="design-project-card__view" aria-hidden="true">{{ cmsCopy.copy.text8 }}</span>
                 </NuxtLink>
               </div>
               <div class="design-project-card__text">
@@ -142,9 +146,9 @@ useSeoMeta({
           role="status"
         >
           <SlidersHorizontal aria-hidden="true" />
-          <h2>目前沒有符合條件的設計案例</h2>
-          <p>請調整設計型式或設計風格，再重新篩選。</p>
-          <button type="button" @click="draftForm = ''; draftStyle = ''; applyFilters()">查看全部案例</button>
+          <h2>{{ cmsCopy.copy.text9 }}</h2>
+          <p>{{ cmsCopy.copy.text10 }}</p>
+          <button type="button" @click="draftForm = ''; draftStyle = ''; applyFilters()">{{ cmsCopy.copy.text11 }}</button>
         </div>
 
         <nav v-if="!loading && !error && result?.total" class="design-projects-pagination" aria-label="案例分頁">
@@ -164,6 +168,7 @@ useSeoMeta({
     </section>
   </main>
 </template>
+</template>
 
 <style scoped>
 .design-projects-hero {
@@ -172,7 +177,7 @@ useSeoMeta({
   min-height: 360px;
   overflow: hidden;
   color: #fff;
-  background: url('/section-3/store-songzhu.jpg') center 36% / cover no-repeat fixed;
+  background: var(--cms-image-asset_7692def0, url('/section-3/store-songzhu.jpg')) center 36% / cover no-repeat fixed;
 }
 
 .design-projects-hero__overlay {

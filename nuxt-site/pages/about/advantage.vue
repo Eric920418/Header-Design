@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { brandAdvantageFaqGroups } from '~/data/brandAdvantage'
+const cmsCopy = await useCmsResource('view-pages-about-advantage', {"copy":{"text1":"Industrial Elegance Condo","text2":"打造符合每個家庭的理想廚房","text3":"源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+
+import { brandAdvantageFaqGroups as cmsSeed_brandAdvantageFaqGroups } from '~/data/brandAdvantage'
+const { brandAdvantageFaqGroups } = await useCmsResource('data-brandAdvantage', { brandAdvantageFaqGroups: cmsSeed_brandAdvantageFaqGroups })
+
 
 useSeoMeta({
   title: '品牌優勢｜SAKURA 整體廚房',
@@ -8,18 +12,20 @@ useSeoMeta({
   ogDescription: '從家庭生活研究、3D 廚房設計、品質驗證到售後健檢，認識 SAKURA 整體廚房的品牌優勢。',
   ogImage: '/section-5/brand-advantage/banner.jpg',
 })
+useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
 
 <template>
+  <template v-if="cmsCopy.cmsSettings.visible">
   <main class="brand-advantage-page">
     <InternalBrandAdvantageHero />
 
     <section class="brand-family-section" aria-labelledby="brand-family-title">
       <div class="brand-family-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-family-heading ev">
-          <h2 id="brand-family-title">Industrial Elegance Condo</h2>
-          <h3>打造符合每個家庭的理想廚房</h3>
-          <p>源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。</p>
+          <h2 id="brand-family-title">{{ cmsCopy.copy.text1 }}</h2>
+          <h3>{{ cmsCopy.copy.text2 }}</h3>
+          <p>{{ cmsCopy.copy.text3 }}</p>
         </header>
         <InternalBrandFamilyGallery />
       </div>
@@ -29,6 +35,7 @@ useSeoMeta({
     <InternalBrandStoreSection />
     <InternalFaqAccordion class="brand-advantage-faq" :groups="brandAdvantageFaqGroups" section-id="brand-advantage-faq-title" safe-rail />
   </main>
+</template>
 </template>
 
 <style scoped>
