@@ -1,9 +1,10 @@
 <script setup lang="ts">
 const cmsVisuals=await useCmsResource('site-visuals',{"images":{"asset_7692def0":"/section-3/store-songzhu.jpg","asset_7a7fece6":"/section-6/franchise/antra-original/h5-bg1.png","asset_39582b0b":"/section-6/franchise/antra-original/h5-bg02.png","asset_18ed1982":"/section-6/franchise/antra-original/h1-bg01.png","asset_52e702e4":"/section-6/franchise/antra-original/h1-bg01-1.png","asset_d0922f9d":"/section-6/franchise/antra-original/h1-bg02.png","asset_82b9dd3e":"/section-6/franchise/antra-original/h1-bg05.png","asset_38bb39f2":"/section-6/franchise/antra-original/h6-bg-3.png","asset_b3dcb152":"/section-6/builders/builder-hero.jpg","asset_1795db00":"/section-6/franchise/hero-store.jpg","asset_98d304fd":"/section-3/service-process/breadcrumb-df.jpg","asset_44761f00":"/section-5/brand-pavilion/pavilion-taichung.jpg","asset_9b0c0f62":"/home-2026/footer/kitchen-background.webp","asset_73c853de":"/services/h6-bg-2.jpg","asset_809f4bbe":"/section-3/store-chengde.jpg","asset_daa09d8d":"/section-5/brand-pavilion/banner.jpg","asset_10b5a86c":"/home-2026/brand-commitment-opening-frame.webp"},"brandVideoId":"wH374AF9wLI","franchiseVideoId":"sAuAjtpvZYk"})
 
-const cmsCopy = await useCmsResource('view-pages-franchising-intro', {"copy":{"field1":"/section-6/franchise/hero-building.jpg","field2":"SAKURA KITCHEN 櫻花整體廚房門市建築外觀","text3":"FRANCHISE WITH US","text4":"為什麼選擇加盟","text5":"櫻花整體廚房?","text6":"為什麼選擇加盟櫻花整體廚房？","text7":"台灣櫻花陪伴消費者超過四十六年，在台灣家庭的滲透率超過73%，使用櫻花產品或服務的家庭總數超過700萬戶。","text8":"不僅連續36年獲得理想品牌，更穩坐熱水器、除油煙機、瓦斯爐三冠王寶座。","text9":"立即申請加盟 ","field10":"/section-6/franchise/hero-store.jpg","field11":"SAKURA KITCHEN 櫻花整體廚房加盟門市","field12":"/franchising/download","text13":" 加盟資料下載","text14":"We Shape ","text15":"Kitchen Designs, Crafting","text16":" Timeless and Inspiring Spaces","field17":"SAKURA KITCHEN Store Manager Stories","field18":"/section-6/franchise/marquee-1.webp","field19":"SAKURA KITCHEN 加盟夥伴與門市成果","field20":"/section-6/franchise/marquee-1.webp","field21":"","field22":"/section-6/franchise/marquee-2.webp","field23":"SAKURA KITCHEN 品牌活動與設計成果","field24":"/section-6/franchise/marquee-2.webp","field25":"","text26":"Franchise Advantages","text27":"Franchise ","text28":"Success Starts","text29":" Here","text30":"從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。","text31":" · SAKURA","text32":"Subscribe To The Newsletter","text33":"Franchise ","text34":"With SAKURA","text35":"從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！","text36":"快來了解加盟金、補助金，填寫表單 ","text37":"Celebrity ","text38":"Stories That","text39":" Inspire","text40":"Beautiful","text41":" Living","text42":"集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。","text43":"加盟流程與辦法","field44":"/section-6/franchise/franchise-process.svg","field45":"加盟諮詢、資格審核、商圈與店址評估、營運計畫確認、簽約與店面規劃、教育訓練與實習、開幕與持續輔導七步流程","text46":"我要加盟","text47":"加盟資格與條件","text48":" Quick And Clear ","text49":"Answers","text50":" To Your Key","text51":" Questions ","field52":"/franchising/download","field53":"/section-6/franchise/franchise-download-cover.png","field54":"櫻花整體廚房加盟資料封面","field55":"/franchising/download","text56":"加盟資料下載","text57":"報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！","text58":"Franchise Information","text59":"Behind ","text60":"Every Statistic Pulses","text61":" A Human Story","field62":"/news/latest","text63":"查看更多 "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-franchising-intro', {"copy":{"field1":"/section-6/franchise/hero-building.jpg","field2":"SAKURA KITCHEN 櫻花整體廚房門市建築外觀","text3":"FRANCHISE WITH US","text4":"為什麼選擇加盟","text5":"櫻花整體廚房?","text6":"為什麼選擇加盟櫻花整體廚房？","text7":"台灣櫻花陪伴消費者超過四十六年，在台灣家庭的滲透率超過73%，使用櫻花產品或服務的家庭總數超過700萬戶。","text8":"不僅連續36年獲得理想品牌，更穩坐熱水器、除油煙機、瓦斯爐三冠王寶座。","text9":"立即申請加盟 ","field10":"/section-6/franchise/hero-store.jpg","field11":"SAKURA KITCHEN 櫻花整體廚房加盟門市","field12":"/franchising/download","text13":" 加盟資料下載","text14":"加盟夥伴真實分享","text15":"Hear from Our Partners","text16":"","field17":"SAKURA KITCHEN Store Manager Stories","field18":"/section-6/franchise/marquee-1.webp","field19":"SAKURA KITCHEN 加盟夥伴與門市成果","field20":"/section-6/franchise/marquee-1.webp","field21":"","field22":"/section-6/franchise/marquee-2.webp","field23":"SAKURA KITCHEN 品牌活動與設計成果","field24":"/section-6/franchise/marquee-2.webp","field25":"","text26":"Franchise Advantages","text27":"Franchise ","text28":"Success Starts","text29":" Here","text30":"從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。","text31":" · SAKURA","text32":"BUILD YOUR FUTURE WITH US","text33":"Join ","text34":"SAKURA KITCHEN","text35":"從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！","text36":"立即加盟","text37":"Celebrity ","text38":"Stories That","text39":" Inspire","text40":"Beautiful","text41":" Living","text42":"集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。","text43":"加盟流程與辦法","field44":"/section-6/franchise/franchise-process.svg","field45":"加盟諮詢、資格審核、商圈與店址評估、營運計畫確認、簽約與店面規劃、教育訓練與實習、開幕與持續輔導七步流程","text46":"我要加盟","text47":"加盟資格與條件","text48":"最新加盟消息","text49":"Franchise Updates","text50":"","text51":"","field52":"/franchising/download","field53":"/section-6/franchise/franchise-download-cover.png","field54":"櫻花整體廚房加盟資料封面","field55":"/franchising/download","text56":"加盟資料下載","text57":"報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！","text58":"Franchise Information","text59":"Behind ","text60":"Every Statistic Pulses","text61":" A Human Story","field62":"/news/latest","text63":"查看更多 "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
-import { ArrowRight, ChevronRight, Download } from 'lucide-vue-next'
+import emblaCarouselVue from 'embla-carousel-vue'
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { FRANCHISE_FORM_URL as cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages as cmsSeed_franchiseAdvantages, franchiseFaqItems as cmsSeed_franchiseFaqItems, franchiseMarketingStories as cmsSeed_franchiseMarketingStories, franchiseQualifications as cmsSeed_franchiseQualifications, franchiseSupportHighlights as cmsSeed_franchiseSupportHighlights, franchiseTestimonials as cmsSeed_franchiseTestimonials,  } from '~/data/franchise'
 import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
 const { FRANCHISE_FORM_URL, franchiseAdvantages, franchiseFaqItems, franchiseMarketingStories, franchiseQualifications, franchiseSupportHighlights, franchiseTestimonials } = await useCmsResource('data-franchise', { FRANCHISE_FORM_URL: cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages: cmsSeed_franchiseAdvantages, franchiseFaqItems: cmsSeed_franchiseFaqItems, franchiseMarketingStories: cmsSeed_franchiseMarketingStories, franchiseQualifications: cmsSeed_franchiseQualifications, franchiseSupportHighlights: cmsSeed_franchiseSupportHighlights, franchiseTestimonials: cmsSeed_franchiseTestimonials })
@@ -19,7 +20,10 @@ useSeoMeta({
 })
 
 const openFaq = ref(0)
-const marketingTrack = ref<HTMLElement | null>(null)
+const [marketingViewport, marketingApi] = emblaCarouselVue({ align: 'start', loop: true, slidesToScroll: 1 })
+const marketingPaused = ref(false)
+const reducedMotion = useReducedMotion()
+let marketingTimer: ReturnType<typeof setInterval> | undefined
 const activeAdvantageGroup = ref(0)
 const advantageGroups = computed(() => Array.from(
   { length: Math.ceil(franchiseAdvantages.length / 2) },
@@ -36,10 +40,16 @@ const toggleFaq = (index: number) => {
 }
 
 const scrollMarketing = (direction: -1 | 1) => {
-  const track = marketingTrack.value
-  if (!track) return
-  track.scrollBy({ left: direction * Math.min(track.clientWidth * 0.82, 780), behavior: 'smooth' })
+  if (direction > 0) marketingApi.value?.scrollNext(reducedMotion.value)
+  else marketingApi.value?.scrollPrev(reducedMotion.value)
 }
+
+watch([marketingApi, reducedMotion], ([api, isReduced]) => {
+  if (marketingTimer) clearInterval(marketingTimer)
+  if (api && !isReduced) marketingTimer = setInterval(() => {
+    if (!marketingPaused.value) scrollMarketing(1)
+  }, 3500)
+}, { immediate: true })
 
 const updateActiveAdvantage = () => {
   cancelAnimationFrame(advantageFrame)
@@ -69,6 +79,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (marketingTimer) clearInterval(marketingTimer)
   cancelAnimationFrame(advantageFrame)
   window.removeEventListener('scroll', updateActiveAdvantage)
   window.removeEventListener('resize', updateActiveAdvantage)
@@ -110,14 +121,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section class="franchise-about elementor-df512f3" aria-labelledby="franchise-story-title">
       <div class="source-rail-wide internal-rail-safe">
         <div class="franchise-about__grid">
-          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Partners" source="home5" class="source-heading-rail">
-            <template #actions>
-              <NuxtLink :to="cmsCopy.copy.field12" target="_blank" rel="noopener" class="source-round-link source-round-link--outline"><Download aria-hidden="true" />{{ cmsCopy.copy.text13 }}</NuxtLink>
-            </template>
-          </InternalTemplateHeadingRail>
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Partners" source="home5" class="source-heading-rail" />
 
           <div class="franchise-about__content">
-            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">{{ cmsCopy.copy.text14 }}<span>{{ cmsCopy.copy.text15 }}</span>{{ cmsCopy.copy.text16 }}</h2>
+            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">{{ cmsCopy.copy.text14 }}<br /><span>{{ cmsCopy.copy.text15 }}</span>{{ cmsCopy.copy.text16 }}</h2>
             <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="franchise-about__video ev">
               <InternalFranchiseVideo :video-id="cmsVisuals.franchiseVideoId" :title="cmsCopy.copy.field17" />
             </div>
@@ -210,19 +217,28 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
         </header>
 
-        <div ref="marketingTrack" class="franchise-project-track elementor-widget-antra-project" tabindex="0" aria-label="品牌行銷案例，可用左右方向鍵或觸控水平瀏覽" @keydown.left.prevent="scrollMarketing(-1)" @keydown.right.prevent="scrollMarketing(1)">
-          <article v-for="(story, index) in franchiseMarketingStories" :key="story.title" v-reveal="{ anim: 'opalMoveUp', delay: (index % 3) * 80 }" class="project-block">
-            <div class="project-block__media">
-              <InternalFranchiseImage :src="story.image" :alt="story.title" />
-              <div class="project-block__overlay">
-                <h3>{{ story.shortTitle }}</h3>
-                <span>{{ String(index + 1).padStart(2, '0') }}</span>
-              </div>
+        <div v-reveal="{ anim: 'fadeIn' }" class="franchise-project-carousel">
+          <div ref="marketingViewport" class="franchise-project-viewport" role="region" aria-roledescription="輪播" tabindex="0" aria-label="五個品牌行銷案例，可用左右方向鍵或觸控切換" @keydown.left.prevent="scrollMarketing(-1)" @keydown.right.prevent="scrollMarketing(1)">
+            <div class="franchise-project-track elementor-widget-antra-project">
+              <article v-for="(story, index) in franchiseMarketingStories" :key="story.title" class="project-block">
+                <div class="project-block__media">
+                  <InternalFranchiseImage :src="story.image" :alt="story.title" />
+                  <div class="project-block__overlay">
+                    <h3>{{ story.shortTitle }}</h3>
+                    <span>{{ String(index + 1).padStart(2, '0') }}</span>
+                  </div>
+                </div>
+                <div class="project-block__content">
+                  <p>{{ story.title }}</p>
+                </div>
+              </article>
             </div>
-            <div class="project-block__content">
-              <p>{{ story.title }}</p>
-            </div>
-          </article>
+          </div>
+          <div class="franchise-project-controls" aria-label="品牌行銷案例輪播控制">
+            <button type="button" aria-label="上一個行銷案例" @click="scrollMarketing(-1)"><ChevronLeft aria-hidden="true" /></button>
+            <button type="button" :aria-pressed="marketingPaused" @click="marketingPaused = !marketingPaused">{{ marketingPaused ? '繼續輪播' : '暫停輪播' }}</button>
+            <button type="button" aria-label="下一個行銷案例" @click="scrollMarketing(1)"><ChevronRight aria-hidden="true" /></button>
+          </div>
         </div>
       </div>
     </section>
@@ -275,7 +291,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             data-ev="opalMoveRight"
             class="franchise-faq__heading-rail ev"
           />
-          <h2 id="franchise-faq-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text48 }}<span>{{ cmsCopy.copy.text49 }}<br />{{ cmsCopy.copy.text50 }}</span>{{ cmsCopy.copy.text51 }}</h2>
+          <h2 id="franchise-faq-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text48 }}<br /><span>{{ cmsCopy.copy.text49 }}{{ cmsCopy.copy.text50 }}</span>{{ cmsCopy.copy.text51 }}</h2>
         </header>
 
         <div class="franchise-faq__body">
@@ -333,9 +349,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .source-round-link:hover { transform: translateY(-2px); }
 .source-round-link:hover svg.lucide-arrow-right { transform: rotate(0); }
 .source-round-link--gold { border-color: #caa05c; color: #1c1c1d; background: #caa05c; }
-.source-round-link--outline { border-color: rgb(89 88 93 / 36%); color: #1c1c1d; }
-.source-round-link--outline::after { content: none; }
-.source-round-link--outline:hover { border-color: #caa05c; color: #a57b38; }
 .source-round-link--hero { min-height: 60px; gap: 8px; padding: 9px 9px 9px 30px; font-size: 15px; line-height: 22px; letter-spacing: .5px; }
 .source-round-link--hero::after { right: 9px; width: 40px; height: 40px; }
 .source-round-link--hero svg { width: 40px; height: 40px; padding: 10px; border-radius: 50%; color: #fff; background: #caa05c; }
@@ -362,7 +375,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-about::after { position: absolute; pointer-events: none; content: ""; }
 .franchise-about__grid { display: grid; grid-template-columns: 30% 70%; }
 .source-heading-rail { min-height: 100%; }
-.source-heading-rail > .source-round-link { position: absolute; bottom: 92px; left: 0; }
 .franchise-about__content { padding: 70px 0 90px 58px; }
 .franchise-about h2,
 .franchise-advantages h2,
@@ -371,6 +383,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-process h2,
 .franchise-news h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .franchise-about h2 { max-width: 822px; margin-bottom: 50px; }
+#franchise-story-title { text-transform: none; }
 .franchise-about h2 span,
 .franchise-advantages h2 span,
 .franchise-projects h2 span,
@@ -429,13 +442,18 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .source-split-heading > div:last-child { padding-left: 58px; }
 .source-split-heading h2 { max-width: 100%; margin-top: 65px; }
 .source-split-heading p { max-width: 636px; margin: 30px 0 0; color: #59585d; font-size: 16px; line-height: 25px; }
-.franchise-project-track { display: flex; gap: 30px; overflow-x: auto; overscroll-behavior-inline: contain; padding: 0 0 12px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.franchise-project-viewport { overflow: hidden; touch-action: pan-y pinch-zoom; }
+.franchise-project-track { display: flex; align-items: flex-start; padding: 0 0 12px; }
+.franchise-project-controls { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 24px; }
+.franchise-project-controls button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 10px 16px; border: 1px solid #e3e3e8; border-radius: 999px; color: #59585d; background: #fff; font-size: 14px; }
+.franchise-project-controls button:hover { border-color: #caa05c; }
+.franchise-project-controls svg { width: 22px; height: 22px; }
 .franchise-marquees:focus-visible,
-.franchise-project-track:focus-visible,
+.franchise-project-viewport:focus-visible,
+.franchise-project-controls button:focus-visible,
 .franchise-faq__item button:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
-.franchise-project-track::-webkit-scrollbar { display: none; }
-.project-block { min-width: calc((100% - 60px) / 3); overflow: hidden; scroll-snap-align: start; border-radius: 18px; background: #fff; }
-.project-block:nth-child(3n + 2) { transform: translateY(50px); }
+.project-block { flex: 0 0 calc((100% - 60px) / 3); min-width: 0; margin-right: 30px; overflow: hidden; border-radius: 18px; background: #fff; }
+.project-block:nth-child(3n + 2) { margin-top: 50px; }
 .project-block__media { position: relative; aspect-ratio: 1860 / 1400; overflow: hidden; border-radius: 18px; }
 .project-block__media > :deep(.franchise-image) { height: 100%; }
 .project-block__overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 24px 58px 24px 22px; color: #fff; background: linear-gradient(180deg, transparent 36%, rgb(18 18 18 / 78%)); }
@@ -572,9 +590,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-advantage-scene { min-height: auto; padding: 0 0 55px; }
   .franchise-advantage-scene:last-child { padding-bottom: 0; }
   .franchise-post-grid { grid-template-columns: 1fr; gap: 40px; }
-  .project-block { min-width: calc((100% - 30px) / 2); }
-  .project-block:nth-child(3n + 2) { transform: none; }
-  .project-block:nth-child(even) { transform: translateY(35px); }
+  .project-block { flex-basis: calc((100% - 30px) / 2); }
+  .project-block:nth-child(3n + 2) { margin-top: 0; }
+  .project-block:nth-child(even) { margin-top: 35px; }
   .franchise-process__details { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .franchise-support-panel,
   .franchise-qualification-panel { padding: 38px 32px; }
@@ -616,7 +634,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-news { padding: 75px 15px 80px; }
   .franchise-about { background-size: 70% auto; }
   .franchise-about__grid { grid-template-columns: 1fr; }
-  .source-heading-rail > .source-round-link { position: static; margin-top: 22px; }
   .franchise-about__content { padding: 38px 0 50px; }
   .franchise-about h2,
   .franchise-advantages h2,
@@ -643,8 +660,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .source-split-heading > div:last-child { padding: 0; }
   .source-split-heading h2 { margin-top: 28px; }
   .source-split-heading p { font-size: 15px; line-height: 24px; }
-  .project-block { min-width: 84vw; }
-  .project-block:nth-child(even) { transform: none; }
+  .project-block { flex-basis: 84vw; }
+  .project-block:nth-child(even) { margin-top: 0; }
   .project-block__overlay h3 { font-size: 20px; line-height: 26px; }
 
   .franchise-newsletter { width: calc(100% - 30px); min-height: 560px; margin-top: 75px; padding: 80px 20px; border-radius: 20px; }

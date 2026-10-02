@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-builders-index', {"strengths":[{"value":["45","萬"],"lines":["設計模組","累積\n超過","多元選擇"],"background":"/section-6/builders/capability-banners/catalog-background.png"},{"value":["AI","智能"],"lines":["廚衛工廠","全台\n最大","供貨穩定"],"background":"/section-6/builders/capability-banners/factory-background.png"},{"value":["管理","平台"],"lines":["案件進度","獨家\n智能","精準掌握"],"background":"/section-6/builders/capability-banners/management-background.png"}],"services":[{"eyebrow":"ONE-STOP","label":"一站式服務","title":"專業銷講","copy":["舉辦住戶裝修講座","加速建案銷售"]},{"eyebrow":"NUMEROUS","label":"多樣產品選擇","title":"專屬監工","copy":["透過專屬的即時監控系統","完善管理工期"]},{"eyebrow":"EFFICIENT","label":"輕鬆擁有","title":"專人驗收","copy":["協助建案偕同驗收","住戶安心放心"]}],"copy":{"text1":"Property Developers","text2":"Find Your Inspired","text3":"Kitchen Design","text4":"一站式整體廚房解決方案，為建案提升價值與銷售力。","text5":"專人聯繫","field6":"/section-6/builders/builder-hero.jpg","field7":"SAKURA KITCHEN 深色現代整體廚房與中島空間","text8":"OUR BRAND","text9":"Meet The ","text10":"Experts Our","text11":"Kitchen Designers","field12":"SAKURA KITCHEN 建商整體廚房展示空間","field13":"SAKURA KITCHEN","field14":"即將推出的廚房品牌空間","text15":"Coming","text16":"Soon","text17":"Have A Project In ","text18":"Mind?","text19":"Let’s","text20":" Make It Happen","text21":"櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。","text22":"美好居家生活的創造者","text23":"HOME in O.N.E","text24":"Lifetime Service","text25":"One-Click Registration ","text26":"Lifetime Service","text27":"購買 SAKURA iCare 系列產品，掃描保證書專屬 QR Code，即可啟動智能化服務，銜接產品登錄、保固與後續服務。","field28":"/section-6/builders/i-care-service.png","field29":"SAKURA KITCHEN 一鍵登錄終身服務、保證書與手機產品服務示意","text30":"OUR CLIENTS","field31":"","field32":"","text33":"Get In Touch","text34":"Have A Project In ","text35":"Mind?","text36":"Let’s","text37":" Make It Happen","text38":"櫻花集團 品牌館","text39":"全預約制","text40":"留下您的資訊，將由專人與您聯繫，提供最適合您建案的整體廚房規劃建議。","text41":"地址","text42":"營業時間"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-builders-index', {"strengths":[{"value":["45","萬"],"lines":["設計模組","累積\n超過","多元選擇"],"background":"/section-6/builders/proposal-20261002/design-modules.webp"},{"value":["AI","智能"],"lines":["廚衛工廠","全台\n最大","供貨穩定"],"background":"/section-6/builders/proposal-20261002/ai-factory.webp"},{"value":["管理","平台"],"lines":["案件進度","獨家\n智能","精準掌握"],"background":"/section-6/builders/proposal-20261002/project-platform.webp"}],"services":[{"eyebrow":"ONE-STOP","label":"一站式服務","title":"專業銷講","copy":["舉辦住戶裝修講座","加速建案銷售"]},{"eyebrow":"NUMEROUS","label":"多樣產品選擇","title":"專屬監工","copy":["透過專屬的即時監控系統","完善管理工期"]},{"eyebrow":"EFFICIENT","label":"輕鬆擁有","title":"專人驗收","copy":["協助建案偕同驗收","住戶安心放心"]}],"copy":{"text1":"Property Developers","text2":"提供一站式整體解決方案","text3":"為建案提升價值與銷售力","text4":"一站式整體廚房解決方案，為建案提升價值與銷售力。","text5":"立即預約","field6":"/section-6/builders/builder-hero.jpg","field7":"SAKURA KITCHEN 深色現代整體廚房與中島空間","text8":"OUR BRAND","text9":"嚴選國內外優質品牌","text10":"Experts Our","text11":"打造不同定位與多元風格的理想家居空間","field12":"SAKURA KITCHEN 建商整體廚房展示空間","field13":"SAKURA KITCHEN","field14":"即將推出的廚房品牌空間","text15":"Coming","text16":"Soon","text17":"Have A Project In ","text18":"Mind?","text19":"Let’s","text20":" Make It Happen","text21":"櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。","text22":"美好居家生活的創造者","text23":"HOME in O.N.E","text24":"Lifetime Service","text25":"One-Click Registration ","text26":"Lifetime Service","text27":"購買 SAKURA iCare 系列產品，掃描保證書專屬 QR Code，即可啟動智能化服務，銜接產品登錄、保固與後續服務。","field28":"/section-6/builders/proposal-20261002/icare.webp","field29":"SAKURA iCare 時刻在乎・永恆守護：以智能平台整合永久免費服務，掃描產品 QR Code，享受櫻花的安心守護。","text30":"OUR CLIENTS","field31":"","field32":"","text33":"Get In Touch","text34":"Have A Project In ","text35":"Mind?","text36":"Let’s","text37":" Make It Happen","text38":"櫻花集團 品牌館","text39":"全預約制","text40":"留下您的資訊，將由專人與您聯繫，提供最適合您建案的整體廚房規劃建議。","text41":"地址","text42":"營業時間"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
-import { ArrowRight, Check, Clock3, MapPin, Triangle } from 'lucide-vue-next'
+import { ArrowRight, Check, Clock3, MapPin } from 'lucide-vue-next'
 import { BUILDER_APPOINTMENT_HASH as cmsSeed_BUILDER_APPOINTMENT_HASH, builderPartners as cmsSeed_builderPartners, builderProjectCards as cmsSeed_builderProjectCards } from '~/data/builders'
 import { brandPavilions as cmsSeed_brandPavilions } from '~/data/brandPavilions'
 const { BUILDER_APPOINTMENT_HASH, builderPartners, builderProjectCards } = await useCmsResource('data-builders', { BUILDER_APPOINTMENT_HASH: cmsSeed_BUILDER_APPOINTMENT_HASH, builderPartners: cmsSeed_builderPartners, builderProjectCards: cmsSeed_builderProjectCards })
@@ -54,11 +54,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <span class="builders-hero__deco" aria-hidden="true" />
       <div class="builders-rail-wide builders-hero__inner internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="builders-hero__headline ev">
-          <InternalSectionPill tone="dark">{{ cmsCopy.copy.text1 }}</InternalSectionPill>
-          <h1 id="builders-title">{{ cmsCopy.copy.text2 }}<br /><span>{{ cmsCopy.copy.text3 }}</span></h1>
+          <InternalSectionPill tone="dark"><span>{{ cmsCopy.copy.text1 }}</span></InternalSectionPill>
+          <p class="builders-hero__eyebrow">櫻花 HOME IN O.N.E</p>
+          <h1 id="builders-title"><span>{{ cmsCopy.copy.text2 }}</span><br />{{ cmsCopy.copy.text3 }}</h1>
         </div>
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="builders-hero__aside ev">
-          <p>{{ cmsCopy.copy.text4 }}</p>
           <a :href="BUILDER_APPOINTMENT_HASH" class="builders-round-link">
             <span>{{ cmsCopy.copy.text5 }}</span>
             <span class="builders-round-link__icon"><ArrowRight aria-hidden="true" /></span>
@@ -75,7 +75,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--team">
           <InternalSectionPill>{{ cmsCopy.copy.text8 }}</InternalSectionPill>
-          <h2 id="builders-team-title">{{ cmsCopy.copy.text9 }}<span>{{ cmsCopy.copy.text10 }}</span><br />{{ cmsCopy.copy.text11 }}</h2>
+          <h2 id="builders-team-title"><strong>{{ cmsCopy.copy.text9 }}</strong><span>{{ cmsCopy.copy.text11 }}</span></h2>
         </header>
         <div class="builders-team__grid">
           <template v-for="(card, index) in builderProjectCards" :key="card.image">
@@ -130,64 +130,61 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
         </header>
 
-        <div class="builders-capability__showcase">
-          <div class="builders-strengths">
-            <article
-              v-for="(item, index) in strengths"
-              :key="item.lines[0]"
-              v-reveal="{ anim: index === 0 ? 'opalMoveRight' : index === 2 ? 'opalMoveLeft' : 'opalMoveUp', delay: index * 100 }"
-              data-ev="opalMoveUp"
-              class="builders-strength ev"
-              :style="{ backgroundImage: `linear-gradient(rgb(255 255 255 / 60%), rgb(255 255 255 / 60%)), url(${item.background})` }"
-            >
+        <div id="builders-solutions" class="builders-capability__showcase">
+          <article
+            v-for="(item, index) in strengths"
+            :key="item.lines[0]"
+            v-reveal="{ anim: 'opalMoveUp' }"
+            class="builders-solution"
+            :class="{ 'builders-solution--modules': index === 0 }"
+          >
+            <div v-if="index === 0" class="builders-solution__copy">
+              <p class="builders-solution__lead">{{ item.lines[1].replaceAll('\n', '') }}</p>
+              <p class="builders-solution__number">{{ item.value[0] }}+{{ item.value[1] }}</p>
               <h3>{{ item.lines[0] }}</h3>
-              <div class="builders-strength__middle">
-                <p class="builders-strength__accent"><span v-for="line in item.lines[1].split('\n')" :key="line">{{ line }}</span></p>
-                <p class="builders-strength__slogan">
-                  <sup v-if="index === 0">+</sup>
-                  <span v-if="index === 0"><span class="builders-strength__number">{{ item.value[0] }}</span>{{ item.value[1] }}</span>
-                  <template v-else><span v-for="line in item.value" :key="line">{{ line }}</span></template>
-                </p>
-              </div>
-              <p class="builders-strength__footer">{{ item.lines[2] }}</p>
-            </article>
+              <p>{{ item.lines[2] }}</p>
+            </div>
+            <h3 v-else class="builders-solution__caption">
+              <span>{{ item.lines[1].replaceAll('\n', '') }}<template v-if="index === 2"> {{ item.lines[0] }}</template></span>
+              <strong>{{ item.value.join('') }}</strong>
+              <span><template v-if="index === 1">{{ item.lines[0] }} </template>{{ item.lines[2] }}</span>
+            </h3>
+            <InternalBuilderImage
+              :src="item.background"
+              :alt="index === 0 ? '整體家居設計模組及建案廚房規劃軟體' : index === 1 ? 'AI 智能廚衛工廠：自動化產線、生產管理看板與機械手臂' : '智能案件管理平台串接簽約、設計、工廠供貨與驗收進度'"
+              :fit="index === 1 ? 'cover' : 'contain'"
+              class="builders-solution__visual"
+              :class="index === 0 ? 'builders-solution__visual--modules' : index === 1 ? 'builders-solution__visual--factory' : 'builders-solution__visual--platform'"
+            />
+          </article>
+
+          <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-home-one">
+            <InternalBuilderImage
+              src="/section-6/builders/proposal-20261002/home-in-one.webp"
+              alt="HOME IN O.N.E：ONE-STOP 一站式服務、NUMEROUS 多樣產品選擇、EFFICIENT 輕鬆擁有"
+              class="builders-home-one__visual"
+            />
           </div>
 
-          <div class="builders-home-one">
-            <div class="builders-one">
-              <p>{{ cmsCopy.copy.text22 }}</p>
-              <strong>{{ cmsCopy.copy.text23 }}</strong>
-            </div>
-
+          <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-services-panel">
+            <InternalBuilderImage
+              src="/section-6/builders/proposal-20261002/dedicated-services.webp"
+              alt="專業銷講選材、專屬監工規劃與專人驗收"
+              class="builders-services-panel__visual"
+              fit="contain"
+            />
             <div class="builders-services">
-              <article v-for="(service, index) in services" :key="service.title" v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }" data-ev="opalMoveUp" class="builders-service ev">
-                <div class="builders-service__label">
-                  <Triangle aria-hidden="true" />
-                  <strong>{{ service.eyebrow }}</strong>
-                  <span>{{ service.label }}</span>
-                </div>
+              <article v-for="service in services" :key="service.title" class="builders-service">
                 <h3><Check aria-hidden="true" />{{ service.title }}</h3>
                 <p><span v-for="line in service.copy" :key="line">{{ line }}</span></p>
               </article>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="builders-lifetime" aria-labelledby="builders-lifetime-title">
-      <div class="builders-rail internal-rail-safe">
-        <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="builders-lifetime__heading ev">
-          <InternalSectionPill class="builders-lifetime__pill">{{ cmsCopy.copy.text24 }}</InternalSectionPill>
-          <h2 id="builders-lifetime-title">{{ cmsCopy.copy.text25 }}<span>{{ cmsCopy.copy.text26 }}</span></h2>
-          <p>{{ cmsCopy.copy.text27 }}</p>
-        </header>
-        <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" data-ev="opalScaleUp" class="builders-lifetime__visual ev" style="animation-delay:120ms">
-          <InternalBuilderImage
-            :src="cmsCopy.copy.field28"
-            :alt="cmsCopy.copy.field29"
-            fit="contain"
-          />
+          <section v-reveal="{ anim: 'opalMoveUp' }" class="builders-lifetime" aria-labelledby="builders-lifetime-title">
+            <h3 id="builders-lifetime-title" class="sr-only">{{ cmsCopy.copy.text24 }}</h3>
+            <InternalBuilderImage :src="cmsCopy.copy.field28" :alt="cmsCopy.copy.field29" class="builders-lifetime__visual" fit="contain" />
+          </section>
         </div>
       </div>
     </section>
@@ -292,13 +289,14 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-round-link:hover .builders-round-link__icon::after,
 .builders-round-link:focus-visible .builders-round-link__icon::after { animation: none; opacity: 0; }
 @keyframes builders-cta-radar { from { opacity: .6; transform: scale(1); } to { opacity: 0; transform: scale(1.55); } }
-.builders-hero { position: relative; z-index: 0; min-height: 820px; overflow: hidden; color: #fff; background: #1c1c1d; }
+.builders-hero { position: relative; z-index: 0; min-height: 868px; overflow: hidden; color: #fff; background: #1c1c1d; }
 .builders-hero__deco { position: absolute; z-index: -1; inset: 0; opacity: .08; background: var(--cms-image-asset_7a7fece6, url('/section-6/franchise/antra-original/h5-bg1.png')) center / cover no-repeat; filter: invert(1); }
 .builders-hero__inner { display: grid; grid-template-columns: 64% 36%; padding: 142px 30px 0; }
-.builders-hero h1 { max-width: 960px; margin: 22px 0 0; font-family: var(--font-display); font-size: clamp(72px, 7.28vw, 110px); font-weight: 400; line-height: 1; letter-spacing: -1px; }
-.builders-hero h1 span { color: #caa05c; }
+.builders-hero__headline :deep(.section-pill) { margin-bottom: 16px; }
+.builders-hero__eyebrow { margin: 0; color: #fff; font-family: var(--font-cjk-sans); font-size: clamp(20px, 2.3vw, 40px); font-weight: 700; line-height: 1.25; letter-spacing: .04em; }
+.builders-hero h1 { max-width: 960px; margin: 8px 0 0; color: #fff; font-family: var(--font-cjk-sans); font-size: clamp(32px, 4.4vw, 76px); font-weight: 700; line-height: 1.6; letter-spacing: 0; text-shadow: 0 6px 18px rgb(0 0 0 / 22%); }
+.builders-hero h1 span { color: #c4a574; }
 .builders-hero__aside { width: 100%; min-width: 0; align-self: end; margin: 0 0 16px 6px; }
-.builders-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-size: 16px; line-height: 27px; }
 .builders-hero__aside .builders-round-link { margin-top: 42px; }
 .builders-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -360px; overflow: hidden; border-radius: 24px; }
 .builders-hero-media :deep(img) { object-position: center 58%; }
@@ -309,6 +307,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-section-heading > p { color: #59585d; font-size: 16px; line-height: 25px; }
 .builders-team { padding: 125px 30px 130px; background: #fff var(--cms-image-asset_39582b0b, url('/section-6/franchise/antra-original/h5-bg02.png')) top right / auto no-repeat; }
 .builders-section-heading--team { display: grid; grid-template-columns: 25% 48% 27%; align-items: end; margin-bottom: 60px; }
+.builders-section-heading--team h2 { min-width: 0; color: #c4a574; font-family: var(--font-cjk-sans); text-align: center; }
+.builders-section-heading--team h2 strong { display: block; font-size: 36px; font-weight: 700; line-height: 1.4; letter-spacing: .06em; }
+.builders-section-heading--team h2 span { display: block; margin-top: 4px; color: inherit; font-size: 22px; font-weight: 400; line-height: 1.5; letter-spacing: .06em; }
 .builders-section-heading--team > p { margin: 0 0 4px; }
 .builders-team__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; }
 .builders-team-card { position: relative; display: block; min-width: 0; overflow: hidden; border-radius: 24px; color: inherit; background: #fafafa; text-decoration: none; }
@@ -333,47 +334,35 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-team-card__project-status > svg { width: 36px; height: 36px; flex: none; padding: 9px; border-radius: 50%; color: #1c1c1d; background: #caa05c; transform: rotate(-45deg); transition: transform .35s ease; }
 .builders-team-card--project:hover .builders-team-card__project-status > svg,
 .builders-team-card--project:focus-visible .builders-team-card__project-status > svg { transform: rotate(0); }
-.builders-capability { padding: 130px 30px 72px; background: #f6f6f6; }
+.builders-capability { padding: 130px 30px 72px; background: #fafafa; }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-capability .builders-section-heading--split > div h2 { margin-top: 70px; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
-.builders-capability__showcase { display: grid; gap: 32px; margin-top: 48px; }
-.builders-strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; padding: 30px; border-radius: 36px; background: var(--cms-image-asset_18ed1982, url('/section-6/franchise/antra-original/h1-bg01.png')) bottom left / 100% auto no-repeat; }
-.builders-strength { --strength-scale: 1; --slogan-size: 54px; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto; min-height: 250px; gap: 8px 12px; overflow: hidden; padding: 28px; border: 1px solid rgb(202 160 92 / 12%); border-radius: 22px; background-color: #fff; background-position: center; background-repeat: no-repeat; background-size: cover; box-shadow: 0 14px 36px rgb(28 28 29 / 5%); }
-.builders-strength:nth-child(2) { --slogan-size: 48px; }
-.builders-strength:nth-child(3) { --slogan-size: 44px; }
-.builders-strength h3,
-.builders-strength__footer { grid-column: 1; justify-self: center; margin: 0; font-family: var(--font-cjk-sans); font-size: 22px; font-weight: 700; line-height: 1.25; white-space: nowrap; text-align: center; }
-.builders-strength__middle { display: contents; color: #caa05c; }
-.builders-strength__accent { grid-column: 1; grid-row: 2; align-self: center; justify-self: center; }
-.builders-strength__slogan { grid-column: 2; grid-row: 2; align-self: center; justify-self: center; }
-.builders-strength__accent { display: flex; flex-direction: column; gap: 8px; margin: 0; font-family: var(--font-cjk-serif); font-size: 36px; line-height: 1.15; white-space: nowrap; }
-.builders-strength:nth-child(2) .builders-strength__accent { align-items: center; font-weight: 600; text-align: center; }
-.builders-strength__slogan { position: relative; display: flex; min-width: 0; flex-direction: column; gap: 8px; margin: 0; color: #caa05c; font-family: var(--font-cjk-serif); font-size: calc(var(--slogan-size) * var(--strength-scale)); font-weight: 600; line-height: 1.05; white-space: nowrap; }
-.builders-strength__number { font-size: 1.2em; }
-.builders-strength__slogan sup { position: absolute; top: -.1em; right: -.6em; font-family: var(--font-cjk-sans); font-size: .65em; line-height: 1; }
-.builders-strength:nth-child(2) .builders-strength__slogan { text-align: center; }
-.builders-home-one { width: 100%; margin: 0; padding: 54px 30px 64px; border: 1px solid rgb(202 160 92 / 16%); border-radius: 36px; background: rgb(255 255 255 / 92%); box-shadow: 0 28px 90px rgb(28 28 29 / 8%); }
-.builders-one { display: flex; flex-direction: column; align-items: center; }
-.builders-one p { margin: 0 0 16px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 42px; font-weight: 700; line-height: 1.25; }
-.builders-one strong { display: inline-flex; width: min(420px, 100%); min-height: 64px; align-items: center; justify-content: center; padding: 10px 28px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-ui); font-size: 28px; font-weight: 400; letter-spacing: .18em; white-space: nowrap; }
-.builders-services { display: grid; width: min(960px, 100%); grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 38px auto 0; }
-.builders-service { text-align: center; }
-.builders-service__label { position: relative; display: flex; min-height: 92px; flex-direction: column; align-items: center; justify-content: center; border: 2px solid rgb(202 160 92 / 72%); border-radius: 14px; color: #b99864; background: #fff; font-family: var(--font-cjk-sans); line-height: 1.12; }
-.builders-service__label > svg { position: absolute; top: -18px; left: 50%; width: 24px; height: 21px; color: #c4a574; fill: #c4a574; stroke-width: 0; transform: translateX(-50%); }
-.builders-service__label strong { font-size: 21px; font-weight: 500; }
-.builders-service__label span { margin-top: 4px; font-size: 19px; }
-.builders-service h3 { position: relative; width: max-content; max-width: 100%; margin: 36px auto 0; font-family: var(--font-cjk-serif); font-size: 32px; font-weight: 600; line-height: 1.2; }
-.builders-service h3 > svg { position: absolute; right: calc(100% + 10px); top: 50%; width: 25px; height: 25px; color: #c4a574; stroke-width: 4.5; transform: translateY(-50%); }
-.builders-service p { display: flex; flex-direction: column; gap: 8px; margin: 16px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 21px; line-height: 1.45; }
-.builders-lifetime { padding: 72px 30px 140px; color: #1c1c1d; background: #fafafa var(--cms-image-asset_52e702e4, url('/section-6/franchise/antra-original/h1-bg01-1.png')) bottom center / 100% auto no-repeat; }
-.builders-lifetime__heading { width: min(920px, 100%); margin-inline: auto; text-align: center; }
-.builders-lifetime__pill { margin-inline: auto; }
-.builders-lifetime__heading h2 { margin-top: 24px; font-family: var(--font-display); font-weight: 400; }
-.builders-lifetime__heading h2 span { display: inline-block; color: #caa05c; white-space: nowrap; }
-.builders-lifetime__heading p { max-width: 690px; margin: 24px auto 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
-.builders-lifetime__visual { margin-top: 58px; overflow: hidden; border: 1px solid #e3e3e8; border-radius: 24px; background: #fff; box-shadow: 0 24px 70px rgb(28 28 29 / 8%); }
-.builders-lifetime__visual > :deep(.builder-image) { aspect-ratio: 16 / 9; background: #fff; }
+.builders-capability__showcase { width: min(1280px, 100%); margin: 70px auto 0; container-type: inline-size; font-family: var(--font-cjk-sans); }
+.builders-capability__showcase :deep(.builder-image) { height: auto; background: transparent; }
+.builders-solution { margin: 0; }
+.builders-solution--modules { display: grid; grid-template-columns: 44% 47%; align-items: center; padding-top: 2.25cqw; }
+.builders-solution__copy { text-align: center; }
+.builders-solution__copy h3,
+.builders-solution__copy p { margin: 0; font-family: var(--font-cjk-sans); font-size: clamp(13px, 3.2cqw, 40px); font-weight: 400; line-height: 1.15; }
+.builders-solution__copy .builders-solution__lead { margin-bottom: 2cqw; font-size: clamp(12px, 2.8cqw, 36px); }
+.builders-solution__copy .builders-solution__number { color: #c4a574; font-size: clamp(24px, 6.2cqw, 80px); font-weight: 700; }
+.builders-solution__caption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: .3em; margin: 0; padding: 2.6cqw 2%; font-family: var(--font-cjk-sans); font-size: clamp(12px, 3.2cqw, 40px); font-weight: 400; line-height: 1.4; text-align: center; }
+.builders-solution__caption strong { color: #c4a574; font-size: clamp(20px, 5.5cqw, 68px); font-weight: 700; }
+.builders-solution:nth-child(3) .builders-solution__caption { padding-block: 3.5cqw; }
+.builders-solution__visual--modules { aspect-ratio: 4933 / 3946; }
+.builders-solution__visual--factory { aspect-ratio: 1280 / 460; }
+.builders-solution__visual--factory :deep(img) { object-position: bottom; }
+.builders-solution__visual--platform { width: 90%; aspect-ratio: 16 / 9; }
+.builders-home-one__visual { aspect-ratio: 2.7 / 1; }
+.builders-services-panel__visual { aspect-ratio: 1280 / 391; }
+.builders-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75cqw; padding: 2cqw 2% 3cqw; }
+.builders-service { min-width: 0; text-align: center; }
+.builders-service h3 { display: flex; align-items: center; justify-content: center; gap: .25em; margin: 0; font-family: var(--font-cjk-serif); font-size: clamp(12px, 2.8cqw, 36px); font-weight: 600; line-height: 1.4; }
+.builders-service h3 svg { width: .9em; height: .9em; flex: none; color: #c4a574; }
+.builders-service p { display: flex; flex-direction: column; margin: .6em 0 0; color: #59585d; font-size: clamp(10px, 1.8cqw, 22px); line-height: 1.6; }
+.builders-lifetime { margin: 0; padding: 0; }
+.builders-lifetime__visual { aspect-ratio: 16 / 9; }
 .builders-partners { overflow: hidden; padding: 86px 0 102px; background: #fff var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) bottom center / 100% auto no-repeat; }
 .builders-partners__rail { width: 100%; }
 .builders-partners h2 { display: flex; width: min(1410px, calc(100% - 60px)); margin: 0 auto 62px; box-sizing: border-box; align-items: center; justify-content: center; gap: 24px; padding-inline: 43px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 700; line-height: 36px; text-align: center; }
@@ -419,43 +408,27 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 @media (max-width: 1199px) {
   .builders-hero__inner { grid-template-columns: 61% 39%; }
-  .builders-hero h1 { font-size: clamp(64px, 7.4vw, 88px); }
   .builders-section-heading--team { grid-template-columns: 23% 52% 25%; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 52px; line-height: 57px; }
-  .builders-strength { --strength-scale: .72; min-height: 186px; padding: 28px 24px 30px; }
-  .builders-strength h3 { font-size: 20px; }
   .builders-contact__aside { padding-right: 35px; }
 }
 
 @media (max-width: 1023px) {
   .builders-rail-wide { width: calc(100% - 60px); }
-  .builders-hero { min-height: 730px; }
+  .builders-hero { min-height: 778px; }
   .builders-hero__inner { grid-template-columns: 1fr; padding-top: 115px; }
   .builders-hero__aside { margin: 42px 0 0; }
   .builders-hero-media { height: 520px; margin-top: -240px; }
   .builders-team,
   .builders-capability,
-  .builders-lifetime,
   .builders-partners,
   .builders-contact { padding-block: 96px; }
   .builders-capability { padding-bottom: 56px; }
-  .builders-lifetime { padding-top: 56px; }
   .builders-section-heading--team,
   .builders-section-heading--split { grid-template-columns: 1fr; gap: 25px; }
   .builders-section-heading--team > p { max-width: 680px; }
   .builders-team__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .builders-strengths { gap: 22px; }
-  .builders-strength { --strength-scale: .58; padding: 24px 18px 26px; }
-  .builders-strength h3 { font-size: 18px; }
-  .builders-strength__accent { flex: none; font-size: 24px; }
-  .builders-home-one { width: 100%; }
-  .builders-services { gap: 24px; }
-  .builders-one p { font-size: 32px; }
-  .builders-service__label strong { font-size: 18px; }
-  .builders-service__label span { font-size: 16px; }
-  .builders-service h3 { font-size: 25px; }
-  .builders-service p { font-size: 17px; }
   .builders-contact__grid { grid-template-columns: 1fr; }
   .builders-contact__aside { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 30px; padding: 0 0 48px; }
 }
@@ -464,39 +437,28 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-page .internal-rail-safe { padding-right: 0; }
   .builders-rail-wide { width: calc(100% - 30px); }
   .builders-rail { width: 100%; }
-  .builders-hero { min-height: 620px; }
+  .builders-hero { min-height: 668px; }
   .builders-hero__inner { padding: 80px 0 0; }
-  .builders-hero h1 { margin-top: 18px; font-size: clamp(47px, 13.8vw, 58px); line-height: 1.02; letter-spacing: -.02em; }
+  .builders-hero__eyebrow { font-size: 20px; }
+  .builders-hero h1 { margin-top: 18px; font-size: clamp(24px, 7.3vw, 32px); line-height: 1.5; }
   .builders-hero__aside { margin: 35px 0 0; }
   .builders-hero__aside .builders-round-link { margin-top: 27px; }
   .builders-hero-media { width: calc(100% - 30px); height: 310px; margin-top: -135px; border-radius: 18px; }
   .builders-team,
   .builders-capability,
-  .builders-lifetime,
   .builders-partners,
   .builders-contact { padding: 72px 15px; }
   .builders-capability { padding-bottom: 40px; }
-  .builders-lifetime { padding-top: 48px; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 41px; line-height: 46px; }
+  .builders-section-heading--team h2 strong { font-size: 28px; }
+  .builders-section-heading--team h2 span { font-size: 18px; }
   .builders-partners h2 { width: calc(100% - 30px); gap: 13px; margin-bottom: 42px; padding-inline: 0; font-size: 20px; line-height: 28px; }
   .builders-partners h2::before,
   .builders-partners h2::after { width: 42px; flex: none; }
   .builders-capability .builders-section-heading--split > div h2 { margin-top: 20px; }
   .builders-team__grid { grid-template-columns: 1fr; gap: 20px; }
   .builders-team-card > :deep(.builder-image) { aspect-ratio: 1 / 1.12; }
-  .builders-strengths { grid-template-columns: 1fr; margin-top: 56px; }
-  .builders-capability__showcase { gap: 20px; }
-  .builders-capability__showcase .builders-strengths { margin-top: 0; padding: 18px; border-radius: 26px; }
-  .builders-strength { --strength-scale: .8; width: 100%; min-height: 170px; margin-inline: auto; padding: 24px 16px 26px; }
-  .builders-strength h3 { font-size: 22px; }
-  .builders-strength__accent { font-size: 36px; }
-  .builders-home-one { margin: 0; padding: 42px 18px 48px; border-radius: 26px; }
-  .builders-one p { font-size: 27px; text-align: center; }
-  .builders-one strong { min-height: 58px; padding-inline: 14px; font-size: 18px; letter-spacing: .12em; }
-  .builders-services { grid-template-columns: 1fr; gap: 46px; margin-top: 36px; }
-  .builders-service { width: min(330px, 100%); margin-inline: auto; }
-  .builders-lifetime__visual { margin-top: 40px; border-radius: 18px; }
   .builders-partners { padding: 64px 0 72px; }
   .builders-partner { width: 184px; height: 98px; padding: 20px 26px; }
   .builders-contact__aside { display: block; }

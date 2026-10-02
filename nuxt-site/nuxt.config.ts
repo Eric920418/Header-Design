@@ -58,6 +58,8 @@ export default defineNuxtConfig({
     strict: true,
   },
   nitro: {
+    // 共用純 JS 驗證必須內嵌，避免 dev external 相對路徑指向工作區外。
+    externals: { inline: [/shared\/franchise-form\.mjs$/] },
     // Nuxt 位於 workspace 子目錄；Vercel 的 Build Output API 必須落在 Repository 根目錄。
     // 否則 Nitro 會寫進 nuxt-site/.vercel/output，Vercel 只看到根目錄舊 Vite 的 dist 預設。
     output: process.env.VERCEL ? { dir: '../.vercel/output' } : undefined,
