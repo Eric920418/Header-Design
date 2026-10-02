@@ -3,7 +3,13 @@ const props = defineProps<{ designListUrl?: string }>()
 const route = useRoute()
 const fromDesignInspiration = computed(() => Boolean(props.designListUrl) || route.query.from === 'inspiration')
 const parentLabel = computed(() => fromDesignInspiration.value ? '設計靈感' : '案例門市')
-const parentRoute = computed(() => props.designListUrl || (fromDesignInspiration.value ? '/design-inspiration' : '/gallery'))
+const parentRoute = computed(() => {
+  if (props.designListUrl) return props.designListUrl
+  if (!fromDesignInspiration.value) return '/gallery'
+  const query = new URLSearchParams()
+  for (const key of ['form', 'style', 'page']) if (typeof route.query[key] === 'string') query.set(key, route.query[key] as string)
+  return '/design-inspiration' + (query.size ? `?${query}` : '')
+})
 </script>
 
 <template>

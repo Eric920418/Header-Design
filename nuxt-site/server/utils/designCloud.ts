@@ -13,7 +13,7 @@ export async function withDesignDb<T>(event: H3Event, run: (pool: sql.Connection
       const pool = new sql.ConnectionPool({
         server: config.server, port: Number(config.port), database: config.database, user: config.user, password: config.password,
         options: { encrypt: String(config.encrypt) !== 'false', trustServerCertificate: String(config.trustServerCertificate) === 'true' },
-        connectionTimeout: 8000, requestTimeout: 15000, pool: { max: 5, min: 0, idleTimeoutMillis: 30000 },
+        connectionTimeout: 60000, requestTimeout: 20000, pool: { max: 5, min: 0, idleTimeoutMillis: 30000 },
       })
       pool.on('error', () => { connection = undefined; void pool.close().catch(() => {}) })
       connection = pool.connect().catch(async error => { connection = undefined; await pool.close(); throw error })

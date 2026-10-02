@@ -200,9 +200,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .antra-store-filter__row--cities { border-top: 1px solid #e3e3e8; }
 
 .antra-store-filter__label {
-  color: #9f9fa4;
+  color: #59585d;
   font-family: var(--font-cjk-sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 24px;
 }
 
@@ -253,9 +253,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .antra-store-gallery__result-count {
   margin-top: 36px;
-  color: #9f9fa4;
+  color: #59585d;
   font-family: var(--font-cjk-sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 24px;
 }
 
@@ -353,7 +353,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   }
 
   .antra-store-filter__row--cities { padding-top: 18px; }
-  .antra-store-filter__label { font-size: 14px; }
+  .antra-store-filter__label { font-size: 16px; }
 
   .antra-store-filter__options {
     gap: 8px;

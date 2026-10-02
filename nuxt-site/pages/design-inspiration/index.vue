@@ -2,7 +2,7 @@
 const cmsCopy = await useCmsResource('view-pages-design-inspiration-index', {"copy":{"text1":"Inspiration","text2":"篩選設計靈感案例","text3":"設計型式","text4":"設計風格","text5":"Filter","text6":"共 ","text7":" 筆符合條件的設計案例","text8":"View","text9":"目前沒有符合條件的設計案例","text10":"請調整設計型式或設計風格，再重新篩選。","text11":"查看全部案例"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ArrowRight, SlidersHorizontal } from 'lucide-vue-next'
-import type { DesignCasePage, DesignFilters } from '~/types/designCloud'
+import type { DesignCase, DesignCasePage, DesignFilters } from '~/types/designCloud'
 
 const route = useRoute()
 const router = useRouter()
@@ -27,7 +27,9 @@ const error = computed(() => filterError.value || casesError.value)
 const currentPage = computed(() => result.value?.page ?? 1)
 const totalPages = computed(() => result.value?.totalPages ?? 0)
 const paginatedCases = computed(() => result.value?.items ?? [])
-const detailRoute = (id: string) => ({ path: `/design-inspiration/${id}`, query: { ...route.query } })
+const detailRoute = (item: DesignCase) => item.storeSlug
+  ? { path: `/gallery/${item.storeSlug}`, query: { ...route.query, from: 'inspiration' } }
+  : { path: `/design-inspiration/${item.id}`, query: { ...route.query } }
 async function retry() { await Promise.all([refreshFilters(), refreshCases()]) }
 
 async function applyFilters() {
@@ -124,14 +126,14 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                   <span>{{ item.form }}</span>
                   <span>{{ item.style }}</span>
                 </div>
-                <NuxtLink :to="detailRoute(item.id)" class="design-project-card__image-link" :aria-label="`查看案例：${item.title}`">
+                <NuxtLink :to="detailRoute(item)" class="design-project-card__image-link" :aria-label="`查看案例：${item.title}`">
                   <InternalCaseImage v-if="item.cover" :src="item.cover" :alt="item.title" class="design-project-card__image" />
                   <span class="design-project-card__shade" aria-hidden="true" />
                   <span class="design-project-card__view" aria-hidden="true">{{ cmsCopy.copy.text8 }}</span>
                 </NuxtLink>
               </div>
               <div class="design-project-card__text">
-                <h2><NuxtLink :to="detailRoute(item.id)">{{ item.title }}</NuxtLink></h2>
+                <h2><NuxtLink :to="detailRoute(item)">{{ item.title }}</NuxtLink></h2>
                 <p>{{ item.description }}</p>
               </div>
             </article>

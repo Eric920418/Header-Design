@@ -1,5 +1,33 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-02 SAKURA 廚電分類確認（本機，未部署）
+
+- `/products/sakura` 依客戶截圖只保留九張分類卡片並依序顯示：除油煙機、瓦斯爐、IH 感應爐、殺菌烘碗機、洗碗機、烤箱與電器收納櫃、瓦斯熱水器、電能熱水器、淨水設備。每張仍連至原對應分類列表。
+- 調整入口的顯示範圍；原始商品資料、既有產品網址與 CMS 設定保留。SVAGO、TEKA 的分類不受影響。唯讀回歸沿用 `node nuxt-site/scripts/check-product-covers.mjs`，驗證九項順序、SSR、圖片與分類列表連結。
+
+## 2026-09-29 Vercel／Azure SQL 雲端測試站
+
+- 已完成並切換兩個既有網域：`https://header-design-two.vercel.app`、`https://sakura-demo-vanlantech.com`。Production 部署 `dpl_4WcSWWzCCXvUY2KEVU5SZZR7fcnX`（2026-09-29，Ready，Functions `sin1`）；後台路徑 `/admin`。網站與後台連 Azure，不依賴本機開機；既有提案密碼與 CMS 帳密沿用。依 Vercel deployments-cicd／env-vars 技能採伺服器端環境變數、分階段部署、測試通過再 promote；未加購服務。
+- SQL 素材儲存模式為 `CMS_MEDIA_STORAGE=sql`（測試上限 2GB）與每段 2MiB 上傳，保留圖片 10MB／PDF 30MB、登入／CSRF／私有素材權限。新增資料表採 additive schema，不刪除或覆寫既有資料。本機初始化／啟動指令沿用下方章節；Vercel 只設定 Production 資料庫憑證，Preview 未共用此 CMS 寫入權限。
+- 最終版本正式建置及線上端對端重測通過後已 promote；兩個正式網址均再次確認首頁、登入、設計靈感、SAKURA 頁面 200，案例總數 25、第三頁 7 筆。部署 error 等級查詢未找到紀錄（當次查詢，非長期監控）；型別檢查、素材單元檢查、匯入回滾／重複比對均通過。既有 Tailwind sourcemap 警告未阻擋建置。程式變更保留本機，尚未 commit／push；後續 Git 自動部署須包含本次檔案。
+- 雲端專用匯入：`node --env-file=.env.design-db.local --env-file=.env.azure-sql.local --env-file=nuxt-site/.env nuxt-site/scripts/azure-test-db.mjs import`；目標固定為本次 Azure 測試庫，只允許空庫整批交易匯入，既有資料必須完全一致才可跳過，衝突拒絕而非覆蓋。`verify` 檢查逐表內容及素材 SHA-256；`AZURE_TEST_ROLLBACK=1` 可在空庫測試完整交易回滾。來源只讀，保留 ID／CMS 密碼雜湊，不移轉登入工作階段。產生的 `.env.azure-runtime.local` 只包含兩個最小權限應用帳號，不含管理員密碼。`.vercelignore` 排除憑證及私有快照。
+- 素材測試：`node nuxt-site/scripts/check-media-chunks.mjs`，涵蓋檔案驗證、區塊超限／缺段／重送衝突。分段上傳暫存一小時，最多 100MB，發布前素材仍需登入；不新增付費 Blob。
+- Vercel Functions 設為 `sin1`，與 Southeast Asia 資料庫靠近；不啟用固定出口 IP。匯入演練發現 Audit identity 的 SQL batch 範圍問題，已改為同批次保留原序號；失敗交易已回滾，未留下部分資料。
+- 免費 SQL 閒置後會休眠；來源與 CMS 連線等待延長至 60 秒，首次開啟可能較慢，額度耗盡則暫停至下月。這是成本受限測試環境，不保證正式站 SLA。
+- 匯入驗證要求內容一致；Audit 的時間欄位明確綁定 DateTime2，避免驅動程式推斷為 DateTime 後四捨五入。素材批次匯入並於 SQL 計算 SHA-256，減少測試庫往返流量。
+- 雲端端對端檢查：`TEST_BASE_URL=https://header-design-<deployment>.vercel.app node --env-file=.env.azure-runtime.local nuxt-site/scripts/check-cloud-site.mjs`。僅接受本次測試庫／暫存部署；檢查 SSR、品牌總數、案例分頁、超過 4.5MB 的 PDF 分段上傳／串流下載、CSRF 與素材權限，只建立並清除本輪隨機驗收帳號及其資料。
+- 完整匯入／回滾演練、正式測試庫匯入及再次內容比對已通過（25 案例、879 來源商品、65 CMS 資源、297 素材）。Vercel Production 環境已設定獨立應用帳號；暫存部署以 `--prod --skip-domain` 建立，驗收透過已登入 Vercel CLI 取得測試存取 cookie，不關閉部署保護，不輸出憑證。
+- 已驗證來源唯讀帳號無法讀取 CMS 帳號表，兩個應用帳號均被拒絕修改 `sync` 資料；首頁／案例／三品牌／門市線上 SSR 已回應 200。後台未登入時的 302 導向登入頁為預期行為，驗收直接檢查登入頁。
+- 暫存部署端對端已通過：25 案例分頁 9／9／7、三品牌商品 749／60／38、5MB 以上 PDF 分段上傳及完整 SHA-256 下載、缺段／重送、CSRF 拒絕、私人素材 401／已發布素材可讀。驗收資料已清除，原始 CMS 資源未修改。本機亦已 additive 初始化新素材表；檔案模式遇交易回滾會清除該次新檔。
+
+- 2026-09-29 使用者已同意測試期間放寬來源 IP，不加購固定 IP／Blob。CMS 素材使用既有 SQL 免費額度；一次性移轉管理密碼僅填入被 Git 忽略的 `.env.azure-sql.local`，不傳入 Vercel。
+- Azure 已完成部署：資源群組 `rg-sakura-website-test`、伺服器 `sakura-website-test-20260929.database.windows.net`、資料庫 `SakuraWebsiteTest`，區域為 Southeast Asia。入口網站確認資料庫為 Online、免費方案，超額計費 Disabled，免費額度用完即暫停。
+- 建立時使用「沒有存取權」；依使用者本次確認，已儲存並重新載入驗證測試規則 `VercelTestPublic-TLSRequired`（`0.0.0.0`–`255.255.255.255`），允許所有 IPv4 來源嘗試連線，仍須資料庫認證；規則名稱本身不負責強制 TLS，應用連線仍必須啟用加密及憑證驗證。Azure 服務通用存取例外未勾選、未啟用 Defender 付費試用。此設定降低網路隔離，僅供測試，正式公開前應收緊。
+- 未加購固定 IP、Blob 或其他服務；SQL 免費額度用完暫停，不承諾其他既有雲端服務的流量完全不計費。
+- Vercel 專案 `header-design` 同時綁定 `header-design-two.vercel.app` 與 `sakura-demo-vanlantech.com`。之後雲端後台變更只寫 Azure，本機仍用 `SakuraWebsiteDev`，不自動雙向同步；既有本機備份指令仍只適用檔案儲存模式，不當作雲端 SQL 素材備份。
+- 原本機匯入器仍只允許 `127.0.0.1:14333/SakuraWebsiteDev`；本次使用另有固定目標保護的 Azure 匯入指令，不移除本機保護、不修改 SPA。
+- 管理員密碼不存入本文件、Git、前端或聊天；官網應使用獨立最小權限帳號，不使用 SQL 管理員。Azure 簡易建立流程切換進階設定可能把輸入值帶入網址，避免分享建立流程網址或未遮蔽的診斷紀錄；先前輸入已要求更換，不應重用。
+
 ## 2026-09-29 正式 CMS（本機版本）
 
 後台入口 `/admin`；本機正式建置驗收入口 `http://localhost:3120/admin`，原開發入口為 `http://localhost:3100/admin`。提案密碼仍保留；通過提案保護後，另以 CMS 帳號登入。此版本需要 Node 伺服器與 MSSQL，不能以純靜態網站部署。
@@ -1902,3 +1930,16 @@ final result: passed
 - **官網尺寸真值**：依原官網實際 DOM 與 computed layout 校正，不再只憑截圖估算。按鈕在手機為 `72 × 72px`、桌機為 `74 × 74px`，四周固定 `8px` padding；內容框因此分別為 `56 × 56px` 與 `58 × 58px`，第一顆按鈕下方保留 `20px` 間距。灰色按鈕間的 1px 白色半透明分隔線獨立於按鈕盒模型，第三顆不再被邊框撐成 75px。
 - **指定資產與內容**：金色按鈕依 `截圖 2026-08-25 上午11.26.34.png` 恢復「案例門市」及 `/gallery` 連結；第二輪實圖比對發現 36px 房屋與 16px 標籤仍比官網 SVG 大一級，因此再校正為手機 29px／桌機 30px 房屋、Noto Sans TC 12/12px 標籤，並對齊下方兩顆圖示約 14px 的上緣與標籤約 12px 的下緣。按鈕外框仍維持官網 72／74px；灰色區保留原始圖示與正式服務連結，其中丈量按鈕可見文字及無障礙名稱已統一為「到府丈量」。
 - **本輪 Design QA**：來源視覺為使用者提供的金色案例門市截圖與前一輪官網灰色按鈕截圖；XML、靜態尺寸規則與正式建置會持續檢查。Codex In-app Browser 的本機 URL 安全規則拒絕重新載入 `127.0.0.1:3018`，因此無法取得修改後瀏覽器截圖並與來源組成同畫面比較；依 image-to-code 驗收規則，本輪視覺 QA `final result: blocked`，需由使用者手動重新整理後提供或確認最終畫面，不能僅以建置成功宣稱視覺通過。
+# 2026-10-02 前台修正（本機，未部署）
+
+- 修復首頁廚房產品、Footer 的 CMS 背景樣式被空白拆開；保留 CMS 圖片設定。
+- 區域篩選不再視為選定門市；切換篩選會取消門市鎖定，只有點選門市才固定該張卡片。
+- 品牌系列板材 CTA 移除上方橫線、縮小與推薦電器的留白；少量板材／電器卡片置中，保留響應式卡片尺寸。
+- 案例門市的區域標籤與結果筆數統一為 16px、#59585D。
+- 設計靈感重新納入 CMS 原有門市故事，與資料庫案例共同篩選／每頁 9 筆；門市故事仍使用原 `/gallery/:slug`，返回設計靈感保留型式、風格與頁碼，不複製或覆寫資料庫案例。
+- 標示「提供樣式後再修改」的標題／Hero／產品版型暫不調整；尋找門市的新標題、Figma 提案商品範圍待確認。
+- 內容修正使用 CMS 版本機制（保留原版本、有未發布草稿或 revision 衝突即停止），不重跑 seed、不修改 SPA／sync 資料。先在 `nuxt-site` 執行 `FRONTEND_ASSET_DIR='/Users/eric/Downloads/提案後新增用圖/2.2廚房產品型錄' node --env-file=.env scripts/update-frontend-content-20261002.mjs` 檢查，再加 `--apply` 套用本機：君璽導覽圖片對齊 Hero、Brand Commitment 小標、廚房配備 PDF／封面與已核實的同型號去背圖。指令拒絕非本機 SakuraWebsiteDev；正式 CMS 尚未套用，部署程式不會自動發布這些內容。
+- 推薦電器 28 型號中 19 個已有／找到透明原圖。仍缺原始去背素材：G2112G、R605、EG2501GC、EG2350GB、Q7585BL、DR7397XL、Q7693、DR7790A、G2932AG；暫保留原圖，不替換其他型號或 AI 重繪產品。
+- 唯讀回歸：啟動本機 3100 後，在 `nuxt-site` 執行 `node scripts/check-frontend-regressions.mjs`；驗證 25 個來源案例加 3 門市案例（9／9／9／1）、交集篩選、錯誤參數、返回列表、背景與 PDF 預覽／下載一致。可指定上述 `FRONTEND_ASSET_DIR` 另比對 PDF SHA-256。原匯入驗證指令的來源資料庫筆數仍為 25，列表驗收更新為 28。
+- 已驗證：`pnpm typecheck`、`pnpm build`、`node scripts/check-frontend-regressions.mjs`、`node scripts/check-kitchen-series.mjs` 通過；內容更新重跑四筆皆 `UNCHANGED`。瀏覽器確認 1218px／390px 卡片置中、無水平溢出、CTA 上框線為 0px、四張北部門市卡片輪替、君璽導覽圖載入、背景恢復、門市篩選文字 16px／rgb(89,88,93)，以及「工業風 → 安康案例 → 設計靈感」保留篩選、麵包屑固定、scrollY=0。
+- 另以 3121 啟動正式建置產物並重跑上述唯讀回歸通過；測試程序已關閉，3100 開發預覽保留。沒有部署或修改雲端 CMS。

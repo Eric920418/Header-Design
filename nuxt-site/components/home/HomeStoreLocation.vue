@@ -34,6 +34,7 @@ const visible = computed(() => filtered.value.find(store => store.id === selecte
 watch(region, () => city.value = '')
 watch(filteredKey, () => {
   const list = filtered.value
+  focused.value = false
   if (!list.some(store => store.id === selected.value)) selected.value = list[0]?.id ?? stores[0].id
   displayedIds.value = list.slice(0, STORE_BOARD_ROWS).map(store => store.id)
   nextFlipSlot = 0
@@ -74,7 +75,7 @@ function runFlip() {
   if (boardPaused.value || reducedMotion.value || flipState.value) return
 
   const candidates = filtered.value.filter(store => !displayedIds.value.includes(store.id))
-  const keepSelected = focused.value || Boolean(region.value || city.value)
+  const keepSelected = focused.value
   const replaceableSlots = displayedIds.value
     .map((id, index) => ({ id, index }))
     .filter(({ id }) => !keepSelected || id !== selected.value)

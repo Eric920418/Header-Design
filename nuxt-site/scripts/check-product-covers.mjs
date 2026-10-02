@@ -13,10 +13,11 @@ async function get(path) {
   return response
 }
 const covers = { 9: 'menu-water-purifier.png', 83097: 'menu-hardware.jpg', 83098: 'menu-faucet.png', 83100: 'menu-sink.png', 83377: 'menu-door-panel.png', 83378: 'menu-countertop.png' }
-for (const [brand, total, count] of [['sakura', 749, 16], ['svago', 60, 8], ['teka', 38, 8]]) {
+for (const [brand, total, count] of [['sakura', 749, 9], ['svago', 60, 8], ['teka', 38, 8]]) {
   const data = await (await get(`/api/products/${brand}/categories`)).json()
   assert.equal(data.total, total)
   assert.equal(data.categories.length, count)
+  if (brand === 'sakura') assert.deepEqual(data.categories.map(category => category.id), [6, 7, 162, 8, 48, 83307, 5, 83227, 9], 'SAKURA 分類須符合客戶截圖的九項及順序')
   const html = await (await get(`/products/${brand}`)).text()
   for (const category of data.allCategories) {
     if (brand === 'sakura' && covers[category.id]) {

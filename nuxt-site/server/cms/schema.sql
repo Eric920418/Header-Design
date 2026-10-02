@@ -25,3 +25,9 @@ IF OBJECT_ID('cms.Audit') IS NULL CREATE TABLE cms.Audit (
 IF OBJECT_ID('cms.RateLimits') IS NULL CREATE TABLE cms.RateLimits (id varchar(64) PRIMARY KEY,hits int NOT NULL,until datetime2 NOT NULL);
 IF COL_LENGTH('cms.Media','originUrl') IS NULL ALTER TABLE cms.Media ADD originUrl nvarchar(1000) NULL;
 IF NOT EXISTS(SELECT 1 FROM sys.indexes WHERE name='cms_media_origin') EXEC('CREATE UNIQUE INDEX cms_media_origin ON cms.Media(originUrl) WHERE originUrl IS NOT NULL');
+IF OBJECT_ID('cms.MediaBytes') IS NULL CREATE TABLE cms.MediaBytes (
+ id uniqueidentifier PRIMARY KEY REFERENCES cms.Media(id) ON DELETE CASCADE, bytes varbinary(max) NOT NULL);
+IF OBJECT_ID('cms.MediaUploads') IS NULL CREATE TABLE cms.MediaUploads (
+ id uniqueidentifier PRIMARY KEY,userId uniqueidentifier NOT NULL REFERENCES cms.Users(id),name nvarchar(255) NOT NULL,mime varchar(80) NOT NULL,
+ size int NOT NULL CHECK(size>0 AND size<=31457280),bytes varbinary(max) NOT NULL DEFAULT 0x,expiresAt datetime2 NOT NULL,
+ mediaId uniqueidentifier NULL REFERENCES cms.Media(id));

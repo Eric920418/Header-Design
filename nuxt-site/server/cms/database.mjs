@@ -4,7 +4,7 @@ export { sql, randomUUID }
 let pool
 export async function database() {
   if (!pool) {
-    const p = new sql.ConnectionPool({ server: process.env.NUXT_DESIGN_DB_SERVER || '127.0.0.1', port: Number(process.env.NUXT_DESIGN_DB_PORT || 14333), database: process.env.CMS_DB_DATABASE || process.env.NUXT_DESIGN_DB_DATABASE || 'SakuraWebsiteDev', user: process.env.CMS_DB_USER || 'sakura_website_cms', password: process.env.CMS_DB_PASSWORD, options: {encrypt: true, trustServerCertificate: process.env.NUXT_DESIGN_DB_TRUST_SERVER_CERTIFICATE === 'true'}, pool: {max: 8, min: 0}, connectionTimeout: 8000, requestTimeout: 20000 })
+    const p = new sql.ConnectionPool({ server: process.env.NUXT_DESIGN_DB_SERVER || '127.0.0.1', port: Number(process.env.NUXT_DESIGN_DB_PORT || 14333), database: process.env.CMS_DB_DATABASE || process.env.NUXT_DESIGN_DB_DATABASE || 'SakuraWebsiteDev', user: process.env.CMS_DB_USER || 'sakura_website_cms', password: process.env.CMS_DB_PASSWORD, options: {encrypt: true, trustServerCertificate: process.env.NUXT_DESIGN_DB_TRUST_SERVER_CERTIFICATE === 'true'}, pool: {max: 8, min: 0}, connectionTimeout: 60000, requestTimeout: 20000 })
     pool = p.connect().catch(e => {pool = undefined; throw e})
     p.on('error', () => {pool = undefined; void p.close()})
   }

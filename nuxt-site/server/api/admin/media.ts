@@ -5,6 +5,7 @@ import sharp from 'sharp'
 import { PDFDocument } from 'pdf-lib'
 import { query,transaction,randomUUID,digest,fail,audit } from '../../cms/database.mjs'
 import { cmsHandler,cmsUser,cmsWrite } from '../../utils/cms'
+import { normalizeMedia,saveMedia } from '../../cms/media.mjs'
 export default defineEventHandler(event=>cmsHandler(event,async()=>{
  if(event.method==='GET'){
   await cmsUser(event)
@@ -22,6 +23,7 @@ export default defineEventHandler(event=>cmsHandler(event,async()=>{
  if(event.method!=='POST')fail(405,'不支援的操作')
  const length=Number(getHeader(event,'content-length'));if(!length||length>31*1024*1024)fail(413,'上傳總大小不可超過 31MB')
  const parts=await readMultipartFormData(event);const files=parts?.filter(p=>p.name==='file'&&p.filename)||[];if(files.length!==1)fail(400,'請一次上傳一個檔案')
+ if(process.env.CMS_MEDIA_STORAGE==='sql'){const f=files[0]!;const file=await normalizeMedia(f.data,f.type);return transaction((tx:any)=>saveMedia(file,(f.filename||'素材').slice(0,255),user.id,tx))}
  const f=files[0]!;let bytes=f.data,mime='',ext=''
  const name=(f.filename||'素材').slice(0,255)
  if(bytes.subarray(0,5).toString()==='%PDF-'){

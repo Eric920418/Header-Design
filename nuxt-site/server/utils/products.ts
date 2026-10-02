@@ -7,6 +7,8 @@ import { withDesignDb } from './designCloud'
 
 const sourceBrands = { sakura: '櫻花', svago: 'SVAGO', teka: 'TEKA' }
 const brandRoots = { sakura: [83301,83300], svago: [81002], teka: [83312] }
+// SAKURA 入口依提案保留九張廚電分類卡片，順序對齊客戶確認的版面。
+const sakuraDisplayCategories = [6, 7, 162, 8, 48, 83307, 5, 83227, 9]
 // SPA kitchen-products.vue 的專用分類封面，不以濾芯、皂液器或色樣代表整個分類。
 const sakuraCategoryCovers: Record<number, string> = {
   9: 'menu-water-purifier.png', 83097: 'menu-hardware.jpg', 83098: 'menu-faucet.png',
@@ -62,7 +64,9 @@ export async function getProductCategories(event: H3Event, brand: ProductBrand):
   const { items, categories } = await productCatalog(event, brand)
   const roots = brandRoots[brand]
   return { brand, total: items.length, allCategories: categories,
-    categories: categories.filter(category => roots.includes(category.parentId) || (brand === 'sakura' && category.parentId === 0 && !roots.includes(category.id))) }
+    categories: brand === 'sakura'
+      ? sakuraDisplayCategories.flatMap(id => categories.filter(category => category.id === id))
+      : categories.filter(category => roots.includes(category.parentId)) }
 }
 function ancestry(category: ProductCategory, categories: ProductCategory[], brand: ProductBrand) {
   const result: ProductCategory[] = [], seen = new Set<number>()

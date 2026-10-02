@@ -58,7 +58,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <footer id="footer-navigation" data-breadcrumb-root class="relative w-full overflow-hidden bg-[#1C1C1D] text-white">
-    <div aria-hidden class="absolute inset-0 bg-[var(--cms-image-asset_9b0c0f62, url('/home-2026/footer/kitchen-background.webp'))] bg-cover bg-center opacity-20" />
+    <div aria-hidden style="background-image: var(--cms-image-asset_9b0c0f62, url('/home-2026/footer/kitchen-background.webp'))" class="absolute inset-0 bg-cover bg-center opacity-20" />
     <div class="relative z-10 mx-auto flex max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]" :class="sitemapOpen ? 'h-[144px] lg:h-[120px]' : 'h-[220px]'">
       <nav aria-label="頁尾連結" class="flex flex-wrap items-center gap-x-10 gap-y-4 font-cjk-sans text-[15px] text-white/80 md:text-[18px]">
         <button type="button" class="flex items-center gap-2 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4" :aria-expanded="sitemapOpen" aria-controls="footer-sitemap" @click="sitemapOpen = !sitemapOpen">{{ cmsCopy.copy.text1 }}<ChevronDown aria-hidden="true" class="h-4 w-4" :class="{ 'rotate-180': sitemapOpen }" />

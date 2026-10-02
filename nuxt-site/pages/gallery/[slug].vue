@@ -29,7 +29,7 @@ const metaEntries = metaOrder
 const description = item.article?.[0]?.paragraphs[0] ?? `${item.storeName}設計案例，設計師 ${item.designer}。`
 const fromDesignInspiration = computed(() => route.query.from === 'inspiration')
 const detailRoute = (slug: string) => fromDesignInspiration.value
-  ? { path: `/gallery/${slug}`, query: { from: 'inspiration' } }
+  ? { path: `/gallery/${slug}`, query: { ...route.query, from: 'inspiration' } }
   : `/gallery/${slug}`
 const [relatedViewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 18 })
 

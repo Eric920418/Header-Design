@@ -19,7 +19,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
-  <section aria-labelledby="services-heading" class="relative overflow-hidden bg-[var(--cms-image-asset_73c853de, url('/services/h6-bg-2.jpg'))] bg-cover bg-top bg-no-repeat px-[15px] pt-[60px] min-[768px]:px-[30px] min-[768px]:pt-[80px] min-[1025px]:pt-[100px] min-[1201px]:pt-[125px]">
+  <section aria-labelledby="services-heading" style="background-image: var(--cms-image-asset_73c853de, url('/services/h6-bg-2.jpg'))" class="relative overflow-hidden bg-cover bg-top bg-no-repeat px-[15px] pt-[60px] min-[768px]:px-[30px] min-[768px]:pt-[80px] min-[1025px]:pt-[100px] min-[1201px]:pt-[125px]">
     <div aria-hidden class="absolute inset-0 bg-black/[.76]" />
     <div class="relative z-10 mx-auto max-w-[1410px]">
       <div class="home-services-heading relative mx-auto mb-[30px] grid max-w-[1410px] grid-cols-1 min-[768px]:mb-[60px] min-[768px]:grid-cols-[30%_70%]">
