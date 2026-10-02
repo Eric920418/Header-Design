@@ -82,6 +82,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </article>
           </li>
         </ul>
+        <p class="builder-catalogue-notice">
+          <span>本專區型錄僅供建設公司、工程專案及設計師等大宗採購參考。</span>
+          <span>若有個人家用需求，歡迎至櫻花整體廚房門市選購。</span>
+        </p>
       </div>
     </section>
   </main>
@@ -140,7 +144,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .builder-catalogue-projects {
   overflow: hidden;
-  padding: 100px 30px 130px;
+  padding: 100px 30px 36px;
   background: #fafafa;
 }
 
@@ -150,6 +154,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 .builder-catalogue-projects__rail.internal-rail-safe { padding-inline: 43px; }
+
+.builder-catalogue-notice { margin: 56px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 400; line-height: 18px; text-align: center; }
+.builder-catalogue-notice span { display: block; text-wrap: balance; }
 
 .builder-catalogue-grid {
   display: grid;
@@ -273,7 +280,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builder-catalogue-card__link:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; border-radius: 24px; }
 
 @media (max-width: 1023px) {
-  .builder-catalogue-projects { padding-block: 80px; }
+  .builder-catalogue-projects { padding-top: 80px; }
   .builder-catalogue-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -282,7 +289,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builder-catalogue-hero__inner { width: calc(100% - 30px); padding: 80px 0 60px; }
   .builder-catalogue-hero h1 { margin-bottom: 25px; font-size: 48px; line-height: 52px; }
   .builder-catalogue-hero__trail { flex-wrap: wrap; }
-  .builder-catalogue-projects { padding: 60px 15px; }
+  .builder-catalogue-projects { padding: 60px 15px 36px; }
+  .builder-catalogue-notice { margin-top: 40px; line-height: 22px; }
   .builder-catalogue-projects__rail.internal-rail-safe { padding-inline: 0; }
   .builder-catalogue-grid { grid-template-columns: 1fr; gap: 42px; }
   .builder-catalogue-card__action { right: 78px; bottom: 18px; gap: 9px; opacity: 1; visibility: visible; transform: none; }

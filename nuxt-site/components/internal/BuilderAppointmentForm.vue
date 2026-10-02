@@ -126,7 +126,7 @@ const submit = async () => {
   <section class="builder-form" aria-labelledby="builder-form-heading">
     <header class="builder-form__header">
       <span>Appointment Form</span>
-      <h3 id="builder-form-heading">預約專人聯繫</h3>
+      <h3 id="builder-form-heading">預約品牌館參訪</h3>
     </header>
 
     <form ref="formElement" novalidate @submit.prevent="submit">
