@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-about-advantage', {"copy":{"text1":"Industrial Elegance Condo","text2":"打造符合每個家庭的理想廚房","text3":"源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-about-advantage', {"copy":{"text1":"Creating the Ideal Kitchen for Every Family","text2":"打造符合每個家庭的理想廚房","text3":"源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { brandAdvantageFaqGroups as cmsSeed_brandAdvantageFaqGroups } from '~/data/brandAdvantage'
 const { brandAdvantageFaqGroups } = await useCmsResource('data-brandAdvantage', { brandAdvantageFaqGroups: cmsSeed_brandAdvantageFaqGroups })

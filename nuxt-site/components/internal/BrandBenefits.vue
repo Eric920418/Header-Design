@@ -5,69 +5,37 @@ const { brandBenefits } = await useCmsResource('data-brandAdvantage', { brandBen
 
 
 const storyRef = ref<HTMLElement | null>(null)
-const scrollStoryActive = ref(false)
-let stopScrollStory: (() => void) | undefined
+const autoplayStarted = ref(false)
+let storyObserver: IntersectionObserver | undefined
 
 onMounted(() => {
-  const media = window.matchMedia('(min-width: 1201px) and (prefers-reduced-motion: no-preference)')
-  let frame = 0
-
-  const update = () => {
-    frame = 0
-    const story = storyRef.value
-    scrollStoryActive.value = media.matches
-    if (!story || !media.matches) {
-      story?.style.removeProperty('--reveal-2')
-      story?.style.removeProperty('--reveal-3')
-      return
-    }
-
-    const rect = story.getBoundingClientRect()
-    const range = Math.max(story.offsetHeight - window.innerHeight + 80, 1)
-    const progress = Math.min(Math.max((80 - rect.top) / range, 0), 1)
-    const reveal = (start: number) => Math.min(Math.max((progress - start) / .24, 0), 1)
-    story.style.setProperty('--reveal-2', String(reveal(.18)))
-    story.style.setProperty('--reveal-3', String(reveal(.5)))
-  }
-
-  const requestUpdate = () => {
-    if (!frame) frame = window.requestAnimationFrame(update)
-  }
-
-  window.addEventListener('scroll', requestUpdate, { passive: true })
-  window.addEventListener('resize', requestUpdate)
-  media.addEventListener('change', requestUpdate)
-  update()
-
-  stopScrollStory = () => {
-    if (frame) window.cancelAnimationFrame(frame)
-    window.removeEventListener('scroll', requestUpdate)
-    window.removeEventListener('resize', requestUpdate)
-    media.removeEventListener('change', requestUpdate)
-  }
+  if (!storyRef.value) return
+  storyObserver = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return
+    autoplayStarted.value = true
+    storyObserver?.disconnect()
+  }, { threshold: .1 })
+  storyObserver.observe(storyRef.value)
 })
 
-onBeforeUnmount(() => stopScrollStory?.())
+onBeforeUnmount(() => storyObserver?.disconnect())
 </script>
 
 <template>
   <section class="brand-benefits" aria-labelledby="brand-benefits-title">
     <div class="brand-benefits-rail internal-rail-safe">
       <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-benefits-heading ev">
-        <h2 id="brand-benefits-title">Take A Look At <span>Our Latest<br />Blog</span> &amp; Articles.</h2>
+        <h2 id="brand-benefits-title">Discover What Makes <span>SAKURA KITCHEN</span> Different</h2>
         <p>櫻花整體廚房擁有近百家門市，第一線接觸消費者的設計師皆受過專業的產品力及設計力之培訓、及廚藝大學之認證，提供給消費者最符合其需求的廚房規劃。</p>
       </header>
 
-      <div ref="storyRef" class="brand-benefit-story" :class="{ 'is-scroll-story': scrollStoryActive }">
+      <div ref="storyRef" class="brand-benefit-story" :class="{ 'is-autoplay': autoplayStarted }">
         <div class="brand-benefit-stage">
           <div class="brand-benefit-grid">
             <article
-              v-for="(benefit, index) in brandBenefits"
+              v-for="benefit in brandBenefits"
               :key="benefit.id"
-              v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }"
-              data-ev="opalMoveUp"
-              class="brand-benefit-card ev"
-              :style="{ animationDelay: `${index * 100}ms` }"
+              class="brand-benefit-card"
             >
               <InternalBrandImage :src="benefit.image" :alt="`${benefit.number} ${benefit.title}`" class="brand-benefit-image" />
               <div class="brand-benefit-copy">
@@ -103,13 +71,23 @@ onBeforeUnmount(() => stopScrollStory?.())
 .brand-benefit-copy p { position: relative; z-index: 1; margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .brand-benefit-number { position: absolute; right: 24px; bottom: 18px; color: #e3e3e8; font-family: var(--font-ui); font-size: 80px; font-weight: 400; line-height: 1; }
 
-@media (min-width: 1201px) and (prefers-reduced-motion: no-preference) {
-  .brand-benefit-story.is-scroll-story { height: calc(100vh + 1050px); }
-  .brand-benefit-story.is-scroll-story .brand-benefit-stage { position: sticky; top: 80px; }
-  .brand-benefit-story.is-scroll-story .brand-benefit-card { visibility: visible !important; animation: none !important; transition: opacity .08s linear, transform .08s linear; }
-  .brand-benefit-story.is-scroll-story .brand-benefit-card:first-child { opacity: 1; transform: none; }
-  .brand-benefit-story.is-scroll-story .brand-benefit-card:nth-child(2) { opacity: var(--reveal-2, 0); transform: translate3d(0, calc((1 - var(--reveal-2, 0)) * 110px), 0) scale(calc(.96 + var(--reveal-2, 0) * .04)); }
-  .brand-benefit-story.is-scroll-story .brand-benefit-card:nth-child(3) { opacity: var(--reveal-3, 0); transform: translate3d(0, calc((1 - var(--reveal-3, 0)) * 110px), 0) scale(calc(.96 + var(--reveal-3, 0) * .04)); }
+@media (prefers-reduced-motion: no-preference) {
+  .is-autoplay .brand-benefit-card { animation: benefit-first 12s ease-in-out infinite; }
+  .is-autoplay .brand-benefit-card:nth-child(2) { animation-name: benefit-second; }
+  .is-autoplay .brand-benefit-card:nth-child(3) { animation-name: benefit-third; }
+}
+
+@keyframes benefit-first {
+  0%, 100% { opacity: 0; transform: translateY(36px); }
+  8%, 92% { opacity: 1; transform: none; }
+}
+@keyframes benefit-second {
+  0%, 25%, 100% { opacity: 0; transform: translateY(36px); }
+  33%, 92% { opacity: 1; transform: none; }
+}
+@keyframes benefit-third {
+  0%, 50%, 100% { opacity: 0; transform: translateY(36px); }
+  58%, 92% { opacity: 1; transform: none; }
 }
 
 @media (max-width: 1200px) {

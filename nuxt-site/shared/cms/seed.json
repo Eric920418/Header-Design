@@ -4829,7 +4829,7 @@
         }
       ],
       "pavilionNotice": [
-        "目前僅開放建設公司預約參觀，將提供SAKURA KITCHEN與TLK進口廚具展示品介紹與體驗。如有需求請直撥客戶服務專線： 0800-021-818；手機另撥：0909-611818。",
+        "目前僅開放建設公司預約參觀，將提供SAKURA KITCHEN與進口廚具展示品介紹與體驗。如有需求請直撥客戶服務專線： 0800-021-818；手機另撥：0909-611818。",
         "如有廚具或設備相關需求，可至網頁上方「門市與服務」，就近找尋門市參觀，將提供免費丈量與廚具規劃服務。",
         "現場不提供維修、零件購買等服務。如需維修或商品諮詢，請改撥客戶服務專線。",
         "本館採「全預約制」，如需參觀請先電話聯繫相關人員。"
@@ -4889,7 +4889,7 @@
           "item": {
             "type": "string"
           },
-          "template": "目前僅開放建設公司預約參觀，將提供SAKURA KITCHEN與TLK進口廚具展示品介紹與體驗。如有需求請直撥客戶服務專線： 0800-021-818；手機另撥：0909-611818。"
+          "template": "目前僅開放建設公司預約參觀，將提供SAKURA KITCHEN與進口廚具展示品介紹與體驗。如有需求請直撥客戶服務專線： 0800-021-818；手機另撥：0909-611818。"
         }
       },
       "required": [
@@ -8351,7 +8351,7 @@
     "route": "/about/advantage",
     "data": {
       "copy": {
-        "text1": "Industrial Elegance Condo",
+        "text1": "Creating the Ideal Kitchen for Every Family",
         "text2": "打造符合每個家庭的理想廚房",
         "text3": "源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。"
       },
@@ -8369,7 +8369,7 @@
           "fields": {
             "text1": {
               "type": "string",
-              "label": "Industrial Elegance Condo"
+              "label": "Creating the Ideal Kitchen for Every Family"
             },
             "text2": {
               "type": "string",
@@ -8420,16 +8420,16 @@
     "data": {
       "copy": {
         "text1": " 以人為主的體驗融入整體空間設計中，完整打造家庭生活場域，創造空間通透感，營造宛如現代美術館般之空間氛圍。 ",
-        "text2": "Understanding The Fundamentals",
+        "text2": "Enjoy · Connect · Experience",
         "text3": "享受、交流、體驗",
         "text4": "透過鏡面延伸感打破空間框架限制、以天花格柵創造無邊際之視覺效果，家人間的生活交流互動體現於居家空間內，空間氛圍以「六感體驗」為主軸，體驗生活就是一門藝術的感官饗宴。",
         "field5": "/section-5/brand-pavilion/interior-main.jpg",
         "field6": "集團品牌館客廳與廚房展示空間",
         "field7": "/section-5/brand-pavilion/interior-gallery.png",
         "field8": "集團品牌館多元空間展示",
-        "text9": "Gallery Of Inspiring ",
-        "text10": "Kitchen",
-        "text11": " Designs",
+        "text9": "Memories are made ",
+        "text10": "when we’re together",
+        "text11": "",
         "text12": "地址",
         "text13": "營業時間",
         "text14": "Important Information & Guidelines",
@@ -8453,7 +8453,7 @@
             },
             "text2": {
               "type": "string",
-              "label": "Understanding The Fundamentals"
+              "label": "Enjoy · Connect · Experience"
             },
             "text3": {
               "type": "string",

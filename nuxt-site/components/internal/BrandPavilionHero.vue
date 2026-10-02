@@ -26,8 +26,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape))
       />
       <div class="pavilion-single-hero__shade" aria-hidden="true" />
       <div class="pavilion-single-hero__copy">
-        <small>集團品牌館<br />SAKURA Brand Pavilion</small>
-        <h1 id="pavilion-hero-title">Creative <span>Projects That<br />Define</span> Our Style</h1>
+        <h1 id="pavilion-hero-title">SAKURA <span>BRAND PAVILION</span></h1>
       </div>
       <button type="button" class="pavilion-single-hero__video-card" aria-haspopup="dialog" aria-label="播放集團品牌館影片" @click="videoOpen = true">
         <span class="pavilion-single-hero__video-title">Watch a Video About Us</span>
@@ -54,7 +53,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape))
 .pavilion-single-hero__image { position: absolute; inset: 0; width: 100%; height: 100%; }
 .pavilion-single-hero__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(16 8 1 / 58%) 0%, rgb(16 8 1 / 12%) 61%, rgb(16 8 1 / 28%) 100%); }
 .pavilion-single-hero__copy { position: absolute; left: 30px; bottom: 200px; width: min(665px, 55%); }
-.pavilion-single-hero__copy small { display: block; margin-bottom: 20px; color: rgb(255 255 255 / 75%); font-family: var(--font-ui); font-size: 11px; line-height: 16px; letter-spacing: .12em; text-transform: uppercase; }
 .pavilion-single-hero__copy h1 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.15; text-transform: capitalize; }
 .pavilion-single-hero__copy h1 span { color: #caa05c; }
 .pavilion-single-hero__video-card { position: absolute; right: 104px; bottom: 30px; display: flex; width: 560px; max-width: calc(100% - 134px); align-items: center; justify-content: space-between; border: 0; border-radius: 24px; padding: 10px 10px 10px 33px; color: #fff; background: rgb(255 255 255 / 30%); backdrop-filter: blur(58px); cursor: pointer; animation: opalMoveLeft .8s ease .5s both; }
@@ -82,7 +80,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape))
   .pavilion-single-hero { padding: 20px 15px 30px; }
   .pavilion-single-hero__rail { min-height: 520px; aspect-ratio: auto; }
   .pavilion-single-hero__copy { left: 20px; bottom: 190px; width: calc(100% - 40px); }
-  .pavilion-single-hero__copy small { margin-bottom: 14px; }
   .pavilion-single-hero__copy h1 { font-size: 38px; }
   .pavilion-single-hero__video-card { right: 20px; bottom: 20px; left: 20px; width: auto; max-width: none; padding-left: 20px; }
   .pavilion-single-hero__video-title { width: 150px; font-size: 18px; line-height: 24px; }

@@ -9,7 +9,7 @@
           class="brand-store-heading-aside ev"
         />
         <div v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="brand-store-heading-copy ev">
-          <h2 id="brand-store-title">Description. <span>Architecture<br />Process For</span> Exceptional Results</h2>
+          <h2 id="brand-store-title">Shaping Kitchens <span>Across Taiwan</span></h2>
           <h3>全國最大廚具連鎖通路</h3>
           <p>櫻花自 1997 年開始推展「櫻花廚藝生活館」的連鎖廚具加盟體系；並以社區廚房專家自許，以讓櫻花對消費者的服務能像便利商店一般的無所不在，時時照顧著每一個家庭的廚房生活品質，給所有消費者一個高質感的廚房空間。專營進口廚具、系統廚具、廚具設計，為口碑第一且品質優良的廚具品牌。</p>
         </div>

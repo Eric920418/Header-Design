@@ -1,5 +1,5 @@
-import type { RouterScrollBehavior } from 'vue-router'
-import { useRouter } from '#app'
+import { START_LOCATION, type RouterScrollBehavior } from 'vue-router'
+import { useNuxtApp, useRouter } from '#app'
 
 let pendingScrollReset: AbortController | undefined
 
@@ -11,13 +11,18 @@ const scrollBehavior: RouterScrollBehavior = async (to, from) => {
   if (toPath === fromPath && !to.hash && !from.hash && !productListChanged) return false
 
   const router = useRouter()
+  // Async CMS pages may not have rendered the target anchor at navigation time.
+  if (to.hash && toPath !== fromPath && from !== START_LOCATION) {
+    await new Promise<void>(resolve => useNuxtApp().hooks.hookOnce('page:loading:end', () => resolve()))
+  }
   // Page-mounted effects (including ScrollTrigger.refresh) must finish before the final position.
   await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
   if (router.currentRoute.value.fullPath !== to.fullPath) return false
 
   if (to.hash) {
     const top = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--site-header-height')) || 0
-    return { el: to.hash, top, behavior: 'smooth' }
+    // Native smooth scrolling can be interrupted by Lenis/page layout refresh.
+    return { el: to.hash, top, behavior: 'instant' as ScrollBehavior }
   }
 
   // Wheel momentum and late layout effects can resume after an instant scroll.

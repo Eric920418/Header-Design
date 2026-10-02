@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-about-exhibition', {"copy":{"text1":" 以人為主的體驗融入整體空間設計中，完整打造家庭生活場域，創造空間通透感，營造宛如現代美術館般之空間氛圍。 ","text2":"Understanding The Fundamentals","text3":"享受、交流、體驗","text4":"透過鏡面延伸感打破空間框架限制、以天花格柵創造無邊際之視覺效果，家人間的生活交流互動體現於居家空間內，空間氛圍以「六感體驗」為主軸，體驗生活就是一門藝術的感官饗宴。","field5":"/section-5/brand-pavilion/interior-main.jpg","field6":"集團品牌館客廳與廚房展示空間","field7":"/section-5/brand-pavilion/interior-gallery.png","field8":"集團品牌館多元空間展示","text9":"Gallery Of Inspiring ","text10":"Kitchen","text11":" Designs","text12":"地址","text13":"營業時間","text14":"Important Information & Guidelines","text15":"注意事項"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-about-exhibition', {"copy":{"text1":" 以人為主的體驗融入整體空間設計中，完整打造家庭生活場域，創造空間通透感，營造宛如現代美術館般之空間氛圍。 ","text2":"Enjoy · Connect · Experience","text3":"享受、交流、體驗","text4":"透過鏡面延伸感打破空間框架限制、以天花格柵創造無邊際之視覺效果，家人間的生活交流互動體現於居家空間內，空間氛圍以「六感體驗」為主軸，體驗生活就是一門藝術的感官饗宴。","field5":"/section-5/brand-pavilion/interior-main.jpg","field6":"集團品牌館客廳與廚房展示空間","field7":"/section-5/brand-pavilion/interior-gallery.png","field8":"集團品牌館多元空間展示","text9":"Memories are made ","text10":"when we’re together","text11":"","text12":"地址","text13":"營業時間","text14":"Important Information & Guidelines","text15":"注意事項"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
-import { Clock3, MapPin } from 'lucide-vue-next'
+import { ArrowRight, Clock3, MapPin } from 'lucide-vue-next'
 import { brandPavilions as cmsSeed_brandPavilions, pavilionNotice as cmsSeed_pavilionNotice } from '~/data/brandPavilions'
 const { brandPavilions, pavilionNotice } = await useCmsResource('data-brandPavilions', { brandPavilions: cmsSeed_brandPavilions, pavilionNotice: cmsSeed_pavilionNotice })
 
@@ -83,6 +83,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                   <div><dt><MapPin aria-hidden="true" />{{ cmsCopy.copy.text12 }}</dt><dd>{{ activePavilion.address }}</dd></div>
                   <div><dt><Clock3 aria-hidden="true" />{{ cmsCopy.copy.text13 }}</dt><dd>{{ activePavilion.hours }}</dd></div>
                 </dl>
+                <div class="pavilion-booking">
+                  <NuxtLink to="/builders#appointment" aria-describedby="pavilion-booking-notice" class="site-content-cta group/cta inline-flex h-[60px] items-center gap-2 rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white focus-visible:border-[#CAA05C] focus-visible:bg-[#CAA05C] focus-visible:text-white">
+                    <span class="font-cjk-sans text-[15px]">立即預約</span>
+                    <span class="site-cta-icon flex h-10 w-10 -rotate-45 items-center justify-center rounded-full bg-[#CAA05C] text-white transition-transform group-hover/cta:rotate-0 group-focus-visible/cta:rotate-0"><ArrowRight aria-hidden="true" class="h-5 w-5" /></span>
+                  </NuxtLink>
+                  <p id="pavilion-booking-notice" class="pavilion-booking-notice">※ 本預約服務限建商合作夥伴使用</p>
+                </div>
               </div>
             </div>
           </section>
@@ -125,7 +132,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .pavilion-gallery { position: relative; left: 50%; width: 100vw; max-width: 1290px; padding: 100px 0 0; transform: translateX(-50%); }
 .pavilion-gallery-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; margin-bottom: 53px; }
-.pavilion-gallery-heading h2 { margin: 70px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.pavilion-gallery-heading h2 { margin: 70px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: none; }
 .pavilion-gallery-heading h2 span { color: #caa05c; }
 .pavilion-filter { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-bottom: 40px; }
 .pavilion-filter button { min-height: 46px; padding: 9px 18px; border: 1px solid #e3e3e8; border-radius: 100px; color: #59585d; background: #fff; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; text-align: left; cursor: pointer; transition: color .3s ease, border-color .3s ease, background .3s ease; }
@@ -141,13 +148,15 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .project-image :deep(img) { transition: transform .5s ease; }
 .project-block:hover .project-transition::after { background: rgb(0 0 0 / 25%); }
 .project-block:hover .project-image :deep(img) { transform: scale(1.05); }
-.project-text-box { min-width: 0; padding: 3px 0 0; }
+.project-text-box { display: flex; min-width: 0; flex-direction: column; align-self: stretch; padding: 3px 0 0; }
 .project-text-box h3 { margin: 0 0 18px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 500; line-height: 40px; }
 .project-text-box dl { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 0 0 22px; }
 .project-text-box dl div { border-top: 1px solid #e3e3e8; padding-top: 12px; }
 .project-text-box dt { display: flex; align-items: center; gap: 7px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 500; line-height: 24px; }
 .project-text-box dt svg { width: 15px; height: 15px; color: #caa05c; }
 .project-text-box dd { margin: 6px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; }
+.pavilion-booking { margin-top: auto; padding-top: 32px; }
+.project-text-box .pavilion-booking-notice { margin: 12px 0 0; font-size: 14px; line-height: 22px; }
 .pavilion-copy-block .pavilion-notes-title { margin: 0 0 8px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 600; line-height: 28px; }
 .pavilion-notes { margin: 0; padding: 0; list-style: none; }
 .pavilion-notes li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid #e3e3e8; }
