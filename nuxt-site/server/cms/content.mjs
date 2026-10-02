@@ -92,10 +92,10 @@ function checkIdentities(previous,next,schema,path='內容'){
  if(schema.type==='object'){for(const [key,field] of Object.entries(schema.fields)){if(field.identity&&previous?.[key]!==undefined&&next?.[key]!==previous[key])fail(400,`${path}.${key} 已發布，不可更改`);if(next?.[key]!==undefined)checkIdentities(previous?.[key],next[key],field,`${path}.${key}`)}}
  else if(schema.type==='array'&&schema.item.type==='object')for(const n of next){const identity=Object.keys(schema.item.fields).find(k=>schema.item.fields[k].identity);const p=identity?previous?.find(x=>x[identity]===n[identity]):undefined;if(p)checkIdentities(p,n,schema.item,path)}
 }
-export async function changeDocument(id,input,user){
+export async function changeDocument(id,input,user,connection){
  if(!['save','publish','unpublish','restore'].includes(input.action))fail(400,'未知內容操作')
  if(input.action!=='save'&&user.role!=='admin')fail(403,'僅管理員可發布、下架或還原')
- return transaction(async tx=>{
+ const run=async tx=>{
  const d=(await query('SELECT * FROM cms.Documents WITH(UPDLOCK,HOLDLOCK) WHERE id=@id',{id},tx)).recordset[0];if(!d)fail(404,'找不到內容')
  if(input.revision!==d.revision)fail(409,'內容已被其他人修改，請先重新載入；本次輸入尚未覆蓋')
  let draft=d.draftId,published=d.publishedId
@@ -123,5 +123,6 @@ export async function changeDocument(id,input,user){
  }else published=null
  await query('UPDATE cms.Documents SET draftId=@draft,publishedId=@published,revision=revision+1,updatedAt=SYSUTCDATETIME() WHERE id=@id',{id,draft,published},tx)
  await audit(user.id,input.action,id,tx);return{revision:d.revision+1,draftId:draft,publishedId:published}
- })
+ }
+ return connection?run(connection):transaction(run)
 }

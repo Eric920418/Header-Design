@@ -1,5 +1,42 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-02 最新修改同步正式 CMS（已完成）
+
+- 使用者確認以本次最新本機修改為準，授權同步前次核對的 10 份內容及 2 份型錄素材；不整庫還原、不執行 seed、不修改來源資料、帳號、密碼、權限或收件。
+- 固定範圍指令 `nuxt-site/scripts/sync-content-20261002.mjs` 讀取本機已發布內容，不以種子或舊正式內容取代最新文案。只允許既定 Azure 測試庫；預設 check 無寫入，輸出 planHash。`--rollback --expect=<planHash>` 測試整批回滾，`--apply --expect=<planHash>` 才發布；來源或目標變動時拒絕沿用舊計畫。
+- 沿用既有 CMS 媒體校驗、儲存及內容 save／publish 流程；`changeDocument` 僅增加可傳入既有交易的內部參數，原 HTTP 呼叫仍沿用原交易方式。同步 10 份內容及素材共用 SERIALIZABLE 交易，建立新版本並保留正式舊版本，先保存型錄檔案、核對 SHA-256，再將本文中的兩個本機媒體 ID 對應到正式媒體 ID；可重跑，不產生重複版本。
+- 帳號／工作階段／收件／留言／13 張來源表及其他 55 份文件以同步前後指紋核對，密碼等欄位只在記憶體比對、不輸出。不新增其他說明文件或套件。
+- 已以計畫雜湊 `f3c5c33c6c1d59e65c2be6f7142b7b228ceb940b96b8f6ca877355aa77e9485f` 完成整批回滾測試：兩份素材、10 份內容、版本、引用、稽核資料均回到原狀；SQL IDENTITY 在回滾後有流水號空號屬正常，不重設。其後同一計畫正式提交成功，10 份內容均使用本機最新版本，新正式文件 revision 為 3，舊版本不刪除。重跑預設 check 得到 `pending: []`、`newMedia: []`，不建立重複版本。
+- 正式新增型錄封面 `/media/af3b40a2-db93-4fb2-bb7f-84b9fa312c17`（68,882 bytes）及 PDF `/media/4c8ad00e-af11-43b1-856c-a49569fe3681`（15,529,327 bytes）。兩個正式網域皆可下載，實際 HTTP 檔案 SHA-256 與本機一致；不再使用只存在本機的兩個 media ID。
+- `https://header-design-two.vercel.app` 與 `https://sakura-demo-vanlantech.com`：10 個已發布內容 API 逐欄與本機比對通過（僅將兩個媒體 ID 對應到雲端、沿用 AI Kitchen 既有衍生資料處理）；建商、品牌紀事、品牌館、品牌特色、加盟及型錄六頁 SSR 均讀到新內容。設計靈感仍 28 筆、三品牌商品仍 749／60／38，不新增或重複來源資料。
+- 正式瀏覽器重新載入建商頁，確認 Hero 已為「提供一站式整體解決方案／為建案提升價值與銷售力」、CTA「立即預約」，品牌區標題為最新中文；實際捲至新六段圖文，可見模組／AI 工廠／管理平台／HOME IN O.N.E／三項服務／iCare，六張圖片 `complete` 與 `naturalWidth` 載入檢查通過，沒有回退舊底圖。僅通過提案入口，未登入 CMS 或送表單。
+- 提交後再核對：65 份文件、123 筆歷史版本、299 份素材／SQL 檔案、33 筆稽核記錄；無未發布文件或草稿差異，299 份素材大小及 SHA-256 均正常。
+- 語法檢查、`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`git diff --check` 通過。Vercel 既有 Production 程式已具備這些版型，本次僅更新雲端 CMS，不重新部署或更動網域／環境變數；同步工具及內部交易參數留在本機程式碼。上次唯讀核對的「未同步」為同步前狀態，現已解決本次指定 10 份內容。
+
+## 2026-10-02 正式端 CMS 唯讀核對
+
+- 核對時兩個網域 `header-design-two.vercel.app`、`sakura-demo-vanlantech.com` 都指向 Production 部署 `dpl_dCcwtU5DC1iK9F7z2WnVda3sVFqL`，Ready、Nuxt、Functions `sin1`；建立時間為 2026-10-02 21:58（台灣），Git `978d7caa916b814d889772c7f4e475e4154e6fc6`。因此上方歷次「未部署」記錄代表各修改當時的狀態，不能據此判定現在的程式版本。
+- 正式 Azure `SakuraWebsiteTest` 與本機 `SakuraWebsiteDev` 是獨立資料庫。13 張 `sync` 來源表逐列比對本機、雲端與私有 SQL 快照都一致，沒有本次更新造成的來源資料缺漏或改寫：DesignCloud 25 案例／46 標籤／200 關聯／182 檔案／200 屬性；879 筆產品中櫻花 749、SVAGO 60、TEKA 38、其餘 Electrolux 32（目前三品牌 API 不顯示）。
+- 正式 CMS 65 份資源皆有草稿及發布版本，版本歸屬、JSON／欄位格式、現行 schema 相容性均通過，無未發布草稿差異、失聯版本或失聯素材關聯；113 筆歷史版本保留。297 份正式媒體都有 SQL bytes，大小及 SHA-256 全部吻合；已發布內容沒有引用不存在或已封存的 `/media` 素材。正式收件及留言目前各 0 筆，此次未送表單，不以測試寫入宣稱送件已驗收。
+- 正式 API：65 個內容入口均 HTTP 200；三個舊新聞入口會經既有文章轉接器補出 `cover`／`paragraphs`，不將其與舊種子欄位不同誤判為資料損壞。設計靈感 28 筆（25 設計案例＋3 門市案例）分頁 9／9／9／1、ID 不重複；三品牌 API 總數 749／60／38，SAKURA 入口仍是確認的九類；錯誤頁碼回傳 400。建商、品牌館、加盟、型錄頁 SSR 均 HTTP 200，但正式建商 Hero 實際仍呈現舊 CMS 英文標題。
+- **發現 10 份已發布內容未同步，不是資料被破壞。** 正式端這些文件 revision 都為 1，本機已建立新版本；本機與正式 schema 相同，但已發布本文不同。正式稽核記錄未見 10 月 1 日後的內容儲存／發布。
+
+| 未同步資源 | 正式端與本機差異 |
+| --- | --- |
+| `view-pages-builders-index` | Hero／CTA、品牌大標、三張能力圖片及 iCare；正式仍用舊卡片底圖，與已部署的新分段版型不一致 |
+| `view-pages-franchising-intro` | 加盟主標、夥伴分享、加盟 CTA、小標及最新加盟消息文案 |
+| `view-pages-about-exhibition`、`data-brandPavilions` | 品牌館區塊標題與移除 TLK 的警語文字 |
+| `view-pages-about-introduce`、`view-pages-about-advantage` | 品牌紀事／品牌識別標題及家庭概念標題 |
+| `view-components-home-HomeWhatWeDo` | 品牌承諾英文小標 |
+| `data-kitchenStyles`、`data-kitchenSeries` | 君璽導覽封面及 18 處廚電去背圖來源 |
+| `data-productCatalogues` | 2026 廚房配備型錄 PDF 與封面 |
+
+- 新型錄 PDF 與封面共兩份媒體只在本機；正式 `/media/e6d13491-33e0-448a-af28-67367da919a1`、`/media/f9d2bb24-2df3-4f39-b0c7-da20f8a0c8e4` 均 404。正式當前仍引用舊型錄，沒有因此產生已發布失聯素材；不能只複製本機的新 URL，需先以雲端媒體流程保存檔案並核對雜湊，再更新型錄新版本。建商新靜態 WebP 已隨程式部署，正式 HTTP 200，但 CMS 仍未選用。
+- 原始產品快照本來就含 46 筆找不到產品或分類的分類關聯（3 筆缺產品、43 筆缺分類）及 4 筆找不到產品的檔案關聯。本機、雲端、私有快照一致，並非此次前台調整造成；不自行刪除或補造來源資料。設計案例關聯、商品功能與價格關聯沒有失聯。
+- 初次 Azure 連線曾回覆 `ELOGIN / database not currently available`，再次唯讀連線及正式 API 已恢復。入口網站顯示 Online、剩餘 90,015 vCore 秒、超額計費 Disabled，不能把一次連線失敗直接認定為額度耗盡或資料遺失；免費環境仍有首次喚醒延遲。
+- 本次僅執行 SQL SELECT、部署／日誌／資源狀態查詢及 HTTP GET；只通過既有提案密碼入口取得瀏覽 Cookie，未登入 CMS、未執行 seed／import／發布／同步／部署、未變更帳號／密碼／收件或雲端設定。僅更新本 README 留存結果。結論限目前資料與既有快照，不宣稱有完整歷史備份即可證明所有時間都未被修改。
+- 後續若授權同步：先保留正式版本與媒體，再逐欄核對上述 10 份內容並建立新版本；保留正式管理員已修改的密碼、帳號、權限及收件，不做整庫覆蓋，不使用 `accept-data-loss`。此同步尚未執行。
+
 ## 2026-10-02 建商型錄用途警語（本機，未部署）
 
 - `/builders/catalogues` 型錄清單下方新增「本專區型錄僅供建設公司、工程專案及設計師等大宗採購參考。／若有個人家用需求，歡迎至櫻花整體廚房門市選購。」；依截圖置中兩行、16px 既有中文無襯線字、`#59585D`，手機自然換行。卡片下留 56px（手機 40px）、警語下留 36px 接頁尾，不加入 Figma 綠色 T。
