@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const cmsVisuals=await useCmsResource('site-visuals',{"images":{"asset_7692def0":"/section-3/store-songzhu.jpg","asset_7a7fece6":"/section-6/franchise/antra-original/h5-bg1.png","asset_39582b0b":"/section-6/franchise/antra-original/h5-bg02.png","asset_18ed1982":"/section-6/franchise/antra-original/h1-bg01.png","asset_52e702e4":"/section-6/franchise/antra-original/h1-bg01-1.png","asset_d0922f9d":"/section-6/franchise/antra-original/h1-bg02.png","asset_82b9dd3e":"/section-6/franchise/antra-original/h1-bg05.png","asset_38bb39f2":"/section-6/franchise/antra-original/h6-bg-3.png","asset_b3dcb152":"/section-6/builders/builder-hero.jpg","asset_1795db00":"/section-6/franchise/hero-store.jpg","asset_98d304fd":"/section-3/service-process/breadcrumb-df.jpg","asset_44761f00":"/section-5/brand-pavilion/pavilion-taichung.jpg","asset_9b0c0f62":"/home-2026/footer/kitchen-background.webp","asset_73c853de":"/services/h6-bg-2.jpg","asset_809f4bbe":"/section-3/store-chengde.jpg","asset_daa09d8d":"/section-5/brand-pavilion/banner.jpg","asset_10b5a86c":"/home-2026/brand-commitment-opening-frame.webp"},"brandVideoId":"wH374AF9wLI","franchiseVideoId":"sAuAjtpvZYk"})
 
-const cmsCopy = await useCmsResource('view-pages-franchising-intro', {"copy":{"field1":"/section-6/franchise/hero-building.jpg","field2":"SAKURA KITCHEN 櫻花整體廚房門市建築外觀","text3":"FRANCHISE WITH US","text4":"Find Your Inspired ","text5":"Kitchen Design","text6":"為什麼選擇加盟櫻花整體廚房？","text7":"台灣櫻花陪伴消費者超過四十六年，在台灣家庭的滲透率超過73%，使用櫻花產品或服務的家庭總數超過700萬戶。","text8":"不僅連續36年獲得理想品牌，更穩坐熱水器、除油煙機、瓦斯爐三冠王寶座。","text9":"立即申請加盟 ","field10":"/section-6/franchise/hero-store.jpg","field11":"SAKURA KITCHEN 櫻花整體廚房加盟門市","field12":"/franchising/download","text13":" 加盟資料下載","text14":"We Shape ","text15":"Kitchen Designs, Crafting","text16":" Timeless and Inspiring Spaces","field17":"SAKURA KITCHEN Store Manager Stories","field18":"/section-6/franchise/marquee-1.webp","field19":"SAKURA KITCHEN 加盟夥伴與門市成果","field20":"/section-6/franchise/marquee-1.webp","field21":"","field22":"/section-6/franchise/marquee-2.webp","field23":"SAKURA KITCHEN 品牌活動與設計成果","field24":"/section-6/franchise/marquee-2.webp","field25":"","text26":"Franchise Advantages","text27":"Franchise ","text28":"Success Starts","text29":" Here","text30":"從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。","text31":" · SAKURA","text32":"Subscribe To The Newsletter","text33":"Franchise ","text34":"With SAKURA","text35":"從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！","text36":"快來了解加盟金、補助金，填寫表單 ","text37":"Celebrity ","text38":"Stories That","text39":" Inspire","text40":"Beautiful","text41":" Living","text42":"集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。","text43":"加盟流程與辦法","field44":"/section-6/franchise/franchise-process.svg","field45":"加盟諮詢、資格審核、商圈與店址評估、營運計畫確認、簽約與店面規劃、教育訓練與實習、開幕與持續輔導七步流程","text46":"我要加盟","text47":"加盟資格與條件","text48":" Quick And Clear ","text49":"Answers","text50":" To Your Key","text51":" Questions ","field52":"/franchising/download","field53":"/section-6/franchise/franchise-download-cover.png","field54":"櫻花整體廚房加盟資料封面","field55":"/franchising/download","text56":"加盟資料下載","text57":"報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！","text58":"Franchise Information","text59":"Behind ","text60":"Every Statistic Pulses","text61":" A Human Story","field62":"/news/latest","text63":"查看更多 "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-franchising-intro', {"copy":{"field1":"/section-6/franchise/hero-building.jpg","field2":"SAKURA KITCHEN 櫻花整體廚房門市建築外觀","text3":"FRANCHISE WITH US","text4":"為什麼選擇加盟","text5":"櫻花整體廚房?","text6":"為什麼選擇加盟櫻花整體廚房？","text7":"台灣櫻花陪伴消費者超過四十六年，在台灣家庭的滲透率超過73%，使用櫻花產品或服務的家庭總數超過700萬戶。","text8":"不僅連續36年獲得理想品牌，更穩坐熱水器、除油煙機、瓦斯爐三冠王寶座。","text9":"立即申請加盟 ","field10":"/section-6/franchise/hero-store.jpg","field11":"SAKURA KITCHEN 櫻花整體廚房加盟門市","field12":"/franchising/download","text13":" 加盟資料下載","text14":"We Shape ","text15":"Kitchen Designs, Crafting","text16":" Timeless and Inspiring Spaces","field17":"SAKURA KITCHEN Store Manager Stories","field18":"/section-6/franchise/marquee-1.webp","field19":"SAKURA KITCHEN 加盟夥伴與門市成果","field20":"/section-6/franchise/marquee-1.webp","field21":"","field22":"/section-6/franchise/marquee-2.webp","field23":"SAKURA KITCHEN 品牌活動與設計成果","field24":"/section-6/franchise/marquee-2.webp","field25":"","text26":"Franchise Advantages","text27":"Franchise ","text28":"Success Starts","text29":" Here","text30":"從生產、商品、品牌、展店到售後與人才培育，六大優勢建立能長期經營的完整系統。","text31":" · SAKURA","text32":"Subscribe To The Newsletter","text33":"Franchise ","text34":"With SAKURA","text35":"從開業到經營，讓您起步沒壓力！開店補助金讓您起步沒壓力，業績獎金幫您多賺一筆，還有專業教育訓練，穩穩站穩市場！","text36":"快來了解加盟金、補助金，填寫表單 ","text37":"Celebrity ","text38":"Stories That","text39":" Inspire","text40":"Beautiful","text41":" Living","text42":"集團採用強勢整合行銷策略，結合多媒體廣告與數位行銷資源，持續推出高效宣傳活動，快速提升品牌影響力，為加盟店打造穩固的市場優勢。","text43":"加盟流程與辦法","field44":"/section-6/franchise/franchise-process.svg","field45":"加盟諮詢、資格審核、商圈與店址評估、營運計畫確認、簽約與店面規劃、教育訓練與實習、開幕與持續輔導七步流程","text46":"我要加盟","text47":"加盟資格與條件","text48":" Quick And Clear ","text49":"Answers","text50":" To Your Key","text51":" Questions ","field52":"/franchising/download","field53":"/section-6/franchise/franchise-download-cover.png","field54":"櫻花整體廚房加盟資料封面","field55":"/franchising/download","text56":"加盟資料下載","text57":"報名加盟培訓課程，透過專業教育訓練與實戰支持，掌握廚具銷售核心技巧，為您開啟成功創業之路！","text58":"Franchise Information","text59":"Behind ","text60":"Every Statistic Pulses","text61":" A Human Story","field62":"/news/latest","text63":"查看更多 "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ArrowRight, ChevronRight, Download } from 'lucide-vue-next'
 import { FRANCHISE_FORM_URL as cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages as cmsSeed_franchiseAdvantages, franchiseFaqItems as cmsSeed_franchiseFaqItems, franchiseMarketingStories as cmsSeed_franchiseMarketingStories, franchiseQualifications as cmsSeed_franchiseQualifications, franchiseSupportHighlights as cmsSeed_franchiseSupportHighlights, franchiseTestimonials as cmsSeed_franchiseTestimonials,  } from '~/data/franchise'
@@ -90,10 +90,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <h1 id="franchise-page-title">{{ cmsCopy.copy.text4 }}<span>{{ cmsCopy.copy.text5 }}</span></h1>
           </div>
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="franchise-hero__aside ev">
-            <h2>{{ cmsCopy.copy.text6 }}</h2>
             <p>{{ cmsCopy.copy.text7 }}</p>
             <p>{{ cmsCopy.copy.text8 }}</p>
-            <NuxtLink :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">{{ cmsCopy.copy.text9 }}<ArrowRight aria-hidden="true" /></NuxtLink>
+            <div class="franchise-hero__actions">
+              <NuxtLink :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">{{ cmsCopy.copy.text9 }}<ArrowRight aria-hidden="true" /></NuxtLink>
+              <NuxtLink :to="cmsCopy.copy.field12" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">{{ cmsCopy.copy.text13 }}<ArrowRight aria-hidden="true" /></NuxtLink>
+            </div>
           </div>
         </div>
       </div>
@@ -346,13 +348,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-hero__overlay { position: absolute; z-index: -1; inset: 0; background: rgb(16 8 1 / 72%); }
 .franchise-hero__inner { padding: 158px 30px 0; }
 .franchise-hero__grid { display: grid; grid-template-columns: 64% 36%; align-items: end; }
-.franchise-hero h1 { max-width: 960px; margin: 20px 0 0; color: #fff; font-family: var(--font-display); font-size: 110px; font-weight: 400; line-height: 110px; letter-spacing: -1px; }
-.franchise-hero h1 span { color: #caa05c; }
+.franchise-hero h1 { max-width: 960px; margin: 20px 0 0; color: #fff; font-family: var(--font-cjk-serif); font-size: 38px; font-weight: 400; line-height: 1.4; letter-spacing: 0; }
+.franchise-hero h1 span { display: block; color: #caa05c; }
 .franchise-hero__aside { width: min(454px, 100%); margin-left: 6px; }
-.franchise-hero__aside h2 { margin: 0 0 22px; color: #fff; font-family: var(--font-ui); font-size: 16px; font-weight: 600; line-height: 25px; }
 .franchise-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-family: var(--font-ui); font-size: 15px; line-height: 24px; }
 .franchise-hero__aside p + p { margin-top: 16px; }
-.franchise-hero__aside .source-round-link { margin-top: 50px; }
+.franchise-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 50px; }
 
 .franchise-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -400px; overflow: hidden; border-radius: 24px; }
 .franchise-hero-media :deep(img) { object-position: center 55%; }
@@ -540,13 +541,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   75%, 100% { opacity: 0; transform: scale(1.45); }
 }
 
-@media (max-width: 1366px) {
-  .franchise-hero h1 { font-size: 90px; line-height: 110px; }
-}
-
 @media (max-width: 1200px) {
   .franchise-hero__grid { align-items: start; }
-  .franchise-hero h1 { font-size: 60px; line-height: 90px; }
   .franchise-hero__aside { margin-top: 0; }
   .franchise-about h2,
   .franchise-advantages h2,
@@ -564,7 +560,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-hero { min-height: 760px; }
   .franchise-hero__inner { padding-top: 110px; }
   .franchise-hero__grid { grid-template-columns: 58% 42%; }
-  .franchise-hero h1 { font-size: 42px; line-height: 60px; }
   .franchise-hero__aside { margin-top: 0; }
   .franchise-hero__aside p { font-size: 16px; line-height: 24px; }
   .franchise-hero-media { height: 500px; margin-top: -260px; }
@@ -588,7 +583,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (min-width: 768px) and (max-width: 880px) {
-  .franchise-hero h1 { font-size: 36px; line-height: 40px; }
   .franchise-process__details { grid-template-columns: 1fr; }
   .franchise-faq__body { grid-template-columns: 1fr; gap: 50px; }
   .franchise-faq__promo { width: min(430px, 100%); padding-left: 0; }
@@ -608,10 +602,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-hero { min-height: 660px; }
   .franchise-hero__inner { width: 100%; padding: 100px 15px 0; }
   .franchise-hero__grid { grid-template-columns: 1fr; }
-  .franchise-hero h1 { margin-top: 20px; font-size: 30px; line-height: 50px; letter-spacing: 0; }
   .franchise-hero__aside { width: 100%; margin: 35px 0 0; }
   .franchise-hero__aside p { font-size: 15px; line-height: 24px; }
-  .franchise-hero__aside .source-round-link { margin-top: 28px; }
+  .franchise-hero__actions { margin-top: 28px; }
   .franchise-hero-media { height: 280px; margin-top: -60px; border-radius: 18px; }
 
   .franchise-about,

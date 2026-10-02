@@ -71,4 +71,18 @@ const scroll=await readFile(new URL('../app/router.options.ts',import.meta.url),
 assert(/el: to.hash, top, behavior: 'instant'/.test(scroll),'錨點需直接定位，避免原生平滑捲動中斷')
 assert(scroll.includes("hookOnce('page:loading:end'"),'跨頁錨點必須等待 CMS 頁面完成渲染')
 console.log('PASS 品牌館預約 CTA、警語與目標錨點／直接定位設定')
+const introduction=await readFile(new URL('../pages/about/introduce.vue',import.meta.url),'utf8')
+const moveSource=introduction.slice(introduction.indexOf('function moveHistory('),introduction.indexOf('function updateHistoryFocus(')).replace('direction: number','direction')
+const calls=[],motion={value:false}
+let next=true,prev=true
+const historyApi={value:{canScrollNext:()=>next,canScrollPrev:()=>prev,scrollNext:()=>calls.push(['next']),scrollPrev:()=>calls.push(['prev']),scrollTo:(index,jump)=>calls.push(['to',index,jump]),scrollSnapList:()=>Array(9)}}
+const move=new Function('historyEmblaApi','reducedMotion',moveSource+'; return moveHistory')(historyApi,motion)
+move(1);next=false;move(1);move(-1);prev=false;move(-1);motion.value=true;move(1)
+assert.deepEqual(calls,[['next'],['to',0,false],['prev'],['to',8,false],['to',0,true]])
+historyApi.value=undefined;move(1)
+assert(introduction.includes("event.target.matches(':focus-visible')"),'滑鼠點按焦點不可停止紀事自動播放')
+assert(introduction.includes('if (!historyPaused.value) moveHistory(1)'))
+const historyTemplate=introduction.slice(introduction.indexOf('<section class="about-history"'),introduction.indexOf('<section class="about-values'))
+assert(!historyTemplate.includes('@mouseenter')&&!historyTemplate.includes('class="about-history__card ev"'),'Hover 不得暫停，逐卡 reveal 不得干擾輪播位移')
+console.log('PASS 品牌紀事首尾回捲、無 API／減少動態效果與滑鼠焦點規則')
 console.log('PASS 背景、君璽圖、英文小標、28 案例／篩選／門市返回連結、錯誤參數、PDF 預覽下載一致、翻牌鎖定規則')

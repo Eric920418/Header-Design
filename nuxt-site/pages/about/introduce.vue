@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-about-introduce', {"copy":{"text1":" Explore Our Comprehensive","text2":"Kitchen Design","text3":" Services ","field4":"","text5":"SAKURA 品牌承諾","text6":" Gallery Of Inspiring","text7":"Kitchen","text8":" Designs ","text9":"櫻花整體廚房之廚具，除於門板張貼SAKURA KITCHEN之品牌銘板外，亦會於下列地方標示 SAKURA Logo","field10":"body"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-about-introduce', {"copy":{"text1":"SAKURA KITCHEN Stories","text2":"櫻花整體廚房紀事","text3":"","field4":"","text5":"SAKURA 品牌承諾","text6":"專屬品牌識別","text7":"Signature Brand Identity","text8":"","text9":"櫻花整體廚房之廚具，除於門板張貼SAKURA KITCHEN之品牌銘板外，亦會於下列地方標示 SAKURA Logo","field10":"body"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-vue-next'
@@ -9,7 +9,7 @@ const { brandHistory, brandHistoryHighlights, brandIdentities, brandValues } = a
 
 const activeHistoryYear = ref<(typeof brandHistoryHighlights)[number]['year']>('1978')
 const activeHistory = computed(() => brandHistoryHighlights.find(item => item.year === activeHistoryYear.value) ?? brandHistoryHighlights[0]!)
-const [historyEmblaRef, historyEmblaApi] = emblaCarouselVue({ align: 'start', loop: true, slidesToScroll: 1 })
+const [historyEmblaRef, historyEmblaApi] = emblaCarouselVue({ align: 'start', loop: false, slidesToScroll: 1 })
 const historyPaused = ref(false)
 const reducedMotion = useReducedMotion()
 let historyTimer: ReturnType<typeof setInterval> | undefined
@@ -20,6 +20,20 @@ const identityScrollRatio = ref(0)
 const identityLightboxOpen = ref(false)
 const activeIdentityIndex = ref(0)
 const activeIdentity = computed(() => brandIdentities[activeIdentityIndex.value] ?? brandIdentities[0]!)
+
+function moveHistory(direction: number) {
+  const api = historyEmblaApi.value
+  if (!api) return
+  if (direction > 0) {
+    if (api.canScrollNext()) api.scrollNext()
+    else api.scrollTo(0, reducedMotion.value)
+  } else if (api.canScrollPrev()) api.scrollPrev()
+  else api.scrollTo(api.scrollSnapList().length - 1, reducedMotion.value)
+}
+
+function updateHistoryFocus(event: FocusEvent) {
+  historyPaused.value = event.target instanceof HTMLElement && event.target.matches(':focus-visible')
+}
 
 function updateIdentityProgress() {
   const track = identityTrack.value
@@ -64,7 +78,7 @@ const identityProgressStyle = computed(() => ({
 watch([historyEmblaApi, reducedMotion], ([api, isReduced]) => {
   if (historyTimer) clearInterval(historyTimer)
   if (api && !isReduced) historyTimer = setInterval(() => {
-    if (!historyPaused.value) api.scrollNext()
+    if (!historyPaused.value) moveHistory(1)
   }, 3500)
 }, { immediate: true })
 
@@ -151,16 +165,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
     <section class="about-history" aria-label="櫻花整體廚房品牌紀事">
       <div class="about-rail">
-        <div class="about-history__carousel" @focusin="historyPaused = true" @focusout="historyPaused = false">
-          <div ref="historyEmblaRef" class="about-history__viewport" role="region" aria-label="櫻花整體廚房品牌紀事輪播" tabindex="0" @keydown.left.prevent="historyEmblaApi?.scrollPrev()" @keydown.right.prevent="historyEmblaApi?.scrollNext()">
+        <div v-reveal="{ anim: 'fadeIn' }" class="about-history__carousel" @focusin="updateHistoryFocus" @focusout="historyPaused = false">
+          <div ref="historyEmblaRef" class="about-history__viewport" role="region" aria-label="櫻花整體廚房品牌紀事輪播" tabindex="0" @keydown.left.prevent="moveHistory(-1)" @keydown.right.prevent="moveHistory(1)">
             <div class="about-history__grid">
               <article
-                v-for="(item, index) in brandHistory"
+                v-for="item in brandHistory"
                 :key="item.year"
-                v-reveal="{ anim: 'opalMoveUp', delay: Math.min(index * 100, 300) }"
-                data-ev="opalMoveUp"
-                class="about-history__card ev"
-                :style="{ animationDelay: `${Math.min(index * 100, 300)}ms` }"
+                class="about-history__card"
               >
                 <InternalBrandImage :src="item.image" :alt="`${item.year} 年品牌記事`" class="about-history__image" />
                 <div class="about-history__content">
@@ -171,8 +182,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </article>
             </div>
           </div>
-          <button type="button" class="about-history__nav about-history__nav--previous" aria-label="上一則品牌記事" @click="historyEmblaApi?.scrollPrev()"><ChevronLeft aria-hidden="true" /></button>
-          <button type="button" class="about-history__nav about-history__nav--next" aria-label="下一則品牌記事" @click="historyEmblaApi?.scrollNext()"><ChevronRight aria-hidden="true" /></button>
+          <button type="button" class="about-history__nav about-history__nav--previous" aria-label="上一則品牌記事" @click="moveHistory(-1)"><ChevronLeft aria-hidden="true" /></button>
+          <button type="button" class="about-history__nav about-history__nav--next" aria-label="下一則品牌記事" @click="moveHistory(1)"><ChevronRight aria-hidden="true" /></button>
         </div>
       </div>
     </section>
