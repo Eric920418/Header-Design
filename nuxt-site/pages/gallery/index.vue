@@ -28,11 +28,13 @@ const filteredCases = computed(() => storeCaseSummaries.filter(item =>
   (!selectedRegion.value || item.region === selectedRegion.value)
   && (!selectedCity.value || item.city === selectedCity.value),
 ))
+const { currentPage, totalPages, paginatedItems: paginatedCases } = useListPagination(filteredCases)
 
 const updateFilters = async (region = '', city = '') => {
   const query = { ...route.query }
   delete query.region
   delete query.city
+  delete query.page
   if (region) query.region = region
   if (city) query.city = city
   await router.push({ query })
@@ -94,11 +96,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
         <div
           v-if="filteredCases.length"
-          :key="`grid-${selectedRegion}-${selectedCity}`"
+          :key="`grid-${selectedRegion}-${selectedCity}-${currentPage}`"
           class="antra-store-grid"
           v-reveal="{ anim: 'opalMoveUp', delay: 100 }"
         >
-          <InternalStoreCard v-for="item in filteredCases" :key="item.slug" :item="item" />
+          <InternalStoreCard v-for="item in paginatedCases" :key="item.slug" :item="item" />
         </div>
 
         <div
@@ -115,6 +117,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
           <button type="button" @click="updateFilters()">{{ cmsCopy.copy.text9 }}</button>
         </div>
+        <InternalListPagination :current-page="currentPage" :total-pages="totalPages" label="案例門市分頁" />
       </div>
     </section>
   </main>
@@ -176,7 +179,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .antra-store-gallery {
   overflow: hidden;
-  padding: 100px 30px 108px;
+  padding: 100px 30px 130px;
   background: #fafafa;
 }
 

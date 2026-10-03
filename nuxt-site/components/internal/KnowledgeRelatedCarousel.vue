@@ -223,7 +223,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
 
 .knowledge-related-home07__cta {
   display: inline-flex;
-  min-height: 54px;
+  min-height: 60px;
   align-items: center;
   gap: 12px;
   margin-top: 44px;

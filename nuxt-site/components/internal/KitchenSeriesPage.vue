@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NuxtLink } from '#components'
 import emblaCarouselVue from 'embla-carousel-vue'
-import { ArrowRight, Check, ChevronLeft, ChevronRight, Plus } from 'lucide-vue-next'
+import { ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import type { KitchenSeriesPageData } from '~/data/kitchenSeries'
 import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
 const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
@@ -376,9 +376,11 @@ useSeoMeta({
         <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="ai-equipment__grid" :aria-label="`${data.name} 推薦廚電`">
           <article v-for="equipment in visibleEquipment" :key="equipment.model" class="ai-equipment__item">
             <component :is="equipment.route ? NuxtLink : 'div'" :to="equipment.route || undefined" :target="equipment.route.startsWith('https://') ? '_blank' : undefined" :rel="equipment.route.startsWith('https://') ? 'noopener noreferrer' : undefined" class="ai-equipment__card" :aria-label="equipment.route ? `查看 ${equipment.model} ${equipment.name}` : undefined">
-              <InternalBrandImage :src="equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
+              <div class="ai-equipment__visual">
+                <InternalBrandImage :src="equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
+                <span v-if="equipment.route" class="ai-equipment__action" aria-hidden="true"><ArrowRight /></span>
+              </div>
               <h3><span>{{ equipment.model }}</span>{{ equipment.name }}</h3>
-              <span v-if="equipment.route" class="ai-equipment__action" aria-hidden="true"><Plus /></span>
             </component>
           </article>
         </div>
@@ -530,13 +532,14 @@ useSeoMeta({
 .ai-equipment__grid { --columns: 5; --gap: 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); margin-top: 60px; }
 .ai-equipment__item { min-width: 0; flex: 0 0 calc((100% - (var(--columns) - 1) * var(--gap)) / var(--columns)); }
 .ai-equipment__card { position: relative; display: block; color: inherit; }
+.ai-equipment__card:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; }
+.ai-equipment__visual { position: relative; }
 .ai-equipment__image { aspect-ratio: 1.2; background: transparent; }
 .ai-equipment__item h3 { margin: 20px auto 0; max-width: 220px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; font-weight: 400; line-height: 22px; text-align: center; text-transform: none; }
 .ai-equipment__item h3 span { display: block; margin-bottom: 3px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 18px; font-weight: 500; }
-.ai-equipment__action { position: absolute; top: 46%; right: 12px; display: flex; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: rgb(28 28 29 / 62%); opacity: 0; transform: translateY(10px); transition: opacity .3s ease, transform .3s ease, background-color .3s ease; }
-.ai-equipment__action svg { width: 20px; height: 20px; }
-.ai-equipment__card:hover .ai-equipment__action, .ai-equipment__card:focus-visible .ai-equipment__action { opacity: 1; transform: none; }
-.ai-equipment__card:hover .ai-equipment__action { background: #caa05c; }
+.ai-equipment__action { position: absolute; top: 50%; left: 50%; display: grid; width: 60px; height: 60px; place-items: center; border: 1px solid rgb(255 255 255 / 72%); border-radius: 50%; color: #fff; background: #caa05c; opacity: 0; transform: translate(-50%, -50%) scale(.76) rotate(-45deg); transition: opacity .35s ease, transform .35s ease, background-color .35s ease; pointer-events: none; }
+.ai-equipment__action svg { width: 24px; height: 24px; }
+.ai-equipment__card:hover .ai-equipment__action, .ai-equipment__card:focus-visible .ai-equipment__action { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0); }
 
 .ai-cases { background: #fff; }
 .ai-cases__heading { display: grid; grid-template-columns: 30% 70%; }
@@ -643,6 +646,7 @@ useSeoMeta({
   .ai-finishes__grid { --columns: 2; --gap: 14px; row-gap: 20px; margin-top: 38px; }
   .ai-finishes__image { border-radius: 16px; }
   .ai-equipment__grid { --columns: 2; --gap: 14px; row-gap: 24px; margin-top: 38px; }
+  .ai-equipment__action { width: 52px; height: 52px; opacity: 1; transform: translate(-50%, -50%); }
   .ai-cases__heading { display: block; text-align: center; }
   .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 0 30px; font-size: 32px; line-height: 37px; }
   .ai-cases__viewport { margin-top: 38px; }

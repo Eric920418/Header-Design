@@ -5,14 +5,15 @@ import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
 const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
 
 
-const latestArticles = newsArticles.filter(article => article.category === 'latest')
+const latestArticles = computed(() => newsArticles.filter(article => article.category === 'latest'))
+const { currentPage, totalPages, paginatedItems: paginatedArticles } = useListPagination(latestArticles)
 
 useSeoMeta({
   title: '最新消息｜SAKURA 整體廚房',
   description: '瀏覽 SAKURA 整體廚房品牌館、加盟說明會與品牌最新動態。',
   ogTitle: '最新消息｜SAKURA 整體廚房',
   ogDescription: 'SAKURA 整體廚房最新消息列表。',
-  ogImage: latestArticles[0]?.cover,
+  ogImage: () => latestArticles.value[0]?.cover,
 })
 useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
@@ -39,9 +40,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section aria-labelledby="latest-list-title" class="antra-latest-index">
       <div class="antra-latest-index__rail">
         <h2 id="latest-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
-        <div class="antra-latest-grid">
+        <InternalNewsCategoryNav active="latest" />
+        <div :key="currentPage" class="antra-latest-grid">
           <article
-            v-for="(article, index) in latestArticles"
+            v-for="(article, index) in paginatedArticles"
             :key="article.id"
             v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }"
             class="antra-latest-post"
@@ -67,6 +69,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </NuxtLink>
           </article>
         </div>
+        <InternalListPagination :current-page="currentPage" :total-pages="totalPages" label="最新消息分頁" />
       </div>
     </section>
   </main>
@@ -129,7 +132,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .antra-latest-index {
   overflow: hidden;
-  padding: 100px 30px 108px;
+  padding: 130px 30px 130px;
   background: #fafafa;
 }
 
@@ -255,7 +258,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   }
 
   .antra-latest-breadcrumb__inner { padding-block: 80px; }
-  .antra-latest-index { padding-block: 80px; }
+  .antra-latest-index { padding-block: 100px 80px; }
   .antra-latest-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .antra-latest-post__content { width: 100%; }
 }
@@ -274,7 +277,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     line-height: 35px;
   }
 
-  .antra-latest-index { padding: 60px 15px; }
+  .antra-latest-index { padding: 80px 15px 60px; }
   .antra-latest-grid { grid-template-columns: minmax(0, 1fr); }
 
 }

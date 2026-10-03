@@ -8,7 +8,8 @@ const scrollBehavior: RouterScrollBehavior = async (to, from) => {
   const toPath = to.path.replace(/\/$/, '')
   const fromPath = from.path.replace(/\/$/, '')
   const productListChanged = toPath.startsWith('/products/') && (to.query.page !== from.query.page || to.query.q !== from.query.q)
-  if (toPath === fromPath && !to.hash && !from.hash && !productListChanged) return false
+  const listPageChanged = ['/design-inspiration', '/gallery', '/news/activities', '/news/latest', '/news/video'].includes(toPath) && to.query.page !== from.query.page
+  if (toPath === fromPath && !to.hash && !from.hash && !productListChanged && !listPageChanged) return false
 
   const router = useRouter()
   // Async CMS pages may not have rendered the target anchor at navigation time.

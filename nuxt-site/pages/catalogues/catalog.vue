@@ -219,9 +219,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .product-catalogue-projects { padding: 100px 30px 60px; background: #fff; }
 .product-catalogue-card__title-row { display: flex; align-items: baseline; gap: 14px; justify-content: space-between; }
-.product-catalogue-card__download { display: inline-flex; flex: none; align-items: center; gap: 5px; color: #a87c3d; font-size: 14px; }
-.product-catalogue-card__download svg { width: 18px; height: 18px; }
+.product-catalogue-card__download { display: inline-flex; flex: none; min-width: 86px; height: 40px; align-items: center; justify-content: center; gap: 8px; border: 1px solid #d7d7dc; border-radius: 999px; padding-inline: 15px; color: #1c1c1d; background: transparent; font-family: var(--font-cjk-sans); font-size: 15px; font-weight: 500; line-height: 22px; transition: border-color .3s ease, color .3s ease, background-color .3s ease, transform .3s ease; }
+.product-catalogue-card__download svg { width: 17px; height: 17px; }
 .product-catalogue-card__download:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
+.product-catalogue-card__download:hover,
+.product-catalogue-card__download:focus-visible { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
 .product-catalogue-projects .internal-rail-safe { padding-inline: 43px; }
 .product-catalogue-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 50px 30px; margin: 0; padding: 0; list-style: none; }
 .product-catalogue-card,
@@ -320,6 +322,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .product-catalogue-card__action { right: 18px; bottom: 18px; gap: 9px; opacity: 1; visibility: visible; transform: none; }
   .product-catalogue-card__arrow { width: 54px; height: 54px; }
   .product-catalogue-card__text strong { font-size: 20px; line-height: 28px; }
+  .product-catalogue-card__download { min-width: 44px; width: 44px; height: 44px; padding: 0; }
+  .product-catalogue-card__download span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .product-care { padding: 32px 93px 92px 15px; }
   .product-care__header { grid-template-columns: 1fr; gap: 0; margin-bottom: 38px; }
   .product-care__header > p { grid-column: auto; }
@@ -343,6 +347,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .product-catalogue-card__shade,
   .product-catalogue-card__action,
   .product-catalogue-card__text strong,
+  .product-catalogue-card__download,
   .product-care__filter,
   .product-care__media :deep(img),
   .product-care__media-arrow { transition: none; }

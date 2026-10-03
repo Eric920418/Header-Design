@@ -5,14 +5,15 @@ import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
 const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
 
 
-const activityArticles = newsArticles.filter(article => article.category === 'activities')
+const activityArticles = computed(() => newsArticles.filter(article => article.category === 'activities'))
+const { currentPage, totalPages, paginatedItems: paginatedArticles } = useListPagination(activityArticles)
 
 useSeoMeta({
   title: '優惠活動｜SAKURA 整體廚房',
   description: '瀏覽 SAKURA 整體廚房期間限定優惠、廚房健檢與廚房升級活動。',
   ogTitle: '優惠活動｜SAKURA 整體廚房',
   ogDescription: 'SAKURA 整體廚房優惠活動列表。',
-  ogImage: activityArticles[0]?.cover,
+  ogImage: () => activityArticles.value[0]?.cover,
 })
 useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.seoTitle}:{}), meta: cmsCopy.cmsSettings.seoDescription ? [{name:'description',content:cmsCopy.cmsSettings.seoDescription}] : [] }))
 </script>
@@ -39,9 +40,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section aria-labelledby="activity-list-title" class="antra-activity-index">
       <div class="antra-activity-index__rail">
         <h2 id="activity-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
-        <div class="antra-activity-grid">
+        <InternalNewsCategoryNav active="activities" />
+        <div :key="currentPage" class="antra-activity-grid">
           <article
-            v-for="(article, index) in activityArticles"
+            v-for="(article, index) in paginatedArticles"
             :key="article.id"
             v-reveal="{ anim: 'opalMoveUp', delay: index * 100 }"
             class="antra-activity-post"
@@ -67,6 +69,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </NuxtLink>
           </article>
         </div>
+        <InternalListPagination :current-page="currentPage" :total-pages="totalPages" label="優惠活動分頁" />
       </div>
     </section>
   </main>
@@ -129,7 +132,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .antra-activity-index {
   overflow: hidden;
-  padding: 100px 30px 108px;
+  padding: 130px 30px 130px;
   background: #fafafa;
 }
 
@@ -259,7 +262,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   }
 
   .antra-activity-breadcrumb__inner { padding-block: 80px; }
-  .antra-activity-index { padding-block: 80px; }
+  .antra-activity-index { padding-block: 100px 80px; }
   .antra-activity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .antra-activity-post__content { width: 100%; }
 }
@@ -278,7 +281,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     line-height: 35px;
   }
 
-  .antra-activity-index { padding: 60px 15px; }
+  .antra-activity-index { padding: 80px 15px 60px; }
   .antra-activity-grid { grid-template-columns: minmax(0, 1fr); }
 
 }

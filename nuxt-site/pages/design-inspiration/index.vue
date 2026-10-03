@@ -38,13 +38,6 @@ async function applyFilters() {
   if (draftStyle.value) query.style = draftStyle.value
   await router.push({ path: '/design-inspiration', query })
 }
-async function goToPage(page: number) {
-  const query = { ...route.query }
-  if (page > 1) query.page = String(page)
-  else delete query.page
-  await router.push({ path: route.path, query })
-  if (import.meta.client) window.scrollTo({ top: 0, behavior: 'instant' })
-}
 
 useSeoMeta({
   title: '設計靈感｜SAKURA 整體廚房',
@@ -153,19 +146,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <button type="button" @click="draftForm = ''; draftStyle = ''; applyFilters()">{{ cmsCopy.copy.text11 }}</button>
         </div>
 
-        <nav v-if="!loading && !error && result?.total" class="design-projects-pagination" aria-label="案例分頁">
-          <button
-            v-for="page in totalPages"
-            :key="page"
-            type="button"
-            :aria-current="page === currentPage ? 'page' : undefined"
-            :disabled="page === currentPage"
-            :class="{ 'is-current': page === currentPage }"
-            @click="goToPage(page)"
-          >
-            {{ page }}
-          </button>
-        </nav>
+        <InternalListPagination v-if="!loading && !error && result?.total" :current-page="currentPage" :total-pages="totalPages" label="案例分頁" />
       </div>
     </section>
   </main>
@@ -445,30 +426,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .design-projects-empty p { margin: 0; font-size: 16px; line-height: 24px; }
 .design-projects-empty button { margin-top: 12px; border-bottom: 1px solid #caa05c; padding: 4px 0; color: #1c1c1d; }
 
-.design-projects-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 41px;
-}
-
-.design-projects-pagination button {
-  display: flex;
-  min-width: 40px;
-  min-height: 40px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  color: #1c1c1d;
-  font-size: 16px;
-  line-height: 24px;
-  transition: color .3s ease, background-color .3s ease;
-}
-
-.design-projects-pagination button:hover,
-.design-projects-pagination button.is-current { color: #fff; background: #caa05c; }
-.design-projects-pagination button:disabled { cursor: default; opacity: 1; }
 
 @media (max-width: 1023px) {
   .design-projects-section { padding-block: 80px; }
@@ -489,7 +446,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .design-projects-grid { grid-template-columns: 1fr; gap: 30px; }
   .design-project-card__categories { top: 20px; left: 15px; }
   .design-project-card__text h2 { min-height: 0; font-size: 20px; line-height: 30px; }
-  .design-projects-pagination { margin-top: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

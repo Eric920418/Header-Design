@@ -2,7 +2,7 @@
 const cmsCopy = await useCmsResource('view-pages-gallery-slug-', {"metaLabels":{"style":"設計風格","color":"設計顏色","series":"設計系列","form":"設計形式","size":"設計尺寸","kitchenArea":"廚房坪數","budget":"廚具預算","countertop":"檯面材質","household":"家的組成","designer":"設計師"},"copy":{"field1":"https://pse.is/9kq37z","text2":"到店預約","text3":"案例規格","text4":"門市資訊","text5":"LINE 諮詢","text6":"Google Map","text7":"Previous Post","text8":"Next Post","text9":"顧客評論","text10":"Take a look at ","text11":"our latest blog","text12":" & articles."},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import emblaCarouselVue from 'embla-carousel-vue'
-import { ArrowLeft, ArrowRight, CalendarClock, MapPin, Phone, UserRound } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, ArrowUpRight, CalendarClock, MapPin, Phone, UserRound } from 'lucide-vue-next'
 import { storeCases as cmsSeed_storeCases } from '~/data/storeCases'
 const { storeCases } = await useCmsResource('data-storeCases', { storeCases: cmsSeed_storeCases })
 const getStoreCase = (slug: string) => storeCases.find(item => item.slug === slug)
@@ -88,7 +88,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </section>
 
               <section v-if="item.contact" class="case-detail-widget" aria-labelledby="case-store-title" v-reveal="{ anim: 'opalMoveLeft', delay: 160 }">
-                <h2 id="case-store-title">{{ cmsCopy.copy.text4 }}</h2>
+                <div class="case-detail-store-heading">
+                  <h2 id="case-store-title">{{ cmsCopy.copy.text4 }}</h2>
+                  <a href="https://www.sakura-kitchenlife.com.tw/measuring" target="_blank" rel="noopener noreferrer" class="case-detail-store-booking">
+                    <span>{{ cmsCopy.copy.text2 }}</span><ArrowUpRight aria-hidden="true" />
+                  </a>
+                </div>
                 <h3>{{ item.contact.name }}</h3>
                 <ul class="case-detail-contact-list">
                   <li v-if="item.contact.hours"><CalendarClock aria-hidden="true" /><span>{{ item.contact.hours }}</span></li>
@@ -219,6 +224,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .case-detail-widget { margin-top: 49px; }
 .case-detail-widget h2 { margin-bottom: 25px; color: #1c1c1d; font-family: var(--font-display); font-size: 25px; font-weight: 400; line-height: 31px; }
+.case-detail-store-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-bottom: 25px; }
+.case-detail-store-heading h2 { margin-bottom: 0; }
+.case-detail-store-booking { display: inline-flex; flex: 0 0 auto; height: 50px; align-items: center; justify-content: center; gap: 16px; padding: 0 22px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-cjk-sans); font-size: 18px; line-height: 24px; white-space: nowrap; cursor: pointer; transition: background-color .3s ease; }
+.case-detail-store-booking:hover { background: #b58b49; }
+.case-detail-store-booking:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
+.case-detail-store-booking :deep(svg) { width: 22px; height: 22px; flex: 0 0 auto; }
 .case-detail-widget h3 { color: #1c1c1d; font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 26px; }
 .case-detail-specs { border-top: 1px solid #e3e3e8; }
 .case-detail-specs > div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 55px; padding: 12px 0; border-bottom: 1px solid #e3e3e8; }
@@ -333,6 +344,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .case-detail-store-booking,
   .case-detail-booking,
   .case-detail-booking .site-cta-icon,
   .case-detail-contact-list a,

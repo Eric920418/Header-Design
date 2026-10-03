@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-components-SiteHeader', {"leftNav":[{"label":"設計案例","seriesMega":true,"children":[{"label":"品牌系列"},{"label":"設計靈感","to":"/design-inspiration"},{"label":"廚房裝修指南","to":"/knowledge"},{"label":"品牌系列型錄","to":"/catalogues/kitchenware-catalog","external":true}]},{"label":"廚房產品","mega":[{"label":"SAKURA 廚電","image":"/products/sakura.jpg","logo":"/home-2026/logos/sakura.svg","to":"/products/sakura"},{"label":"SVAGO","image":"/products/svago.jpg","logo":"/home-2026/logos/svago.svg","to":"/products/svago"},{"label":"TEKA","image":"/products/teka.jpg","logo":"/home-2026/logos/teka.svg","to":"/products/teka"}]},{"label":"門市與服務","children":[{"label":"服務流程","to":"/service-process"},{"label":"案例門市","to":"/gallery"},{"label":"到府丈量","to":"https://www.sakura-kitchenlife.com.tw/measuring","external":true},{"label":"客服中心","to":"https://icare.sakura.com.tw","external":true}]},{"label":"優惠消息","to":"/news","children":[{"label":"優惠活動","to":"/news/activities"},{"label":"最新消息","to":"/news/latest"},{"label":"媒體影音","to":"/news/video"}]}],"rightNav":[{"label":"品牌承諾","children":[{"label":"品牌優勢","to":"/about/advantage"},{"label":"集團品牌館","to":"/about/exhibition"},{"label":"關於我們","to":"/about/introduce"}]},{"label":"我要加盟","to":"/franchising/intro","children":[{"label":"加盟介紹","to":"/franchising/intro#introduction"},{"label":"加盟優勢","to":"/franchising/intro#advantages"},{"label":"加盟金與流程","to":"/franchising/intro#franchise-process"},{"label":"加盟Q&A","to":"/franchising/intro#franchise-faq"}]},{"label":"建商專區","to":"/builders","children":[{"label":"建商專區首頁","to":"/builders"},{"label":"SAKURA KITCHEN","to":"/builders/sakura-kitchen"},{"label":"建商專區型錄","to":"/builders/catalogues"}]},{"label":"櫻花集團","to":"https://www.sakura.com.tw/"}],"copy":{"field1":"/catalogues/catalog","text2":" 廚房商品型錄 ","text3":"Design Inspiration","text4":"品牌系列","text5":"Kitchen Series","text6":"品牌系列","text7":"目前開放 AI Kitchen","text8":"尚未開放","field9":"/","field10":"/home-2026/logos/sakura-kitchen-horizontal.svg","field11":"SAKURA Kitchen","field12":"/","field13":"/home-2026/logos/sakura-kitchen-horizontal.svg","field14":"SAKURA Kitchen","text15":"總覽","text16":"品牌系列","text17":"尚未開放","text18":"・尚未開放","field19":"/catalogues/catalog","text20":"廚房商品型錄","text21":"站內搜尋"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-components-SiteHeader', {"leftNav":[{"label":"設計案例","seriesMega":true,"children":[{"label":"品牌系列"},{"label":"設計靈感","to":"/design-inspiration"},{"label":"廚房裝修指南","to":"/knowledge"},{"label":"品牌系列型錄","to":"/catalogues/kitchenware-catalog","external":true}]},{"label":"廚房產品","mega":[{"label":"SAKURA 廚電","image":"/products/sakura.jpg","logo":"/home-2026/logos/sakura.svg","to":"/products/sakura"},{"label":"SVAGO","image":"/products/svago.jpg","logo":"/home-2026/logos/svago.svg","to":"/products/svago"},{"label":"TEKA","image":"/products/teka.jpg","logo":"/home-2026/logos/teka.svg","to":"/products/teka"}]},{"label":"門市與服務","children":[{"label":"服務流程","to":"/service-process"},{"label":"案例門市","to":"/gallery"},{"label":"到府丈量","to":"https://www.sakura-kitchenlife.com.tw/measuring","external":true},{"label":"客服中心","to":"https://icare.sakura.com.tw","external":true}]},{"label":"優惠消息","to":"/news","children":[{"label":"優惠活動","to":"/news/activities"},{"label":"最新消息","to":"/news/latest"},{"label":"媒體影音","to":"/news/video"}]}],"rightNav":[{"label":"品牌承諾","children":[{"label":"品牌優勢","to":"/about/advantage"},{"label":"櫻花集團品牌館","to":"/about/exhibition"},{"label":"關於我們","to":"/about/introduce"}]},{"label":"我要加盟","to":"/franchising/intro","children":[{"label":"加盟介紹","to":"/franchising/intro#introduction"},{"label":"加盟優勢","to":"/franchising/intro#advantages"},{"label":"加盟金與流程","to":"/franchising/intro#franchise-process"},{"label":"加盟Q&A","to":"/franchising/intro#franchise-faq"},{"label":"加盟申請表單","to":"/franchising/form"},{"label":"加盟資料下載","to":"/franchising/download"}]},{"label":"建商專區","to":"/builders","children":[{"label":"建商專區首頁","to":"/builders"},{"label":"SAKURA KITCHEN","to":"/builders/sakura-kitchen"},{"label":"建商專區型錄","to":"/builders/catalogues"}]},{"label":"櫻花集團","to":"https://www.sakura.com.tw/"}],"copy":{"field1":"/catalogues/catalog","text2":" 廚房商品型錄 ","text3":"Design Inspiration","text4":"品牌系列","text5":"Kitchen Series","text6":"品牌系列","text7":"目前開放 AI Kitchen","text8":"尚未開放","field9":"/","field10":"/home-2026/logos/sakura-kitchen-horizontal.svg","field11":"SAKURA Kitchen","field12":"/","field13":"/home-2026/logos/sakura-kitchen-horizontal.svg","field14":"SAKURA Kitchen","text15":"總覽","text16":"品牌系列","text17":"尚未開放","text18":"・尚未開放","field19":"/catalogues/catalog","text20":"廚房商品型錄","text21":"站內搜尋"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ArrowRight, ChevronDown, Menu, Search, X } from 'lucide-vue-next'
 import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
@@ -135,7 +135,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 @pointerleave="scheduleDesktopMenuClose"
               >
                 <div class="border-t border-black/5 bg-white shadow-2xl">
-                  <div class="mx-auto max-w-[1200px] px-[30px] py-6 xl:px-0">
+                  <div class="mx-auto max-w-[1200px] px-[30px] pb-8 pt-6 xl:px-0">
                     <div class="grid grid-cols-3 gap-[30px]">
                       <template v-for="card in item.mega" :key="card.label">
                         <NuxtLink v-if="card.to" :to="card.to" class="group/card block">
@@ -156,21 +156,24 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                         </div>
                       </template>
                     </div>
-                    <NuxtLink :to="cmsCopy.copy.field1" class="mt-6 inline-flex items-center gap-2 text-sm text-[#1C1C1D] transition-colors hover:text-[#CAA05C]">{{ cmsCopy.copy.text2 }}<ArrowRight class="h-4 w-4" />
+                    <NuxtLink :to="cmsCopy.copy.field1" class="site-header__catalogue-cta mt-8 inline-flex h-[52px] min-w-[200px] items-center justify-center gap-2 rounded-full border border-[#C1C1C4] px-7 text-sm text-[#1C1C1D] transition-colors hover:border-[#C4A574] hover:bg-[#C4A574] hover:text-white focus-visible:border-[#C4A574] focus-visible:bg-[#C4A574] focus-visible:text-white">{{ cmsCopy.copy.text2 }}<ArrowRight class="h-4 w-4" />
                     </NuxtLink>
                   </div>
                 </div>
               </div>
 
               <div v-else-if="item.children && !item.seriesMega" class="desktop-nav-dropdown absolute left-0 top-full z-[70] pt-2 transition-all" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
-                <ul class="series-dropdown-list relative z-[70] min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
+                <ul class="series-dropdown-list relative z-[70] min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl" :class="{ 'w-[190px]': item.label === '門市與服務' }">
                   <li
                     v-for="child in item.children"
                     :key="child.label"
                     class="group/series relative z-[70]"
                   >
                     <span v-if="child.disabled" aria-disabled="true" class="flex cursor-not-allowed items-center justify-between px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
-                    <a v-else-if="child.external" :href="child.to" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</a>
+                    <a v-else-if="child.external" :href="child.to" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between gap-1 px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
+                      <span class="whitespace-nowrap">{{ child.label }}</span>
+                      <img v-if="item.label === '門市與服務' && ['到府丈量', '客服中心'].includes(child.label)" src="/home-2026/logos/sakura-icare.svg" alt="" aria-hidden="true" class="h-auto w-20 shrink-0" />
+                    </a>
                     <NuxtLink v-else :to="child.to || '/'" class="flex items-center justify-between gap-4 whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">
                       {{ child.label }}
                     </NuxtLink>

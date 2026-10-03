@@ -252,9 +252,9 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
 .near-suction-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
 .near-suction-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .near-suction-catalogue__copy h2 span { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
-.near-suction-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid #1c1c1d; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
+.near-suction-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid rgb(159 159 164 / 64%); border-radius: 999px; padding: 9px 9px 9px 30px; color: #1c1c1d; background: transparent; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .near-suction-catalogue__cta:hover,
-.near-suction-catalogue__cta:focus-visible { border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
+.near-suction-catalogue__cta:focus-visible { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
 .near-suction-catalogue__cta:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .near-suction-catalogue__cta > span:first-child { white-space: nowrap; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .near-suction-catalogue__cta .site-cta-icon { position: relative; isolation: isolate; display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }

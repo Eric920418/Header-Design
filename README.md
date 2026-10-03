@@ -1,5 +1,101 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-03 優惠消息分類與間距（PPT 第 12 頁）
+
+- 優惠活動、最新消息、媒體影音三個列表新增共用分類導覽，沿用文章內頁下方分類樣式：14px 中文、15px 相機／圖片／影音圖示、灰框圓角，當前分類金底白字；保留 Hover、手指游標、鍵盤焦點與減少動態支援。導向既有三個列表路由，切換時移除 page、保留其他 query（包含 CMS 預覽），依既有路由規則從頂端開始。
+- Hero 到分類列上方間距由桌機 100px 增為 130px、平板 80px 增為 100px、手機 60px 增為 80px；分類與卡片間距桌機／平板 30px、手機 24px。手機按鈕至少 44px 高、窄版可換行。不修改 Hero、文章照片／文案／後台資料、麵包屑、卡片、既有分頁與底部間距；不新增套件、不寫入 CMS／資料庫、未部署。
+- 驗證：`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`node --experimental-strip-types nuxt-site/scripts/check-list-pagination.mjs`、`git diff --check` 通過。系統 Node 22.14 直接執行含 TS import 的測試會報 `ERR_UNKNOWN_FILE_EXTENSION`，需指定 strip-types，未新增套件；正式建置保留既有 Tailwind sourcemap 警告。桌機實際依序點擊最新消息、鍵盤 Enter 切換媒體影音、回優惠活動，手機亦正常切換，當前分類正確且完成跳轉後 scrollY=0；`?page=1&qa=categories` 切換後移除 page、保留 qa。三分類各三篇資料、原分頁 1 與固定麵包屑維持正常，照片載入成功，本輪瀏覽器 error 為空。
+- 響應式：1280×900 桌機分類列與 Hero 間距 130px／卡片間距 30px；768×1024 平板為 100px／30px；390×844 手機 80px／24px、三顆按鈕同列且各 108×44px，320×844 窄版自然換為兩列。各尺寸無水平溢出，平板分類按鈕中心命中正確連結、不被服務列遮住。鍵盤焦點為 2px 金色外框；既有右侧懸浮服務列覆蓋部分平板卡片文字屬原版面，非本次新增分類列影響，未擴大修改範圍。
+- 截圖 QA：來源「截圖 2026-10-03 下午2.12.21.png」（1304×608，含三頁縮放截圖與註記）及 `/tmp/sakura-news-categories-qwtFIM/desktop-activities.jpg`、`desktop-latest.jpg`（1280×900／1×）、`tablet-activities.jpg`（768×1024／1×）、`mobile-latest.jpg`（390×844／1×）、`mobile-320.jpg`（320×844／1×）放入同一比較輸入；只比對指定分類列與增加間距，不將來源舊卡片、Footer、紅框做成新內容。聚焦分類字型／14px 字級與 15px 圖示、灰框與金色選中、左側對齊與上下留白、真實照片及指定三分類文案；另存 `desktop-video.jpg`、`desktop-focus.jpg`、`mobile-video.jpg`。新增分類與間距範圍無 P0／P1／P2，final result: passed。QA 只維護本 README，不新增文件；測試尺寸還原、本機預覽保留，未部署。
+
+## 2026-10-03 門市案例到店預約（PPT 第 11 頁）
+
+- 依第 11 頁指定位置，三篇門市案例共用文章頁於「門市資訊」標題旁新增金色橢圓「到店預約」CTA，50px 高、18px 中文、白色右上箭頭；窄版可換行，保留滑鼠手指、Hover、鍵盤 focus-visible 與減少動態偏好。
+- 依圖中明確網址導向 `https://www.sakura-kitchenlife.com.tw/measuring`，`target="_blank"`／`rel="noopener noreferrer"` 另開分頁。實際點擊確認此網址會轉至櫻花 iCare 會員登入頁，原案例分頁保留；不自行換成其他短網址。未登入、未提交預約資料，登入後流程非本次驗證範圍，測試外網分頁已關閉。原側欄頂端預約 CTA（`https://pse.is/9kq37z`）、照片、規格、門市資料、地圖、前後篇及推薦文章皆不改；不寫入 CMS／資料庫、不新增套件或其他文件、未部署。
+- 驗證：`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`git diff --check` 通過，保留既有 Tailwind sourcemap 建置警告。安康／承德／松竹三篇案例均顯示新 CTA 與指定網址。1440×900 桌機、768×1024 平板、390×844／320×844 手機的 CTA 均為 154×50px、18px 中文、22px 圖示，標題與按鈕同列垂直置中、間距 16px，無水平溢出；按鈕中心與箭頭點擊位置均落在正確連結，沒有被服務列遮擋。Tab／Shift+Tab 可選取按鈕，焦點具金色外框，滑鼠點擊已驗證另開新分頁；本輪正常瀏覽器 error 紀錄為空。
+- 截圖 QA：來源「截圖 2026-10-03 下午2.00.57.png」（1954×922，含註記與縮放截圖）及 `/tmp/sakura-store-cta-b1RS4U/desktop-final.jpg`（1440×900／1×）、`tablet.jpg`（768×1024／1×）、`mobile-final.jpg`（390×844／1×）放入同一比較輸入，聚焦指定標題旁位置與右側獨立 CTA 樣式示意；金色橢圓、中文白字與右上箭頭符合指定，沿用現有字型與品牌金色，不還原來源舊圖片或更動文章排版。另存 `desktop-focus.jpg`、`mobile-320-focus.jpg`。字體／文案、間距／對齊、色彩、原圖品質與鍵盤／新分頁操作已核對，指定 CTA 範圍無 P0／P1／P2，final result: passed。QA 僅記錄本 README，測試尺寸還原、本機預覽保留，未部署。
+
+## 2026-10-03 列表分頁（PPT 第 10 頁）
+
+- 依 `2026.10.02-版面調整(0.0~6.0單元).pptx` 第 10 頁，設計靈感、案例門市、優惠活動、媒體影音及最新消息共用 `InternalListPagination`，參照原 Antra Projects 01 的 40px 圓形頁碼、16px 字級、10px 間距、置中、上方 41px 留白，當頁金底白字，前後頁斜箭頭。四個原缺少分頁的列表補上唯讀每頁 9 筆分頁；單頁顯示「1」，零結果不顯示分頁，未存在的頁面不做假連結。手機上方留白 30px、觸控區 44px，原卡片及素材保留。
+- 分頁以網址 page 切換，保留篩選與預覽 query、回第一頁移除 page；案例門市改變區域／縣市時重設第一頁。新 CMS 列表參數不合法回第一頁，超出頁碼採末頁；既有設計靈感 API 的錯誤及載入／重試狀態不變。中央 router 捲動規則新增上述五頁的 page 變更，沿用全站頂端定位與停止慣性，不影響產品分頁及 hash 區塊連結。
+- 列表桌機底部留白統一採設計靈感／範本的 130px，手機沿用 60px；不修改 CMS、資料庫、資料順序、標題、麵包屑或詳情頁，不新增套件或其他文件，不部署。
+- 驗證：`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 通過，保留既有 Tailwind sourcemap 警告。`pnpm --dir nuxt-site exec node --experimental-strip-types scripts/check-list-pagination.mjs` 驗證合成 25 筆分成 9／9／7，無遺漏／重複、單頁／空列表、非法及越界頁碼、100 頁省略顯示均通過；測試不寫入 CMS。實際設計靈感 28 筆（保留原三篇門市案例）為 9／9／9／1 筆，末頁沒有下一頁；其餘四頁現有各三筆，顯示單頁「1」，未以假資料製造額外頁碼，因此這四頁多頁操作以純函式測試覆蓋。
+- 瀏覽器驗證：1280×900 桌機頁碼 40×40px／16px／gap 10px／上方 41px，768×1024 平板維持同規格，390×844 手機觸控區 44×44px／上方 30px，均無水平溢出。桌機從底部點第 2 頁、手機從第 4 頁點第 3 頁、平板以 Tab／Shift+Tab 選取頁碼後 Enter 換頁，均確認 scrollY=0；鍵盤焦點有金色外框。現代風篩選仍為七筆單頁，案例門市南部篩選為零筆時不顯示分頁；設計靈感非法 page 顯示具體 HTTP 400 原因與重新載入，不顯示假卡片或分頁。正常流程瀏覽器 error 紀錄為空；錯誤參數測試的 HTTP 400 為預期結果。
+- 截圖 QA：簡報第 10 頁抽出的 Projects 01 範本 `image15.png`（3280×8046）與 `/tmp/sakura-pagination-zHXO9S/inspiration-final-desktop.jpg`、`gallery-final-desktop.jpg`（1280×900／1×）、`tablet-focus.jpg`（768×1024／1×）、`inspiration-mobile.jpg`（390×844／1×）於同一比較輸入核對，聚焦金色當頁圓形、字級、間距、箭頭與卡片／Footer 留白。原卡片、素材、標題及麵包屑維持現況，不還原 PPT 舊內容；頁碼範圍無 P0／P1／P2，final result: passed。原手機懸浮服務列與卡片內文重疊為既有版面，本次頁碼未被遮擋。QA 僅記錄本 README，測試尺寸還原、本機預覽保留，未部署。
+
+## 2026-10-03 廚房商品型錄下載按鈕（PPT 第 9 頁）
+
+- 依 `2026.10.02-版面調整(0.0~6.0單元).pptx` 第 9 頁「下載按鈕統一同右樣式」，`/catalogues/catalog` 五份型錄的下載按鈕採既有品牌系列型錄同款：透明底、深色字、1px 灰框 `#d7d7dc`、橢圓圓角、桌機最小寬 86px／高 40px、17px 下載圖示及 15px 文案。Hover／鍵盤 focus-visible 為金底白字，保留焦點框；手機沿用品牌系列型錄的 44px 圓形圖示按鈕及完整下載 aria-label，減少動態時關閉轉場。
+- 僅修改 `nuxt-site/pages/catalogues/catalog.vue` 與本 README；保留五份現有封面、文案、PDF 預覽網址、下載 API、download 檔名及保養區塊，不修改品牌系列型錄參考頁、CMS 或資料庫，不新增套件、文件，不部署。
+- 驗證：`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`git diff --check` 通過，保留既有 Tailwind sourcemap 建置警告。1280×900 桌機與 768×1024 平板五顆按鈕均為實際 87×40px（原參考頁同尺寸，內容寬度使最小 86px 增為 87px），字體／圖示／灰框與參考頁一致；390×844 手機均為 44×44px、17px 圖示，原下載 aria-label 保留，按鈕右緣 297px 不被浮動列遮擋，各尺寸無水平溢出。Hover 與 Tab／Shift+Tab focus-visible 均為金底白字，手機焦點外框清楚，本輪瀏覽器 error 紀錄為空。
+- 下載驗證：五個 API 網址及 download 檔名逐一核對保留。滑鼠點擊後，瀏覽器下載事件等待 45 秒未回報完成；改用已登入瀏覽器的下載連結讀取方式取得 `/Users/eric/Downloads/sakura-kitchen-2026 (1).pdf`，檔案確認為 PDF 1.7、9,787,101 bytes，原 API 可用。未帶登入資訊的 CLI 請求為 401（預覽存取保護），不視為 PDF 來源故障，亦未停用保護；本輪未逐一下載其他四份 PDF，不宣稱全部檔案驗收。
+- 截圖 QA：来源「截圖 2026-10-03 下午1.28.40.png」（2004×732，含註記及縮放頁面）、`/tmp/sakura-download-cta-Nkyi9t/desktop-final.jpg`（1280×900／1×）與 `mobile-focus.jpg`（390×844／1×）放入同一比較輸入，聚焦指定下載按鈕。字體／文案、外框留白與圓角、灰框深字及金色狀態、原圖品質均核對；目前已更新的五金封面保留，不還原 PPT 舊素材。另存 `reference-desktop.jpg`、`desktop-hover.jpg`、`tablet-focus.jpg`，一般狀態重新清除預覽 Hover／焦點後拍攝，無剩餘 P0／P1／P2，final result: passed。QA 僅維護本 README，測試尺寸還原、本機預覽保留，未部署。
+
+## 2026-10-03 廚房產品系列型錄 CTA（PPT 第 8 頁）
+
+- 依 `2026.10.02-版面調整(0.0~6.0單元).pptx` 第 8 頁「CTA 統一同右邊樣式」，產品系列列表的「廚房商品型錄下載」由黑底白字改為首頁「櫻花優勢」同款透明底、深色文字 `#1c1c1d`、1px 灰色 `rgb(159 159 164 / 64%)` 橢圓框；60px 外框高度、40px 金色白箭頭圓圈、原文字、間距、動畫及 `/catalogues/catalog` 連結維持不變。Hover／鍵盤 focus-visible 為金底白字，保留原焦點框與減少動態支援。
+- 僅修改共用 `ProductListPage.vue` 及本 README，SAKURA／SVAGO／TEKA 同版型系列及全品項列表共用此調整；產品詳細頁、其他 CTA、Hero、產品與型錄素材不變。不修改 CMS／資料庫，不新增套件、文件，不部署。
+- 驗證：`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`git diff --check` 通過，建置保留既有 Tailwind sourcemap 警告。1280×900 SAKURA 近吸系列及 390×844 SVAGO／TEKA 全品項頁的 CTA 均為 209×60px、箭頭圓圈 CSS 尺寸 40px；一般狀態透明底灰框深色字，Hover／focus-visible 為金底白字，保留箭頭旋轉與焦點框。滑鼠點擊及鍵盤 Enter 均抵達 `/catalogues/catalog` 且 scrollY=0，手機頁寬 390px 無水平溢出，本輪瀏覽器 error 紀錄為空。
+- 截圖 QA：來源「截圖 2026-10-03 下午1.20.08.png」（2006×716，含註記及縮放頁面）、`/tmp/sakura-product-cta-iLmZSG/desktop.jpg`（1280×900／1×）與 `mobile-teka-final.jpg`（390×844／1×，鍵盤焦點）置於同一比較輸入，核對 CTA 外框、字色、圓圈及原尺寸；另存 `desktop-hover.jpg`、`mobile-focus.jpg`。初次手機截圖受到進場動畫／建置後定位影響，已重新定位並確認 opacity=1 後重拍；保留目前型錄封面，不還原 PPT 舊素材。指定 CTA 範圍無 P0／P1／P2，final result: passed；QA 只記錄本 README，未部署。
+
+## 2026-10-03 廚房裝修指南文章 CTA（PPT 第 7 頁）
+
+- 依 `2026.10.02-版面調整(0.0~6.0單元).pptx` 第 7 頁，將文章頁下方延伸文章區塊的「Explore Blogs」橢圓 CTA 整體高度由 54px 改為 60px；44px 金色箭頭圓圈、字級、寬度、圓角、Hover／焦點及動畫維持原設定，網址仍為 `/knowledge`。
+- 僅調整 `KnowledgeRelatedCarousel.vue` 的 `home07` 變體，套用到系統櫃、插座規劃及中島餐桌同版型內頁；不改一般推薦文章輪播、全站 CTA、文案、圖片、CMS 或資料庫，不新增套件或文件，不部署。
+- 驗證：`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`git diff --check` 通過，保留既有 Tailwind sourcemap 建置警告。1280×900 系統櫃文章及 390×844 插座文章的 CTA 均為 169.67×60px，原字級 14px、箭頭圓圈 CSS 尺寸 44px 不變；Hover／focus-visible 維持金底白字、箭頭旋轉。Tab／Shift+Tab 能選取連結，滑鼠點擊與手機尺寸 Enter 均抵達 `/knowledge`，列表 Hero 正常顯示且 scrollY=0，手機頁寬 390px 無水平溢出，本輪瀏覽器未新增 error。
+- 截圖 QA：來源「截圖 2026-10-03 下午1.13.23.png」（1364×780，含註記及縮放頁面）、`/tmp/sakura-guide-cta-E6p0mS/desktop.jpg`（1280×900／1×）與 `mobile.jpg`（390×844／1×，鍵盤焦點）置於同一比較輸入，聚焦標註 CTA，不把來源的 60px 示意圖寬度或紅框做進網站。字體／文案、灰框與金色、原圖片及三欄版型維持原有設定，只有 CTA 外框高度增加；另存 `desktop-hover.jpg`、`desktop-focus.jpg`，按鈕範圍無 P0／P1／P2，final result: passed。QA 只記錄本 README，測試尺寸還原、本機預覽保留，未部署。
+
+## 2026-10-03 品牌系列推薦廚電按鈕（PPT 第 6 頁）
+
+- 依同份 `2026.10.02-版面調整(0.0~6.0單元).pptx` 第 6 頁「按鈕統一同右邊樣式」，將十個品牌系列共用推薦廚電卡片的加號改為商品分類卡同款右箭頭：60px 金色 `#caa05c` 圓形、白色 24px 箭頭、1px 半透明白框，Hover／鍵盤 focus-visible 置於圖片正中央，以同款縮放／旋轉漸入；不把 PPT 舊標題、產品及圖片還原至前台。
+- 圖片與操作提示共用定位容器，不改卡片寬度、圖片比例、透明素材、文字、原路由與少量卡片置中；無網址的展示產品不顯示按鈕。手機採同款 52px 圓形箭頭、圖片中央常駐，不依賴 Hover；初次 QA 發現手機右下角提示被既有懸浮服務列遮擋（P2），已改為置中，後續重新截圖確認。圖示不增加額外 tab 焦點，原連結可鍵盤操作，減少動態偏好沿用關閉轉場。
+- 只改 `KitchenSeriesPage.vue` 與本 README，不新增套件、路由、素材，不修改 CMS／資料庫，不部署。`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`node nuxt-site/scripts/check-kitchen-series.mjs`（於 nuxt-site 執行時為 `node scripts/check-kitchen-series.mjs`）及 `git diff --check` 通過；十系列 SSR、404 與 215 個來源圖片回歸正常。建置保留既有 Tailwind sourcemap 警告，無建置失敗。
+- 瀏覽器驗證：1280×720 Hover 為 60×60px 金色白箭頭，按鈕與圖片中心差值為 0；Tab 顯示同款按鈕及 2px 金色焦點框，Enter 可啟用原連結。390×844 六個箭頭均為 52×52px 常駐、圖片載入正常、頁寬 390px 無水平溢出，六個按鈕中心的點擊目標均為對應產品連結，不被服務列遮擋。原手機服務列與部分文字重疊為既有版面，本輪未調整。Loft Chic 三卡仍置中，外連 `_blank`／`noopener noreferrer` 保留。正常點擊 P0531 後等待完整頁面，抵達 `/products/sakura`、Hero 及產品分類可見、scrollY=0；快速取消測試跳轉時曾記錄一次既有 CMS loader「內容尚未初始化」錯誤，唯讀查詢確認發布內容存在，完整正常跳轉未新增此錯誤，未重建或覆寫資料。
+- 截圖 QA：來源第 6 頁截圖（2006×704，含兩個頁面及註記）、`/tmp/sakura-equipment-eYmjmt/desktop-final.jpg`（1280×720／1×）、`mobile-final.jpg`（390×844／1×）已放入同一比較輸入，聚焦按鈕圖示、金色、白框與圖片中心定位；保留現行標題及原產品圖，不額外複製右圖整張灰色卡片遮罩。另存 `desktop-focus.jpg`、`loft-chic.jpg`；初次手機右下角被遮擋的 P2 已修正並重新截圖與命中測試，按鈕範圍 final result: passed。QA 只記錄本 README，未部署。
+
+## 2026-10-03 Footer 網站地圖（PPT 第 5 頁）
+
+- 依 `2026.10.02-版面調整(0.0~6.0單元).pptx` 第 5 頁及使用者截圖調整六分類：維持桌機六個等寬欄位、標題及首列頂端對齊，平板三欄／手機兩欄；桌機及平板入口字級 16px。保留原背景、金色分類、白色連結、數位展板／YouTube、回頂端與展開收合功能。
+- 「門市與服務」新增到府丈量／線上客服，沿用 Header／快速服務的既有 HTTPS 網址並另開分頁。「品牌館、關於櫻花」更名為「櫻花集團品牌館、關於我們」；SVAGO、TEKA、建商專區保留正確名稱。PPT「TELA」為來源筆誤，採實際品牌 TEKA。
+- 依圖將廚房產品保留四個入口、合作專區保留我要加盟／建商專區兩個入口；僅移除 Footer 的除油煙機系列、近吸系列、加盟資料下載、建商整體廚房、建商專區型錄入口，相關頁面及 Header 選單不刪除。
+- `nuxt-site/scripts/update-footer-content-20261003.mjs` 只修改本機 Footer 文件的指定項目，不重跑 seed、不整筆套用舊範本。於 `nuxt-site` 執行 `node --env-file=.env scripts/update-footer-content-20261003.mjs` 先檢查，追加 `--apply` 才以 CMS save／publish 交易發布；保留舊版本，未發布草稿、文案或 revision 衝突即停止，可重跑。限 `127.0.0.1 / SakuraWebsiteDev`，不修改雲端 CMS 或部署。
+- 本機 CMS 已發布 revision 3，保留舊版本 `80a65fb3-1243-4c4f-8972-e64a0d1c3f81`。前後比對確認 copy（含圖示／社群／版權）、cmsSettings、設計案例及優惠消息分類完全不變；各分類入口數為 4／4／4／1／3／2，草稿與發布版本一致，再次執行為 `UNCHANGED`。指令語法、`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`git diff --check` 通過。資料庫連線保留既有 Node IP TLS ServerName 棄用警告，本次未降低 TLS 或修改連線安全設定。
+- 瀏覽器驗證：1280px 六欄各 174px、起點等距 198px，1024px 六欄約 131.33px，標題／首列各自同一 Y 座標；768px 三等寬欄、390px 兩欄各 132.5px，各尺寸無水平溢出、欄內溢出 0。兩個新外連為 `_blank`＋`noopener noreferrer`，18 個入口均為手指游標，原圖示及 logo 正常載入；手機實際從 Footer 點服務流程抵達 `/service-process` 且 scrollY=0，網站地圖收合／展開均正常。瀏覽器 error 0，測試尺寸已還原，本機預覽保持開啟。
+- 截圖 QA：使用者來源截圖（1610×996，含註記及不同縮放）、`/tmp/sakura-footer-i6jjLo/desktop.jpg`（1280×900／1×）與 `mobile-top.jpg`（390×844／1×）放入同一比較輸入，聚焦展開網站地圖而非把紅字／遮罩做成畫面；字級、均分／頂端对齊、背景與品牌色、真實素材、指定名稱及排列均核對。另存 `desktop-1024.jpg`、`tablet.jpg`、`mobile-bottom.jpg`；原有底部大 logo 保留，來源截圖未顯示不視為刪除要求。無剩餘 P0／P1／P2，final result: passed；僅維護本 README，不新增 QA 文件，未同步正式 CMS 或部署。
+
+## 2026-10-03 Header 新增加盟入口
+
+- 依使用者截圖，在「我要加盟」原四個下拉選項後新增「加盟申請表單」→ `/franchising/form`、「加盟資料下載」→ `/franchising/download`，沿用既有頁面及 PDF 預覽／下載，不新增路由，不改原選項、順序與版型；桌機及手機共用 CMS 資料。
+- 延伸同日 `update-header-content-20261003.mjs`，保留上一輪品牌館名稱更新；只追加缺少的兩個選項，遇到重複或同名異址時停止，不覆寫既有項目。仍先 check、加 `--apply` 才交易儲存／發布本機版本，不使用 seed、保留舊版本，不同步正式 CMS 或部署。
+- 已套用本機 CMS revision 5，保留原版本 `c1ecc130-b5f6-4ded-97dd-81dc53ff688c`。逐欄比對確認只在原四項後新增兩項，全部其他欄位完整保留；再次執行輸出 `UNCHANGED`，不新增重複版本或項目。型別檢查、指令語法及 `git diff --check` 通過。
+- 本機瀏覽器：1280×720 六個選項順序正確、寬度仍 190px，實際點擊進入表單與下載頁且 scrollY=0；下載頁顯示既有兩頁 PDF 預覽／下載入口 `/section-6/franchise/franchising_info.pdf`（此輪未另下載整份檔案、未送出表單）。390×844 手機兩個新入口與網址正確、頁寬 390px 無溢出，已還原尺寸，瀏覽器無 error。
+- 截圖 QA：來源「截圖 2026-10-03 上午11.55.57.png」（774×342，含裁切與註記）、`/tmp/sakura-franchise-nav-mHI91V/desktop.jpg`（1280×720／1×）、`mobile.jpg`（390×844／1×）置於同一比較輸入，聚焦我要加盟下拉區域；原字體、列距、白底／灰字及既有圖片不變，新增名稱與排列符合註記，未發現 P0／P1／P2，final result: passed。QA 僅記錄於本 README，未同步正式 CMS 或部署。
+
+## 2026-10-03 Header 品牌館選單文案
+
+- 依使用者截圖，品牌承諾下拉「集團品牌館」改為「櫻花集團品牌館」；保留 `/about/exhibition` 網址、版型及其他文案，手機導覽共用同一來源。
+- 修正實際本機 CMS 內容與 SiteHeader 型別範例，不用前台硬蓋 CMS。於 `nuxt-site` 執行 `node --env-file=.env scripts/update-header-content-20261003.mjs` 先檢查，再加 `--apply` 才在交易中儲存並發布指定 Header 修改（現另包含上節兩個加盟入口）；僅限 `127.0.0.1 / SakuraWebsiteDev`，保留舊版本，有草稿／文案衝突時停止，可重跑，不重跑 seed、不修改正式資料庫。
+- 已套用本機 CMS revision 3，保留原版本 `784926d3-e6d1-442d-b9cb-dab53f2c9d9b`；逐欄比對確認只改品牌館 label，其他欄位／連結完全相同，草稿與發布版本一致，重跑輸出 `UNCHANGED`。尚未同步正式 CMS 或部署，部署程式本身不會同步這筆資料。
+- 驗證：1280×720 桌機顯示新名稱、選單仍 190px 寬／每列 44px／字級 16px，實際點擊 `/about/exhibition` 且 scrollY=0；390×844 手機共用新文案、原網址且無水平溢出，已還原尺寸。型別檢查、指令語法與 `git diff --check` 通過，瀏覽器無 error。
+- 截圖 QA：使用者「截圖 2026-10-03 上午11.51.21.png」（1670×250，含裁切與文字註記）及 `/tmp/sakura-pavilion-nav-BQrN40/desktop.jpg`（1280×720／1×）置於同一比較輸入，聚焦相同品牌承諾選單；背景頁面不同不作全頁比例比對。文字依指定更名，字型、留白、原金白色系與圖片均未更動，未發現 P0／P1／P2 差異，final result: passed。只更新本 README，不新增 QA 文件。
+
+## 2026-10-03 Header 門市與服務 iCare logo
+
+- 依使用者截圖，在桌機「門市與服務」的「到府丈量／客服中心」文字右側加上 SAKURA iCare logo；固定維持原有 190px 選單寬度，原文字、間距、兩個外部網址及另開分頁行為保留。
+- 使用提供的 `櫻花整體廚房_開版用圖 2/Logo/Global_Icon_SAKURA_iCare_08.svg` 原檔，納入 `public/home-2026/logos/sakura-icare.svg`；80px 等比例顯示、不裁切或拉伸。Logo 是連結內裝飾，不新增重複焦點或更改連結名稱。
+- 文字與 logo 間距 4px，保留左右各 20px 原內距；首次 QA 發現全站實際字級為 16px，8px 間距會侵占右側 4px 留白，已收緊為 4px。修正後 1280px／1024px 桌機皆量測為 190px 寬、每列 44px 高、兩個 logo 均載入且左右內距各 20px。390px 手機無水平溢出，原手機選單不變；Tab 可從到府丈量到客服中心、logo 不出現在可存取名稱中，Escape 關閉正常。
+- 截圖 QA：來源為使用者「截圖 2026-10-03 上午11.40.57.png」（1560×380、含頁面裁切與註記），修正前 `/tmp/sakura-service-menu-x73Xyc/desktop.jpg`，修正後 `desktop-final.jpg`（1280×720、1×），已在相同 `/knowledge` 路由展開門市與服務，將來源與最終畫面放在同一比較輸入；比較重點為局部選單，不將來源註記留白當網站版型。字體／文案未變、等寬與左右留白確認、logo 紅灰原色保留、原始向量素材等比例清晰顯示（原 SVG 內容相同，僅檔尾換行差異）。前述內距問題已修正並再次截圖，無剩餘 P0／P1／P2，final result: passed；QA 僅記錄於本 README。
+- `pnpm --dir nuxt-site typecheck` 與 `git diff --check` 通過，瀏覽器沒有 error；上一輪型錄 CTA 高度仍 52px、網址仍 `/catalogues/catalog`。不修改 CMS／資料庫，不部署，本機預覽保留並還原測試尺寸。
+
+## 2026-10-03 Header 廚房產品型錄入口
+
+- 依使用者截圖調整桌機「廚房產品」下拉選單：型錄 CTA 上方與下方各 32px 留白，新增 52px 高橢圓灰色外框，Hover／鍵盤 focus-visible 為品牌金色 `#C4A574` 底、白色文字與箭頭。
+- 保留三品牌卡片、型錄 CMS 文案及網址、其他下拉選單與手機導覽。只修改前台樣式，不改 CMS 或資料庫，不部署。
+- 本機驗證：1280×720 桌機量測 CTA 為 200×52px、上下各 32px、1px 灰框與手指游標；滑鼠真實懸停時 `:hover=true`，底色 rgb(196,165,116)、文字白色。Tab 可到達 CTA 並顯示金底白字，Escape 關閉選單；點擊進入 `/catalogues/catalog` 且 scrollY=0。390×844 手機展開廚房產品後三品牌與型錄連結正常，頁寬 390px、無水平溢出，驗證後已還原視窗尺寸。
+- 截圖 QA：來源為使用者「截圖 2026-10-03 上午11.31.38.png」（1578×462，含裁切與右側註記）；實作為 `/tmp/sakura-header-dmcXFu/default.jpg`、`hover.jpg`（1280×720／1×）、`mobile.jpg`（390×844／1×）。將來源及一般／Hover 畫面放在同一比較輸入，聚焦 CTA 註記而非把裁切圖誤當完整視窗：字體與文案沿用、留白及橢圓外框符合要求、品牌金色與白字正確、三品牌原圖裁切與清晰度不變；無需重新製作素材。此次未發現需修正的 P0／P1／P2 差異，final result: passed；沿用本份 README 記錄，不新增 QA 文件。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。最初同時執行型別檢查及建置造成 Nuxt 產生檔競爭、`#components` 暫時缺失；停止自行啟動的 dev 後依序重跑型別檢查通過，再啟動 dev 重新驗證畫面。瀏覽器沒有 error，只有既有 Google Maps Marker 棄用 warning；建置保留既有 Tailwind sourcemap warning。本機預覽保持運作，未部署。
+
 ## 2026-10-02 最新修改同步正式 CMS（已完成）
 
 - 使用者確認以本次最新本機修改為準，授權同步前次核對的 10 份內容及 2 份型錄素材；不整庫還原、不執行 seed、不修改來源資料、帳號、密碼、權限或收件。
