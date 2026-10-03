@@ -1,5 +1,15 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-03 正式 CMS 再次唯讀檢查
+
+- 14:30 左右（台灣時間）重新核對 `sakura-demo-vanlantech.com` 與 `header-design-two.vercel.app`，皆指向同一 Production 部署 `dpl_FXy7UHoxsb36ZcBcMWuotj4ha6FE`，READY、建立於 2026-10-03 14:22:43。正式 `/news/activities` SSR 200，含本次新增 `news-category-nav` 與原優惠活動分頁。不能沿用前一輪「本機未部署」或 10 月 2 日舊部署 ID 判斷目前狀態；本輪未部署、未同步或改環境設定。Vercel connector 的 projectId／idOrName 驗證規則衝突，改用既有已登入 CLI 唯讀 inspect／logs，不移除任何存取保護。
+- 兩網域未通過提案入口時 `/admin` 302 至 `/preview-access`、內容 API 401，屬預期保護；通過既有提案入口後 `/admin` 302 至 `/admin/login`、登入頁 200。瀏覽器已實際看到 CMS 電子郵件／密碼表單，沒有 console error，截圖 `/tmp/sakura-production-admin-A2htdc/login.jpg`。未嘗試猜測、重設或更換管理員密碼；已請使用者在正式頁登入，登入後的內容／媒體／權限／收件 UI 與儲存、發布、上傳尚未重新驗收，不能宣稱後台全部操作已通過。
+- 雲端 `SakuraWebsiteTest` 直接 TLS 唯讀連線成功。65 份文件／123 筆歷史版本／299 份素材及 SQL bytes／33 筆稽核記錄；版本歸屬失聯 0、草稿與已發布本文差異 0、版本或 schema JSON 無效 0、素材引用失聯 0、素材 bytes 遺失／大小或 SHA-256 不符 0。1 個啟用 admin、3 個既有停用驗收帳號，啟用管理員沒有強制改密碼旗標；不輸出密碼雜湊、session、CSRF 或私人資料。收件及留言各 0，不送測試表單。本輪資料狀態與 10 月 2 日同步後記錄一致。
+- 五張 DesignCloud 來源表維持 25／46／200／182／200，來源商品 879。兩網域各 65 個已發布內容 API 全部 200；正式設計靈感 filters 與 cases 200，案例總數 28、首頁 9，非法 page=0 為預期 400。SAKURA／SVAGO／TEKA 商品 items API 200、總数 749／60／38。新型錄封面與 PDF HTTP 200、類型與長度正確（68,882／15,529,327 bytes）；HTTP 僅查可讀，不重複下載整份 PDF，完整素材雜湊於 SQL 核對。
+- **最新 Header／Footer CMS 內容尚未同步。** 正式已發布 revision 皆為 1，本機 Header 為 5、Footer 為 3，已發布本文直接比對不相同。這是環境內容差異，不是資料損壞；部署程式不會自動把本機 CMS 版本發布到雲端。本輪沒有整庫還原、seed、import、同步、發布或任何資料覆蓋。若要同步必須另行確認指定內容並保留正式舊版本、帳號與收件。
+- 正式部署最近 1 小時 error 等級日誌查詢 0（僅當次查詢，不保證長期沒有錯誤）。第一次瀏覽器入口切換快照曾等待逾時，再次觀察已正常進入登入頁，未把一次工具快照逾時列為服務故障。初次本機比對漏用 CMS 資料庫預設回退、誤连 master 後 SELECT 回 `Invalid object name cms.Documents`，改以明確 `SakuraWebsiteDev` 重新查詢成功；沒有資料庫變更，不誤報為正式庫缺表。
+- 依 qa-only 的報告流程只檢查，不修程式；因本專案規則，報告僅保留本 README、不建立其他 `.md`，瀏覽器採既有 CUA、不安裝工具、不新增遙測或同步設定。結論：正式部署、資料庫、已發布內容讀取及素材可用；**登入後管理操作尚待使用者登入實測，完整後台驗收為待確認**。未給未測功能虛構健康分數，未更動正式資料。
+
 ## 2026-10-03 優惠消息分類與間距（PPT 第 12 頁）
 
 - 優惠活動、最新消息、媒體影音三個列表新增共用分類導覽，沿用文章內頁下方分類樣式：14px 中文、15px 相機／圖片／影音圖示、灰框圓角，當前分類金底白字；保留 Hover、手指游標、鍵盤焦點與減少動態支援。導向既有三個列表路由，切換時移除 page、保留其他 query（包含 CMS 預覽），依既有路由規則從頂端開始。
