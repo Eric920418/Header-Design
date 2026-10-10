@@ -21,6 +21,13 @@ const scrollBehavior: RouterScrollBehavior = async (to, from) => {
   if (router.currentRoute.value.fullPath !== to.fullPath) return false
 
   if (to.hash) {
+    // Direct anchor access must not wait for observers tied to the previous viewport.
+    const target = document.getElementById(to.hash.slice(1))
+    if (target) {
+      for (const element of [target, ...target.querySelectorAll<HTMLElement>('.ev')]) {
+        element.setAttribute('data-reveal-direct', '')
+      }
+    }
     const top = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--site-header-height')) || 0
     // Native smooth scrolling can be interrupted by Lenis/page layout refresh.
     return { el: to.hash, top, behavior: 'instant' as ScrollBehavior }

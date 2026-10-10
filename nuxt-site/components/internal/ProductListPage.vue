@@ -15,16 +15,12 @@ const { data, error, status, refresh } = await useFetch<ProductList>(`/api/produ
 const search = ref(typeof route.query.q === 'string' ? route.query.q : '')
 watch(() => route.query.q, q => { search.value = typeof q === 'string' ? q : '' })
 const heading = computed(() => data.value?.category?.title ?? `${info.name} 全部產品`)
-const catalogueHighlights = PRODUCT_CATALOGUES.filter(item => ['sakura-kitchen-2026', brand === 'sakura' ? 'sakura-all-2026' : 'imported-appliances-2026'].includes(item.id))
+const catalogueHighlights = PRODUCT_CATALOGUES
+  .filter(item => ['sakura-kitchen-2026', 'kitchenware-2026'].includes(item.id))
+  .map(item => item.id === 'kitchenware-2026' ? { ...item, title: '櫻花整廚廚房配備型錄' } : item)
 const productCategories = computed(() => data.value?.children.map(item => ({ ...item, groupLabel: info.name })) ?? [])
 const breadcrumbs = computed(() => [{ label: '首頁', to: '/' }, { label: info.label, to: `/products/${brand}` },
   ...(data.value?.ancestors.length ? data.value.ancestors.map((item, index, list) => ({ label: item.title, to: index < list.length - 1 ? item.route : undefined })) : [{ label: '全部產品' }])])
-const pageNumbers = computed(() => {
-  const current = data.value?.page ?? 1, total = data.value?.pages ?? 1
-  const start = Math.max(1, Math.min(current - 2, total - 4))
-  return Array.from({ length: Math.min(5,total) }, (_,index) => start + index)
-})
-const pageRoute = (page: number) => ({ path: route.path, query: { ...(route.query.q ? { q: route.query.q } : {}), page: String(page) } })
 const productRoute = (item: { route: string }) => ({ path: item.route, query: { ...(category ? { category: String(category) } : {}), ...(route.query.q ? { q: route.query.q } : {}), page: String(data.value?.page ?? 1) } })
 function submitSearch() { return navigateTo({ path: route.path, query: search.value.trim() ? { q: search.value.trim() } : {} }) }
 if (import.meta.server && error.value) setResponseStatus(error.value.statusCode ?? 500)
@@ -55,7 +51,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
           <em>{{ brand === 'sakura' && category === 9 ? 'Smart Appliances for Better Living' : `${info.name} Kitchen Appliances` }}</em>
           <span>{{ heading }}</span>
         </h2>
-        <form class="product-search" role="search" @submit.prevent="submitSearch">
+        <form v-if="!category" class="product-search" role="search" @submit.prevent="submitSearch">
           <label for="product-search">搜尋產品名稱／型號</label>
           <div><input id="product-search" v-model="search" type="search" maxlength="100" placeholder="輸入產品名稱或型號"><button type="submit">搜尋</button></div>
         </form>
@@ -93,11 +89,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
             </NuxtLink>
           </li>
         </ul>
-        <nav v-if="data && !error && data.pages > 1" class="product-pagination" aria-label="產品分頁">
-          <NuxtLink v-if="data.page > 1" :to="pageRoute(data.page - 1)">上一頁</NuxtLink>
-          <NuxtLink v-for="page in pageNumbers" :key="page" :to="pageRoute(page)" :aria-current="page === data.page ? 'page' : undefined">{{ page }}</NuxtLink>
-          <NuxtLink v-if="data.page < data.pages" :to="pageRoute(data.page + 1)">下一頁</NuxtLink>
-        </nav>
+        <InternalListPagination v-if="data && !error && data.pages > 1" class="product-pagination" :current-page="data.page" :total-pages="data.pages" label="產品分頁" />
       </div>
     </section>
 
@@ -144,9 +136,11 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
         </div>
 
         <div class="near-suction-catalogue__cards">
-          <article
+          <NuxtLink
             v-for="(catalogue, index) in catalogueHighlights"
             :key="catalogue.id"
+            to="/catalogues/catalog"
+            :aria-label="`前往廚房商品型錄：${catalogue.title}`"
             v-reveal="{ anim: 'opalMoveUp', delay: 100 + index * 100 }"
             class="near-suction-catalogue-card"
           >
@@ -155,7 +149,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
             </div>
             <span>Catalogue Preview</span>
             <h3>{{ catalogue.title }}</h3>
-          </article>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -168,10 +162,10 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
 .product-search > div { display: flex; gap: 12px; }
 .product-search input { min-width: 0; flex: 1; border: 1px solid #c8c8cc; border-radius: 999px; padding: 12px 22px; background: #fff; }
 .product-search button { border-radius: 999px; padding: 12px 24px; background: #1c1c1d; color: #fff; cursor: pointer; }
-.product-subcategories, .product-pagination { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0; font-family: var(--font-cjk-sans); }
-.product-subcategories a, .product-pagination a { border: 1px solid #caa05c; border-radius: 999px; padding: 10px 18px; }
-.product-pagination { justify-content: center; margin-top: 45px; }
-.product-pagination a[aria-current], .product-subcategories a:hover, .product-pagination a:hover { background: #caa05c; color: white; }
+.product-subcategories { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0; font-family: var(--font-cjk-sans); }
+.product-subcategories a { border: 1px solid #caa05c; border-radius: 999px; padding: 10px 18px; }
+.product-subcategories a { display: inline-flex; width: 144px; max-width: 100%; min-height: 46px; align-items: center; justify-content: center; padding-inline: 8px; text-align: center; }
+.product-subcategories a:hover { background: #caa05c; color: white; }
 
 .near-suction-catalogue__copy h2 em { color: #caa05c; font-style: normal; }
 .near-suction-page { overflow: clip; color: #59585d; background: #fafafa; }
@@ -258,16 +252,13 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
 .near-suction-catalogue__cta:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .near-suction-catalogue__cta > span:first-child { white-space: nowrap; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .near-suction-catalogue__cta .site-cta-icon { position: relative; isolation: isolate; display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
-.near-suction-catalogue__cta .site-cta-icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; background: #caa05c; content: ""; animation: near-suction-cta-radar 2s ease-out infinite; }
 .near-suction-catalogue__cta svg { width: 19px; height: 19px; }
 .near-suction-catalogue__cta:hover .site-cta-icon,
 .near-suction-catalogue__cta:focus-visible .site-cta-icon { transform: rotate(0); }
-.near-suction-catalogue__cta:hover .site-cta-icon::after,
-.near-suction-catalogue__cta:focus-visible .site-cta-icon::after { animation: none; opacity: 0; }
-@keyframes near-suction-cta-radar { from { opacity: .55; transform: scale(1); } to { opacity: 0; transform: scale(1.55); } }
 .near-suction-catalogue__copy > p { margin: 18px 0 0; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 20px; }
 .near-suction-catalogue__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
-.near-suction-catalogue-card { min-width: 0; }
+.near-suction-catalogue-card { display: block; min-width: 0; color: inherit; }
+.near-suction-catalogue-card:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; border-radius: 24px; }
 .near-suction-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #fafafa; }
 .near-suction-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .near-suction-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }

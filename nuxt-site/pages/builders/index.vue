@@ -61,7 +61,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="builders-hero__aside ev">
           <a :href="BUILDER_APPOINTMENT_HASH" class="builders-round-link">
             <span>{{ cmsCopy.copy.text5 }}</span>
-            <span class="builders-round-link__icon"><ArrowRight aria-hidden="true" /></span>
+            <span class="site-cta-icon builders-round-link__icon"><ArrowRight aria-hidden="true" /></span>
           </a>
         </div>
       </div>
@@ -280,15 +280,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-rail { width: min(1770px, 100%); margin-inline: auto; padding-right: 56px; box-sizing: border-box; }
 .builders-round-link { display: inline-flex; min-height: 60px; width: max-content; flex: none; align-items: center; justify-content: center; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgb(255 255 255 / 34%); border-radius: 999px; color: #fff; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .builders-round-link__icon { position: relative; isolation: isolate; display: inline-flex; width: 40px; height: 40px; flex: none; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: color .35s ease, background-color .35s ease, transform .5s ease; }
-.builders-round-link__icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; content: ''; background: #caa05c; animation: builders-cta-radar 2s ease-out infinite; }
 .builders-round-link__icon svg { width: 20px; height: 20px; }
 .builders-round-link:hover,
 .builders-round-link:focus-visible { color: #1c1c1d; border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
 .builders-round-link:hover .builders-round-link__icon,
 .builders-round-link:focus-visible .builders-round-link__icon { color: #fff; background: #1c1c1d; transform: rotate(0); }
-.builders-round-link:hover .builders-round-link__icon::after,
-.builders-round-link:focus-visible .builders-round-link__icon::after { animation: none; opacity: 0; }
-@keyframes builders-cta-radar { from { opacity: .6; transform: scale(1); } to { opacity: 0; transform: scale(1.55); } }
 .builders-hero { position: relative; z-index: 0; min-height: 868px; overflow: hidden; color: #fff; background: #1c1c1d; }
 .builders-hero__deco { position: absolute; z-index: -1; inset: 0; opacity: .08; background: var(--cms-image-asset_7a7fece6, url('/section-6/franchise/antra-original/h5-bg1.png')) center / cover no-repeat; filter: invert(1); }
 .builders-hero__inner { display: grid; grid-template-columns: 64% 36%; padding: 142px 30px 0; }

@@ -47,12 +47,11 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
       </div>
     </section>
 
-    <div class="page-container mb-10">
-      <nav class="mb-6 flex flex-wrap gap-5" aria-label="切換廚電品牌">
-        <NuxtLink v-for="(item, slug) in PRODUCT_BRANDS" :key="slug" :to="`/products/${slug}`" :aria-current="brand === slug ? 'page' : undefined" class="rounded-full border border-[#caa05c] px-6 py-3 hover:bg-[#caa05c] hover:text-white">{{ item.name }}</NuxtLink>
+    <div class="page-container sakura-product-brands">
+      <nav class="sakura-product-brands__nav" aria-label="切換廚電品牌">
+        <NuxtLink v-for="(item, slug) in PRODUCT_BRANDS" :key="slug" :to="`/products/${slug}`" :aria-current="brand === slug ? 'page' : undefined" class="sakura-product-brands__link">{{ item.name }}</NuxtLink>
       </nav>
       <InternalDesignLoadState label="商品分類" :pending="status === 'pending'" :error="error" @retry="refresh()" />
-      <NuxtLink v-if="data && !error" :to="`/products/${brand}/all`" class="inline-block rounded-full bg-[#1c1c1d] px-7 py-3 text-white">查看全部 {{ data.total }} 項產品／搜尋型號</NuxtLink>
     </div>
 
     <section v-if="data && !error" class="sakura-product-list" aria-labelledby="sakura-product-list-title">
@@ -182,6 +181,28 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
 
 .sakura-product-story__image :deep(img) { object-fit: cover; }
 
+.sakura-product-brands { padding: 80px 43px 0; margin-bottom: 30px; }
+.sakura-product-brands__nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 116px));
+  gap: 20px;
+}
+.sakura-product-brands__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 12px 8px;
+  border: 1px solid #caa05c;
+  border-radius: 999px;
+  font-size: 14px;
+  transition: background-color .3s ease, color .3s ease;
+}
+.sakura-product-brands__link[aria-current="page"] { color: #1c1c1d; }
+.sakura-product-brands__link:hover,
+.sakura-product-brands__link:focus-visible { color: #fff; background: #caa05c; }
+.sakura-product-brands__link:focus-visible { outline: 2px solid #caa05c; outline-offset: 3px; }
+
 .sakura-product-source { padding: 0 30px 50px; background: #fafafa; }
 .sakura-product-source__rail {
   display: grid;
@@ -307,6 +328,8 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
   .sakura-product-story__rail { grid-template-columns: 1fr; gap: 34px; }
   .sakura-product-story h2 { font-size: 40px; line-height: 43px; }
   .sakura-product-story__image { aspect-ratio: 1.35; border-radius: 18px; }
+  .sakura-product-brands { padding: 32px 0 0; margin-bottom: 30px; }
+  .sakura-product-brands__nav { max-width: 388px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .sakura-product-source { padding: 0 15px 40px; }
   .sakura-product-source__rail { grid-template-columns: auto minmax(0, 1fr); padding: 18px; }
   .sakura-product-source button { grid-column: 1 / -1; justify-self: start; }
@@ -321,6 +344,7 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sakura-product-brands__link { transition: none; }
   .sakura-product-card__image :deep(img),
   .sakura-product-card__shade,
   .sakura-product-card__text h3,

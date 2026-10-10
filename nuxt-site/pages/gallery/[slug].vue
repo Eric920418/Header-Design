@@ -227,9 +227,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .case-detail-store-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-bottom: 25px; }
 .case-detail-store-heading h2 { margin-bottom: 0; }
 .case-detail-store-booking { display: inline-flex; flex: 0 0 auto; height: 50px; align-items: center; justify-content: center; gap: 16px; padding: 0 22px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-cjk-sans); font-size: 18px; line-height: 24px; white-space: nowrap; cursor: pointer; transition: background-color .3s ease; }
-.case-detail-store-booking:hover { background: #b58b49; }
 .case-detail-store-booking:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
-.case-detail-store-booking :deep(svg) { width: 22px; height: 22px; flex: 0 0 auto; }
+.case-detail-store-booking :deep(svg) { width: 22px; height: 22px; flex: 0 0 auto; transition: transform .3s ease; }
+.case-detail-store-booking:hover :deep(svg),
+.case-detail-store-booking:focus-visible :deep(svg) { transform: rotate(45deg); }
 .case-detail-widget h3 { color: #1c1c1d; font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 26px; }
 .case-detail-specs { border-top: 1px solid #e3e3e8; }
 .case-detail-specs > div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 55px; padding: 12px 0; border-bottom: 1px solid #e3e3e8; }
@@ -345,6 +346,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 @media (prefers-reduced-motion: reduce) {
   .case-detail-store-booking,
+  .case-detail-store-booking :deep(svg),
   .case-detail-booking,
   .case-detail-booking .site-cta-icon,
   .case-detail-contact-list a,

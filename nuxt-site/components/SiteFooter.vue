@@ -9,6 +9,8 @@ const sitemapGroups = cmsCopy.sitemapGroups
 const footerSocialLeft = ref('0px')
 const footerSocialGap = ref('48px')
 const footerSocialLinks = ref<HTMLElement | null>(null)
+const footerSitemap = ref<HTMLElement | null>(null)
+const footerSitemapColumnWidth = ref<string>()
 const reducedMotion = useReducedMotion()
 let headerResizeObserver: ResizeObserver | null = null
 
@@ -31,7 +33,17 @@ function alignSocialLinksWithHeader() {
   const iconWidth = footerSocialLinks.value?.firstElementChild?.getBoundingClientRect().width || 35
   footerSocialLeft.value = `${left - container.getBoundingClientRect().left}px`
   footerSocialGap.value = `${Math.max(16, group.getBoundingClientRect().left - left - iconWidth)}px`
+
+  const sitemap = footerSitemap.value
+  const lastTitle = sitemap?.lastElementChild?.querySelector('h2 > span')
+  if (sitemap && lastTitle && sitemapOpen.value && sitemapGroups.length > 1) {
+    const contentLeft = sitemap.getBoundingClientRect().left + parseFloat(getComputedStyle(sitemap).paddingLeft)
+    // 六欄起點等距，最後一欄文字右緣對齊展板 icon，而非欄位右緣。
+    footerSitemapColumnWidth.value = `${(left + iconWidth - contentLeft - lastTitle.getBoundingClientRect().width) / (sitemapGroups.length - 1)}px`
+  }
 }
+
+watch(sitemapOpen, () => nextTick(alignSocialLinksWithHeader))
 
 onMounted(() => {
   nextTick(() => {
@@ -59,7 +71,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   <template v-if="cmsCopy.cmsSettings.visible">
   <footer id="footer-navigation" data-breadcrumb-root class="relative w-full overflow-hidden bg-[#1C1C1D] text-white">
     <div aria-hidden style="background-image: var(--cms-image-asset_9b0c0f62, url('/home-2026/footer/kitchen-background.webp'))" class="absolute inset-0 bg-cover bg-center opacity-20" />
-    <div class="relative z-10 mx-auto flex max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]" :class="sitemapOpen ? 'h-[144px] lg:h-[120px]' : 'h-[220px]'">
+    <div class="footer-navigation-shell relative z-10 mx-auto flex max-w-[1410px] items-start justify-between pt-12 pr-[96px] pl-[15px] md:pr-[104px] md:pl-[30px] lg:pt-[60px] lg:pr-[112px]" :class="sitemapOpen ? 'h-[144px] lg:h-[120px]' : 'h-[220px]'">
       <nav aria-label="頁尾連結" class="flex flex-wrap items-center gap-x-10 gap-y-4 font-cjk-sans text-[15px] text-white/80 md:text-[18px]">
         <button type="button" class="flex items-center gap-2 hover:text-[#CAA05C] focus-visible:outline-2 focus-visible:outline-offset-4" :aria-expanded="sitemapOpen" aria-controls="footer-sitemap" @click="sitemapOpen = !sitemapOpen">{{ cmsCopy.copy.text1 }}<ChevronDown aria-hidden="true" class="h-4 w-4" :class="{ 'rotate-180': sitemapOpen }" />
         </button>
@@ -74,9 +86,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <a :href="cmsCopy.copy.field7" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="flex h-10 items-center"><img :src="cmsCopy.copy.field8" :alt="cmsCopy.copy.field9" class="h-[40px] w-auto translate-y-[7px]" /></a>
       </div>
     </div>
-    <nav v-show="sitemapOpen" id="footer-sitemap" aria-label="網站地圖" class="relative z-10 mx-auto grid max-w-[1410px] grid-cols-2 items-start gap-x-6 gap-y-8 pb-12 pr-[86px] pl-[15px] font-cjk-sans md:grid-cols-3 md:pl-[30px] lg:grid-cols-6">
+    <nav v-show="sitemapOpen" ref="footerSitemap" id="footer-sitemap" aria-label="網站地圖" :style="{ '--footer-sitemap-column-width': footerSitemapColumnWidth }" class="relative z-10 mx-auto grid max-w-[1410px] grid-cols-2 items-start gap-x-6 gap-y-8 pb-12 pr-[86px] pl-[15px] font-cjk-sans md:grid-cols-3 md:pl-[30px] lg:grid-cols-6">
       <section v-for="group in sitemapGroups" :key="group.title" class="min-w-0">
-        <h2 class="mb-4 text-[17px] font-semibold text-[#CAA05C]">{{ group.title }}</h2>
+        <h2 class="mb-4 text-[17px] font-semibold text-[#CAA05C]"><span>{{ group.title }}</span></h2>
         <ul class="space-y-3">
           <li v-for="[label, to] in group.links" :key="to"><NuxtLink :to="to!" :target="/^https?:\/\//i.test(to!) ? '_blank' : undefined" :rel="/^https?:\/\//i.test(to!) ? 'noopener noreferrer' : undefined" class="text-[14px] leading-6 text-white/80 underline-offset-4 hover:text-[#CAA05C] hover:underline focus-visible:outline-2 md:text-[16px]">{{ label }}</NuxtLink></li>
         </ul>
@@ -99,3 +111,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   </button>
 </template>
 </template>
+
+<style scoped>
+@media (min-width: 1024px) {
+  #footer-sitemap {
+    grid-template-columns: repeat(6, var(--footer-sitemap-column-width, minmax(0, 1fr)));
+    column-gap: 0;
+  }
+}
+</style>

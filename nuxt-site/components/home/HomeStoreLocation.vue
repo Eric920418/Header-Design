@@ -32,6 +32,7 @@ const displayedStores = computed(() => displayedIds.value
 const visible = computed(() => filtered.value.find(store => store.id === selected.value) || filtered.value[0] || stores[0])
 
 watch(region, () => city.value = '')
+watch([region, city], () => focused.value = false)
 watch(filteredKey, () => {
   const list = filtered.value
   focused.value = false

@@ -24,7 +24,9 @@ const activeImageIndex = ref(0)
 const specificationsDialog = ref<HTMLDialogElement | null>(null)
 const [relatedViewport, relatedApi] = emblaCarouselVue({ loop: true, align: 'start' })
 const reducedMotion = useReducedMotion()
-const catalogueHighlights = PRODUCT_CATALOGUES.filter(item => ['sakura-kitchen-2026', brand === 'sakura' ? 'sakura-all-2026' : 'imported-appliances-2026'].includes(item.id))
+const catalogueHighlights = PRODUCT_CATALOGUES
+  .filter(item => ['sakura-kitchen-2026', 'kitchenware-2026'].includes(item.id))
+  .map(item => item.id === 'kitchenware-2026' ? { ...item, title: '櫻花整廚廚房配備型錄' } : item)
 
 const activeImage = computed(() => product.value?.gallery[activeImageIndex.value] ?? product.value?.image)
 const relatedProducts = computed(() => product.value?.related ?? [])
@@ -141,7 +143,7 @@ useSeoMeta({
             <p v-if="!product.attachments.length" class="mb-4">此產品尚未提供附件。</p>
             <button type="button" class="product-action-button product-action-button--primary" @click="openSpecifications">
               <span>詳細規格</span>
-              <span class="product-action-button__icon"><ArrowRight aria-hidden="true" /></span>
+              <span class="site-cta-icon product-action-button__icon"><ArrowRight aria-hidden="true" /></span>
             </button>
             <a
               v-for="attachment in product.attachments"
@@ -225,9 +227,11 @@ useSeoMeta({
         </div>
 
         <div class="product-catalogue__cards">
-          <article
+          <NuxtLink
             v-for="(catalogue, index) in catalogueHighlights"
             :key="catalogue.id"
+            to="/catalogues/catalog"
+            :aria-label="`前往廚房商品型錄：${catalogue.title}`"
             v-reveal="{ anim: 'opalMoveUp', delay: 100 + index * 100 }"
             class="product-catalogue-card"
           >
@@ -236,7 +240,7 @@ useSeoMeta({
             </div>
             <span>Catalogue Preview</span>
             <h3>{{ catalogue.title }}</h3>
-          </article>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -337,12 +341,9 @@ useSeoMeta({
 .product-action-button--primary:hover,
 .product-action-button--primary:focus-visible { border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
 .product-action-button__icon { position: relative; isolation: isolate; display: flex; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
-.product-action-button__icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; background: #caa05c; content: ''; animation: product-detail-cta-radar 2s ease-out infinite; }
 .product-action-button__icon svg { width: 19px; height: 19px; }
 .product-action-button--primary:hover .product-action-button__icon,
 .product-action-button--primary:focus-visible .product-action-button__icon { transform: rotate(0); }
-.product-action-button--primary:hover .product-action-button__icon::after,
-.product-action-button--primary:focus-visible .product-action-button__icon::after { animation: none; opacity: 0; }
 .product-action-button--attachment { min-height: 54px; margin-top: 9px; border: 1px solid #e3e3e8; padding: 11px 20px 11px 26px; color: #59585d; background: #fff; }
 .product-action-button--attachment svg { width: 18px; height: 18px; color: #caa05c; }
 .product-action-button--attachment:hover,
@@ -391,16 +392,13 @@ useSeoMeta({
 .product-catalogue__cta:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .product-catalogue__cta > span:first-child { white-space: nowrap; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .product-catalogue__cta .site-cta-icon { position: relative; isolation: isolate; display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
-.product-catalogue__cta .site-cta-icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; background: #caa05c; content: ''; animation: product-detail-cta-radar 2s ease-out infinite; }
 .product-catalogue__cta svg { width: 19px; height: 19px; }
 .product-catalogue__cta:hover .site-cta-icon,
 .product-catalogue__cta:focus-visible .site-cta-icon { transform: rotate(0); }
-.product-catalogue__cta:hover .site-cta-icon::after,
-.product-catalogue__cta:focus-visible .site-cta-icon::after { animation: none; opacity: 0; }
-@keyframes product-detail-cta-radar { from { opacity: .55; transform: scale(1); } to { opacity: 0; transform: scale(1.55); } }
 .product-catalogue__copy > p { margin: 18px 0 0; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 20px; }
 .product-catalogue__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
-.product-catalogue-card { min-width: 0; }
+.product-catalogue-card { display: block; min-width: 0; color: inherit; }
+.product-catalogue-card:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; border-radius: 24px; }
 .product-catalogue-card__cover { aspect-ratio: 1.1; overflow: hidden; border-radius: 24px; background: #fafafa; }
 .product-catalogue-card__cover :deep(img) { object-fit: cover; object-position: center 16%; transition: transform .55s ease; }
 .product-catalogue-card > span { display: block; margin-top: 18px; color: #caa05c; font-family: var(--font-cjk-sans); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }

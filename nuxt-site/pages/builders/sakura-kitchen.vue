@@ -183,14 +183,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .sakura-kitchen-content-cta:hover,
 .sakura-kitchen-content-cta:focus-visible { color: #fff; border-color: #caa05c; background: #caa05c; }
 .sakura-kitchen-content-cta__icon { position: relative; isolation: isolate; display: inline-flex; width: 40px; height: 40px; flex: none; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
-.sakura-kitchen-content-cta__icon::after { position: absolute; z-index: -1; inset: 0; border-radius: 50%; content: ''; background: #caa05c; animation: sakura-kitchen-cta-radar 2s ease-out infinite; }
 .sakura-kitchen-content-cta__icon svg { width: 20px; height: 20px; }
 .sakura-kitchen-content-cta:hover .sakura-kitchen-content-cta__icon,
 .sakura-kitchen-content-cta:focus-visible .sakura-kitchen-content-cta__icon { transform: rotate(0); }
-.sakura-kitchen-content-cta:hover .sakura-kitchen-content-cta__icon::after,
-.sakura-kitchen-content-cta:focus-visible .sakura-kitchen-content-cta__icon::after { animation: none; opacity: 0; }
 .sakura-kitchen-content-cta:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
-@keyframes sakura-kitchen-cta-radar { from { opacity: .55; transform: scale(1); } to { opacity: 0; transform: scale(1.55); } }
 .sakura-kitchen-content-cta--photo { color: #fff; border-color: rgb(255 255 255 / 60%); background: rgb(28 28 29 / 48%); backdrop-filter: blur(12px); }
 
 @media (max-width: 1024px) {

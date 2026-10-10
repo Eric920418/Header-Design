@@ -231,7 +231,7 @@ const submit = async () => {
       <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="application-form__submit-row ev">
         <button type="submit" :disabled="submitState === 'submitting'">
           <span>{{ submitState === 'submitting' ? '送出中' : '確認送出' }}</span>
-          <span class="application-form__submit-icon">
+          <span class="site-cta-icon application-form__submit-icon">
             <LoaderCircle v-if="submitState === 'submitting'" aria-hidden="true" class="is-spinning" />
             <ArrowRight v-else aria-hidden="true" />
           </span>
@@ -337,7 +337,6 @@ const submit = async () => {
 .application-form__submit-row > button:hover:not(:disabled) { color: #fff; border-color: #caa05c; background: #caa05c; }
 .application-form__submit-row > button:disabled { cursor: wait; opacity: .62; }
 .application-form__submit-icon { position: relative; display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
-.application-form__submit-icon::before { position: absolute; z-index: -1; inset: 0; border: 1px solid #caa05c; border-radius: inherit; animation: application-radar 2s ease-out infinite; content: ''; }
 .application-form__submit-row > button:hover .application-form__submit-icon { transform: rotate(0); }
 .application-form__submit-icon svg { width: 20px; height: 20px; }
 .application-form__submit-icon .is-spinning { animation: application-spin .8s linear infinite; }
@@ -353,10 +352,6 @@ const submit = async () => {
 .application-form__notice code { display: block; margin-top: 8px; overflow-wrap: anywhere; color: #8b3329; font-size: 12px; line-height: 19px; }
 
 @keyframes application-spin { to { transform: rotate(360deg); } }
-@keyframes application-radar {
-  0% { opacity: .65; transform: scale(1); }
-  75%, 100% { opacity: 0; transform: scale(1.55); }
-}
 
 @media (max-width: 767px) {
   .application-form { padding: 36px 20px 42px; border-radius: 18px; }
@@ -375,6 +370,5 @@ const submit = async () => {
   .application-form__radios label span,
   .application-form__submit-row > button,
   .application-form__submit-icon { transition: none; }
-  .application-form__submit-icon::before { animation: none; }
 }
 </style>

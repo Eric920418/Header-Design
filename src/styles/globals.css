@@ -1079,8 +1079,7 @@ body {
   }
 }
 
-/* 全站內容型 CTA 的金色箭頭圓：沿用影片播放鍵的雷達擴散語言。
-   僅在 CTA 尚未 hover 時播放；整顆按鈕 hover 後隱藏水波，保留既有填金與箭頭轉正。 */
+/* 內容型 CTA 沿用產品型錄的實心金色水波，不影響影片播放鍵。 */
 .site-cta-icon {
   position: relative;
   isolation: isolate;
@@ -1091,14 +1090,18 @@ body {
   z-index: -1;
   inset: 0;
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(202, 160, 92, 0.9);
+  background: #caa05c;
   content: "";
   pointer-events: none;
-  animation: antra-lexus-scale 2s infinite;
+  animation: site-gold-cta-radar 2s ease-out infinite;
 }
-.site-content-cta:hover .site-cta-icon::after {
+:is(a, button):is(:hover, :focus-visible, :disabled) .site-cta-icon::after {
   animation: none;
   opacity: 0;
+}
+@keyframes site-gold-cta-radar {
+  from { opacity: .55; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.55); }
 }
 
 /* Hero 的 Start Project 是整顆圓形 CTA，因此水波直接由按鈕外框向外擴散。
@@ -1365,6 +1368,10 @@ body {
 .ev {
   visibility: hidden;
 }
+.ev[data-reveal-direct] {
+  visibility: visible !important;
+  animation: none !important;
+}
 .ev.is-visible {
   visibility: visible;
   animation-duration: 1.25s;
@@ -1428,4 +1435,29 @@ body {
   .home-project-slide { transition: none !important; }
   .home-project-slide:hover,
   .home-project-slide:focus-visible { flex-basis: var(--home-project-basis) !important; }
+}
+
+/* 首頁圖片貼齊 40px 品牌浮標；文字另留 24px 安全間隔，背景維持滿版。 */
+@media (min-width: 1024px) {
+  .has-home-brand-rail .home-project-heading,
+  .has-home-brand-rail section[aria-label="廚房風格"],
+  .has-home-brand-rail section[aria-labelledby="services-heading"],
+  .has-home-brand-rail .what-we-do-section,
+  .has-home-brand-rail #contact > div,
+  .has-home-brand-rail .footer-navigation-shell,
+  .has-home-brand-rail #footer-sitemap {
+    padding-left: 64px;
+  }
+  .has-home-brand-rail .home-project-carousel-reveal {
+    padding-left: 40px;
+  }
+  .has-home-brand-rail .gallery-main-layout {
+    padding-left: max(64px, var(--gallery-inline));
+  }
+  .has-home-brand-rail .hero-template-bottom {
+    width: calc(100% - 128px);
+  }
+  .has-home-brand-rail [aria-label="集團品牌"] {
+    margin-left: 30px;
+  }
 }

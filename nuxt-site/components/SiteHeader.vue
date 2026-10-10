@@ -19,6 +19,16 @@ const searchOpen = ref(false)
 const expanded = ref<number | null>(null)
 const keyboardNavigation = ref(false)
 const activeDesktopMenu = ref<string | null>(null)
+const franchiseExtrasOpen = ref(false)
+watch([activeDesktopMenu, expanded, mobileOpen], () => franchiseExtrasOpen.value = false)
+
+function navChildren(item: NavItem, extra = false) {
+  return (item.children || []).filter(child => {
+    const isExtra = item.to === '/franchising/intro' && ['/franchising/form', '/franchising/download'].includes(child.to || '')
+    return extra ? isExtra : !isExtra
+  })
+}
+
 let desktopMenuCloseTimer: ReturnType<typeof setTimeout> | null = null
 const allNav = computed(() => [...leftNav, ...rightNav])
 const route = useRoute()
@@ -271,9 +281,20 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap py-2 text-[15px] text-white">{{ item.label }}</NuxtLink>
               <div v-if="item.children" class="desktop-nav-dropdown absolute right-0 top-full z-50 pt-2 transition-all" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
                 <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
-                  <li v-for="child in item.children" :key="child.label">
+                  <li v-for="child in navChildren(item)" :key="child.label">
                     <span v-if="child.disabled" aria-disabled="true" class="block cursor-not-allowed whitespace-nowrap px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
                     <NuxtLink v-else :to="child.to || '/'" class="block whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</NuxtLink>
+                  </li>
+                  <li v-if="navChildren(item, true).length">
+                    <button type="button" :aria-label="franchiseExtrasOpen ? '收合加盟申請與下載選項' : '展開加盟申請與下載選項'" :aria-expanded="franchiseExtrasOpen" aria-controls="franchise-extra-desktop" class="mx-auto flex h-11 w-11 items-center justify-center rounded-full text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#CAA05C]" @click="franchiseExtrasOpen = !franchiseExtrasOpen">
+                      <ChevronDown aria-hidden="true" class="h-4 w-4 transition-transform motion-reduce:transition-none" :class="{ 'rotate-180': franchiseExtrasOpen }" />
+                    </button>
+                    <ul id="franchise-extra-desktop" v-show="franchiseExtrasOpen">
+                      <li v-for="child in navChildren(item, true)" :key="child.label">
+                        <span v-if="child.disabled" aria-disabled="true" class="block cursor-not-allowed whitespace-nowrap px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
+                        <NuxtLink v-else :to="child.to || '/'" class="block whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</NuxtLink>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
               </div>
@@ -310,10 +331,22 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 </span>
               </template>
             </template>
-            <template v-for="child in item.seriesMega ? item.children.slice(1) : item.children" :key="child.label">
+            <template v-for="child in item.seriesMega ? item.children.slice(1) : navChildren(item)" :key="child.label">
               <span v-if="child.disabled" aria-disabled="true" class="block py-3 text-sm text-white/40">{{ child.label }}</span>
               <a v-else-if="child.external" :href="child.to" target="_blank" rel="noopener noreferrer" class="block py-3 text-sm text-white/80">{{ child.label }}</a>
               <NuxtLink v-else :to="child.to || '/'" class="block py-3 text-sm text-white/80">{{ child.label }}</NuxtLink>
+            </template>
+            <template v-if="navChildren(item, true).length">
+              <button type="button" :aria-label="franchiseExtrasOpen ? '收合加盟申請與下載選項' : '展開加盟申請與下載選項'" :aria-expanded="franchiseExtrasOpen" aria-controls="franchise-extra-mobile" class="mx-auto flex h-11 w-11 items-center justify-center rounded-full text-white/80 hover:bg-white/10 hover:text-[#CAA05C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#CAA05C]" @click="franchiseExtrasOpen = !franchiseExtrasOpen">
+                <ChevronDown aria-hidden="true" class="h-4 w-4 transition-transform motion-reduce:transition-none" :class="{ 'rotate-180': franchiseExtrasOpen }" />
+              </button>
+              <div id="franchise-extra-mobile" v-show="franchiseExtrasOpen">
+                <template v-for="child in navChildren(item, true)" :key="child.label">
+                  <span v-if="child.disabled" aria-disabled="true" class="block py-3 text-sm text-white/40">{{ child.label }}</span>
+                  <a v-else-if="child.external" :href="child.to" target="_blank" rel="noopener noreferrer" class="block py-3 text-sm text-white/80">{{ child.label }}</a>
+                  <NuxtLink v-else :to="child.to || '/'" class="block py-3 text-sm text-white/80">{{ child.label }}</NuxtLink>
+                </template>
+              </div>
             </template>
           </template>
           <template v-else>

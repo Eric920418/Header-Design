@@ -15,13 +15,13 @@ function pageRoute(page: number) {
 
 <template>
   <nav v-if="totalPages > 0" class="list-pagination" :aria-label="label">
-    <NuxtLink v-if="currentPage > 1" :to="pageRoute(currentPage - 1)" class="list-pagination__arrow list-pagination__arrow--prev" aria-label="上一頁"><ArrowUpLeft aria-hidden="true" /></NuxtLink>
+    <NuxtLink v-if="currentPage > 1" :to="pageRoute(currentPage - 1)" class="list-pagination__arrow list-pagination__arrow--prev" aria-current-value="false" aria-label="上一頁"><ArrowUpLeft aria-hidden="true" /></NuxtLink>
     <template v-for="(page, index) in pages" :key="`${page}-${index}`">
       <span v-if="page === 'ellipsis'" class="list-pagination__ellipsis" aria-hidden="true">…</span>
       <span v-else-if="page === currentPage" class="list-pagination__current" aria-current="page" :aria-label="`第${page}頁，目前頁面`">{{ page }}</span>
-      <NuxtLink v-else :to="pageRoute(page)" :aria-label="`第${page}頁`">{{ page }}</NuxtLink>
+      <NuxtLink v-else :to="pageRoute(page)" aria-current-value="false" :aria-label="`第${page}頁`">{{ page }}</NuxtLink>
     </template>
-    <NuxtLink v-if="currentPage < totalPages" :to="pageRoute(currentPage + 1)" class="list-pagination__arrow list-pagination__arrow--next" aria-label="下一頁"><ArrowUpRight aria-hidden="true" /></NuxtLink>
+    <NuxtLink v-if="currentPage < totalPages" :to="pageRoute(currentPage + 1)" class="list-pagination__arrow list-pagination__arrow--next" aria-current-value="false" aria-label="下一頁"><ArrowUpRight aria-hidden="true" /></NuxtLink>
   </nav>
 </template>
 

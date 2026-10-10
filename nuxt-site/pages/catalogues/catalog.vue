@@ -4,7 +4,7 @@ const cmsCopy = await useCmsResource('view-pages-catalogues-catalog', {"copy":{"
 import { ArrowUpRight, ChevronRight, Download } from 'lucide-vue-next'
 import { PRODUCT_CARE_CATEGORIES as cmsSeed_PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES as cmsSeed_PRODUCT_CATALOGUES } from '~/data/productCatalogues'
 const { PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES } = await useCmsResource('data-productCatalogues', { PRODUCT_CARE_CATEGORIES: cmsSeed_PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES: cmsSeed_PRODUCT_CATALOGUES })
-
+const catalogueList = PRODUCT_CATALOGUES.map(item => item.id === 'kitchenware-2026' ? { ...item, title: '櫻花整廚廚房配備型錄' } : item)
 
 const activeCategoryIndex = ref(1)
 const activeQuestionIndex = ref(0)
@@ -64,7 +64,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <h2 id="product-catalogue-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
         <ul class="product-catalogue-grid" aria-label="廚房商品型錄清單">
           <li
-            v-for="(catalogue, index) in PRODUCT_CATALOGUES"
+            v-for="(catalogue, index) in catalogueList"
             :key="catalogue.id"
             v-reveal="{ anim: 'opalMoveUp', delay: Math.min(index * 80, 240) }"
             class="product-catalogue-card"

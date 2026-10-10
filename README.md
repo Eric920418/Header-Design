@@ -1,9 +1,158 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-11 品牌館預約跳轉空白修正
+
+- 依01:02:12截圖，使用investigate重現 `/about/exhibition` 的「立即預約」跳到 `/builders#appointment`：定位與資料正常，但14秒後預約標題／館別／表單仍被reveal的visibility:hidden隱藏，捲動也未恢復；直接重新載入目標URL則正常。暫加僅輸出靜態CSS／observer狀態的本機診斷，確認站內跳轉的進場生命週期，不記錄表單個資、不提交或修改CMS／資料庫。
+- 診斷確認觀察器在page:finish取得跳轉前的4812／4998px位置並回報不相交；異常跳轉完成後三區實際已在180／366px，卻一直隱藏，另一次相同流程才補收到相交通知。修正共用錨點定位：沿用等待頁面完成與兩次rAF，定位前只標記目標本身及其reveal子元素，CSS立即顯示並跳過進場動畫，不再以觀察器通知作為表單可用前提；一般捲動進場、其他未定位區塊、Lenis、影片、表單驗證／完整錯誤與CMS資料保留。暫時診斷已移除。共用前台回歸補上實際執行標記／失效錨點／即時可見／一般動畫保留斷言。
+- 驗證：`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次錨點限定回歸、腳本語法與 `git diff --check` 通過；同一標記斷言在HEAD舊版失敗、修正版通過（RED／GREEN），失效錨點不拋錯。建置保留既有Tailwind sourcemap警告。完整前台回歸兩次均在第一個商品SSR頁 `/products/sakura` 等待45秒逾時，並非新錨點斷言失敗；獨立建置預覽回歸則因本機SQL Server自簽憑證連線失敗在同頁回傳503，未關閉憑證驗證或更動資料庫設定，不能據此宣稱完整回歸通過。獨立3101測試伺服器已停止，原3100開發伺服器保留。
+- investigate驗收狀態：BLOCKED（修正已寫入、實際畫面驗收未完成）。修正後原預覽與新測試頁籤皆出現瀏覽器CDP控制逾時，連新頁籤導覽／觀察也無法完成，產品面板開啟請求亦回報queued；因此沒有修正後桌機／手機截圖，不能宣稱已完成實機跳轉驗收。修正前證據在 `/tmp/sakura-booking-jump-ySHlLC/before.jpg`。僅改router／CSS／既有測試與本README，不新增套件／文件；未部署、未送出有效表單、未修改CMS／資料庫。恢復預覽後須重測品牌館立即預約、同頁預約錨點、直接載入及手機呈現。
+
+## 2026-10-11 品牌館 Hero 中文小標與249px定位
+
+- 依00:51:24截圖，只調整 `/about/exhibition` 的 `BrandPavilionHero`：在原英文h1前加入「櫻花集團品牌館」，桌機以固定導覽底緣往下249px為小標定位基準（扣除圖片20px上間距，並沿用導覽高度變數）。保留英文字型／字級／金色、背景圖片／遮罩／圓角、影片入口及原進場動畫；手機保留距底190px的彈性位置，縮小中文小標，避免套用桌機固定距離。
+- 使用image-to-code，沿用既有元件與CSS，不新增套件／素材／文件，不修改CMS／資料庫或部署。共用回歸補上小標SSR／順序、定位基準、平板／手機避讓及原圖／動畫／影片入口斷言；768px驗收發現照搬桌機249px會使標題被原影片卡遮住，因此768～1023px保留底部200px彈性定位。最終 `pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定前台回歸（含原預約CTA／警語／目標錨點）、腳本語法與 `git diff --check` 通過。保留既有Tailwind sourcemap警告，未重跑完整表單／資料回歸。
+- 本機1512×982／1280×900／1024×768頁首實量：導覽底緣60px、中文小標框上緣309px，相差249px；1280英文維持Cal Sans 60/69px、400、兩行及原金色，字形與影片卡不重疊。768×900標題框與影片卡上下相隔20px；390×844中文18/26px、英文38px完整兩行，影片卡前留50px，各尺寸圖片載入、無水平溢出。鍵盤Enter仍可開啟原影片dialog，Escape可關閉，瀏覽器error為空；影片完整播放與OS減少動態偏好未另驗證。1024第一次取樣受先前焦點捲動38px影響，使用原回到頂端後重測正好249px；測試尺寸已還原，預覽保留。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_NTK1Bo/截圖 2026-10-11 凌晨12.51.24.png` 與 `/tmp/sakura-pavilion-hero-N3EUWq/desktop.jpg`（1280×900 CSS／1×）、`desktop-1512.jpg`於同一比較輸入，聚焦右側目標小標與249px註記，不把紅框／標註加入頁面。原英文字體／字級／字重、圖片品質／裁切、背景／遮罩色彩、圓角及影片卡版型不變；新增中文小標與標題定位依註記完成。以明確249px尺寸為準，不按簡報縮放畫布推算CSS像素。小標缺失／桌機定位不符（P2）及新增定位導致的平板遮擋（P1）均已修正；`tablet-768.jpg`、`mobile.jpg`重截確認內容可讀，本次範圍無剩餘P0／P1／P2，final result: passed。QA只維護本README，未驗證正式端／其他瀏覽器。
+
+## 2026-10-11 品牌優勢02／03圖卡提前出現
+
+- 依00:51:11截圖，只調整 `BrandBenefits` 的02／03循環動畫關鍵影格：02開始時間從3秒提前到0.6秒、完整顯示從3.96秒提前到1.56秒；03從6秒提前到1.2秒、完整顯示從6.96秒提前到2.16秒。01的0～0.96秒進場、每張0.96秒淡入／上移、12秒循環及92%開始退場不變，因此文字閱讀時間不會被縮短；保留原可見時啟動、減少動態靜態顯示、卡片文字、圖片、尺寸、圓角、響應式與CMS錯誤提示。
+- 使用image-to-code，沿用既有CSS keyframes，不新增JS／套件或文件，不部署或寫入資料庫。同步既有前台回歸的舊時間斷言並驗證01不變／02與03新節奏；`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定前台回歸（含優勢卡原檢查區塊）、腳本語法及 `git diff --check` 通過。保留既有Tailwind sourcemap警告，未重跑完整表單／資料回歸。
+- 實際1280×900動畫取樣：起始01 opacity .113、02／03=0；約0.8秒後01=1、02=.431、03=0；約1.7秒後01／02=1、03=.857；約2.4秒後三張均opacity1、transform=none，確認提前且依序出現。三卡358×601.23px、28px圓角及三張原圖載入成功、無水平溢出；390×844維持原288px單欄，02／03可完整捲動閱讀。瀏覽器error為空，減少動態以既有CSS及回歸斷言確認，未切換作業系統偏好；測試尺寸已還原，預覽保留。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_JyP51D/截圖 2026-10-11 凌晨12.51.11.png`（1776×908註記畫布、1190px內嵌頁面）與 `/tmp/sakura-benefit-timing-rAty4C/desktop.jpg`（1280×900 CSS／1×、三卡完整顯示終態）於同一比較輸入，按內嵌比例聚焦三卡，不複製紅框／右側註記。字體／字級／字重、三欄及間距／圓角／陰影、色彩、三張實景圖片品質／裁切與文案均不變；此輪只改進場節奏，靜態截圖另搭配取樣證明速度。原02／03等待3／6秒（P2）已改為0.6／1.2秒；`desktop-entry.jpg`為約2.4秒進場證據，`mobile-02.jpg`、`mobile-03.jpg`重截確認內容完整。文字細節可讀，無需另裁切，本次範圍无剩餘P0／P1／P2，final result: passed。QA僅維護本README，未驗證正式端／其他瀏覽器。
+
+## 2026-10-11 品牌優勢家庭區塊英文標題
+
+- 依00:51:00截圖，`/about/advantage` 的家庭區塊英文標題改為「Creating Ideal Kitchens for Every Family」；只對既有CMS舊標題做前台相容校正，其他後台自訂標題原樣顯示，不寫入或覆蓋資料庫。同步程式範例並停用此h2的capitalize，保留for的小寫；中文、說明、字型／字級、版型、家庭輪播與上一輪大圖動畫均不變。
+- 沿用image-to-code、既有內容取得及前台回歸；新增舊標題校正／自訂標題保留／SSR文案與大小寫／中文說明斷言，不新增套件或文件。`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定前台回歸、腳本語法及 `git diff --check` 通過；建置保留既有Tailwind sourcemap警告，不重跑完整表單／資料回歸。
+- 本機1280×900／390×844驗收：實際h2與SSR均為完整新標題，桌機維持Cal Sans 40/44px、400、#1c1c1d單行；手機30/35px、原288px安全欄位內三行且無截字／水平溢出。鍵盤Enter啟動原向下導覽可到 `#brand-family-title`，中文、說明、家庭圖片／輪播及上一輪Hero動畫保留；瀏覽器error為空。測試尺寸已還原、預覽保留，未部署或寫入資料庫，後台原始舊標題仍保留。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_mPlfgc/截圖 2026-10-11 凌晨12.51.00.png`（1954×838註記畫布、1190px內嵌頁面）與 `/tmp/sakura-family-title-UnItaf/desktop.jpg`（1280×900 CSS／1×）於同一比較輸入，聚焦紅框標題及右側指定文字，按照內嵌比例比較，不把註記加入頁面。字型／字級／字重、版型間距、色彩、原家庭圖片品質均保持；新英文文案與for小寫一致，輪播當下顯示順序差異是既有4秒自動切換，未改圖片或順序資料。文字細節清楚可讀，無需額外裁切；原單數／多餘冠詞與CSS大寫不符（P2）已修正，`mobile.jpg`重截確認完整换行，本次範圍無剩餘P0／P1／P2，final result: passed。QA只維護本README，不新增文件，未驗證正式端／其他瀏覽器。
+
+## 2026-10-11 品牌優勢大圖接續首頁 Hero 動態
+
+- 依 00:39:07 截圖，只在 `BrandAdvantageHero` 下方大圖的實際 img 重用首頁 `hero-kenburns`：進入可見狀態後先等待原1.25秒 opalMoveUp 進場，再執行5秒 ease-out 緩放大／向左平移並保留終態。沒有新增輪播、循環、計時器或重製素材；上方小圖、文字、原進場、圓角、尺寸、圖片載入錯誤及頁面導覽保留。
+- 減少動態偏好取消新增動畫及縮放；不修改共用首頁動畫、CMS／資料庫或其他頁。沿用 image-to-code，新增既有前台回歸斷言；最終 `pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定前台／SSR回歸、腳本語法與 `git diff --check` 通過。首次SSR斷言未接受既有reveal指令重複附加的ev class，已限定接受該輸出，未更動原進場指令；保留既有Tailwind sourcemap警告，未重跑完整表單／資料回歸。
+- 手機驗收發現既有最小高度260px未讓圖片填滿，會露出框底色；僅將此大圖img設為絕對定位填滿原框、保留object-cover與錯誤提示，桌機及手機圖片框尺寸／圓角不變，並增加填滿斷言。
+- 本機1280×900／390×844實際取樣：進場初期外層translateY(98.10px)、opacity .019，內層保持scale1.06／x=0；約1.7秒後外層已到原位且opacity1，內層開始scale1.076／x=-8.57px，終態scale1.16／桌機x=-56.608px。桌機框1220×610、手機360×260且img同高，手機離屏時animation=none，進入視窗後才開始；小圖animation=none、圖片均載入成功、無水平溢出及露底，瀏覽器error為空。減少動態驗證為CSS／回歸斷言，未切換作業系統偏好或驗證其他瀏覽器。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_CPvrFS/截圖 2026-10-11 凌晨12.39.07.png`（1776×854註記畫布、1190px內嵌頁面）與 `/tmp/sakura-brand-hero-motion-lafwi8/desktop.jpg`（1280×900 CSS／1×）於同一比較輸入。字體／文案、版型／框距／24px圓角、色彩與UI不變；沿用同一實景照片且不重製，終態裁切是指定首頁動態的緩放大／左移，而非換圖或更改框尺寸。原缺少接續動態及手機露底（P2）均已修正；`mobile.jpg`重截確認填滿，畫面細節可讀，無需額外裁切，本次範圍無剩餘P0／P1／P2，final result: passed。僅維護本README、不新增文件；測試尺寸已還原，預覽保留，不部署或寫入資料庫。
+
+## 2026-10-11 門市資訊到店預約 Hover 動畫
+
+- 依 00:35:31 截圖，只調整三篇門市案例共用文章頁「門市資訊」旁的金色到店預約 CTA：預設右上箭頭，Hover／鍵盤 focus-visible 時以300ms轉成向右；金底白字、原尺寸／位置、焦點框與預約網址／新分頁安全設定保留。減少動態偏好停用轉場，不添加水波、不修改上方另一顆預約CTA、CMS或資料庫。
+- 沿用 image-to-code 與現有 ArrowUpRight 圖示，不新增套件或文件；既有前台回歸補上三篇SSR、箭頭互動樣式、減少動態與兩處連結保留斷言。本次限定前台回歸、`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、腳本語法及 `git diff --check` 通過；建置保留既有 Tailwind sourcemap 警告，未重跑完整表單／資料回歸。
+- 本機1280×900與390×844：CTA維持154×50px、Noto Sans TC 18/24px、白字與 `#CAA05C`；預設SVG transform=none、Hover及鍵盤焦點為rotate(45deg)，右上箭頭變向右，離開恢復。焦點框2px、手機無水平溢出，既有網址、`_blank`／`noopener noreferrer` 均保留；本輪沒有點開或提交外部預約，瀏覽器error為空。Google Maps既有12秒載入逾時提示在本輪可見，不隱藏錯誤、也不將此次CTA驗收誤當地圖正常；此第三方載入問題不在本次修改範圍。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_CMo2xw/截圖 2026-10-11 凌晨12.35.31.png`（1894×878註記畫布，1190px內嵌頁面）與 `/tmp/sakura-store-booking-hover-IXjK21/default.jpg`、`hover.jpg`（1280×900 CSS／1×）於同一比較輸入，聚焦指定CTA及右側互動示意，按內嵌比例比對，不把红框或兩個示意按鈕加入頁面。原固定箭頭／深色Hover（P2）改為300ms轉向且金色不變，預设及純Hover重截均符合；保持字體、圓角、尺寸、標題旁間距、原圖像與「到店預約」文案。圖片／地圖區無改動，地圖逾時另列範圍外風險；按鈕細節可讀，無需另裁切。手機焦點證據為同目錄 `mobile-focus.jpg`，本次CTA範圍無剩餘P0／P1／P2，final result: passed。QA僅維護本README，不部署、不改資料庫，未驗證正式端／其他瀏覽器；測試尺寸已還原，保留案例預覽。
+
+## 2026-10-11 型錄列表配備型錄名稱
+
+- 依 23:44:46 截圖，`/catalogues/catalog` 的 `kitchenware-2026` 前台顯示名稱改為「櫻花整廚廚房配備型錄」，與商品頁預覽一致；標題、封面 alt、開啟及下載 PDF 的 aria-label 都由同一展示資料產生。只複製該筆標題，不修改後台資料、封面、PDF、ID、下載檔名、其他型錄或版型。不新增套件、抽象元件或文件。
+- 既有回歸腳本補上列表新名稱／舊名稱移除、無障礙操作名稱、PDF／封面／下載連結不變、其他型錄標題不變及真實 PDF 標頭斷言。初次斷言未接受 Vue SSR 的 scoped attribute，已改成讀取 strong 的文字而非精確比對開標籤。建置期間的開發SSR曾短暫回500，建置完成後重跑本次限定回歸全部通過；`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、腳本語法與 `git diff --check` 通過，保留既有Tailwind sourcemap警告，未重跑全部資料／表單回歸。
+- 本機1280×900與390×844：新名稱完整顯示，沿用 Noto Serif TC 20/28px、600，沒有水平溢出；封面載入成功、鍵盤焦點與操作名稱正常，下载API返回 `%PDF-` 真實PDF。瀏覽器 error 為空；測試尺寸已還原，型錄頁預覽保留。沒有點開外部PDF或測試正式端，不部署或寫入資料庫。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_WPfXsJ/截圖 2026-10-10 晚上11.44.46.png`（1292×940註記畫布，1190px內嵌頁面）與 `/tmp/sakura-catalogue-title-fpWziU/desktop.jpg`（1280×900 CSS／1×）置於同一比較輸入，按内嵌頁面比例聚焦第二張名稱；來源hover金字與完成版預設黑字是原互動狀態差異，不改色彩規則。文字清楚可讀，無需裁切；字型／字級／字重、三欄版型／間距／圓角、色彩與hover、三張封面品質均保留，文案依紅字指定的新名稱替換，不複製紅色註記。原列表與預覽不同名（P2）已修正，首次截圖舊hover尚在淡出，最終重截無殘留遮罩。手機焦點證據為同目錄 `mobile.jpg`，本次範圍無剩餘P0／P1／P2，final result: passed。QA只維護本README，不新增文件。
+
+## 2026-10-11 廚房產品內頁型錄預覽與金色 CTA 動畫
+
+- 依 23:44:33 截圖，商品清單／分類系列與商品詳情的型錄預覽固定使用現有整體廚房及廚房配備型錄，第二張顯示「櫻花整廚廚房配備型錄」。整張卡片可點至 `/catalogues/catalog`，保留封面、鍵盤連結語意與焦點框；只複製前台預覽標題，不更改 CMS 原標題、PDF、封面或資料庫。三品牌共用此預覽。
+- 內容型 CTA 的金色箭頭圓集中使用產品型錄既有實心水波：`#CAA05C`、2秒 ease-out、opacity .55→0、scale 1→1.55；hover／鍵盤焦點／停用時停止，減少動態偏好仍關閉。影片播放鍵、首頁整顆 Start Project、商品圖片 hover 按鈕與分頁圓點不套用，不改連結、表單驗證或送出行為。沿用 image-to-code 與既有元件，不新增套件或其他文件。
+- 已移除商品／建商／加盟頁各自重複的水波定義（含加盟介紹頁四個箭頭圓），統一從共用樣式繼承。既有前台回歸腳本補上三品牌／商品詳情兩張卡片、目的網址、已發布封面、CMS資料不變及共用動畫／停止／減少動態斷言。本次限定 SSR／樣式斷言、`pnpm --dir nuxt-site build`、建置後順序執行的 `pnpm --dir nuxt-site typecheck`、腳本語法與 `git diff --check` 通過；建置保留既有 Tailwind sourcemap 警告。沒有重跑完整資料／表單回歸。
+- 本機 1280×900 兩張卡片各309.52px寬、30px間距，封面均成功載入；390×844 為兩張172px、16px間距，較長配備名稱自然折行、無水平溢出。滑鼠第一張／鍵盤 Enter 第二張都抵達 `/catalogues/catalog`。實測共用偽元素為實心金色、2s ease-out、無外框，opacity及縮放隨時間變化；鍵盤焦點時 animation=none／opacity=0。加盟介紹四個箭頭圓均40×40px且共用同一動畫。減少動態與停用規則由回歸斷言確認，未更改作業系統偏好或送出表單；瀏覽器 error 為空，測試尺寸已還原。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_2FA9ZM/截圖 2026-10-10 晚上11.44.33.png`（1884×980註記畫布，內嵌1190px寬頁面）與 `/tmp/sakura-catalogue-preview-3MSaAp/desktop.jpg`（1280×900 CSS／1×）放入同一比較輸入。按內嵌比例核對標題字型／階層、左文右卡的間距與版型、金色CTA、兩張實際封面及預覽文案；第二張符合來源灰白配備型錄，不新增圖片、不搬入紅色註記。維持原24px圓角與cover裁切，不改區塊尺寸；原錯誤紅色全產品封面及不可點卡片（P2）已修正。手機證據為同目錄 `mobile.jpg`，本次範圍無剩餘P0／P1／P2，final result: passed。只維護本README，不部署、不檢查正式端／其他瀏覽器、不寫入資料庫；型錄總覽原CMS名稱／PDF下載未改，動畫其他使用頁以共用樣式及來源回歸驗證、非逐頁視覺全測。
+
+## 2026-10-11 廚房產品共用分頁樣式
+
+- 依再次提供的 23:57:16 截圖重新核對，現有共用分頁已符合右側設計，不重複修改元件。本機1280×900第1頁為40px金色圓底、其餘黑字無框、斜向下一頁箭頭；鍵盤 Enter 下一頁到第2頁、上一頁回第1頁，40項及4頁保留、跳頁 scrollY=0，瀏覽器 error 為空。既有前台回歸前段（含第1／2／4頁、單頁、搜尋 query 與其他列表共用分頁）重跑通過。來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_E2OJOZ/截圖 2026-10-10 晚上11.57.16.png`（1866×682註記畫布）與 `/tmp/sakura-product-pagination-check-QFKx5U/desktop.jpg`（1280×900 CSS／1×）於同一比較輸入聚焦分頁，按內嵌比例核對字型、居中間距、金底白字／黑字、現有圖示及頁碼文案；產品圖與其他版型不變，不複製紅框，無本次P0／P1／P2，final result: passed。只補本README驗收記錄，未重跑手機、建置、完整表單或正式端，不部署、不改資料庫；測試尺寸還原，保留本機預覽。
+- 依 23:44:09 截圖，`ProductListPage` 改用設計靈感頁既有 `InternalListPagination`：選中頁金色圓底、其他頁無框、斜向上一頁／下一頁箭頭，沿用桌機40px／手機44px控制尺寸與間距。刪除原頁碼計算、文字下一頁及橢圓外框樣式；保留 `product-pagination` class，既有路由滾動測試定位不變。
+- 共用元件保留所有網址 query，搜尋條件、預覽參數與分類路徑不會因翻頁遺失；商品 API 與資料不變，單頁仍隱藏分頁。不新增套件、不修改 CMS／資料庫。首次回歸發現 NuxtLink 只比對路徑、不比對頁碼 query，把所有分頁連結錯標為目前頁面（5個）；共用元件為非當前連結設定 `aria-current-value="false"`，只由選中頁碼 span 回報目前頁面，其他使用頁的外觀／行為不變。既有前台回歸腳本補上第1／2／4頁、單頁配備、搜尋條件與首末頁箭頭，以及設計靈感／案例門市／優惠活動共用分頁斷言。搜尋翻頁測試改用實際有31筆／3頁的「除油」，原DR只有11筆／1頁，第2頁被API正確拒絕。
+- `pnpm --dir nuxt-site build`、建置完成後重新執行的 `pnpm --dir nuxt-site typecheck`、本次限定SSR回歸、既有 `check-list-pagination.mjs` 與 `git diff --check` 通過。最終建置與typecheck並行時Nuxt生成檔曾短暫缺少 `#components` 型別，順序重跑後通過，不修改其他元件。工具未安裝tsx，故既有純型別工具測試改以Node22 `--experimental-strip-types` 執行，沒有新增依賴；保留既有Tailwind sourcemap及Node型別移除實驗警告。
+- 本機1280×900 實測頁碼40×40px、10px間隔、0px外框，選中底色 `#CAA05C`；390×844末頁為44×44px、無水平溢出且不顯示下一頁。滑鼠下一頁抵達第2／4頁，鍵盤上一頁回第1頁，跳頁scrollY=0；搜尋「除油」Enter下一頁保留q、31筆與第2／3頁。瀏覽器error為空。商品名、價格、素材、分類篩選及單頁行為保留，未執行其他資料／表單完整回歸或原瀏覽器自動化腳本。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_Tr5GUG/截圖 2026-10-10 晚上11.44.09.png`（1894×694，兩個860px寬縮放頁面）與 `/tmp/sakura-product-pagination-WvkCpV/desktop.jpg`（1280×900 CSS／1×）放入同一比較輸入，依嵌入頁面比例核對右側分頁，保留左側同一排產品。字體／文字沿用共用元件16px UI字體，版型居中、40px圓底與10px間距一致；色彩金底白字／非選中黑字無框一致，斜向箭頭沿用既有icon，圖片不替換。末頁手機證據為同目錄 `mobile.jpg`。沒有抄入紅色框／說明文字，原舊外框與文字CTA（P2）已修正；最終於進場opacity=1後重截，分頁清楚可讀無需另裁切，本次範圍無剩餘P0／P1／P2，final result: passed。只維護本README，未部署、未檢查正式端／其他瀏覽器，沒有寫入資料庫。
+
+## 2026-10-11 廚房產品分類／系列篩選列
+
+- 依 23:43:53 截圖，在共用 `ProductListPage` 僅移除有 category 的分類／系列內頁搜尋表單；保留全部產品頁與主導覽搜尋、既有 query、商品／分類資料、分頁及完整錯誤與重試。八個子分類（含「配備」）橢圓統一 144px 寬、至少 46px 高，窄螢幕自然換行，不影響分頁按鈕寬度。不改 CMS／資料庫、不新增套件或文件。
+- 既有前台回歸腳本補上分類／系列 SSR 無搜尋表單、全部產品搜尋保留、配備數量／連結及分頁斷言；本次限定斷言、`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build` 與 `git diff --check` 通過。沒有執行其他 API／表單完整回歸；僅維護本 README。
+- 本機 1280×900 與 1024×768 八個按鈕均為 144×46px；修改前前七個寬 142.891px、配備僅110.891px，修改後等寬。搜尋列移除後篩選列自然上移114px，不補回空白。390×844 採兩欄、320×844 自然單欄，均無水平溢出。鍵盤 Enter 點配備實際抵達原 category/34，標題為「配備」、共8項；第二頁回報40項／第2頁，全部產品頁 Enter 搜尋 DR7396 回傳1項正確型號。瀏覽器 error 為空，預覽尺寸還原；沒有修改商品名称、數量或價格。
+- image-to-code／design-qa：来源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_2CMuCp/截圖 2026-10-10 晚上11.43.53.png`（1414×874註記畫布，內嵌1190px寬頁面）與 `/tmp/sakura-product-subcategories-vvWybY/desktop.jpg`（1280×900 CSS／1×）置於同一比較輸入，按嵌入頁面比例聚焦搜尋列刪除及配備外框，沒有將「調整後」空白區或紅色註記轉為 UI。文字／字型與金色細框、透明底、商品素材及文案沿用既有設計；版型只刪除搜尋與統一篩選寬度。原搜尋仍存在／配備較短的P2已修正；最終於進場 opacity=1 後重截，控制項足夠清楚，無需另裁切。手機證據為同目錄 `mobile.jpg`，本次範圍無剩餘P0／P1／P2，final result: passed。未檢查正式端與其他瀏覽器、不部署、不寫入資料庫。
+
+## 2026-10-10 廚房產品品牌切換列
+
+- 依 23:43:11 截圖右側，三品牌共用 `ProductBrandPage` 將 SAKURA／SVAGO／TEKA 橢圓按鈕統一為 116×52px、20px 間距，品牌列與分類卡片左緣對齊；移除「查看全部產品／搜尋型號」CTA，品牌列上方增加 80px 留白、下方距分類卡片 30px。手機採三欄等寬縮小、12px 間距與 32px 上方留白，不換行。
+- 保留品牌連結、目前品牌 aria-current、鍵盤金色焦點框、商品分類載入／完整錯誤與重試；主導覽搜尋及原 `/products/[brand]/all` 路由仍可使用。不新增素材、套件或文件，不修改 CMS／資料庫，既有回歸腳本補上三品牌 SSR 與等寬／手機規則斷言。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、本次三品牌限定 SSR／樣式回歸斷言、腳本語法及 `git diff --check` 通過。初次限定測試以 data URL 匯入整段腳本，遇到依賴相對路徑解析錯誤；改為只執行本次自包含斷言區段後通過，不改正式測試腳本執行方式。未執行其他資料／表單完整回歸，建置保留既有 Tailwind sourcemap 警告。
+- 實測 768／1024／1280／1512px 三按鈕皆 116×52px，同列、等距、左緣與分類卡片一致；390×844 為三個 112×52px、12px 間隔，沒有水平溢出。1280px 分類第一卡的文件 top 維持 1045.695px，品牌列由 x=30／不等寬 115.125、102.805、91.766px 改為 x=73／等寬116px。鍵盤 Enter 切換 SAKURA／SVAGO／TEKA，當前品牌標記與文案正常，跳頁 scrollY=0；滑鼠另驗證 SVAGO，主導覽搜尋可以開啟／關閉。瀏覽器無 error，原九張 SAKURA 分類圖載入正常。
+- image-to-code／design-qa 比對：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_mIXFwN/截圖 2026-10-10 晚上11.43.11.png`（2068×706，含前後縮放頁面與紅色註記），與 `/tmp/sakura-product-brands-zah33o/desktop.jpg`（1280×900 CSS／1×）置於同一比較輸入，聚焦來源右側「調整後」品牌列及第一排分類卡片；另檢查 `mobile.jpg`（390×844／1×）。來源為約 860px 寬的縮放頁面，不把整張註記畫布當網站尺寸，依比例核對 116×52px 橢圓、20px 間距、下方30px空隙及卡片左緣；不複製註記或截圖中的錯誤選取品牌狀態。
+- 字體／文案：品牌列沿用既有字體與品牌名稱，統一 14px 居中不折行；間距／版型：修正原不等寬、左緣錯位及多餘 CTA（P2），分類卡片位置／圓角維持。色彩：保留 `#CAA05C` 細金框，預設透明、当前深字、Hover／鍵盤金底白字；圖像：不生成、更換或裁切商品素材。修改後重截比對無本次範圍 P0／P1／P2，final result: passed。QA 僅維護本 README，不建立其他文件。
+- 驗收範圍為三品牌分類入口的切換列，非所有系列商品清單；不修改先前 R3750B 名稱、CMS／資料庫，不部署。測試尺寸已還原，保留本機產品頁預覽；未檢查正式端、其他瀏覽器或完整搜尋結果流程。
+
+## 2026-10-10 首頁品牌輪播貼齊浮標
+
+- 依 22:50:47 截圖，將首頁 `HomeProject` 輪播外層從文字共用的 64px 安全距離分離，桌機 ≥1024px 改為 40px，圖片裁切邊緣貼齊固定品牌浮標右緣，移除 24px 空隙。標題／內文保留 64px，其他 section、手機／平板、抽屜及內頁不變；使用 frontend-design 沿用現有版型，不改 CMS／資料庫或圖片。
+- 既有前台回歸腳本補上輪播 40px 與文字 64px 分離斷言，本次限定浮標／Hero 斷言、`pnpm --dir nuxt-site build` 及 `git diff --check` 通過；保留既有 Tailwind sourcemap 警告。未重跑完整前台 API／表單腳本，本次未修改 TS／Vue。
+- 本機 1024×768、1280×900、1512×982 實量浮標右緣與輪播左緣均為 40px，間隔為 0；標題 padding-left=64px。768×900／390×844 浮標隱藏、輪播左緣=0，標題仍為原 30px／15px，各尺寸無水平溢出，瀏覽器無 error。截圖：`/tmp/sakura-home-rail-flush-8GanH0/desktop.jpg`；測試尺寸已還原，預覽留於首頁輪播區。未部署、未改資料庫、未檢查其他瀏覽器，僅維護本 README。
+
+## 2026-10-10 巧域／BASIC+ 白色色卡外框
+
+- 依 22:50:00 截圖，在共用 `KitchenSeriesPage` 將巧域 `D8410 雪絨白` 套用既有 1px `#e3e3e8` 白色色卡框；AI Kitchen `D0032` 原框保留。BASIC+ `K540D 瓷白` 的灰框經原圖確認為 JPG 自帶，不是 CSS；只以既有 `scale(1.012)`／overflow 裁去極外緣，不重製圖片或改板材顏色。
+- 僅處理指定系列／色號，其他色卡、圓角、尺寸、文字框、Hover、CTA 與資料保留，不更新 CMS／資料庫或安裝套件。使用 frontend-design 沿用現有版型。既有系列回歸腳本補上十系列 SSR 外框／無框範圍及裁邊斷言。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`pnpm --dir nuxt-site exec node scripts/check-kitchen-series.mjs`（十系列 SSR／404／215 張來源與本次外框斷言）及 `git diff --check` 通過；保留既有 Tailwind sourcemap 警告。1280×900 實看 BASIC+ 瓷白無圖片灰框、巧域雪絨白有 1px 淡灰框；390×844 兩頁卡片均為 173×173px、正確框線與裁邊、圖片載入、無水平溢出，無瀏覽器 error。
+- 截圖：`/tmp/sakura-white-finishes-twSkO8/basic-plus.jpg`、`clever.jpg`。第一次重新載入截圖遇進場動畫未完成，已重拍完成画面。測試尺寸已還原，預覽留於巧域板材區。未部署、未檢查其他瀏覽器／正式端；若將來 K540D 改成無框原圖，仍會裁去 0.6% 四邊，屆時可移除此規則。僅維護本 README。
+
+## 2026-10-10 全品牌系列推薦廚電去背
+
+- 依 22:49:49 截圖盤點十個系列的已發布推薦廚電：AI Kitchen 六張既有透明圖保留，其他系列共九個仍有白底的來源；同款跨系列只處理一次。優先重用對應產品現有透明素材，其餘使用 imagegen 內建工具對原開版圖片進行 background-extraction，不換型號、不改名稱或連結。
+- 新增 `public/section-1/brand-series/equipment-cutouts/` 九張透明 PNG：EG2350GB 重用 Joyful 原廠透明圖；G2112G、R605、EG2501GC、Q7585BL、DR7397XL、Q7693、DR7790A、G2932AG 使用各型號原開版圖去背。提示要求只移除白底、保留輪廓、控制介面、標誌、材質、視角、比例與原構圖，不新增陰影／物件；生成圖並非逐像素相同的原始產品照，細小標誌仍需品牌最終核稿。
+- 共用 `KitchenSeriesPage` 僅替換九個已知舊網址（`kitchenEquipmentCutouts.ts`），原圖及 CMS 原資料保留；其他來源含未來後台新圖不變。既有 `check-kitchen-series.mjs` 加入九圖透明通道／非空白及新 CMS 網址保留斷言；`--cutouts` 讀取已發布十系列逐張驗證透明與 SSR 對應。正在進行建置與瀏覽器驗證。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`pnpm --dir nuxt-site exec node scripts/check-kitchen-series.mjs --cutouts` 與 `git diff --check` 通過。讀取本機已發布十系列 45 個廚電位置、29 個不同來源皆含真正透明背景，SSR 對應正確，另保留十系列／404／215 張來源、輪播與鍵盤回歸；建置保留既有 Tailwind sourcemap 警告。
+- 1280×900 實看 Clever、Basic+、Loft Chic：白色矩形底消失，全部圖片載入，無水平溢出，Loft Chic 新圖 Hover 淡化約 0.6、文字=1、原外連與安全 rel 保留。390×844 Clever 五張載入、opacity=1、無水平溢出，瀏覽器無 error。既有右侧懸浮服務列會覆蓋最右部分內容，本次不擴大調整該共用版面。第一次 Basic+ 截圖遇到進場動畫未結束，已重拍完成畫面。
+- 截圖：`/tmp/sakura-equipment-cutouts-IYjPXw/clever-desktop.jpg`、`basic-plus.jpg`、`loft-hover.jpg`、`clever-mobile.jpg`。尺寸已還原，預覽留於 Clever 廚電區塊。去背素材以新檔案保存，不覆蓋原圖、不更新 CMS／資料庫或整份系列資料；原 Hover、尺寸、箭頭、錯誤顯示保留。未部署、未重新檢查正式端／其他瀏覽器，產品細小標誌需原廠素材核稿；僅維護本 README。
+
+## 2026-10-10 推薦廚電圖片 Hover 淡化
+
+- 依 22:49 截圖，在十個系列共用推薦廚電卡片加入 350ms 圖片淡化：可點擊圖片 Hover／鍵盤 focus-visible 時 opacity=0.6，移開後恢復；只作用於實際 img，不影響文字、中央金色箭頭、圖片錯誤提示、尺寸與原連結。沿用 frontend-design 的現有版型微互動，不新增素材或套件。
+- Hover 限 ≥768px 且可懸停的精準指標，手機圖片保持清晰，不產生觸控黏住的淡化；減少動態偏好停用轉場。既有系列回歸腳本補上圖片專屬淡化、觸控／鍵盤及減少動態效果斷言。`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`pnpm --dir nuxt-site exec node scripts/check-kitchen-series.mjs`（十系列 SSR、404、215 張圖片來源、動畫／鍵盤及本次斷言）與 `git diff --check` 通過；建置保留既有 Tailwind sourcemap 警告。
+- 本機 1280×900 AI Kitchen 實際 Hover：P0531 圖片 opacity=0.6、箭頭／文字=1、轉場=350ms；移開恢復 opacity=1，Tab 鍵盤焦點同樣為 0.6 並保留焦點框。390×844 六張圖片皆已載入、opacity=1、箭頭=1，無水平溢出；Enter 實際抵達原 `/products/sakura`。Loft Chic 同款 Hover 生效，文字清晰、原外連 `_blank`／`noopener noreferrer` 保留，期間無新增瀏覽器 error。
+- 截圖：`/tmp/sakura-equipment-fade-5OmsGu/hover-final.jpg`、`loft-hover.jpg`、`mobile.jpg`。第一次 Hover 測試拖曳文字產生藍色選取，已取消選取後重拍；最終截圖非該選取狀態。測試尺寸還原，預覽留於 Loft Chic 推薦廚電；未部署、不改 CMS／資料庫，未測其他瀏覽器或實際切換 OS 減少動態偏好（僅檢查 CSS 與回歸斷言），僅維護本 README。
+
+## 2026-10-10 加盟選單小箭頭展開
+
+- 依 22:47 最新說明，桌機「我要加盟」先顯示原四項；底下加 16px 向下箭頭（44px 點擊範圍），點擊才在同一選單下方展開「加盟申請表單／加盟資料下載」，再次點擊收合。手機同樣採額外展開，不是兩項各自新增子選單；原字體、寬度及連結保留。
+- 依原 CMS 連結識別額外兩項，不硬切前四筆或覆寫後台資料；切換／關閉主選單後重設收合。支援鍵盤 Enter／Space、焦點提示與 aria-expanded，隱藏連結不進入鍵盤焦點。既有回歸腳本補上 CMS 原四項／額外兩項分組、順序改變、其他選單及空清單的斷言，以及桌機／手機的展開控制與重設檢查。僅調整共用 Header、既有回歸腳本及本 README，不新增套件、不修改 CMS／資料庫。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、本次限定加盟選單回歸斷言、腳本語法及 `git diff --check` 通過；建置保留既有 Tailwind sourcemap 警告。1280×900 選單收合為 190×238px、展開為 190×326px，原四項保留、額外兩項在同一白色外框下方出現，寬度不變；Enter 展開、Space 收合、Tab 選取表單連結、Escape／切換主選單後重設均正常。
+- 390×844 手機原兩項隱藏，點小箭頭後出現，Enter／Space 及跳頁後重設收合正常，無水平溢出；實際點選抵達 `/franchising/download` 與 `/franchising/form`，主選單自動關閉，不送出表單或改動資料。建置觸發本機重新整理後重做鍵盤驗證通過，驗證期間無新增瀏覽器 error。截圖：`/tmp/sakura-franchise-dropdown-F5cpRo/final.jpg`、`expanded.jpg`、`mobile-expanded.jpg`；測試尺寸還原，未部署、未重跑完整表單／API 回歸或檢查正式端。
+
+## 2026-10-10 品牌系列 Hero 位置對齊首頁
+
+- 依 22:42 截圖調整十個系列共用的 `KitchenSeriesPage`：標題沿用首頁 `hero-template-top` 的定位與 24px 下移／50px 標籤保留空間，保留各系列名稱及原文字動畫；抽屜浮標以 40×144px 按鈕置中，不再依整個選單面板高度置中。展開時標題同首頁右移，收合選單不進入鍵盤焦點；1024px 起顯示浮標，較小尺寸隱藏。CTA 與 Hero 下方介紹列保留原佔位，不改圖片、名稱、輪播、套系、板材及電器資料。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、本次限定的 Hero 定位回歸斷言、腳本語法與 `git diff --check` 通過。1512×982 實際逐頁確認十個系列：標題 top=318px、浮標 top=419px／40×144px、CTA top=446px，標題不撞 CTA，無水平溢出。相較修正前，標題由 174px 下移至首頁的 318px，浮標由 290px 下移至首頁的 419px，CTA 位置維持不變。
+- 1024×768、1280×900、1920×1080、768×900、390×844 分別比較首頁與 Loft Chic：標題垂直位置一致，≥1024px 浮標位置一致；小尺寸浮標隱藏，手機標題保留右側服務列安全距離，各尺寸無水平溢出且標題不碰 CTA。Enter 展開抽屜正常，點君璽連結實際抵達 `/home-style/premium`、scrollY=0、抽屜收合。Loft Chic 桌機／手機 Hero 圖片均完整載入，驗證期間無新增瀏覽器 error，測試尺寸已還原，預覽保留於 Loft Chic。
+- 截圖：`/tmp/sakura-series-hero-Psys3l/final.jpg`（1512×982）與 `mobile-final.jpg`（390×844）；初次手機截圖落在進場／淡出時段，已於標題 opacity>0.99、圖片載入後重截。不新增套件、不修改 CMS／資料庫、不部署；未重跑完整 API／表單回歸或檢查正式端，僅維護本 README。
+
+## 2026-10-10 Footer 均分與展板對齊
+
+- 依 21:41 截圖調整全站 Footer：桌機網站地圖六欄起點等距，合作專區文字右緣對齊上方數位展板 icon 右緣。沿用既有 Header／Footer 對齊量測、resize 與字體載入機制，展開網站地圖後重新計算欄距；手機兩欄、平板三欄不變。不改字體、文案、圖片、連結與 CMS，不寫入資料庫、不部署。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、Footer 限定回歸斷言、腳本語法及 `git diff --check` 通過。首頁實測 1024／1280／1512／1920px：六欄起點等距，合作專區與 icon 右緣誤差 ≤0.032px，均無水平溢出。768px 保留三欄、390px 保留兩欄且沒有水平溢出；廚房裝修指南頁 1512px 誤差 0.008px，收合後重開正常。重新導覽後瀏覽器沒有新增 error，已還原視窗尺寸並保留首頁 Footer 預覽。
+- 截圖：`/tmp/sakura-footer-align-I2nEKt/final.jpg`、`desktop-1512.jpg` 與 `mobile.jpg`。保留原字體、17px 金色標題、連結文案、底圖與手機欄數；原本 1512px 最後一欄文字比展板右緣偏左 56px，現在依實際 Header 錨點與文字寬度重新計算，避免僅在特定寬度巧合對齊。只維護本 README，不新增文件；未重跑完整資料／表單回歸、未檢查正式端或其他瀏覽器，未部署。
+
+## 2026-10-10 主導覽品牌館名稱再次確認
+
+- 依 21:39 截圖確認指定名稱為「櫻花集團品牌館」，網址仍為 `/about/exhibition`。本機已發布 CMS Header revision 5 與程式範例均為正確名稱，沒有未發布草稿；既有本機修正指令（未加 `--apply`）輸出 `UNCHANGED`，本輪沒有重複寫入或新增 CMS 版本。
+- 回歸腳本補上已發布 Header 的品牌館入口唯一性及文案檢查，避免只核對程式範例卻漏掉 CMS；不修改選單寬度、字體、連結與其他導覽。雲端 CMS 唯讀連線在 15 秒內逾時（`ETIMEOUT`），本輪無法確認正式端最新文字，不把 10 月 3 日舊檢查結果當成今天狀態；不擅自整份同步 Header、不覆寫正式資料、不部署。
+- 本機已發布內容 API 的限定回歸斷言、腳本語法及 `git diff --check` 通過；1280×900 桌機展開選單與 390×844 手機展開選單均顯示新名稱，連結仍為 `/about/exhibition`。手機點選實際抵達品牌館頁、選單收合且 scrollY=0，瀏覽器 error 為空；已還原視窗尺寸並保留首頁預覽。手機文字驗證截圖：`/tmp/sakura-pavilion-name-cfjUbl/mobile.jpg`。本輪僅補測試及本文件，沒有修改 Vue 元件；未重跑全套回歸、型別檢查或建置，正式端仍未驗證。
+
+## 2026-10-10 首頁左側品牌浮標安全距離
+
+- 依 21:38 截圖修正首頁「品牌系列」固定浮標遮住品牌承諾與設計案例文字。桌機 ≥1024px 為首頁文字／輪播內容保留至少 64px 左側距離（40px 浮標加 24px 間隔），涵蓋風格列、品牌系列、廚房產品、設計案例、品牌承諾、門市及 Footer；Hero 下方 CTA 也移出浮標範圍。只調整內容安全距離，背景仍滿版，保留字型、文案、圖像、浮標位置、選單與輪播功能。
+- 使用現有全站版型的首頁路由條件與集中式響應 CSS，不增加套件、偵測碰撞程式或新的文件；手機／平板 <1024px 與其他路由不套用。未修改 CMS／資料庫、未部署；新增限定首頁與桌機斷點及各內容容器的回歸斷言。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、本次限定的浮標安全距離斷言及 `git diff --check` 通過。瀏覽器實測 1024×768、1280×900、1512×982：浮標仍為 40px，品牌承諾／設計案例／廚房產品內容左界 ≥64px；1280px 品牌輪播實際 viewport 與兩組跑馬燈內容左界為 64px，背景 section 左界仍為 0；設計案例定位時標題、小標與 CTA 不與浮標相交。1512px Footer 開啟網站地圖後首欄左界 115px、無水平溢出。1023×768／390×844 浮標仍隱藏，品牌承諾左界仍為原 30px／15px，輪播沒有新增左內距，各尺寸均無水平溢出。滑鼠展開與鍵盤 Enter 展開／收合正常，十個品牌連結保留，Enter 實際抵達 `/home-style/premium`、scrollY=0，該頁不含首頁安全距離 class、Footer 仍為原 30px 內距。本輪瀏覽器 error 為空，測試尺寸已還原，預覽留在首頁。
+- 截圖 QA：來源「截圖 2026-10-10 晚上9.38.47.png」（2038×696，兩個縮放頁面與註記）與 `/tmp/sakura-brand-rail-wwOxKj/brand-promise.jpg`、`gallery.jpg`（1280×900／1×）放入同一比較輸入，聚焦各畫面左側浮標與文字；另比對 `desktop-1024.jpg`、`mobile-final.jpg`、`project.jpg`、`products.jpg`，檢查 `footer-1512.jpg`。初始品牌承諾內容 x=30、浮標占 x=0–40，遮住文字（P1）；改成至少 x=64 後重截，與浮標相隔 ≥24px。保留字型、字重、色碼、圓角、原照片與 CMS 文案；只有內容間距及其自然換行調整，背景仍滿版，案例照片差異是既有自動輪播狀態，不是更換素材。初次手機截圖落在 reveal 進場，已在 opacity=1／visible 後重截；本次左側浮標範圍無剩餘 P0／P1／P2，final result: passed。使用 image-to-code／design-qa 比對流程，依專案規則只記錄本 README，不建立其他文件。
+- 驗收界線：只修首頁收合中的左側浮標；主動展開品牌選單時仍沿用原抽屜覆蓋行為。手機右側快速服務列仍可能蓋住標題，是既有、另列的 UI 問題，本次沒有調整；不宣稱全站所有浮動元件皆不遮字。未重跑完整資料 API／表單回歸、未檢查正式端或其他瀏覽器。
+
 ## 2026-10-10 首頁門市卡片選取色
 
-- 依 21:35 截圖「選定門市後才變金色底」，將正常卡面與三種翻牌過場的金底條件改為已手動選取且 ID 相符，不再用地圖預設門市作為已選取狀態；未點選、自动翻牌或剛切換區域／城市時四卡都維持白底。沿用現有 `focused`／`selected` 狀態，點選後仍鎖定該卡、更新地圖，其他卡繼續翻牌，新增 `aria-pressed` 同步選取狀態。
-- 保留字型、尺寸、篩選、翻牌間隔與地圖，不修改 CMS／資料庫、不新增套件、不部署；回歸腳本補上四個卡面守衛及選取 ARIA 檢查。驗證結果待補。
+- 依 21:35 截圖「選定門市後才變金色底」，將正常卡面與三種翻牌過場的金底條件改為已手動選取且 ID 相符，不再用地圖預設門市作為已選取狀態；未點選、自動翻牌或剛切換區域／城市時四卡都維持白底。沿用現有 `focused`／`selected` 狀態，點選後仍鎖定該卡、更新地圖，其他卡繼續翻牌，新增 `aria-pressed` 同步選取狀態。
+- 區域與城市變更直接取消選取；修正原本只監看篩選結果 ID、導致「中部 → 臺中市」結果相同時金底殘留的邊界情況。保留字型、尺寸、翻牌間隔與地圖，不修改 CMS／資料庫、不新增套件、不部署；回歸腳本補上四個卡面守衛、選取 ARIA 與篩選變更檢查。
+- `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、門市區域限定的回歸斷言及 `git diff --check` 通過。本機 1280×900 實測初始／自動翻牌／僅鍵盤聚焦皆四卡白底；滑鼠點選或 Enter 後只有該卡為 `#CAA05C` 金底、地圖更新，已選卡鎖定且其他卡繼續翻牌。切換區域與城市皆取消選取，包含篩選前後 ID 相同的情況；南部無資料提示正常。390×844 手機重測選取與同結果城市切換，卡片 282×122px、沒有水平溢出，本輪瀏覽器 error 為空。未重跑涉及資料 API／表單的完整回歸套件，未檢查正式端、CMS 或其他瀏覽器。
+- 截圖 QA：来源「截圖 2026-10-10 晚上9.35.39.png」與 `/tmp/sakura-store-selection-rYO6dL/default.jpg`、`selected-final.jpg`（1280×900／1×）及 `mobile-selected.jpg`（390×844／1×）放入同一比較輸入；另存 `mobile-default.jpg` 與 `filter-reset.jpg`。只核對門市選取色：保留標題／卡片字型、尺寸與間距、原地圖及門市文案，選取金底白字與 ARIA 狀態一致。驗收中發現篩選結果相同時舊選取殘留（P2），補直接監看區域／城市後已重測通過；本次範圍沒有剩餘 P0／P1／P2，final result: passed。已還原測試視窗尺寸，預覽保持啟動，QA 僅維護本 README。
 
 ## 2026-10-10 首頁集團品牌跑馬燈 Logo 放大
 

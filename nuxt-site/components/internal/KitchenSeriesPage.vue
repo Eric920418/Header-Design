@@ -3,6 +3,7 @@ import { NuxtLink } from '#components'
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import type { KitchenSeriesPageData } from '~/data/kitchenSeries'
+import { KITCHEN_EQUIPMENT_CUTOUTS } from '~/data/kitchenEquipmentCutouts'
 import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
 const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
 
@@ -212,10 +213,16 @@ useSeoMeta({
       <span class="absolute inset-0 z-[3] bg-gradient-to-r from-black/55 via-black/15 to-black/10" aria-hidden="true" />
       <span class="absolute inset-x-0 bottom-0 z-[3] h-[45%] bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true" />
 
-      <div class="ai-hero__inner">
-        <div :key="`title-${heroTransition}`" class="hero-slide-copy ai-hero__title-slot">
+      <div class="ai-hero__heading hero-template-top pointer-events-none translate-y-[24px] z-[5] transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
+        <div :key="`title-${heroTransition}`" class="hero-slide-copy">
+          <div aria-hidden="true" class="mb-[20px] h-[30px]" />
           <h1 id="ai-kitchen-hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ data.name }}</h1>
         </div>
+      </div>
+
+      <div class="ai-hero__inner">
+        <!-- 保留原標題佔位，定位調整不推動 CTA 與下方介紹列。 -->
+        <div aria-hidden="true" class="ai-hero__title-slot" />
 
         <div v-reveal="{ anim: 'fadeIn', delay: 900, duration: 'slow' }" class="inline-block">
           <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" class="hero-start-project ai-hero__cta">
@@ -246,7 +253,7 @@ useSeoMeta({
     </section>
 
     <aside class="ai-series-drawer" :class="{ 'is-open': seriesOpen }" aria-label="品牌系列快速選單">
-      <div class="ai-series-drawer__panel">
+      <div id="series-quick-menu" :aria-hidden="!seriesOpen" :inert="seriesOpen ? undefined : true" class="ai-series-drawer__panel">
         <NuxtLink
           v-for="style in KITCHEN_STYLES"
           :key="style.slug"
@@ -257,7 +264,7 @@ useSeoMeta({
           {{ style.zh }}
         </NuxtLink>
       </div>
-      <button type="button" :aria-expanded="seriesOpen" :aria-label="seriesOpen ? '收合品牌系列選單' : '展開品牌系列選單'" @click="seriesOpen = !seriesOpen">
+      <button type="button" aria-controls="series-quick-menu" :aria-expanded="seriesOpen" :aria-label="seriesOpen ? '收合品牌系列選單' : '展開品牌系列選單'" @click="seriesOpen = !seriesOpen">
         <ChevronRight aria-hidden="true" />
         <span>品牌系列</span>
       </button>
@@ -350,7 +357,10 @@ useSeoMeta({
               :src="finish.image"
               :alt="`${finish.code} ${finish.name} 門板`"
               class="ai-finishes__image"
-              :class="{ 'ai-finishes__image--light': finish.code === 'D0032' }"
+              :class="{
+                'ai-finishes__image--light': finish.code === 'D0032' || (data.slug === 'clever' && finish.code === 'D8410'),
+                'ai-finishes__image--borderless': data.slug === 'basic-plus' && finish.code === 'K540D',
+              }"
             />
             <div class="ai-finishes__caption">
               <p>{{ finish.code }}</p>
@@ -377,7 +387,7 @@ useSeoMeta({
           <article v-for="equipment in visibleEquipment" :key="equipment.model" class="ai-equipment__item">
             <component :is="equipment.route ? NuxtLink : 'div'" :to="equipment.route || undefined" :target="equipment.route.startsWith('https://') ? '_blank' : undefined" :rel="equipment.route.startsWith('https://') ? 'noopener noreferrer' : undefined" class="ai-equipment__card" :aria-label="equipment.route ? `查看 ${equipment.model} ${equipment.name}` : undefined">
               <div class="ai-equipment__visual">
-                <InternalBrandImage :src="equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
+                <InternalBrandImage :src="KITCHEN_EQUIPMENT_CUTOUTS[equipment.image] || equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
                 <span v-if="equipment.route" class="ai-equipment__action" aria-hidden="true"><ArrowRight /></span>
               </div>
               <h3><span>{{ equipment.model }}</span>{{ equipment.name }}</h3>
@@ -433,7 +443,7 @@ useSeoMeta({
 .ai-hero { position: relative; height: 840px; overflow: hidden; background: #6f6d69; color: #fff; }
 .ai-hero__inner { position: relative; z-index: 5; width: min(1584px, calc(100% - 60px)); height: 100%; margin-inline: auto; padding-top: 118px; }
 .ai-hero__title-slot { margin-top: 56px; min-height: 242px; }
-.ai-hero__title-slot h1 { max-width: 100%; text-transform: none; }
+.ai-hero__heading h1 { max-width: 100%; text-transform: none; }
 .ai-hero__cta { position: relative; display: inline-flex; width: 120px; height: 120px; overflow: visible; align-items: center; justify-content: center; margin: 30px 0 0 30px; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
 .ai-hero__cta > span { position: absolute; z-index: 2; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 15px; line-height: 19px; transition: opacity .3s ease; }
 .ai-hero__cta > .ai-hero__cta-label--hover { opacity: 0; font-family: var(--font-cjk-sans); }
@@ -456,12 +466,12 @@ useSeoMeta({
 .ai-hero__watermark { position: absolute; z-index: 4; right: max(30px, calc((100vw - 1584px) / 2)); bottom: -90px; color: rgb(255 255 255 / 10%); font-family: var(--font-display); font-size: clamp(190px, 18vw, 320px); line-height: .8; pointer-events: none; }
 @keyframes ai-story-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
-.ai-series-drawer { position: fixed; top: 50%; left: 0; z-index: 80; display: flex; align-items: flex-start; transform: translate(-190px, -50%); transition: transform .45s ease; }
-.ai-series-drawer.is-open { transform: translate(0, -50%); }
+.ai-series-drawer { position: fixed; top: calc(50% - 72px); left: 0; z-index: 80; display: flex; align-items: flex-start; transform: translateX(-190px); transition: transform .45s ease; }
+.ai-series-drawer.is-open { transform: translateX(0); }
 .ai-series-drawer__panel { width: 190px; border-block: 1px solid rgb(255 255 255 / 12%); background: rgb(28 28 29 / 78%); padding-block: 10px; backdrop-filter: blur(14px); }
 .ai-series-drawer__panel a { display: block; border-left: 2px solid transparent; padding: 8px 20px; color: rgb(255 255 255 / 80%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; white-space: nowrap; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
 .ai-series-drawer__panel a:hover, .ai-series-drawer__panel a:focus-visible, .ai-series-drawer__panel a.is-active { border-left-color: #caa05c; color: #caa05c; background: rgb(255 255 255 / 6%); }
-.ai-series-drawer > button { display: flex; width: 42px; height: 146px; flex-direction: column; align-items: center; justify-content: center; gap: 9px; border: 1px solid rgb(255 255 255 / 12%); border-radius: 0 17px 17px 0; color: rgb(255 255 255 / 88%); background: rgb(28 28 29 / 72%); backdrop-filter: blur(14px); transition: color .3s ease, background-color .3s ease; }
+.ai-series-drawer > button { display: flex; width: 40px; height: 144px; flex-direction: column; align-items: center; justify-content: center; gap: 9px; border: 1px solid rgb(255 255 255 / 12%); border-radius: 0 17px 17px 0; color: rgb(255 255 255 / 88%); background: rgb(28 28 29 / 72%); backdrop-filter: blur(14px); transition: color .3s ease, background-color .3s ease; }
 .ai-series-drawer > button:hover, .ai-series-drawer > button:focus-visible { color: #caa05c; background: rgb(28 28 29 / 88%); }
 .ai-series-drawer > button svg { width: 18px; height: 18px; transition: transform .45s ease; }
 .ai-series-drawer.is-open > button svg { transform: rotate(180deg); }
@@ -521,6 +531,8 @@ useSeoMeta({
 .ai-finishes__image { aspect-ratio: 1; border-radius: 24px; transition: transform .5s; }
 .ai-finishes__image--light { border: 1px solid #e3e3e8; background: #fff; }
 .ai-finishes__image--light :deep(img) { transform: scale(1.012); }
+/* K540D 原圖自帶灰框，僅裁去最外緣，保留板材顏色。 */
+.ai-finishes__image--borderless :deep(img) { transform: scale(1.012); }
 .ai-finishes__grid article:hover .ai-finishes__image { transform: translateY(-7px); }
 .ai-finishes__caption { width: calc(100% - 8px); margin: -2px auto 0; border: 1px solid #e3e3e8; background: #fff; padding: 10px 14px 13px; }
 .ai-finishes__caption p { margin: 0; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 18px; }
@@ -535,6 +547,13 @@ useSeoMeta({
 .ai-equipment__card:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; }
 .ai-equipment__visual { position: relative; }
 .ai-equipment__image { aspect-ratio: 1.2; background: transparent; }
+.ai-equipment__image :deep(img) { transition: opacity .35s ease; }
+@media (min-width: 768px) {
+  a.ai-equipment__card:focus-visible .ai-equipment__image :deep(img) { opacity: .6; }
+}
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+  a.ai-equipment__card:hover .ai-equipment__image :deep(img) { opacity: .6; }
+}
 .ai-equipment__item h3 { margin: 20px auto 0; max-width: 220px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; font-weight: 400; line-height: 22px; text-align: center; text-transform: none; }
 .ai-equipment__item h3 span { display: block; margin-bottom: 3px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 18px; font-weight: 500; }
 .ai-equipment__action { position: absolute; top: 50%; left: 50%; display: grid; width: 60px; height: 60px; place-items: center; border: 1px solid rgb(255 255 255 / 72%); border-radius: 50%; color: #fff; background: #caa05c; opacity: 0; transform: translate(-50%, -50%) scale(.76) rotate(-45deg); transition: opacity .35s ease, transform .35s ease, background-color .35s ease; pointer-events: none; }
@@ -588,7 +607,6 @@ useSeoMeta({
   .ai-hero__inner { padding-top: 80px; }
   .ai-hero__title-slot { min-height: 188px; }
   .ai-hero__cta { width: 105px; height: 105px; margin-top: 24px; }
-  .ai-series-drawer { display: none; }
   .ai-section-heading h2, .ai-centered-heading h2 { font-size: 48px; line-height: 53px; }
   .ai-intro__content { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); gap: 14px; }
   .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); grid-template-rows: 320px; gap: 14px; }
@@ -608,9 +626,14 @@ useSeoMeta({
   .ai-case-card__body--featured { display: none; }
 }
 
+@media (max-width: 1023px) {
+  .ai-series-drawer { display: none; }
+}
+
 @media (max-width: 767px) {
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
+  .ai-hero__heading { width: auto; margin: 0 93px 0 15px; }
   .ai-hero__title-slot { margin-top: 50px; min-height: 134px; }
   .ai-hero__cta { width: 82px; height: 82px; margin-top: 22px; margin-left: 15px; }
   .ai-hero__cta > span { font-size: 13px; line-height: 16px; }
@@ -664,6 +687,6 @@ useSeoMeta({
 
 @media (prefers-reduced-motion: reduce) {
   .ai-hero__story-thumb, .ai-hero__story-copy, .ai-suite-image, .ai-suite-details { animation: none; }
-  .ai-series-drawer, .ai-finishes__image, .ai-equipment__action, .ai-case-card :deep(img) { transition: none; }
+  .ai-series-drawer, .ai-finishes__image, .ai-equipment__image :deep(img), .ai-equipment__action, .ai-case-card :deep(img) { transition: none; }
 }
 </style>

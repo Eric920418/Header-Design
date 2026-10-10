@@ -86,6 +86,8 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
 .brand-h8-aside p { width: min(510px, 100%); margin: 0; color: #59585d; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 28px; }
 .brand-h8-stage { position: relative; width: min(1770px, calc(100% - 60px)); margin: -300px auto 0; overflow: hidden; border-radius: 24px; }
 .brand-h8-stage__image { width: 100%; aspect-ratio: 2 / 1; border-radius: 24px; }
+.brand-h8-stage__image :deep(img) { position: absolute; inset: 0; width: 100%; height: 100%; }
+.brand-h8-stage.is-visible .brand-h8-stage__image :deep(img) { transform-origin: center center; animation: hero-kenburns 5s ease-out 1.25s both; }
 
 @media (min-width: 1025px) {
   .brand-h8-copy h1 { color: #fff; }
@@ -126,5 +128,9 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
   .brand-h8-aside p { font-size: 15px; line-height: 24px; }
   .brand-h8-stage { width: calc(100% - 30px); margin-top: 30px; }
   .brand-h8-stage__image { min-height: 260px; aspect-ratio: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-h8-stage.is-visible .brand-h8-stage__image :deep(img) { animation: none; transform: none; }
 }
 </style>

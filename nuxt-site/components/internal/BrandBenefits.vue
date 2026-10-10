@@ -82,12 +82,12 @@ onBeforeUnmount(() => storyObserver?.disconnect())
   8%, 92% { opacity: 1; transform: none; }
 }
 @keyframes benefit-second {
-  0%, 25%, 100% { opacity: 0; transform: translateY(36px); }
-  33%, 92% { opacity: 1; transform: none; }
+  0%, 5%, 100% { opacity: 0; transform: translateY(36px); }
+  13%, 92% { opacity: 1; transform: none; }
 }
 @keyframes benefit-third {
-  0%, 50%, 100% { opacity: 0; transform: translateY(36px); }
-  58%, 92% { opacity: 1; transform: none; }
+  0%, 10%, 100% { opacity: 0; transform: translateY(36px); }
+  18%, 92% { opacity: 1; transform: none; }
 }
 
 @media (max-width: 1200px) {

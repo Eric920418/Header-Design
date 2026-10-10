@@ -104,8 +104,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <p>{{ cmsCopy.copy.text7 }}</p>
             <p>{{ cmsCopy.copy.text8 }}</p>
             <div class="franchise-hero__actions">
-              <NuxtLink :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">{{ cmsCopy.copy.text9 }}<ArrowRight aria-hidden="true" /></NuxtLink>
-              <NuxtLink :to="cmsCopy.copy.field12" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">{{ cmsCopy.copy.text13 }}<ArrowRight aria-hidden="true" /></NuxtLink>
+              <NuxtLink :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">{{ cmsCopy.copy.text9 }}<span class="site-cta-icon source-round-link__icon"><ArrowRight aria-hidden="true" /></span></NuxtLink>
+              <NuxtLink :to="cmsCopy.copy.field12" target="_blank" rel="noopener" class="source-round-link source-round-link--hero">{{ cmsCopy.copy.text13 }}<span class="site-cta-icon source-round-link__icon"><ArrowRight aria-hidden="true" /></span></NuxtLink>
             </div>
           </div>
         </div>
@@ -202,7 +202,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" tone="dark">{{ cmsCopy.copy.text32 }}</InternalSectionPill>
         <h2 id="franchise-conversion-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }">{{ cmsCopy.copy.text33 }}<span>{{ cmsCopy.copy.text34 }}</span></h2>
         <p v-reveal="{ anim: 'opalMoveUp', delay: 120 }">{{ cmsCopy.copy.text35 }}</p>
-        <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 170 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--news">{{ cmsCopy.copy.text36 }}<ArrowRight aria-hidden="true" /></NuxtLink>
+        <NuxtLink v-reveal="{ anim: 'opalScaleUp', delay: 170 }" :to="FRANCHISE_FORM_URL" target="_blank" rel="noopener" class="source-round-link source-round-link--news">{{ cmsCopy.copy.text36 }}<span class="site-cta-icon source-round-link__icon"><ArrowRight aria-hidden="true" /></span></NuxtLink>
       </div>
     </section>
 
@@ -329,7 +329,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <i aria-hidden="true" /><h3>{{ article.title }}</h3><ArrowRight aria-hidden="true" />
           </NuxtLink>
         </div>
-        <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" class="franchise-news__more"><NuxtLink :to="cmsCopy.copy.field62" class="source-round-link source-round-link--news">{{ cmsCopy.copy.text63 }}<ArrowRight aria-hidden="true" /></NuxtLink></div>
+        <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" class="franchise-news__more"><NuxtLink :to="cmsCopy.copy.field62" class="source-round-link source-round-link--news">{{ cmsCopy.copy.text63 }}<span class="site-cta-icon source-round-link__icon"><ArrowRight aria-hidden="true" /></span></NuxtLink></div>
       </div>
     </section>
   </main>
@@ -343,14 +343,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-about > .source-rail-wide { width: min(1770px, 100%); margin-inline: auto; padding-right: 56px; box-sizing: border-box; }
 
 .source-round-link { position: relative; isolation: isolate; display: inline-flex; min-height: 52px; width: max-content; align-items: center; justify-content: center; gap: 11px; padding: 13px 21px; border: 1px solid rgb(255 255 255 / 22%); border-radius: 999px; color: #fff; font-family: var(--font-ui); font-size: 14px; line-height: 20px; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
-.source-round-link::after { position: absolute; z-index: -1; right: 11px; width: 38px; height: 38px; pointer-events: none; border: 1px solid currentcolor; border-radius: 50%; opacity: 0; content: ""; animation: franchise-radar 2.6s ease-out infinite; }
+.source-round-link__icon { display: inline-flex; width: 40px; height: 40px; flex: none; border-radius: 50%; }
 .source-round-link svg { width: 18px; height: 18px; transition: transform .3s ease; }
 .source-round-link svg.lucide-arrow-right { transform: rotate(-35deg); }
 .source-round-link:hover { transform: translateY(-2px); }
 .source-round-link:hover svg.lucide-arrow-right { transform: rotate(0); }
 .source-round-link--gold { border-color: #caa05c; color: #1c1c1d; background: #caa05c; }
 .source-round-link--hero { min-height: 60px; gap: 8px; padding: 9px 9px 9px 30px; font-size: 15px; line-height: 22px; letter-spacing: .5px; }
-.source-round-link--hero::after { right: 9px; width: 40px; height: 40px; }
 .source-round-link--hero svg { width: 40px; height: 40px; padding: 10px; border-radius: 50%; color: #fff; background: #caa05c; }
 .source-round-link--hero svg.lucide-arrow-right { transform: rotate(-45deg); }
 .source-round-link--hero:hover { border-color: #caa05c; color: #fff; background: #caa05c; transform: none; }
@@ -543,7 +542,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-news-row:hover > svg { border-color: #caa05c; transform: translateX(3px); }
 .franchise-news__more { display: flex; justify-content: center; margin-top: 50px; }
 .source-round-link--news { min-height: 60px; gap: 8px; padding: 9px 9px 9px 30px; border-color: rgb(159 159 164 / 64%); color: #1c1c1d; background: #fff; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
-.source-round-link--news::after { right: 9px; width: 40px; height: 40px; color: #caa05c; }
 .source-round-link--news svg { box-sizing: border-box; width: 40px; height: 40px; flex: none; padding: 10px; border-radius: 50%; color: #fff; background: #caa05c; }
 .source-round-link--news svg.lucide-arrow-right { transform: rotate(-45deg); }
 .source-round-link--news:hover { border-color: #caa05c; color: #fff; background: #caa05c; transform: none; }
@@ -554,10 +552,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   to { transform: translateX(-50%); }
 }
 
-@keyframes franchise-radar {
-  0% { opacity: .45; transform: scale(.62); }
-  75%, 100% { opacity: 0; transform: scale(1.45); }
-}
 
 @media (max-width: 1200px) {
   .franchise-hero__grid { align-items: start; }
@@ -696,7 +690,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 @media (prefers-reduced-motion: reduce) {
   .franchise-marquee__track,
-  .source-round-link::after,
   .franchise-support-panel__cta { animation: none; }
   .franchise-marquee { overflow-x: auto; scrollbar-width: none; }
   .franchise-marquee__track > :deep(.franchise-image:nth-child(2)) { display: none; }

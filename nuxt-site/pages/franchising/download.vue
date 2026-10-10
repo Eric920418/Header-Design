@@ -269,15 +269,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .download-back-cta:hover,
 .download-back-cta:focus-visible { color: #fff; border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
 .download-back-cta__icon { position: relative; display: inline-flex; width: 40px; height: 40px; flex: 0 0 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: color .3s ease, background-color .3s ease, transform .5s ease; }
-.download-back-cta__icon::after { position: absolute; width: 100%; height: 100%; border: 1px solid #caa05c; border-radius: 50%; content: ''; animation: download-back-radar 2s infinite; }
 .download-back-cta__icon svg { width: 20px; height: 20px; }
 .download-back-cta:hover .download-back-cta__icon,
 .download-back-cta:focus-visible .download-back-cta__icon { color: #caa05c; background: #fff; transform: rotate(0); }
 
-@keyframes download-back-radar {
-  0% { opacity: .8; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.6); }
-}
 
 @media (max-width: 1023px) {
   .download-hero__inner,

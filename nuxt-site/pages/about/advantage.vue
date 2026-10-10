@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-about-advantage', {"copy":{"text1":"Creating the Ideal Kitchen for Every Family","text2":"打造符合每個家庭的理想廚房","text3":"源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-about-advantage', {"copy":{"text1":"Creating Ideal Kitchens for Every Family","text2":"打造符合每個家庭的理想廚房","text3":"源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+// shortcut: 僅校正既有舊標題，後台發布新文案後可移除此相容分支。
+const familyTitle = cmsCopy.copy.text1 === 'Creating the Ideal Kitchen for Every Family' ? 'Creating Ideal Kitchens for Every Family' : cmsCopy.copy.text1
 
 import { brandAdvantageFaqGroups as cmsSeed_brandAdvantageFaqGroups } from '~/data/brandAdvantage'
 const { brandAdvantageFaqGroups } = await useCmsResource('data-brandAdvantage', { brandAdvantageFaqGroups: cmsSeed_brandAdvantageFaqGroups })
@@ -23,7 +25,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section class="brand-family-section" aria-labelledby="brand-family-title">
       <div class="brand-family-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-family-heading ev">
-          <h2 id="brand-family-title">{{ cmsCopy.copy.text1 }}</h2>
+          <h2 id="brand-family-title">{{ familyTitle }}</h2>
           <h3>{{ cmsCopy.copy.text2 }}</h3>
           <p>{{ cmsCopy.copy.text3 }}</p>
         </header>
@@ -45,7 +47,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .brand-advantage-page :deep(.brand-store-section) { background: #fff; }
 .brand-family-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-family-heading { margin-bottom: 50px; }
-.brand-family-heading h2 { scroll-margin-top: 100px; margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: capitalize; }
+.brand-family-heading h2 { scroll-margin-top: 100px; margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 44px; text-transform: none; }
 .brand-family-heading h3 { margin: 24px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .brand-family-heading p { width: min(1050px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-advantage-faq { background: #fafafa; }
