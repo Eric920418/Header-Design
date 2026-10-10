@@ -1,5 +1,23 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-10 首頁門市卡片選取色
+
+- 依 21:35 截圖「選定門市後才變金色底」，將正常卡面與三種翻牌過場的金底條件改為已手動選取且 ID 相符，不再用地圖預設門市作為已選取狀態；未點選、自动翻牌或剛切換區域／城市時四卡都維持白底。沿用現有 `focused`／`selected` 狀態，點選後仍鎖定該卡、更新地圖，其他卡繼續翻牌，新增 `aria-pressed` 同步選取狀態。
+- 保留字型、尺寸、篩選、翻牌間隔與地圖，不修改 CMS／資料庫、不新增套件、不部署；回歸腳本補上四個卡面守衛及選取 ARIA 檢查。驗證結果待補。
+
+## 2026-10-10 首頁集團品牌跑馬燈 Logo 放大
+
+- 依 21:33 截圖標註，首頁廚房產品下方跑馬燈的 SAKURA KITCHEN 長條 Logo 由 170px 放大至 266px（約 1.56 倍），保留 SVG 原比例、置中及每格 310×50px；該格左右內距由 70px 改為 22px，其他三品牌大小與位置不變。五組循環都套用，不修改 Header Logo、原連結 `/home-style/aikitchen`、跑馬燈速度或 Hover 行為。
+- 只修改 `LogoMarquee.vue` 與本 README，不新增素材或套件、不修改 CMS／資料庫、未部署。`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`git diff --check` 通過。1280×900 桌機及 390×844 手機均實測五張重複 Logo 為 266×21.03px、圖片載入正常，其他 Logo 維持 170px 寬，每格 310px 不變、沒有相鄰重疊或水平溢出。輪播仍為 12.8s linear infinite，兩次手機觀察位移持續變化、play-state 為 running；本次未新增暫停條件。鍵盤 Enter 實際抵達 `/home-style/aikitchen`、scrollY=0，本輪瀏覽器 error 為空；未執行正式環境、後台或其他瀏覽器驗收。
+- 截圖 QA：來源「截圖 2026-10-10 晚上9.33.35.png」（1646×854，含縮放截圖及註記）与 `/tmp/sakura-marquee-logo-ctJjsS/desktop.jpg`（1280×900／1×）放入同一比較輸入，聚焦底部品牌列，另檢查 `mobile.jpg`、`mobile-final.jpg`（390×844／1×）。保留原 SVG 字形／色彩／比例與品牌名稱，不換字型、拉伸、重畫或更動卡片；維持垂直中心、原格距及白色 Logo，放大後長條 Logo 的視覺份量與左右品牌接近。來源沒有指定等高像素，因此以視覺份量校正而非強制四品牌同高；不將跑馬燈正常進出邊界誤判為圖片裁切錯誤。此 Logo 範圍無 P0／P1／P2，final result: passed；QA 僅維護本 README，測試尺寸已還原，預覽保持啟動。
+
+## 2026-10-10 主導覽型錄 CTA（PPT 第 1 頁）
+
+- 依 10 月 8 日版面調整簡報第一頁，主導覽「廚房商品型錄」維持灰框深字橢圓，預設箭頭朝右上；Hover／鍵盤 focus-visible 轉為 `#CAA05C` 金底白字、箭頭轉向右方，轉場 300ms。減少動態偏好停用轉場，保留原 52px 高度、尺寸、選單排版與 `/catalogues/catalog` 連結。
+- 只調整 `SiteHeader.vue` 與本 README，沿用既有圖示與樣式，不新增套件、不更改其他 CTA、CMS 或資料庫，未部署。`pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、`git diff --check` 通過。
+- 本機瀏覽器 1280×900 實測：按鈕 200×52px、手指游標，預設透明背景／灰框 `rgb(193,193,196)`／深字、箭頭 -45deg；實際 Hover 為 `rgb(202,160,92)` 金底白字、箭頭 0deg。鍵盤 focus-visible 同款且保留 2px 金色焦點框，Enter 到 `/catalogues/catalog`、scrollY=0。390×844 手機原選單與型錄連結正常、點擊後關閉選單，無水平溢出。本輪瀏覽器 error 為空；未測其他瀏覽器、未執行正式環境或後台資料驗收。
+- 截圖 QA：來源「截圖 2026-10-10 晚上8.52.14.png」（1938×838，含縮放頁面與註記）與 `/tmp/sakura-header-cta-FSuIfl/default-final.jpg`、`hover-final.jpg`（1280×550，1280×900 CSS 視窗局部／1×）及 `mobile.jpg`（390×844／1×）置於同一比較輸入。只核對主導覽 CTA，不複製紅框、註記或還原其他舊版內容；字型與 14px 字級、原 52px 高度／間距／圓角、指定色碼、三品牌真實圖像與「廚房商品型錄」文案維持一致，預設與 Hover 箭頭方向符合示意，無 P0／P1／P2，final result: passed。初次截圖位於選單進場轉場、右鍵文字選取階段，已在穩定狀態重新截圖；QA 僅記錄本 README、不建立其他文件，預覽保持啟動，測試尺寸已還原。
+
 ## 2026-10-03 正式 CMS 再次唯讀檢查
 
 - 14:30 左右（台灣時間）重新核對 `sakura-demo-vanlantech.com` 與 `header-design-two.vercel.app`，皆指向同一 Production 部署 `dpl_FXy7UHoxsb36ZcBcMWuotj4ha6FE`，READY、建立於 2026-10-03 14:22:43。正式 `/news/activities` SSR 200，含本次新增 `news-category-nav` 與原優惠活動分頁。不能沿用前一輪「本機未部署」或 10 月 2 日舊部署 ID 判斷目前狀態；本輪未部署、未同步或改環境設定。Vercel connector 的 projectId／idOrName 驗證規則衝突，改用既有已登入 CLI 唯讀 inspect／logs，不移除任何存取保護。

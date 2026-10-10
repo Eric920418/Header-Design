@@ -55,6 +55,8 @@ for(const file of ['../components/home/HomeServices.vue','../components/SiteFoot
 const board=await readFile(new URL('../components/home/HomeStoreLocation.vue',import.meta.url),'utf8')
 assert(board.includes('const keepSelected = focused.value\n'),'篩選不得鎖定門市')
 assert(board.includes('focused.value = false'),'切換篩選應取消鎖定')
+assert.equal((board.match(/:active="focused && (?:store\.id|previousStoreFor\(index\)\?\.id) === selected"/g)||[]).length,4,'正常及翻牌卡面僅能在手動選定門市後顯示金底')
+assert(board.includes(':aria-pressed="focused && store.id === selected"'),'門市按鈕需同步回報真正的選取狀態')
 const benefits=await readFile(new URL('../components/internal/BrandBenefits.vue',import.meta.url),'utf8')
 assert(!benefits.includes('is-scroll-story')&&!benefits.includes("addEventListener('scroll'"),'品牌特色不得依賴滾動進度')
 assert(benefits.includes('12s ease-in-out infinite'),'品牌特色必須循環自動播放')

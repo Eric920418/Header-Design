@@ -156,7 +156,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                         </div>
                       </template>
                     </div>
-                    <NuxtLink :to="cmsCopy.copy.field1" class="site-header__catalogue-cta mt-8 inline-flex h-[52px] min-w-[200px] items-center justify-center gap-2 rounded-full border border-[#C1C1C4] px-7 text-sm text-[#1C1C1D] transition-colors hover:border-[#C4A574] hover:bg-[#C4A574] hover:text-white focus-visible:border-[#C4A574] focus-visible:bg-[#C4A574] focus-visible:text-white">{{ cmsCopy.copy.text2 }}<ArrowRight class="h-4 w-4" />
+                    <NuxtLink :to="cmsCopy.copy.field1" class="site-header__catalogue-cta group/catalogue mt-8 inline-flex h-[52px] min-w-[200px] items-center justify-center gap-2 rounded-full border border-[#C1C1C4] px-7 text-sm text-[#1C1C1D] transition-colors duration-300 motion-reduce:transition-none hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white focus-visible:border-[#CAA05C] focus-visible:bg-[#CAA05C] focus-visible:text-white">{{ cmsCopy.copy.text2 }}<ArrowRight aria-hidden="true" class="h-4 w-4 -rotate-45 transition-transform duration-300 motion-reduce:transition-none group-hover/catalogue:rotate-0 group-focus-visible/catalogue:rotate-0" />
                     </NuxtLink>
                   </div>
                 </div>

@@ -139,13 +139,14 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 :key="index"
                 type="button"
                 :aria-label="`查看${store.name}：${store.address}`"
+                :aria-pressed="focused && store.id === selected"
                 class="store-board-entry store-board-slot relative h-[122px] w-full cursor-pointer rounded-2xl text-left outline-none sm:h-[100px] lg:h-[118px] xl:h-[100px]"
                 :style="{ animationDelay: `${index * 100}ms` }"
                 @click="selected = store.id; focused = true"
               >
                 <HomeStoreBoardFace
                   :store="store"
-                  :active="store.id === visible.id"
+                  :active="focused && store.id === selected"
                   class="store-board-base transition-colors"
                   :class="previousStoreFor(index) ? 'store-board-base--flipping' : ''"
                 />
@@ -153,21 +154,21 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                   <div class="store-board-half store-board-half--old-bottom" aria-hidden="true">
                     <HomeStoreBoardFace
                       :store="previousStoreFor(index)!"
-                      :active="previousStoreFor(index)?.id === visible.id"
+                      :active="focused && previousStoreFor(index)?.id === selected"
                       class="store-board-half-surface store-board-half-surface--bottom"
                     />
                   </div>
                   <div class="store-board-half store-board-half--old-top" aria-hidden="true">
                     <HomeStoreBoardFace
                       :store="previousStoreFor(index)!"
-                      :active="previousStoreFor(index)?.id === visible.id"
+                      :active="focused && previousStoreFor(index)?.id === selected"
                       class="store-board-half-surface store-board-half-surface--top"
                     />
                   </div>
                   <div class="store-board-half store-board-half--new-bottom" aria-hidden="true">
                     <HomeStoreBoardFace
                       :store="store"
-                      :active="store.id === visible.id"
+                      :active="focused && store.id === selected"
                       class="store-board-half-surface store-board-half-surface--bottom"
                     />
                   </div>
