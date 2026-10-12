@@ -1,11 +1,92 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-11 建商型錄說明行距
+
+- 依12:34:16截圖，只調整 `/builders/catalogues` 底部用途說明：原16px字級／18px行高增加為1.75倍（28px），手機移除舊22px覆寫並沿用相同行高；保留原字族／字重／置中、兩段文案與平衡換行、桌機56px／手機40px頂距。增加的是文字行距，不是型錄卡片或整個區塊間距；不改型錄素材、預覽／下載入口、CMS／資料庫或前台錯誤顯示。手機QA發現原右側浮標遮住此段文字（P2），僅在此段手機樣式沿用本頁卡片文字的72px右側安全距離，不改浮標或其他區塊。
+- 使用image-to-code與ponytail做局部修正，重用現有CSS、圖片與回歸腳本，不新增套件／素材／文件，只維護本README。回歸補上16px／1.75倍行高、兩段分行、手機繼承與浮標避讓斷言；修正後 `pnpm --dir nuxt-site build`、建置後 `pnpm --dir nuxt-site typecheck`、限定建商型錄SSR／完整警語／原預覽及下載入口／響應式行高回歸、腳本語法與 `git diff --check` 通過。原PDF唯讀請求回傳200及%PDF-檔頭，保留既有Tailwind sourcemap警告。
+- IAB實測1190×634桌機、900×900平板、390×844手機：字級皆16px、行高28px；桌機／平板兩行共56px，手機兩段各換成兩行、共112px，頂距仍56px／40px，水平溢出均0。手機段落右緣303px、浮標左緣318px，文字已有15px安全空間，不被服務列蓋住；原圖片載入成功、預覽／下載URL及檔名保留、瀏覽器error為空。測試viewport已還原並保留本機型錄預覽，不填寫／送出表單，不操作CMS／資料庫或部署。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_5afLDG/截圖 2026-10-11 中午12.34.16.png`（1986×836註記畫布、1190×634內嵌頁面）與 `/tmp/sakura-builders-notice-Dz5CE6/desktop.png`（1190×634 CSS／1×、型錄頁底部一般狀態）、`tablet.png`、`mobile-before-safety.png`、`mobile.png`於同一比較輸入。聚焦兩段用途說明，來源為調整前，不重現舊18px行高或將紅框加入UI；桌機最終兩行上緣475.79／503.79px，清楚相隔28px。五項檢查：原中文字族／16px／400字重保留，行高增加而非放大文字；原卡片版心、頂距、圓角及區塊padding保留，只修文字行距與手機浮標安全區；原灰字#59585d／浅底／品牌金配色保留；同一型錄封面、裁切與背景品质不變；兩段全文、型錄標題與描述、預覽／下載入口完整保留。首次手機QA（`mobile-before-safety.png`）發現浮標遮字P2，局部增加72px避讓後再擷取`mobile.png`，全文清楚可讀且右緣位於浮標左側。全景足以辨識文字與上下文，不需另裁切；本次範圍無剩餘P0／P1／P2，final result: passed。未重跑全站回歸、正式端／其他瀏覽器／真實手機或完整PDF閱讀器下載互動。
+
+## 2026-10-11 建商品牌館切換按鈕尺寸
+
+- 依12:34:06截圖，只調整 `/builders#appointment` 的台北／台中／高雄橢圓切換按鈕：三斷點統一高42px、字級15px，保留20px行高、原等寬三欄／間距／999px圓角與金色選取樣式。移除手機原38px／13px覆寫，手機仍沿用10px左右內距。不改文案、品牌館資料／照片、表單、原點擊／方向鍵／Home／End切換、ARIA或錯誤顯示，不操作CMS／資料庫。
+- 使用image-to-code與ponytail做局部樣式修正，重用現有按鈕／字型／素材與回歸腳本，不新增套件或文件，只維護本README。回歸補上42px／15px、手機繼承、三個原tab／單一選取與點擊／鍵盤入口斷言；`pnpm --dir nuxt-site build`、建置後 `pnpm --dir nuxt-site typecheck`、限定建商SSR／按鈕／原CTA／服務間距／圓角與圖片品質回歸、腳本語法及 `git diff --check` 通過，保留既有Tailwind sourcemap警告。
+- IAB實測1280×684桌機、900×900平板、390×844手機：三個按鈕皆高42px、字級15px、行高20px，各斷點等寬約136.63／117.66／114.66px；原12px／手機8px間距、999px圓角和金色狀態保留，水平溢出均0。桌機點台中後地址／照片同步，End切到高雄、ArrowLeft切回台中、Home回台北；手機點台中與Home回台北也正常，ARIA面板與選取狀態一致。原照片載入成功，表單保持空白未送出，瀏覽器error為空。測試viewport已還原並保留 `/builders#appointment` 本機預覽，不操作CMS／資料庫或部署。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_hW9G0Q/截圖 2026-10-11 中午12.34.06.png`（1500×744註記畫布，約992×530內嵌頁面）與 `/tmp/sakura-builders-tabs-YYizxy/desktop.png`（1280×684 CSS／1×、台北選取一般狀態）、`tablet.png`、`mobile.png`於同一比較輸入，聚焦指定切換列，以42px／15px註記為準而非重現修改前尺寸，不把紅框加入UI。五項檢查：原中文字族／字重保留，字級15px、行高20px；三欄等寬／原間距／圓角不變，僅統一高度與字級；金白灰配色和原hover／focus／選取效果保留；同一品牌館實景照片與背景、裁切比例與品質未改；三城市文案、資料、表單及原切換功能完整保留。來源與預覽尺度不同，不宣稱全頁像素一致；預覽表單標題沿用先前修改，本次不更動。全景可清楚閱讀切換列，無須另裁切；本次範圍無剩餘P0／P1／P2，final result: passed。未重跑全站回歸、正式端／其他瀏覽器／真實手機及表單送出流程。
+
+## 2026-10-11 加盟行銷輪播首尾交錯修正
+
+- 依12:03:02截圖與使用者確認，修正 `/franchising/intro` 的05→01接縫同高：奇數案例只在前端呈現兩輪，利用既有單雙CSS讓第二輪高低反轉，包含第二輪05→第一輪01都持續一上一下。CMS／seed／資料庫仍是原五筆，不改順序、圖片或文案，偶數筆不複製；沿用Embla無限輪播、左右按鈕／方向鍵／觸控、3.5秒自動切換、暫停與減少動態偏好。顯示編號維持01–05、Vue key唯一，第二輪aria-hidden避免輔助閱讀重複宣告案例。
+- 使用image-to-code與ponytail做最小局部修正，重用原圖／字體／CSS／回歸腳本，不新增套件、素材或文件，只維護本README。舊五卡固定交錯的首尾斷言先驗證預期失敗；既有回歸更新兩輪SSR／編號／無障礙／接縫，加入空／奇／偶數資料自我檢查。`pnpm --dir nuxt-site build`、建置後 `pnpm --dir nuxt-site typecheck`、限定加盟Hero／圖片／行銷輪播的SSR與接縫回歸、腳本語法及 `git diff --check` 通過，保留原Tailwind sourcemap警告。
+- IAB實測1280×900桌機：第一接縫05／01／02的上距為0／50／0px，第二接縫為50／0／50px，左緣等距約398px；900×900平板兩欄保持35px交錯，390×844手機沿用0px齊平、84vw卡寬。三斷點水平溢出均0，原五張圖片載入成功。上一張／下一張、左右方向鍵、手機尺寸下的滑鼠拖曳切換、暫停與恢復後自動切換皆生效；原3.5秒間隔與reduced-motion邏輯保留。原生AX清單只宣告五個案例，沒有重複的第二輪內容；瀏覽器error為空。測試viewport已還原、恢復自動播放並保留本機預覽；不填寫／送出表單，不操作CMS／資料庫或部署。
+- 最後再將同一來源與 `/tmp/sakura-franchise-seam-vPBxjP/desktop-second-seam.png` 置於同一比較輸入，完整確認第二輪05（y=352.91）→第一輪01（y=302.91）→02（y=352.91），首尾三張圖片／文案／控制按鈕清楚可見，原型持續運行。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_Lh6hDD/截圖 2026-10-11 中午12.03.02.png` 與 `/tmp/sakura-franchise-seam-vPBxjP/desktop.png`（1280×900 CSS／1×、05／01／02暫停狀態）於同一比較輸入，聚焦卡片區域；來源是缺陷截圖，修正目標為首尾也持續交錯，不重現其中的05／01同高。來源與預覽視口／截圖倍率不同，不宣稱全頁像素一致。五項檢查：原字族／字重／字級／行高保留；僅改前端循環顯示位置，原三欄／兩欄／手機卡寬、間距、圓角與控制器保留；金灰黑白配色保留；同一實景照片、比例與裁切品質未改；五筆文案、圖內01–05編號與順序完整保留。`tablet.png`／`mobile.png`補充響應式驗證，接縫同高P2已修正，本次範圍final result: passed。未重跑全站回歸、正式端／其他瀏覽器／真實手機觸控或表單送出流程。
+
+## 2026-10-11 建商合作 Logo 區塊移除
+
+- 依11:43:54截圖，從 `/builders` 完整移除OUR CLIENTS標題、裝飾線、兩排合作建商Logo、輔助閱讀清單與區塊背景／留白，讓含iCare的能力區直接接到原聯繫區。不僅隱藏Logo，避免留下空白或可聚焦的空輪播。同步移除本頁專用輪播複製資料、動畫／響應式／reduced-motion樣式與全域失效字型選擇器；不改其他頁或共用圖片元件。
+- 使用image-to-code做局部刪除，不新增素材、JS、套件或文件，QA僅維護本README。保留CMS／seed／data中的合作建商資料與原Logo檔案，不做資料刪除／同步／發布，前台程式可由Git還原。保留iCare圓角／比例、前輪服務間距、原#appointment入口、品牌館切換／表單及錯誤顯示。既有回歸的能力區擷取終點改為聯繫區，補上完整移除／直接相鄰／無失效樣式斷言；`pnpm --dir nuxt-site build`、建置後 `pnpm --dir nuxt-site typecheck`、限定建商SSR／圖片品質／原CTA／服務間距／圓角與刪除區塊回歸、腳本語法及 `git diff --check` 通過。API唯讀確認合作建商資料仍保留9筆。
+- IAB實測1190×634桌機與390×844手機：合作建商DOM節點0、能力區後直接相鄰聯繫區，水平溢出0；iCare圖片下緣至聯繫區頂緣沿用原能力區底距72px／40px，沒有合作建商空容器或專用留白。原#appointment能定位到聯繫區、表單欄位完整；台中tab選取狀態、地址與圖片面板正常，檢查後回復台北；不填寫／送出表單。瀏覽器error為空，測試viewport已還原，本機預覽保留，未部署。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_QVMtwg/截圖 2026-10-11 上午11.43.54.png`（1522×866註記畫布、1190×634內嵌頁面）與 `/tmp/sakura-builders-remove-clients-WIrRBD/desktop.png`（1190×634 CSS／1×、iCare至聯繫區、進場完成）、`mobile.png`（390×844）於同一比較輸入。来源為刪除前，按紅框要求確認標題、線條、兩排Logo及區塊均消失，不將註記加入UI。五項檢查：相鄰標題原字體／字級／字重及響應式換行保留；移除完整區塊並保留原iCare與聯繫版心／間距／圓角；原金黑灰白配色保留；原iCare圖片與聯繫背景品質／比例未改，沒有新增素材；除指定合作建商區外文案與表單完整保留。全景足以辨識銜接，不需另裁切，本次範圍無剩餘P0／P1／P2，final result: passed。未重跑全站回歸、平板實機、正式端／其他瀏覽器／真實手機及表單送出流程。
+
+## 2026-10-11 建商 iCare 大圖四角圓角
+
+- 依11:43:45截圖，只在 `/builders` 的iCare圖片外框加入四角圓角：桌機／平板24px、手機18px，沿用本頁Hero大圖的既有尺寸。利用BuilderImage原有overflow:hidden裁切，不修改共用圖片元件，不影響其他五張能力圖、圖片載入錯誤提示、16:9比例、原contain、reveal動畫或上一輪服務區間距；不改素材、CMS／資料庫、文案或表單。
+- 使用image-to-code與既有CSS／回歸腳本，只維護本README，不新增套件／JS／文件。新增桌機／手機圓角與原比例斷言；`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定圓角／contain／外框裁切／錯誤提示／上一輪三斷點間距回歸、腳本語法與 `git diff --check` 通過。
+- IAB實測桌機1190×900：四角皆24px、overflow:hidden，圖片1074×604.125、contain與reveal終態opacity1；390×844手機四角皆18px、圖片360×202.5。圖片均載入、水平溢出0，服務文字留白仍為桌機60／120px、手機30／60px，瀏覽器error為空。保留原底部QR Code與所有圖中文字，未另改手機字級；測試viewport已還原，本機預覽保留，不部署或送出表單。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_X50qh2/截圖 2026-10-11 上午11.43.45.png`（1518×842註記畫布、1190×634內嵌頁面）與 `/tmp/sakura-builders-radius-WhDZzf/desktop.png`（1190×634 CSS／1×、同服務／iCare銜接區、進場完成）置於同一比較輸入，另同時查看 `desktop-four-corners.png`（1190×900 CSS／1×）完整圖框四角，`mobile.png`確認手機四角。字體／字級／文案保留；此輪僅將原直角（P2）改為24px／18px，上一輪指定留白、版心、16:9及周邊版型不變；原金／黑／灰配色保留；使用同一iCare圖、比例與contain，無重製／拉伸，角落裁切不遮擋Logo或QR Code；三項服務文字與圖內文字原樣保留。全圖四角清楚可辨，不需另外裁切；本次範圍無剩餘P0／P1／P2，final result: passed。未重跑全站回歸、平板實機、正式端／其他瀏覽器／真實手機及表單送出流程。
+
+## 2026-10-11 建商服務區上下間距
+
+- 依11:43:34截圖，只調整 `/builders` 專業銷講／專屬監工／專人驗收的文字區上下留白。原本2cqw／3cqw會隨圖片版心縮小，改參考原Antra模板的區塊節奏：桌機上60／下120px、平板上40／下80px、手機上30／下60px。參考本機 `antra-full 2/antra/dummy-data/homepage/home-6.xml` 的d0bd50f／f0420ee與Home07的fdd7770：桌機120px、平板80px、手機60px；上距使用一半，區別同組圖片說明與下個iCare區塊，不把兩側padding與額外margin重複相加。
+- 沿用image-to-code與既有CSS斷點，保留三欄、所有文案／字型、圖片／比例／順序、原reveal動畫與前台錯誤提示；不新增素材、套件、JS或文件，不修改CMS／資料庫。既有回歸加入三斷點留白斷言，QA僅維護本README。`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定CSS／建商SSR回歸、腳本語法及 `git diff --check` 通過；六張圖、三項服務文字與前一輪專人聯繫／原預約入口保留。
+- IAB實測1190×634桌機上60／下120px、768×900平板上40／下80px、390×844手機上30／下60px，皆量測圖片邊緣至服務文字行盒；圖片載入成功、reveal終態opacity1、水平溢出0，瀏覽器error為空。保留手機原三欄字級，此輪未另外放大文字。測試viewport已還原，本機預覽保留；不送出表單，未部署。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_RRcyny/截圖 2026-10-11 上午11.43.34.png`（1724×854註記畫布、1190×634內嵌頁面）與 `/tmp/sakura-builders-spacing-EmqhdG/desktop.png`（1190×634 CSS／1×，同服務與iCare銜接區、進場完成）於同一比較輸入。以內嵌頁面對齊，不將紅線與右側註記加入UI；來源為調整前，新的間距以原Antra XML尺寸為準。五項檢查：原中文字族／字重／字級與兩行說明保留；只修改服務文字區上下留白，不改版心／三欄／圖框或其他區塊；原金灰底／黑字配色保留；同一專屬服務與iCare實景圖片，無重製、拉伸或裁切改動；三項服務文案完整不變。原留白隨版心縮成約21／32px（P2）已調整為60／120px，`tablet.png`／`mobile.png`確認響應式留白與完整內容。桌機文字細節清楚可讀，無需另裁切，本次範圍無剩餘P0／P1／P2，final result: passed。未重跑全站回歸、正式端／其他瀏覽器／真實手機及表單送出流程。
+
+## 2026-10-11 建商頁首專人聯繫
+
+- 依11:43:12截圖，將 `/builders` 頁首CTA舊文案「立即預約」顯示為「專人聯繫」。沿用品牌優勢英文標題修正的既有前台相容方式，只轉換CMS中完全相同的舊值，其他自訂文案不變；不覆寫CMS／資料庫。保留原 `#appointment` 入口、金色圓形箭頭動畫、按鈕尺寸、字型、Hero版型及圖片；旁邊大字、紅框與標線視為註記，不加入UI。
+- 使用image-to-code做局部調整，不生成素材、加套件或新增文件，QA僅維護本README。更新既有SSR文案回歸，補上舊值／新值／自訂值相容自我檢查及原錨點保留；`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定回歸、腳本語法及 `git diff --check` 通過，保留既有Tailwind sourcemap警告。SSR已顯示專人聯繫，API唯讀確認CMS的text5仍為立即預約；不執行內容同步或資料發布。
+- IAB實測1280×684與390×844：按鈕均顯示專人聯繫、149×60px，`href=#appointment`不變，無水平溢出。桌面點擊後URL為 `/builders#appointment`，區塊頂緣60.008px、opacity=1且表單已出現；不填入或送出表單。瀏覽器error為空。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_P4yVoY/截圖 2026-10-11 上午11.43.12.png`（1224×860註記畫布，1190×634內嵌頁面）與 `/tmp/sakura-builders-contact-9uV0Ls/desktop.png`（1280×684 CSS／1×、頁首進場完成）置於同一比較輸入，按內嵌比例對照相同頁首，聚焦專人聯繫註記，不把旁邊立即預約大字加入UI。五項檢查：原字族／字級／字重與標題換行保留；Hero比例、CTA外框／尺寸／位置與圓角保留；金白灰配色與箭頭效果保留；原實景圖片、裁切／品質與背景保留；只變更指定CTA文案，其餘標題與內容不動。按鈕文字在全景可清楚閱讀，無需另做裁切；`mobile.png`確認單行按鈕與原手機版型。舊CTA文案P2已修正，本次範圍無剩餘P0／P1／P2，final result: passed。未重跑全站回歸、正式端／其他瀏覽器／真實手機及表單送出流程，未部署。
+
+## 2026-10-11 我要加盟行銷圖卡交錯
+
+- 依11:43:01截圖，只調整 `/franchising/intro` 名人行銷輪播圖卡：桌面原 `3n + 2` 導致第3／4張同高、第5張下移，改用偶數卡下移50px，1／3／5在上、2／4在下；刪除失效的平板三張分組重置，保留平板35px偏移、手機單卡0偏移。整張圖片與內容一起交錯，不改五筆資料、順序、圖片、文案、圓角、寬度、控制按鈕、循環與3.5秒節奏，不修改CMS／資料庫。
+- image-to-code沿用現有實景素材與CSS，不生成圖片、加套件或新增文件；QA僅維護本README。既有回歸加入桌面單雙交錯、移除三張分組、平板35px與手機齊平斷言；`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定回歸、腳本語法及 `git diff --check` 通過，保留既有Tailwind sourcemap警告。未重跑全站資料／表單回歸、未部署或寫入資料庫。
+- IAB實測1280×684：五張margin-top為0／50／0／50／0px，截圖同樣對齊03／04／05，top為127.406／177.406／127.406px；下一張與暫停控制正常。900×684維持0／35／0／35／0px；390×844五張均0px、寬327.594px，單卡與下一張部分可見維持原版型。五張原圖載入成功、無水平溢出、瀏覽器error為空。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_37rvUY/截圖 2026-10-11 上午11.43.01.png`（1730×838註記畫布、1190×634內嵌頁面）與 `/tmp/sakura-franchise-stagger-oKcBBr/desktop.png`（1280×684 CSS／1×、03／04／05暫停狀態）置於同一比較輸入，按內嵌比例聚焦圖卡交錯，垂直差異來自捲動位置。五項檢查：字族／字級／行高與換行保留；桌面50px高低節奏修正、原寬度／間距／圓角與操作按鈕保留；金灰白配色保留；原圖主體／比例／裁切與品質保留；五筆藝人與標題文案保留，不把註記加入UI。全景可清楚辨識所需交錯，不另做裁切；`mobile-natural.png`為手機完整區塊證據，較早 `mobile.png` 是捲動到控制按鈕後的部分截圖，不用作完整版型驗收。03／04同高及05下移P2已修正，本次01至05固定卡序範圍無剩餘P0／P1／P2，final result: passed。
+- 當時已知範圍限制：五筆為奇數，只用五個固定CSS位置會讓05與01同高；此限制已在上方「加盟行銷輪播首尾交錯修正」改為前端兩輪交錯處理，不修改原輪播／CMS資料。當輪未驗證正式端、其他瀏覽器或真實手機。
+
+## 2026-10-11 我要加盟門市大圖動態
+
+- 依11:42:42截圖，在 `/franchising/intro` 門市大圖保留原opalMoveUp進場及260ms延遲，再沿用首頁既有 `hero-kenburns`：等待1.51秒後，5秒緩慢由1.06倍放大至1.16倍並往左移4%，完成後停在終態，不新增無限循環。以原is-visible觸發，未進入畫面不啟動；減少動態偏好保持原圖靜止。原圖片／替代文字／載入失敗完整提示、object-position、圓角、圖片框尺寸、版型、標題與CTA不變，不修改資料庫。
+- 使用image-to-code，沿用原keyframes／reveal，不加JS計時器、套件、路由、圖片或文件；QA只維護本README。既有回歸補上原進場、260ms＋1.25秒先後順序、首頁同款動態與減少動態斷言；`pnpm --dir nuxt-site build`、建置完成後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定回歸、腳本語法及 `git diff --check` 通過。保留既有Tailwind sourcemap警告；未重跑全站資料／表單回歸，未送出表單或部署。
+- IAB實測：631ms時外框仍進場、圖片維持1.06倍；1642ms時外框已完整顯示、圖片才開始縮放；3161ms為1.106倍，6679ms達1.16倍／左移4%，後續8484ms與18994ms仍停在同一終態。390×844時圖片框360×280／18px圓角、原圖載入成功、無水平溢出；瀏覽器error為空。減少動態以CSS／回歸斷言驗證，未切換作業系統偏好。
+- image-to-code／design-qa：11:42:42來源截圖（1786×840註記畫布，內嵌頁面1190×634）與 `/tmp/sakura-franchise-photo-GweUmm/desktop.png`（1280×684 CSS／1×，動畫終態）置於同一比較輸入，按內嵌比例對照同一門市大圖；垂直位置差異來自捲動位置。五項檢查：版型／外框尺寸與圓角保留；字體及CTA未改；真實圖片、原裁切基準與品質保留，放大／平移造成邊緣內容被裁切是首頁同款動畫的預期效果；右側操作按鈕與原間距保留；原配色及文案保留，不把紅框／箭頭／說明加入UI。`mobile.png`確認手機無跑版，原缺少後續動態P2已修正，本次範圍無剩餘P0／P1／P2，final result: passed。未驗證正式端、其他瀏覽器或真實手機，不修改CMS／資料庫。
+
+## 2026-10-11 我要加盟 Hero 標題字體
+
+- 依11:42:23截圖，只調整 `/franchising/intro` 頁首兩行標題：由明體38px／400改成右側建商Hero的黑體 `--font-cjk-sans`、700字重、`clamp(32px, 4.4vw, 76px)` 字級及1.6行高；手機沿用建商 `clamp(24px, 7.3vw, 32px)`／1.5行高。保留加盟文案、第一行白色／第二行金色、原間距、背景實景、進場動畫、說明與兩個新分頁CTA，不修改建商頁或CMS／資料庫。
+- 使用image-to-code，沿用現有字體與素材，不新增套件／路由／文件，QA僅維護本README。既有前台回歸補上兩頁標題字族／字級／字重／行高／字距一致與手機縮放斷言；`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次限定回歸、腳本語法及 `git diff --check` 通過，保留既有Tailwind sourcemap警告。此次未重跑全站資料／表單回歸，不送出表單或部署。
+- IAB已恢復可用，1280×684實測兩頁標題同為Noto Sans TC、56.32px／700、90.112px行高。1512／1024／768px分別為66.528／45.056／33.792px；390×844為28.47px／42.705px行高、320px為24px／36px，均維持兩行、無水平溢出且不壓到說明／CTA／下方圖片。兩入口維持 `/franchising/form`、`/franchising/download`、target=_blank及rel=noopener；IAB點申請未回報新頁籤，因此僅確認可點與既有連結屬性，未宣稱另開分頁目的頁驗收。瀏覽器error為空、尺寸已還原、本機預覽保留。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_brJTyZ/截圖 2026-10-11 上午11.42.23.png`（2002×722註記畫布、860×459內嵌頁面）與 `/tmp/sakura-franchise-type-msI42c/desktop.png`、`builders-reference.png`（1280×684 CSS／1×）置於同一比較輸入，按內嵌比例聚焦右側字體／大小要求，不把紅框與箭頭加入UI。字族／字級／字重／行高與右側基準一致，版型／背景圖片品質與裁切、CTA、原金白配色與加盟文案保留；放大後標題在原grid內自然重新對齐，不另更改Hero間距。標題可清楚閱讀，無需額外裁切。`mobile-stable.png`（390×844／1×）確認手機閱讀完整；快速縮放時的首張 `mobile.png` 是截圖尚未穩定，不作驗收證據。原明體與字級偏小P2已修正，本次範圍無剩餘P0／P1／P2，final result: passed。未檢查正式端、其他瀏覽器或真實手機，不修改資料庫。
+
+## 2026-10-11 品牌紀事首尾淡出淡入
+
+- 依01:02:25截圖，調整 `/about/introduce` 品牌紀事：原末端 `scrollTo(0, false)` 會倒滑跨越整段年份，改採指定方案一「450ms淡出 → 隱藏時立即回到1978 → 450ms淡入 → 繼續輪播」。向前到末端與向後越過首張使用同一轉場，正常相鄰年份滑動與3.5秒自動節奏不變；既有圖片、年份順序、文案、字型、金色、尺寸及桌機／手機版型保留。
+- 轉場中以aria-disabled回報兩顆按鈕暫不可操作，保留鍵盤焦點與原暫停狀態；共用操作函式阻擋點擊／鍵盤／自動輪播連續呼叫，並暫停拖曳，淡入結束恢復操作。使用viewport本身的transitionend事件完成復位／解鎖，不依賴猜測延遲或新增計時器；子元素事件不觸發復位。保留鍵盤焦點暫停、滑鼠Hover不中止規則；減少動態偏好不自動輪播、手動切換／復位均立即完成，單筆及無API不空轉；偏好／API改變解除轉場狀態。不修改CMS／資料庫。
+- 使用image-to-code，沿用現有Embla／元件與真實品牌素材，不生成圖片、不新增套件／路由／文件；QA依專案規則只維護本README。既有回歸補上淡出前不復位、隱藏時立即復位、淡入完成再解鎖、連點防護、正常續播、反向回末端、減少動態、單筆／無API及原生事件完成轉場斷言。最終 `pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、完整 `check-frontend-regressions.mjs`、本次限定斷言、腳本語法及 `git diff --check` 全部通過。建置保留既有Tailwind sourcemap警告。
+- Chrome實測1512×773與390×844：末端回1978時，桌機約445ms／手機約451ms opacity=0且已隱藏復位，約904ms／909ms恢復opacity=1、aria-busy=false；沒有整段年份倒滑，轉場期間重複方向鍵不會重啟或超前。反向回末端同樣正常，鍵盤焦點保留且仍暫停自動輪播；滑鼠操作後約3532ms繼續前進一張。原圖片載入成功、無水平溢出，瀏覽器error為空；手機沿用原單卡與下一卡部分可見版型。減少動態以CSS／執行斷言驗證，未切換作業系統偏好。測試viewport已還原、3100預覽保留；未部署、未改CMS／資料庫。
+- image-to-code／design-qa：本次01:02:25來源截圖與 `/tmp/sakura-history-reset-jDuU9Z/desktop-matched.png`（1280×682 CSS／1×，1978／1992／1994／1997及上一則按鈕焦點）於同一比較輸入，按來源1190×634內嵌頁面比例核對；垂直位置差異是截圖捲動位置，非本次版型變更。字體／字級／字重、四欄及間距、130px原圖／裁切／24px圓角、48px箭頭、年份文案與金色均保留；不把紅框／說明加入UI。`fade-out.png`、`fade-in.png`與取樣記錄證明動畫，`mobile.png`確認手機可讀。原回捲過快P2已修正，本次範圍無剩餘P0／P1／P2，final result: passed；未驗證正式端及其他瀏覽器／真實手機。
+
 ## 2026-10-11 品牌館預約跳轉空白修正
 
 - 依01:02:12截圖，使用investigate重現 `/about/exhibition` 的「立即預約」跳到 `/builders#appointment`：定位與資料正常，但14秒後預約標題／館別／表單仍被reveal的visibility:hidden隱藏，捲動也未恢復；直接重新載入目標URL則正常。暫加僅輸出靜態CSS／observer狀態的本機診斷，確認站內跳轉的進場生命週期，不記錄表單個資、不提交或修改CMS／資料庫。
 - 診斷確認觀察器在page:finish取得跳轉前的4812／4998px位置並回報不相交；異常跳轉完成後三區實際已在180／366px，卻一直隱藏，另一次相同流程才補收到相交通知。修正共用錨點定位：沿用等待頁面完成與兩次rAF，定位前只標記目標本身及其reveal子元素，CSS立即顯示並跳過進場動畫，不再以觀察器通知作為表單可用前提；一般捲動進場、其他未定位區塊、Lenis、影片、表單驗證／完整錯誤與CMS資料保留。暫時診斷已移除。共用前台回歸補上實際執行標記／失效錨點／即時可見／一般動畫保留斷言。
 - 驗證：`pnpm --dir nuxt-site build`、建置後順序執行 `pnpm --dir nuxt-site typecheck`、本次錨點限定回歸、腳本語法與 `git diff --check` 通過；同一標記斷言在HEAD舊版失敗、修正版通過（RED／GREEN），失效錨點不拋錯。建置保留既有Tailwind sourcemap警告。完整前台回歸兩次均在第一個商品SSR頁 `/products/sakura` 等待45秒逾時，並非新錨點斷言失敗；獨立建置預覽回歸則因本機SQL Server自簽憑證連線失敗在同頁回傳503，未關閉憑證驗證或更動資料庫設定，不能據此宣稱完整回歸通過。獨立3101測試伺服器已停止，原3100開發伺服器保留。
-- investigate驗收狀態：BLOCKED（修正已寫入、實際畫面驗收未完成）。修正後原預覽與新測試頁籤皆出現瀏覽器CDP控制逾時，連新頁籤導覽／觀察也無法完成，產品面板開啟請求亦回報queued；因此沒有修正後桌機／手機截圖，不能宣稱已完成實機跳轉驗收。修正前證據在 `/tmp/sakura-booking-jump-ySHlLC/before.jpg`。僅改router／CSS／既有測試與本README，不新增套件／文件；未部署、未送出有效表單、未修改CMS／資料庫。恢復預覽後須重測品牌館立即預約、同頁預約錨點、直接載入及手機呈現。
+- 初次investigate驗收狀態：BLOCKED（當時修正已寫入、實際畫面驗收未完成）。修正後原預覽與新測試頁籤皆出現瀏覽器CDP控制逾時，連新頁籤導覽／觀察也無法完成，產品面板開啟請求亦回報queued；當時沒有修正後桌機／手機截圖，不能宣稱已完成實機跳轉驗收。修正前證據在 `/tmp/sakura-booking-jump-ySHlLC/before.jpg`。僅改router／CSS／既有測試與本README，不新增套件／文件；未部署、未送出有效表單、未修改CMS／資料庫。
+- 01:02:25品牌紀事調整時補驗：重新啟動原本機3100開發伺服器後完整前台回歸全部通過；IAB仍無法控制，改用Chrome恢復畫面驗收。品牌館「立即預約」跨頁跳到 `/builders#appointment`，桌機約262ms／390×844手機約456ms表單即可見，錨點top約60px；預約標題、館別、表單三區皆data-reveal-direct且visibility=visible、animation=none。建商頁Hero同頁「立即預約」及手機直接重新載入目標URL同樣正常，無水平溢出、瀏覽器error為空，沒有提交表單。修正後證據在 `/tmp/sakura-history-reset-jDuU9Z/booking-jump.png`、`booking-mobile.png`；原畫面驗收阻塞已解除，final result: passed。此次僅補本README紀錄，未再改錨點實作、未部署或變更資料庫／憑證設定。
 
 ## 2026-10-11 品牌館 Hero 中文小標與249px定位
 

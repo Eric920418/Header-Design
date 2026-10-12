@@ -155,7 +155,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .builder-catalogue-projects__rail.internal-rail-safe { padding-inline: 43px; }
 
-.builder-catalogue-notice { margin: 56px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 400; line-height: 18px; text-align: center; }
+.builder-catalogue-notice { margin: 56px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 400; line-height: 1.75; text-align: center; }
 .builder-catalogue-notice span { display: block; text-wrap: balance; }
 
 .builder-catalogue-grid {
@@ -290,7 +290,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builder-catalogue-hero h1 { margin-bottom: 25px; font-size: 48px; line-height: 52px; }
   .builder-catalogue-hero__trail { flex-wrap: wrap; }
   .builder-catalogue-projects { padding: 60px 15px 36px; }
-  .builder-catalogue-notice { margin-top: 40px; line-height: 22px; }
+  .builder-catalogue-notice { margin-top: 40px; padding-right: 72px; }
   .builder-catalogue-projects__rail.internal-rail-safe { padding-inline: 0; }
   .builder-catalogue-grid { grid-template-columns: 1fr; gap: 42px; }
   .builder-catalogue-card__action { right: 78px; bottom: 18px; gap: 9px; opacity: 1; visibility: visible; transform: none; }

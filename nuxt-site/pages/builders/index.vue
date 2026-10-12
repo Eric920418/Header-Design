@@ -2,10 +2,11 @@
 const cmsCopy = await useCmsResource('view-pages-builders-index', {"strengths":[{"value":["45","萬"],"lines":["設計模組","累積\n超過","多元選擇"],"background":"/section-6/builders/proposal-20261002/design-modules.webp"},{"value":["AI","智能"],"lines":["廚衛工廠","全台\n最大","供貨穩定"],"background":"/section-6/builders/proposal-20261002/ai-factory.webp"},{"value":["管理","平台"],"lines":["案件進度","獨家\n智能","精準掌握"],"background":"/section-6/builders/proposal-20261002/project-platform.webp"}],"services":[{"eyebrow":"ONE-STOP","label":"一站式服務","title":"專業銷講","copy":["舉辦住戶裝修講座","加速建案銷售"]},{"eyebrow":"NUMEROUS","label":"多樣產品選擇","title":"專屬監工","copy":["透過專屬的即時監控系統","完善管理工期"]},{"eyebrow":"EFFICIENT","label":"輕鬆擁有","title":"專人驗收","copy":["協助建案偕同驗收","住戶安心放心"]}],"copy":{"text1":"Property Developers","text2":"提供一站式整體解決方案","text3":"為建案提升價值與銷售力","text4":"一站式整體廚房解決方案，為建案提升價值與銷售力。","text5":"立即預約","field6":"/section-6/builders/builder-hero.jpg","field7":"SAKURA KITCHEN 深色現代整體廚房與中島空間","text8":"OUR BRAND","text9":"嚴選國內外優質品牌","text10":"Experts Our","text11":"打造不同定位與多元風格的理想家居空間","field12":"SAKURA KITCHEN 建商整體廚房展示空間","field13":"SAKURA KITCHEN","field14":"即將推出的廚房品牌空間","text15":"Coming","text16":"Soon","text17":"Have A Project In ","text18":"Mind?","text19":"Let’s","text20":" Make It Happen","text21":"櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。","text22":"美好居家生活的創造者","text23":"HOME in O.N.E","text24":"Lifetime Service","text25":"One-Click Registration ","text26":"Lifetime Service","text27":"購買 SAKURA iCare 系列產品，掃描保證書專屬 QR Code，即可啟動智能化服務，銜接產品登錄、保固與後續服務。","field28":"/section-6/builders/proposal-20261002/icare.webp","field29":"SAKURA iCare 時刻在乎・永恆守護：以智能平台整合永久免費服務，掃描產品 QR Code，享受櫻花的安心守護。","text30":"OUR CLIENTS","field31":"","field32":"","text33":"Get In Touch","text34":"Have A Project In ","text35":"Mind?","text36":"Let’s","text37":" Make It Happen","text38":"櫻花集團 品牌館","text39":"全預約制","text40":"留下您的資訊，將由專人與您聯繫，提供最適合您建案的整體廚房規劃建議。","text41":"地址","text42":"營業時間"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ArrowRight, Check, Clock3, MapPin } from 'lucide-vue-next'
-import { BUILDER_APPOINTMENT_HASH as cmsSeed_BUILDER_APPOINTMENT_HASH, builderPartners as cmsSeed_builderPartners, builderProjectCards as cmsSeed_builderProjectCards } from '~/data/builders'
+import { BUILDER_APPOINTMENT_HASH as cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards as cmsSeed_builderProjectCards } from '~/data/builders'
 import { brandPavilions as cmsSeed_brandPavilions } from '~/data/brandPavilions'
-const { BUILDER_APPOINTMENT_HASH, builderPartners, builderProjectCards } = await useCmsResource('data-builders', { BUILDER_APPOINTMENT_HASH: cmsSeed_BUILDER_APPOINTMENT_HASH, builderPartners: cmsSeed_builderPartners, builderProjectCards: cmsSeed_builderProjectCards })
+const { BUILDER_APPOINTMENT_HASH, builderProjectCards } = await useCmsResource('data-builders', { BUILDER_APPOINTMENT_HASH: cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards: cmsSeed_builderProjectCards })
 const { brandPavilions } = await useCmsResource('data-brandPavilions', { brandPavilions: cmsSeed_brandPavilions })
+const heroContactLabel = cmsCopy.copy.text5 === '立即預約' ? '專人聯繫' : cmsCopy.copy.text5
 
 
 useSeoMeta({
@@ -15,8 +16,6 @@ useSeoMeta({
   ogDescription: '為建案提升價值與銷售力的一站式整體廚房解決方案。',
   ogImage: '/section-6/builders/builder-hero.jpg',
 })
-
-const builderPartnerLoop = [...builderPartners, ...builderPartners]
 
 const strengths = cmsCopy.strengths
 
@@ -60,7 +59,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         </div>
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="builders-hero__aside ev">
           <a :href="BUILDER_APPOINTMENT_HASH" class="builders-round-link">
-            <span>{{ cmsCopy.copy.text5 }}</span>
+            <span>{{ heroContactLabel }}</span>
             <span class="site-cta-icon builders-round-link__icon"><ArrowRight aria-hidden="true" /></span>
           </a>
         </div>
@@ -185,31 +184,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <h3 id="builders-lifetime-title" class="sr-only">{{ cmsCopy.copy.text24 }}</h3>
             <InternalBuilderImage :src="cmsCopy.copy.field28" :alt="cmsCopy.copy.field29" class="builders-lifetime__visual" fit="contain" />
           </section>
-        </div>
-      </div>
-    </section>
-
-    <section class="builders-partners" aria-labelledby="builders-partners-title">
-      <div class="builders-partners__rail">
-        <h2 id="builders-partners-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text30 }}</h2>
-        <ul class="sr-only">
-          <li v-for="partner in builderPartners" :key="partner.name">{{ partner.name }}</li>
-        </ul>
-        <div class="builders-partners__viewport" tabindex="0" aria-label="合作建商 Logo 輪播，取得鍵盤焦點後暫停">
-          <div class="builders-partners__row">
-            <div class="builders-partners__track">
-              <div v-for="(partner, index) in builderPartnerLoop" :key="`top-${partner.name}-${index}`" class="builders-partner" :class="{ 'builders-partner--clone': index >= builderPartners.length }">
-                <InternalBuilderImage :src="partner.logo" :alt="cmsCopy.copy.field31" fit="contain" />
-              </div>
-            </div>
-          </div>
-          <div class="builders-partners__row builders-partners__row--reverse">
-            <div class="builders-partners__track">
-              <div v-for="(partner, index) in builderPartnerLoop" :key="`bottom-${partner.name}-${index}`" class="builders-partner" :class="{ 'builders-partner--clone': index >= builderPartners.length }">
-                <InternalBuilderImage :src="partner.logo" :alt="cmsCopy.copy.field32" fit="contain" />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -352,29 +326,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-solution__visual--platform { width: 90%; aspect-ratio: 16 / 9; }
 .builders-home-one__visual { aspect-ratio: 2.7 / 1; }
 .builders-services-panel__visual { aspect-ratio: 1280 / 391; }
-.builders-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75cqw; padding: 2cqw 2% 3cqw; }
+.builders-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75cqw; padding: 60px 2% 120px; }
 .builders-service { min-width: 0; text-align: center; }
 .builders-service h3 { display: flex; align-items: center; justify-content: center; gap: .25em; margin: 0; font-family: var(--font-cjk-serif); font-size: clamp(12px, 2.8cqw, 36px); font-weight: 600; line-height: 1.4; }
 .builders-service h3 svg { width: .9em; height: .9em; flex: none; color: #c4a574; }
 .builders-service p { display: flex; flex-direction: column; margin: .6em 0 0; color: #59585d; font-size: clamp(10px, 1.8cqw, 22px); line-height: 1.6; }
 .builders-lifetime { margin: 0; padding: 0; }
-.builders-lifetime__visual { aspect-ratio: 16 / 9; }
-.builders-partners { overflow: hidden; padding: 86px 0 102px; background: #fff var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) bottom center / 100% auto no-repeat; }
-.builders-partners__rail { width: 100%; }
-.builders-partners h2 { display: flex; width: min(1410px, calc(100% - 60px)); margin: 0 auto 62px; box-sizing: border-box; align-items: center; justify-content: center; gap: 24px; padding-inline: 43px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 700; line-height: 36px; text-align: center; }
-.builders-partners h2::before,
-.builders-partners h2::after { height: 1px; flex: 1 1 0; background: #d7d7db; content: ""; }
-.builders-partners__viewport { display: grid; gap: 0; border-block: 1px solid #e3e3e8; }
-.builders-partners__row { min-width: 0; overflow: hidden; border-bottom: 1px solid #e3e3e8; }
-.builders-partners__row:last-child { border-bottom: 0; }
-.builders-partners__track { display: flex; width: max-content; animation: builders-partners-marquee 34s linear infinite; will-change: transform; }
-.builders-partners__row--reverse .builders-partners__track { animation-direction: reverse; animation-duration: 39s; }
-.builders-partners__viewport:focus-within .builders-partners__track { animation-play-state: paused; }
-.builders-partners__viewport:focus-visible { outline: 2px solid #caa05c; outline-offset: 5px; }
-.builders-partner { width: clamp(210px, 16.6vw, 300px); height: 118px; flex: none; padding: 24px 34px; border-right: 1px solid #e3e3e8; background: rgb(255 255 255 / 82%); }
-.builders-partner > :deep(.builder-image) { background: transparent; }
-.builders-partner :deep(img) { max-width: 100%; max-height: 100%; opacity: .42; filter: grayscale(1); }
-@keyframes builders-partners-marquee { to { transform: translateX(-50%); } }
+.builders-lifetime__visual { aspect-ratio: 16 / 9; border-radius: 24px; }
 .builders-contact { scroll-margin-top: 60px; padding: 120px 30px 130px; background: #fafafa var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) top right / auto no-repeat; }
 .builders-contact__heading { margin-bottom: 58px; }
 .builders-contact__grid { display: grid; grid-template-columns: 42% 58%; align-items: start; }
@@ -388,8 +346,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-contact__copy dt { display: flex; align-items: center; gap: 8px; color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 13px; }
 .builders-contact__copy dt svg { width: 17px; height: 17px; color: #caa05c; }
 .builders-contact__copy dd { margin: 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; }
-.builders-contact__tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 20px; }
-.builders-contact__tabs button { min-height: 44px; padding: 10px 16px; border: 1px solid #e3e3e8; border-radius: 999px; color: #1c1c1d; background: #fff; font: inherit; cursor: pointer; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
+.builders-contact__tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 20px; }
+.builders-contact__tabs button { height: 42px; padding: 10px 16px; border: 1px solid #e3e3e8; border-radius: 999px; color: #1c1c1d; background: #fff; font: inherit; cursor: pointer; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .builders-contact__tabs button:hover,
 .builders-contact__tabs button:focus-visible,
 .builders-contact__tabs button[aria-selected='true'] { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
@@ -418,9 +376,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-hero-media { height: 520px; margin-top: -240px; }
   .builders-team,
   .builders-capability,
-  .builders-partners,
   .builders-contact { padding-block: 96px; }
   .builders-capability { padding-bottom: 56px; }
+  .builders-services { padding-block: 40px 80px; }
   .builders-section-heading--team,
   .builders-section-heading--split { grid-template-columns: 1fr; gap: 25px; }
   .builders-section-heading--team > p { max-width: 680px; }
@@ -442,25 +400,21 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-hero-media { width: calc(100% - 30px); height: 310px; margin-top: -135px; border-radius: 18px; }
   .builders-team,
   .builders-capability,
-  .builders-partners,
   .builders-contact { padding: 72px 15px; }
   .builders-capability { padding-bottom: 40px; }
+  .builders-services { padding-block: 30px 60px; }
+  .builders-lifetime__visual { border-radius: 18px; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 41px; line-height: 46px; }
   .builders-section-heading--team h2 strong { font-size: 28px; }
   .builders-section-heading--team h2 span { font-size: 18px; }
-  .builders-partners h2 { width: calc(100% - 30px); gap: 13px; margin-bottom: 42px; padding-inline: 0; font-size: 20px; line-height: 28px; }
-  .builders-partners h2::before,
-  .builders-partners h2::after { width: 42px; flex: none; }
   .builders-capability .builders-section-heading--split > div h2 { margin-top: 20px; }
   .builders-team__grid { grid-template-columns: 1fr; gap: 20px; }
   .builders-team-card > :deep(.builder-image) { aspect-ratio: 1 / 1.12; }
-  .builders-partners { padding: 64px 0 72px; }
-  .builders-partner { width: 184px; height: 98px; padding: 20px 26px; }
   .builders-contact__aside { display: block; }
   .builders-contact__visual { margin-top: 36px; }
-  .builders-contact__tabs { gap: 8px; margin-bottom: 12px; font-size: 13px; }
-  .builders-contact__tabs button { min-height: 38px; padding: 8px 10px; }
+  .builders-contact__tabs { gap: 8px; margin-bottom: 12px; }
+  .builders-contact__tabs button { padding-inline: 10px; }
   .builders-contact__copy dl div { grid-template-columns: 1fr; gap: 6px; }
 }
 
@@ -477,18 +431,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-team-card__project-status > svg { transition: none; }
   .builders-team-card--project:hover .builders-team-card__project-status > svg,
   .builders-team-card--project:focus-visible .builders-team-card__project-status > svg { transform: rotate(-45deg); }
-  .builders-partners__row { overflow: visible; }
-  .builders-partners__row--reverse { display: none; }
-  .builders-partners__track { display: grid; width: 100%; grid-template-columns: repeat(5, minmax(0, 1fr)); animation: none; }
-  .builders-partner { width: auto; }
-  .builders-partner--clone { display: none; }
   .builders-contact__tabs button,
   .builders-contact__tabs button::after,
   .builders-pavilion-enter-active,
   .builders-pavilion-leave-active { transition: none; }
 }
 
-@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
-  .builders-partners__track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 </style>

@@ -11,8 +11,10 @@ const activeHistoryYear = ref<(typeof brandHistoryHighlights)[number]['year']>('
 const activeHistory = computed(() => brandHistoryHighlights.find(item => item.year === activeHistoryYear.value) ?? brandHistoryHighlights[0]!)
 const [historyEmblaRef, historyEmblaApi] = emblaCarouselVue({ align: 'start', loop: false, slidesToScroll: 1 })
 const historyPaused = ref(false)
+const historyResetPhase = ref<'idle' | 'out' | 'in'>('idle')
 const reducedMotion = useReducedMotion()
 let historyTimer: ReturnType<typeof setInterval> | undefined
+let historyResetIndex = 0
 const activeValueId = ref<(typeof brandValues)[number]['id']>('service')
 const identityTrack = ref<HTMLElement | null>(null)
 const identityViewportRatio = ref(1)
@@ -21,14 +23,34 @@ const identityLightboxOpen = ref(false)
 const activeIdentityIndex = ref(0)
 const activeIdentity = computed(() => brandIdentities[activeIdentityIndex.value] ?? brandIdentities[0]!)
 
-function moveHistory(direction: number) {
+function resetHistory(index: number) {
   const api = historyEmblaApi.value
   if (!api) return
+  if (reducedMotion.value) {
+    api.scrollTo(index, true)
+    return
+  }
+  historyResetIndex = index
+  historyResetPhase.value = 'out'
+}
+
+function finishHistoryReset() {
+  const api = historyEmblaApi.value
+  if (historyResetPhase.value === 'out' && api) {
+    // Reposition only after fade-out so the full timeline never sweeps backwards.
+    api.scrollTo(historyResetIndex, true)
+    historyResetPhase.value = 'in'
+  } else historyResetPhase.value = 'idle'
+}
+
+function moveHistory(direction: number) {
+  const api = historyEmblaApi.value
+  if (!api || historyResetPhase.value !== 'idle' || api.scrollSnapList().length < 2) return
   if (direction > 0) {
-    if (api.canScrollNext()) api.scrollNext()
-    else api.scrollTo(0, reducedMotion.value)
-  } else if (api.canScrollPrev()) api.scrollPrev()
-  else api.scrollTo(api.scrollSnapList().length - 1, reducedMotion.value)
+    if (api.canScrollNext()) api.scrollNext(reducedMotion.value)
+    else resetHistory(0)
+  } else if (api.canScrollPrev()) api.scrollPrev(reducedMotion.value)
+  else resetHistory(api.scrollSnapList().length - 1)
 }
 
 function updateHistoryFocus(event: FocusEvent) {
@@ -77,6 +99,7 @@ const identityProgressStyle = computed(() => ({
 
 watch([historyEmblaApi, reducedMotion], ([api, isReduced]) => {
   if (historyTimer) clearInterval(historyTimer)
+  historyResetPhase.value = 'idle'
   if (api && !isReduced) historyTimer = setInterval(() => {
     if (!historyPaused.value) moveHistory(1)
   }, 3500)
@@ -166,7 +189,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section class="about-history" aria-label="櫻花整體廚房品牌紀事">
       <div class="about-rail">
         <div v-reveal="{ anim: 'fadeIn' }" class="about-history__carousel" @focusin="updateHistoryFocus" @focusout="historyPaused = false">
-          <div ref="historyEmblaRef" class="about-history__viewport" role="region" aria-label="櫻花整體廚房品牌紀事輪播" tabindex="0" @keydown.left.prevent="moveHistory(-1)" @keydown.right.prevent="moveHistory(1)">
+          <div ref="historyEmblaRef" class="about-history__viewport" :class="{ 'is-resetting': historyResetPhase === 'out', 'is-transitioning': historyResetPhase !== 'idle' }" :aria-busy="historyResetPhase !== 'idle'" role="region" aria-label="櫻花整體廚房品牌紀事輪播" tabindex="0" @transitionend.self="finishHistoryReset" @keydown.left.prevent="moveHistory(-1)" @keydown.right.prevent="moveHistory(1)">
             <div class="about-history__grid">
               <article
                 v-for="item in brandHistory"
@@ -182,8 +205,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </article>
             </div>
           </div>
-          <button type="button" class="about-history__nav about-history__nav--previous" aria-label="上一則品牌記事" @click="moveHistory(-1)"><ChevronLeft aria-hidden="true" /></button>
-          <button type="button" class="about-history__nav about-history__nav--next" aria-label="下一則品牌記事" @click="moveHistory(1)"><ChevronRight aria-hidden="true" /></button>
+          <button type="button" class="about-history__nav about-history__nav--previous" :aria-disabled="historyResetPhase !== 'idle'" aria-label="上一則品牌記事" @click="moveHistory(-1)"><ChevronLeft aria-hidden="true" /></button>
+          <button type="button" class="about-history__nav about-history__nav--next" :aria-disabled="historyResetPhase !== 'idle'" aria-label="下一則品牌記事" @click="moveHistory(1)"><ChevronRight aria-hidden="true" /></button>
         </div>
       </div>
     </section>
@@ -307,7 +330,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .about-history { padding: 0 30px 120px; background: #fafafa; }
 .about-history__carousel { position: relative; }
-.about-history__viewport { overflow: hidden; }
+.about-history__viewport { overflow: hidden; transition: opacity 450ms ease; }
+.about-history__viewport.is-resetting { opacity: 0; }
+.about-history__viewport.is-transitioning { pointer-events: none; }
 .about-history__grid { display: flex; margin-left: -30px; touch-action: pan-y pinch-zoom; }
 .about-history__card { min-width: 0; flex: 0 0 25%; padding-left: 30px; }
 .about-history__image { width: 130px; height: 130px; border-radius: 24px; }
@@ -481,6 +506,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-services__plus,
   .about-services__visual-image :deep(img),
   .about-history__nav,
+  .about-history__viewport,
   .about-values__image,
   .about-values__copy,
   .about-values__copy p,

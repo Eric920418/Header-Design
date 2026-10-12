@@ -21,6 +21,8 @@ useSeoMeta({
 
 const openFaq = ref(0)
 const [marketingViewport, marketingApi] = emblaCarouselVue({ align: 'start', loop: true, slidesToScroll: 1 })
+// 奇數案例需兩輪交錯，避免無限循環時首尾同高。
+const marketingSlides = computed(() => franchiseMarketingStories.length % 2 ? [...franchiseMarketingStories, ...franchiseMarketingStories] : franchiseMarketingStories)
 const marketingPaused = ref(false)
 const reducedMotion = useReducedMotion()
 let marketingTimer: ReturnType<typeof setInterval> | undefined
@@ -220,12 +222,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div v-reveal="{ anim: 'fadeIn' }" class="franchise-project-carousel">
           <div ref="marketingViewport" class="franchise-project-viewport" role="region" aria-roledescription="輪播" tabindex="0" aria-label="五個品牌行銷案例，可用左右方向鍵或觸控切換" @keydown.left.prevent="scrollMarketing(-1)" @keydown.right.prevent="scrollMarketing(1)">
             <div class="franchise-project-track elementor-widget-antra-project">
-              <article v-for="(story, index) in franchiseMarketingStories" :key="story.title" class="project-block">
+              <article v-for="(story, index) in marketingSlides" :key="`${story.title}-${index}`" class="project-block" :aria-hidden="index >= franchiseMarketingStories.length ? true : undefined">
                 <div class="project-block__media">
                   <InternalFranchiseImage :src="story.image" :alt="story.title" />
                   <div class="project-block__overlay">
                     <h3>{{ story.shortTitle }}</h3>
-                    <span>{{ String(index + 1).padStart(2, '0') }}</span>
+                    <span>{{ String(index % franchiseMarketingStories.length + 1).padStart(2, '0') }}</span>
                   </div>
                 </div>
                 <div class="project-block__content">
@@ -360,7 +362,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-hero__overlay { position: absolute; z-index: -1; inset: 0; background: rgb(16 8 1 / 72%); }
 .franchise-hero__inner { padding: 158px 30px 0; }
 .franchise-hero__grid { display: grid; grid-template-columns: 64% 36%; align-items: end; }
-.franchise-hero h1 { max-width: 960px; margin: 20px 0 0; color: #fff; font-family: var(--font-cjk-serif); font-size: 38px; font-weight: 400; line-height: 1.4; letter-spacing: 0; }
+.franchise-hero h1 { max-width: 960px; margin: 20px 0 0; color: #fff; font-family: var(--font-cjk-sans); font-size: clamp(32px, 4.4vw, 76px); font-weight: 700; line-height: 1.6; letter-spacing: 0; }
 .franchise-hero h1 span { display: block; color: #caa05c; }
 .franchise-hero__aside { width: min(454px, 100%); margin-left: 6px; }
 .franchise-hero__aside p { margin: 0; color: rgb(255 255 255 / 82%); font-family: var(--font-ui); font-size: 15px; line-height: 24px; }
@@ -369,6 +371,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .franchise-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -400px; overflow: hidden; border-radius: 24px; }
 .franchise-hero-media :deep(img) { object-position: center 55%; }
+.franchise-hero-media.is-visible :deep(img) { transform-origin: center center; animation: hero-kenburns 5s ease-out 1.51s both; }
 
 .franchise-about { padding: 124px 30px 0; background: #fff var(--cms-image-asset_38bb39f2, url('/section-6/franchise/antra-original/h6-bg-3.png')) top right / auto no-repeat; }
 .franchise-about::after { position: absolute; pointer-events: none; content: ""; }
@@ -452,7 +455,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-project-controls button:focus-visible,
 .franchise-faq__item button:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .project-block { flex: 0 0 calc((100% - 60px) / 3); min-width: 0; margin-right: 30px; overflow: hidden; border-radius: 18px; background: #fff; }
-.project-block:nth-child(3n + 2) { margin-top: 50px; }
+.project-block:nth-child(even) { margin-top: 50px; }
 .project-block__media { position: relative; aspect-ratio: 1860 / 1400; overflow: hidden; border-radius: 18px; }
 .project-block__media > :deep(.franchise-image) { height: 100%; }
 .project-block__overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 24px 58px 24px 22px; color: #fff; background: linear-gradient(180deg, transparent 36%, rgb(18 18 18 / 78%)); }
@@ -585,7 +588,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-advantage-scene:last-child { padding-bottom: 0; }
   .franchise-post-grid { grid-template-columns: 1fr; gap: 40px; }
   .project-block { flex-basis: calc((100% - 30px) / 2); }
-  .project-block:nth-child(3n + 2) { margin-top: 0; }
   .project-block:nth-child(even) { margin-top: 35px; }
   .franchise-process__details { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .franchise-support-panel,
@@ -614,6 +616,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-hero { min-height: 660px; }
   .franchise-hero__inner { width: 100%; padding: 100px 15px 0; }
   .franchise-hero__grid { grid-template-columns: 1fr; }
+  .franchise-hero h1 { font-size: clamp(24px, 7.3vw, 32px); line-height: 1.5; }
   .franchise-hero__aside { width: 100%; margin: 35px 0 0; }
   .franchise-hero__aside p { font-size: 15px; line-height: 24px; }
   .franchise-hero__actions { margin-top: 28px; }
@@ -689,6 +692,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .franchise-hero-media.is-visible :deep(img) { animation: none; transform: none; }
   .franchise-marquee__track,
   .franchise-support-panel__cta { animation: none; }
   .franchise-marquee { overflow-x: auto; scrollbar-width: none; }
