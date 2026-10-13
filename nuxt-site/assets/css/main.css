@@ -22,6 +22,7 @@
 }
 :root {
   color-scheme: light;
+  --template-heading-title-gap: 47px;
 }
 
 /* 招牌安全區：圖片依 Hero 寬度縮放，Logo 固定在導覽下方，文案從招牌下緣開始。 */

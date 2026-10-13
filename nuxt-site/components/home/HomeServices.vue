@@ -45,7 +45,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <style scoped>
 @media (min-width: 768px) {
   .home-services-heading__rail {
-    grid-column: 1 / -1;
+    grid-column: 1;
     grid-row: 1;
   }
 
@@ -69,6 +69,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
   .home-services-heading__rail {
     grid-row: 1;
+  }
+
+  .home-services-heading__rail :deep(.template-heading-rail__line) {
+    display: none;
   }
 
   .home-services-heading__copy {

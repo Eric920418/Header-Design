@@ -212,6 +212,23 @@ assert(board.includes(':aria-pressed="focused && store.id === selected"'),'門�
 assert(board.includes('watch([region, city], () => focused.value = false)'),'即使篩選結果相同，改選區域或城市也需取消選定門市')
 const homeRailLayout=await readFile(new URL('../layouts/default.vue',import.meta.url),'utf8')
 const homeRailCss=await readFile(new URL('../../src/styles/globals.css',import.meta.url),'utf8')
+const headingRailSource=await readFile(new URL('../components/internal/TemplateHeadingRail.vue',import.meta.url),'utf8')
+const headingGlobalCss=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
+assert(headingGlobalCss.includes('--template-heading-title-gap: 47px;'),'十字線與主標題需共用47px間距')
+assert(headingRailSource.includes('--rail-vertical-right: calc(var(--template-heading-title-gap, 47px) + 14px - var(--template-heading-title-inset, 0px));'),'共用十字線定位需扣除標題已有左內距並保留箭頭14px補償')
+assert.equal((headingRailSource.match(/--rail-vertical-right:/g)||[]).length,1,'來源版型或斷點不得另外覆寫十字間距')
+assert.equal((headingRailSource.match(/--rail-vertical-left:/g)||[]).length,1,'十字線不得再用來源版型固定left像素值')
+const headingServicesSource=await readFile(new URL('../components/home/HomeServices.vue',import.meta.url),'utf8')
+assert(/\.home-services-heading__rail \{\s*grid-column: 1;/.test(headingServicesSource),'首頁廚房產品十字線需以第一欄為定位基準，不能橫跨全部欄位')
+assert(headingServicesSource.includes('.home-services-heading__rail :deep(.template-heading-rail__line)'),'上下排列的首頁廚房產品需隱藏無對位十字線')
+const headingFranchiseSource=await readFile(new URL('../pages/franchising/intro.vue',import.meta.url),'utf8')
+for(const selector of ['.franchise-about__grid','.source-split-heading'])assert(headingFranchiseSource.includes(selector+' { --template-heading-title-inset: 58px;'),'加盟十字線需補償原58px標題內距：'+selector)
+assert(headingFranchiseSource.includes('.source-split-heading { --template-heading-title-inset: 30px; }'),'加盟窄桌機需補償原30px標題內距')
+for(const width of [768,900,1190,1280,1920])for(const inset of [0,30,58]){
+  const railRight=30+(width-60)*.3, titleLeft=railRight+inset, verticalRight=47+14-inset
+  assert.equal(Math.round(titleLeft-(railRight-(verticalRight-14))),47,'欄寬與標題內距變動後仍需保留47px間距')
+}
+console.log('PASS 全站十字標題47px共用間距、來源／斷點覆寫移除、加盟內距補償與首頁廚電欄位定位')
 const seriesHeroSource=await readFile(new URL('../components/internal/KitchenSeriesPage.vue',import.meta.url),'utf8')
 assert(seriesHeroSource.includes('ai-hero__heading hero-template-top')&&seriesHeroSource.includes('translate-y-[24px]'),'品牌系列標題需共用首頁定位')
 assert(seriesHeroSource.includes('aria-hidden="true" class="ai-hero__title-slot"'),'調整標題位置時不得移動原 CTA 佔位')

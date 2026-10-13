@@ -55,7 +55,7 @@ const slots = useSlots()
   --rail-horizontal-width: 540px;
   --rail-vertical-top: -20px;
   --rail-vertical-left: auto;
-  --rail-vertical-right: 61px;
+  --rail-vertical-right: calc(var(--template-heading-title-gap, 47px) + 14px - var(--template-heading-title-inset, 0px));
   --rail-vertical-height: 215px;
   position: relative;
   box-sizing: border-box;
@@ -88,8 +88,6 @@ const slots = useSlots()
   --rail-padding-top: 46px;
   --rail-horizontal-top: 15px;
   --rail-horizontal-width: 502px;
-  --rail-vertical-left: 345px;
-  --rail-vertical-right: auto;
   --rail-vertical-height: 179px;
 }
 
@@ -99,7 +97,6 @@ const slots = useSlots()
   --rail-horizontal-top: 39px;
   --rail-horizontal-left: 10px;
   --rail-vertical-top: 0px;
-  --rail-vertical-right: 0px;
 }
 
 /* Antra Home 01 / Our Projects uses the Home 04 rail geometry with a 64px label offset. */
@@ -156,12 +153,6 @@ const slots = useSlots()
   }
 }
 
-@media (max-width: 1200px) {
-  .template-heading-rail--home1 {
-    --rail-vertical-right: 30px;
-  }
-}
-
 @media (max-width: 1024px) {
   .template-heading-rail--home4,
   .template-heading-rail--home1 {
@@ -170,13 +161,10 @@ const slots = useSlots()
 
   .template-heading-rail--home6 {
     --rail-horizontal-width: 315px;
-    --rail-vertical-left: 200px;
-    --rail-vertical-right: auto;
   }
 
   .template-heading-rail--home5 {
     --rail-horizontal-width: 315px;
-    --rail-vertical-right: 60px;
     --rail-vertical-height: 115px;
   }
 }
@@ -190,7 +178,6 @@ const slots = useSlots()
     --rail-min-height: 100px;
     --rail-horizontal-width: 165px;
     --rail-vertical-top: -40px;
-    --rail-vertical-left: 100px;
     --rail-vertical-height: 115px;
     text-align: center;
   }

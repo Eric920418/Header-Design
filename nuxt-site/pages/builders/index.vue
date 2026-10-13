@@ -381,6 +381,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-services { padding-block: 40px 80px; }
   .builders-section-heading--team,
   .builders-section-heading--split { grid-template-columns: 1fr; gap: 25px; }
+  .builders-section-heading--split :deep(.template-heading-rail__line) { display: none; }
   .builders-section-heading--team > p { max-width: 680px; }
   .builders-team__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .builders-contact__grid { grid-template-columns: 1fr; }

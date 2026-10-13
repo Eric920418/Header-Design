@@ -375,7 +375,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .franchise-about { padding: 124px 30px 0; background: #fff var(--cms-image-asset_38bb39f2, url('/section-6/franchise/antra-original/h6-bg-3.png')) top right / auto no-repeat; }
 .franchise-about::after { position: absolute; pointer-events: none; content: ""; }
-.franchise-about__grid { display: grid; grid-template-columns: 30% 70%; }
+.franchise-about__grid { --template-heading-title-inset: 58px; display: grid; grid-template-columns: 30% 70%; }
 .source-heading-rail { min-height: 100%; }
 .franchise-about__content { padding: 70px 0 90px 58px; }
 .franchise-about h2,
@@ -440,7 +440,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 .franchise-projects { padding: 97px 30px 108px; background: #fafafa var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) top right / auto no-repeat; }
-.source-split-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
+.source-split-heading { --template-heading-title-inset: 58px; display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
 .source-split-heading > div:last-child { padding-left: 58px; }
 .source-split-heading h2 { max-width: 100%; margin-top: 65px; }
 .source-split-heading p { max-width: 636px; margin: 30px 0 0; color: #59585d; font-size: 16px; line-height: 25px; }
@@ -557,6 +557,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 
 @media (max-width: 1200px) {
+  .franchise-about__grid,
+  .source-split-heading { --template-heading-title-inset: 30px; }
   .franchise-hero__grid { align-items: start; }
   .franchise-hero__aside { margin-top: 0; }
   .franchise-about h2,
