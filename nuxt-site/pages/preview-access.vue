@@ -12,6 +12,7 @@ const pending = ref(false)
 const errorMessage = ref('')
 
 async function unlockPreview() {
+  if (pending.value) return
   errorMessage.value = ''
   pending.value = true
 
@@ -19,13 +20,18 @@ async function unlockPreview() {
     await $fetch('/api/preview-access', {
       method: 'POST',
       body: { password: password.value },
+      timeout: 15000,
+      retry: 0,
     })
 
     const requestedPath = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
     window.location.assign(requestedPath.startsWith('/') && !requestedPath.startsWith('//') ? requestedPath : '/')
   }
   catch (error: any) {
-    errorMessage.value = error?.data?.statusMessage || error?.statusMessage || error?.message || '驗證失敗，請稍後再試。'
+    const details = [error?.data?.statusMessage || error?.data?.message || error?.statusMessage, error?.message, error?.cause?.message]
+      .filter(Boolean).join('；') || '驗證失敗，請稍後再試。'
+    const timedOut = ['TimeoutError', 'AbortError'].includes(error?.cause?.name)
+    errorMessage.value = timedOut ? `驗證連線超過 15 秒仍未回應，請重新按「進入網站」。錯誤詳情：${details}` : details
   }
   finally {
     pending.value = false
