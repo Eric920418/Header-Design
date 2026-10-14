@@ -196,7 +196,8 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
   padding: 12px 8px;
   border: 1px solid #caa05c;
   border-radius: 999px;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 600;
   transition: background-color .3s ease, color .3s ease;
 }
 .sakura-product-brands__link[aria-current="page"] { color: #1c1c1d; }

@@ -15,6 +15,8 @@ const cookie=login.headers.getSetCookie().map(v=>v.split(';')[0]).join('; ')
 async function get(path,status=200){const r=await fetch(base+path,{signal:AbortSignal.timeout(45000),headers:{cookie}});assert.equal(r.status,status,path);return r}
 const content=async id=>(await get('/api/content/'+id)).json()
 const productBrandSource=await readFile(new URL('../components/internal/ProductBrandPage.vue',import.meta.url),'utf8')
+assert(/\.sakura-product-brands__link\s*\{[^}]*font-size: 16px;[^}]*font-weight: 600;/.test(productBrandSource),'SAKURA／SVAGO／TEKA切換按鈕統一16px SemiBold600')
+assert(/\.sakura-product-brands__link\s*\{[^}]*min-height: 52px;[^}]*padding: 12px 8px;/.test(productBrandSource),'改字級不得變更原按鈕高度與內距')
 assert(productBrandSource.includes('grid-template-columns: repeat(3, minmax(0, 116px))'),'三品牌橢圓按鈕需共用等寬欄位')
 assert(productBrandSource.includes('repeat(3, minmax(0, 1fr))'),'手機品牌列需等分縮小，避免換行或溢出')
 assert(productBrandSource.includes('<InternalDesignLoadState label="商品分類"'),'移除多餘 CTA 不得移除載入／錯誤提示')
@@ -150,6 +152,9 @@ console.log('PASS 品牌優勢家庭英文標題、大小寫、CMS自訂文案�
 const headerPavilions=(await content('view-components-SiteHeader')).rightNav.flatMap(item=>item.children||[]).filter(child=>child.to==='/about/exhibition')
 assert.equal(headerPavilions.length,1,'品牌館導覽入口需唯一')
 assert.equal(headerPavilions[0].label,'櫻花集團品牌館','需檢查已發布 CMS 文案，而非只檢查程式範例')
+const renderedHeader=/<header[\s\S]*?<\/header>/.exec(await(await get('/')).text())?.[0]||''
+const renderedPavilions=[...renderedHeader.matchAll(/<a\b[^>]*href="\/about\/exhibition"[^>]*>([\s\S]*?)<\/a>/g)].map(match=>match[1].replace(/<[^>]+>/g,'').trim())
+assert(renderedPavilions.length>0&&renderedPavilions.every(label=>label==='櫻花集團品牌館'),'首頁主導覽實際輸出不得仍是舊品牌館名称')
 const headerSource=await readFile(new URL('../components/SiteHeader.vue',import.meta.url),'utf8')
 const navSource=headerSource.slice(headerSource.indexOf('function navChildren('),headerSource.indexOf('let desktopMenuCloseTimer')).replace('item: NavItem','item')
 const navChildren=new Function(navSource+'; return navChildren')()
@@ -206,6 +211,36 @@ for(const file of ['../components/home/HomeServices.vue','../components/SiteFoot
   assert(source.includes('style="background-image: var(--cms-image-'))
 }
 const board=await readFile(new URL('../components/home/HomeStoreLocation.vue',import.meta.url),'utf8')
+const flipSource=board.slice(board.indexOf('function runFlip()'),board.indexOf('function previousStoreFor(')).replaceAll(']!',']')
+const makeFlipBoard=new Function('stores','settings',`
+const filtered={value:stores},displayedIds={value:stores.slice(0,4).map(store=>store.id)};
+const STORE_FLIP_DURATION=760;
+let seenStoreIds=new Set(displayedIds.value),nextFlipSlot=0,flipTimer,flipFinishTimer;
+const boardPaused={value:!!settings.paused},reducedMotion={value:!!settings.reduced},focused={value:!!settings.focused},selected={value:settings.selected??0},flipState={value:null};
+const Math={floor:globalThis.Math.floor,random:()=>0};
+let finish;const setTimeout=callback=>{finish=callback;return 1};const scheduleFlip=()=>{};
+${flipSource}
+return {ids:displayedIds,flip:()=>{runFlip();const changed=flipState.value;if(finish){const callback=finish;finish=null;callback()}return changed}};
+`)
+const flipStores=Array.from({length:9},(_,id)=>({id}))
+const flipBoard=makeFlipBoard(flipStores,{})
+const firstRound=new Set(flipBoard.ids.value)
+for(let index=4;index<9;index++){
+  const change=flipBoard.flip()
+  assert(change,'九家門市應可持續翻牌')
+  const nextId=flipBoard.ids.value[change.slot]
+  assert(!firstRound.has(nextId),'本輪全部門市未顯示完之前不得重抽已顯示門市')
+  firstRound.add(nextId)
+  assert.equal(new Set(flipBoard.ids.value).size,4,'同畫面四張卡不可重複')
+}
+assert.equal(firstRound.size,9,'首輪需包含完整九家門市')
+for(let index=0;index<30;index++){assert(flipBoard.flip(),'新一輪仍須持續輪替');assert.equal(new Set(flipBoard.ids.value).size,4)}
+const pinnedFlipBoard=makeFlipBoard(flipStores,{focused:true,selected:0})
+for(let index=0;index<20;index++){pinnedFlipBoard.flip();assert(pinnedFlipBoard.ids.value.includes(0),'手動選取門市不得翻走');assert.equal(new Set(pinnedFlipBoard.ids.value).size,4)}
+for(const count of [0,1,3,4]){const smallBoard=makeFlipBoard(flipStores.slice(0,count),{});assert.equal(smallBoard.flip(),null);assert.equal(new Set(smallBoard.ids.value).size,count,'不足四家不可用重複卡補滿')}
+for(const settings of [{paused:true},{reduced:true}])assert.equal(makeFlipBoard(flipStores,settings).flip(),null)
+console.log('PASS 門市翻牌首輪完整排重、多輪四卡唯一、選取保留、少量／空清單及暫停／減少動態')
+assert(board.includes('let seenStoreIds = new Set(displayedIds.value)')&&/watch\(filteredKey,[\s\S]*?displayedIds\.value = list\.slice\(0, STORE_BOARD_ROWS\)\.map\(store => store\.id\)\s+seenStoreIds = new Set\(displayedIds\.value\)/.test(board),'初始及篩選變更都需以當前四卡初始化本輪排重狀態')
 assert(board.includes('const keepSelected = focused.value\n'),'篩選不得鎖定門市')
 assert(board.includes('focused.value = false'),'切換篩選應取消鎖定')
 assert.equal((board.match(/:active="focused && (?:store\.id|previousStoreFor\(index\)\?\.id) === selected"/g)||[]).length,4,'正常及翻牌卡面僅能在手動選定門市後顯示金底')
@@ -260,6 +295,59 @@ for(const width of [768,900,1190,1280,1920])for(const inset of [0,30,58]){
 }
 console.log('PASS 全站十字標題47px共用間距、來源／斷點覆寫移除、加盟內距補償與首頁廚電欄位定位')
 const seriesHeroSource=await readFile(new URL('../components/internal/KitchenSeriesPage.vue',import.meta.url),'utf8')
+const resolveSeriesHeroTitle=new Function('data','return '+seriesHeroSource.match(/^const heroTitle = (.+)$/m)?.[1])
+assert.equal(resolveSeriesHeroTitle({slug:'clever',name:'Clever Kitchen'}),'Clever','Clever內頁Hero只保留Clever')
+for(const data of [{slug:'aikitchen',name:'AI Kitchen'},{slug:'other',name:'Clever Kitchen'},{slug:'clever',name:'Clever'},{slug:'clever',name:'自訂系列名稱'}])assert.equal(resolveSeriesHeroTitle(data),data.name,'其他系列及CMS自訂名稱不得被刪字')
+assert(/<h1\b[^>]*id="ai-kitchen-hero-title"[^>]*>\{\{ heroTitle \}\}<\/h1>/.test(seriesHeroSource),'Hero需使用限定顯示文案')
+assert(seriesHeroSource.includes('title: `${data.name}｜櫻花整體廚房`'),'原SEO系列名稱保留')
+console.log('PASS Clever Hero刪除Kitchen、其他系列／自訂CMS名稱／SEO保留')
+assert(!seriesHeroSource.includes('ai-hero__story-thumb')&&!seriesHeroSource.includes('ai-hero__story-copy')&&!seriesHeroSource.includes('activeHeroStory')&&!seriesHeroSource.includes('const heroStories'),'品牌系列Hero底欄需移除縮圖／文案及未使用資料')
+const heroBottomSource=seriesHeroSource.slice(seriesHeroSource.indexOf('<div class="ai-hero__bottom">'),seriesHeroSource.indexOf('<span class="ai-hero__watermark"'))
+assert(heroBottomSource.includes('/catalogues/kitchenware-catalog?series=${data.slug}')&&heroBottomSource.includes('target="_blank" rel="noopener noreferrer"'),'保留型錄系列query、新分頁及安全屬性')
+for(const direction of ['-','+'])assert(heroBottomSource.includes(`@click="showHero(currentHero ${direction} 1)"`),'前後箭頭必須仍切換Hero')
+assert.equal((heroBottomSource.match(/:disabled="data.heroSlides.length < 2"/g)||[]).length,2,'單張系列維持箭頭停用')
+assert(/\.ai-hero__bottom \{[^}]*right: 86px;[^}]*display: flex;[^}]*width: max-content;/.test(seriesHeroSource),'桌機需保留靠右控制組')
+assert(heroBottomSource.indexOf('class="ai-hero__story-controls"')<heroBottomSource.indexOf('class="ai-hero__actions"'),'箭頭需放在框外左側，框內只放型錄及探索CTA')
+assert(heroBottomSource.includes('to="/design-inspiration" class="ai-hero__explore-link"')&&heroBottomSource.includes('<span>探索設計案例</span><ArrowUpRight aria-hidden="true" />'),'探索設計案例需連向設計靈感並保留右上箭頭')
+assert(/\.ai-hero__actions \{[^}]*grid-template-columns: 108px 140px;[^}]*backdrop-filter: blur\(18px\);/.test(seriesHeroSource),'深色框需限定型錄及探索CTA兩欄')
+assert(seriesHeroSource.includes('grid-template-columns: 98px 140px; gap: 16px;')&&seriesHeroSource.includes('min-height: 98px; grid-template-columns: 70px 98px;'),'平板／手機需緊湊適配新CTA')
+assert(seriesHeroSource.includes('flex-direction: column; align-items: flex-end; gap: 12px;'),'手機箭頭置於框外上方，避免橫向溢出')
+for(const width of [320,390,767])assert(70+98+12+28+2<=width-93-15,'手機型錄及探索CTA含邊框需可容納於原安全距離')
+assert(seriesHeroSource.includes('heroTimer = setInterval(changeHero, 5000)')&&seriesHeroSource.includes('if (!reduced)'),'保留自動輪播及減少動態設定')
+console.log('PASS 品牌系列Hero框外左側箭頭、框內型錄及探索設計案例CTA、響應式排列與輪播防護')
+const seriesHeroHomeSource=await readFile(new URL('../components/home/HomeHero.vue',import.meta.url),'utf8')
+assert(seriesHeroHomeSource.includes(':key="`hero-copy-${activeSlide}`" class="hero-slide-copy"')&&seriesHeroSource.includes(':key="`title-${heroTransition}`" class="hero-slide-copy"'),'首頁及品牌系列主標題需使用同一動畫class並於換張重建')
+assert(/\.hero-slide-copy \{[^}]*animation: hero-copy-cycle 5s ease both;/.test(homeRailCss),'兩種Hero必須沿用同一5秒動畫，不另新增系列動畫')
+assert(homeRailCss.includes('transform: translate3d(-48px, 0, 0);')&&homeRailCss.includes('30%, 46%')&&homeRailCss.includes('80%, 100%'),'保留首頁由左淡入、停留及淡出三階段')
+assert(seriesHeroHomeSource.includes('}, 5000)')&&seriesHeroSource.includes('heroTimer = setInterval(changeHero, 5000)')&&seriesHeroSource.includes('heroTransition.value += 1'),'兩種Hero文字重播需與5秒換圖週期一致')
+assert(homeRailCss.includes('.hero-slide-copy { opacity: 1 !important; transform: none !important; animation: none !important; }')&&seriesHeroHomeSource.includes('|| value) return')&&seriesHeroSource.includes('if (!reduced)'),'減少動態需停播並直接顯示文字')
+console.log('PASS 品牌系列主標題與首頁Hero共用左入／停留／淡出動畫、5秒换圖重播及減少動態保護')
+const equipmentRouteSource=await readFile(new URL('../data/kitchenSeries.ts',import.meta.url),'utf8')
+const equipmentDetailRoutes=new Function('return ('+equipmentRouteSource.match(/export const KITCHEN_EQUIPMENT_DETAIL_ROUTES:[^=]+=(\s*\{[\s\S]*?\n\})/)?.[1]+')')()
+const resolveEquipmentCards=new Function('data','KITCHEN_EQUIPMENT_DETAIL_ROUTES','return '+seriesHeroSource.match(/^const visibleEquipment = (.+)$/m)?.[1])
+const expectedCleverRoutes={EG2350GB:'/products/sakura/item/81546',VE7770A:'/products/svago/item/82164',Q7585BL:'/products/sakura/item/82121',DR7397XL:'/products/sakura/item/82131',G2926G:'/products/sakura/item/80339'}
+for(const [model,route] of Object.entries(expectedCleverRoutes))assert.equal(resolveEquipmentCards({equipment:[{model,route:''}]},equipmentDetailRoutes)[0].route,route,'Clever推薦需導到正確品牌／主商品頁：'+model)
+for(const route of ['/products/sakura',''])assert.equal(resolveEquipmentCards({equipment:[{model:'G2926G',route}]},equipmentDetailRoutes)[0].route,expectedCleverRoutes.G2926G,'空白及品牌首頁入口需修正為詳細頁')
+for(const route of ['/custom/product','https://www.sakura.com.tw/Product/Content/8030'])assert.equal(resolveEquipmentCards({equipment:[{model:'G2926G',route}]},equipmentDetailRoutes)[0].route,route,'明確CMS／官方連結不得被覆寫')
+assert.equal(resolveEquipmentCards({equipment:[{model:'UNKNOWN',route:''}]},equipmentDetailRoutes)[0].route,'','未核對型號不得臆造詳細頁')
+assert(seriesHeroSource.includes(':is="equipment.route ? NuxtLink : \'div\'"')&&seriesHeroSource.includes(':to="equipment.route || undefined"'),'沿用整卡連結，圖片／型號／名稱同一點擊區；未知型號保留非連結狀態')
+console.log('PASS 品牌系列推薦產品已核對詳細頁、SVAGO品牌隔離、CMS明確連結及未知型號保留')
+const equipmentDetailModels={EG2350GB:'EG2350G',Q7585BL:'Q7585B',DR7397XL:'DR7397'}
+for(const [model,route] of Object.entries(expectedCleverRoutes)){
+  const [,brand,,id]=route.split('/').slice(1)
+  const detail=await(await get(`/api/products/${brand}/items/${id}`)).json()
+  assert.equal(detail.brand,brand,'推薦詳細頁不得跨品牌：'+model)
+  assert.equal(detail.model,equipmentDetailModels[model]||model,'推薦详细頁需是指定主商品：'+model)
+}
+const equipmentCleverHtml=await(await get('/home-style/clever')).text()
+const equipmentCleverSection=equipmentCleverHtml.match(/<section\b[^>]*aria-labelledby="equipment-heading"[\s\S]*?<\/section>/)?.[0]||''
+const equipmentCleverCards=[...equipmentCleverSection.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*class="ai-equipment__card"[^>]*>([\s\S]*?)<\/a>/g)]
+assert.equal(equipmentCleverCards.length,5,'五個推薦產品皆需可點擊')
+for(const [index,[model,route]] of Object.entries(expectedCleverRoutes).entries()){
+  assert.equal(equipmentCleverCards[index][1],route)
+  assert(equipmentCleverCards[index][2].includes(model)&&equipmentCleverCards[index][2].includes('<img')&&equipmentCleverCards[index][2].includes('<h3'),'圖片／型號／名稱需在同一連結內')
+}
+console.log('PASS Clever推薦五筆詳細頁API與整卡SSR連結')
 const productBrandHeadingSource=await readFile(new URL('../components/internal/ProductBrandPage.vue',import.meta.url),'utf8')
 assert(productBrandHeadingSource.includes('class="sakura-product-story__eyebrow">Kitchen Appliances</InternalSectionPill>')&&productBrandHeadingSource.includes('class="sakura-product-story__chinese-title">廚房產品</span>'),'三品牌需統一英文眉標及中文主標')
 assert(productBrandHeadingSource.includes('Elevate Your<br><span>Kitchen with</span><br>{{ info.name }}'),'品牌名稱需取原資料且黑色，只有Kitchen with金色')

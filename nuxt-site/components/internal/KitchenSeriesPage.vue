@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { NuxtLink } from '#components'
 import emblaCarouselVue from 'embla-carousel-vue'
-import { ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import type { KitchenSeriesPageData } from '~/data/kitchenSeries'
+import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { KITCHEN_EQUIPMENT_DETAIL_ROUTES, type KitchenSeriesPageData } from '~/data/kitchenSeries'
 import { KITCHEN_EQUIPMENT_CUTOUTS } from '~/data/kitchenEquipmentCutouts'
 import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
 const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
 
 
 const { data } = defineProps<{ data: KitchenSeriesPageData }>()
+const heroTitle = data.slug === 'clever' && data.name === 'Clever Kitchen' ? 'Clever' : data.name
 const reducedMotion = useReducedMotion()
 const currentHero = ref(0)
 const previousHero = ref(0)
@@ -20,30 +21,11 @@ const casesInteracted = ref(false)
 const seriesOpen = ref(false)
 const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false, duration: 24 })
 
-const heroStories = data.slug === 'aikitchen' ? [
-  {
-    eyebrow: 'AI Cabinet',
-    title: '感應閘門櫃',
-    description: '輕鬆省力地開啟與下降，不需費力即可操作；同時隱藏調味料與餐具，維持廚房整潔有序。',
-  },
-  {
-    eyebrow: 'AI Faucet',
-    title: 'AI 智能感應龍頭',
-    description: 'AI 感應開關即時監控水溫，三段光氛辨識冷暖；伸縮磁吸回歸，單手切換花灑與水柱。',
-  },
-  {
-    eyebrow: 'AI Light',
-    title: '廚下手掃可調光 LED 照明',
-    description: '輕輕揮手即可控制燈光開關與亮度，讓備餐、清潔與夜間使用更直覺便利。',
-  },
-] : data.heroSlides.map(() => ({ eyebrow: data.name, title: data.intro.title, description: data.intro.paragraphs.join(' ') }))
-
 const activeSuite = computed(() => data.suites[activeSuiteIndex.value]!)
 const activeSuiteImages = computed(() => activeSuite.value.images)
 const activeSuitePrimaryImage = computed(() => activeSuiteImages.value[activeSuiteImageIndex.value]!)
 const activeSuiteSecondaryImage = computed(() => activeSuiteImages.value[(activeSuiteImageIndex.value + 1) % activeSuiteImages.value.length]!)
-const activeHeroStory = computed(() => heroStories[currentHero.value]!)
-const visibleEquipment = data.equipment
+const visibleEquipment = data.equipment.map(equipment => ({ ...equipment, route: !equipment.route || equipment.route === '/products/sakura' ? KITCHEN_EQUIPMENT_DETAIL_ROUTES[equipment.model] || equipment.route : equipment.route }))
 const casesLoop = computed(() => data.cases.length > 1 ? [...data.cases, ...data.cases] : data.cases)
 let heroTimer: ReturnType<typeof setInterval> | undefined
 let casesTimer: ReturnType<typeof setInterval> | undefined
@@ -216,12 +198,12 @@ useSeoMeta({
       <div class="ai-hero__heading hero-template-top pointer-events-none translate-y-[24px] z-[5] transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
         <div :key="`title-${heroTransition}`" class="hero-slide-copy">
           <div aria-hidden="true" class="mb-[20px] h-[30px]" />
-          <h1 id="ai-kitchen-hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ data.name }}</h1>
+          <h1 id="ai-kitchen-hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ heroTitle }}</h1>
         </div>
       </div>
 
       <div class="ai-hero__inner">
-        <!-- 保留原標題佔位，定位調整不推動 CTA 與下方介紹列。 -->
+        <!-- 保留原標題佔位，定位調整不推動 CTA。 -->
         <div aria-hidden="true" class="ai-hero__title-slot" />
 
         <div v-reveal="{ anim: 'fadeIn', delay: 900, duration: 'slow' }" class="inline-block">
@@ -232,20 +214,17 @@ useSeoMeta({
         </div>
 
         <div class="ai-hero__bottom">
-          <span :key="`story-thumb-${currentHero}`" class="ai-hero__story-thumb">
-            <InternalBrandImage :src="data.heroSlides[currentHero]" :alt="`${activeHeroStory.title}預覽`" class="h-full w-full" />
-          </span>
-          <div :key="`story-copy-${currentHero}`" class="ai-hero__story-copy">
-            <span>{{ activeHeroStory.eyebrow }}</span>
-            <strong>{{ activeHeroStory.title }}</strong>
-            <p>{{ activeHeroStory.description }}</p>
-          </div>
-          <NuxtLink :to="`/catalogues/kitchenware-catalog?series=${data.slug}`" target="_blank" rel="noopener noreferrer" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
-            <span>品牌系列<br>型錄</span>
-          </NuxtLink>
           <div class="ai-hero__story-controls" :aria-label="`${data.name} 輪播控制`">
             <button type="button" :disabled="data.heroSlides.length < 2" aria-label="上一張品牌圖片" @click="showHero(currentHero - 1)"><ChevronLeft /></button>
             <button type="button" :disabled="data.heroSlides.length < 2" aria-label="下一張品牌圖片" @click="showHero(currentHero + 1)"><ChevronRight /></button>
+          </div>
+          <div class="ai-hero__actions">
+            <NuxtLink :to="`/catalogues/kitchenware-catalog?series=${data.slug}`" target="_blank" rel="noopener noreferrer" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
+              <span>品牌系列<br>型錄</span>
+            </NuxtLink>
+            <NuxtLink to="/design-inspiration" class="ai-hero__explore-link">
+              <span>探索設計案例</span><ArrowUpRight aria-hidden="true" />
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -458,12 +437,12 @@ useSeoMeta({
 .ai-hero__cta:hover, .ai-hero__cta:focus-visible { border-color: #caa05c; background: #caa05c; }
 .ai-hero__cta:hover > span:first-child, .ai-hero__cta:focus-visible > span:first-child { opacity: 0; }
 .ai-hero__cta:hover > .ai-hero__cta-label--hover, .ai-hero__cta:focus-visible > .ai-hero__cta-label--hover { opacity: 1; }
-.ai-hero__bottom { position: absolute; right: 86px; bottom: 28px; left: 0; display: grid; min-height: 142px; grid-template-columns: 84px minmax(0, 1fr) 108px 94px; align-items: center; gap: 22px; border: 1px solid rgb(255 255 255 / 15%); border-radius: 24px; background: rgb(37 35 35 / 48%); padding: 14px 18px; backdrop-filter: blur(18px); }
-.ai-hero__story-thumb { display: block; width: 78px; height: 78px; overflow: hidden; border: 1px solid rgb(255 255 255 / 32%); border-radius: 50%; animation: ai-story-in .55s ease both; }
-.ai-hero__story-copy { min-width: 0; font-family: var(--font-cjk-sans); animation: ai-story-in .55s ease both; }
-.ai-hero__story-copy > span { display: block; color: #caa05c; font-size: 12px; font-weight: 500; line-height: 18px; letter-spacing: .08em; text-transform: uppercase; }
-.ai-hero__story-copy > strong { display: block; margin-top: 2px; color: #fff; font-size: 18px; font-weight: 500; line-height: 26px; }
-.ai-hero__story-copy > p { display: -webkit-box; overflow: hidden; max-width: 700px; margin: 6px 0 0; color: rgb(255 255 255 / 78%); font-size: 15px; line-height: 23px; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.ai-hero__bottom { position: absolute; right: 86px; bottom: 28px; display: flex; width: max-content; align-items: center; gap: 22px; }
+.ai-hero__actions { display: grid; min-height: 142px; grid-template-columns: 108px 140px; align-items: center; gap: 22px; border: 1px solid rgb(255 255 255 / 15%); border-radius: 24px; background: rgb(37 35 35 / 48%); padding: 14px 18px; backdrop-filter: blur(18px); }
+.ai-hero__explore-link { display: inline-flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 12px; color: #fff; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 20px; }
+.ai-hero__explore-link:hover { color: #caa05c; }
+.ai-hero__explore-link:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; border-radius: 4px; }
+.ai-hero__explore-link svg { width: 18px; height: 18px; flex-shrink: 0; }
 .ai-hero__catalogue-link { display: inline-flex; width: 98px; height: 98px; align-items: center; justify-content: center; border: 1px solid rgb(202 160 92 / 72%); border-radius: 50%; color: #fff; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 18px; text-align: center; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
 .ai-hero__catalogue-link:hover, .ai-hero__catalogue-link:focus-visible { color: #1c1c1d; background: #caa05c; transform: translateY(-3px); }
 .ai-hero__story-controls { display: flex; justify-content: flex-end; gap: 8px; }
@@ -472,7 +451,6 @@ useSeoMeta({
 .ai-hero__story-controls svg { width: 17px; height: 17px; }
 .ai-hero__story-controls button:disabled { opacity: .35; cursor: default; pointer-events: none; }
 .ai-hero__watermark { position: absolute; z-index: 4; right: max(30px, calc((100vw - 1584px) / 2)); bottom: -90px; color: rgb(255 255 255 / 10%); font-family: var(--font-display); font-size: clamp(190px, 18vw, 320px); line-height: .8; pointer-events: none; }
-@keyframes ai-story-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
 .ai-series-drawer { position: fixed; top: calc(50% - 72px); left: 0; z-index: 80; display: flex; align-items: flex-start; transform: translateX(-190px); transition: transform .45s ease; }
 .ai-series-drawer.is-open { transform: translateX(0); }
@@ -601,8 +579,8 @@ useSeoMeta({
 @media (max-width: 1200px) {
   .ai-hero { height: 760px; }
   .ai-hero__inner { padding-top: 95px; }
-  .ai-hero__bottom { grid-template-columns: 72px minmax(0, 1fr) 98px 88px; gap: 16px; }
-  .ai-hero__story-thumb { width: 68px; height: 68px; }
+  .ai-hero__bottom { gap: 16px; }
+  .ai-hero__actions { grid-template-columns: 98px 140px; gap: 16px; }
   .ai-intro__content { grid-template-columns: minmax(0, 1fr) 164px minmax(0, 1fr); gap: 18px; }
   .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 164px minmax(0, 1fr); grid-template-rows: 360px; gap: 18px; }
   .ai-suite-tabs button { min-height: 50px; }
@@ -652,10 +630,10 @@ useSeoMeta({
   .ai-hero__title-slot { margin-top: 50px; min-height: 134px; }
   .ai-hero__cta { width: 82px; height: 82px; margin-top: 22px; margin-left: 15px; }
   .ai-hero__cta > span { font-size: 13px; line-height: 16px; }
-  .ai-hero__bottom { right: 0; bottom: 18px; min-height: 236px; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; border-radius: 18px; padding: 14px; }
-  .ai-hero__story-thumb { width: 64px; height: 64px; }
-  .ai-hero__story-copy > strong { font-size: 16px; line-height: 23px; }
-  .ai-hero__story-copy > p { font-size: 13px; line-height: 20px; -webkit-line-clamp: 3; }
+  .ai-hero__bottom { right: 0; bottom: 18px; flex-direction: column; align-items: flex-end; gap: 12px; }
+  .ai-hero__actions { min-height: 98px; grid-template-columns: 70px 98px; gap: 12px; border-radius: 18px; padding: 14px; }
+  .ai-hero__explore-link { gap: 6px; font-size: 12px; line-height: 18px; }
+  .ai-hero__explore-link svg { width: 16px; height: 16px; }
   .ai-hero__catalogue-link { width: 70px; height: 70px; font-size: 11px; line-height: 15px; }
   .ai-hero__story-controls { justify-content: flex-start; }
   .ai-hero__watermark { right: 15px; bottom: -26px; font-size: 100px; }
@@ -706,7 +684,7 @@ useSeoMeta({
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ai-hero__story-thumb, .ai-hero__story-copy, .ai-suite-image, .ai-suite-details { animation: none; }
+  .ai-suite-image, .ai-suite-details { animation: none; }
   .ai-series-drawer, .ai-finishes__image, .ai-equipment__image :deep(img), .ai-equipment__action, .ai-case-card :deep(img) { transition: none; }
 }
 </style>

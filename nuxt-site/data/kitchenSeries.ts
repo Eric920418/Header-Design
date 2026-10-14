@@ -23,6 +23,25 @@ export type KitchenEquipment = {
   route: string
 }
 
+// 規格型號連到對應主商品；只用於空白或品牌首頁入口，保留明確 CMS 連結。
+export const KITCHEN_EQUIPMENT_DETAIL_ROUTES: Record<string, string> = {
+  EG2350GB: '/products/sakura/item/81546',
+  VE7770A: '/products/svago/item/82164',
+  Q7585BL: '/products/sakura/item/82121',
+  DR7397XL: '/products/sakura/item/82131',
+  G2926G: '/products/sakura/item/80339',
+  EG2250G: '/products/sakura/item/81545',
+  G2112G: '/products/sakura/item/944',
+  R605: '/products/sakura/item/946',
+  EG2501GC: '/products/sakura/item/82143',
+  R610HS: '/products/sakura/item/82134',
+  P0531: '/products/sakura/item/81960',
+  E8891: '/products/sakura/item/81954',
+  E7683: '/products/sakura/item/81835',
+  E3625: '/products/sakura/item/81078',
+  E8890: '/products/sakura/item/80844',
+}
+
 export type KitchenCase = {
   title: string
   excerpt: string

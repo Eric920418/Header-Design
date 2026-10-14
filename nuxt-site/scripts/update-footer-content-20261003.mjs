@@ -1,10 +1,21 @@
-// PPT page 5: scoped, versioned local Footer update. Other documents stay untouched.
+// PPT page 5: scoped, versioned Footer update. Production requires an explicit flag.
 import assert from 'node:assert/strict'
+import {readFileSync} from 'node:fs'
 import {database,query,transaction} from '../server/cms/database.mjs'
 import {getDocument,changeDocument,validate} from '../server/cms/content.mjs'
 
-assert.equal(process.env.NUXT_DESIGN_DB_SERVER,'127.0.0.1','僅限本機 CMS')
-assert.equal(process.env.CMS_DB_DATABASE||process.env.NUXT_DESIGN_DB_DATABASE,'SakuraWebsiteDev','禁止修改其他資料庫')
+if(process.argv.includes('--production')){
+  const runtime=readFileSync(new URL('../../.env.azure-runtime.local',import.meta.url),'utf8')
+  const expectedServer=/^NUXT_DESIGN_DB_SERVER=(.+)$/m.exec(runtime)?.[1]?.trim().replace(/^['"]|['"]$/g,'')
+  assert(expectedServer?.endsWith('.database.windows.net'),'缺少既有正式 Azure 目標')
+  assert.equal(process.env.NUXT_DESIGN_DB_SERVER,expectedServer,'正式目標必須與既有runtime檔一致')
+  assert.equal(process.env.CMS_DB_DATABASE||process.env.NUXT_DESIGN_DB_DATABASE,'SakuraWebsiteTest','禁止修改其他正式資料庫')
+  assert.equal(process.env.CMS_DB_USER,'sakura_website_cms','只能使用既有CMS應用權限')
+  assert.notEqual(process.env.NUXT_DESIGN_DB_TRUST_SERVER_CERTIFICATE,'true','正式TLS不可降低驗證')
+}else{
+  assert.equal(process.env.NUXT_DESIGN_DB_SERVER,'127.0.0.1','僅限本機 CMS；正式必須明確指定--production')
+  assert.equal(process.env.CMS_DB_DATABASE||process.env.NUXT_DESIGN_DB_DATABASE,'SakuraWebsiteDev','禁止修改其他資料庫')
+}
 const apply=process.argv.includes('--apply')
 try {
   await transaction(async tx=>{
@@ -12,6 +23,7 @@ try {
     assert(doc.publishedId&&doc.draftId===doc.publishedId,'有未發布草稿，停止以免覆蓋')
     const body=JSON.parse((await query('SELECT body FROM cms.Versions WHERE id=@id',{id:doc.publishedId},tx)).recordset[0].body)
     const previous=JSON.stringify(body)
+    const preserved={copy:JSON.stringify(body.copy),settings:JSON.stringify(body.cmsSettings),other:JSON.stringify(body.sitemapGroups.filter(g=>['設計案例','優惠消息'].includes(g.title)))}
     function group(title){
       const matches=body.sitemapGroups.filter(g=>g.title===title)
       assert.equal(matches.length,1,`${title} 分類必須唯一`)
@@ -43,11 +55,14 @@ try {
       assert(matches.length<=1,`${to} 入口重複，停止`)
       if(matches.length){assert.equal(matches[0][0],label,'入口已另行修改，停止以免覆蓋');section.links=section.links.filter(link=>link[1]!==to)}
     }
+    assert.equal(JSON.stringify(body.copy),preserved.copy,'社群／圖片／版權不得修改')
+    assert.equal(JSON.stringify(body.cmsSettings),preserved.settings,'顯示及SEO設定不得修改')
+    assert.equal(JSON.stringify(body.sitemapGroups.filter(g=>['設計案例','優惠消息'].includes(g.title))),preserved.other,'其他選單不得修改')
     if(JSON.stringify(body)===previous){console.log('UNCHANGED view-components-SiteFooter');return}
     validate(body,JSON.parse(doc.schemaJson))
-    if(!apply){console.log('CHECK Footer 文案、兩個服務入口與指定五個多餘入口；保留其他欄位及舊版本');return}
+    if(!apply){console.log(`CHECK ${process.argv.includes('--production')?'production':'local'} Footer revision ${doc.revision}; 指定兩個名稱／兩個服務入口／五個多餘入口，保留其他欄位及舊版本`);return}
     const user=(await query("SELECT id,role FROM cms.Users WHERE email='admin@sakura.local' AND role='admin' AND disabled=0",{},tx)).recordset[0]
-    assert(user,'找不到有效本機管理員')
+    assert(user,'找不到既有有效管理員，停止')
     const saved=await changeDocument(doc.id,{action:'save',revision:doc.revision,body},user,tx)
     const published=await changeDocument(doc.id,{action:'publish',revision:saved.revision},user,tx)
     console.log(`UPDATED ${doc.id}; revision ${published.revision}; retained previous version ${doc.publishedId}`)

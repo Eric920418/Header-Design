@@ -23,6 +23,7 @@ const reducedMotion = useReducedMotion()
 let flipTimer: ReturnType<typeof setTimeout> | undefined
 let flipFinishTimer: ReturnType<typeof setTimeout> | undefined
 let nextFlipSlot = 0
+let seenStoreIds = new Set(displayedIds.value)
 
 const filtered = computed(() => stores.filter(store => (!region.value || store.region === region.value) && (!city.value || store.city === city.value)))
 const filteredKey = computed(() => filtered.value.map(store => store.id).join(','))
@@ -38,6 +39,7 @@ watch(filteredKey, () => {
   focused.value = false
   if (!list.some(store => store.id === selected.value)) selected.value = list[0]?.id ?? stores[0].id
   displayedIds.value = list.slice(0, STORE_BOARD_ROWS).map(store => store.id)
+  seenStoreIds = new Set(displayedIds.value)
   nextFlipSlot = 0
   flipState.value = null
   clearFlipTimers()
@@ -87,7 +89,11 @@ function runFlip() {
   }
 
   const target = replaceableSlots[nextFlipSlot++ % replaceableSlots.length]!
-  const replacement = candidates[Math.floor(Math.random() * candidates.length)]!
+  const unseenCandidates = candidates.filter(store => !seenStoreIds.has(store.id))
+  if (!unseenCandidates.length) seenStoreIds = new Set(displayedIds.value)
+  const pool = unseenCandidates.length ? unseenCandidates : candidates
+  const replacement = pool[Math.floor(Math.random() * pool.length)]!
+  seenStoreIds.add(replacement.id)
   flipState.value = { slot: target.index, previousId: target.id }
   displayedIds.value = displayedIds.value.map((id, index) => index === target.index ? replacement.id : id)
 

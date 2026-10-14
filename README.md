@@ -1,11 +1,91 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-15 廚電三品牌切換按鈕16px SemiBold
+
+- 依2026-10-14 23:43:37截圖，ponytail只把共用ProductBrandPage的SAKURA／SVAGO／TEKA品牌切換按鈕由14px改16px、font-weight600；桌機／平板／手機套用同一規格。不改原字型、等寬116px欄、52px最小高度、12／8px內距、20px間距或手機三等分／12px間距。
+- 原品牌切換網址、當前品牌aria-current、hover／鍵盤focus與商品分類內容保留，其他導覽／CTA／列表標籤不套用本次規格。既有回歸新增16px600及原高度／內距防護，文件只維護README，不新增套件／文件、不修改CMS／資料庫或部署。
+- 限定品牌回歸通過16px600、等寬／手機三欄、原52px高度／12px8px內距；三品牌頁SSR均200且保留三個品牌網址及唯一aria-current。本次pnpm build通過、建置後唯一品牌按鈕scoped CSS規則含font-size16px／font-weight600，腳本node --check及git diff --check通過，保留既有Tailwind sourcemap警告。
+- 本輪僅修改兩項CSS屬性，未重跑typecheck或含業務表單POST的全站回歸；未作瀏覽器字體實際呈現／視覺／互動驗收，不將編譯CSS當成畫面像素驗收。未Git提交／推送、部署或驗正式端；保留前輪未提交變更，正式需部署本次程式才會更新。
+
+## 2026-10-15 品牌系列推薦電器導向產品介紹頁
+
+- 依2026-10-14 23:43:25截圖，用ponytail核對共用推薦卡；原模板只有equipment.route非空才是NuxtLink，Clever五筆CMS網址皆空，導致圖片／型號／名稱均不可點擊。修改前實際SSR斷言五個a連結失敗（0≠5）。其他系列亦有空白或誤指/products/sakura品牌首頁的入口，不直接拼型號或將全部送到產品列表。
+- 已核對本站產品API／來源資料：EG2350GB對应EG2350G id81546、Q7585BL對應Q7585B id82121、DR7397XL對應DR7397 id82131；VE7770A是SVAGO id82164，G2926G是SAKURA id80339。規格型號歸屬另以官方2024型錄、Q7585手冊及DR7397官方商品頁驗證，不用去尾碼猜測或跨品牌取第一筆。原卡的型號／名稱／圖片保持不變。
+- 在既有kitchenSeries.ts加入15個已核對的詳細頁入口，KitchenSeriesPage只補空白或品牌首頁route，已有明確自訂／官方入口保留；未知型號仍不臆造網址。沿用整卡NuxtLink及外連安全屬性，CMS資料不覆寫；不新增API／套件／文件、不改商品資料、圖片、Hero或其他區塊，只維護README。
+- 官方核對來源：https://www.sakura.com.tw/Uploads/Catalog/6516c7d9-7c55-4723-8027-f224d2e65dd8/%E7%B6%B2%E8%B7%AF%E7%94%A8_SAKURA_%E5%85%A8%E7%94%A2%E5%93%81%E5%9E%8B%E9%8C%84_%E7%94%9F%E6%B4%BB%E9%A4%A8_240418.pdf、https://buy.sakura.com.tw/files/11984/Q7585%E8%AA%AA%E6%98%8E%E6%9B%B8_250522.pdf、https://shop.sakura.com.tw/zh-TW/products/dr7397。不修改資料庫或正式端。
+- 修正後15個新增入口的產品API均200且主型號／品牌／route符合對應；十個系列SSR共45張推薦卡全部為連結，圖片／型號／名稱在同一a內，CMS原始equipment不變。Clever五個目標頁SSR皆200、主商品型號正確且沒有role=alert。既有回歸加入純函式解算、自訂／官方及未知型號保留、五個目標API品牌／主型號及整卡SSR連結防護；只限定執行，不跑業務表單POST。
+- pnpm build、建置後typecheck、限定回歸、腳本語法及git diff --check通過，保留既有Tailwind sourcemap警告。未執行本輪瀏覽器點擊／鍵盤／觸控及返回位置驗收，SSR連結和目標頁200不等同實際互動驗收；未驗正式端、不Git提交／推送或部署，正式需部署程式修改。保留原未提交Hero／門市／Footer CLI變更；目前為本地連結與資料／建置驗證完成、瀏覽器互動待確認。
+
+## 2026-10-15 品牌系列Hero動畫與首頁一致核對
+
+- 依2026-10-14 23:43:14截圖指定標題區動畫同首頁，以ponytail比對目前HomeHero／KitchenSeriesPage及實際共用src/styles/globals.css；兩頁現有主標題皆包在hero-slide-copy內，已共用hero-copy-cycle 5s ease both，由左48px淡入、停留、後段淡出，5秒換圖時透過key重建文字包層；系列手動換圖亦增加heroTransition重播。
+- 截圖含AI LIGHT／龍頭說明及已刪除的舊底欄，不代表目前本地內容；本輪不恢復舊文字、不新增介紹內容、不改Hero字級／定位／圖片、底部框外箭頭＋型錄／探索CTA或Clever標題，不另疊加v-reveal／新動畫。首頁與系列皆保留減少動態停播／文字直接顯示。
+- 只在既有回歸補共用class、動畫階段／5秒週期、換圖key及減少動態一致性防護，限定執行通過；回歸腳本node --check及git diff --check通過。本地3100首頁／aikitchen／clever SSR均200、h1在hero-slide-copy包層内，兩系列新底部控制組保留且舊文案節點不存在；實際/_nuxt/assets/css/main.css200含共用hero-copy-cycle及hero-slide-copy規則。
+- 本輪未修改Vue／CSS，無需再次建置；不把source／SSR／CSS確認當成瀏覽器實際動畫或像素驗收，未重新捕捉動畫，亦未驗正式端。文件只維護README、不新增文件／套件，不修改CMS／資料庫、不Git提交／推送或部署，原未提交變更保留。結論為本地動畫規則已符合，不新增重複動畫；若正式端畫面仍不同須另驗正式部署，不能以本地結果代替。
+
+## 2026-10-15 品牌系列Hero框外箭頭與探索設計案例CTA
+
+- 依2026-10-14 23:43:00截圖及使用者明確確認「箭頭放框外左側；框內保留型錄＋探索設計案例」，共用KitchenSeriesPage底部由左側前後箭頭與右側玻璃框組成；框內保留品牌系列型錄圓鈕，新增探索設計案例連到/design-inspiration（設計靈感），並使用既有Lucide右上箭頭。
+- 沿用ponytail局部改模板／CSS，保留上一輪已刪除的前段及Clever Hero文案修正、不重建Hero。輪播函式／自動播放／單張停用／無障礙標籤、型錄query／另開新分頁及安全屬性、Start Project／圖片／系列抽屜與CMS內容不動。
+- 桌機箭頭在框外左側；手機原安全距離下無法容納整排，因此框外箭頭置於框上方靠右，框內70／98px兩欄。保留原深色背景／模糊／圓角，新增CTA最小44px觸控高度及鍵盤focus。既有回歸同步更新以防舊欄位驗收誤報；只維護README，不新增套件／文件、不寫資料庫或部署。
+- 限定回歸通過：框外控制組在框前、框內兩連結及右上圖示、型錄query／安全屬性、箭頭事件及單張停用、自動輪播／減少動態保留、三斷點CSS與320／390／767px靜態寬度容納。3100的aikitchen／clever SSR均200，框內無button／控制組、探索CTA href=/design-inspiration、圖示存在，控制組在框前；Clever單張仍停用箭頭、兩頁Hero文字及前段刪除保留。目標/design-inspiration SSR200且含設計靈感內容，未送業務表單。
+- pnpm build、建置後typecheck、回歸腳本語法及git diff --check通過，保留既有Tailwind sourcemap警告；未作本輪瀏覽器視覺、實際點擊／鍵盤／觸控或返回捲動驗收，不能把SSR及靜態欄寬檢查當成互動／無溢出完整驗收。未Git提交／推送或部署，正式端需部署此程式更新；原門市／Footer CLI等未提交變更保留。
+
+## 2026-10-15 品牌系列內頁Hero底欄只保留後段
+
+- 依2026-10-14 23:40:49截圖刪除共用KitchenSeriesPage Hero底欄前段縮圖／眉標／標題／說明，只保留後段品牌系列型錄及上一張／下一張箭頭；適用品牌系列內頁共用底欄。使用ponytail局部刪除，不重建Hero、不刪上方標題／Start Project、其他區塊或CMS資料。
+- 刪除失去引用的heroStories／activeHeroStory與專用CSS動畫；底欄改靠右max-content兩欄，保留桌機位置／高度／深色背景／圓角，手機改98px高70／88px兩欄，不留下整條空框或236px舊文案留白。型錄系列query及新分頁安全屬性、單張系列箭頭停用、showHero循環及5秒自動輪播／減少動態設定保留。
+- 限定回歸通過移除內容、型錄query／安全屬性、前後箭頭與单張停用、三斷點欄位及320／390／767px靜態寬度可容納防護；以元件實際showHero函式驗證一張／三張圖片的前後循環與轉場計數。3100本地aikitchen／clever SSR均200、前段縮圖／文案節點不存在、型錄及兩箭頭／Start Project／背景保留，Clever單張兩箭頭停用、AI三張可用。未跑含業務表單POST的全站回歸。
+- pnpm build、建置後typecheck、回歸腳本語法及git diff --check通過，保留既有Tailwind sourcemap警告。未作本輪瀏覽器視覺／觸控互動驗收，靜態寬度檢查不代表真實畫面無溢出；狀態為本地實作及邏輯／SSR驗證完成、視覺驗收待確認。文件只維護README，不新增套件／文件，不Git提交／推送或部署、不修改CMS／資料庫或正式端；不包含其他待處理項目並保留前輪變更。
+
+## 2026-10-14 Clever品牌系列內頁Hero刪除Kitchen
+
+- 依23:40:33截圖只將/home-style/clever的Hero「Clever Kitchen」呈現為「Clever」，保留原字級、白色、定位、圖片、Start Project及系列抽屜。image-to-code／ponytail採既有頁面局部文案修正，不重建頁面或生成資產；文件只維護本README。
+- 共用KitchenSeriesPage限定slug=clever且CMS名稱為Clever Kitchen時改Hero顯示；其他系列（含AI Kitchen）、CMS自訂名称、SEO、圖片alt與其他區塊仍取原data.name。不修改CMS／資料庫，避免全域刪除Kitchen或覆寫系列資料。
+- 既有回歸加入限定Hero文案及其他系列／自訂CMS名称／SEO保留檢查，限定區塊執行通過，未跑包含業務表單POST的全站回歸。本地3100實際SSR兩頁均200，clever的h1為Clever、aikitchen仍為AI Kitchen，原標題class／CTA保留；pnpm build、建置後typecheck、回歸腳本語法及git diff --check通過，保留既有Tailwind sourcemap警告（驗證跨至2026-10-15）。
+- 設計QA來源為/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_hGkYMW/截圖 2026-10-14 晚上11.40.33.png。五項範圍檢查：字體／字級、定位／間距、配色、圖片資產均無程式變更；Hero文案經SSR確認。瀏覽器先前受URL安全限制，本輪未改用替代方式繞過；無新瀏覽器截圖、未作同viewport視覺比較，image-to-code設計QA final result: blocked（僅文案邏輯／SSR及建置已驗證，不宣稱像素或互動驗收通過）。依使用者規則只寫README、不新增design-qa.md。
+- 正式端需要部署程式修改，不能把本地改好當成正式生效；本輪未Git提交／推送、部署、修改CMS或資料庫，亦不包含其他待處理項目，原未提交門市及Footer CLI變更保留。
+
+## 2026-10-14 正式Footer網站地圖對齊已確認版本
+
+- 依23:38:13截圖與要求處理正式頁尾，gstack-openclaw-investigate／ponytail核對正式SiteFooter API200仍為舊內容，本地已確認入口數4／4／4／1／3／2。只修兩個品牌名稱、補到府丈量／線上客服、移除指定五個多餘Footer入口；不把截圖舊文字當新版設計，也不修改其他CMS文件。
+- 正式Azure既有SakuraWebsiteTest／CMS應用帳號唯讀核對Footer revision1、draftId等於publishedId，沒有未發布草稿；沿用現有update-footer-content-20261003.mjs交易save／publish與revision衝突檢查，保留80a65fb3-1243-4c4f-8972-e64a0d1c3f81舊版本。新增明確--production且必須匹配既有.env.azure-runtime.local目標／固定庫名／CMS應用帳號／正式TLS驗證；預設仍只允許本機，沒有擴權或改憑證。
+- 執行以nuxt-site為cwd：node --env-file=../.env.azure-runtime.local scripts/update-footer-content-20261003.mjs --production先做dry-run，確認後同指令加--apply。保護copy（圖片／社群／版權）、cmsSettings及設計案例／優惠消息欄完全不變；不seed、整庫import或修改主導覽。
+- 更新前正式入口數4／6／2／1／3／5的驗收斷言失敗；版本化發布後Footer revision3、draftId等於publishedId 7eccba2b-b638-4e95-a97b-0b24da9293c7，原80a65fb3-1243-4c4f-8972-e64a0d1c3f81版本仍存在。與舊版本核對copy／cmsSettings及兩個未修改分類完全相同，其他CMS文件的revision／draftId／publishedId在發布前後完全一致。
+- sakura-demo-vanlantech.com與header-design-two.vercel.app的正式Footer API及首頁SSR均200；兩站API全文與新發布版本相同，六欄18個指定入口全部存在、五個多餘入口及舊「關於櫻花」名稱不存在於Footer。只檢查Footer範圍，未誤把主導覽中的同名入口當成頁尾殘留。本輪修復為正式CMS發布，不需重建部署；未驗收瀏覽器展開互動／像素排版，亦未處理待授權的Header加盟箭頭或尚未通過的歷史捲動驗收。
+- 發布後重跑正式dry-run回UNCHANGED，沒有建立額外版本；腳本node --check及git diff --check通過。只修改此限定CLI與本README，保留既有HomeStoreLocation及回歸腳本未提交變更；未新增套件、提交Git或部署。調查結論：正式CMS頁尾舊資料為根因，內容已發布並經兩網域API／SSR驗證；狀態DONE_WITH_CONCERNS（瀏覽器展開及像素驗收未執行）。
+
+## 2026-10-14 首頁門市翻牌不重複
+
+- 依23:36:56截圖，gstack-openclaw-investigate／ponytail確認本地九筆門市無重複，同時四卡原已依ID排重；真正缺口為隨機抽選只排除當前四家，剛離場者可在其他門市尚未顯示前立即再出現。
+- 規則採同一篩選範圍內全數顯示過再開下一輪，當前四卡始終不同；門市有限，不承諾永遠不重播。篩選不足四家只顯示實際數量，選取門市、翻牌動畫／間隔、地圖及資料庫內容保留。驗收與調查只寫README，不新增文件。
+- 先補既有回歸的確定性抽選測試：首輪九家完整且未顯示完前不重抽、跨輪四卡唯一、選店保留、零至四筆不翻牌及暫停／減少動態，預期舊邏輯失敗後再做最小修正。
+- 測試夾具保留原760ms常數，以原runFlip函式直接執行並固定隨機值，避免只測重寫的模擬演算法。
+- 舊程式已確定性重現「本輪全部門市未顯示完之前不得重抽」失敗；新增已顯示ID集合，優先抽未顯示候選者，全輪完成才以當前四卡開新輪，切換篩選重新初始化集合。只改HomeStoreLocation的抽選狀態，不變更門市內容或其他輪播。
+- 修正後限定回歸通過：首輪完整九家、不重抽、多輪四卡唯一、手動選店保留、零至四笔不補重複卡，以及暫停／減少動態。另以實際元件script經TypeScript轉譯搭配Vue ref／computed／watch及可控計時器執行，北部五家仍翻牌、中部四家停止、無符合城市顯示空清單、清除篩選回九家時已顯示集合重新初始化，全部通過；補入篩選reset來源防護。
+- pnpm build／建置後typecheck、回歸腳本語法及diff檢查通過，保留原Tailwind sourcemap警告。未執行含業務表單POST的全站回歸，也未重新做瀏覽器動畫視覺驗收；本輪只確認抽選／響應狀態邏輯與建置。調查報告：隨機抽選缺少本輪已顯示記錄，已加集合並以舊失敗／新通過證據確認；狀態DONE_WITH_CONCERNS（視覺及正式端未驗）。未部署、提交或更改CMS／資料庫，正式端需部署此程式修改才會生效。
+
+## 2026-10-14 正式加盟選單伸縮箭頭未顯示根因
+
+- investigate／ponytail及Vercel部署檢查只做診斷，不改正式資料。Git main與origin/main均為14e7951d；SiteHeader伸縮功能已於184fb7db提交。Vercel CLI目前沒有登入憑證、MCP對既有team／project回404，不能由此確認正式部署的完整commit；已改以正式實際SSR及公開JS取證，不宣稱取得Vercel部署metadata。
+- 本地及兩正式網域header-design-two.vercel.app／sakura-demo-vanlantech.com的view-components-SiteHeader均HTTP200：本地加盟children六筆，正式均四筆，正式缺加盟申請表單/franchising/form與加盟資料下載/franchising/download。使用同一navChildren分組函式可重現本地extras=2、正式extras=0；箭頭v-if依extras.length決定，正式條件為false。
+- 正式首頁SSR均200且沒有franchise-extra-desktop；x-vercel-cache=MISS、age=0。首頁引用的/_nuxt/SrV8HtzE.js HTTP200，含桌機／手機franchise-extra-desktop／mobile、展開加盟申請與下載選項及對應額外選單過濾邏輯，證實這項程式已在線上，不是只憑本地source推測部署。此檢查排除「箭頭程式完全沒部署」及本次回應的舊快取，未驗其他新版功能或完整commit一致性。
+- 根因是程式與正式CMS資料不同步。useCmsResource的_sample只提供型別，不會把Git中示範選單合併進正式發布內容；推Git／重建部署不會更新Azure CMS。本機update-header-content-20261003.mjs亦明確只允許本機SakuraWebsiteDev，不能直接用於正式。
+- 調查結論：原因已確認、尚未修復。建議僅替正式Header新增／發布上述兩筆，保留原四筆、其他所有欄位、歷史版本，先检查未發布草稿及revision衝突後才更新；不得整份seed或覆寫資料庫。先前只驗本地而未驗正式CMS的交付缺口已記錄。本轮只补README，不修改程式／CMS、不部署、不送業務表單；後續正式修改待使用者授權。
+
+## 2026-10-14 主導覽品牌館名稱核對（23:17截圖）
+
+- 依截圖指定「櫻花集團品牌館」，以ponytail先核對共用SiteHeader與實際發布內容。本地/api/content/view-components-SiteHeader200，品牌承諾下唯一/about/exhibition入口已為「櫻花集團品牌館」；首頁SSR200亦輸出相同文字，非只看程式範例。桌機及手機由同一rightNav／navChildren來源輸出。
+- 此需求在本地已完成，因此本輪不重複修改Vue／CMS、不新增版本／套件或文件，只補本README與既有SSR回歸防護。截圖含旧名稱不能視為目前本地状态；本輪未確認正式網站，也未執行瀏覽器互動，未部署或修改資料庫。原瀏覽器返回位置修正仍待完整驗收，不將本輪文字核對視為其驗收完成。
+
 ## 2026-10-14 預覽登入長時間等待調查
 
 - 使用者回報 Chrome 停在「驗證中…」。線上獨立量測登入 API 200 約430ms、首頁 HTML 200 約1638ms；同一台 Chrome 實際點擊約977ms進首頁，本輪尚未重現間歇性長等待。Vercel 23:18:03 的 Chrome POST 紀錄顯示執行11ms、回應66ms且無對外請求，不能認定資料庫或密碼比對變慢，也不能把目前正常當成原問題已消失。
 - 確認登入請求原本沒有逾時限制，連線卡住會持續鎖在驗證中。限定修正登入頁的15秒逾時、不自動重送、防止等待中重複送出與前端錯誤細節；不變更驗證密碼、簽章、Cookie期限或其他頁面。此修正限制等待並讓使用者可重試，不宣稱已找到間歇性網路延遲來源。
 - 新增 `pnpm --dir nuxt-site exec node scripts/check-preview-access.mjs`，使用真實ofetch與本機無回應HTTP服務驗證逾時，另驗錯誤密碼、重試、成功返回指定內頁及外站導向防護。文件僅維護本README，不新增套件、不寫CMS／資料庫、不部署；保留原有未提交的router捲動修改。
-- 回歸先在未修正頁面執行，確認缺少逾時與防重送會失敗，再驗證修正後行為；驗證結果於完成後補記。
+- 回歸先在未修正頁面執行失敗，再於修正後通過真實15秒逾時／不重送／解除pending／錯誤細節／錯誤密碼與成功重試檢查。`pnpm build`、建置後`pnpm typecheck`、腳本語法及`git diff --check`通過；保留原Tailwind sourcemap警告。
+- Chrome搭配獨立3048建置預覽／3049暫存代理，讓第一筆POST真正無回應，確認15秒後role=alert顯示逾時與底層TimeoutError、按鈕可重試；再次送錯誤密碼正確顯示401，再用正確密碼可返回指定的站內Logo資源，沒有讀寫CMS或提交業務表單。使用者補充為偶爾無規律發生，原間歇性延遲尚未定位，investigate狀態為DONE_WITH_CONCERNS；確認的缺陷為缺少等待上限，並非已證實的伺服器效能退化。
+- 本輪未執行Git提交／推送或Vercel部署；驗證期間工作區由其他流程提交為14e7951d，最後唯讀抓取正式網域登入頁及其JS，已確認線上程式包含「驗證連線超過15秒」處理。暫存測試服務於驗證後關閉。
 
 ## 2026-10-14 首頁進站與歷史捲動恢復
 
@@ -13,6 +93,8 @@
 - ponytail最小範圍修改共用router.options.ts：原實作忽略savedPosition並將返回固定到0；改為歷史返回優先恢復Vue Router依history entry保存的位置（包含同頁query及帶hash歷史位置），一般新頁仍從頂端開始，原同頁篩選維持位置。
 - 跨頁定位先等待Nuxt page:loading:end及兩次rAF，舊導航可取消；恢復位置後以scroll與ResizeObserver處理延後圖片／CMS高度變化和捲動範圍初期不足，使用者wheel／touch／pointer／keyboard／focus或新導航即解除固定，保留Lenis慣性終止及原錨點reveal處理。不新增套件、資料庫／CMS寫入或部署，文件只維護README。
 - 既有check-route-scroll.cjs改掉「後退／前進必須回頂」的舊驗收，新增SCROLL_HISTORY_ONLY唯讀模式：桌機／手機／減少動態分別測主網址、新分頁／重整、內頁直連、中段品牌卡返回與前進、延後圖片1200ms、帶hash及同路徑分頁歷史位置；不送聯繫表單。
+- 2026-10-14再次詢問狀態時，確認修正已在14e7951d，補跑本地SCROLL_HISTORY_ONLY實際瀏覽器回歸。1440px一般動畫的中段品牌卡跳頁可從新頁頂端開始；返回且延後圖片1200ms時，點擊事件記錄1278px、返回後三次取樣均1304px（差26px），超出2px驗收容差而停止。未回到頂端、返回後也沒有後續跳動，但慣性捲動的取樣時間差或位置保存偏差尚未釐清，不能認定整項已完成。
+- 本輪為状态查核，不改實作或放寬測試門檻，不部署或修改資料庫；手機、減少動畫及正式端尚未完成本次驗收。当前状态：程式已加入／完整驗收未通過，不能把建置成功或Git已提交當成互動驗收完成。
 
 ## 2026-10-14 建商專區聯繫品牌館標題
 
