@@ -6,7 +6,10 @@
 - Vercel MCP在已知team取得零專案且既有id／header-design皆404，CLI無登入憑證，已停止自動開啟的登入流程；不能據此宣稱專案不存在。GitHub最新main的Vercel status與Production deployment成功紀錄確認既有header-design專案／erics-projects-57e51613，將沿用Git integration推送觸發，不建立新專案、不改環境變數／資料庫或保護設定。
 - 全量回歸發現建商品牌區仍要求舊兩行中文，改為明確比對已確認「嚴選國內外優質品牌＋Creating the Ideal Kitchen for Every Family」，僅正規化br與模板原空白，不放寬文案；系列獨立回歸亦同步Clever Hero已確認刪Kitchen，其他系列仍逐字比對原名，不放寬驗收或略過斷言。
 - 本輪pnpm build、建置完成後typecheck、完整check-frontend-regressions、check-kitchen-series --cutouts（10系列／45廚電位置／29透明來源／215圖片來源／404）、商品分類封面三品牌749／60／38項、分頁純函式、媒體分塊／格式驗證及preview-access真實15秒逾時／重試／目的頁驗證全通過；腳本語法與git diff --check通過。全量回歸一次在開發SSR商品頁500中止，全部建置／型別作業結束後單獨完整重跑通過，不忽略失敗或修改API回應。保留既有Tailwind sourcemap與Node型別移除實驗警告。
-- 九份程式／測試／README將提交並推送main（原八份前輪修改及本輪系列回歸修正）；Vercel Git正式部署與兩個公開網域的新SSR／樣式驗證結果待補。未同步正式Header CMS，該兩筆資料是否發布另待使用者確認，推Git本身不會讓缺少的加盟額外入口出現。
+- 九份程式／測試／README已提交並推送main（原八份前輪修改及本輪系列回歸修正），程式commit=2099b50b996a5b610d559153e94fc6bf3aaefe1c。Vercel check為success／Deployment has completed，GitHub Production deployment7072654031亦success，部署網址https://header-design-9nxu2ozhx-erics-projects-57e51613.vercel.app。部署紀錄回寫README另作正常文件commit／push，不amend或force push。
+- https://header-design-two.vercel.app及https://sakura-demo-vanlantech.com均已在正常預覽登入後驗證首頁／品牌優勢／加盟介紹／加盟PDF／建商首頁／建商SAKURA六頁SSR200，沒有跳往上次內頁；正式新三行標題、Home7／45+萬、原生required同意label、預約／PDF入口皆存在。每站內嵌style與八份外部CSS200證實招牌20%焦點、19px勾選框、40px PDF標題、輪播pointer、97%進場及同首頁CTA配色都已上線，不只確認Git部署成功。
+- 正式驗證初次一個GET遇20秒逾時，正常重試／45秒上限後兩站六頁與樣式全部通過；不關閉安全驗證、不更動資料庫。Nuxt正式版部分CSS直接內嵌HTML，已納入驗證，不能只用link stylesheets判斷未更新。未取得Vercel runtime error logs／drains／建置耗時，不能宣稱監控無錯誤；HTTP／SSR檢查通過不等於實際瀏覽器互動／捲動與視覺验收。
+- 未同步正式Header CMS，該兩筆資料是否發布另待使用者確認，推Git本身不會讓缺少的加盟額外入口出現；品牌Hero選單位置、建商Hero預約入口方案及返回位置實際驗收仍待處理，本次發布不宣稱全部需求皆已完成。
 - 限定本地前台／SSR／純函式與安全負向驗證，不執行會seed、匯入、還原、建立帳號或插入有效業務收件的資料庫測試。全量前台唯一業務POST為非法team選項，已查server在收件transaction前拒絕，預期400而非新增加盟收件；沒有使用accept-data-loss。瀏覽器URL安全限制不繞過，不將SSR或deployment success當成動態／手機視覺驗收。
 
 ## 2026-10-15 建商SAKURA Hero圓形CTA同首頁顏色
