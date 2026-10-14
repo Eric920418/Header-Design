@@ -72,7 +72,8 @@ for (const page of pages) {
   const borderlessFinish = page.finishes.some(finish => page.slug === 'basic-plus' && finish.code === 'K540D')
   assert.equal(html.includes('ai-finishes__image--light'), lightFinish, `${page.slug}: 白色色卡細框範圍錯誤`)
   assert.equal(html.includes('ai-finishes__image--borderless'), borderlessFinish, `${page.slug}: 只裁除 BASIC+ 瓷白原圖灰框`)
-  assert(html.match(/<h1\b[^>]*id="ai-kitchen-hero-title"[^>]*>(.*?)<\/h1>/s)?.[1].includes(page.name), `${page.slug}: SSR 標題錯誤`)
+  const heroTitle = page.slug === 'clever' && page.name === 'Clever Kitchen' ? 'Clever' : page.name
+  assert.equal(html.match(/<h1\b[^>]*id="ai-kitchen-hero-title"[^>]*>(.*?)<\/h1>/s)?.[1], heroTitle, `${page.slug}: SSR 標題錯誤`)
   assert(html.includes('hero-slide-copy') && html.includes('hero-template-title'), `${page.slug}: 未共用首頁標題`)
   for (const marker of ['ai-suite-stage', 'ai-finishes__grid', 'ai-equipment__grid', 'https://pse.is/9kq37z']) assert(html.includes(marker), `${page.slug}: ${marker} 遺失`)
   assert(html.includes(page.suites[0].name.replaceAll('&', '&amp;')), `${page.slug}: 套系內容錯誤`)

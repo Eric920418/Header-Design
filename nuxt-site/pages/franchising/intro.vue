@@ -453,7 +453,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-project-viewport { overflow: hidden; touch-action: pan-y pinch-zoom; }
 .franchise-project-track { display: flex; align-items: flex-start; padding: 0 0 12px; }
 .franchise-project-controls { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 24px; }
-.franchise-project-controls button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 10px 16px; border: 1px solid #e3e3e8; border-radius: 999px; color: #59585d; background: #fff; font-size: 14px; }
+.franchise-project-controls button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 10px 16px; border: 1px solid #e3e3e8; border-radius: 999px; color: #59585d; background: #fff; font-size: 14px; cursor: pointer; }
 .franchise-project-controls button:hover { border-color: #caa05c; }
 .franchise-project-controls svg { width: 22px; height: 22px; }
 .franchise-marquees:focus-visible,

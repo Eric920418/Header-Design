@@ -127,11 +127,28 @@ for(const slug of ['case10','case35','case56']){
 }
 console.log('PASS 三篇門市案例預約箭頭 hover／焦點、減少動態及原連結保留')
 const brandHeroSource=await readFile(new URL('../components/internal/BrandAdvantageHero.vue',import.meta.url),'utf8')
+assert(brandHeroSource.includes('<h1 id="brand-h8-title" class="hero-template-title">Why Choose<br /><span>SAKURA KITCHEN</span><br />For Your Home</h1>'),'品牌承諾Hero需完整三行標題，只有品牌行金色')
+assert(brandHeroSource.includes('font-size: clamp(40px, 4vw, 80px);')&&brandHeroSource.includes('white-space: nowrap; text-transform: none;')&&brandHeroSource.includes('font-size: clamp(24px, 7.8vw, 40px);'),'長標題需局部響應式字級、三行不再拆行及原大小寫')
+const brandHeroGlobalStyles=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
+assert(brandHeroGlobalStyles.includes('h1:not(.sr-only, .hero-template-title)'),'局部hero-template-title需避開全站80px!important覆寫，不修改全站規則')
+assert(brandHeroSource.includes('.brand-h8-copy h1 span { color: #caa05c; }')&&brandHeroSource.includes('.brand-h8-copy h1 { color: #fff; }'),'桌機保留白色兩行及品牌金色')
+assert(brandHeroSource.includes('inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0;')&&brandHeroSource.includes("url('/section-3/store-chengde.jpg')) center 20% / cover no-repeat"),'品牌背景需保留承德店原圖及CMS素材，將招牌焦點置於導覽下安全區')
+assert(/@media \(min-width: 1025px\)\s*\{\s*\.brand-h8-copy \{ padding-top: 32px; \}/.test(brandHeroSource),'只調桌機左側文案間距，不推動手機或右側内容')
+assert(brandHeroSource.includes('.brand-h8-intro::before { display: none; }'),'平板／手機仍保留原單欄及背景隱藏規則')
+for(const width of [1025,1280,1440,1920,2560,3840])for(const height of [900,1020,1200]){
+  const header=60, offset=(header+16)*1.25, pseudoHeight=height*1.25-offset
+  const scale=Math.max(width/2/500,pseudoHeight/371)
+  const imageTop=-height*.25+offset+(pseudoHeight-371*scale)*.2
+  const signTop=imageTop+74*scale,signBottom=imageTop+84*scale
+  assert(signTop>=header+12&&signBottom<=104+32-12,'承德店原圖招牌上／下緣應避開導覽與文案（僅靜態幾何模型）')
+}
 assert(brandHeroSource.includes('v-reveal="{ anim: \'opalMoveUp\' }" data-ev="opalMoveUp" class="brand-h8-stage ev"'),'品牌優勢保留原大圖進場')
 assert(brandHeroSource.includes('.brand-h8-stage__image :deep(img) { position: absolute; inset: 0; width: 100%; height: 100%; }'),'大圖需填滿手機最小高度，避免動畫露出底色')
 assert(/\.brand-h8-stage\.is-visible \.brand-h8-stage__image :deep\(img\)\s*\{[^}]*animation: hero-kenburns 5s ease-out 1\.25s both;/.test(brandHeroSource),'大圖可見後等待原1.25秒進場，再重用首頁5秒Ken Burns')
 assert(/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.brand-h8-stage\.is-visible \.brand-h8-stage__image :deep\(img\)\s*\{ animation: none; transform: none;/.test(brandHeroSource),'減少動態偏好需保持原圖靜止')
 const brandHeroHtml=await(await get('/about/advantage')).text()
+const brandHeroTitleMarkup=brandHeroHtml.match(/<h1\b[^>]*id="brand-h8-title"[^>]*>([\s\S]*?)<\/h1>/)?.[1]?.replace(/<(br|span)\b[^>]*>/g,'<$1>')
+assert.equal(brandHeroTitleMarkup,'Why Choose<br><span>SAKURA KITCHEN</span><br>For Your Home','實際SSR需輸出指定三行完整文案')
 const brandHeroStage=brandHeroHtml.match(/<div\b[^>]*class="brand-h8-stage ev(?: ev)?"[^>]*>[\s\S]*?<\/div>/)?.[0]
 assert(brandHeroStage?.includes('data-ev="opalMoveUp"')&&brandHeroStage.includes('SAKURA 品牌優勢廚房空間'),'大圖原進場與替代文字需保留')
 assert(brandHeroStage.includes('<img')&&brandHeroStage.includes('loading="eager"'),'保留原圖片元件及優先載入')
@@ -458,6 +475,16 @@ assert(exhibition.includes('aria-describedby="pavilion-booking-notice"'))
 assert((await(await get('/builders')).text()).includes('id="appointment"'),'目標表單區塊必須存在')
 const buildersHtml=await(await get('/builders')).text()
 assert(/id="builder-form-heading"[^>]*>預約品牌館參訪<\/h3>/.test(buildersHtml),'建商表單標題需為預約品牌館參訪')
+const builderFormSource=await readFile(new URL('../components/internal/BuilderAppointmentForm.vue',import.meta.url),'utf8')
+assert(builderFormSource.includes(".builder-form input:not([type='checkbox']),")&&builderFormSource.includes(".builder-form input:not([type='checkbox']) { height: 58px; padding: 0 21px; }")&&builderFormSource.includes(".builder-form input:not([type='checkbox']):focus,"),'文字欄位滿寬／58px／焦點樣式不得套到checkbox')
+assert(/\.builder-form label\.builder-form__consent \{[^}]*display: grid;[^}]*grid-template-columns: 19px minmax\(0, 1fr\);[^}]*min-height: 44px;/.test(builderFormSource),'同意列需19px固定勾選欄、可換行文字及44px可點擊高度，優先於通用label')
+assert(/\.builder-form__consent input \{[^}]*width: 19px; height: 19px;[^}]*padding: 0;[^}]*accent-color: #caa05c;/.test(builderFormSource)&&builderFormSource.includes('.builder-form__consent input:focus-visible { outline: 2px solid #caa05c; outline-offset: 3px; }'),'19px原生勾選框與鍵盤焦點需保留')
+const builderConsentSsr=buildersHtml.match(/<label\b[^>]*class="builder-form__consent"[^>]*>([\s\S]*?)<\/label>/)?.[1]||''
+assert.equal((builderConsentSsr.match(/<input\b/g)||[]).length,1,'同意列僅保留一個checkbox')
+assert(/<input\b[^>]*type="checkbox"[^>]*required/.test(builderConsentSsr)&&builderConsentSsr.includes('我已閱讀隱私權政策，同意提供資料供預約聯繫使用。')&&/<span\b[^>]*>我已閱讀/.test(builderConsentSsr),'SSR需將原必勾選checkbox與原文案置於同一label')
+assert(builderFormSource.includes('v-model="form.consent" type="checkbox" required')&&builderFormSource.includes("if (!validate() || !form.consent)")&&builderFormSource.includes('consent: form.consent,')&&builderFormSource.includes('notice.detail')&&builderFormSource.includes('to="/privacy" target="_blank"'),'保留勾選綁定、送出中停用、必勾選阻擋、提交資料、完整錯誤與隱私入口')
+assert(builderFormSource.includes(':disabled="submitState === \'submitting\'" v-model="form.consent"'),'提交中勾選框不可改值')
+console.log('PASS 建商同意勾選框19px／44px同意列／文字換行、輸入樣式排除、SSR label／required及原驗證錯誤保留')
 const builderCataloguesHtml=await(await get('/builders/catalogues')).text()
 assert(/<p class="builder-catalogue-notice"[^>]*><span[^>]*>本專區型錄僅供建設公司、工程專案及設計師等大宗採購參考。<\/span><span[^>]*>若有個人家用需求，歡迎至櫻花整體廚房門市選購。<\/span><\/p>/.test(builderCataloguesHtml),'建商型錄用途警語需完整顯示')
 assert(builderCataloguesHtml.includes('aria-label="開啟 2026 建商專區型錄 PDF"')&&builderCataloguesHtml.includes('download="SAKURA-建商專區型錄-2026.pdf"'),'建商型錄預覽與下載入口需保留')
@@ -477,7 +504,8 @@ const contactLabel=new Function('cmsCopy','return '+contactLabelSource)
 for(const [input,expected] of [['立即預約','專人聯繫'],['專人聯繫','專人聯繫'],['建案諮詢','建案諮詢']])assert.equal(contactLabel({copy:{text5:input}}),expected)
 assert(buildersContactSource.includes('<span>{{ heroContactLabel }}</span>'),'SSR與前台按鈕需沿用同一聯繫文案')
 console.log('PASS 建商Hero專人聯繫、舊CMS值相容、自訂文案及原表單錨點保留')
-assert(/id="builders-team-title"[^>]*><strong[^>]*>嚴選國內外優質品牌<\/strong><span[^>]*>打造不同定位與多元風格的理想家居空間<\/span>/.test(buildersHtml),'建商品牌區需呈現兩行中文標題')
+const buildersTeamTitle=buildersHtml.match(/<h2\b[^>]*id="builders-team-title"[^>]*>([\s\S]*?)<\/h2>/)?.[1]||''
+assert.equal(buildersTeamTitle.replace(/<br\b[^>]*>/g,' ').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(),'嚴選國內外優質品牌Creating the Ideal Kitchen for Every Family','建商品牌區採已確認中文＋英文標題，僅正規化換行空白，不沿用舊兩行中文斷言')
 const solutions=/id="builders-solutions"[^>]*>(.*?)<section id="appointment" class="builders-contact"/s.exec(buildersHtml)?.[1]
 assert(solutions,'建商分段圖文區塊必須存在')
 const proposalImages=['design-modules.webp','ai-factory.webp','project-platform.webp','home-in-one.webp','dedicated-services.webp','icare.webp']
@@ -493,15 +521,63 @@ for(const image of proposalImages){
 }
 assert.equal((solutions.match(/class="builders-service"/g)||[]).length,3)
 assert(solutions.includes('45+萬')&&solutions.includes('AI智能')&&solutions.includes('管理平台'))
-assert(!solutions.includes('builders-strength')&&!solutions.includes('One-Click Registration'))
+assert(!/class="[^"]*\bbuilders-strength\b[^"]*"/.test(solutions)&&!solutions.includes('One-Click Registration'),'不恢復舊builders-strength卡片；Home7的builders-strengths新版容器不應誤報')
 assert(/class="section-pill section-pill--dark"[^>]*>.*?Property Developers/.test(buildersHtml),'建商 Hero 必須保留原有膠囊小標籤')
 assert(buildersHtml.includes('櫻花 HOME IN O.N.E'))
 assert(/id="builders-title"[^>]*><span[^>]*>提供一站式整體解決方案<\/span><br[^>]*>為建案提升價值與銷售力/.test(buildersHtml),'建商標題金色需在第一段')
 assert(!buildersHtml.includes('Find Your Inspired'))
 const buildersSource=await readFile(new URL('../pages/builders/index.vue',import.meta.url),'utf8')
+assert(buildersHtml.includes('OUR STRENGTHS')&&buildersHtml.includes('智能整合，打造建築新價值'),'建商Home7實力区需指定中英標題')
+const strengthsTitle=buildersHtml.match(/<h2\b[^>]*id="builders-capability-title"[^>]*>([\s\S]*?)<\/h2>/)?.[1]||''
+assert.equal(strengthsTitle.replace(/<br\b[^>]*>/g,' ').replace(/<[^>]+>/g,''),'智能整合，打造建築新價值Smart Solutions for Better Living Spaces')
+assert(buildersHtml.includes('以多元設計模組、AI 智能製造與數位案件管理，')&&buildersHtml.includes('為建商提供從設計規劃到交付的整合服務。'))
+assert(buildersSource.includes('Smart Solutions <span>for Better<br />Living</span> Spaces'),'for Better／Living金色，其餘英文不得改色或大小寫')
+assert(buildersSource.includes(':fit="index === 1 ? \'cover\' : \'contain\'"')&&buildersSource.includes('.builders-solution__visual--factory { aspect-ratio: 1280 / 460; }')&&buildersSource.includes('.builders-solution__visual--factory :deep(img) { object-position: bottom; }'),'保留AI圖原空白裁切與其他兩圖contain')
+const strengthsSsr=buildersHtml.slice(buildersHtml.indexOf('id="builders-solutions"'),buildersHtml.indexOf('class="builders-home-one'))
+assert.equal((strengthsSsr.match(/class="builders-solution ev/g)||[]).length,3,'前三項實力不得增刪或重複')
+assert(strengthsSsr.includes('aria-label="45+萬"')&&strengthsSsr.includes('aria-hidden="true"')&&strengthsSsr.includes('45+萬'),'SSR及輔助閱讀保持原最終值')
+assert(/\.builders-strengths-layout \{[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);[^}]*gap: 30px;/.test(buildersSource)&&/\.builders-strengths-copy \{[^}]*position: sticky;[^}]*top: calc\(var\(--site-header-height, 60px\) \+ 50px\);/.test(buildersSource),'沿用Home7雙等欄／30px及左文sticky')
+assert(/\.builders-strengths-section \{[^}]*padding: 75px 30px 105px;[^}]*background: #241c18;/.test(buildersSource),'Home7原版棕黑底與上下節奏')
+const strengthsMobileCss=buildersSource.slice(buildersSource.indexOf('@media (max-width: 767px)'))
+assert(strengthsMobileCss.includes('.builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }')&&strengthsMobileCss.includes('.builders-strengths-copy { position: static; padding-top: 0; }'),'手機單欄且不得sticky遮擋圖文')
+assert(buildersSource.includes('duration: \'slow\'')&&buildersSource.includes('aria-hidden="true">{{ moduleCount }}+')&&buildersSource.includes('font-variant-numeric: tabular-nums'),'保留Home7向上進場、最終值ARIA與等寬計數')
+const moduleCounterSource=buildersSource.slice(buildersSource.indexOf('const moduleCounter ='),buildersSource.indexOf('const activePavilionId =')).replace('ref<HTMLElement>()','ref()').replace(/: (?:IntersectionObserver|number) \| undefined/g,'').replace('(time: number)','(time)')
+function counterHarness(value='45',{reduced=false,observer=true}={}){
+ const originals=[{value:[value,'萬']}],before=JSON.stringify(originals),motion={value:reduced},mounted=[],unmounted=[],watches=[],frames=new Map();let frameId=0,io
+ class Observer {constructor(callback,options){this.callback=callback;this.options=options;this.disconnects=0;io=this}observe(element){this.element=element}disconnect(){this.disconnects++}}
+ const api=new Function('strengths','ref','useReducedMotion','watch','onMounted','onBeforeUnmount','window','IntersectionObserver','requestAnimationFrame','cancelAnimationFrame',moduleCounterSource+';return {moduleCounter,moduleCount,startModuleCount}')(
+  originals,value=>({value}),()=>motion,(_source,fn)=>watches.push(fn),fn=>mounted.push(fn),fn=>unmounted.push(fn),observer?{IntersectionObserver:Observer}:{},Observer,fn=>{frames.set(++frameId,fn);return frameId},id=>frames.delete(id))
+ api.moduleCounter.value={counter:true}
+ return {api,frames,get io(){return io},mount:()=>mounted.forEach(fn=>fn()),unmount:()=>unmounted.forEach(fn=>fn()),intersect:visible=>io.callback([{isIntersecting:visible}]),motion:()=>{motion.value=true;watches.forEach(fn=>fn(true))},tick:time=>{const queued=[...frames.values()];frames.clear();queued.forEach(fn=>fn(time))},unchanged:()=>assert.equal(JSON.stringify(originals),before)}
+}
+const counterNormal=counterHarness();assert.equal(counterNormal.api.moduleCount.value,'45','SSR必須顯示最終值');counterNormal.mount()
+assert.equal(counterNormal.io.options.threshold,.2);assert(counterNormal.io.element);counterNormal.intersect(false);assert.equal(counterNormal.frames.size,0)
+counterNormal.intersect(true);assert.equal(counterNormal.api.moduleCount.value,'0');counterNormal.tick(0);counterNormal.tick(1000);assert.equal(counterNormal.api.moduleCount.value,'39');counterNormal.tick(2000);assert.equal(counterNormal.api.moduleCount.value,'45');assert.equal(counterNormal.frames.size,0)
+counterNormal.intersect(true);assert.equal(counterNormal.frames.size,0,'不可重播');counterNormal.unchanged();assert(counterNormal.io.disconnects>0)
+for(const options of [{reduced:true},{observer:false}]){const test=counterHarness('45',options);test.mount();assert.equal(test.api.moduleCount.value,'45');assert.equal(test.frames.size,0);assert(!test.io)}
+const counterMotion=counterHarness();counterMotion.mount();counterMotion.intersect(true);counterMotion.tick(0);counterMotion.motion();assert.equal(counterMotion.api.moduleCount.value,'45');assert.equal(counterMotion.frames.size,0,'偏好切換需取消rAF')
+const counterUnmount=counterHarness();counterUnmount.mount();counterUnmount.intersect(true);counterUnmount.unmount();assert.equal(counterUnmount.frames.size,0);assert(counterUnmount.io.disconnects>0)
+const counterBeforeUnmount=counterHarness();counterBeforeUnmount.mount();counterBeforeUnmount.unmount();counterBeforeUnmount.intersect(true);assert.equal(counterBeforeUnmount.frames.size,0,'卸載前未開始的計數也不得被遲到observer重啟')
+for(const value of ['AI','0','-1']){const test=counterHarness(value);test.mount();test.intersect(true);assert.equal(test.api.moduleCount.value,value);assert.equal(test.frames.size,0);test.unchanged()}
+const counterCustom=counterHarness('72');counterCustom.mount();counterCustom.intersect(true);counterCustom.tick(0);counterCustom.tick(2000);assert.equal(counterCustom.api.moduleCount.value,'72','不得把CMS自訂數值強制改成45')
+console.log('PASS 建商Home7雙欄／sticky／手機／指定文案、兩秒計數一次／SSR／CMS不變／減少動態／無observer／卸載清理')
 assert(buildersSource.includes('櫻花集團品牌館</b>The Art <span>of</span><br /> <span>Kitchen</span> Showrooms'),'建商聯繫區指定中文／完整英文及of／Kitchen金色')
 assert(/#builders-contact-title \{[^}]*font-size: 58px;/.test(buildersSource)&&/\.builders-contact-chinese \{[^}]*top: -.06em;[^}]*font-size: 38px;[^}]*font-weight: 600;/.test(buildersSource)&&/#builders-contact-title \.builders-contact-eyebrow \{[^}]*font-size: 16px;/.test(buildersSource),'聯繫區16／38px600／58px專用字級與同列補償')
 const builderSeriesSource=await readFile(new URL('../pages/builders/sakura-kitchen.vue',import.meta.url),'utf8')
+const homeHeroCtaSource=await readFile(new URL('../components/home/HomeHero.vue',import.meta.url),'utf8')
+const homeHeroCta=homeHeroCtaSource.match(/<NuxtLink\b[^>]*class="hero-start-project[^\"]*"[^>]*>/)?.[0]||''
+const homeCtaBg=homeHeroCta.match(/bg-\[(#[\da-f]{8})\]/i)?.[1]?.toLowerCase(),homeCtaBorder=homeHeroCta.match(/border-\[(#[\da-f]{8})\]/i)?.[1]?.toLowerCase(),homeCtaHover=homeHeroCta.match(/hover:text-\[(#[\da-f]{6})\]/i)?.[1]?.toLowerCase()
+assert(homeCtaBg&&homeCtaBorder&&homeCtaHover,'需取目前首頁CTA實際顏色，不用截圖猜色')
+const builderHeroBookingCss=builderSeriesSource.match(/\.sakura-kitchen-hero__booking \{([^}]+)\}/)?.[1]||''
+assert(builderHeroBookingCss.includes('background: '+homeCtaBg+';')&&builderHeroBookingCss.includes('border: 1px solid '+homeCtaBorder+';')&&builderHeroBookingCss.includes('color: #fff;'),'建商Hero CTA灰底／淡白邊／白字需與首頁一致')
+const builderHeroBookingHover=builderSeriesSource.match(/\.sakura-kitchen-hero__booking:hover,\s*\.sakura-kitchen-hero__booking:focus-visible \{([^}]+)\}/)?.[1]||''
+assert(builderHeroBookingHover.includes('color: '+homeCtaHover+';')&&builderHeroBookingHover.includes('background: '+homeCtaBg+';'),'Hover／鍵盤焦點只改金字，不能變金底黑字')
+assert(builderSeriesSource.includes('outline: 2px solid '+homeCtaHover+'; outline-offset: 4px;'),'鍵盤焦點沿用首頁金色且保留可見外框')
+assert(builderHeroBookingCss.includes('width: 110px; height: 110px;')&&builderHeroBookingCss.includes('bottom: 30px;')&&builderHeroBookingCss.includes('backdrop-filter: blur(14px);')&&builderHeroBookingCss.includes('animation: sakura-kitchen-booking-radar 2.4s ease-out infinite;')&&builderSeriesSource.includes('width: 90px; height: 90px;'),'原尺寸／定位／模糊／水波／手機90px不得随改色變動')
+const builderHeroCtaHtml=await(await get('/builders/sakura-kitchen')).text()
+const builderHeroBookingSsr=builderHeroCtaHtml.match(/<a\b[^>]*class="sakura-kitchen-hero__booking"[^>]*>[\s\S]*?<\/a>/)?.[0]||''
+assert(builderHeroBookingSsr.includes('href="/builders#appointment"')&&builderHeroBookingSsr.includes('aria-label="立即預約建商服務"')&&builderHeroBookingSsr.includes('立即')&&builderHeroBookingSsr.includes('預約'),'原預約入口、無障礙名稱與兩行文案保留')
+console.log('PASS 建商圓CTA首頁同色／Hover及焦點、原110／90px尺寸／水波／預約SSR入口')
 assert(builderSeriesSource.includes('探索品牌系列</b>Creating the <em>Ideal Kitchen</em><br /> <em>for Every</em> Family'),'建商SAKURA系列中文及完整英文、Ideal Kitchen／for Every金色，Family黑色')
 assert(/#sakura-kitchen-series-title \{[^}]*font-size: 50px;/.test(builderSeriesSource)&&/\.sakura-kitchen-series-chinese \{[^}]*display: block;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(builderSeriesSource),'SAKURA系列中文40px600獨立行／英文50px')
 assert(builderSeriesSource.includes('v-for="(item, index) in series"')&&builderSeriesSource.includes('{{ cmsCopy.copy.text29 }}'),'系列清單及原說明不得硬切或刪除')
@@ -532,6 +608,17 @@ assert(/@media \(max-width: 1023px\) \{[\s\S]*?\.builders-services \{ padding-bl
 assert(/@media \(max-width: 767px\) \{[\s\S]*?\.builders-services \{ padding-block: 30px 60px; \}/.test(buildersSource),'手機服務區需縮小上下留白')
 assert(buildersSource.includes('font-weight: 700; line-height: 1.6')&&buildersSource.includes('color: #c4a574'))
 const buildersGlobalCss=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
+assert(buildersSource.includes('<div v-reveal="{ anim: \'fadeIn\' }" class="builders-home-one">'),'HOME IN O.N.E整圖需共用可見觸發淡入')
+assert(/@media \(prefers-reduced-motion: no-preference\) \{\s*\.builders-home-one\.ev\.is-visible \{ animation-name: builders-home-one-reveal; \}/.test(buildersSource),'僅此圖且無減少動態偏好時啟用局部放大')
+assert(/@keyframes builders-home-one-reveal \{\s*from \{ opacity: 0; transform: scale\(\.97\); \}\s*to \{ opacity: 1; transform: scale\(1\); \}/.test(buildersSource),'整圖97%至100%淡入放大，不裁切內容或套全站60%縮放')
+assert(buildersSource.includes('<div v-reveal="{ anim: \'opalMoveUp\' }" class="builders-services-panel">'),'三大服務圖片與文字需整組向上浮現／淡入，不拆三張動畫')
+const buildersRevealCss=await readFile(new URL('../../src/styles/globals.css',import.meta.url),'utf8')
+assert(/@keyframes opalMoveUp\s*\{ 0% \{ transform: translateY\(100px\); opacity: 0; \}\s*100% \{ transform: translateY\(0\); opacity: 1; \}/.test(buildersRevealCss),'保留服務區原100px向上淡入效果')
+assert(buildersRevealCss.includes('animation-duration: 1.25s;')&&buildersRevealCss.includes('animation-fill-mode: both;')&&buildersRevealCss.includes('.ev, .ev.is-visible { visibility: visible !important; animation: none !important; }'),'沿用原1.25秒／填充及減少動態直接顯示')
+const homeOneSsr=buildersHtml.match(/<div\b[^>]*class="builders-home-one[^\"]*"[^>]*>/)?.[0]||''
+const servicesPanelSsr=buildersHtml.match(/<div\b[^>]*class="builders-services-panel[^\"]*"[^>]*>/)?.[0]||''
+assert(homeOneSsr.includes('data-ev="fadeIn"')&&servicesPanelSsr.includes('data-ev="opalMoveUp"'),'SSR需正確標示兩種整組動畫')
+console.log('PASS HOME IN O.N.E整圖97%淡入放大／三大服務整組向上淡入、原週期／減少動態及SSR')
 assert(!buildersGlobalCss.includes('builders-partners'),'全域樣式不得留下已刪除合作建商選擇器')
 assert(buildersGlobalCss.includes('.franchise-hero, .builders-hero)'),'建商 Hero 不得被全站 80px 覆蓋')
 const scroll=await readFile(new URL('../app/router.options.ts',import.meta.url),'utf8')
@@ -583,6 +670,19 @@ assert(historyTemplate.includes(':aria-busy="historyResetPhase !== \'idle\'"')&&
 assert(historyTemplate.includes('@transitionend.self="finishHistoryReset"')&&!moveSource.includes('setTimeout'),'必須等viewport淡出完成，不依賴猜測時間或子元素轉場事件')
 assert(introduction.slice(introduction.indexOf('@media (prefers-reduced-motion: reduce)')).includes('.about-history__viewport,'))
 console.log('PASS 品牌紀事淡出／隱藏復位／淡入、連點防護、持續輪播、單筆／無API及減少動態')
+const franchiseDownloadSource=await readFile(new URL('../pages/franchising/download.vue',import.meta.url),'utf8')
+assert(franchiseDownloadSource.includes('.download-document__heading { --download-document-title-size: 40px; }')&&/\.download-document__heading h2 \{[^}]*font-size: var\(--download-document-title-size\);/.test(franchiseDownloadSource),'加盟簡介標題需以局部40px變數控制，不改Hero或全站標題')
+assert(/\.download-document__logo \{[^}]*width: min\(calc\(var\(--download-document-title-size\) \* 20 \/ 3\), 100%\);[^}]*height: auto;[^}]*aspect-ratio: 3156 \/ 245;[^}]*margin-top: 32px;/.test(franchiseDownloadSource),'Logo按原360／54比例跟隨字級、保持原比例與間距且不超出欄寬')
+assert(franchiseDownloadSource.slice(franchiseDownloadSource.indexOf('@media (max-width: 767px)')).includes('.download-document__heading { --download-document-title-size: 38px; }'),'手機原38px保留，Logo使用同一字級變數縮放')
+assert(franchiseDownloadSource.includes('font-size: 80px !important;')&&franchiseDownloadSource.includes('download="SAKURA-KITCHEN-加盟簡介.pdf"')&&franchiseDownloadSource.includes('role="alert"')&&franchiseDownloadSource.includes('{{ brochureError }}'),'保留英文Hero、PDF下載檔名與前端完整錯誤')
+const franchiseDownloadHtml=await(await get('/franchising/download')).text()
+const franchiseDownloadHeading=franchiseDownloadHtml.match(/<h2\b[^>]*id="franchise-document-title"[^>]*>([\s\S]*?)<\/h2>/)?.[1]||''
+assert.equal(franchiseDownloadHeading.replace(/<br\b[^>]*>/g,'／').replace(/<[^>]+>/g,''),'櫻花整體廚房／加盟簡介','保留原標題文案及兩行')
+assert(/class="[^"]*\bdownload-document__logo\b[^"]*"/.test(franchiseDownloadHtml)&&franchiseDownloadHtml.includes('/section-6/franchise/sakura-kitchen-logo-gold.png'),'Logo保持原素材，允許圖片元件合併自身class')
+const franchiseBrochureUrl=(await content('data-franchise')).FRANCHISE_BROCHURE_URL
+assert.equal(franchiseDownloadHtml.split('href="'+franchiseBrochureUrl+'"').length-1,2,'預覽及下載需保留同一PDF網址')
+assert.equal((await fetch(base+franchiseBrochureUrl,{method:'HEAD',headers:{cookie}})).status,200,'原PDF需可存取')
+console.log('PASS 加盟PDF標題40px／手機38px、Logo同比例、原兩行文案／素材／預覽下載及錯誤保留')
 const franchise=await readFile(new URL('../pages/franchising/intro.vue',import.meta.url),'utf8')
 assert(franchise.includes('品牌信賴</b>Celebrity <span>Stories</span><br />Of Inspired <span>Living</span>'),'品牌信賴需完整指定文案與Stories／Living金色')
 assert(/#franchise-marketing-title \{[^}]*font-size: 50px;/.test(franchise)&&/\.franchise-celebrity-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(franchise),'品牌信賴50／40px600及同列補償')
@@ -638,6 +738,11 @@ assert(franchise.includes(':key="`${story.title}-${index}`"'),'兩輪顯示位�
 const loopSlides=renderMarketingSlides(stories)
 for(const start of [4,9])assert.deepEqual(Array.from({length:3},(_,index)=>({number:(start+index)%stories.length+1,offset:((start+index)%loopSlides.length)%2?50:0})),start===4?[{number:5,offset:0},{number:1,offset:50},{number:2,offset:0}]:[{number:5,offset:50},{number:1,offset:0},{number:2,offset:50}],'05→01→02兩個接縫都必須持續交錯')
 assert(franchiseHtml.includes('暫停輪播')&&franchiseHtml.includes('下一個行銷案例'))
+assert(/\.franchise-project-controls button \{[^}]*cursor: pointer;/.test(franchise),'名人案例三個可點擊控制按鈕需顯示手指游標')
+assert(!/\.project-block \{[^}]*cursor: pointer;/.test(franchise),'無點擊事件的拖曳卡片不得顯示假連結游標')
+const marketingControlsHtml=franchiseHtml.match(/<div\b[^>]*class="franchise-project-controls"[^>]*>([\s\S]*?)<\/div>/)?.[1]||''
+assert.equal((marketingControlsHtml.match(/<button\b/g)||[]).length,3,'上一個／暫停繼續／下一個三個控制按鈕需保留')
+assert(marketingControlsHtml.includes('aria-label="上一個行銷案例"')&&marketingControlsHtml.includes('aria-label="下一個行銷案例"')&&marketingControlsHtml.includes('aria-pressed="false"'),'保留控制按鈕無障礙標籤及播放狀態')
 assert(franchise.includes("loop: true, slidesToScroll: 1"),'行銷案例必須首尾循環')
 assert(franchise.includes('if (!marketingPaused.value) scrollMarketing(1)')&&franchise.includes('if (api && !isReduced)'),'行銷輪播必須支援暫停與減少動態效果')
 const marketingTemplate=franchise.slice(franchise.indexOf('<div v-reveal="{ anim: \'fadeIn\' }" class="franchise-project-carousel">'),franchise.indexOf('<!-- PPT 6.1'))

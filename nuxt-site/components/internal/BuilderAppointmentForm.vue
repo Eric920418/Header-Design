@@ -157,7 +157,10 @@ const submit = async () => {
         </label>
       </div>
 
-      <label><input :disabled="submitState === 'submitting'" v-model="form.consent" type="checkbox" required /> 我已閱讀隱私權政策，同意提供資料供預約聯繫使用。</label>
+      <label class="builder-form__consent">
+        <input :disabled="submitState === 'submitting'" v-model="form.consent" type="checkbox" required />
+        <span>我已閱讀隱私權政策，同意提供資料供預約聯繫使用。</span>
+      </label>
       <div class="builder-form__submit-row">
         <button type="submit" class="site-content-cta" :disabled="submitState === 'submitting'">
           <span>{{ submitState === 'submitting' ? '送出中' : '立即預約' }}</span>
@@ -189,17 +192,21 @@ const submit = async () => {
 .builder-form__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 20px; }
 .builder-form label { display: block; min-width: 0; color: #1c1c1d; font-size: 14px; line-height: 22px; }
 .builder-form label > span:first-child { display: block; margin-bottom: 9px; }
-.builder-form input,
+.builder-form input:not([type='checkbox']),
 .builder-form textarea { width: 100%; border: 1px solid rgb(159 159 164 / 28%); border-radius: 24px; color: #1c1c1d; background: #fafafa; outline: none; transition: border-color .3s ease, box-shadow .3s ease, background-color .3s ease; }
-.builder-form input { height: 58px; padding: 0 21px; }
+.builder-form input:not([type='checkbox']) { height: 58px; padding: 0 21px; }
 .builder-form textarea { min-height: 132px; resize: vertical; padding: 17px 21px; }
 .builder-form input::placeholder,
 .builder-form textarea::placeholder { color: #9f9fa4; }
-.builder-form input:focus,
+.builder-form input:not([type='checkbox']):focus,
 .builder-form textarea:focus { border-color: #caa05c; background: #fff; box-shadow: 0 0 0 3px rgb(202 160 92 / 12%); }
 .builder-form input[aria-invalid='true'] { border-color: #a74335; }
 .builder-form small { display: block; margin-top: 6px; color: #a74335; font-size: 13px; line-height: 20px; }
 .builder-form__note { grid-column: 1 / -1; }
+.builder-form label.builder-form__consent { display: grid; grid-template-columns: 19px minmax(0, 1fr); align-items: start; gap: 11px; min-height: 44px; margin-top: 18px; padding-block: 10px; }
+.builder-form__consent input { width: 19px; height: 19px; margin: 2px 0 0; padding: 0; accent-color: #caa05c; }
+.builder-form__consent input:focus-visible { outline: 2px solid #caa05c; outline-offset: 3px; }
+.builder-form__consent > span { min-width: 0; }
 .builder-form__submit-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 28px; }
 .builder-form__submit-row button { display: inline-flex; width: max-content; min-height: 60px; align-items: center; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgb(159 159 164 / 64%); border-radius: 999px; color: #1c1c1d; background: transparent; font-size: 15px; line-height: 22px; cursor: pointer; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
 .builder-form__submit-row button:hover:not(:disabled),

@@ -27,7 +27,7 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
       <div class="brand-h8-intro__rail">
         <div ref="copy" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
           <InternalSectionPill>OUR COMMITMENT</InternalSectionPill>
-          <h1 id="brand-h8-title">Why<br /><span>SAKURA<br />KITCHEN</span></h1>
+          <h1 id="brand-h8-title" class="hero-template-title">Why Choose<br /><span>SAKURA KITCHEN</span><br />For Your Home</h1>
           <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
             <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
             <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span ref="pavilionLabel">集團品牌館</span></NuxtLink>
@@ -64,10 +64,11 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
 <style scoped>
 .brand-h8-hero { overflow: hidden; background: #fafafa; }
 .brand-h8-intro { position: relative; padding: 104px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #fafafa 50% 100%); }
-.brand-h8-intro::before { position: absolute; inset: -25% 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), var(--cms-image-asset_809f4bbe, url('/section-3/store-chengde.jpg')) center bottom / cover no-repeat; content: ''; pointer-events: none; }
+/* 原圖上方 SAKURA 招牌約在20%高度，定位於導覽下方並為前景文案留安全區。 */
+.brand-h8-intro::before { position: absolute; inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), var(--cms-image-asset_809f4bbe, url('/section-3/store-chengde.jpg')) center 20% / cover no-repeat; content: ''; pointer-events: none; }
 .brand-h8-intro__rail { position: relative; display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
-.brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: 100px; font-weight: 400; line-height: 100px; letter-spacing: -.01em; text-transform: capitalize; }
+.brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: clamp(40px, 4vw, 80px); font-weight: 400; line-height: 1.2; letter-spacing: -.01em; white-space: nowrap; text-transform: none; }
 .brand-h8-copy h1 span { color: #caa05c; }
 .brand-h8-nav { display: flex; max-width: 570px; border-top: 1px solid #d2d1cf; }
 .brand-h8-nav > * { display: flex; min-width: 0; flex: 1; align-items: baseline; gap: 8px; padding: 16px 8px 0 0; color: #9f9fa4; text-decoration: none; }
@@ -90,6 +91,7 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
 .brand-h8-stage.is-visible .brand-h8-stage__image :deep(img) { transform-origin: center center; animation: hero-kenburns 5s ease-out 1.25s both; }
 
 @media (min-width: 1025px) {
+  .brand-h8-copy { padding-top: 32px; }
   .brand-h8-copy h1 { color: #fff; }
   .brand-h8-copy :deep(.section-pill) { border-color: rgb(255 255 255 / 28%); color: #fff; }
   .brand-h8-nav { border-color: rgb(255 255 255 / 28%); }
@@ -100,7 +102,6 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
 
 @media (max-width: 1366px) {
   .brand-h8-intro { padding-bottom: 350px; }
-  .brand-h8-copy h1 { font-size: 70px; line-height: 70px; }
 }
 
 @media (max-width: 1024px) {
@@ -118,7 +119,7 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
 
 @media (max-width: 767px) {
   .brand-h8-intro { padding: 84px 15px 0; }
-  .brand-h8-copy h1 { margin-bottom: 30px; font-size: 40px; line-height: 45px; }
+  .brand-h8-copy h1 { margin-bottom: 30px; font-size: clamp(24px, 7.8vw, 40px); line-height: 1.2; }
   .brand-h8-nav { display: grid; grid-template-columns: 1fr; }
   .brand-h8-nav > * { padding: 10px 0; }
   .brand-h8-nav > * + * { padding-left: 0; border-left: 0; border-top: 1px solid #d2d1cf; }

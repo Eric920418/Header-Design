@@ -202,18 +202,19 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   border-bottom: 1px solid #d0d0d5;
 }
 
+.download-document__heading { --download-document-title-size: 40px; }
 .download-document__heading h2 {
   margin: 0;
   color: #1c1c1d;
   font-family: var(--font-cjk-serif);
-  font-size: 54px;
+  font-size: var(--download-document-title-size);
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -.035em;
 }
 
 .download-document__heading h2 span { color: inherit; }
-.download-document__logo { width: min(360px, 100%); height: auto; aspect-ratio: 3156 / 245; margin-top: 32px; background: transparent; }
+.download-document__logo { width: min(calc(var(--download-document-title-size) * 20 / 3), 100%); height: auto; aspect-ratio: 3156 / 245; margin-top: 32px; background: transparent; }
 .download-document__summary > p { max-width: 700px; margin: 4px 0 0; color: #59585d; font-family: var(--font-cjk-sans); font-size: 18px; line-height: 31px; }
 
 .download-document__meta {
@@ -290,7 +291,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .download-hero.hero-includes-header h1 { margin-block: 24px; font-size: 38px !important; line-height: 46px; }
   .download-document { padding: 64px 15px 76px; background-size: 52%; }
   .download-document__header { gap: 34px; padding-bottom: 52px; }
-  .download-document__heading h2 { font-size: 38px; line-height: 47px; }
+  .download-document__heading { --download-document-title-size: 38px; }
+  .download-document__heading h2 { line-height: 47px; }
   .download-document__summary > p { font-size: 16px; line-height: 27px; }
   .download-document__meta { gap: 10px; margin-top: 30px; }
   .download-document__meta dd { font-size: 18px; }

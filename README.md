@@ -1,5 +1,75 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-15 全量檢查與Git正式部署
+
+- 使用者要求跑完檢查、push及部署；使用ponytail／Vercel部署與CLI指引，確認目前main、origin=Eric920418/Header-Design且HEAD／origin main一致。八份未提交檔均為本對話前輪修改，保留相關程式與單一README。只部署已實作且檢查通過的程式，不自行決定尚待確認的品牌Hero選單位置或建商Hero新增預約入口；返回位置先前26px差異及瀏覽器驗收未通過不記為完成。
+- Vercel MCP在已知team取得零專案且既有id／header-design皆404，CLI無登入憑證，已停止自動開啟的登入流程；不能據此宣稱專案不存在。GitHub最新main的Vercel status與Production deployment成功紀錄確認既有header-design專案／erics-projects-57e51613，將沿用Git integration推送觸發，不建立新專案、不改環境變數／資料庫或保護設定。
+- 全量回歸發現建商品牌區仍要求舊兩行中文，改為明確比對已確認「嚴選國內外優質品牌＋Creating the Ideal Kitchen for Every Family」，僅正規化br與模板原空白，不放寬文案；系列獨立回歸亦同步Clever Hero已確認刪Kitchen，其他系列仍逐字比對原名，不放寬驗收或略過斷言。
+- 本輪pnpm build、建置完成後typecheck、完整check-frontend-regressions、check-kitchen-series --cutouts（10系列／45廚電位置／29透明來源／215圖片來源／404）、商品分類封面三品牌749／60／38項、分頁純函式、媒體分塊／格式驗證及preview-access真實15秒逾時／重試／目的頁驗證全通過；腳本語法與git diff --check通過。全量回歸一次在開發SSR商品頁500中止，全部建置／型別作業結束後單獨完整重跑通過，不忽略失敗或修改API回應。保留既有Tailwind sourcemap與Node型別移除實驗警告。
+- 九份程式／測試／README將提交並推送main（原八份前輪修改及本輪系列回歸修正）；Vercel Git正式部署與兩個公開網域的新SSR／樣式驗證結果待補。未同步正式Header CMS，該兩筆資料是否發布另待使用者確認，推Git本身不會讓缺少的加盟額外入口出現。
+- 限定本地前台／SSR／純函式與安全負向驗證，不執行會seed、匯入、還原、建立帳號或插入有效業務收件的資料庫測試。全量前台唯一業務POST為非法team選項，已查server在收件transaction前拒絕，預期400而非新增加盟收件；沒有使用accept-data-loss。瀏覽器URL安全限制不繞過，不將SSR或deployment success當成動態／手機視覺驗收。
+
+## 2026-10-15 建商SAKURA Hero圓形CTA同首頁顏色
+
+- 依00:25:55截圖，只調/builders/sakura-kitchen Hero左下「立即／預約」圓形CTA顏色，以實際HomeHero同款程式為準，不用截圖猜色：#5C5C5C75半透明灰底、#FFFFFF12淡白邊、白字；hover／focus-visible為#CAA05C金字，保持灰底、不再整顆金底黑字，焦點框亦為金色。
+- ponytail只改顏色相關宣告，不換CTA結構或動全站樣式；原110px圓鈕／手機90px、位置、14px模糊、2.4秒水波、hover上提、兩行文案、aria-label、CMS入口/builders#appointment及減少動態保留。下方其他預約CTA、Homepage本身與前輪未提交變更不動，無CMS／資料庫寫入或業務POST。
+- 既有回歸直接擷取Homepage CTA的底色／邊框／hover色，核對建商局部CSS，另防護原尺寸／水波／手機與SSR預約入口；限定執行通過，/builders/sakura-kitchen與原預約目標SSR均200，該頁所有非CSS內容與HEAD逐字相同。pnpm build、唯一該頁scoped編譯CSS的底色／邊框／白字／金字／焦點及110px／2.4秒動畫、腳本語法、git diff --check通過，保留既有Tailwind sourcemap警告。本輪只改CSS，未重跑typecheck或全站業務POST回歸；只維護README、不新增套件／文件、不提交／推送或部署。
+- 尚未作本輪瀏覽器實際hover／鍵盤／手機視覺驗收，不以CSS／SSR或建置宣稱畫面已同色，透明背景受兩頁原照片／遮罩影響，規格相同不代表截圖取色必然相同。
+
+## 2026-10-15 建商預約同意勾選框跑版修正
+
+- 依00:25:41截圖，根因為BuilderAppointmentForm通用input滿寬／58px高／21px內距與文字輸入焦點樣式誤套原生checkbox。ponytail局部修正，在共用表單的文字輸入樣式排除checkbox，不只用一個height覆蓋症狀；一般文字欄位與textarea原樣式保留。
+- 同意列改為同一label包input與span，以19px＋可收縮文字欄、11px間距向上對齊，原生勾選框19px／零內距／品牌金色，文字於窄螢幕自然換行；整個同意列最小44px且可點擊文字勾選，保留鍵盤focus-visible。不重畫勾選圖示、不預設勾選，不改文字／隱私入口、required／v-model／提交中停用、驗證、收件API、完整錯誤或資料庫。
+- 該元件僅/builders使用，未擴大全站表單樣式；前輪Home7／數字與兩段動畫、Hero待確認CTA、其他表單不動。既有回歸補輸入樣式排除、19px／44px同意列、換行、SSR單一原生checkbox／同一label／required及原綁定／驗證／錯誤保護；限定執行通過，實際/builders SSR200，表單script與HEAD逐字相同，沒有驗證／API改動或表單送出。
+- pnpm build、編譯scoped CSS19px勾選框／44px雙欄label／文字輸入58px排除checkbox／焦點框、腳本語法及git diff --check通過，保留既有Tailwind sourcemap警告。模板只包原文字span與新增class，未重跑typecheck或全站含業務POST回歸。
+- 只維護README、不新增套件／文件、無CMS／資料庫寫入或表單POST、無Git提交／推送／部署，保留前輪未提交變更；未作本輪瀏覽器實際勾選／鍵盤／手機換行與視覺驗收，不以source／SSR或編譯CSS當成完整畫面驗收。
+
+## 2026-10-15 建商HOME IN O.N.E及三大服務進場動畫
+
+- 依00:16:56截圖，只調/builders內HOME IN O.N.E整張圖為淡入＋輕微放大；使用ponytail局部修改，原全站opalScaleUp由60%放大，過於劇烈，改為此圖專用97%→100%、opacity0→1，僅無減少動態偏好時啟用。不改全站keyframe或其他圖片，不加JS／套件／新圖片。
+- 沿用原reveal可見觸發、1.25秒ease／fill both，動畫套外層整圖，不拆圖中字樣或裁切素材；原2.7／1比例、間距、圖片及完整錯誤保留。三大服務已有整組opalMoveUp（100px下方→原位、opacity0→1），保留單一外層包住圖片和三項文字，不拆逐張動畫或重複疊加。
+- 減少動態沿用全站直接顯示／動畫none!important，直接錨點仍可跳過reveal；前輪Home7／45+萬、Hero待確認CTA、後續iCare及表單不動。既有回歸補專用97%放大／局部媒體條件、服務整組、原週期／減少動態及SSR標記；限定執行通過。實際/builders SSR200、兩圖各出現一次／HEAD200、三項原服務與兩組data-ev正確；沒有送出表單。
+- pnpm build、唯一建商scoped動畫名稱／no-preference條件／97%→100%及opacity0→1編譯keyframe、腳本語法及git diff --check通過；保留既有Tailwind sourcemap警告。僅改動畫屬性與CSS，未重跑typecheck或全站含業務POST回歸。
+- 未取得本輪瀏覽器動畫錄影或實作截圖，source／SSR／編譯不代表實際動畫節奏或視覺已驗收。無CMS／資料庫寫入、無提交／推送或部署，只維護README、不新增.md或套件，保留前輪未提交變更。
+
+## 2026-10-15 建商實力Home7版型與45+萬動畫
+
+- 依00:16:44截圖，把/builders#builders-solutions前三項實力改為Home7左文右圖，原Home7 XML的Projects區確認50%／50%、30px間距、#241C18底色、75／105px上下距、左文35px頂距、sticky top110及opal-move-up；沿用既有Vue reveal與本地正式三圖，不引入WordPress／jQuery、不另建頁或生成圖片。手機單欄、取消sticky，設計模組／平台圖contain；已檢視AI工廠原图上方大段空白，沿用原1280／460及bottom cover裁去空白，沒有重新裁製圖片；24／18px圓角。
+- 以指定OUR STRENGTHS、智能整合，打造建築新價值、Smart Solutions for Better Living Spaces及整合服務說明取代此區舊Have A Project文案；for Better／Living金色，其餘白色，中文用原襯線、英文用原display字族。原strengths CMS數值／名稱／圖片保留，沒有覆寫CMS／資料庫；45+萬移至左文下方，右欄依序為設計模組／AI工廠／案件管理平台，後面的HOME IN O.N.E、三項服務、iCare及表單不變。
+- 45數字進入視窗後以rAF兩秒ease-out計數一次，+萬保留；SSR顯示CMS最終值，不先輸出0。減少動態或無IntersectionObserver直接顯示最終值，偏好切換立即取消動畫；卸載清理observer及rAF並阻止遲到observer啟動，不用setInterval。ARIA提供最終數值、動畫span隱藏於輔助閱讀，等寬數字及固定行盒避免位數變動跳動。既有回歸新增實際計數程式的模擬視窗／時鐘生命週期測試：兩秒終值、只播一次、動態偏好切換、無observer、卸載／遲到callback、非數字／零／負值不動畫、自訂72不改成45及CMS陣列不變；另核對文案、雙欄／sticky、手機、SSR與原六圖。舊「不得有builders-strength」子字串防護誤報新的builders-strengths容器，改為精確class token，仍禁止舊卡片。
+- 限定計數／Home7回歸通過；實際/builders SSR200含三筆圖文／指定中英文／最終45+萬及ARIA、六圖HTTP200／WebP尺寸／順序與單次出現、三項服務、iCare樣式與後續聯繫區銜接。原Hero專人聯繫／#appointment仍保留，唯讀CMS確認45數值及舊文案仍原值。pnpm build、建置後typecheck、編譯scoped CSS棕黑／雙欄／sticky／手機static、腳本語法及git diff --check通過，保留既有Tailwind sourcemap警告；未執行包含業務表單POST的全站回歸，沒有送出表單。
+- 本輪使用image-to-code／ponytail，文件只維護README、無新套件、无提交／推送或部署，保留前輪未提交變更；上一張Hero立即預約的新增／改字範圍未獲確認，本輪不動該入口。
+- 設計QA來源/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_JgyW4u/截圖 2026-10-15 凌晨12.16.44.png（1916×910含拼貼標註，未附CSS viewport／密度）；來源與三張原WebP已開啟檢視，原素材無UI字體需重畫。字體／圖文節奏按原Home7與指定文案、棕黑／金／白色、原圖與原裁切及新文案待實際視覺核對；無實作截圖與同viewport整體／局部並排比較，不以SSR／編譯或函式測試取代瀏覽器動畫／sticky／手機驗收，安全限制不繞過。final result: blocked。依使用者要求QA只維護README、不新增design-qa.md。
+
+## 2026-10-15 加盟資料PDF標題40px與Logo同比例
+
+- 依00:12:04截圖，只調/franchising/download文件介紹的「櫻花整體廚房／加盟簡介」h2，由54px改40px；上方英文Hero不動。ponytail局部修改，保留原中文襯線、字重、兩行文案、配色、欄位與間距；手機保留原38px。
+- 標題與Logo共用局部字級變數，依原360／54比例縮放Logo：桌機約266.67px、手機約253.33px，最大不超過欄寬；保留原PNG與3156／245比例，不重新生成或拉伸品牌圖。預覽／下載網址、PDF內容、檔名、載入檢查／完整錯誤與重試不改，無CMS／資料庫寫入、新套件或新文件。
+- 既有回歸補局部字級／Logo同比例／手機、兩行SSR文案／原素材、兩個PDF入口及HEAD200防護；初次SSR檢查因圖片元件合併自身class而誤報，已改為比對class token，不放寬素材要求。限定回歸通過、本地頁SSR200／Logo PNG200／PDF HEAD200；未執行業務表單POST或改動原PDF。pnpm build、編譯scoped CSS40px／手機38px及Logo公式、腳本語法、git diff --check通過，保留既有Tailwind sourcemap警告；本輪僅改CSS，未重跑typecheck。保留前輪未提交變更，未Git提交／推送、部署或驗正式端。
+- image-to-code局部截圖對照：來源/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_qgdJJJ/截圖 2026-10-15 凌晨12.12.04.png（1582×816含標註畫布，原CSS viewport／密度未提供）；已開啟來源，沿用原Logo、背景、預覽圖片及圖示。字體／顏色／文案不變，尺寸按標註調整，實際換行／欄位／圖片縮放仍需畫面驗收。沒有新的實作截圖、同viewport整體與局部並排比較，不能以source／SSR／編譯CSS宣稱視覺通過；瀏覽器安全限制不繞過，final result: blocked。依使用者要求只維護README，不新增design-qa.md。
+
+## 2026-10-15 我要加盟名人輪播可點擊區手指游標
+
+- 依00:11:51截圖，ponytail核對/franchising/intro名人案例輪播：五筆卡片只有article及Embla拖曳，無點擊事件、URL或案例導頁；可點擊區為下方上一個／暫停繼續／下一個三個button。只對此三個按鈕加cursor:pointer，不對卡片加假連結提示或臆造點擊功能。
+- 原44px觸控高度、hover／focus、3.5秒自動循環、暫停切換、減少動態、鍵盤方向鍵、五筆資料／兩輪交錯及圖片不變，不全站改button或動其他輪播。若後續要求卡片導頁，需另確認對應案例連結；前一張品牌選單「下移置中」範圍仍待使用者確認，未移動選單。
+- 既有回歸新增局部手指游標、無點擊卡片不顯示pointer、三個SSR按鈕及無障礙狀態防護。限定輪播回歸通過：本地頁SSR200、三個控制按鈕／標籤／播放狀態、五筆原案例及圖片200、十個交錯顯示位置／五個輔助閱讀隱藏位置、01–05編號／雙接縫、空／奇／偶數資料、方向及減少動態函式；未執行含業務表單POST的全站腳本。
+- pnpm build、編譯後scoped按鈕CSS的cursor:pointer、回歸腳本語法及git diff --check通過，保留原Tailwind sourcemap警告。本輪只改一項CSS，未重跑typecheck；未作瀏覽器實際滑鼠游標／點擊／鍵盤／手機視覺验收，不將SSR或編譯CSS當成實際互動驗收。只維護README，不新增套件／文件、不寫CMS／資料庫、不Git提交／推送或部署、不驗正式端，保留前輪未提交招牌／標題變更。
+
+## 2026-10-15 品牌承諾Hero完整三行標題
+
+- 依00:11:21截圖，只將/about/advantage主標題改為Why Choose／SAKURA KITCHEN／For Your Home三行；桌機首尾白色、中間整行品牌金色，保留OUR COMMITMENT、既有品牌導覽及向下按鈕。使用ponytail局部修改，前輪招牌焦點與文案安全間距、右側圖文及後續大圖保持不變。
+- 原全站桌機80px!important會強制覆寫局部字級；這個固定長標題沿用已有hero-template-title排除機制，局部採clamp(40px,4vw,80px)、不額外拆行，平板原60px保留，手機clamp(24px,7.8vw,40px)。不修改全站標題規則／字型，不縮放整張Hero或改其他頁面。
+- 既有回歸加入完整文案／兩個換行、金色範圍、局部響應式及全站覆寫排除、SSR內容防護；SSR只正規化br／span的scoped屬性，不放寬文案或分行要求。限定品牌Hero回歸通過，實際/about/advantage SSR200含完整三行，前輪招牌安全規則、原大圖進場／減少動態、圖片／向下連結防護仍通過。
+- pnpm build、建置後typecheck、回歸腳本語法及git diff --check通過，保留原Tailwind sourcemap警告。未作本輪瀏覽器換行／字體／招牌及左右欄位實際視覺驗收，不把CSS規格／SSR確認當成無溢出或像素驗收。只維護README，不新增套件／文件、不改CMS／資料庫、不Git提交／推送或部署，不驗正式端；保留前輪未提交招牌定位變更。
+
+## 2026-10-15 品牌承諾Hero背景招牌完整露出
+
+- 依00:10:49截圖定位Why／SAKURA KITCHEN的品牌承諾Hero（/about/advantage），使用者澄清「要出現背景圖片的招牌，不能被擋住」；以此為準，不按初步猜測刪掉招牌或將照片裁到招牌以下。image-to-code／ponytail保留承德店原圖及CMS素材變數，只修背景焦點與左側文案安全間距，不改文字、字級、右側圖／說明或其他頁面。
+- 已檢視原store-chengde.jpg（500×371），上方SAKURA文字約在y74–84；原背景往上延伸25%並底部cover，使招牌落入固定導覽覆蓋區。改背景焦點為20%，背景層上移量補償「導覽高度＋16px」安全區，桌機左側copy增加32px上距；平板／手機既有背景隱藏及單欄規則不動，不修改或生成圖片資產。
+- 既有回歸加入素材／焦點／導覽變數、桌機局部間距、手機原規則及1025–3840px／900–1200px容器高度的靜態招牌幾何防護；限定執行通過。實際site-visuals API200確認背景仍為已量測的store-chengde.jpg，/about/advantage SSR200及原大圖進場／替代文字／優先載入／向下連結防護通過。pnpm build、腳本語法及git diff --check通過，保留原Tailwind sourcemap警告；本輪只改CSS，未重跑typecheck或全站業務表單回歸。
+- image-to-code設計QA：來源/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_pUW1hi/截圖 2026-10-15 凌晨12.10.49.png（890×648，未附原CSS viewport）。原圖已開啟檢視，未編輯素材；字體／字級／配色／原圖片及文案不變，僅改焦點與左側間距。沒有新瀏覽器實作截圖、同viewport比較及實際動態驗收；幾何模型不是畫面驗收，瀏覽器URL安全限制不以替代工具繞過。final result: blocked（需實際裁切截圖确认，不能宣稱招牌於所有實際畫面皆无遮挡）。依使用者規則只寫README、不新增design-qa.md。
+- 未改CMS／資料庫、不Git提交／推送或部署、不驗正式端。工作區在本輪檢查前已由其他流程提交為a8977c1c；本輪只新增BrandAdvantageHero兩項CSS、限定回歸及README紀錄，保留該提交既有內容，不更改已完成的其他頁面。
+
 ## 2026-10-15 廚電三品牌切換按鈕16px SemiBold
 
 - 依2026-10-14 23:43:37截圖，ponytail只把共用ProductBrandPage的SAKURA／SVAGO／TEKA品牌切換按鈕由14px改16px、font-weight600；桌機／平板／手機套用同一規格。不改原字型、等寬116px欄、52px最小高度、12／8px內距、20px間距或手機三等分／12px間距。
