@@ -15,7 +15,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="what-we-do-copy min-w-0">
         <div class="what-we-do-heading">
           <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" class="mb-[20px]">{{ cmsCopy.copy.text3 }}</InternalSectionPill>
-          <h2 id="what-we-do-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="what-we-do-title mx-auto max-w-[560px] font-display text-[#1C1C1D]">{{ cmsCopy.copy.text4 }}<span class="text-[#CAA05C]">{{ cmsCopy.copy.text5 }}</span></h2>
+          <h2 id="what-we-do-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="what-we-do-title mx-auto max-w-[560px] font-display text-[#1C1C1D]"><span class="what-we-do-title__chinese">品牌承諾</span>{{ cmsCopy.copy.text4 }}<span class="text-[#CAA05C]">{{ cmsCopy.copy.text5 }}</span></h2>
         </div>
         <div v-reveal="{ anim: 'opalMoveUp', delay: 180 }" class="what-we-do-description mx-auto max-w-[645px]">
           <h3 class="font-cjk-serif text-[30px] font-semibold leading-[42px] text-[#1C1C1D]">{{ cmsCopy.copy.text6 }}</h3>

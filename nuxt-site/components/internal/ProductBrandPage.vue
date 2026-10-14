@@ -34,10 +34,10 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
     <section class="sakura-product-story" aria-labelledby="sakura-product-story-title">
       <div class="sakura-product-story__rail internal-rail-safe">
         <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-story__copy">
-          <InternalSectionPill v-if="brand !== 'sakura'" class="sakura-product-story__eyebrow">廚房產品</InternalSectionPill>
+          <InternalSectionPill class="sakura-product-story__eyebrow">Kitchen Appliances</InternalSectionPill>
           <h2 id="sakura-product-story-title">
-            <b v-if="brand === 'sakura'" class="sakura-product-story__chinese-title">廚房產品</b>
-            Elevate Your <span>Kitchen with {{ info.name }}</span>
+            <span class="sakura-product-story__chinese-title">廚房產品</span>
+            Elevate Your<br><span>Kitchen with</span><br>{{ info.name }}
           </h2>
           <p>{{ info.description }}</p>
         </div>
@@ -162,13 +162,14 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
   margin: 0 0 25px;
   color: #1c1c1d;
   font-family: var(--font-display);
-  font-size: clamp(44px, 4.2vw, 64px);
+  font-size: 50px;
   font-weight: 400;
-  line-height: .98;
+  line-height: 1.1;
+  text-transform: none;
 }
 
 .sakura-product-story h2 span { color: #caa05c; }
-.sakura-product-story__chinese-title { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-weight: 500; line-height: 1.2; }
+.sakura-product-story__chinese-title { display: block; margin-bottom: 8px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; }
 .sakura-product-story__copy > p:last-child { max-width: 610px; margin: 0; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; }
 
 .sakura-product-story__image {
@@ -312,7 +313,8 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
 @media (max-width: 1023px) {
   .sakura-product-story { padding-block: 80px 70px; }
   .sakura-product-story__rail { gap: 36px; }
-  .sakura-product-story h2 { font-size: 46px; }
+  .sakura-product-story h2 { font-size: 42px; }
+  .sakura-product-story__chinese-title { font-size: 32px; }
   .sakura-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sakura-product-list { padding-bottom: 100px; }
 }
@@ -326,7 +328,9 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
   .sakura-product-source__rail.internal-rail-safe,
   .sakura-product-list__rail.internal-rail-safe { padding-inline: 0; }
   .sakura-product-story__rail { grid-template-columns: 1fr; gap: 34px; }
-  .sakura-product-story h2 { font-size: 40px; line-height: 43px; }
+  .sakura-product-story__copy { min-width: 0; padding-right: 72px; }
+  .sakura-product-story h2 { font-size: 30px; }
+  .sakura-product-story__chinese-title { font-size: 28px; }
   .sakura-product-story__image { aspect-ratio: 1.35; border-radius: 18px; }
   .sakura-product-brands { padding: 32px 0 0; margin-bottom: 30px; }
   .sakura-product-brands__nav { max-width: 388px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }

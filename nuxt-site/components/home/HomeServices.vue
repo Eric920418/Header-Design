@@ -25,7 +25,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="home-services-heading relative mx-auto mb-[30px] grid max-w-[1410px] grid-cols-1 min-[768px]:mb-[60px] min-[768px]:grid-cols-[30%_70%]">
         <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="KITCHEN PRODUCTS" tone="dark" source="home6" class="home-services-heading__rail" />
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="home-services-heading__copy">
-          <h2 id="services-heading" class="w-full max-w-[769px] text-center font-cjk-serif text-[30px] font-semibold leading-[1.2] tracking-[.02em] text-white min-[768px]:text-left min-[768px]:text-[45px] min-[881px]:text-[60px]">{{ cmsCopy.copy.text1 }}<span class="text-[#CAA05C]">{{ cmsCopy.copy.text2 }}</span></h2>
+          <h2 id="services-heading" class="home-services-title">
+            <span class="home-services-title__eyebrow">Explore Our</span>
+            <span class="home-services-title__chinese">{{ cmsCopy.copy.text1 }}{{ cmsCopy.copy.text2 }}</span>
+            <span class="home-services-title__english">Smart Appliances</span><br />
+            Designed for <span class="text-[#CAA05C]">Better Living</span>
+          </h2>
         </div>
       </div>
       <div ref="emblaRef" class="cursor-grab overflow-hidden active:cursor-grabbing" @focusin="paused = true" @focusout="paused = false"><div class="-ml-[30px] flex">
@@ -43,7 +48,55 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 </template>
 
 <style scoped>
+.home-services-title {
+  width: 100%;
+  max-width: 769px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: none;
+}
+
+.home-services-title__eyebrow {
+  display: inline-block;
+  margin-right: 16px;
+  font-size: 18px;
+  vertical-align: middle;
+  border-bottom: 1px solid rgb(255 255 255 / 50%);
+}
+
+.home-services-title__chinese {
+  display: inline-block;
+  margin-right: 12px;
+  color: #CAA05C;
+  font-family: var(--font-cjk-serif);
+  font-size: 28px;
+  font-weight: 600;
+  vertical-align: baseline;
+  position: relative;
+  top: -.06em;
+}
+
+.home-services-title__english {
+  display: inline-block;
+  width: 100%;
+  margin-top: 8px;
+}
+
 @media (min-width: 768px) {
+  .home-services-title {
+    font-size: 42px;
+    text-align: left;
+  }
+
+  .home-services-title__chinese {
+    font-size: 32px;
+  }
+
   .home-services-heading__rail {
     grid-column: 1;
     grid-row: 1;
@@ -54,6 +107,23 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     grid-column: 2;
     grid-row: 1;
     padding-top: 38px;
+  }
+}
+
+@media (min-width: 881px) {
+  .home-services-title__english {
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-services-title {
+    font-size: 50px;
+  }
+
+  .home-services-title__chinese {
+    font-size: 40px;
   }
 }
 

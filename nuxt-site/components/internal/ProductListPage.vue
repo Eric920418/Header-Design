@@ -48,8 +48,8 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
     <section class="near-suction-products" aria-labelledby="near-suction-products-title">
       <div class="near-suction-rail internal-rail-safe">
         <h2 id="near-suction-products-title" v-reveal="{ anim: 'opalMoveUp' }">
-          <em>{{ brand === 'sakura' && category === 9 ? 'Smart Appliances for Better Living' : `${info.name} Kitchen Appliances` }}</em>
-          <span>{{ heading }}</span>
+          <em>{{ brand === 'sakura' && (category === 6 || category === 9 || category === 83205) ? 'Smart Appliances for Better Living' : `${info.name} Kitchen Appliances` }}</em>
+          <span>{{ heading }}{{ brand === 'sakura' && category === 6 && !heading.endsWith('系列') ? '系列' : '' }}</span>
         </h2>
         <form v-if="!category" class="product-search" role="search" @submit.prevent="submitSearch">
           <label for="product-search">搜尋產品名稱／型號</label>
@@ -191,7 +191,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
 .near-suction-products { padding: 100px 30px 125px; background: #fafafa; }
 .near-suction-products h2 { display: flex; margin: 0 0 54px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .near-suction-products h2 span { font-family: var(--font-cjk-serif); font-size: 30px; line-height: 40px; }
-.near-suction-products h2 em { margin-bottom: 8px; color: #caa05c; font-family: var(--font-display); font-size: 40px; font-style: normal; font-weight: 400; line-height: 44px; }
+.near-suction-products h2 em { margin-bottom: 8px; color: #caa05c; font-family: var(--font-display); font-size: 40px; font-style: normal; font-weight: 400; line-height: 44px; text-transform: none; }
 .near-suction-product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 58px 30px; margin: 0; padding: 0; list-style: none; }
 .near-suction-product-grid > li { min-width: 0; }
 .near-suction-product-card { display: block; min-width: 0; color: inherit; }

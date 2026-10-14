@@ -1,5 +1,124 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-14 SAKURA近吸系列英文標題
+
+- 依11:07:16截圖，沿用上方註記Smart Appliances for Better Living（非右圖Smart Kitchen Living），只把近吸分類83205納入上一輪英文標題條件。兩個既有入口 `/products/sakura/range-hood/near-suction` 與 `/products/sakura/category/83205` 共用變更，中文仍取CMS近吸系列，不追加或重複系列；其他品牌／分類、原9商品、圖片／名稱／價格／連結／分頁／錯誤顯示與資料不改，分類搜尋保持先前移除。
+- 使用image-to-code與ponytail，只改一個共用條件及既有回歸，只維護README，不新增素材／套件／文件，不部署／送表單／寫CMS或資料庫。
+- 建置、建置後typecheck、限定列表標題回歸、腳本語法與diff檢查通過，保留原Tailwind sourcemap警告。獨立瀏覽器驗1280／900／390／320px：新英文與近吸系列皆正確、水平溢出0、原9商品／1頁及搜尋DOM0保留。兩個入口皆顯示新英文，前後唯讀商品API回應一致，pageerror／console error為空。首次Enter在路由剛載入的DOM過渡期未導頁；等頁面穩定並確認焦點href後重驗，正常抵達 `/products/sakura/item/80794?category=83205&page=1`，未改導頁邏輯。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_UEKhx3/截圖 2026-10-14 上午11.07.16.png`（2020×744註記畫布、右側約968px頁面）與 `/tmp/sakura-near-title-LMZjUs/1280.png`（1280×900 CSS／1×）、`390.png`於同一比較輸入，另測900／320px。五項檢查：原Cal Sans／中文宋體、英文40／36／30px及中文30px、字重／上下層級不變，小寫for保留；原版心／留白／四欄及手機單欄／卡片比例／圓角不改；原英文金色、中文黑色與灰底保持；同一九項商品圖／裁切／型號／價格／箭頭保留；以上方明確英文註記為準，不複製右圖Smart Kitchen Living或舊搜尋列，中文不重複系列。等待標題有限進場完成再截圖，標題清楚無需裁切；本次範圍無剩餘P0／P1／P2，final result: passed。未驗正式端／真實手機／其他瀏覽器或所有商品詳情，不部署；保留本機近吸系列預覽。
+
+## 2026-10-14 SAKURA除油煙機列表標題
+
+- 依11:07:08截圖，SAKURA除油煙機分類6英文改為上方註記指定Smart Appliances for Better Living，不混用右图Smart Kitchen Living；中文仍取原分類heading，只在該分類追加系列（已有系列不重複），顯示除油煙機系列。原分類9已有相同英文不撤回，其他品牌／分類標題不改；不改字級／版心／搜尋／分類篩選／分頁／商品卡／SEO／錯誤顯示及資料。截圖仍有舊搜尋列，但沿用先前已確認的分類頁隱藏搜尋，不重加。
+- 使用image-to-code與ponytail做兩行局部調整，重用原素材與樣式，不新增套件／文件，不部署、送表單或改CMS／資料庫；文件只維護README。
+- 英文標題局部關閉共用capitalize，保留註記小寫for，其他原品牌文字大小寫不變。
+- 既有回歸加入分類6／9英文範圍、系列不重複、for大小寫與原分類搜尋隱藏防護，限定執行，不跑全站表單POST。
+- 建置、建置後typecheck、限定列表標題回歸、腳本語法與diff檢查通過，保留原Tailwind sourcemap警告。獨立瀏覽器驗1280／900／390／320px，水平溢出0，沿用原英文40／36／30／30px、中文30px與金黑配色；原40項／4頁、8分類保留，分類搜尋DOM仍0。鍵盤第2頁回報40項／第2頁，近吸子分類抵達原 `/products/sakura/category/83205`，回報9項／第1頁。早期測試誤用另一路徑及頁碼文字而非aria-label造成等待逾時，改用實際href及「第2頁」後通過，未因此修改路由或分頁；最後pageerror為空，視覺驗證console error為空。商品API／CMS寫入、表單送出皆未執行。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_kpZUuq/截圖 2026-10-14 上午11.07.08.png`（2040×810註記畫布、右側約968px頁面）與 `/tmp/sakura-list-title-kZoUWP/1280.png`（1280×900 CSS／1×）、`390.png`於同一比較輸入，另驗900／320px。五項檢查：原Cal Sans／中文宋體、字重／字級與上下層級不改，保留小寫for；原版心／標題到分類間距／按鍵／分頁／四欄卡片與手機單欄保留；英文金色／中文黑色、灰底及框線不變；原商品圖／型號／價格／圖片比例與圓角未改；以上方明確英文註記為準，不用右圖Smart Kitchen Living，中文顯示除油煙機系列。來源含先前已移除的分類搜尋，本輪不重加，屬已说明差異。等待有限進場完成後取證，標題清晰不需裁切；本次範圍無剩餘P0／P1／P2，final result: passed。未驗正式端／真實手機／其他瀏覽器或所有商品詳情，不部署；保留本機除油煙機列表預覽。
+
+## 2026-10-14 廚電品牌介紹雙語標題
+
+- 依11:06:38截圖，ProductBrandPage三品牌共用介紹區統一Kitchen Appliances眉標與金色「廚房產品」，英文三行Elevate Your／Kitchen with／原動態品牌名稱，只有Kitchen with金色，品牌名稱黑色。截圖註記寫SAKURA但示意為SVAGO，保留info.name避免錯置品牌，不把SVAGO或TEKA硬改SAKURA，不將紅色註記加入UI。桌機中文40px600／英文50px，平板32／42px、手機28／30px；上下排列不套用同列位移。只在手機文字欄加原本站72px安全距離，圖片保持滿寬。
+- 使用image-to-code與ponytail重用字型／眉標／圖片／原CSS，不新增素材／套件／文件；保留品牌說明／圖片／三品牌切換／分類／產品資料／SEO／错误显示与重試，不寫入CMS／資料庫、不送表單／部署；文件只維護README。
+- 既有回歸加入三品牌共用文案、動態品牌黑色／英文金色範圍、50／40px600與手機72px避讓斷言，限定執行標題檢查，不跑全站表單POST。
+- 初次對稿發現共用h2 capitalize會把with變成With（P2），只在本標題關閉自動大寫，保留來源with；重新截圖確認，不改品牌名稱本身。
+- 回歸同步保護text-transform:none，避免再被全站大寫慣例覆蓋。
+- 最終建置、建置後typecheck、限定品牌標題回歸、脚本語法及diff檢查通過，保留原Tailwind sourcemap警告。獨立瀏覽器SVAGO驗1280／1024／900／390／320px，桌機40px600／50px、平板32／42px、手機28／30px，水平溢出0；原圖片正常載入、8個分類仍在。鍵盤切換SAKURA及TEKA抵達原路由，等待新頁DOM及進場完成後標題／aria-current與品牌一致（只等URL變動會讀到上一頁過渡DOM，未因此改路由邏輯）。前後唯讀data-productBrands相同，pageerror／console error為空。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_kiKr2f/截圖 2026-10-14 上午11.06.38.png`（2034×742註記畫布、右側約968px頁面）與 `/tmp/sakura-brand-title-H9p84D/1280.png`（1280×900 CSS／1×）、`320.png`於同一比較輸入，另驗1024／900／390px。五項檢查：原Cal Sans／Noto Serif TC、中文40px600／英文50px，三行英文及小寫with符合來源；原左右欄比例／間距／照片版心與圓角／三品牌按鍵保留，手機文字避讓72px但照片仍滿寬；中文與Kitchen with金色、英文首行及品牌黑色，英文眉標在原膠囊而非新增紅色註記；同一SVAGO酒櫃照片／比例／裁切／原圖示保留；保留動態品牌、描述與分類資料，不因上方SAKURA註記覆寫SVAGO。初次With大寫P2已修正重截確認，進場完成後比對；本次標題範圍無剩餘P0／P1／P2，final result: passed，標題全景清楚不需裁切。未驗正式端／真實手機／其他瀏覽器或所有分類詳情，不改資料／部署，保留SAKURA本機介紹預覽。
+
+## 2026-10-14 裝修指南文章頁延伸文章標題
+
+- 依09:23:59截圖，KnowledgeRelatedCarousel的home07呈現新增金色「廚房知識與靈感」，英文三行Take A Look／At Our Latest／Articles，第二行金色，移除Blog／&／驚嘆號及原英文說明段落；CTA改「更多廚房知識」，仍到 `/knowledge`。中文40px600／英文50px，平板32／42px、手機28／30px；上下排列不套用同列基線補償。保留原眉標、三欄／两欄／手機單欄、CTA尺寸與動效／卡片／圖片／分類／摘要／文章連結。
+- 使用image-to-code與ponytail，只改home07文案及相關字級，沿用既有字型／素材，不新增套件／文件。home07實際為兩張靜態推薦卡，另一路cards才是Embla輪播；不將兩者誤認或重寫。所有指南文章頁共用此次變更，不影響cards版本；不寫入CMS／資料庫、不送表單或部署，僅維護README。
+- 既有回歸補上指定中文／三行英文／中文CTA、移除舊說明、原入口及40／50px斷言；限定執行此區檢查，不跑全站表單POST。
+- 初次320px視覺比較發現眉標最小內容寬度把手機1fr撐大，介紹／卡片被父層裁切（P2）。只把home07手機單欄改為minmax(0,1fr)，讓眉標／長中文自然換行、卡片依原版心縮放，不縮字、不截斷文字；修正後重截驗收。
+- 回歸補上手機欄位minmax防護，避免後續恢復會裁切的隱含最小寬度。
+- 320px中文需要兩行，加入原生text-wrap:balance避免最後單獨一個「感」字；不改文案或指定字級，桌機單行不受影響。
+- 最終建置、建置後typecheck、限定延伸標題回歸、腳本語法與diff檢查通過，保留原Tailwind sourcemap警告。獨立瀏覽器驗1280／1024／900／390／320px，桌機中文40px600／英文50px，平板32／42px、手機28／30px，水平溢出0。320px介紹實寬182px、內部溢出0，眉標與中文自然兩行，原兩卡圖片正常載入、連結／順序不變；CTA鍵盤Enter回到 `/knowledge`。前後唯讀data-kitchenGuides一致，pageerror／console error為空。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_BpA7Ms/截圖 2026-10-14 上午9.23.59.png`（2016×806註記畫布、右側約968px頁面）與 `/tmp/sakura-guide-related-UpiCkx/1280.png`（1280×900 CSS／1×）、`320.png`於同一比較輸入，另驗1024／900／390px。五項檢查：原Cal Sans／Noto Serif TC、上方中文40px600／下方英文50px，英文依右圖三行，手機中文均衡兩行；原三欄／兩欄／單欄、版心／卡片／圖框／CTA圓角尺寸與間距保留，僅修正手機min-content裁切；中文及At Our Latest金色、其餘英文黑色，原淡菱格背景不變；兩張原實景圖片、裁切／圓角／分類badge及箭頭保留；依右圖移除英文說明与Blog／&／驚嘆號，CTA以註記改中文，卡片內容不改。初次320px裁切P2修正後重截，中文末字孤行以balance修正，等待介紹及兩卡有限進場／上方內容穩定後再取證；本次範圍無剩餘P0／P1／P2，final result: passed，標題清晰無需另裁切。未重排原桌機固定服務列與卡片、未驗cards輪播版本／正式端／真實手機／其他瀏覽器／全文互動，不部署／送表單，保留本機文章預覽。
+
+## 2026-10-14 廚房裝修指南列表標題
+
+- 依09:23:49截圖，只改 `/knowledge` 列表區標題：Explore Our／廚房裝修指南／Take A Look At Our Latest Articles.，移除Blog &，中文與Our金色、其餘黑色。桌機18／40／50px、中文600／baseline上移0.06em，平板18／32／42px、手機18／28／30px及中文後分行。保留原30／70分欄、760px上限、64px頂距、共用47px十字間距與手機93px右側避讓，不套用舊45px桌機邊界覆寫。
+- 使用image-to-code與ponytail重用原字型／元件／素材，只維護README；不新增套件／文件、不部署／送出表單／寫入CMS或資料庫。前端固定新標題，原CMS欄位及資料不覆寫；Hero中文／英文原CMS欄位、可見性／SEO、文章資料／图片／日期／分類／連結／列表／文章頁相關輪播都不改。
+- 既有回歸新增指南完整中英文案、50／40px600／基線補償及原手機93px安全距離斷言，限定執行此區檢查，不跑全站表單POST。
+- 建置、建置後typecheck、限定指南標題回歸、腳本語法及diff檢查通過；保留原Tailwind sourcemap警告。已核准獨立瀏覽器驗1280／1024／900／390／320px，字級18／40／50、18／40／50、18／32／42、18／28／30、18／28／30px，中文600、水平溢出0；桌機及平板軌距47px、手機沿用原避讓與隱藏軌線。三篇文章／分類／日期／順序／圖片及連結保留，可見圖片載入正常；鍵盤Enter第一篇抵達 `/knowledge/design/systemcabinet`。前後唯讀data-kitchenGuides與view-pages-knowledge-index回應一致，pageerror／console error為空。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_O4drt7/截圖 2026-10-14 上午9.23.49.png`（2042×726註記畫布、右側約968px頁面）與 `/tmp/sakura-guide-heading-zKkiCX/1280.png`（1280×900 CSS／1×）、`390.png`於同一比較輸入，另驗1024／900／320px。五項檢查：沿用Cal Sans／Noto Serif TC、18／40／50px、中文600與baseline／0.06em補償，分行與大小寫符合右圖；原30／70分欄／47px十字間距／64px頂距／60px標題底距及文章布局保留，手機原右側避讓使標題完整；金色中文／Our、黑色其餘英文與灰底／淺灰線保持；原實景封面／裁切／圓角及圖示保留，沒有新增素材；英文依右圖刪除Blog &且保留句點，文章資料与Hero原CMS文案不改。等待is-visible及有限進場完成後截圖，標題清楚可辨不需另裁切；本次標題範圍無剩餘P0／P1／P2，final result: passed。未重設原桌機文章與固定服務列布局、未驗正式端／真實手機／其他瀏覽器或全文互動；不送出表單／部署，保留本機指南列表預覽。
+
+## 2026-10-14 品牌系列推薦案例標題
+
+- 依09:23:41截圖，KitchenSeriesPage推薦案例標題新增Explore Our／風格廚房實例，英文改為Take A Look At Our Latest Articles.，刪除Blog &，中文與Look At Our金色、其他文字黑色。沿用共用同列18／40／50px、中文600／baseline上移0.06em字形補償、手機分行28／30px與平板32／42px；保留30／70分欄、47px十字間距、原64px頂距／60px底距。只改共用標題，不動案例CMS／圖片／文案／連結／首尾複製／輪播／鍵盤／自動播放／暫停／空狀態。
+- 使用image-to-code與ponytail重用既有字型、雙語樣式與素材；不新增套件／文件，不送出表單／部署／寫入CMS或資料庫，QA只維護README。
+- 既有回歸增加案例指定文案／50px桌機／42px平板斷言，限定執行本區及前兩區標題檢查，不跑含表單POST的全站流程。
+- 初次視覺比較發現手機新標題被原固定服務列遮住（本次P2），只在手機標題增加72px右側安全距離；桌機文字欄上限750px讓Our依示意換到第二行，其他欄位／卡片不改。修正後重新截圖驗收，不把原卡片服務列遮擋納入本輪重排。
+- 回歸補上手機72px避讓防護，避免後續又移除標題安全距離。
+- 最終建置、建置後typecheck、限定案例／色卡／廚電標題回歸、腳本語法與diff檢查通過，保留原Tailwind sourcemap警告。獨立瀏覽器驗1280／1024／900／390／320px，字級18／40／50、18／40／50、18／32／42、18／28／30、18／28／30px，中文600、各寬水平溢出0；桌機及平板十字間距47px，手機軌線隱藏。手機標題內容右緣303／233px，與固定服務列有15px安全距離。原輪播ArrowRight／ArrowLeft有位置變化，圖片載入正常；最初未載入的離屏複製圖為原lazy loading，進入視口後正常，不修改載入策略。前後唯讀CMS一致，pageerror／console error為空。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_7dh2EJ/截圖 2026-10-14 上午9.23.41.png`（2016×736註記畫布、右側約968px頁面）與 `/tmp/sakura-cases-heading-vvTkY5/1280-final.png`（1280×900 CSS／1×）、`390-final.png`於同一比較輸入，另測1024／900／320px。五項檢查：原Cal Sans／Noto Serif TC、18／40／50px、中文600／baseline上移0.06em，中文與英文視覺等高；原30／70分欄及47px軌距保留，750px文字上限讓Our換到第二行，僅手機標題加72px避讓；中文與Look At Our金色、其餘黑色及原灰線一致；原案例圖／比例／圓角／中央變形卡片保留，輪播測試後選取位置與來源不同，不照抄圖片次序；完整指定文案保留句點且移除Blog &，CMS案例內容不改。初次手機標題遮擋P2已修正並重截對稿；標題範圍無剩餘P0／P1／P2，final result: passed，標題全景清楚不需另裁切。卡片被手機服務列遮住屬既有標題外问题，未重排；未驗正式端／真實手機／外部案例文章，不送出表單／部署，保留本機预覽。
+
+## 2026-10-14 品牌系列廚電推薦標題
+
+- 依09:23:31截圖，所有KitchenSeriesPage共用廚電推薦區改為Explore Our灰色眉標、廚房電器推薦黑色中文主標、Kitchen Appliance金色英文。英文按來源單數，不擅自改文案。桌機中文40px／600、英文50px，平板32／42px、手機28／30px；上下排列沿用色卡標題8px層級間距，不套用同列基線位移。重用上一輪置中雙語CSS，排除舊48px斷點覆寫；色卡本身樣式不變。
+- 使用image-to-code與ponytail，只改標題與既有回歸，保留原產品資料／圖片／型號／順序／連結／卡片／背景／錯誤顯示與CTA，不新增素材／套件／文件，不部署、送出表單或寫入CMS／資料庫；文件只更新README。
+- 既有回歸新增廚電中英文案與字級斷言，色卡斷言同步容許共用CSS選擇器；限定執行色卡／廚電標題檢查，不執行含表單POST的全站流程。
+- 建置、建置後typecheck、限定色卡／廚電標題回歸、腳本語法與diff檢查通過；保留原Tailwind sourcemap警告。已核准獨立瀏覽器驗1280／1024／900／390／320px，桌機中文40px600／英文50px，平板32／42px、手機28／30px，水平溢出0；六筆產品圖片皆載入，型號／名稱／連結不變，第一張鍵盤Enter抵達原DR7396詳情路由。前後唯讀CMS回應一致，pageerror／console error為空。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_1mxvaD/截圖 2026-10-14 上午9.23.31.png`（2018×740註記畫布、右側約968px頁面）與 `/tmp/sakura-appliance-heading-UaeM8M/1280.png`（1280×900 CSS／1×）、`390.png`於同一比較輸入，另測1024／900／320px。五項檢查：原Cal Sans／Noto Serif TC、中文40px600／英文50px、灰色12pxExplore Our眉標，獨立中英層級；原置中版心／網格／卡片／17px眉標距與產品區留白保留，中英8px間距；中文黑色、英文金色與原灰白格線背景一致；原去背產品圖比例／contain／圖示未替換；文案依右圖及註記使用單數Kitchen Appliance，不保留錯誤Newsletter文案，不刪除截圖第一排外的原第六項E3625。等待標題及產品網格進場完成後取證，標題範圍無剩餘P0／P1／P2，final result: passed；全景可辨無需另裁切。既有手機固定服務列仍遮部分產品卡，屬標題外問題，不宣稱整頁手機QA通過。未驗正式端／其他瀏覽器／真實手機或外部產品連結，未送出表單／部署；保留本機預覽。
+
+## 2026-10-14 品牌系列板材色卡標題
+
+- 依09:23:21截圖，以明確文字註記「板材顏色選擇 Explore Our Color Collection」為準，不混入右圖額外的探索色彩美學或刪掉Explore Our。共用KitchenSeriesPage色卡標題上方保留Material Selection小標，中文改為黑色40px／600獨立行，英文50px、Explore Our黑色／Color Collection金色；上下排列不套用同列基線補償。平板32／42px，手機28／30px。僅改此標題，不影響廚電等其他置中標題、原色卡圖片／代碼／名稱／順序／網格／CTA與CMS資料。
+- 使用image-to-code與ponytail重用既有字型／樣式／素材，不新增套件或文件，QA紀錄只維護README；不部署、不送出表單、不寫入CMS／資料庫。
+- 首次響應式驗證發現1024px舊共用樣式覆寫英文為48px（P2），已將色卡標題排除於舊覆寫，保留其他置中區塊48px；重新擷取驗證桌機50px。
+- 既有回歸腳本補上此區完整文案、40px／600独立中文與桌機覆寫防護斷言，限定執行本次檢查，不執行全站表單POST流程。
+- 最終建置、建置後typecheck、限定色卡回歸、脚本語法及diff檢查通過。獨立瀏覽器驗1280／1024／900／390／320px：水平溢出0、字級依序40／50、40／50、32／42、28／30、28／30px，中文600；六張原色卡圖片載入成功，代碼／名稱／順序與原CTA URL保留，前後唯讀CMS回應相同，無pageerror／console error。建置重載曾使舊驗證頁面回到登入／空DOM，重新登入且等進場完成後取證，非修改登入邏輯。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_6bAKNL/截圖 2026-10-14 上午9.23.21.png`（2026×730註記畫布、右側約968px頁面）與 `/tmp/sakura-color-title-d1x11B/1280-final.png`（1280×900 CSS／1×）、`390-final.png`於同一比較輸入，另以`1024-final.png`驗覆寫修正。五項檢查：現有Cal Sans／Noto Serif TC，中文獨立行40px600／英文50px，層級清楚；置中、原17px眉標距離／55px網格距離／卡片比例／圓角不变，僅中英間8px；中文與Explore Our黑色、Color Collection金色、小標灰色；原六張門板素材／圖示／框線保留，未用CSS或新素材取代；以明確註記文案為準，右圖額外中文與刪除Explore Our為已說明差異。最初1024px字級P2修正後重截確認，標題範圍無剩餘P0／P1／P2，final result: passed；標題清楚可辨不需另裁切。原右側服務列仍遮部分手機色卡，屬既有標題外問題，不宣稱整頁手機通過。未實際開啟外部預約、送出表單、部署或驗真實手機。
+
+## 2026-10-14 品牌系列內頁介紹標題
+
+- 依09:12:52截圖，共用KitchenSeriesPage介紹區加入Explore Our／探索廚房美學，英文保留先前確認的完整「Creative Projects That Define Our Style」；右圖漏掉Define造成不完整句子，不照抄缺字。套用18／40／50px、中文600、baseline與0.06em字形補償，中文及Projects That金色，其他英文黑色；手機28／30px、平板32／42px自然分行。保留原70px標題頂距、30／70分欄與47px十字線間距，不改其他區塊標題。
+- 所有品牌系列內頁共用此次標題，不只AI Kitchen。保留各系列CMS資料、下方副標／正文／分隔線、Hero／圖片／套系／色卡／廚電／案例／快速選單及其互動。重用image-to-code與ponytail，不新增套件／素材／文件，僅維護README，不部署或寫入CMS／資料庫。重新啟動原已停止的本機3100預覽，沿用使用者核准的獨立瀏覽器驗證。
+- 建置、建置後typecheck、限定此標題的回歸斷言、脚本語法與diff檢查通過。AI Kitchen驗1512／1280／1190／1024／900／390／320px，潮派系列驗1280px：水平溢出0，桌機18／40／50px、中文600、十字間距47px；平板18／32／42px、手機18／28／30px。實際Canvas字形高中文37.30px／英文Creative36.75px，中文上移2.4px補償基線。套系ArrowDown／Home選取與焦點、圖片01↔02切換正常；前後唯讀CMS回應完全相同，pageerror／console error為空。未跑含表單POST的全站回歸，不送出表單、不部署。
+- image-to-code／design-qa：來源09:12:52（2040×698註記畫布、右侧约968px內嵌頁面）與 `/tmp/sakura-series-heading-J0WwBh/desktop.png`（1280×684 CSS／1×）、`ai-390.png`於同一比較輸入，另以`ai-900.png`、`ai-320.png`與`loft-desktop.png`驗響應式及共用系列。五項檢查：原Cal Sans／Noto Serif TC、指定字級／600字重、同列中文字形及基線對齊；保留30／70分欄、70px頂距、47px十字間距、下方分隔與段落版型；中文／Projects That金色、其他英文黑色、線條淺灰；未更換Hero／套系／圖示／背景素材；新增文字符合指定，完整英文保留Define，各系列原CMS副標與正文不變。等待is-visible及有限進場動畫完成再取證，本次標題範圍無剩餘P0／P1／P2，final result: passed。
+- 手機原有下方正文與套系tabs被固定右側服務列遮擋，屬本次標題以外的既有P2；此次未擴改下方版型，不能宣稱整頁手機QA全通過。未驗正式端／其他瀏覽器／真實手機；保留本機品牌系列預覽。
+
+## 2026-10-13 首頁尋找門市雙語標題
+
+- 依15:47:52截圖，首頁尋找門市加入Explore Our、原CMS中文「櫻花整體廚房／全台門市據點」及英文「Find Us Stores at／SAKURA KITCHEN」。桌機18／40／50px，中文600並沿用baseline／0.06em字形補償，金色中文／Stores at、其他英文黑色，現有Cal Sans／Noto Serif TC不變；手機分行28／30px、平板32／42px。
+- 新標題比舊版左移，標題區沿用30／70分欄及共用47px十字軌，線條使用現有淺灰而非來源編輯選取藍色。窄於1024px上下排列時隱藏十字裝飾；下方地圖／門市卡片、篩選、翻牌、選取／暫停及定位按鍵不改，原手機右側安全距離保留。不把截圖的金色選取門市變成預設鎖定，也不更換店名／資料。使用image-to-code與ponytail重用現有元件，僅更新README，無新套件／素材／文件、部署或CMS／資料庫寫入。
+- 建置、建置後typecheck、本次限定門市標題回歸、腳本語法與diff檢查通過。獨立瀏覽器驗1512／1280／1190／1024／900／390／320px，水平溢出0；所有桌機18／40／50px、中文600、十字間距47px，900px小標／中文／英文為18／32／42px，手機18／28／30px。平板／手機上下排列且十字線隱藏，文字保留既有右側安全空間。Google地圖實際載入、無錯誤提示；中部／臺中市篩出中港、松竹、台中復興、博館4店，鍵盤Enter選取回報aria-pressed=true，重設篩選後取消選取且城市恢復停用。前後CMS唯讀回應相同、原9筆資料保留，pageerror／console error為空。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_rN5L4Y/截圖 2026-10-13 下午3.47.52.png`（2036×722註記畫布、右側約968×518頁面）與 `/tmp/sakura-store-heading-cDlrIz/desktop.png`（1280×684 CSS／1×）、`heading.png`（約791×184標題近拍）、`390.png`（390×900）於同一比較輸入，按約0.756倍率核對標題；另測1512px全景與900px平板。五項檢查：18／40／50px、字族／600字重／英文大小寫／基線補償符合指定，長文案自然分行；標題使用30／70分欄、47px共用十字間距，地圖與列表保持原62%布局、圓角與控制尺寸；中文／Stores at金色、其他英文黑色，線條沿用本站淺灰而不加入編輯藍色；實際Google圖磚、S pin、Logo与原圖示保留，篩選後等待圖磚回復清晰再截圖；兩段中文與9店資料來自原CMS，英文符合來源，不複製截圖隨機店序或金底選取状态。原標題缺少英文層級P2已修正，無剩餘本次P0／P1／P2，final result: passed。第一次滾輪碰到地圖顯示原Google操作提示遮罩，已移開指標、等待恢復後重截，未修改地圖程式。
+- 既有「我的位置」按鍵在元件中沒有綁定定位事件；這是原程式的功能缺口，本次僅註記、不擴大到GPS或權限串接，不宣稱定位已驗證。沒有新增其他功能、真實定位、表單送出或部署，未驗正式端／其他瀏覽器／真實手機。保留本機 `/#contact` 預覽。
+
+## 2026-10-13 首頁品牌承諾雙語標題
+
+- 依15:32:54截圖，首頁品牌承諾主標加入上方金色「品牌承諾」，英文仍沿用目前CMS的Why／SAKURA KITCHEN。示意圖SKITCHEN為誤植，不帶入前台或覆寫資料。沿用本輪雙語規格：桌機中文40px／600、英文50px，現有Noto Serif TC／Cal Sans；上下排列不套用同列字形位移，手機28／30px、平板32／42px。中文與英文留8px層級間距。
+- 保留Brand Commitment小標、正文、副標、CTA、影片／封面、背景、版心與進場；只有標題新增中文及字級／行高调整。使用image-to-code與ponytail重用既有元件／CSS／回歸，僅更新本README，不新增套件／素材／文件，不部署、不改CMS／資料庫。
+- 手機QA發現長英文及正文被固定右側服務列遮住（P2），僅此區塊≤767px文字欄加入72px安全距離，沿用本站卡片文字避讓尺寸；保留手機影片滿寬及原上下排列，桌機／平板版型不改。文字自然折行，不縮小字級或截斷文案。
+- 建置、建置後typecheck、本次限定品牌承諾回歸、腳本語法及diff檢查通過。已獲同意的獨立瀏覽器驗1280／1190／1024／900／390／320px，水平溢出0；桌機中文40px／600、英文50px，900px為32／42px，手機28／30px。390px文字右緣303px、320px233px，與右側服務列有15px安全空間；影片仍滿寬且原封面載入正常。鍵盤Enter櫻花優勢抵達 `/about/advantage`；影片按鍵可鍵盤聚焦且啟用，不觸發外部串流播放。前後唯讀CMS回應完全相同，pageerror／console error為空；未執行含表單POST的全站回歸。
+- 來源畫布實測2030×734px，包含左右比較與註記，不將整張畫布當網站視口；對稿按右側內嵌頁面縮放。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_yTFf2y/截圖 2026-10-13 下午3.32.54.png` 的右側約968px頁面，與 `/tmp/sakura-promise-heading-cdtIxR/desktop.png`（1280×684 CSS／1×）、`390.png`（390×844）及 `heading.png`（約446×176標題近拍）於同一比較輸入，依約0.756比例核對指定標題。五項檢查：沿用Cal Sans／Noto Serif TC，上中文、下英文的分行／字級／600字重清楚；保留版心、左右文字影片比例、原圓角與段落间距，僅手機增加文字安全距離；金色中文／SAKURA KITCHEN、黑色Why及灰色正文一致；影片封面、藍圖背景與播放icon未重製，圖片載入完整；英文依上方註記使用正確KITCHEN，不複製示意圖SKITCHEN或舊標題，其他CMS內容不變。初次手機英文被遮住P2已修正，重截確認完整可讀；首次重截發生在CSS進場delay階段，後續改為等待is-visible及有限動畫完成後才驗收，最終證據无過渡偏移。本次無剩餘P0／P1／P2，final result: passed。未驗真實YouTube播放、正式端／其他瀏覽器／真實手機；保留本機預覽，不部署。
+
+## 2026-10-13 同列中英文標題等高對齊慣例
+
+- 依15:11:34截圖修正首頁「品牌系列」中文向下偏移。Canvas實測Noto Serif TC 40px／600字形高37.50px，Cal Sans 50px英文Creative字形高36.75px，原問題主要是middle垂直對齊而非中文太小。保留原40／50px與18px小標，中文改為baseline並上移0.06em（桌機2.4px）補償中英字形；不擴大中文到50px，不改文字、色彩、47px十字間距、輪播或其他頁標題。
+- 沿用image-to-code與ponytail做局部修正，重用既有字型與回歸腳本，只維護本README，不新增套件／素材／文件，不部署、不改CMS／資料庫。
+- 依使用者「剛剛改的都改一遍，之後也是」，廚房產品同列中文同步baseline／0.06em字形補償。後續新增或修改同列中英主標時，必須檢查实际字形高度與垂直對齊，不能只按font-size或middle認定已等高；沿用現有字型時可用本次40／50px組合及補償。換字型時重新量測，不盲套偏移值。上下排列的獨立中文小標（如設計案例38px／英文80px）保留使用者指定層級，不硬改成同高。
+- 本次建置、建置完成後重跑typecheck、限定雙語標題回歸與腳本語法／diff檢查通過。獨立瀏覽器測1280／1190／900／390／320px，兩區均為baseline且水平溢出0；手機中文28px、平板32px、桌機40px不變，品牌十字線最終仍47px。排除進場尚未結束的47.02px過渡讀數後精確確認47px；型別檢查引發dev reload時測試helper曾讀到空DOM，重新載入後完整驗證，最終pageerror／console error為空。沒有送出表單或執行全站資料回歸。
+- image-to-code／design-qa：缺陷來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_x6Uepp/截圖 2026-10-13 下午3.11.34.png`（1386×270、約2×標題近拍）與 `/tmp/sakura-brand-align-MwMPin/heading.png`（766×120 CSS／1×）、`services-heading.png`（769×120）於同一比較輸入。品牌中文字像素頂緣／底緣11／47、英文Creative11／46，頂緣同高，底緣僅1px字形柵格差；未追求拉伸字形。五項檢查：字型、字重、40／50px及小標18px保留，修正的是基線與字形位置；欄位、段落、卡片、47px橫距與手機換行不變；金黑白配色及下劃線不變；原圖片／Logo未編輯，另檢查 `brand-1280.png`／`services-1280.png`全景與兩張390px手機證據；所有文案及資料不變。來源是偏低缺陷，不重現偏移；中文下沉P2已修正，無剩餘本次P0／P1／P2，final result: passed。未驗正式端、其他瀏覽器或真實手機，不部署；不同字型／其他上下排列標題不自動套用本補償。
+
+## 2026-10-13 首頁品牌系列與設計案例雙語標題
+
+- 依14:38:02截圖及使用者確認，品牌系列保留英文「Creative Projects That Define Our Style」，加入Explore Our及原CMS中文「品牌系列」。桌機18px／中文40px、600／英文50px，沿用金黑色與現有Cal Sans／Noto Serif TC，保持47px十字線間距、正文與輪播不變。
+- 依14:38:45截圖，設計案例把原CMS中文作為英文上方的38px／600小標，加入80px「Kitchen／Design」兩行英文；手機／平板縮小適配。不改進場、背景／縮圖、原案例資料、輪播、更多設計CTA或資料庫。沿用image-to-code與ponytail，只維護本README，無新增套件／素材／文件或部署。
+- 建置、建置後typecheck、既有前台回歸新增的本次限定斷言、腳本語法及 `git diff --check` 通過；沒有執行含表單POST的完整回歸。已獲同意的獨立瀏覽器驗證1920／1280／1190／1024／900／390／320px：水平溢出0，桌機品牌50／18／40px、案例80／38px，兩區中文600；品牌所有左右排列間距47px，手機保留隱藏十字線。900px品牌42／18／32px、案例60／32px；手機品牌30／18／28px、案例40／26px。品牌與案例的下一張皆可鍵盤Enter切換，「更多設計」Enter抵達原 `/design-inspiration`，兩區圖片完整載入，pageerror／console error為空。
+- image-to-code／design-qa：來源14:38:02（2028×746）與14:38:45（2008×726）註記畫布中的右側約968px頁面，分別與 `/tmp/sakura-dual-heading-0s0bpN/brand-desktop.png`、`case-desktop.png`（1280×900 CSS／1×）於同一比較輸入，依約0.756比例聚焦雙語標題；另查看同目錄 `brand-900.png`／`brand-390.png`／`case-390.png`。五項檢查：現有Cal Sans／Noto Serif TC對應英文與中文，指定字級／600字重／分行正確；保留共用47px、原欄位／區塊頂距／圖卡佈局與CTA，品牌標題寬度由639改為沿用正文的766px以容納新增內容，手機分行不擠出畫面；品牌金黑灰、案例白字與原深色遮罩不變；原案例／廚房素材、Logo、圖片品質与裁切未修改，當前輪播頁與來源不同屬原自動切換狀態；品牌英文依使用者確認保留完整文案，中文仍取CMS，案例補Kitchen Design，不加入註記或舊Lorem ipsum。初次品牌截圖受建置／typecheck後dev重新載入影響、進場尚不可見，作為無效證據捨棄；待動畫與hover收束後重截比對。原雙語層級缺失P2已修正，最終沒有本次P0／P1／P2，final result: passed。標題可清楚辨識且有實測邊界證據，不需另裁切；未驗正式端、其他瀏覽器／真實手機或所有案例詳情，保留本機預覽。
+
+## 2026-10-13 首頁廚房產品雙語標題
+
+- 依14:38:23截圖，首頁廚房產品標題加入Explore Our與英文「Smart Appliances Designed for Better Living」；保留原CMS中文兩欄合併顯示「廚房產品」，不覆寫資料。桌機沿用本輪指定的18px／中文40px、600／英文50px，使用現有Cal Sans與Noto Serif TC；中文及Better Living沿用金色，其他英文白色。手機／窄平板自然分行縮小，不加入示意圖文字背後的編輯遮罩。
+- 使用image-to-code與ponytail，只改HomeServices標題／局部響應式樣式，保留共用47px十字線間距、原進場／輪播／圖片／卡片／品牌連結。QA與驗證記錄僅維護本README；品牌系列的英文選擇仍待確認，不連帶修改。不新增套件／素材／文件，不部署、不寫入CMS或資料庫。
+- `pnpm --dir nuxt-site build`、建置後順序執行的 `pnpm --dir nuxt-site typecheck`、瀏覽器字級／字重／間距斷言及 `git diff --check` 通過。沿用已獲同意的獨立Playwright驗證1920／1280／1190／1024／900／820／390／320px，水平溢出皆0；左右版型皆47px，上下排列仍隱藏裝飾線。1280px主標左緣419.80px、線右緣372.80px，桌機三種字級為18／40／50px、中文600；1024px自然三行，不壓縮桌機字級。900px兩欄自動輪播會切換，1280px三卡全部可見時不需捲動。鍵盤Enter原SAKURA卡片抵達 `/products/sakura`，圖片與Logo均正常載入；首次SPA跳頁曾短暫報內容初始化錯誤，等待載入並重新導航後品牌頁與首頁pageerror／console error均為空，未更改資料或錯誤處理。
+- image-to-code／design-qa：來源 `/var/folders/_2/0cgnyjy96gq7clyqpvzrx0vm0000gn/T/TemporaryItems/NSIRD_screencaptureui_Qnh7yD/截圖 2026-10-13 下午2.38.23.png`（2048×750註記畫布、約968×516內嵌頁面）與最終 `/tmp/sakura-services-heading-t80ah9/desktop.png`（1280×684 CSS／1×、進場完成）於同一比較輸入，另檢查同目錄 `900.png`／`390.png`，聚焦標題而非來源舊卡片英文示意文。五項檢查：沿用Cal Sans／Noto Serif TC，新增小標、中文與英文分級，字重／行高及英文大小寫正確；保留標題欄位、47px共用間距、原標題頂距與卡片版型，窄螢幕分行無裁切；白色英文及金色中文／Better Living符合示意，原背景遮罩保留，不複製編輯黑色背板；圖片／Logo仍為原素材、載入完整，無生成替代品；中文取原CMS欄位，新增英文逐字符合右圖，未變更其他文案。全景中文字與間距清楚可辨，搭配字級邊界量測，無需另裁切；既有標題缺少指定英文／中文階層的P2已修正，本次無剩餘P0／P1／P2，final result: passed。未重跑含表單POST的全站回歸、其他品牌目的頁、正式端或真實手機，不部署。
+
 ## 2026-10-13 全站十字線與主標題間距
 
 - 依14:05:14截圖，統一所有使用 `InternalTemplateHeadingRail` 的並排標題：沿用首頁既有47px作為垂直線到主標題左緣的共用間距，定義於全站CSS；移除Home06／Home05／Home01來源版型與斷點的固定座標覆寫。既有箭頭15px圖框／14px定位補償保留，不重製素材，不改主標題或小標文案、字級、配色、橫線長度、區塊頂距、reveal或資料。

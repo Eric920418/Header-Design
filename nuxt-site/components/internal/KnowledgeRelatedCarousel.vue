@@ -25,10 +25,9 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   <section v-if="variant === 'home07'" class="knowledge-related knowledge-related--home07" aria-label="延伸文章">
     <header class="knowledge-related-home07__intro" v-reveal="{ anim: 'opalMoveRight' }">
       <InternalSectionPill>Straight From The Newsroom</InternalSectionPill>
-      <h2>Take A Look At<br><em>Our Latest Blog</em><br>&amp; Articles!</h2>
-      <p>Check out our latest blog posts and industry insights to stay informed about the latest trends, technologies, and project updates.</p>
+      <h2><span class="knowledge-related-home07__chinese">廚房知識與靈感</span>Take A Look<br><em>At Our Latest</em><br>Articles</h2>
       <NuxtLink to="/knowledge" class="knowledge-related-home07__cta site-content-cta">
-        <span>Explore Blogs</span>
+        <span>更多廚房知識</span>
         <i class="site-cta-icon"><ArrowUpRight aria-hidden="true" /></i>
       </NuxtLink>
     </header>
@@ -200,7 +199,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   margin: 31px 0 29px;
   color: #1c1c1d;
   font-family: var(--font-display);
-  font-size: 52px;
+  font-size: 50px;
   font-style: normal;
   font-weight: 400;
   line-height: 1.06;
@@ -212,13 +211,16 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   font-style: normal;
 }
 
-.knowledge-related-home07__intro > p {
-  max-width: 370px;
-  margin: 0;
-  color: #59585d;
-  font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 24px;
+.knowledge-related-home07__chinese {
+  display: block;
+  margin-bottom: 8px;
+  color: #caa05c;
+  font-family: var(--font-cjk-serif);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-wrap: balance;
 }
 
 .knowledge-related-home07__cta {
@@ -330,7 +332,11 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   .knowledge-related__slide { flex-basis: 50%; }
   .knowledge-related--home07 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .knowledge-related-home07__intro { grid-column: 1 / -1; padding: 0 0 25px; }
-  .knowledge-related-home07__intro h2 { font-size: 48px; }
+}
+
+@media (max-width: 1023px) {
+  .knowledge-related-home07__intro h2 { font-size: 42px; }
+  .knowledge-related-home07__chinese { font-size: 32px; }
 }
 
 @media (max-width: 767px) {
@@ -347,7 +353,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
 
   .knowledge-related--home07 {
     width: calc(100% - 108px);
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 38px;
     margin-right: auto;
     margin-left: 15px;
@@ -355,8 +361,8 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   }
 
   .knowledge-related-home07__intro { padding-bottom: 3px; }
-  .knowledge-related-home07__intro h2 { margin-block: 26px 22px; font-size: 40px; }
-  .knowledge-related-home07__intro > p { max-width: 100%; }
+  .knowledge-related-home07__intro h2 { margin-block: 26px 22px; font-size: 30px; }
+  .knowledge-related-home07__chinese { font-size: 28px; }
   .knowledge-related-home07__cta { margin-top: 32px; }
   .knowledge-related-home07__media { border-radius: 18px; }
   .knowledge-related-home07__article h3 { font-size: 20px; line-height: 30px; }

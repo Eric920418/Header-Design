@@ -118,7 +118,18 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   <template v-if="cmsCopy.cmsSettings.visible">
   <section id="contact" aria-labelledby="store-location-heading" class="store-location-section relative overflow-hidden bg-[#fafafa] py-[60px]">
     <div class="mx-auto w-full max-w-[1512px] pl-5 pr-[88px] sm:pl-8 sm:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
-      <div class="relative mb-[60px]"><div class="grid grid-cols-1 items-start lg:grid-cols-[minmax(260px,424px)_minmax(0,1fr)] lg:pt-[46px]"><div class="mb-5 lg:mb-0"><InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }">{{ cmsCopy.copy.text1 }}</InternalSectionPill></div><h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="max-w-[661px] font-cjk-serif text-[42px] font-semibold leading-[46px] text-[#1C1C1D] sm:text-[52px] sm:leading-[56px] xl:text-[60px] xl:leading-[64px]">{{ cmsCopy.copy.text2 }}<br /><span class="text-[#CAA05C]">{{ cmsCopy.copy.text3 }}</span></h2></div></div>
+      <div class="relative mb-[60px]">
+        <div class="store-location-heading grid grid-cols-1 items-start gap-5 lg:grid-cols-[30%_70%] lg:gap-0">
+          <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" :label="cmsCopy.copy.text1" source="home4" class="store-location-heading-rail" />
+          <h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="store-location-title">
+            <span class="store-location-title__eyebrow">Explore Our</span>
+            <span class="store-location-title__chinese">{{ cmsCopy.copy.text2 }}</span>
+            Find Us <span class="text-[#CAA05C]">Stores at</span><br />
+            <span class="store-location-title__chinese">{{ cmsCopy.copy.text3 }}</span>
+            SAKURA KITCHEN
+          </h2>
+        </div>
+      </div>
       <div class="flex min-w-0 flex-col gap-8 lg:flex-row">
         <div v-reveal="{ anim: 'opalMoveRight', delay: 180 }" class="flex w-full min-w-0 flex-col lg:w-[62%] lg:shrink-0"><div class="h-[var(--store-map-h)] overflow-hidden rounded-3xl bg-[#F6F6F6] shadow-sm lg:min-h-[var(--store-map-h)] lg:flex-1"><GoogleStoreMap :address="visible.address" :name="visible.name" :focus="focused" /></div></div>
         <div class="min-w-0 flex-1">
@@ -183,3 +194,50 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   </section>
 </template>
 </template>
+
+<style scoped>
+.store-location-title {
+  min-width: 0;
+  color: #1c1c1d;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.store-location-title__eyebrow {
+  display: inline-block;
+  margin-right: 16px;
+  border-bottom: 1px solid #c5c5c5;
+  font-size: 18px;
+  vertical-align: middle;
+}
+.store-location-title__chinese {
+  position: relative;
+  top: -.06em;
+  margin-right: 6px;
+  color: #CAA05C;
+  font-family: var(--font-cjk-serif);
+  font-size: 28px;
+  font-weight: 600;
+  vertical-align: baseline;
+}
+@media (min-width: 768px) {
+  .store-location-title { font-size: 42px; }
+  .store-location-title__chinese { font-size: 32px; }
+}
+@media (min-width: 1024px) {
+  .store-location-title { padding-top: 64px; font-size: 50px; }
+  .store-location-title__chinese { font-size: 40px; }
+}
+@media (max-width: 1023px) {
+  .store-location-heading-rail { --rail-min-height: 0px; --rail-padding-top: 0px; }
+  .store-location-heading-rail :deep(.template-heading-rail__line) { display: none; }
+}
+@media (max-width: 767px) {
+  .store-location-title { text-align: center; }
+  .store-location-title__eyebrow { margin-right: 0; }
+  .store-location-title__chinese { display: block; margin-right: 0; }
+}
+</style>

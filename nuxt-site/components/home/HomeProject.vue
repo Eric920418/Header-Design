@@ -62,7 +62,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <InternalTemplateHeadingRail label="BRAND SERIES" source="home9" />
       </div>
       <div v-reveal="{ anim: 'opalMoveLeft' }" class="home-project-heading-copy">
-        <h2 id="home-project-heading" class="home-project-title">{{ cmsCopy.copy.text1 }}<span class="text-[#CAA05C]">{{ cmsCopy.copy.text2 }}</span>
+        <h2 id="home-project-heading" class="home-project-title">
+          <span class="home-project-title__eyebrow">Explore Our</span>
+          <span class="home-project-title__chinese">{{ cmsCopy.copy.text1 }}{{ cmsCopy.copy.text2 }}</span><br class="home-project-title__break" />
+          Creative <span class="text-[#CAA05C]">Projects That</span> Define Our Style
         </h2>
         <p class="home-project-heading-description">{{ cmsCopy.copy.text3 }}</p>
       </div>

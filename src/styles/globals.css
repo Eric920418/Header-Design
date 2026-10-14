@@ -506,14 +506,40 @@ body {
 }
 .home-project-title {
   width: 100%;
-  max-width: 639px;
+  max-width: 766px;
   margin: 0 0 30px;
   color: #1c1c1d;
-  font-family: var(--font-cjk-serif);
+  font-family: var(--font-display);
   font-size: 30px;
-  font-weight: var(--font-weight-cjk-serif-emphasis);
+  font-weight: 400;
   line-height: 1.2;
-  letter-spacing: .02em;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.home-project-title__eyebrow {
+  display: inline-block;
+  margin-right: 16px;
+  font-size: 18px;
+  vertical-align: middle;
+  border-bottom: 1px solid #c5c5c5;
+}
+.home-project-title__chinese {
+  display: inline-block;
+  margin-right: 12px;
+  color: #CAA05C;
+  font-family: var(--font-cjk-serif);
+  font-size: 28px;
+  font-weight: 600;
+  vertical-align: baseline;
+  position: relative;
+  top: -.06em;
+}
+.home-project-title__break { display: none; }
+@media (max-width: 767px) {
+  .home-project-title__chinese {
+    margin-right: 0;
+  }
+  .home-project-title__break { display: initial; }
 }
 .home-project-heading-description {
   width: 100%;
@@ -575,6 +601,7 @@ body {
   .home-project-title {
     font-size: 42px;
   }
+  .home-project-title__chinese { font-size: 32px; }
   .home-project-track {
     --home-project-columns: 2;
     --home-project-basis: calc(50% - 9px);
@@ -585,9 +612,6 @@ body {
   .home-project-heading-copy {
     padding-top: 63px;
     padding-bottom: 60px;
-  }
-  .home-project-title {
-    font-size: 48px;
   }
   .home-project-track {
     --home-project-columns: 3;
@@ -600,14 +624,15 @@ body {
     padding-top: 100px;
     padding-bottom: 100px;
   }
-  .home-project-title {
-    font-size: 60px;
-  }
   .home-project-track {
     --home-project-columns: 4;
     --home-project-basis: calc(25% - 13.5px);
   }
   .home-project-card { height: 560px; }
+}
+@media (min-width: 1024px) {
+  .home-project-title { font-size: 50px; }
+  .home-project-title__chinese { font-size: 40px; }
 }
 @media (min-width: 1201px) {
   .home-project-section {
@@ -789,8 +814,18 @@ body {
   text-align: center;
 }
 .gallery-heading-title {
+  font-family: var(--font-display);
   font-size: 40px;
-  line-height: 45px;
+  font-weight: 400;
+  line-height: 1;
+}
+.gallery-heading-title__chinese {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-cjk-serif);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
 }
 .gallery-case-row {
   width: 100%;
@@ -822,9 +857,13 @@ body {
     --gallery-content-top: 140px;
   }
   .gallery-heading-title {
-    font-size: 42px;
-    line-height: 50px;
+    font-size: 60px;
   }
+  .gallery-heading-title__chinese { font-size: 32px; }
+}
+@media (min-width: 1024px) {
+  .gallery-heading-title { font-size: 80px; }
+  .gallery-heading-title__chinese { font-size: 38px; }
 }
 @media (min-width: 1025px) {
   .gallery-section {
@@ -846,8 +885,6 @@ body {
   }
   .gallery-heading-title {
     min-height: 200px;
-    font-size: 76px;
-    line-height: 90px;
   }
   .gallery-case-row {
     flex: 1 1 0%;
@@ -887,12 +924,6 @@ body {
   .gallery-section {
     --gallery-card-size: clamp(280px, calc(280px + (100vw - 1280px) * 0.09375), 295px);
     --gallery-layout-gap: clamp(5px, calc(5px + (100vw - 1280px) * 0.287356), 30px);
-  }
-}
-@media (min-width: 1201px) {
-  .gallery-heading-title {
-    font-size: 110px;
-    line-height: 100px;
   }
 }
 
@@ -948,7 +979,17 @@ body {
 }
 .what-we-do-title {
   font-size: 30px;
-  line-height: 35px;
+  line-height: 1.2;
+  text-transform: none;
+}
+.what-we-do-title__chinese {
+  display: block;
+  margin-bottom: 8px;
+  color: #CAA05C;
+  font-family: var(--font-cjk-serif);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
 }
 .what-we-do-description {
   margin-top: 30px;
@@ -958,14 +999,18 @@ body {
   justify-content: center;
 }
 
+@media (max-width: 767px) {
+  .what-we-do-copy { padding-right: 72px; }
+}
+
 @media (min-width: 768px) {
   .what-we-do-section {
     padding: 80px 30px;
   }
   .what-we-do-title {
-    font-size: 45px;
-    line-height: 50px;
+    font-size: 42px;
   }
+  .what-we-do-title__chinese { font-size: 32px; }
 }
 
 @media (min-width: 881px) {
@@ -980,8 +1025,6 @@ body {
   .what-we-do-title {
     margin-left: 0;
     margin-right: 0;
-    font-size: 60px;
-    line-height: 64px;
   }
   .what-we-do-description {
     margin: 29px 0 50px;
@@ -989,6 +1032,11 @@ body {
   .what-we-do-cta-row {
     justify-content: flex-start;
   }
+}
+
+@media (min-width: 1024px) {
+  .what-we-do-title { font-size: 50px; }
+  .what-we-do-title__chinese { font-size: 40px; }
 }
 
 @media (min-width: 1025px) {

@@ -274,7 +274,11 @@ useSeoMeta({
       <div class="page-container">
         <div class="ai-section-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Kitchen Collections" />
-          <h2 v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">Creative Projects That<br><span>Define Our Style</span></h2>
+          <h2 id="ai-collections-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
+            <span class="ai-collections-eyebrow">Explore Our</span>
+            <span class="ai-collections-chinese">探索廚房美學</span><br class="ai-collections-mobile-break">
+            Creative <span class="ai-collections-accent">Projects That</span> Define Our Style
+          </h2>
         </div>
         <div class="ai-intro__content">
           <h3 id="ai-intro-title" v-reveal="{ anim: 'opalMoveRight' }">{{ data.intro.title }}</h3>
@@ -347,9 +351,9 @@ useSeoMeta({
 
     <section aria-labelledby="finish-heading" class="ai-finishes">
       <div class="page-container">
-        <div class="ai-centered-heading">
-          <p v-reveal="{ anim: 'opalMoveUp' }">板材顏色選擇</p>
-          <h2 id="finish-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Explore Our<br><span>Color Collection</span></h2>
+        <div class="ai-centered-heading ai-finish-heading">
+          <p v-reveal="{ anim: 'opalMoveUp' }">Material Selection</p>
+          <h2 id="finish-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }"><span class="ai-finish-heading__chinese">板材顏色選擇</span>Explore Our <span>Color Collection</span></h2>
         </div>
         <div class="ai-finishes__grid">
           <article v-for="(finish, index) in data.finishes" :key="finish.code" v-reveal="{ anim: 'opalMoveUp', delay: index * 70 }">
@@ -379,9 +383,9 @@ useSeoMeta({
 
     <section aria-labelledby="equipment-heading" class="ai-equipment">
       <div class="page-container">
-        <div class="ai-centered-heading ai-centered-heading--compact">
-          <p v-reveal="{ anim: 'opalMoveUp' }">廚房電器推薦</p>
-          <h2 id="equipment-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }">Explore Our<br><span>Kitchen Appliances</span></h2>
+        <div class="ai-centered-heading ai-appliance-heading">
+          <p v-reveal="{ anim: 'opalMoveUp' }">Explore Our</p>
+          <h2 id="equipment-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }"><span class="ai-appliance-heading__chinese">廚房電器推薦</span><span>Kitchen Appliance</span></h2>
         </div>
         <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="ai-equipment__grid" :aria-label="`${data.name} 推薦廚電`">
           <article v-for="equipment in visibleEquipment" :key="equipment.model" class="ai-equipment__item">
@@ -401,7 +405,11 @@ useSeoMeta({
       <div class="page-container">
         <div class="ai-cases__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Recommended Cases" class="ai-cases__heading-label" />
-          <h2 id="cases-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 90 }">Take A Look At <span>Our Latest Blog</span> &amp; Articles.</h2>
+          <h2 id="cases-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 90 }">
+            <span class="ai-collections-eyebrow">Explore Our</span>
+            <span class="ai-collections-chinese">風格廚房實例</span><br class="ai-collections-mobile-break">
+            Take A <span class="ai-collections-accent">Look At Our</span> Latest Articles.
+          </h2>
         </div>
         <div
           v-if="data.cases.length"
@@ -479,8 +487,11 @@ useSeoMeta({
 
 .ai-intro { padding: 100px 0; background: #fafafa; }
 .ai-section-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
-.ai-section-heading h2 { max-width: 900px; margin: 70px 0 0; font-size: 60px; line-height: 64px; text-transform: none; }
-.ai-section-heading h2 span, .ai-centered-heading h2 span { color: #caa05c; }
+.ai-section-heading h2 { min-width: 0; max-width: 800px; margin: 70px 0 0; color: #1c1c1d; font-size: 50px; line-height: 1.2; text-transform: none; }
+.ai-collections-chinese, .ai-collections-accent, .ai-centered-heading h2 span { color: #caa05c; }
+.ai-collections-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #c5c5c5; font-size: 18px; vertical-align: middle; }
+.ai-collections-chinese { display: inline-block; position: relative; top: -.06em; margin-right: 12px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; vertical-align: baseline; }
+.ai-collections-mobile-break { display: none; }
 .ai-intro__content { display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); gap: 24px; margin-top: 64px; padding-top: 44px; border-top: 1px solid #e3e3e8; }
 .ai-intro__content h3 { grid-column: 1; max-width: 520px; margin: 0; font-family: var(--font-cjk-serif); font-size: 30px; font-weight: 500; line-height: 40px; letter-spacing: .02em; text-transform: none; }
 .ai-intro__paragraphs { display: grid; grid-column: 3; gap: 8px; align-content: start; padding-top: 5px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
@@ -526,6 +537,8 @@ useSeoMeta({
 .ai-centered-heading > p { margin: 0 0 17px; color: #9f9fa4; font-family: var(--font-cjk-sans); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
 .ai-centered-heading h2 { margin: 0; font-size: 60px; line-height: 64px; text-transform: none; }
 .ai-centered-heading--compact h2 { font-size: 52px; line-height: 58px; }
+.ai-finish-heading h2, .ai-appliance-heading h2 { font-size: 50px; line-height: 1.2; }
+.ai-finish-heading h2 .ai-finish-heading__chinese, .ai-appliance-heading h2 .ai-appliance-heading__chinese { display: block; margin-bottom: 8px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; }
 .ai-finishes__grid { --columns: 6; --gap: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); margin-top: 55px; }
 .ai-finishes__grid article { min-width: 0; flex: 0 0 calc((100% - (var(--columns) - 1) * var(--gap)) / var(--columns)); }
 .ai-finishes__image { aspect-ratio: 1; border-radius: 24px; transition: transform .5s; }
@@ -562,8 +575,7 @@ useSeoMeta({
 
 .ai-cases { background: #fff; }
 .ai-cases__heading { display: grid; grid-template-columns: 30% 70%; }
-.ai-cases__heading > h2 { max-width: 688px; margin: 0; padding: 64px 0 60px; font-size: 60px; line-height: 64px; text-transform: none; }
-.ai-cases__heading > h2 span { color: #caa05c; }
+.ai-cases__heading > h2 { min-width: 0; max-width: 750px; margin: 0; padding: 64px 0 60px; font-size: 50px; line-height: 1.2; text-transform: none; }
 .ai-cases__viewport { overflow: hidden; cursor: grab; outline: none; }
 .ai-cases__viewport:focus-visible { box-shadow: 0 0 0 2px #caa05c inset; }
 .ai-cases__viewport:active { cursor: grabbing; }
@@ -607,7 +619,7 @@ useSeoMeta({
   .ai-hero__inner { padding-top: 80px; }
   .ai-hero__title-slot { min-height: 188px; }
   .ai-hero__cta { width: 105px; height: 105px; margin-top: 24px; }
-  .ai-section-heading h2, .ai-centered-heading h2 { font-size: 48px; line-height: 53px; }
+  .ai-centered-heading:not(.ai-finish-heading):not(.ai-appliance-heading) h2 { font-size: 48px; line-height: 53px; }
   .ai-intro__content { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); gap: 14px; }
   .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); grid-template-rows: 320px; gap: 14px; }
   .ai-suite-tabs button { min-height: 48px; }
@@ -617,7 +629,6 @@ useSeoMeta({
   .ai-suite-details { grid-template-columns: 1fr 1fr; }
   .ai-suite-details > div:last-child { grid-column: 1 / -1; }
   .ai-finishes__grid { --columns: 3; --gap: 24px; }
-  .ai-cases__heading > h2 { font-size: 50px; line-height: 56px; }
   .ai-cases__slide { flex-basis: 50%; }
   .ai-case-card { height: auto; overflow: visible; border-radius: 0; }
   .ai-case-card__image { height: auto !important; aspect-ratio: 1.40625; border-radius: 24px; }
@@ -627,6 +638,10 @@ useSeoMeta({
 }
 
 @media (max-width: 1023px) {
+  .ai-finish-heading h2, .ai-appliance-heading h2 { font-size: 42px; }
+  .ai-finish-heading h2 .ai-finish-heading__chinese, .ai-appliance-heading h2 .ai-appliance-heading__chinese { font-size: 32px; }
+  .ai-section-heading h2, .ai-cases__heading > h2 { font-size: 42px; }
+  .ai-collections-chinese { font-size: 32px; }
   .ai-series-drawer { display: none; }
 }
 
@@ -647,7 +662,12 @@ useSeoMeta({
   .ai-intro, .ai-finishes, .ai-equipment, .ai-cases { padding: 60px 0; }
   .ai-section-heading { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
   .ai-section-heading h2 { margin-top: 0; }
-  .ai-section-heading h2, .ai-centered-heading h2, .ai-centered-heading--compact h2 { font-size: 32px; line-height: 37px; }
+  .ai-centered-heading h2, .ai-centered-heading--compact h2 { font-size: 32px; line-height: 37px; }
+  .ai-finish-heading h2, .ai-appliance-heading h2 { font-size: 30px; line-height: 1.2; }
+  .ai-finish-heading h2 .ai-finish-heading__chinese, .ai-appliance-heading h2 .ai-appliance-heading__chinese { font-size: 28px; }
+  .ai-section-heading h2 { font-size: 30px; }
+  .ai-collections-chinese { margin-right: 0; font-size: 28px; }
+  .ai-collections-mobile-break { display: initial; }
   .ai-intro__content { display: block; margin-top: 40px; padding-top: 32px; text-align: center; }
   .ai-intro__content h3 { margin-inline: auto; }
   .ai-intro__paragraphs { margin-top: 28px; }
@@ -671,7 +691,7 @@ useSeoMeta({
   .ai-equipment__grid { --columns: 2; --gap: 14px; row-gap: 24px; margin-top: 38px; }
   .ai-equipment__action { width: 52px; height: 52px; opacity: 1; transform: translate(-50%, -50%); }
   .ai-cases__heading { display: block; text-align: center; }
-  .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 0 30px; font-size: 32px; line-height: 37px; }
+  .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 72px 30px 0; font-size: 30px; line-height: 1.2; }
   .ai-cases__viewport { margin-top: 38px; }
   .ai-cases__slide { flex-basis: 100%; }
   .ai-case-card__body { min-height: 0; padding-top: 18px; }

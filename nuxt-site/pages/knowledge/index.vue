@@ -40,7 +40,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="kitchen-guide-newsroom__rail">
         <header class="kitchen-guide-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Straight From The Newsroom" class="kitchen-guide-heading__label" />
-          <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">{{ cmsCopy.copy.text2 }}<span>{{ cmsCopy.copy.text3 }}</span>{{ cmsCopy.copy.text4 }}</h2>
+          <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
+            <span class="kitchen-guide-heading__eyebrow">Explore Our</span>
+            <span class="kitchen-guide-heading__chinese">廚房裝修指南</span><br class="kitchen-guide-heading__mobile-break">
+            Take A Look At <span class="kitchen-guide-heading__accent">Our</span> Latest Articles.
+          </h2>
         </header>
 
         <div class="kitchen-guide-posts">
@@ -168,15 +172,18 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   margin: 64px 0 0;
   color: #1c1c1d;
   font-family: var(--font-display);
-  font-size: 60px;
+  font-size: 50px;
   font-weight: 400;
-  line-height: 64px;
+  line-height: 1.2;
   justify-self: start;
   text-align: left;
-  text-transform: capitalize;
+  text-transform: none;
 }
 
-.kitchen-guide-heading h2 span { color: #caa05c; }
+.kitchen-guide-heading__chinese, .kitchen-guide-heading__accent { color: #caa05c; }
+.kitchen-guide-heading__eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #c5c5c5; font-size: 18px; vertical-align: middle; }
+.kitchen-guide-heading__chinese { display: inline-block; position: relative; top: -.06em; margin-right: 12px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; vertical-align: baseline; }
+.kitchen-guide-heading__mobile-break { display: none; }
 
 .kitchen-guide-posts {
   display: grid;
@@ -320,10 +327,14 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 @media (max-width: 1024px) {
   .kitchen-guide-newsroom { padding-top: 80px; padding-bottom: 80px; }
   .kitchen-guide-heading { margin-bottom: 45px; }
-  .kitchen-guide-heading h2 { font-size: 45px; line-height: 50px; }
   .kitchen-guide-featured { display: none; }
   .kitchen-guide-posts { display: block; }
   .kitchen-guide-list { width: 100%; }
+}
+
+@media (max-width: 1023px) {
+  .kitchen-guide-heading h2 { font-size: 42px; }
+  .kitchen-guide-heading__chinese { font-size: 32px; }
 }
 
 @media (max-width: 767px) {
@@ -359,9 +370,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     margin: 20px 0 0;
     padding: 0;
     font-size: 30px;
-    line-height: 35px;
+    line-height: 1.2;
     text-align: center;
   }
+  .kitchen-guide-heading__chinese { margin-right: 0; font-size: 28px; }
+  .kitchen-guide-heading__mobile-break { display: initial; }
 
   .kitchen-guide-list-item {
     display: block;
