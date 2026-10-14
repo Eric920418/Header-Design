@@ -170,7 +170,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <section class="case-detail-related" aria-labelledby="related-cases-title">
           <div class="case-detail-related__heading">
             <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="FEATURED PROJECTS" class="case-detail-related__label-wrap" />
-            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }">{{ cmsCopy.copy.text10 }}<span>{{ cmsCopy.copy.text11 }}</span>{{ cmsCopy.copy.text12 }}</h2>
+            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }"><span class="case-related-eyebrow">Explore Our</span><b class="case-related-chinese">精選廚房案例</b>Real <span>Spaces</span><br /><span>That</span> Inspire Living</h2>
           </div>
           <div ref="relatedViewport" class="case-detail-related__viewport" aria-label="相關案例輪播">
             <div class="case-detail-related__track">
@@ -279,8 +279,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .case-detail-related { margin-top: 0; padding-top: 100px; border-top: 1px solid #e3e3e8; }
 .case-detail-related__heading { display: grid; grid-template-columns: 30% 70%; align-items: start; }
-.case-detail-related__heading > h2 { padding: 64px 0 60px; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
+.case-detail-related__heading > h2 { min-width: 0; padding: 64px 0 60px; color: #1c1c1d; font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; }
 .case-detail-related__heading > h2 span { color: #caa05c; }
+.case-detail-related__heading > h2 .case-related-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; vertical-align: baseline; }
+.case-related-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .case-detail-related__viewport { overflow: hidden; }
 .case-detail-related__track { display: flex; gap: 30px; touch-action: pan-y pinch-zoom; }
 .case-detail-related__slide { min-width: 0; flex: 0 0 calc((100% - 60px) / 3); }
@@ -306,8 +308,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .case-detail-booking { grid-column: 1 / -1; }
   .case-detail-widget { margin-top: 0; }
   .case-detail-related { margin-top: 0; padding-top: 80px; }
-  .case-detail-related__heading > h2 { padding: 50px 0 30px; font-size: 50px; line-height: 56px; }
+  .case-detail-related__heading > h2 { padding: 50px 0 30px; }
   .case-detail-related__slide { flex-basis: calc((100% - 30px) / 2); }
+}
+
+@media (max-width: 1023px) {
+  .case-detail-related__heading > h2 { font-size: 42px; }
+  .case-related-chinese { font-size: 32px; }
 }
 
 @media (max-width: 767px) {
@@ -334,7 +341,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .case-detail-related { margin-top: 0; padding-top: 60px; }
   .case-detail-related__heading { grid-template-columns: 1fr; }
   .case-detail-related__label-wrap { text-align: center; }
-  .case-detail-related__heading > h2 { padding: 20px 0 30px; font-size: 40px; line-height: 46px; text-align: center; }
+  .case-detail-related__heading > h2 { padding: 20px 72px 30px 0; font-size: 30px; line-height: 35px; text-align: center; }
+  .case-detail-related__heading > h2 .case-related-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
+  .case-related-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; text-wrap: balance; }
   .case-detail-related__viewport { margin-top: 38px; }
   .case-detail-related__track { gap: 15px; }
   .case-detail-related__slide { flex-basis: 100%; }

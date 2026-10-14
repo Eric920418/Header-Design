@@ -73,8 +73,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section class="builders-team" aria-labelledby="builders-team-title">
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--team">
-          <InternalSectionPill>{{ cmsCopy.copy.text8 }}</InternalSectionPill>
-          <h2 id="builders-team-title"><strong>{{ cmsCopy.copy.text9 }}</strong><span>{{ cmsCopy.copy.text11 }}</span></h2>
+          <InternalSectionPill>EXPLORE OUR COLLECTIONS</InternalSectionPill>
+          <h2 id="builders-team-title"><b class="builders-brand-chinese">{{ cmsCopy.copy.text9 }}</b>Creating the <span>Ideal Kitchen</span><br /> <span>for Every</span> Family</h2>
+          <p>{{ cmsCopy.copy.text9 }}，{{ cmsCopy.copy.text11 }}</p>
         </header>
         <div class="builders-team__grid">
           <template v-for="(card, index) in builderProjectCards" :key="card.image">
@@ -193,7 +194,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
           <InternalSectionPill>{{ cmsCopy.copy.text33 }}</InternalSectionPill>
           <div>
-            <h2 id="builders-contact-title">{{ cmsCopy.copy.text34 }}<span>{{ cmsCopy.copy.text35 }}</span><br /><span>{{ cmsCopy.copy.text36 }}</span>{{ cmsCopy.copy.text37 }}</h2>
+            <h2 id="builders-contact-title"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese">櫻花集團品牌館</b>The Art <span>of</span><br /> <span>Kitchen</span> Showrooms</h2>
           </div>
         </header>
 
@@ -275,12 +276,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-section-heading h2 span,
 .builders-lifetime h2 span { color: #caa05c; }
 .builders-section-heading > p { color: #59585d; font-size: 16px; line-height: 25px; }
-.builders-team { padding: 125px 30px 130px; background: #fff var(--cms-image-asset_39582b0b, url('/section-6/franchise/antra-original/h5-bg02.png')) top right / auto no-repeat; }
-.builders-section-heading--team { display: grid; grid-template-columns: 25% 48% 27%; align-items: end; margin-bottom: 60px; }
-.builders-section-heading--team h2 { min-width: 0; color: #c4a574; font-family: var(--font-cjk-sans); text-align: center; }
-.builders-section-heading--team h2 strong { display: block; font-size: 36px; font-weight: 700; line-height: 1.4; letter-spacing: .06em; }
-.builders-section-heading--team h2 span { display: block; margin-top: 4px; color: inherit; font-size: 22px; font-weight: 400; line-height: 1.5; letter-spacing: .06em; }
-.builders-section-heading--team > p { margin: 0 0 4px; }
+.builders-team { padding: 40px 30px 130px; background: #fff var(--cms-image-asset_39582b0b, url('/section-6/franchise/antra-original/h5-bg02.png')) top right / auto no-repeat; }
+.builders-section-heading--team { display: flex; flex-direction: column; align-items: center; margin-bottom: 60px; text-align: center; }
+.builders-section-heading--team > :deep(.section-pill) { margin-bottom: 40px; }
+#builders-team-title { min-width: 0; max-width: 100%; margin: 0; color: #1c1c1d; font-size: 50px; line-height: 1.2; text-transform: none; }
+.builders-brand-chinese { display: block; margin-bottom: 16px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; letter-spacing: 0; }
+.builders-section-heading--team > p { max-width: 100%; margin: 28px 0 0; color: #59585d; font-size: 16px; line-height: 25px; }
 .builders-team__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; }
 .builders-team-card { position: relative; display: block; min-width: 0; overflow: hidden; border-radius: 24px; color: inherit; background: #fafafa; text-decoration: none; }
 .builders-team-card--project { grid-column: 1; }
@@ -335,6 +336,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-lifetime__visual { aspect-ratio: 16 / 9; border-radius: 24px; }
 .builders-contact { scroll-margin-top: 60px; padding: 120px 30px 130px; background: #fafafa var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) top right / auto no-repeat; }
 .builders-contact__heading { margin-bottom: 58px; }
+#builders-contact-title { min-width: 0; max-width: 100%; font-size: 58px; line-height: 1.2; text-transform: none; }
+#builders-contact-title .builders-contact-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 16px; line-height: 20px; letter-spacing: 0; vertical-align: baseline; }
+.builders-contact-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 38px; font-weight: 600; line-height: 1.2; letter-spacing: 0; vertical-align: baseline; }
 .builders-contact__grid { display: grid; grid-template-columns: 42% 58%; align-items: start; }
 .builders-contact__aside { padding-right: 55px; }
 .builders-contact__copy { padding: 10px 0 42px; }
@@ -362,7 +366,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 @media (max-width: 1199px) {
   .builders-hero__inner { grid-template-columns: 61% 39%; }
-  .builders-section-heading--team { grid-template-columns: 23% 52% 25%; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 52px; line-height: 57px; }
   .builders-contact__aside { padding-right: 35px; }
@@ -379,8 +382,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-contact { padding-block: 96px; }
   .builders-capability { padding-bottom: 56px; }
   .builders-services { padding-block: 40px 80px; }
-  .builders-section-heading--team,
   .builders-section-heading--split { grid-template-columns: 1fr; gap: 25px; }
+  #builders-team-title { font-size: 42px; }
+  .builders-brand-chinese { font-size: 32px; }
+  #builders-contact-title { font-size: 48px; }
+  .builders-contact-chinese { font-size: 32px; }
   .builders-section-heading--split :deep(.template-heading-rail__line) { display: none; }
   .builders-section-heading--team > p { max-width: 680px; }
   .builders-team__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -407,8 +413,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-lifetime__visual { border-radius: 18px; }
   .builders-section-heading h2,
   .builders-lifetime h2 { font-size: 41px; line-height: 46px; }
-  .builders-section-heading--team h2 strong { font-size: 28px; }
-  .builders-section-heading--team h2 span { font-size: 18px; }
+  #builders-team-title { font-size: 30px; line-height: 35px; }
+  .builders-brand-chinese { font-size: 28px; }
+  .builders-section-heading--team > :deep(.section-pill) { margin-bottom: 28px; }
+  #builders-contact-title { font-size: 34px; line-height: 39px; }
+  #builders-contact-title .builders-contact-eyebrow { display: block; width: fit-content; margin: 0 0 8px; }
+  .builders-contact-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
   .builders-capability .builders-section-heading--split > div h2 { margin-top: 20px; }
   .builders-team__grid { grid-template-columns: 1fr; gap: 20px; }
   .builders-team-card > :deep(.builder-image) { aspect-ratio: 1 / 1.12; }

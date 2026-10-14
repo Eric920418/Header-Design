@@ -9,7 +9,7 @@
           class="brand-store-heading-aside ev"
         />
         <div v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="brand-store-heading-copy ev">
-          <h2 id="brand-store-title">Shaping Kitchens <span>Across Taiwan</span></h2>
+          <h2 id="brand-store-title"><span class="brand-store-eyebrow">Explore Our</span><b class="brand-store-chinese">全台廚具通路</b>Shaping <span>Kitchens</span><br /><b class="brand-store-chinese">專業服務</b>Across <span>Taiwan</span></h2>
           <h3>全國最大廚具連鎖通路</h3>
           <p>櫻花自 1997 年開始推展「櫻花廚藝生活館」的連鎖廚具加盟體系；並以社區廚房專家自許，以讓櫻花對消費者的服務能像便利商店一般的無所不在，時時照顧著每一個家庭的廚房生活品質，給所有消費者一個高質感的廚房空間。專營進口廚具、系統廚具、廚具設計，為口碑第一且品質優良的廚具品牌。</p>
         </div>
@@ -35,8 +35,10 @@
 .brand-store-heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
 .brand-store-heading-aside { align-self: stretch; }
 .brand-store-heading-copy { padding-top: 64px; }
-.brand-store-heading h2 { width: min(850px, 100%); margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.brand-store-heading h2 { width: min(850px, 100%); margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; text-transform: none; }
 .brand-store-heading h2 span { color: #caa05c; }
+.brand-store-heading h2 .brand-store-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; vertical-align: baseline; }
+.brand-store-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .brand-store-heading h3 { margin: 35px 0 12px; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 25px; font-weight: 500; line-height: 36px; }
 .brand-store-heading p { width: min(850px, 100%); margin: 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-store-gallery { display: grid; grid-template-columns: 754fr 386fr; gap: 30px; }
@@ -48,7 +50,11 @@
 
 @media (max-width: 1024px) {
   .brand-store-section { padding-block: 80px; }
-  .brand-store-heading h2 { font-size: 48px; line-height: 52px; }
+}
+
+@media (max-width: 1023px) {
+  .brand-store-heading h2 { font-size: 42px; }
+  .brand-store-chinese { font-size: 32px; }
 }
 
 @media (max-width: 767px) {
@@ -57,7 +63,8 @@
   .brand-store-heading { grid-template-columns: 1fr; margin-bottom: 35px; text-align: center; }
   .brand-store-heading-copy { padding-top: 20px; }
   .brand-store-heading h2 { font-size: 30px; line-height: 35px; }
-  .brand-store-heading h2 br { display: none; }
+  .brand-store-heading h2 .brand-store-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
+  .brand-store-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
   .brand-store-heading h3 { margin-top: 25px; font-size: 22px; line-height: 32px; }
   .brand-store-heading p { font-size: 15px; line-height: 24px; text-align: left; }
   .brand-store-gallery { grid-template-columns: 1fr; gap: 28px; }

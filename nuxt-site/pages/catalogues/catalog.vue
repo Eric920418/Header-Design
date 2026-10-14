@@ -105,7 +105,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="product-catalogue-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="product-care__header">
           <InternalTemplateHeadingRail label="Popular Queries" class="product-care__eyebrow" />
-          <h2 id="product-care-title">{{ cmsCopy.copy.text5 }}<span>{{ cmsCopy.copy.text6 }}<br />{{ cmsCopy.copy.text7 }}</span>{{ cmsCopy.copy.text8 }}</h2>
+          <h2 id="product-care-title"><span class="product-care__chinese">廚房選購指南</span> Clear <span>Answers</span> To Your <span>Questions</span></h2>
         </header>
 
         <div class="product-care__layout">
@@ -357,8 +357,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .product-care__header { grid-template-columns: 30% 66.6666%; align-items: start; gap: 0; }
 .product-care__eyebrow { display: block; width: auto; align-self: stretch; }
-.product-care__header h2 { position: static; max-width: 732px; justify-self: start; margin: 64px 0 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-align: left; transform: none; }
+.product-care__header h2 { position: static; min-width: 0; max-width: 732px; justify-self: start; margin: 64px 0 0; font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; text-align: left; text-transform: none; transform: none; }
 .product-care__header h2 span { color: #caa05c; }
-@media (max-width: 1023px) { .product-care__header h2 { font-size: 36px; line-height: 42px; } }
+.product-care__header h2 .product-care__chinese { display: inline-block; position: relative; top: -.06em; margin-right: 12px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; vertical-align: baseline; }
+@media (max-width: 1023px) { .product-care__header h2 { font-size: 42px; } .product-care__header h2 .product-care__chinese { font-size: 32px; } }
 @media (max-width: 767px) { .product-care__header { grid-template-columns: 1fr; gap: 24px; } .product-care__header h2 { margin-top: 20px; font-size: 30px; line-height: 35px; } }
+@media (max-width: 767px) { .product-care__header h2 .product-care__chinese { display: block; margin: 0 0 8px; font-size: 28px; top: auto; } }
 </style>

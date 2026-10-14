@@ -47,7 +47,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <section class="pavilion-gallery" aria-labelledby="pavilion-gallery-title">
             <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
               <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Gallery" />
-              <h2 id="pavilion-gallery-title">{{ cmsCopy.copy.text9 }}<span>{{ cmsCopy.copy.text10 }}</span>{{ cmsCopy.copy.text11 }}</h2>
+              <h2 id="pavilion-gallery-title"><span class="pavilion-gallery-eyebrow">Explore Our</span><b class="pavilion-gallery-chinese">櫻花集團品牌館</b>Memories are made<br /><span>when we’re together</span></h2>
             </header>
 
             <div v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-filter ev" role="tablist" aria-label="選擇集團品牌館">
@@ -132,8 +132,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .pavilion-gallery { position: relative; left: 50%; width: 100vw; max-width: 1290px; padding: 100px 0 0; transform: translateX(-50%); }
 .pavilion-gallery-heading { display: grid; grid-template-columns: 30% 70%; align-items: start; margin-bottom: 53px; }
-.pavilion-gallery-heading h2 { margin: 70px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: none; }
+.pavilion-gallery-heading h2 { min-width: 0; margin: 70px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; text-transform: none; }
 .pavilion-gallery-heading h2 span { color: #caa05c; }
+.pavilion-gallery-heading h2 .pavilion-gallery-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; vertical-align: baseline; }
+.pavilion-gallery-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .pavilion-filter { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-bottom: 40px; }
 .pavilion-filter button { min-height: 46px; padding: 9px 18px; border: 1px solid #e3e3e8; border-radius: 100px; color: #59585d; background: #fff; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; text-align: left; cursor: pointer; transition: color .3s ease, border-color .3s ease, background .3s ease; }
 .pavilion-filter button::after { content: "+"; float: right; color: #9f9fa4; }
@@ -168,8 +170,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .pavilion-gallery { max-width: calc(100vw - 60px); }
 }
 
+@media (max-width: 1023px) {
+  .pavilion-gallery-heading h2 { font-size: 42px; }
+  .pavilion-gallery-chinese { font-size: 32px; }
+}
+
 @media (max-width: 1024px) {
-  .pavilion-gallery-heading h2 { font-size: 48px; line-height: 52px; }
   .pavilion-project { grid-template-columns: minmax(0, 42%) minmax(0, 58%); gap: 24px; }
   .project-text-box dl { grid-template-columns: 1fr; gap: 10px; }
 }
@@ -186,6 +192,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .pavilion-gallery { padding-top: 60px; }
   .pavilion-gallery-heading { display: block; margin-bottom: 30px; text-align: center; }
   .pavilion-gallery-heading h2 { margin-top: 20px; font-size: 30px; line-height: 35px; }
+  .pavilion-gallery-heading h2 .pavilion-gallery-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
+  .pavilion-gallery-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; text-wrap: balance; }
   .pavilion-filter { grid-template-columns: 1fr; gap: 10px; margin-bottom: 25px; }
   .pavilion-project { grid-template-columns: 1fr; gap: 25px; padding-bottom: 20px; }
   .project-text-box h3 { font-size: 26px; line-height: 30px; }

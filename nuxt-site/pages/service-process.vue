@@ -36,6 +36,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header class="antra-service-intro__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Service Process" />
           <div v-reveal="{ anim: 'opalMoveLeft' }">
+            <span class="service-intro-eyebrow">Explore Our</span>
             <h2 id="service-intro-title">
               <b class="service-intro-chinese-title">{{ cmsCopy.copy.text2 }}</b>{{ cmsCopy.copy.text3 }}<span>{{ cmsCopy.copy.text4 }}</span>{{ cmsCopy.copy.text5 }}</h2>
             <p>{{ cmsCopy.copy.text6 }}</p>
@@ -57,12 +58,58 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
     </section>
 
-    <InternalFaqAccordion safe-rail />
+    <InternalFaqAccordion safe-rail class="service-guide-faq">
+      <template #title>
+        <span class="service-faq-eyebrow">Explore Our</span><b class="service-faq-chinese-title">服務指南</b>Clear <span class="service-faq-accent">Answers</span> To Your <span class="service-faq-accent">Main</span> Questions
+      </template>
+    </InternalFaqAccordion>
   </main>
 </template>
 </template>
 
 <style scoped>
+.service-guide-faq :deep(.antra-faq-title) {
+  min-width: 0;
+  font-size: 50px;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.service-guide-faq :deep(.service-faq-accent) { color: #caa05c; }
+
+.service-guide-faq :deep(.antra-faq-title .service-faq-eyebrow) {
+  display: inline-block;
+  margin-right: 16px;
+  border-bottom: 1px solid #bdbdbd;
+  color: #1c1c1d;
+  font-size: 16px;
+  line-height: 20px;
+  vertical-align: baseline;
+}
+
+.service-guide-faq :deep(.service-faq-chinese-title) {
+  position: relative;
+  top: -.06em;
+  margin-right: 12px;
+  color: #caa05c;
+  font-family: var(--font-cjk-serif);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  vertical-align: baseline;
+}
+
+@media (max-width: 1023px) {
+  .service-guide-faq :deep(.antra-faq-title) { font-size: 42px; }
+  .service-guide-faq :deep(.service-faq-chinese-title) { font-size: 32px; }
+}
+
+@media (max-width: 767px) {
+  .service-guide-faq :deep(.antra-faq-title) { font-size: 30px; line-height: 35px; }
+  .service-guide-faq :deep(.antra-faq-title .service-faq-eyebrow) { display: block; width: fit-content; margin: 0 auto 8px; }
+  .service-guide-faq :deep(.service-faq-chinese-title) { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
+}
+
 .antra-breadcrumb {
   position: relative;
   isolation: isolate;
@@ -136,13 +183,15 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   margin: 0 0 20px;
   color: #1c1c1d;
   font-family: var(--font-display);
-  font-size: 60px;
+  font-size: 50px;
   font-weight: 400;
-  line-height: 64px;
+  line-height: 1.2;
+  text-transform: none;
 }
 
 .antra-service-intro h2 span { color: #caa05c; }
-.service-intro-chinese-title { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-weight: 500; line-height: 1.3; }
+.service-intro-eyebrow { display: block; margin-bottom: 8px; color: #1c1c1d; font-family: var(--font-display); font-size: 16px; line-height: 20px; }
+.service-intro-chinese-title { display: block; margin-bottom: 8px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; text-wrap: balance; }
 
 .antra-service-intro p {
   width: min(766px, 100%);
@@ -167,19 +216,16 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .service-process-page :deep(.antra-faq-question) { font-size: 20px; line-height: 30px; }
 .service-process-page :deep(.antra-faq-panel p) { padding-top: 0; }
 
-@media (min-width: 1025px) and (max-width: 1366px) {
-  .antra-service-intro h2 {
-    font-size: 50px;
-    line-height: 56px;
-  }
-}
-
 @media (max-width: 1024px) {
   .antra-breadcrumb { min-height: 285px; }
   .antra-breadcrumb__inner { padding-block: 80px; }
   .antra-service-intro { padding-block: 80px; }
   .antra-service-intro__heading > div:last-child { padding: 70px 0 40px; }
-  .antra-service-intro h2 { font-size: 46px; line-height: 52px; }
+}
+
+@media (max-width: 1023px) {
+  .antra-service-intro h2 { font-size: 42px; }
+  .service-intro-chinese-title { font-size: 32px; }
 }
 
 @media (max-width: 767px) {
@@ -195,6 +241,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .antra-service-intro__heading > div:first-child { display: none; }
   .antra-service-intro__heading > div:last-child { padding: 0 0 30px; }
   .antra-service-intro h2 { font-size: 30px; line-height: 35px; }
+  .service-intro-chinese-title { font-size: 28px; }
   .antra-service-video { padding-inline: 15px; }
 }
 

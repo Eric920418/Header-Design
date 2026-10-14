@@ -29,7 +29,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
           class="antra-faq-heading__aside ev"
         />
         <h2 :id="sectionId" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="antra-faq-title ev">
-          Quick And Clear <span>Answers<br /> To Your Key</span> Questions
+          <slot name="title">Quick And Clear <span>Answers<br /> To Your Key</span> Questions</slot>
         </h2>
       </header>
 

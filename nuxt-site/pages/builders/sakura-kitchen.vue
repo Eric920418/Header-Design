@@ -87,7 +87,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="sakura-kitchen-rail internal-rail-safe">
         <header class="sakura-kitchen-heading sakura-kitchen-heading--series">
           <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="sakura-kitchen-heading__kicker ev">{{ cmsCopy.copy.text26 }}</InternalSectionPill>
-          <h2 id="sakura-kitchen-series-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev" style="animation-delay:70ms">{{ cmsCopy.copy.text27 }}<br /><em>{{ cmsCopy.copy.text28 }}</em></h2>
+          <h2 id="sakura-kitchen-series-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev" style="animation-delay:70ms"><b class="sakura-kitchen-series-chinese">探索品牌系列</b>Creating the <em>Ideal Kitchen</em><br /> <em>for Every</em> Family</h2>
           <div v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" class="sakura-kitchen-heading__copy ev" style="animation-delay:140ms">
             <p>{{ cmsCopy.copy.text29 }}</p>
           </div>
@@ -166,9 +166,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .sakura-kitchen-panorama .sakura-kitchen-content-cta:hover,
 .sakura-kitchen-panorama .sakura-kitchen-content-cta:focus-visible { transform: translateX(-50%); }
 
-.sakura-kitchen-series { padding: 112px 30px 130px; background: #fff; }
+.sakura-kitchen-series { padding: 40px 30px 130px; background: #fff; }
 .sakura-kitchen-heading--series { width: min(1020px, 100%); }
-.sakura-kitchen-heading--series h2 { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
+#sakura-kitchen-series-title { font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; letter-spacing: -.02em; }
+.sakura-kitchen-series-chinese { display: block; margin-bottom: 16px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; letter-spacing: 0; }
+.sakura-kitchen-heading--series .sakura-kitchen-heading__kicker { margin-bottom: 40px; }
 .sakura-kitchen-series__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 68px; }
 .sakura-kitchen-series__card { position: relative; min-width: 0; aspect-ratio: 1.45 / 1; overflow: hidden; border-radius: 24px; background: #1c1c1d; }
 .sakura-kitchen-series__card :deep(.builder-image) { position: absolute; inset: 0; }
@@ -195,8 +197,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .sakura-kitchen-hero__booking { left: 34px; }
   .sakura-kitchen-hero__project-card { right: 78px; bottom: 24px; width: min(380px, 42%); }
   .sakura-kitchen-heading h2 { font-size: 40px; line-height: 50px; }
-  .sakura-kitchen-heading--series h2 { font-size: 36px; line-height: 42px; }
   .sakura-kitchen-series__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1023px) {
+  #sakura-kitchen-series-title { font-size: 42px; }
+  .sakura-kitchen-series-chinese { font-size: 32px; }
 }
 
 @media (max-width: 767px) {
@@ -217,8 +223,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .sakura-kitchen-hero__project-card-link { margin-top: 5px; font-size: 10.5px; }
   .sakura-kitchen-advantage { padding: 70px 15px 80px; }
   .sakura-kitchen-series { padding: 78px 15px 80px; }
+  .sakura-kitchen-series .internal-rail-safe { padding-right: 0; }
   .sakura-kitchen-heading h2 { font-size: 34px; line-height: 43px; }
-  .sakura-kitchen-heading--series h2 { font-size: 30px; line-height: 35px; }
+  #sakura-kitchen-series-title { font-size: 30px; line-height: 35px; }
+  .sakura-kitchen-series-chinese { font-size: 28px; }
+  .sakura-kitchen-heading--series .sakura-kitchen-heading__kicker { margin-bottom: 28px; }
   .sakura-kitchen-heading__copy { margin-top: 20px; text-align: left; }
   .sakura-kitchen-heading__copy p { font-size: 15px; line-height: 24px; }
   .sakura-kitchen-panorama { min-height: 330px; aspect-ratio: auto; margin-top: 42px; border-radius: 18px; }

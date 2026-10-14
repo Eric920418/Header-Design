@@ -136,7 +136,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="about-rail">
         <header class="about-services__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="About Us" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text1 }}<br /><span>{{ cmsCopy.copy.text2 }}</span>{{ cmsCopy.copy.text3 }}</h2>
+          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="about-stories-eyebrow">Explore Our</span><b class="about-stories-chinese">櫻花整體廚房</b>SAKURA KITCHEN<br /><b class="about-stories-chinese">紀事</b><span>Stories</span></h2>
         </header>
 
         <div class="about-services__panel">
@@ -257,7 +257,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="about-identity__rail">
         <header class="about-identity__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="DISTINCTIVE BRAND IDENTITY" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text6 }}<br /><span>{{ cmsCopy.copy.text7 }}</span>{{ cmsCopy.copy.text8 }}</h2>
+          <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="about-identity-eyebrow">Explore Our</span><b class="about-identity-chinese">專屬品牌識別</b>Signature<br /><span>Brand Identity</span></h2>
         </header>
 
         <p class="about-identity__description">{{ cmsCopy.copy.text9 }}</p>
@@ -307,8 +307,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .about-services { padding: 100px 30px 110px; background: #fafafa; }
 .about-services__heading { display: grid; grid-template-columns: 30% 70%; align-items: start; margin-bottom: 58px; }
-.about-services__heading h2 { margin: 70px 0 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.about-services__heading h2 { min-width: 0; margin: 70px 0 0; font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; text-transform: none; }
 .about-services__heading h2 span { color: #caa05c; }
+.about-services__heading h2 .about-stories-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; vertical-align: baseline; }
+.about-stories-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .about-services__panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; }
 .about-services__visual { position: relative; min-height: 610px; overflow: hidden; border-radius: 24px; background: #1c1c1d; }
 .about-services__visual-image { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -379,8 +381,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .about-identity { padding: 120px 30px 124px; background: #fff; }
 .about-identity__rail { width: min(1410px, 100%); margin-inline: auto; }
 .about-identity__heading { display: grid; grid-template-columns: 30% 70%; margin-bottom: 55px; }
-.about-identity__heading h2 { margin: 70px 0 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.about-identity__heading h2 { min-width: 0; margin: 70px 0 0; font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; text-transform: none; }
 .about-identity__heading h2 span { color: #caa05c; }
+.about-identity__heading h2 .about-identity-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; vertical-align: baseline; }
+.about-identity-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .about-identity__description { width: min(930px, 100%); margin: -25px auto 52px; color: #59585d; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 26px; text-align: center; }
 .about-identity__grid { display: flex; gap: 30px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; scroll-snap-type: x mandatory; }
 .about-identity__grid::-webkit-scrollbar { display: none; }
@@ -424,7 +428,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .identity-lightbox__nav:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 
 @media (max-width: 1366px) {
-  .about-services__heading h2 { font-size: 52px; line-height: 56px; }
   .about-services__visual { min-height: 540px; }
   .about-services__list { padding-left: 15px; }
   .about-services__question { font-size: 20px; line-height: 30px; }
@@ -444,8 +447,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-identity { padding-block: 80px; }
   .about-services__heading,
   .about-identity__heading { grid-template-columns: 27% 73%; }
-  .about-services__heading h2,
-  .about-identity__heading h2 { font-size: 44px; line-height: 48px; }
   .about-services__panel { grid-template-columns: minmax(0, 44%) minmax(0, 56%); }
   .about-services__visual { min-height: 500px; }
   .about-services__visual-copy { inset-inline: 25px; bottom: 25px; }
@@ -462,12 +463,25 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-identity__card { flex-basis: calc((100% - 48px) / 3); }
 }
 
+@media (max-width: 1023px) {
+  .about-services__heading h2 { font-size: 42px; }
+  .about-stories-chinese { font-size: 32px; }
+  .about-identity__heading h2 { font-size: 42px; }
+  .about-identity-chinese { font-size: 32px; }
+}
+
 @media (max-width: 767px) {
   .about-services { padding: 60px 15px 65px; }
   .about-services__heading,
   .about-identity__heading { display: block; margin-bottom: 30px; text-align: center; }
   .about-services__heading h2,
   .about-identity__heading h2 { margin-top: 20px; font-size: 30px; line-height: 35px; }
+  .about-services__heading h2 { padding-right: 72px; }
+  .about-identity__heading h2 { padding-right: 72px; }
+  .about-identity__heading h2 .about-identity-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
+  .about-identity-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
+  .about-services__heading h2 .about-stories-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
+  .about-stories-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
   .about-services__panel { display: block; }
   .about-services__visual { min-height: 420px; }
   .about-services__visual-copy span { font-size: 30px; line-height: 35px; }

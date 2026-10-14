@@ -126,7 +126,8 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
         <div v-reveal="{ anim: 'opalMoveRight' }" class="near-suction-catalogue__copy">
           <InternalSectionPill>{{ info.name }} Product Catalogue</InternalSectionPill>
           <h2 id="near-suction-catalogue-title">
-            <span>Kitchen <em>Product</em> Catalogue</span>
+            <span class="near-suction-catalogue__chinese">廚房商品型錄</span>
+            <span>Kitchen <em>Product<br>Catalogues</em></span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta near-suction-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -245,7 +246,8 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
 .near-suction-catalogue { padding: 120px 30px 130px; background: #fff; }
 .near-suction-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
 .near-suction-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
-.near-suction-catalogue__copy h2 span { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
+.near-suction-catalogue__copy h2 span { font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.1; }
+.near-suction-catalogue__copy h2 .near-suction-catalogue__chinese { margin-bottom: 8px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; }
 .near-suction-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid rgb(159 159 164 / 64%); border-radius: 999px; padding: 9px 9px 9px 30px; color: #1c1c1d; background: transparent; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .near-suction-catalogue__cta:hover,
 .near-suction-catalogue__cta:focus-visible { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
@@ -271,7 +273,8 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
   .near-suction-series { padding-bottom: 100px; }
   .near-suction-catalogue { padding-block: 96px; }
   .near-suction-catalogue__grid { gap: 42px; }
-  .near-suction-catalogue__copy h2 span { font-size: 50px; line-height: 55px; }
+  .near-suction-catalogue__copy h2 span { font-size: 42px; }
+  .near-suction-catalogue__copy h2 .near-suction-catalogue__chinese { font-size: 32px; }
 }
 
 @media (max-width: 1024px) {
@@ -306,7 +309,8 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
   .near-suction-catalogue { padding: 74px 15px 82px; }
   .near-suction-catalogue__grid { grid-template-columns: 1fr; }
   .near-suction-catalogue__copy h2 { margin-block: 22px 30px; }
-  .near-suction-catalogue__copy h2 span { font-size: 43px; line-height: 48px; }
+  .near-suction-catalogue__copy h2 span { font-size: 30px; }
+  .near-suction-catalogue__copy h2 .near-suction-catalogue__chinese { font-size: 28px; }
   .near-suction-catalogue__cards { gap: 16px; }
   .near-suction-catalogue-card h3 { font-size: 18px; line-height: 23px; }
 }

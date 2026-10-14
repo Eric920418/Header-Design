@@ -25,7 +25,7 @@ onBeforeUnmount(() => storyObserver?.disconnect())
   <section class="brand-benefits" aria-labelledby="brand-benefits-title">
     <div class="brand-benefits-rail internal-rail-safe">
       <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-benefits-heading ev">
-        <h2 id="brand-benefits-title">Discover What Makes <span>SAKURA KITCHEN</span> Different</h2>
+        <h2 id="brand-benefits-title"><b class="brand-benefits-chinese">櫻花品牌優勢</b>Discover What Makes <span>SAKURA<br /> KITCHEN</span> Different</h2>
         <p>櫻花整體廚房擁有近百家門市，第一線接觸消費者的設計師皆受過專業的產品力及設計力之培訓、及廚藝大學之認證，提供給消費者最符合其需求的廚房規劃。</p>
       </header>
 
@@ -56,7 +56,8 @@ onBeforeUnmount(() => storyObserver?.disconnect())
 .brand-benefits { overflow: clip; padding: 100px 30px 60px; background: linear-gradient(180deg, #fff 0%, #fafafa 72.12%); }
 .brand-benefits-rail { width: min(1410px, 100%); margin-inline: auto; }
 .brand-benefits-heading { width: min(900px, 100%); margin: 0 auto 60px; text-align: center; }
-.brand-benefits-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.brand-benefits-heading h2 { margin: 0; color: #1c1c1d; font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; text-transform: none; }
+.brand-benefits-chinese { display: block; margin-bottom: 16px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; text-wrap: balance; }
 .brand-benefits-heading h2 span { color: #caa05c; }
 .brand-benefits-heading > p { max-width: 830px; margin: 24px auto 0; color: #59585d; font-size: 16px; line-height: 26px; }
 .brand-benefit-story { position: relative; }
@@ -96,7 +97,11 @@ onBeforeUnmount(() => storyObserver?.disconnect())
 
 @media (max-width: 1024px) {
   .brand-benefits { padding-block: 80px; }
-  .brand-benefits-heading h2 { font-size: 48px; line-height: 52px; }
+}
+
+@media (max-width: 1023px) {
+  .brand-benefits-heading h2 { font-size: 42px; }
+  .brand-benefits-chinese { font-size: 32px; }
 }
 
 @media (max-width: 767px) {
@@ -104,6 +109,7 @@ onBeforeUnmount(() => storyObserver?.disconnect())
   .brand-benefits-rail.internal-rail-safe { padding-right: 72px; }
   .brand-benefits-heading { margin-bottom: 45px; }
   .brand-benefits-heading h2 { font-size: 30px; line-height: 35px; }
+  .brand-benefits-chinese { font-size: 28px; }
   .brand-benefits-heading > p { font-size: 15px; line-height: 24px; text-align: left; }
   .brand-benefit-grid { grid-template-columns: 1fr; gap: 45px; }
   .brand-benefit-card { min-height: auto; }

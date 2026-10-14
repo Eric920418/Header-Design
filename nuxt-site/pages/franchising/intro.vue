@@ -126,7 +126,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Partners" source="home5" class="source-heading-rail" />
 
           <div class="franchise-about__content">
-            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">{{ cmsCopy.copy.text14 }}<br /><span>{{ cmsCopy.copy.text15 }}</span>{{ cmsCopy.copy.text16 }}</h2>
+            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }"><b class="franchise-partners-chinese">加盟夥伴真實分享</b>Here <span>from Our</span><br /><span>Partners</span></h2>
             <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="franchise-about__video ev">
               <InternalFranchiseVideo :video-id="cmsVisuals.franchiseVideoId" :title="cmsCopy.copy.field17" />
             </div>
@@ -166,7 +166,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div class="franchise-advantages__layout">
           <header v-reveal="{ anim: 'opalMoveRight' }" class="franchise-advantages__intro">
             <InternalSectionPill>{{ cmsCopy.copy.text26 }}</InternalSectionPill>
-            <h2 id="franchise-advantage-title">{{ cmsCopy.copy.text27 }}<span>{{ cmsCopy.copy.text28 }}</span>{{ cmsCopy.copy.text29 }}</h2>
+            <h2 id="franchise-advantage-title"><b class="franchise-strength-chinese">專業品牌實力</b>Success<br /><span>Starts</span> Here</h2>
             <p>{{ cmsCopy.copy.text30 }}</p>
             <strong aria-hidden="true">{{ String(activeAdvantageGroup + 1).padStart(2, '0') }}</strong>
           </header>
@@ -214,7 +214,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header class="source-split-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="CELEBRITY STORIES" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <h2 id="franchise-marketing-title">{{ cmsCopy.copy.text37 }}<span>{{ cmsCopy.copy.text38 }}</span>{{ cmsCopy.copy.text39 }}<br /><span>{{ cmsCopy.copy.text40 }}</span>{{ cmsCopy.copy.text41 }}</h2>
+            <h2 id="franchise-marketing-title"><span class="franchise-celebrity-eyebrow">Explore Our</span><b class="franchise-celebrity-chinese">品牌信賴</b>Celebrity <span>Stories</span><br />Of Inspired <span>Living</span></h2>
             <p>{{ cmsCopy.copy.text42 }}</p>
           </div>
         </header>
@@ -293,7 +293,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             data-ev="opalMoveRight"
             class="franchise-faq__heading-rail ev"
           />
-          <h2 id="franchise-faq-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text48 }}<br /><span>{{ cmsCopy.copy.text49 }}{{ cmsCopy.copy.text50 }}</span>{{ cmsCopy.copy.text51 }}</h2>
+          <h2 id="franchise-faq-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><b class="franchise-faq-chinese">了解加盟資訊</b>Clear <span>Answers</span> To<br /> Your <span>Main</span> Questions</h2>
         </header>
 
         <div class="franchise-faq__body">
@@ -325,7 +325,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section id="franchise-news" class="franchise-news elementor-836324d" aria-labelledby="franchise-news-title">
       <div class="source-rail internal-rail-safe">
         <InternalSectionPill>{{ cmsCopy.copy.text58 }}</InternalSectionPill>
-        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }">{{ cmsCopy.copy.text59 }}<span>{{ cmsCopy.copy.text60 }}</span>{{ cmsCopy.copy.text61 }}</h2>
+        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }"><span class="franchise-news-eyebrow">Explore Our</span><b class="franchise-news-chinese">最新加盟資訊</b>Latest Franchise News<br />With <span>SAKURA KITCHEN</span></h2>
         <div class="franchise-news__list">
           <NuxtLink v-for="article in franchiseNews" :key="article.id" :to="article.legacyPath" class="franchise-news-row">
             <i aria-hidden="true" /><h3>{{ article.title }}</h3><ArrowRight aria-hidden="true" />
@@ -385,7 +385,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-process h2,
 .franchise-news h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .franchise-about h2 { max-width: 822px; margin-bottom: 50px; }
-#franchise-story-title { text-transform: none; }
+#franchise-story-title { min-width: 0; font-size: 50px; line-height: 1.2; text-transform: none; }
+.franchise-partners-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .franchise-about h2 span,
 .franchise-advantages h2 span,
 .franchise-projects h2 span,
@@ -414,6 +415,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-advantages__layout { display: grid; grid-template-columns: 30% 70%; gap: 0; }
 .franchise-advantages__intro { position: sticky; top: var(--site-header-height, 60px); display: flex; min-height: calc(100vh - var(--site-header-height, 60px)); align-self: start; flex-direction: column; justify-content: center; padding: 38px 58px 38px 0; }
 .franchise-advantages__intro h2 { margin-top: 28px; }
+#franchise-advantage-title { font-size: 50px; line-height: 1.2; text-transform: none; }
+.franchise-strength-chinese { display: block; margin-bottom: 8px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; text-wrap: balance; }
 .franchise-advantages__intro p { max-width: 360px; margin: 24px 0 0; color: #59585d; font-size: 16px; line-height: 25px; }
 .franchise-advantages__intro > strong { display: block; margin-top: 34px; color: rgb(159 159 164 / 18%); font-family: var(--font-ui); font-size: 116px; font-weight: 400; line-height: 1; transition: opacity .25s ease, transform .25s ease; }
 .franchise-advantage-scenes { min-width: 0; }
@@ -440,6 +443,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 .franchise-projects { padding: 97px 30px 108px; background: #fafafa var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) top right / auto no-repeat; }
+#franchise-marketing-title { min-width: 0; font-size: 50px; line-height: 1.2; text-transform: none; }
+#franchise-marketing-title .franchise-celebrity-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; letter-spacing: 0; vertical-align: baseline; }
+.franchise-celebrity-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .source-split-heading { --template-heading-title-inset: 58px; display: grid; grid-template-columns: 30% 70%; margin-bottom: 59px; overflow: hidden; }
 .source-split-heading > div:last-child { padding-left: 58px; }
 .source-split-heading h2 { max-width: 100%; margin-top: 65px; }
@@ -505,8 +511,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .franchise-faq { overflow: hidden; padding: 100px 30px 130px; background: #fafafa; }
 .franchise-faq__heading { display: grid; grid-template-columns: 30% 66.6666%; margin-bottom: 60px; }
-.franchise-faq__heading h2 { align-self: start; width: min(732px, 100%); margin: 64px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; text-transform: capitalize; }
+.franchise-faq__heading h2 { min-width: 0; align-self: start; width: min(732px, 100%); margin: 64px 0 0; color: #1c1c1d; font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.2; text-transform: none; }
 .franchise-faq__heading h2 span { color: #caa05c; }
+.franchise-faq-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .franchise-faq__body { display: grid; grid-template-columns: 71% 29%; }
 .franchise-faq__list { min-width: 0; }
 .franchise-faq__item { border-top: 1px solid rgb(159 159 164 / 24%); }
@@ -536,6 +543,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .franchise-news { padding: 108px 30px 86px; background: #fff var(--cms-image-asset_39582b0b, url('/section-6/franchise/antra-original/h5-bg02.png')) top right / auto no-repeat; }
 .franchise-news h2 { max-width: 786px; margin-top: 28px; }
+#franchise-news-title { min-width: 0; max-width: 100%; font-size: 58px; line-height: 1.2; text-transform: none; }
+#franchise-news-title .franchise-news-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 16px; line-height: 20px; letter-spacing: 0; vertical-align: baseline; }
+.franchise-news-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 38px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .franchise-news__list { margin-top: 60px; border-top: 1px solid #e3e3e8; }
 .franchise-news-row { display: grid; grid-template-columns: 14px 1fr 46px; gap: 18px; align-items: center; min-height: 84px; border-bottom: 1px solid #e3e3e8; }
 .franchise-news-row > i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
@@ -594,7 +604,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-process__details { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .franchise-support-panel,
   .franchise-qualification-panel { padding: 38px 32px; }
-  .franchise-faq__heading h2 { font-size: 36px; line-height: 42px; }
   .franchise-faq__promo { padding-left: 30px; }
 }
 
@@ -604,7 +613,31 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-faq__promo { width: min(430px, 100%); padding-left: 0; }
 }
 
+@media (max-width: 1023px) {
+  #franchise-news-title { font-size: 48px; }
+  .franchise-news-chinese { font-size: 32px; }
+  .franchise-faq__heading h2 { font-size: 42px; }
+  .franchise-faq-chinese { font-size: 32px; }
+  #franchise-marketing-title { font-size: 42px; }
+  .franchise-celebrity-chinese { font-size: 32px; }
+  #franchise-story-title { font-size: 42px; }
+  .franchise-partners-chinese { font-size: 32px; }
+  #franchise-advantage-title { font-size: 42px; }
+  .franchise-strength-chinese { font-size: 32px; }
+}
+
 @media (max-width: 767px) {
+  #franchise-news-title { font-size: 34px; line-height: 39px; }
+  #franchise-news-title .franchise-news-eyebrow { display: block; width: fit-content; margin: 0 0 8px; }
+  .franchise-news-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
+  .franchise-faq-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
+  #franchise-marketing-title { font-size: 30px; line-height: 35px; }
+  #franchise-marketing-title .franchise-celebrity-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
+  .franchise-celebrity-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
+  #franchise-story-title { font-size: 30px; line-height: 35px; }
+  .franchise-partners-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; text-wrap: balance; }
+  #franchise-advantage-title { font-size: 30px; line-height: 35px; }
+  .franchise-strength-chinese { font-size: 28px; }
   .franchise-page .internal-rail-safe { padding-right: 0; }
 
   .source-rail,
