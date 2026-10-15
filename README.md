@@ -1,5 +1,14 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-15 確認後補完與正式Header發布
+
+- 依使用者三項明確答覆：品牌Hero三項選單留在左側照片內，整組下移48px並置中、各項等分置中，平板手機改24px間距；向下按鈕保留在同組及原中央文字對齊。建商首頁Hero原按鈕改回「立即預約」，不新增第二個入口，保留原表單錨點與其他自訂CMS文案。
+- 本次正式CMS獲授權僅補「加盟申請表單」及「加盟資料下載」兩筆並發布；先唯讀／dry-run確認，遇未發布草稿或連結衝突即停止，沿用既有版本與revision保護，不匯入或重置資料庫、不覆蓋其他內容與歷史。
+- 正式Header限定修補工具：nuxt-site/scripts/update-header-franchise-links-20261015.mjs，必須--production且預設dry-run，--apply才寫入；純轉換函式納入既有回歸，檢查原內容保留、冪等、重複與衝突，測試匯入不會連線或操作資料庫。
+- pnpm build、建置後pnpm typecheck、完整前台回歸（含純函式修補保護）、兩腳本語法、git diff --check與正式編譯scoped CSS的48px／24px及置中檢查通過；沒有新增套件。限定CMS dry-run確認revision1、加盟4→6，實際save／publish後revision3、published=6f0098f4-c7b9-4df6-bc0c-5c6a3539eb17，保留舊784926d3-e6d1-442d-b9cb-dab53f2c9d9b；同transaction核對其他64份文件revision／草稿／發布ID完全不變，再dry-run回傳UNCHANGED。
+- 正式HTTP第一次內容讀取45秒逾時；重試已取得六筆正確內容與桌機箭頭，但檢查誤將關閉手機選單的SSR視為必須有箭頭而失敗。原手機選單v-if需客戶端開啟才建立，不為通過檢查而改元件；正式SSR僅驗桌機，手機保留來源／純函式防護並待實際操作驗收。瀏覽器URL安全限制不繞過；SSR與CSS不等於實際手機視覺或返回捲動已驗收。
+- 正式兩個既有網域Header API均200／六筆原序及新增連結逐字相符，首頁SSR200確認展開箭頭與兩個目的頁入口已出現。接續以正常main push觸發既有Vercel Git部署，不建立新專案或改正式環境設定。
+
 ## 2026-10-15 全量檢查與Git正式部署
 
 - 使用者要求跑完檢查、push及部署；使用ponytail／Vercel部署與CLI指引，確認目前main、origin=Eric920418/Header-Design且HEAD／origin main一致。八份未提交檔均為本對話前輪修改，保留相關程式與單一README。只部署已實作且檢查通過的程式，不自行決定尚待確認的品牌Hero選單位置或建商Hero新增預約入口；返回位置先前26px差異及瀏覽器驗收未通過不記為完成。

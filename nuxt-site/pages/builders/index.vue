@@ -6,7 +6,7 @@ import { BUILDER_APPOINTMENT_HASH as cmsSeed_BUILDER_APPOINTMENT_HASH, builderPr
 import { brandPavilions as cmsSeed_brandPavilions } from '~/data/brandPavilions'
 const { BUILDER_APPOINTMENT_HASH, builderProjectCards } = await useCmsResource('data-builders', { BUILDER_APPOINTMENT_HASH: cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards: cmsSeed_builderProjectCards })
 const { brandPavilions } = await useCmsResource('data-brandPavilions', { brandPavilions: cmsSeed_brandPavilions })
-const heroContactLabel = cmsCopy.copy.text5 === '立即預約' ? '專人聯繫' : cmsCopy.copy.text5
+const heroContactLabel = cmsCopy.copy.text5 === '專人聯繫' ? '立即預約' : cmsCopy.copy.text5
 
 
 useSeoMeta({

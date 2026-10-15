@@ -28,14 +28,16 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
         <div ref="copy" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
           <InternalSectionPill>OUR COMMITMENT</InternalSectionPill>
           <h1 id="brand-h8-title" class="hero-template-title">Why Choose<br /><span>SAKURA KITCHEN</span><br />For Your Home</h1>
-          <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
-            <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
-            <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span ref="pavilionLabel">集團品牌館</span></NuxtLink>
-            <NuxtLink to="/about/introduce"><b aria-hidden="true">。</b><span>關於我們</span></NuxtLink>
-          </nav>
-          <a ref="scrollButton" href="#brand-family-title" class="brand-h8-scroll hero-start-project" aria-label="向下查看品牌優勢內容">
-            <ArrowDown aria-hidden="true" />
-          </a>
+          <div class="brand-h8-navigation">
+            <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
+              <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
+              <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span ref="pavilionLabel">集團品牌館</span></NuxtLink>
+              <NuxtLink to="/about/introduce"><b aria-hidden="true">。</b><span>關於我們</span></NuxtLink>
+            </nav>
+            <a ref="scrollButton" href="#brand-family-title" class="brand-h8-scroll hero-start-project" aria-label="向下查看品牌優勢內容">
+              <ArrowDown aria-hidden="true" />
+            </a>
+          </div>
         </div>
 
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" data-ev="opalMoveLeft" class="brand-h8-aside ev" style="animation-delay:120ms">
@@ -70,15 +72,16 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
 .brand-h8-copy { min-width: 0; }
 .brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: clamp(40px, 4vw, 80px); font-weight: 400; line-height: 1.2; letter-spacing: -.01em; white-space: nowrap; text-transform: none; }
 .brand-h8-copy h1 span { color: #caa05c; }
-.brand-h8-nav { display: flex; max-width: 570px; border-top: 1px solid #d2d1cf; }
-.brand-h8-nav > * { display: flex; min-width: 0; flex: 1; align-items: baseline; gap: 8px; padding: 16px 8px 0 0; color: #9f9fa4; text-decoration: none; }
-.brand-h8-nav > * + * { padding-left: 16px; border-left: 1px solid #d2d1cf; }
+.brand-h8-navigation { padding-top: 48px; }
+.brand-h8-nav { display: flex; max-width: 570px; margin-inline: auto; border-top: 1px solid #d2d1cf; }
+.brand-h8-nav > * { display: flex; min-width: 0; flex: 1; align-items: baseline; justify-content: center; gap: 8px; padding: 16px 8px 0; color: #9f9fa4; text-decoration: none; }
+.brand-h8-nav > * + * { border-left: 1px solid #d2d1cf; }
 .brand-h8-nav b,
 .brand-h8-nav span { font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 400; line-height: 22px; }
 .brand-h8-nav b { color: #caa05c; }
 .brand-h8-nav a[aria-current="page"] span { color: #1c1c1d; }
 .brand-h8-nav > span[aria-disabled="true"] { opacity: .55; }
-.brand-h8-scroll { display: flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin: 38px 0 0 calc(min(570px, 100%) / 2 - 27px); border: 1px solid rgb(202 160 92 / 35%); border-radius: 50%; background: #caa05c; color: #fff; box-shadow: 0 14px 30px rgb(28 28 29 / 12%); transition: transform .35s ease, box-shadow .35s ease; }
+.brand-h8-scroll { display: flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin: 38px auto 0; border: 1px solid rgb(202 160 92 / 35%); border-radius: 50%; background: #caa05c; color: #fff; box-shadow: 0 14px 30px rgb(28 28 29 / 12%); transition: transform .35s ease, box-shadow .35s ease; }
 .brand-h8-scroll svg { width: 18px; height: 18px; stroke-width: 1.8; }
 .brand-h8-scroll:hover { transform: translateY(4px); box-shadow: 0 8px 18px rgb(28 28 29 / 16%); }
 .brand-h8-aside { display: flex; min-width: 0; flex-direction: column; align-items: flex-end; gap: 30px; padding-right: 74px; }
@@ -110,6 +113,7 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
   .brand-h8-intro__rail { grid-template-columns: 1fr; }
   .brand-h8-copy { text-align: center; }
   .brand-h8-copy h1 { margin-inline: auto; font-size: 60px; line-height: 60px; }
+  .brand-h8-navigation { padding-top: 24px; }
   .brand-h8-nav { margin-inline: auto; text-align: left; }
   .brand-h8-scroll { margin-inline: auto; }
   .brand-h8-aside { align-items: center; }

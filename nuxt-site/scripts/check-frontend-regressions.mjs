@@ -4,6 +4,25 @@ import {readFile} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
 import sharp from 'sharp'
 import {franchiseInitialValues,franchiseChoiceGroups,franchiseErrors} from '../shared/franchise-form.mjs'
+import {addFranchiseExtras} from './update-header-franchise-links-20261015.mjs'
+
+const headerFixture={rightNav:[{label:'其他',children:[{label:'保留'}]},{label:'我要加盟',to:'/franchising/intro',children:[{label:'加盟介紹',to:'/franchising/intro#introduction'}]}],copy:{custom:'保留'},cmsSettings:{visible:true}}
+const headerFixtureBefore=structuredClone(headerFixture)
+const headerWithExtras=addFranchiseExtras(headerFixture)
+assert.deepEqual(headerFixture,headerFixtureBefore,'CMS修補不得原地更動輸入')
+assert.deepEqual(headerWithExtras.rightNav[1].children.slice(-2),[{label:'加盟申請表單',to:'/franchising/form'},{label:'加盟資料下載',to:'/franchising/download'}])
+assert.deepEqual(addFranchiseExtras(headerWithExtras),headerWithExtras,'重跑不得新增重複入口')
+assert.deepEqual(headerWithExtras.copy,headerFixture.copy)
+assert.deepEqual(headerWithExtras.rightNav[0],headerFixture.rightNav[0])
+for(const conflict of [{label:'別的名稱',to:'/franchising/form'},{label:'加盟資料下載',to:'/other'}]){
+ const fixture=structuredClone(headerFixture);fixture.rightNav[1].children.push(conflict)
+ assert.throws(()=>addFranchiseExtras(fixture),/已另行修改/,'衝突必須停止，不覆蓋')
+}
+const duplicatedHeader=structuredClone(headerWithExtras)
+duplicatedHeader.rightNav[1].children.push({...duplicatedHeader.rightNav[1].children[1]})
+assert.throws(()=>addFranchiseExtras(duplicatedHeader),/已重複/)
+assert.throws(()=>addFranchiseExtras({rightNav:[]}),/分類必須唯一/)
+console.log('PASS Header兩筆限定追加、原內容不變、可重跑、衝突及重複保護（無DB寫入）')
 
 const base=process.env.TEST_BASE_URL||'http://localhost:3100'
 assert(['localhost','127.0.0.1'].includes(new URL(base).hostname),'僅測試本機')
@@ -153,6 +172,11 @@ const brandHeroStage=brandHeroHtml.match(/<div\b[^>]*class="brand-h8-stage ev(?:
 assert(brandHeroStage?.includes('data-ev="opalMoveUp"')&&brandHeroStage.includes('SAKURA 品牌優勢廚房空間'),'大圖原進場與替代文字需保留')
 assert(brandHeroStage.includes('<img')&&brandHeroStage.includes('loading="eager"'),'保留原圖片元件及優先載入')
 assert(brandHeroHtml.includes('href="#brand-family-title"'),'原向下內容導覽仍可使用')
+assert(brandHeroSource.indexOf('class="brand-h8-navigation"')>brandHeroSource.indexOf('class="brand-h8-copy ev"')&&brandHeroSource.indexOf('class="brand-h8-navigation"')<brandHeroSource.indexOf('class="brand-h8-aside ev"'),'品牌三項導覽需留在左側照片文案欄內')
+assert(brandHeroSource.includes('.brand-h8-navigation { padding-top: 48px; }')&&brandHeroSource.includes('max-width: 570px; margin-inline: auto;')&&brandHeroSource.includes('justify-content: center; gap: 8px; padding: 16px 8px 0;'),'桌機整組下移48px、570px內置中，三項等分置中')
+assert(brandHeroSource.includes('.brand-h8-navigation { padding-top: 24px; }'),'平板手機減少下移間距')
+const brandNavigation=brandHeroHtml.match(/<div\b[^>]*class="brand-h8-navigation"[^>]*>([\s\S]*?)<\/div>/)?.[1]||''
+for(const path of ['/about/advantage','/about/exhibition','/about/introduce','#brand-family-title'])assert(brandNavigation.includes(`href="${path}"`),'原三項導覽與向下按鈕應同組保留：'+path)
 console.log('PASS 品牌優勢大圖原進場、延後首頁Ken Burns、減少動態與SSR內容保留')
 const brandFamilySource=await readFile(new URL('../pages/about/advantage.vue',import.meta.url),'utf8')
 const familyTitleExpression=brandFamilySource.match(/const familyTitle = (.+)/)?.[1]
@@ -496,14 +520,15 @@ assert(builderCatalogueSource.includes('.builder-catalogue-notice { margin-top: 
 console.log('PASS 建商型錄用途說明16px／28px行高、手機繼承／浮標避讓、完整文案及原PDF入口')
 const buildersAside=/class="builders-hero__aside[^\"]*"[^>]*>(.*?)<\/div>/s.exec(buildersHtml)?.[1]
 assert(buildersAside&&!/<p(?:\s|>)/.test(buildersAside)&&buildersAside.includes('href="#appointment"'),'建商 Hero 刪除說明但保留聯繫 CTA')
-assert(buildersAside.includes('專人聯繫')&&!buildersAside.includes('立即預約'),'建商 Hero CTA 文案需為專人聯繫')
+assert(buildersAside.includes('立即預約')&&!buildersAside.includes('專人聯繫'),'建商 Hero 原CTA改回立即預約')
+assert.equal((buildersAside.match(/<a\b/g)||[]).length,1,'建商Hero不得新增第二個預約入口')
 const buildersContactSource=await readFile(new URL('../pages/builders/index.vue',import.meta.url),'utf8')
 const contactLabelSource=/^const heroContactLabel = (.+)$/m.exec(buildersContactSource)?.[1]
 assert(contactLabelSource,'建商聯繫文案需兼容既有CMS內容')
 const contactLabel=new Function('cmsCopy','return '+contactLabelSource)
-for(const [input,expected] of [['立即預約','專人聯繫'],['專人聯繫','專人聯繫'],['建案諮詢','建案諮詢']])assert.equal(contactLabel({copy:{text5:input}}),expected)
+for(const [input,expected] of [['立即預約','立即預約'],['專人聯繫','立即預約'],['建案諮詢','建案諮詢']])assert.equal(contactLabel({copy:{text5:input}}),expected)
 assert(buildersContactSource.includes('<span>{{ heroContactLabel }}</span>'),'SSR與前台按鈕需沿用同一聯繫文案')
-console.log('PASS 建商Hero專人聯繫、舊CMS值相容、自訂文案及原表單錨點保留')
+console.log('PASS 建商Hero單一立即預約、舊CMS值相容、自訂文案及原表單錨點保留')
 const buildersTeamTitle=buildersHtml.match(/<h2\b[^>]*id="builders-team-title"[^>]*>([\s\S]*?)<\/h2>/)?.[1]||''
 assert.equal(buildersTeamTitle.replace(/<br\b[^>]*>/g,' ').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(),'嚴選國內外優質品牌Creating the Ideal Kitchen for Every Family','建商品牌區採已確認中文＋英文標題，僅正規化換行空白，不沿用舊兩行中文斷言')
 const solutions=/id="builders-solutions"[^>]*>(.*?)<section id="appointment" class="builders-contact"/s.exec(buildersHtml)?.[1]
