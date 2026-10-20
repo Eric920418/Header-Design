@@ -404,6 +404,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-testimonial__person span { display: block; }
 .franchise-testimonial__person strong { font-family: var(--font-ui); font-size: 16px; font-weight: 400; }
 .franchise-testimonial__person span { margin-top: 4px; color: #9f9fa4; font-size: 12px; }
+@media (min-width: 768px) {
+  .franchise-testimonials { row-gap: 24px; }
+  .franchise-testimonial { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
+  .franchise-testimonial__person { align-self: start; align-items: flex-start; margin-top: 0; }
+}
 .franchise-marquees { display: grid; gap: 15px; margin-inline: calc(50% - 50vw); padding: 14px 0 88px; overflow: hidden; background: var(--cms-image-asset_7a7fece6, url('/section-6/franchise/antra-original/h5-bg1.png')) bottom left / auto no-repeat; }
 .franchise-marquee { width: 100%; overflow: hidden; }
 .franchise-marquee__track { display: flex; width: max-content; align-items: center; animation: franchise-marquee 38s linear infinite; }

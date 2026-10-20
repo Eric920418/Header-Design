@@ -324,6 +324,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-hero__aside .builders-round-link { margin-top: 42px; }
 .builders-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -360px; overflow: hidden; border-radius: 24px; }
 .builders-hero-media :deep(img) { object-position: center 58%; }
+.builders-hero-media.is-visible :deep(img) { transform-origin: center center; animation: hero-kenburns 5s ease-out 1.47s both; }
 .builders-section-heading h2,
 .builders-lifetime h2 { margin: 0; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; letter-spacing: -.02em; }
 .builders-section-heading h2 span,
@@ -513,6 +514,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .builders-hero-media.is-visible :deep(img) { animation: none; transform: none; }
   .builders-round-link { transition: none; }
   .builders-round-link__icon,
   .builders-round-link__icon::after { transition: none; animation: none; }

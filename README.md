@@ -1,5 +1,31 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-20 建商深色廚房大圖動畫參照品牌優勢
+
+- 依13:48:30截圖，目標為/builders的builders-hero-media深色廚房大圖，參照BrandAdvantageHero白色廚房大圖的「向上淡入後慢速Ken Burns」。原建商僅有向上淡入，保留其220ms延遲與1.25秒進場，在圖片img加入同一個hero-kenburns 5秒ease-out，延遲1.47秒後播放一次並保留終態；不對錯誤提示或整個頁框加運鏡。
+- 沿用ponytail最小修改，只加局部圖片動畫及減少動態靜止覆寫，保留CMS圖片／替代文字、優先載入、center58%裁切基準、原高度／圓角／手機尺寸、參考頁與共用關鍵影格；不修改HOME IN O.N.E或其他頁面。既有前台回歸與check-partnership-ppt補入時長／延遲／減少動態防護，不新增套件或其他文件。
+- 先改本機，不commit／push／部署或CMS寫入；只維護本README並保留其他既有修改。
+- pnpm build、限定來源回歸、與品牌優勢參考時長逐值比對、兩檢查腳本語法與git diff --check通過。編譯CSS確認5秒單次hero-kenburns／1.47秒延遲與減少動態animation:none／transform:none；本機/builders SSR200確認原CMS圖片／alt、220ms外層進場、eager／high載入與下方HOME IN O.N.E保留。初次SSR數量檢查用class前綴誤把__visual子圖也計入，改為完整class token後通過，未為檢查改版面。本次應用程式僅新增兩條圖片CSS，未重跑型別或全站測試，未執行瀏覽器測試與業務表單；實際同視口運鏡／進場時機與手機裁切尚未驗收，不以SSR及編譯CSS宣稱視覺驗收，不繞過既有瀏覽器URL安全限制。
+
+## 2026-10-20 建商SAKURA Hero半透明CTA與16px文字
+
+- 依13:48:22截圖，建商SAKURA KITCHEN頁Hero的「立即／預約」沿用首頁半透明底色。核對本機現有background:#5c5c5c75與border:#ffffff12已和HomeHero一致，不再重改顏色；本輪僅將該按鈕文字15px／21px改16px／24px，保留原兩行文案、110px桌機／90px手機圓形、定位、模糊、水波、Hover／焦點與預約錨點。
+- 沿用ponytail最小修改，既有前台回歸補指定字級／行高，check-partnership-ppt同步補實際字級及與當次首頁computed背景色比對，不硬猜透明度序列化字串。不改首頁CTA字級、其他按鈕或CMS，不新增套件與文件；僅維護本README，保留其他既有變更。先改本機，不commit／push／部署。
+- pnpm build、限定CTA來源／本機SSR回歸、兩檢查腳本語法與git diff --check通過。來源比對確認與目前HomeHero實際背景／邊框／Hover金字一致、保留尺寸／模糊／水波與減少動態；本機CMS預約網址與兩行文案、三個SSR預約入口保留，編譯CSS確認16px／24px、半透明灰底與110／90px尺寸。未執行check-partnership-ppt的瀏覽器流程或點擊預約，也未重跑型別及全站測試；實際桌機／手機的玻璃感、字形及錨點操作尚未驗收，不以SSR或編譯樣式宣稱互動／像素驗收，未改正式CMS或部署。
+
+## 2026-10-20 HOME IN O.N.E整圖動畫再確認
+
+- 依13:48:14截圖核對既有建商頁實作：HOME IN O.N.E完整原圖包在builders-home-one，以v-reveal可視觸發淡入，局部builders-home-one-reveal為opacity0→1與scale(.97)→scale(1)，沿用1.25秒ease／fill both；非每次捲動重播，不將字拆開或改原圖。減少動態偏好則直接顯示、不播放。
+- 沿用ponytail原則，確認本機已有指定效果後不重寫或疊加動畫，也不改下方服務區。既有動畫來源回歸、本機/builders SSR200／原圖及動畫標記、現有編譯CSS的專用關鍵影格與減少動態條件均通過；未修改應用程式或CMS，只補本README核對紀錄，因此未重跑build／typecheck。
+- 本輪未commit／push／部署，未據此判定正式端是否已有更新。瀏覽器實際進場時機、淡入節奏與手機視覺仍未驗收，不以SSR或編譯CSS聲稱動畫視覺驗收通過，不繞過既有瀏覽器URL安全限制。
+
+## 2026-10-20 加盟夥伴人物資訊上緣對齊
+
+- 依13:47:36截圖，兩則加盟心得的頭像／姓名／門市資訊改為上緣對齊，不變更心得文字、頭像、年資或店名，不裁字／補空行／寫死卡片高度。沿用ponytail最小修改與同一頁既有subgrid做法，僅min-width768的兩欄共享心得與人物兩列；列距24px取代人物原24px上margin，人物列靠上且內部靠上，避免心得或店名換行造成錯位。
+- 手機不套共用列，維持自然單欄及原28px卡片間距。只改加盟頁局部CSS，保留影片、動畫、其他區塊與全部CMS資料；既有前台回歸加入來源防護，check-partnership-ppt補入不同寬度人物／頭像／姓名上緣與加長心得檢查，未另建測試框架或新增套件。
+- 先改本機，不commit／push／部署或CMS寫入；僅維護本README，保留其他流程既有修改。
+- pnpm build、限定來源回歸、兩檢查腳本語法及git diff --check通過；編譯CSS確認768px以上兩欄共用列、24px列距與人物靠上，手機原單欄／28px間距保留。本機/franchising/intro SSR200，逐項比對已發布data-franchise兩則心得全文、姓名／職稱、年資／門市與原頭像皆保留；實際來源只有新增五行局部CSS。未執行check-partnership-ppt瀏覽器流程、影片播放或全站測試，本次純CSS亦未重跑型別；桌機／手機實際人物座標與加長內容視覺檢查仍未驗收，不把SSR或編譯CSS稱為像素驗收，不繞過既有瀏覽器URL安全限制。
+
 ## 2026-10-20 品牌承諾Hero選單再下移與移除向下按鈕
 
 - 依12:12:48截圖，三項品牌導覽仍在左側照片文案欄內，下移並整組置中；刪除其下金色向下按鈕，不移到整個Hero外。保留原三條連結、當前項目標記、570px內等分置中及手機單欄排列。

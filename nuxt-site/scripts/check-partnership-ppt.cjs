@@ -66,6 +66,7 @@ async function main() {
     assert(await page.locator('.about-identity__grid').evaluate(e => e.scrollLeft > 0), '品牌辨識箭頭未移動')
     await shot('.about-identity__carousel', '04-identity')
     await go('/')
+    const homeHeroCtaBackground = await css('.hero-start-project', 'backgroundColor')
     await reveal('.home-project-carousel')
     const before = await css('.home-project-track', 'transform')
     await page.getByRole('button', { name: '下一個廚房系列', exact: true }).click()
@@ -73,6 +74,26 @@ async function main() {
     assert.notEqual(await css('.home-project-track', 'transform'), before, '首頁系列箭頭未移動')
     await go('/franchising/intro')
     await page.emulateMedia({ reducedMotion: 'reduce' })
+    for (const width of [1920, 1440, 1024, 768, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await reveal('.franchise-testimonials')
+      const people = await page.locator('.franchise-testimonial__person').evaluateAll(nodes => nodes.map(node => ({
+        top: node.getBoundingClientRect().top,
+        bottom: node.getBoundingClientRect().bottom,
+        portrait: node.querySelector('.franchise-image').getBoundingClientRect().top,
+        name: node.querySelector('strong').getBoundingClientRect().top,
+      })))
+      assert.equal(people.length, 2, '保留兩則加盟心得')
+      if (width >= 768) {
+        for (const key of ['top', 'portrait', 'name']) assert(Math.abs(people[0][key] - people[1][key]) < 1, `${width}px 加盟人物${key}上緣未對齊`)
+        const quote = page.locator('.franchise-testimonial blockquote').first()
+        const original = await quote.textContent()
+        await quote.evaluate(node => { node.textContent = node.textContent.repeat(3) })
+        const tops = await page.locator('.franchise-testimonial__person').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top))
+        assert(Math.abs(tops[0] - tops[1]) < 1, `${width}px 長心得仍須上緣對齊`)
+        await quote.evaluate((node, text) => { node.textContent = text }, original)
+      } else assert(people[1].top > people[0].bottom, '手機人物資料應隨心得自然向下排列')
+    }
     for (const width of [1920, 1440, 1280, 1025]) {
       await page.setViewportSize({ width, height: 1000 })
       assert(await page.locator('.franchise-post-grid').evaluateAll(groups => groups.length === 3 && groups.every(group => {
@@ -131,6 +152,14 @@ async function main() {
     assert.equal(await css('#franchise-document-title span', 'color'), 'rgb(28, 28, 29)')
     await shot('.download-document__header', '10-download')
     await go('/builders')
+    await reveal('.builders-hero-media')
+    assert.equal(await css('.builders-hero-media img', 'animationName'), 'hero-kenburns')
+    assert.equal(await css('.builders-hero-media img', 'animationDuration'), '5s')
+    assert.equal(await css('.builders-hero-media img', 'animationDelay'), '1.47s')
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    assert.equal(await css('.builders-hero-media img', 'animationName'), 'none')
+    assert.equal(await css('.builders-hero-media img', 'transform'), 'none')
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
     await shot('.builders-team__grid', '11-brands')
     assert.equal(await page.locator('.builders-team-card--coming-soon').count(), 3)
     const logoBefore = await rect('.builders-team-card__logo')
@@ -162,6 +191,9 @@ async function main() {
     await go('/builders/sakura-kitchen')
     const bookingLinks = page.locator('.sakura-kitchen-hero__booking, .sakura-kitchen-content-cta')
     assert.equal(await bookingLinks.count(), 3)
+    assert.equal(await css('.sakura-kitchen-hero__booking span', 'fontSize'), '16px')
+    assert.equal(await css('.sakura-kitchen-hero__booking span', 'lineHeight'), '24px')
+    assert.equal(await css('.sakura-kitchen-hero__booking', 'backgroundColor'), homeHeroCtaBackground)
     assert.deepEqual(await bookingLinks.evaluateAll(links => links.map(link => link.getAttribute('href'))), Array(3).fill('/builders#appointment'))
     assert.equal(await page.locator('.sakura-kitchen-panorama .sakura-kitchen-content-cta > span').first().textContent(), '立即預約')
     assert.equal(await page.locator('.sakura-kitchen-hero.ev').count(), 0)

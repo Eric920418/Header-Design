@@ -134,7 +134,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .sakura-kitchen-hero__logo-zh { display: block; width: min(292px, 79%); height: auto; margin-top: 10px; opacity: .86; }
 .sakura-kitchen-hero__description { max-width: 455px; margin: 24px 0 0; color: rgb(255 255 255 / 82%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .sakura-kitchen-hero__booking { position: absolute; z-index: 3; left: clamp(30px, 4.25vw, 60px); bottom: 30px; display: inline-flex; width: 110px; height: 110px; align-items: center; justify-content: center; border: 1px solid #ffffff12; border-radius: 50%; color: #fff; background: #5c5c5c75; font-family: var(--font-cjk-sans); text-align: center; text-decoration: none; backdrop-filter: blur(14px); animation: sakura-kitchen-booking-radar 2.4s ease-out infinite; transition: color .35s ease, background-color .35s ease, transform .35s ease; }
-.sakura-kitchen-hero__booking span { font-size: 15px; line-height: 21px; }
+.sakura-kitchen-hero__booking span { font-size: 16px; line-height: 24px; }
 .sakura-kitchen-hero__booking:hover,
 .sakura-kitchen-hero__booking:focus-visible { color: #caa05c; background: #5c5c5c75; transform: translateY(-3px); }
 .sakura-kitchen-hero__booking:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
