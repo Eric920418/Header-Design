@@ -1,12 +1,7 @@
 import type { StoreCaseDetail, StoreCaseSummary } from '~/types/content'
+import storeRegions from '~/shared/cms/store-regions.json'
 
-export const regionCities: Record<string, string[]> = {
-  北部: ['臺北市', '新北市', '基隆市', '新竹市', '桃園市', '新竹縣', '宜蘭縣'],
-  中部: ['臺中市', '苗栗縣', '彰化縣', '南投縣', '雲林縣'],
-  南部: ['高雄市', '臺南市', '嘉義市', '嘉義縣', '屏東縣', '澎湖縣'],
-  東部: ['花蓮縣', '臺東縣'],
-  離島: ['金門縣', '連江縣'],
-}
+export const regionCities: Record<string, string[]> = storeRegions
 
 const caseImages = (slug: 'case10' | 'case56' | 'case35', start: number, end: number) =>
   Array.from({ length: end - start + 1 }, (_, index) => {

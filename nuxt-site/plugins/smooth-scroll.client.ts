@@ -2,6 +2,8 @@ import Lenis from 'lenis'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)')
+  // Prevent native restoration from showing the old viewport during hydration.
+  window.history.scrollRestoration = 'manual'
 
   const router = useRouter()
   let lenis: Lenis | undefined
@@ -22,6 +24,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   window.addEventListener('resize',update)
   reducedMotion.addEventListener('change',update)
   nuxtApp.hook('page:finish',update)
+  router.beforeEach(() => {
+    // Freeze inertia before Vue Router saves the outgoing history position.
+    if (lenis) lenis.scrollTo(lenis.actualScroll, { immediate: true })
+  })
   router.afterEach((to, from, failure) => {
     // Stop the previous page's inertia before Vue Router applies its scroll position.
     if (!failure && to.fullPath !== from.fullPath) {

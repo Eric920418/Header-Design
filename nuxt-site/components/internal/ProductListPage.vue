@@ -58,10 +58,11 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
         <nav v-if="data?.children.length" class="product-subcategories" aria-label="產品子分類">
           <NuxtLink v-for="child in data.children" :key="child.id" :to="child.route">{{ child.title }}（{{ child.count }}）</NuxtLink>
         </nav>
-        <InternalDesignLoadState label="商品列表" :pending="status === 'pending'" :error="error" @retry="refresh()" />
+        <InternalDesignLoadState label="商品列表" :pending="status === 'pending' && !data" :error="error" @retry="refresh()" />
+        <p v-if="data && !error && status === 'pending'" class="sr-only" role="status">正在更新商品列表…</p>
         <p v-if="data && !error" class="mb-6 font-cjk-sans" role="status">共 {{ data.total }} 項產品 · 第 {{ data.page }}／{{ data.pages }} 頁</p>
         <p v-if="data && !error && !data.total" class="py-12 text-center" role="status">沒有符合條件的產品，請更換搜尋文字。</p>
-        <ul v-if="data && !error && status !== 'pending'" class="near-suction-product-grid" aria-label="產品清單">
+        <ul v-if="data && !error" class="near-suction-product-grid" aria-label="產品清單" :aria-busy="status === 'pending'" :inert="status === 'pending'">
           <li
             v-for="(product, index) in data.items"
             :key="product.id"

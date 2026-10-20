@@ -28,17 +28,17 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <section class="hero-template-section hero-includes-header relative w-full overflow-hidden bg-[#9F9FA4]" aria-labelledby="hero-title">
-    <div class="hidden" aria-hidden="true"><img :src="slides[(activeSlide + 1) % slides.length].image" :alt="cmsCopy.copy.field1" /></div>
+    <div class="hidden" aria-hidden="true"><HomeHeroImage :slide="slides[(activeSlide + 1) % slides.length]!" :alt="cmsCopy.copy.field1" /></div>
     <!-- Antra Home 01 / Slider Revolution `slidingoverlaydown` + `double`：
          暗色新圖先向下揭幕，原色新圖延遲 333ms 再覆蓋。 -->
-    <div :key="`hero-${activeSlide}`" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
+    <div :key="`hero-${activeSlide}`" :style="{ '--hero-pan-x': activeSlide % 2 === 0 ? '-4%' : '4%' }" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
       <span v-if="previousSlide === null" class="absolute inset-0 bg-[#9F9FA4]" />
-      <img v-else :src="slides[previousSlide].image" :alt="cmsCopy.copy.field2" class="hero-page1-image-settled absolute inset-0 h-full w-full object-cover object-center" />
+      <HomeHeroImage v-else :slide="slides[previousSlide]!" :alt="cmsCopy.copy.field2" :style="{ '--hero-pan-x': previousSlide % 2 === 0 ? '-4%' : '4%' }" image-class="hero-page1-image-settled" class="absolute inset-0" />
       <span class="hero-page1-image-layer hero-page1-image-layer-masked">
-        <img :src="slides[activeSlide].image" :alt="cmsCopy.copy.field3" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" />
+        <HomeHeroImage :slide="slides[activeSlide]!" :alt="cmsCopy.copy.field3" image-class="hero-page1-image-active" class="absolute inset-0" />
         <span class="absolute inset-0 bg-[rgba(16,8,1,0.46)]" />
       </span>
-      <span class="hero-page1-image-layer hero-page1-image-layer-final"><img :src="slides[activeSlide].image" :alt="cmsCopy.copy.field4" class="hero-page1-image-active absolute inset-0 h-full w-full object-cover object-center" /></span>
+      <span class="hero-page1-image-layer hero-page1-image-layer-final"><HomeHeroImage :slide="slides[activeSlide]!" :alt="cmsCopy.copy.field4" image-class="hero-page1-image-active" class="absolute inset-0" /></span>
     </div>
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[58%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,.42)_42%,rgba(0,0,0,.86)_100%)]" />
     <NuxtLink v-if="slides[activeSlide].route" :to="slides[activeSlide].route" :aria-label="`前往 ${slides[activeSlide].title} 品牌系列內頁`" class="absolute inset-0 z-[4] cursor-pointer focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-white" />

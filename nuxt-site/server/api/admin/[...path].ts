@@ -1,5 +1,8 @@
 import { query, transaction, fail, passwordHash, checkPassword, digest, randomUUID, audit, throttle } from '../../cms/database.mjs'
 import { getDocument, changeDocument, alignSource } from '../../cms/content.mjs'
+import { homeHeroSchema } from '../../../shared/cms/hero-media.mjs'
+import { homeGallerySchema } from '../../../shared/cms/gallery-cases.mjs'
+import { caseLibrary } from '../../cms/case-library.mjs'
 import { cmsHandler, cmsUser, cmsWrite, sameOrigin, cmsSession } from '../../utils/cms'
 
 export default defineEventHandler(event=>cmsHandler(event,async()=>{
@@ -20,13 +23,15 @@ export default defineEventHandler(event=>cmsHandler(event,async()=>{
   if(!checkPassword(b.currentPassword,u.password))fail(400,'目前密碼不正確');if(b.currentPassword===b.password)fail(400,'新密碼不可與目前密碼相同')
   const hash=passwordHash(b.password);await transaction(async(tx:any)=>{await query('UPDATE cms.Users SET password=@hash,mustChange=0,revision=revision+1 WHERE id=@id; DELETE cms.Sessions WHERE userId=@id',{id:user.id,hash},tx);await audit(user.id,'password-change',user.email,tx)});await cmsSession(event,user.id);return{ok:true}
  }
+ if(path[0]==='case-library'&&method==='GET')return caseLibrary()
  if(path[0]==='documents'){
-  if(!path[1]&&method==='GET')return(await query("SELECT id,title,category,route,revision,draftId,publishedId,updatedAt FROM cms.Documents WHERE id NOT IN (N'data-kitchenGuides',N'data-kitchenGuideDetails',N'data-news',N'data-latestArticles',N'data-activityArticles',N'data-mediaVideos') ORDER BY category,title")).recordset
+  if(!path[1]&&method==='GET')return(await query("SELECT id,title,category,route,revision,draftId,publishedId,updatedAt FROM cms.Documents WHERE id NOT IN (N'data-kitchenGuides',N'data-kitchenGuideDetails',N'data-news',N'data-latestArticles',N'data-activityArticles',N'data-mediaVideos',N'view-components-FloatingButtons') ORDER BY category,title")).recordset
+  if(path[1]?.trim().toLowerCase()==='view-components-floatingbuttons')fail(404,'此項目已從後台移除，官網快速服務按鈕仍保留。')
   if(path[1]&&method==='GET'){
    const d=await getDocument(path[1]);const v=(await query('SELECT body FROM cms.Versions WHERE id=@id',{id:d.draftId})).recordset[0]
    const versions=(await query('SELECT v.id,v.createdAt,u.name AS actor FROM cms.Versions v LEFT JOIN cms.Users u ON u.id=v.actor WHERE documentId=@id ORDER BY createdAt DESC',{id:d.id})).recordset
    const body=v?JSON.parse(v.body):{}
-   return{...d,schema:JSON.parse(d.schemaJson),body:d.id.startsWith('catalog-')?await alignSource(d.id,body):body,versions}
+   return{...d,schema:homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson))),body:d.id.startsWith('catalog-')?await alignSource(d.id,body):body,versions}
   }
   if(path[1]&&method==='POST')return changeDocument(path[1],await readBody(event),user)
  }

@@ -13,12 +13,21 @@ const script = transpile(source, { target: 99 })
 
 function page(fetch, redirect = '/') {
   const navigations = []
+  const timers = new Map()
+  const events = new Map()
   const context = vm.createContext({
     definePageMeta() {}, useSeoMeta() {}, useRoute: () => ({ query: { redirect } }),
     ref: value => ({ value }), $fetch: fetch,
-    window: { location: { assign: path => navigations.push(path) } },
+    setTimeout: (callback, delay) => { const timer = { callback, delay }; timers.set(timer, timer); return timer },
+    clearTimeout: timer => timers.delete(timer),
+    onMounted: run => run(), onBeforeUnmount() {},
+    window: {
+      location: { assign: path => navigations.push(path) },
+      addEventListener: (name, handler) => events.set(name, handler),
+      removeEventListener: name => events.delete(name),
+    },
   })
-  return { ...vm.runInContext(`${script}\n;({ unlockPreview, password, pending, errorMessage })`, context), navigations }
+  return { ...vm.runInContext(`${script}\n;({ unlockPreview, password, pending, loadingSite, errorMessage })`, context), navigations, timers, events }
 }
 
 // Exercise the page's actual timeout through ofetch against a non-responding server.
@@ -61,10 +70,31 @@ try {
   await access.unlockPreview()
   assert.equal(access.errorMessage.value, '')
   assert.equal(access.navigations[0], '/builders#appointment')
+  assert.equal(access.loadingSite.value, true, '驗證成功不代表目的頁已完成載入')
+  assert.equal(access.pending.value, true, '目的頁等待期間不可重複送出密碼')
+  await access.unlockPreview()
+  assert.equal(requests, 3, '目的頁等待期間不可再建立登入請求')
+  assert.equal(access.navigations.length, 1)
+  const [timer] = access.timers.values()
+  assert.equal(timer.delay, 75000)
+  timer.callback()
+  assert.equal(access.pending.value, false)
+  assert.equal(access.loadingSite.value, false)
+  assert.equal(access.timers.size, 0)
+  assert.match(access.errorMessage.value, /驗證已成功.*75 秒/)
+  await access.unlockPreview()
+  assert.equal(access.navigations.length, 2, '目的頁逾時後可以重試')
+  access.events.get('pageshow')({ persisted: false })
+  assert.equal(access.pending.value, true, '首次 pageshow 不應提前解除目的頁等待')
+  access.events.get('pageshow')({ persisted: true })
+  assert.equal(access.pending.value, false, '從瀏覽器快取返回密碼頁須可再次操作')
+  assert.equal(access.loadingSite.value, false)
+  assert.equal(access.timers.size, 0)
   const external = page(async () => ({ ok: true }), '//example.com')
   await external.unlockPreview()
   assert.equal(external.navigations[0], '/')
   console.log('PASS: 錯誤密碼後可重試、成功保留目的頁、拒絕外站導向')
+  console.log('PASS: 目的頁等待保持鎖定、不重送、75 秒逾時可重試、歷史快取返回解除等待')
 }
 finally {
   server.closeAllConnections()

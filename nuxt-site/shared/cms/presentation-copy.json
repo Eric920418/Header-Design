@@ -1,0 +1,1370 @@
+{
+  "view-pages-about-advantage": {
+    "copy.text1": {
+      "label": "版面文字"
+    },
+    "copy.text2": {
+      "label": "家庭情境・段落標題"
+    },
+    "copy.text3": {
+      "label": "家庭情境・介紹文字"
+    }
+  },
+  "view-pages-about-exhibition": {
+    "copy.text1": {
+      "label": "介紹文字（第 1 段）"
+    },
+    "copy.text2": {
+      "label": "區塊標題（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "段落標題（第 1 段）"
+    },
+    "copy.text4": {
+      "label": "介紹文字（第 2 段）"
+    },
+    "copy.field5": {
+      "label": "圖片（第 1 段）"
+    },
+    "copy.field6": {
+      "label": "圖片替代文字（第 1 段）"
+    },
+    "copy.field7": {
+      "label": "圖片（第 2 段）"
+    },
+    "copy.field8": {
+      "label": "圖片替代文字（第 2 段）"
+    },
+    "copy.text9": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text10": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text11": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text12": {
+      "label": "資訊欄位名稱（第 1 段）"
+    },
+    "copy.text13": {
+      "label": "資訊欄位名稱（第 2 段）"
+    },
+    "copy.text14": {
+      "label": "區塊標題（第 2 段）"
+    },
+    "copy.text15": {
+      "label": "段落標題（第 2 段）"
+    }
+  },
+  "view-pages-about-introduce": {
+    "copy.text1": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text2": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text3": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.field4": {
+      "label": "品牌沿革・圖片替代文字"
+    },
+    "copy.text5": {
+      "label": "流程說明・區塊標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text6": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text7": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text8": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text9": {
+      "label": "品牌識別・介紹文字"
+    },
+    "copy.field10": {
+      "label": "按鈕連結"
+    }
+  },
+  "view-pages-builders-catalogues": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "案例介紹・區塊標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text3": {
+      "label": "案例介紹・按鈕文字"
+    }
+  },
+  "view-pages-builders-index": {
+    "copy.text1": {
+      "label": "主視覺・顯示文字"
+    },
+    "copy.text2": {
+      "label": "主視覺・主視覺標題（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "主視覺・主視覺標題（第 2 段）"
+    },
+    "copy.text4": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text5": {
+      "label": "版面文字"
+    },
+    "copy.field6": {
+      "label": "圖片"
+    },
+    "copy.field7": {
+      "label": "圖片替代文字"
+    },
+    "copy.text8": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text9": {
+      "label": "品牌介紹・區塊標題"
+    },
+    "copy.text10": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text11": {
+      "label": "品牌介紹・介紹文字"
+    },
+    "copy.field12": {
+      "label": "品牌介紹・圖片替代文字（第 1 段）"
+    },
+    "copy.field13": {
+      "label": "品牌介紹・圖片替代文字（第 2 段）"
+    },
+    "copy.field14": {
+      "label": "品牌介紹・圖片替代文字（第 3 段）"
+    },
+    "copy.text15": {
+      "label": "品牌介紹・顯示文字（第 1 段）"
+    },
+    "copy.text16": {
+      "label": "品牌介紹・顯示文字（第 2 段）"
+    },
+    "copy.text17": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text18": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text19": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text20": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text21": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text22": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text23": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text24": {
+      "label": "售後服務・段落標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text25": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text26": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text27": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.field28": {
+      "label": "售後服務・圖片"
+    },
+    "copy.field29": {
+      "label": "售後服務・圖片替代文字"
+    },
+    "copy.text30": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.field31": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.field32": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text33": {
+      "label": "聯繫預約・顯示文字"
+    },
+    "copy.text34": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text35": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text36": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text37": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text38": {
+      "label": "聯繫預約・段落標題（第 1 段）"
+    },
+    "copy.text39": {
+      "label": "聯繫預約・段落標題（第 2 段）"
+    },
+    "copy.text40": {
+      "label": "聯繫預約・介紹文字"
+    },
+    "copy.text41": {
+      "label": "聯繫預約・資訊欄位名稱（第 1 段）"
+    },
+    "copy.text42": {
+      "label": "聯繫預約・資訊欄位名稱（第 2 段）"
+    }
+  },
+  "view-pages-builders-sakura-kitchen": {
+    "copy.field1": {
+      "label": "主視覺・圖片（第 1 段）"
+    },
+    "copy.field2": {
+      "label": "主視覺・圖片替代文字（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "主視覺・主視覺標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.field4": {
+      "label": "主視覺・圖片（第 2 段）"
+    },
+    "copy.field5": {
+      "label": "主視覺・圖片替代文字（第 2 段）"
+    },
+    "copy.field6": {
+      "label": "主視覺・圖片（第 3 段）"
+    },
+    "copy.field7": {
+      "label": "主視覺・圖片替代文字（第 3 段）"
+    },
+    "copy.text8": {
+      "label": "主視覺・介紹文字"
+    },
+    "copy.field9": {
+      "label": "主視覺・按鈕連結（第 1 段）"
+    },
+    "copy.text10": {
+      "label": "主視覺・按鈕文字（第 1 段）"
+    },
+    "copy.text11": {
+      "label": "主視覺・按鈕文字（第 2 段）"
+    },
+    "copy.field12": {
+      "label": "主視覺・按鈕連結（第 2 段）"
+    },
+    "copy.field13": {
+      "label": "主視覺・圖片（第 4 段）"
+    },
+    "copy.field14": {
+      "label": "主視覺・圖片替代文字（第 4 段）"
+    },
+    "copy.text15": {
+      "label": "主視覺・按鈕文字（第 3 段）"
+    },
+    "copy.text16": {
+      "label": "主視覺・按鈕文字（第 4 段）"
+    },
+    "copy.text17": {
+      "label": "主視覺・按鈕文字（第 5 段）"
+    },
+    "copy.text18": {
+      "label": "品牌優勢・區塊標題（第 1 段）"
+    },
+    "copy.text19": {
+      "label": "品牌優勢・區塊標題（第 2 段）"
+    },
+    "copy.text20": {
+      "label": "品牌優勢・介紹文字（第 1 段）"
+    },
+    "copy.text21": {
+      "label": "品牌優勢・介紹文字（第 2 段）"
+    },
+    "copy.field22": {
+      "label": "品牌優勢・圖片"
+    },
+    "copy.field23": {
+      "label": "品牌優勢・圖片替代文字"
+    },
+    "copy.field24": {
+      "label": "品牌優勢・按鈕連結"
+    },
+    "copy.text25": {
+      "label": "品牌優勢・按鈕文字"
+    },
+    "copy.text26": {
+      "label": "品牌系列・顯示文字"
+    },
+    "copy.text27": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text28": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text29": {
+      "label": "品牌系列・介紹文字"
+    },
+    "copy.field30": {
+      "label": "品牌系列・按鈕連結"
+    },
+    "copy.text31": {
+      "label": "品牌系列・按鈕文字"
+    }
+  },
+  "view-pages-catalogues-catalog": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "案例介紹・區塊標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text3": {
+      "label": "案例介紹・按鈕文字（第 1 段）"
+    },
+    "copy.text4": {
+      "label": "案例介紹・按鈕文字（第 2 段）"
+    },
+    "copy.text5": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text6": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text7": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text8": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text9": {
+      "label": "清潔保養・顯示文字"
+    },
+    "copy.text10": {
+      "label": "清潔保養・介紹文字"
+    }
+  },
+  "view-pages-catalogues-kitchenware-catalog": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "案例介紹・區塊標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text3": {
+      "label": "案例介紹・按鈕文字（第 1 段）"
+    },
+    "copy.text4": {
+      "label": "案例介紹・按鈕文字（第 2 段）"
+    }
+  },
+  "view-pages-design-inspiration-id-": {
+    "copy.text1": {
+      "label": "內容區塊・介紹文字"
+    },
+    "copy.text2": {
+      "label": "內容區塊・區塊標題"
+    },
+    "copy.text3": {
+      "label": "內容區塊・按鈕文字"
+    }
+  },
+  "view-pages-design-inspiration-index": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "案例介紹・區塊標題（第 1 段）",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text3": {
+      "label": "案例介紹・顯示文字（第 1 段）",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text4": {
+      "label": "案例介紹・顯示文字（第 2 段）",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text5": {
+      "label": "案例介紹・按鈕文字（第 1 段）"
+    },
+    "copy.text6": {
+      "label": "案例介紹・介紹文字（第 1 段）",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text7": {
+      "label": "案例介紹・介紹文字（第 2 段）",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text8": {
+      "label": "案例介紹・按鈕文字（第 2 段）"
+    },
+    "copy.text9": {
+      "label": "案例介紹・區塊標題（第 2 段）"
+    },
+    "copy.text10": {
+      "label": "案例介紹・介紹文字（第 3 段）"
+    },
+    "copy.text11": {
+      "label": "案例介紹・按鈕文字（第 3 段）"
+    }
+  },
+  "view-pages-franchising-download": {
+    "copy.field1": {
+      "label": "主視覺・圖片"
+    },
+    "copy.field2": {
+      "label": "主視覺・圖片替代文字"
+    },
+    "copy.text3": {
+      "label": "主視覺・顯示文字"
+    },
+    "copy.text4": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text5": {
+      "label": "型錄下載・區塊標題（第 1 段）"
+    },
+    "copy.text6": {
+      "label": "型錄下載・區塊標題（第 2 段）"
+    },
+    "copy.field7": {
+      "label": "型錄下載・圖片"
+    },
+    "copy.field8": {
+      "label": "型錄下載・圖片替代文字"
+    },
+    "copy.text9": {
+      "label": "型錄下載・介紹文字（第 1 段）"
+    },
+    "copy.text10": {
+      "label": "型錄下載・資訊欄位名稱（第 1 段）"
+    },
+    "copy.text11": {
+      "label": "型錄下載・顯示文字（第 1 段）"
+    },
+    "copy.text12": {
+      "label": "型錄下載・資訊欄位名稱（第 2 段）"
+    },
+    "copy.text13": {
+      "label": "型錄下載・顯示文字（第 2 段）"
+    },
+    "copy.text14": {
+      "label": "型錄下載・資訊欄位名稱（第 3 段）"
+    },
+    "copy.text15": {
+      "label": "型錄下載・顯示文字（第 3 段）"
+    },
+    "copy.text16": {
+      "label": "型錄下載・按鈕文字（第 1 段）"
+    },
+    "copy.text17": {
+      "label": "型錄下載・按鈕文字（第 2 段）"
+    },
+    "copy.text18": {
+      "label": "型錄下載・介紹文字（第 2 段）"
+    },
+    "copy.text19": {
+      "label": "型錄下載・顯示文字（第 4 段）"
+    },
+    "copy.text20": {
+      "label": "型錄下載・按鈕文字（第 3 段）"
+    },
+    "copy.text21": {
+      "label": "型錄下載・顯示文字（第 5 段）"
+    },
+    "copy.field22": {
+      "label": "型錄下載・按鈕連結"
+    },
+    "copy.text23": {
+      "label": "型錄下載・按鈕文字（第 4 段）"
+    }
+  },
+  "view-pages-franchising-form": {
+    "copy.text1": {
+      "label": "顯示文字"
+    },
+    "copy.text2": {
+      "label": "主視覺標題"
+    },
+    "copy.text3": {
+      "label": "介紹文字"
+    },
+    "copy.field4": {
+      "label": "按鈕連結"
+    },
+    "copy.text5": {
+      "label": "按鈕文字"
+    }
+  },
+  "view-pages-franchising-intro": {
+    "copy.field1": {
+      "label": "主視覺・圖片"
+    },
+    "copy.field2": {
+      "label": "主視覺・圖片替代文字"
+    },
+    "copy.text3": {
+      "label": "主視覺・顯示文字"
+    },
+    "copy.text4": {
+      "label": "主視覺・主視覺標題（第 1 段）"
+    },
+    "copy.text5": {
+      "label": "主視覺・主視覺標題（第 2 段）"
+    },
+    "copy.text6": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text7": {
+      "label": "主視覺・介紹文字（第 1 段）"
+    },
+    "copy.text8": {
+      "label": "主視覺・介紹文字（第 2 段）"
+    },
+    "copy.text9": {
+      "label": "主視覺・按鈕文字（第 1 段）"
+    },
+    "copy.field10": {
+      "label": "圖片"
+    },
+    "copy.field11": {
+      "label": "圖片替代文字"
+    },
+    "copy.field12": {
+      "label": "主視覺・按鈕連結"
+    },
+    "copy.text13": {
+      "label": "主視覺・按鈕文字（第 2 段）"
+    },
+    "copy.text14": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text15": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text16": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.field17": {
+      "label": "品牌介紹・影片說明"
+    },
+    "copy.field18": {
+      "label": "品牌介紹・圖片（第 1 段）"
+    },
+    "copy.field19": {
+      "label": "品牌介紹・圖片替代文字（第 1 段）"
+    },
+    "copy.field20": {
+      "label": "品牌介紹・圖片（第 2 段）"
+    },
+    "copy.field21": {
+      "label": "品牌介紹・圖片替代文字（第 2 段）"
+    },
+    "copy.field22": {
+      "label": "品牌介紹・圖片（第 3 段）"
+    },
+    "copy.field23": {
+      "label": "品牌介紹・圖片替代文字（第 3 段）"
+    },
+    "copy.field24": {
+      "label": "品牌介紹・圖片（第 4 段）"
+    },
+    "copy.field25": {
+      "label": "品牌介紹・圖片替代文字（第 4 段）"
+    },
+    "copy.text26": {
+      "label": "品牌介紹・顯示文字"
+    },
+    "copy.text27": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text28": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text29": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text30": {
+      "label": "品牌介紹・介紹文字"
+    },
+    "copy.text31": {
+      "label": "品牌優勢・顯示文字"
+    },
+    "copy.text32": {
+      "label": "加盟邀請・顯示文字"
+    },
+    "copy.text33": {
+      "label": "加盟邀請・區塊標題（第 1 段）"
+    },
+    "copy.text34": {
+      "label": "加盟邀請・區塊標題（第 2 段）"
+    },
+    "copy.text35": {
+      "label": "加盟邀請・介紹文字"
+    },
+    "copy.text36": {
+      "label": "加盟邀請・按鈕文字"
+    },
+    "copy.text37": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text38": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text39": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text40": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text41": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text42": {
+      "label": "案例介紹・介紹文字"
+    },
+    "copy.text43": {
+      "label": "流程說明・區塊標題"
+    },
+    "copy.field44": {
+      "label": "流程說明・圖片"
+    },
+    "copy.field45": {
+      "label": "流程說明・圖片替代文字"
+    },
+    "copy.text46": {
+      "label": "總部支援・按鈕文字"
+    },
+    "copy.text47": {
+      "label": "流程說明・段落標題"
+    },
+    "copy.text48": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text49": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text50": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text51": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.field52": {
+      "label": "常見問題・按鈕連結（第 1 段）"
+    },
+    "copy.field53": {
+      "label": "常見問題・圖片"
+    },
+    "copy.field54": {
+      "label": "常見問題・圖片替代文字"
+    },
+    "copy.field55": {
+      "label": "常見問題・按鈕連結（第 2 段）"
+    },
+    "copy.text56": {
+      "label": "常見問題・段落標題"
+    },
+    "copy.text57": {
+      "label": "常見問題・介紹文字"
+    },
+    "copy.text58": {
+      "label": "最新消息・顯示文字"
+    },
+    "copy.text59": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text60": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text61": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.field62": {
+      "label": "最新消息・按鈕連結"
+    },
+    "copy.text63": {
+      "label": "最新消息・按鈕文字"
+    }
+  },
+  "view-pages-gallery-slug-": {
+    "copy.field1": {
+      "label": "內容區塊・按鈕連結"
+    },
+    "copy.text2": {
+      "label": "內容區塊・按鈕文字（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "內容區塊・區塊標題（第 1 段）"
+    },
+    "copy.text4": {
+      "label": "內容區塊・區塊標題（第 2 段）"
+    },
+    "copy.text5": {
+      "label": "內容區塊・按鈕文字（第 2 段）"
+    },
+    "copy.text6": {
+      "label": "內容區塊・按鈕文字（第 3 段）"
+    },
+    "copy.text7": {
+      "label": "選單・按鈕文字（第 1 段）"
+    },
+    "copy.text8": {
+      "label": "選單・按鈕文字（第 2 段）"
+    },
+    "copy.text9": {
+      "label": "內容區塊・區塊標題（第 3 段）"
+    },
+    "copy.text10": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text11": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text12": {
+      "label": "版面文字",
+      "hidden": true
+    }
+  },
+  "view-pages-gallery-index": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "門市資訊・區塊標題（第 1 段）",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text3": {
+      "label": "門市資訊・顯示文字（第 1 段）"
+    },
+    "copy.text4": {
+      "label": "門市資訊・按鈕文字（第 1 段）"
+    },
+    "copy.text5": {
+      "label": "門市資訊・顯示文字（第 2 段）"
+    },
+    "copy.text6": {
+      "label": "門市資訊・顯示文字（第 3 段）"
+    },
+    "copy.text7": {
+      "label": "門市資訊・區塊標題（第 2 段）"
+    },
+    "copy.text8": {
+      "label": "門市資訊・介紹文字"
+    },
+    "copy.text9": {
+      "label": "門市資訊・按鈕文字（第 2 段）"
+    }
+  },
+  "view-pages-knowledge-design-slug-": {
+    "copy.field1": {
+      "label": "按鈕連結"
+    },
+    "copy.text2": {
+      "label": "按鈕文字"
+    }
+  },
+  "view-pages-knowledge-design-systemcabinet": {
+    "copy.field1": {
+      "label": "按鈕連結（第 1 段）"
+    },
+    "copy.text2": {
+      "label": "按鈕文字（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "區塊標題（第 1 段）"
+    },
+    "copy.text4": {
+      "label": "區塊標題（第 2 段）"
+    },
+    "copy.text5": {
+      "label": "顯示文字（第 1 段）"
+    },
+    "copy.text6": {
+      "label": "顯示文字（第 2 段）"
+    },
+    "copy.text7": {
+      "label": "介紹文字（第 1 段）"
+    },
+    "copy.text8": {
+      "label": "區塊標題（第 3 段）"
+    },
+    "copy.text9": {
+      "label": "介紹文字（第 2 段）"
+    },
+    "copy.text10": {
+      "label": "顯示文字（第 3 段）"
+    },
+    "copy.text11": {
+      "label": "顯示文字（第 4 段）"
+    },
+    "copy.text12": {
+      "label": "顯示文字（第 5 段）"
+    },
+    "copy.text13": {
+      "label": "顯示文字（第 6 段）"
+    },
+    "copy.field14": {
+      "label": "按鈕連結（第 2 段）"
+    },
+    "copy.text15": {
+      "label": "區塊標題（第 4 段）"
+    },
+    "copy.text16": {
+      "label": "介紹文字（第 3 段）"
+    },
+    "copy.text17": {
+      "label": "介紹文字（第 4 段）"
+    },
+    "copy.field18": {
+      "label": "按鈕連結（第 3 段）"
+    },
+    "copy.text19": {
+      "label": "按鈕文字（第 2 段）"
+    },
+    "copy.text20": {
+      "label": "介紹文字（第 5 段）"
+    }
+  },
+  "view-pages-knowledge-index": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text3": {
+      "label": "版面文字",
+      "hidden": true
+    },
+    "copy.text4": {
+      "label": "版面文字",
+      "hidden": true
+    }
+  },
+  "view-pages-news-activities-slug-": {
+    "copy.text1": {
+      "label": "主視覺・介紹文字"
+    },
+    "copy.field2": {
+      "label": "按鈕連結（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "按鈕文字（第 1 段）"
+    },
+    "copy.field4": {
+      "label": "按鈕連結（第 2 段）"
+    },
+    "copy.text5": {
+      "label": "按鈕文字（第 2 段）"
+    },
+    "copy.field6": {
+      "label": "按鈕連結（第 3 段）"
+    },
+    "copy.text7": {
+      "label": "按鈕文字（第 3 段）"
+    },
+    "copy.field8": {
+      "label": "按鈕連結（第 4 段）"
+    },
+    "copy.text9": {
+      "label": "按鈕文字（第 4 段）"
+    },
+    "copy.field10": {
+      "label": "按鈕連結（第 5 段）"
+    },
+    "copy.text11": {
+      "label": "按鈕文字（第 5 段）"
+    }
+  },
+  "view-pages-news-activities-index": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "區塊標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    }
+  },
+  "view-pages-news-index": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "最新消息・區塊標題（第 1 段）",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    },
+    "copy.text3": {
+      "label": "最新消息・區塊標題（第 2 段）"
+    },
+    "copy.text4": {
+      "label": "最新消息・區塊標題（第 3 段）"
+    }
+  },
+  "view-pages-news-latest-slug-": {
+    "copy.text1": {
+      "label": "主視覺・介紹文字"
+    },
+    "copy.field2": {
+      "label": "按鈕連結（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "按鈕文字（第 1 段）"
+    },
+    "copy.field4": {
+      "label": "按鈕連結（第 2 段）"
+    },
+    "copy.text5": {
+      "label": "按鈕文字（第 2 段）"
+    },
+    "copy.text6": {
+      "label": "介紹文字"
+    },
+    "copy.field7": {
+      "label": "按鈕連結（第 3 段）"
+    },
+    "copy.text8": {
+      "label": "按鈕文字（第 3 段）"
+    },
+    "copy.field9": {
+      "label": "按鈕連結（第 4 段）"
+    },
+    "copy.text10": {
+      "label": "按鈕文字（第 4 段）"
+    },
+    "copy.field11": {
+      "label": "按鈕連結（第 5 段）"
+    },
+    "copy.text12": {
+      "label": "按鈕文字（第 5 段）"
+    }
+  },
+  "view-pages-news-latest-index": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "區塊標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    }
+  },
+  "view-pages-news-video-slug-": {
+    "copy.text1": {
+      "label": "主視覺・介紹文字"
+    },
+    "copy.field2": {
+      "label": "按鈕連結（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "按鈕文字（第 1 段）"
+    },
+    "copy.field4": {
+      "label": "按鈕連結（第 2 段）"
+    },
+    "copy.text5": {
+      "label": "按鈕文字（第 2 段）"
+    },
+    "copy.field6": {
+      "label": "按鈕連結（第 3 段）"
+    },
+    "copy.text7": {
+      "label": "按鈕文字（第 3 段）"
+    },
+    "copy.field8": {
+      "label": "按鈕連結（第 4 段）"
+    },
+    "copy.text9": {
+      "label": "按鈕文字（第 4 段）"
+    },
+    "copy.field10": {
+      "label": "按鈕連結（第 5 段）"
+    },
+    "copy.text11": {
+      "label": "按鈕文字（第 5 段）"
+    }
+  },
+  "view-pages-news-video-index": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "區塊標題",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    }
+  },
+  "view-pages-privacy": {
+    "copy.field1": {
+      "label": "影片說明"
+    },
+    "copy.text2": {
+      "label": "介紹文字（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "介紹文字（第 2 段）"
+    },
+    "copy.text4": {
+      "label": "介紹文字（第 3 段）"
+    }
+  },
+  "view-pages-service-process": {
+    "copy.text1": {
+      "label": "主視覺・主視覺標題"
+    },
+    "copy.text2": {
+      "label": "品牌介紹・區塊標題（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "品牌介紹・區塊標題（第 2 段）"
+    },
+    "copy.text4": {
+      "label": "品牌介紹・區塊標題（第 3 段）"
+    },
+    "copy.text5": {
+      "label": "品牌介紹・區塊標題（第 4 段）"
+    },
+    "copy.text6": {
+      "label": "品牌介紹・介紹文字"
+    },
+    "copy.field7": {
+      "label": "圖片替代文字"
+    }
+  },
+  "view-components-FloatingButtons": {
+    "copy.field1": {
+      "label": "圖片替代文字（第 1 段）"
+    },
+    "copy.field2": {
+      "label": "圖片替代文字（第 2 段）"
+    },
+    "copy.field3": {
+      "label": "影片說明"
+    },
+    "copy.field4": {
+      "label": "圖片"
+    },
+    "copy.field5": {
+      "label": "圖片替代文字（第 3 段）"
+    }
+  },
+  "view-components-SiteFooter": {
+    "copy.text1": {
+      "label": "選單・按鈕文字（第 1 段）"
+    },
+    "copy.field2": {
+      "label": "選單・按鈕連結（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "選單・按鈕文字（第 2 段）"
+    },
+    "copy.field4": {
+      "label": "選單・按鈕連結（第 2 段）"
+    },
+    "copy.field5": {
+      "label": "選單・圖片（第 1 段）"
+    },
+    "copy.field6": {
+      "label": "選單・圖片替代文字（第 1 段）"
+    },
+    "copy.field7": {
+      "label": "選單・按鈕連結（第 3 段）"
+    },
+    "copy.field8": {
+      "label": "選單・圖片（第 2 段）"
+    },
+    "copy.field9": {
+      "label": "選單・圖片替代文字（第 2 段）"
+    },
+    "copy.text10": {
+      "label": "選單・顯示文字（第 1 段）"
+    },
+    "copy.text11": {
+      "label": "選單・顯示文字（第 2 段）"
+    },
+    "copy.text12": {
+      "label": "選單・顯示文字（第 3 段）"
+    },
+    "copy.field13": {
+      "label": "選單・圖片（第 3 段）"
+    },
+    "copy.field14": {
+      "label": "選單・圖片替代文字（第 3 段）"
+    }
+  },
+  "view-components-SiteHeader": {
+    "copy.field1": {
+      "label": "選單・按鈕連結（第 1 段）"
+    },
+    "copy.text2": {
+      "label": "選單・按鈕文字"
+    },
+    "copy.text3": {
+      "label": "選單・介紹文字（第 1 段）"
+    },
+    "copy.text4": {
+      "label": "選單・區塊標題（第 1 段）"
+    },
+    "copy.text5": {
+      "label": "選單・介紹文字（第 2 段）"
+    },
+    "copy.text6": {
+      "label": "選單・區塊標題（第 2 段）"
+    },
+    "copy.text7": {
+      "label": "選單・介紹文字（第 3 段）"
+    },
+    "copy.text8": {
+      "label": "選單・顯示文字"
+    },
+    "copy.field9": {
+      "label": "選單・按鈕連結（第 2 段）"
+    },
+    "copy.field10": {
+      "label": "選單・圖片"
+    },
+    "copy.field11": {
+      "label": "選單・圖片替代文字"
+    },
+    "copy.field12": {
+      "label": "按鈕連結（第 1 段）"
+    },
+    "copy.field13": {
+      "label": "圖片"
+    },
+    "copy.field14": {
+      "label": "圖片替代文字"
+    },
+    "copy.text15": {
+      "label": "按鈕文字（第 1 段）"
+    },
+    "copy.text16": {
+      "label": "介紹文字"
+    },
+    "copy.text17": {
+      "label": "顯示文字（第 1 段）"
+    },
+    "copy.text18": {
+      "label": "顯示文字（第 2 段）"
+    },
+    "copy.field19": {
+      "label": "按鈕連結（第 2 段）"
+    },
+    "copy.text20": {
+      "label": "按鈕文字（第 2 段）"
+    },
+    "copy.text21": {
+      "label": "顯示文字（第 3 段）",
+      "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
+    }
+  },
+  "view-components-home-HomeGallery": {
+    "copy.field1": {
+      "label": "背景圖片替代文字"
+    },
+    "copy.text2": {
+      "label": "英文小標"
+    },
+    "copy.text3": {
+      "label": "區塊標題"
+    },
+    "copy.field4": {
+      "label": "按鈕連結"
+    },
+    "copy.text5": {
+      "label": "按鈕文字"
+    },
+    "copy.field6": {
+      "label": "圖片替代文字"
+    }
+  },
+  "view-components-home-HomeHero": {
+    "copy.field1": {
+      "label": "主視覺・圖片替代文字（第 1 段）"
+    },
+    "copy.field2": {
+      "label": "主視覺・圖片替代文字（第 2 段）"
+    },
+    "copy.field3": {
+      "label": "主視覺・圖片替代文字（第 3 段）"
+    },
+    "copy.field4": {
+      "label": "主視覺・圖片替代文字（第 4 段）"
+    },
+    "copy.field5": {
+      "label": "探索案例按鈕連結"
+    },
+    "copy.text6": {
+      "label": "探索案例按鈕文字（第一行）"
+    },
+    "copy.text7": {
+      "label": "探索案例按鈕文字（第二行）"
+    },
+    "copy.text8": {
+      "label": "手機探索按鈕文字（第一行）"
+    },
+    "copy.text9": {
+      "label": "手機探索按鈕文字（第二行）"
+    },
+    "copy.text10": {
+      "label": "區塊英文標題"
+    },
+    "copy.text11": {
+      "label": "系列選單按鈕文字"
+    }
+  },
+  "view-components-home-HomeProject": {
+    "copy.text1": {
+      "label": "區塊標題（前半段）"
+    },
+    "copy.text2": {
+      "label": "區塊標題（後半段）"
+    },
+    "copy.text3": {
+      "label": "介紹文字"
+    }
+  },
+  "view-components-home-HomeServices": {
+    "copy.text1": {
+      "label": "區塊標題（前半段）"
+    },
+    "copy.text2": {
+      "label": "區塊標題（後半段）"
+    },
+    "copy.field3": {
+      "label": "圖片替代文字"
+    }
+  },
+  "view-components-home-HomeStoreLocation": {
+    "copy.text1": {
+      "label": "區塊英文小標"
+    },
+    "copy.text2": {
+      "label": "區塊標題（第一行）"
+    },
+    "copy.text3": {
+      "label": "區塊標題（第二行）"
+    },
+    "copy.text4": {
+      "label": "定位按鈕文字"
+    },
+    "copy.text5": {
+      "label": "沒有門市時的提示文字"
+    }
+  },
+  "view-components-home-HomeStyleMarquee": {
+    "copy.field1": {
+      "label": "圖片替代文字"
+    },
+    "copy.field2": {
+      "label": "預覽圖片掛載位置",
+      "hidden": true
+    }
+  },
+  "view-components-home-HomeWhatWeDo": {
+    "copy.field1": {
+      "label": "裝飾背景圖片"
+    },
+    "copy.field2": {
+      "label": "圖片替代文字（第 1 段）"
+    },
+    "copy.text3": {
+      "label": "區塊小標"
+    },
+    "copy.text4": {
+      "label": "區塊英文標題（前半段）"
+    },
+    "copy.text5": {
+      "label": "區塊英文標題（品牌名稱）"
+    },
+    "copy.text6": {
+      "label": "介紹標題"
+    },
+    "copy.text7": {
+      "label": "介紹文字"
+    },
+    "copy.field8": {
+      "label": "按鈕連結"
+    },
+    "copy.text9": {
+      "label": "按鈕文字"
+    },
+    "copy.field10": {
+      "label": "影片封面替代文字"
+    }
+  },
+  "view-components-home-LogoMarquee": {}
+}

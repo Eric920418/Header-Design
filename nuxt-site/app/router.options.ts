@@ -7,8 +7,10 @@ const scrollBehavior: RouterScrollBehavior = async (to, from, savedPosition) => 
   pendingScrollReset?.abort()
   const controller = new AbortController()
   pendingScrollReset = controller
-  // A fresh URL/reload must not resume an old entry; Back/Forward must.
-  const restoredPosition = from !== START_LOCATION ? savedPosition : null
+  // A fresh URL/reload must not resume an old entry; document Back/Forward must.
+  const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
+  const freshEntry = from === START_LOCATION && navigation?.type !== 'back_forward'
+  const restoredPosition = freshEntry ? null : savedPosition
   const toPath = to.path.replace(/\/$/, '')
   const fromPath = from.path.replace(/\/$/, '')
   const productListChanged = toPath.startsWith('/products/') && (to.query.page !== from.query.page || to.query.q !== from.query.q)
@@ -27,8 +29,7 @@ const scrollBehavior: RouterScrollBehavior = async (to, from, savedPosition) => 
       controller.signal.addEventListener('abort', cancel, { once: true })
     })
   }
-  // Page-mounted effects (including ScrollTrigger.refresh) must finish before the final position.
-  await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+  // Restore synchronously after rendering; deferring to rAF can expose one wrong frame.
   if (controller.signal.aborted || router.currentRoute.value.fullPath !== to.fullPath) return false
 
   if (!restoredPosition && to.hash) {
@@ -37,6 +38,9 @@ const scrollBehavior: RouterScrollBehavior = async (to, from, savedPosition) => 
     if (target) {
       for (const element of [target, ...target.querySelectorAll<HTMLElement>('.ev')]) {
         element.setAttribute('data-reveal-direct', '')
+      }
+      for (let ancestor = target.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        if (ancestor.classList.contains('ev')) ancestor.setAttribute('data-reveal-direct', '')
       }
     }
     const top = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--site-header-height')) || 0
@@ -53,18 +57,34 @@ const scrollBehavior: RouterScrollBehavior = async (to, from, savedPosition) => 
     if (Math.abs(window.scrollY - top) > 1 || Math.abs(window.scrollX - position.left) > 1) {
       window.scrollTo({ left: position.left, top, behavior: 'instant' })
     }
+    if (restoredPosition) {
+      // Previously viewed content must be visible immediately on history navigation.
+      for (const element of document.querySelectorAll<HTMLElement>('.ev:not([data-reveal-direct])')) {
+        if (element.getBoundingClientRect().top <= window.innerHeight) element.setAttribute('data-reveal-direct', '')
+      }
+    }
   }
   window.addEventListener('scroll', holdPosition, options)
   if (restoredPosition) {
     // Late images/CMS layout can increase the initially clamped scroll range.
     const observer = new ResizeObserver(holdPosition)
     observer.observe(document.body)
-    controller.signal.addEventListener('abort', () => observer.disconnect(), { once: true })
+    // Query-driven lists can replace cards without changing the body's height.
+    const contentObserver = new MutationObserver(holdPosition)
+    contentObserver.observe(document.body, { childList: true, subtree: true })
+    controller.signal.addEventListener('abort', () => {
+      observer.disconnect()
+      contentObserver.disconnect()
+    }, { once: true })
   }
   for (const event of ['wheel', 'touchstart', 'pointerdown', 'keydown', 'focusin']) {
     window.addEventListener(event, () => controller.abort(), { ...options, once: true, capture: true })
   }
 
+  holdPosition()
+  requestAnimationFrame(() => {
+    if (!controller.signal.aborted) holdPosition()
+  })
   return { ...position, behavior: 'instant' as ScrollBehavior }
 }
 

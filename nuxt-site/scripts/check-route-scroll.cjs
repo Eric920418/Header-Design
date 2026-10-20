@@ -46,6 +46,38 @@ async function main() {
         assert(positions.every(y => Math.abs(y - expected) <= 2), `${mode} ${label}: ${expected} → ${positions.join(' → ')}`)
         console.log(`CHECK ${mode} ${label}: ${expected} → ${positions.join(' → ')}`)
       }
+      const traverse = async (direction, expected, label) => {
+        await page.evaluate(() => {
+          const frames = window.__historyFrames = []
+          window.__sampleHistory = true
+          const sample = () => {
+            if (!window.__sampleHistory || frames !== window.__historyFrames) return
+            const app = document.querySelector('#__nuxt')?.__vue_app__?.config.globalProperties.$nuxt
+            const visible = [...document.querySelectorAll('.ev')].filter(el => {
+              const rect = el.getBoundingClientRect()
+              return rect.top < innerHeight && rect.bottom > 0
+            })
+            window.__historyFrames.push({
+              path: app?._route.fullPath,
+              y: scrollY,
+              hidden: visible.filter(el => getComputedStyle(el).visibility === 'hidden').length,
+              revealing: visible.filter(el => el.getAnimations().some(animation => animation.playState === 'running')).length,
+            })
+            requestAnimationFrame(() => setTimeout(sample, 0))
+          }
+          requestAnimationFrame(() => setTimeout(sample, 0))
+        })
+        await (direction === 'back' ? page.goBack() : page.goForward())
+        await settled()
+        await atPosition(expected, label)
+        const frames = await page.evaluate(() => {
+          window.__sampleHistory = false
+          return window.__historyFrames.filter(frame => frame.path === location.pathname + location.search + location.hash)
+        })
+        assert(frames.length > 0, `${mode} ${label}: 未取得目標頁畫面`)
+        const wrong = frames.find(frame => Math.abs(frame.y - expected) > 2 || frame.hidden || frame.revealing)
+        assert(!wrong, `${mode} ${label}: 返回過程閃動 ${JSON.stringify(wrong)}`)
+      }
       const push = async path => {
         // Observe navigation like a click; don't keep a remote Vue promise alive through CDP.
         await page.evaluate(path => { void document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router.push(path) }, path)
@@ -60,7 +92,7 @@ async function main() {
           assert(await page.evaluate(() => document.documentElement.classList.contains('lenis-smooth')), '必須在慣性動畫進行中測試跳轉')
         }
       }
-      const click = async (selector, label) => {
+      const click = async (selector, label, expectedY = 0) => {
         await page.keyboard.press('Shift') // A new user interaction precedes setup scrolling.
         const current = new URL(page.url()).pathname
         const links = page.locator(selector).and(page.locator(`a:not([href="${current}"])`))
@@ -80,7 +112,8 @@ async function main() {
         else await link.click({ force: true })
         await page.waitForURL(url => url.href !== before)
         await settled()
-        await atTop(label)
+        if (expectedY === 0) await atTop(label)
+        else await atPosition(expectedY, label)
         console.log(`CHECK ${mode} ${label}`)
         return page.evaluate(() => window.__scrollBeforeLink)
       }
@@ -101,21 +134,43 @@ async function main() {
           if (route.request().resourceType() === 'image') await new Promise(resolve => setTimeout(resolve, 1200))
           await route.continue()
         })
-        await page.goBack(); await settled(); await atPosition(previousY, '返回原區塊／延後图片')
-        await page.goForward(); await settled(); await atPosition(nextY, '前進恢復內頁位置')
+        await traverse('back', previousY, '返回原區塊／延後圖片')
+        await traverse('forward', nextY, '前進恢復內頁位置')
         await context.unroute('**/*')
         await push('/builders#builders-team-title')
         await page.keyboard.press('Shift')
         await page.evaluate(() => scrollTo({ top: 600, behavior: 'instant' }))
         const hashY = await page.evaluate(() => scrollY)
         await push('/privacy')
-        await page.goBack(); await settled(); await atPosition(hashY, '帶錨點歷史返回優先原位置')
+        await traverse('back', hashY, '帶錨點歷史返回優先原位置')
+        await context.route('**/api/products/sakura/items?*', async route => {
+          await new Promise(resolve => setTimeout(resolve, 800))
+          await route.continue()
+        })
         await push('/products/sakura/all?page=1')
         await page.keyboard.press('Shift')
         await page.evaluate(() => scrollTo({ top: 500, behavior: 'instant' }))
         const queryY = await page.evaluate(() => scrollY)
         await push('/products/sakura/all?page=2')
-        await page.goBack(); await settled(); await atPosition(queryY, '同路徑分頁歷史返回')
+        await page.waitForFunction(() => document.querySelector('.near-suction-product-grid')?.getAttribute('aria-busy') === 'false')
+        await traverse('back', queryY, '同路徑分頁歷史返回')
+        assert.match(await page.locator('.near-suction-products [role="status"]').first().innerText(), /第 1／/, '返回後需顯示第一頁的實際資料')
+        await context.unroute('**/api/products/sakura/items?*')
+        await page.goto(base + '/builders#builders-team-title', { waitUntil: 'domcontentloaded' })
+        await settled()
+        const anchorTop = await page.locator('#builders-team-title').evaluate(el => el.getBoundingClientRect().top)
+        assert(Math.abs(anchorTop - 60) <= 2, `${mode} 內頁錨點直連: top=${anchorTop}`)
+        await page.goto(base + '/builders', { waitUntil: 'domcontentloaded' })
+        await settled()
+        await page.keyboard.press('Shift')
+        await page.evaluate(() => scrollTo({ top: 600, behavior: 'instant' }))
+        await page.goto(base + '/privacy', { waitUntil: 'domcontentloaded' })
+        await settled()
+        await page.goBack({ waitUntil: 'domcontentloaded' })
+        await settled(); await atPosition(600, '跨文件歷史返回保留位置')
+        await page.reload({ waitUntil: 'domcontentloaded' })
+        await settled(); await atTop('重新載入指定內頁仍保留網址並從頂端開始')
+        assert.equal(new URL(page.url()).pathname, '/builders', '重新載入內頁不可強制導回首頁')
         await page.goto(base + '/', { waitUntil: 'domcontentloaded' })
         await settled(); await atTop('重新輸入主網址')
         await page.keyboard.press('Shift')
@@ -123,7 +178,9 @@ async function main() {
         await page.reload({ waitUntil: 'domcontentloaded' }); await settled(); await atTop('重新載入首頁不沿用舊位置')
         const newPage = await context.newPage()
         await newPage.goto(base + '/', { waitUntil: 'domcontentloaded' })
+        await newPage.waitForFunction(() => document.querySelector('#__nuxt')?.__vue_app__?.config.globalProperties.$nuxt?.isHydrating === false)
         assert.equal(new URL(newPage.url()).pathname, '/', '重開主網址分頁必須是首頁')
+        assert.equal(await newPage.evaluate(() => scrollY), 0, '重開主網址分頁必須從頂端開始')
         await newPage.close()
         await context.close()
         continue
@@ -166,8 +223,8 @@ async function main() {
       const previousProductY = await click('.related-product-card[href$="/item/81932"]', '推薦商品 → R7615')
       await wheel(); await page.waitForTimeout(1400)
       const nextProductY = await page.evaluate(() => scrollY)
-      await page.goBack(); await settled(); await atPosition(previousProductY, '商品瀏覽器後退')
-      await page.goForward(); await settled(); await atPosition(nextProductY, '商品瀏覽器前進')
+      await traverse('back', previousProductY, '商品瀏覽器後退')
+      await traverse('forward', nextProductY, '商品瀏覽器前進')
       await click('nav[aria-label="麵包屑"] a[href="/products/sakura/category/83205"]', '商品麵包屑返回分類')
       await click('.near-suction-product-card[href*="/item/81932"]', '分類返回商品')
       await click('.product-catalogue__cta', '商品型錄下載入口')
@@ -182,8 +239,8 @@ async function main() {
       await click('.antra-store-grid a', '案例門市卡片')
       await click('.case-detail-navigation__next', '案例下一篇')
       await push('/design-inspiration?page=2')
-      await click('.design-project-card__image-link', '設計靈感第二頁 → 資料庫案例')
-      await click('nav[aria-label="麵包屑"] a:not([href="/"])', '資料庫案例 → 保留頁碼返回')
+      const designListY = await click('.design-project-card__image-link', '設計靈感第二頁 → 資料庫案例')
+      await click('nav[aria-label="麵包屑"] a:not([href="/"])', '資料庫案例 → 保留頁碼返回', designListY)
       assert.equal(new URL(page.url()).searchParams.get('page'), '2')
       for (const selector of ['#kitchen-series a[href="/home-style/aikitchen"]', '[aria-labelledby="services-heading"] a[href="/products/sakura"]', '.gallery-case-row a[href^="/gallery/"]', '#brand-promise a']) {
         await push('/')

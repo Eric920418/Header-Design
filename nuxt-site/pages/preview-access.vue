@@ -9,7 +9,26 @@ useSeoMeta({
 const route = useRoute()
 const password = ref('')
 const pending = ref(false)
+const loadingSite = ref(false)
 const errorMessage = ref('')
+let navigationTimer: ReturnType<typeof setTimeout> | undefined
+
+function resetNavigation() {
+  if (navigationTimer) clearTimeout(navigationTimer)
+  navigationTimer = undefined
+  pending.value = false
+  loadingSite.value = false
+}
+
+function restorePage(event: PageTransitionEvent) {
+  if (event.persisted) resetNavigation()
+}
+
+onMounted(() => window.addEventListener('pageshow', restorePage))
+onBeforeUnmount(() => {
+  window.removeEventListener('pageshow', restorePage)
+  resetNavigation()
+})
 
 async function unlockPreview() {
   if (pending.value) return
@@ -25,16 +44,23 @@ async function unlockPreview() {
     })
 
     const requestedPath = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
+    loadingSite.value = true
+    // The old document stays visible while a paused database resumes for the next page.
+    navigationTimer = setTimeout(() => {
+      resetNavigation()
+      errorMessage.value = '驗證已成功，但網站載入超過 75 秒仍未完成。請重新按「進入網站」；若持續發生，請聯絡管理員。'
+    }, 75000)
     window.location.assign(requestedPath.startsWith('/') && !requestedPath.startsWith('//') ? requestedPath : '/')
   }
   catch (error: any) {
+    resetNavigation()
     const details = [error?.data?.statusMessage || error?.data?.message || error?.statusMessage, error?.message, error?.cause?.message]
       .filter(Boolean).join('；') || '驗證失敗，請稍後再試。'
     const timedOut = ['TimeoutError', 'AbortError'].includes(error?.cause?.name)
     errorMessage.value = timedOut ? `驗證連線超過 15 秒仍未回應，請重新按「進入網站」。錯誤詳情：${details}` : details
   }
   finally {
-    pending.value = false
+    if (!loadingSite.value) pending.value = false
   }
 }
 </script>
@@ -61,8 +87,9 @@ async function unlockPreview() {
             :aria-describedby="errorMessage ? 'preview-access-error' : undefined"
             placeholder="請輸入密碼"
           />
-          <button type="submit" :disabled="pending">{{ pending ? '驗證中…' : '進入網站' }}</button>
+          <button type="submit" :disabled="pending">{{ loadingSite ? '載入網站中…' : pending ? '驗證中…' : '進入網站' }}</button>
         </div>
+        <p v-if="loadingSite" class="preview-access__status" role="status">驗證已成功，正在啟動網站。閒置後首次進入可能需要約 1 分鐘，請稍候。</p>
         <p v-if="errorMessage" id="preview-access-error" class="preview-access__error" role="alert">{{ errorMessage }}</p>
       </form>
     </section>
@@ -88,6 +115,7 @@ async function unlockPreview() {
 .preview-access button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .preview-access button:disabled { cursor: wait; opacity: .65; }
 .preview-access__error { margin: 12px 12px 0; color: #ffb4ab; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 22px; }
+.preview-access__status { margin: 12px 12px 0; color: rgb(255 255 255 / 72%); font-family: var(--font-cjk-sans); font-size: 14px; line-height: 22px; }
 
 @media (max-width: 600px) {
   .preview-access { padding: 15px; }

@@ -1357,10 +1357,10 @@ body {
 
 /* 英雄輪播底圖 Ken Burns：緩放大 + 往左平移（使用者要的「背景往左跑」）。
    時長＝單張停留時間、ease-out、fill both（收在終態，張與張切換用 opacity 交叉淡入遮住回跳）。
-   scale>1 留出溢出邊，translateX 才不會露出空白。由 HeroSection 對 active 圖做 reflow 重啟（含輪回同一張）。 */
+   scale>1 留出溢出邊，translateX 才不會露出空白。首頁以 --hero-pan-x 交替方向，未設定的頁面維持向左。 */
 @keyframes hero-kenburns {
   from { transform: scale(1.06) translate3d(0, 0, 0); }
-  to   { transform: scale(1.16) translate3d(-4%, 0, 0); }
+  to   { transform: scale(1.16) translate3d(var(--hero-pan-x, -4%), 0, 0); }
 }
 
 /* Home 01 的背景不是揭幕完就停止：同一張圖在 5 秒停留期間仍持續緩慢放大並向左移。
@@ -1372,7 +1372,7 @@ body {
   animation: hero-kenburns 5s ease-out both;
 }
 .hero-page1-image-settled {
-  transform: scale(1.16) translate3d(-4%, 0, 0);
+  transform: scale(1.16) translate3d(var(--hero-pan-x, -4%), 0, 0);
   transform-origin: center center;
 }
 

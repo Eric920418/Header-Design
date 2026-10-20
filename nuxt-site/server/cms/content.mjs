@@ -1,6 +1,10 @@
 import {access} from 'node:fs/promises'
 import {resolve,sep} from 'node:path'
 import { query, transaction, randomUUID, fail, audit } from './database.mjs'
+import { homeHeroSchema } from '../../shared/cms/hero-media.mjs'
+import { homeGallerySchema, HOME_GALLERY_ID } from '../../shared/cms/gallery-cases.mjs'
+import { HOME_STORES_ID, storeLocationIssue } from '../../shared/cms/store-location.mjs'
+import { caseLibrary, validateGalleryCases } from './case-library.mjs'
 export const contentAliases = {'data-kitchenGuides':'knowledge-articles','data-kitchenGuideDetails':'knowledge-articles','data-news':'news-articles','data-latestArticles':'news-articles','data-activityArticles':'news-articles','data-mediaVideos':'news-articles'}
 export function safeLink(value) {
  if(typeof value!=='string'||value.length>2000||/[\u0000-\u001f\\]/.test(value)) return false
@@ -32,6 +36,7 @@ export function validate(value,schema,path='內容') {
  if(schema.enum&&!schema.enum.includes(value))fail(400,`${path} 選項無效`)
  if(typeof value!==schema.type)fail(400,`${path} 格式錯誤`)
  if(typeof value==='number'&&!Number.isFinite(value))fail(400,`${path} 必須是有限數字`)
+ if(typeof value==='number'&&((schema.min!==undefined&&value<schema.min)||(schema.max!==undefined&&value>schema.max)))fail(400,`${schema.label||path} 須介於 ${schema.min}–${schema.max}`)
  if(typeof value==='string'){
   if(value.length>30000)fail(400,`${path} 最多 30000 字`)
   if(['url','media'].includes(schema.format)&&!safeLink(value))fail(400,`${path} 網址不安全或格式錯誤`)
@@ -98,11 +103,13 @@ export async function changeDocument(id,input,user,connection){
  const run=async tx=>{
  const d=(await query('SELECT * FROM cms.Documents WITH(UPDLOCK,HOLDLOCK) WHERE id=@id',{id},tx)).recordset[0];if(!d)fail(404,'找不到內容')
  if(input.revision!==d.revision)fail(409,'內容已被其他人修改，請先重新載入；本次輸入尚未覆蓋')
+ const schema=homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson)))
  let draft=d.draftId,published=d.publishedId
  if(input.action==='save'||input.action==='restore'){
  let body=input.body
  if(input.action==='restore'){const v=(await query('SELECT body FROM cms.Versions WHERE id=@version AND documentId=@id',{version:input.version,id},tx)).recordset[0];if(!v)fail(404,'版本不存在');body=JSON.parse(v.body)}
- const schema=JSON.parse(d.schemaJson);body=normalizeVideos(body,schema);validate(body,schema)
+ body=normalizeVideos(body,schema);validate(body,schema)
+ if(d.id===HOME_STORES_ID){const issue=storeLocationIssue(body);if(issue)fail(400,issue)}
  if(d.id.startsWith('catalog-')){
   if(input.action==='restore')body=await alignSource(id,body,tx)
   const live=await sourceItems(id,tx)
@@ -112,11 +119,14 @@ export async function changeDocument(id,input,user,connection){
  if(published){const previous=JSON.parse((await query('SELECT body FROM cms.Versions WHERE id=@id',{id:published},tx)).recordset[0].body);checkIdentities(previous,body,schema)}
  draft=await version(tx,d,body,user.id)
  }else if(input.action==='publish'){
- if(!draft)fail(400,'請先儲存草稿');const body=JSON.parse((await query('SELECT body FROM cms.Versions WHERE id=@id',{id:draft},tx)).recordset[0].body);validate(body,JSON.parse(d.schemaJson))
+ if(!draft)fail(400,'請先儲存草稿');const body=JSON.parse((await query('SELECT body FROM cms.Versions WHERE id=@id',{id:draft},tx)).recordset[0].body);validate(body,schema)
+ if(d.id===HOME_STORES_ID){const issue=storeLocationIssue(body,true);if(issue)fail(400,issue)}
+ if(d.id==='view-components-home-HomeHero'&&body.slides.some(i=>!i.image.trim()))fail(400,'每張輪播都需要桌機圖片；手機圖片可留空以沿用桌機圖')
+ if(d.id===HOME_GALLERY_ID)validateGalleryCases(body.cases,await caseLibrary(tx))
  if(d.id==='custom-cases')for(const i of body.items){if(!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(i.id)||!i.title.trim()||!i.cover||!i.images.length||i.images.some(x=>!safeLink(x)||!x)||!i.form.trim()||!i.style.trim())fail(400,'案例需要有效識別碼、標題、封面、圖片、型式與風格')}
  if(d.id==='knowledge-articles')for(const i of body.items){if(!i.summary.title.trim()||!i.summary.cover||!i.summary.publishedAt|| (i.slug!=='systemcabinet'&&(!i.detail.cover?.src||!i.detail.sections?.length)))fail(400,'知識文章需要標題、封面、發布日期與內文')}
  if(d.id==='news-articles')for(const i of body.items){if(!i.summary.title.trim()||!i.summary.cover||(!i.detail.sections?.length&&!i.detail.paragraphs?.length&&i.summary.category!=='video')||!/^\d{4}-\d{2}-\d{2}/.test(i.summary.publishedAt))fail(400,'文章需要標題、封面與有效日期');if(i.summary.category==='video'&&!/^[A-Za-z0-9_-]{11}$/.test(i.detail.videoId||''))fail(400,'影音文章需要 YouTube 影片 ID')}
- await publicationMedia(body,JSON.parse(d.schemaJson))
+ await publicationMedia(body,schema)
  // Validate every local media reference again at publication time.
  for(const mid of mediaIds(body)){const m=(await query('SELECT archived FROM cms.Media WHERE id=@id',{id:mid},tx)).recordset[0];if(!m||m.archived)fail(400,'發布內容包含不存在或封存素材')}
  published=draft
