@@ -55,7 +55,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <img :src="item.icon" :alt="cmsCopy.copy.field2" class="block w-14 sm:w-[58px]" />
         </a>
       </template>
-      <button type="button" disabled aria-label="拍立配" :title="cmsCopy.copy.field3" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 sm:h-[74px] sm:w-[74px]"><img :src="cmsCopy.copy.field4" :alt="cmsCopy.copy.field5" class="block h-[70px] w-[70px]" /></button>
+      <a href="https://sakura-ai-one.vercel.app/consumer?entry=official" target="_blank" rel="noopener noreferrer" aria-label="拍立配（另開分頁）" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 sm:h-[74px] sm:w-[74px]"><img :src="cmsCopy.copy.field4" :alt="cmsCopy.copy.field5" class="block h-[70px] w-[70px]" /></a>
     </div>
   </aside>
 </template>

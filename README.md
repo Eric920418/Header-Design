@@ -1,5 +1,44 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-20 品牌系列Hero探索案例字級與箭頭
+
+- 依10:59:21截圖，共用品牌系列Hero右下「探索設計案例」桌機／平板字級由14px改16px，旁邊右上箭頭由18px改22px；保留原控制框、型錄圓鈕、框外分頁箭頭、設計靈感目的頁與鍵盤焦點樣式。不改CMS或新增套件。
+- 手機保留12px文字／16px箭頭與既有98px欄寬，避免六字文案加箭頭超出控制框；此處依桌機截圖調整，不把桌機尺寸直接套到手機。既有前台回歸補入指定尺寸與手機適配防護。
+- 沿用ponytail最小修改，保留其他本機變更，僅維護本README；不commit／push／部署。`pnpm build`、對應Hero純回歸、既有檢查腳本語法及`git diff --check`通過；建置後CSS再次確認桌機16px／22px及手機12px／16px。本機AI Kitchen與Loft Chic的HTTP SSR確認目的頁、文案、圖示、型錄及框外分頁保留，這不是瀏覽器視覺／點擊驗收。此次僅改CSS尺寸，未重跑型別或全站測試，實際桌機／手機版面尚未驗收；既有建置警告保留。
+
+## 2026-10-20 品牌系列Hero名稱同首頁與刪除左側CTA
+
+- 依10:59:12截圖，品牌系列內頁Hero名稱依首頁對應已發布輪播的標題顯示，不一律刪除Kitchen；本機比對AI Kitchen與Clever Kitchen在首頁帶Kitchen，Loft Chic等七個系列不帶，Basic +另有空格差異。先前Clever內頁只留Clever與這次全面同首頁有衝突，已向使用者單獨確認，不默默把例外當成一致。
+- 刪除共用系列Hero左側Start Project圓鈕，右側型錄／探索設計案例與框外左右箭頭、品牌系列抽屜、背景與主標動畫、內文及SEO名稱保留；同步清理僅該圓鈕使用的CSS與標題佔位，其他版面規則不重構。沿用ponytail最小修改，現有前台與十系列回歸同步驗證，不新增套件、CMS欄位或資料版本。
+- 延續先保留本機、不commit／push／部署；先前拍立配、Hero運鏡、Kitchen進場及本機Footer內容版本保留。檢查結果待完成後補記，實際瀏覽器視覺／互動尚未驗收。
+- 標題直接讀取view-components-home-HomeHero已發布slides，依對應/home-style/slug（可帶query／hash）取得非空標題；找不到對應或名稱空白才回退原data.name，不硬編碼刪字清單。首頁文件未發布時沿用既有useCmsResource的404隱藏樣本回退，服務錯誤仍完整拋出，不吞錯；SEO、圖片替代文字與系列資料名稱不改寫。
+- 新標題回歸於修改前確實失敗（Loft Chic Kitchen≠Loft Chic），修改後通過AI保留Kitchen／Loft刪後綴／Basic +空格／目前依最新規則Clever Kitchen、query／hash、缺少首頁對應／空白回退、自訂名稱及原SEO／右側控制／五秒動畫。Clever的舊例外已提出確認，目前先依本次「同首頁」完整規則，不宣稱使用者已另行確認撤銷例外。
+- pnpm build、建置後pnpm typecheck、限定前台來源／純函式回歸、check-kitchen-series --cutouts、腳本語法與git diff --check通過；十個系列SSR名稱皆與實際已發布首頁一致且不含左側CTA，右側控制全保留。另通過45個廚電位置／29個透明來源／215圖片來源／無效系列404等原內容防護。未新增CMS版本、未送表單；保留原Tailwind sourcemap及地區JSON匯入警告。沒有實際桌機／手機瀏覽器視覺與控制點擊驗收，不把SSR／來源檢查當作像素或互動驗收。
+
+## 2026-10-20 頁尾品牌系列名稱與三個消息分類
+
+- 依10:58:56截圖，僅將Footer「品牌系列・AI 廚房」改名「品牌系列」，保留/home-style/aikitchen原目的頁；「優惠消息」欄由原單一/news入口改為優惠活動/news/activities、最新消息/news/latest、媒體影音/news/video。標題「優惠消息」及其他頁尾欄、Logo／社群／版權、排版與展開功能不變，不將紅色註記當成字色設計。
+- ponytail以本機已發布CMS為資料來源，不只改Vue範例或重跑seed。新增限定本機的scripts/update-footer-navigation-20261020.mjs，預設dry-run、--apply才儲存／發布；強制127.0.0.1／SakuraWebsiteDev，遇草稿、分類重複、自訂內容或revision衝突停止。轉換純函式與實際CMS／Footer SSR加入既有回歸；保留其他文件與舊版本，重跑冪等，不寫正式CMS。
+- 本機dry-run先確認revision3原內容；純函式防護通過、實際本機CMS／SSR回歸先因舊「品牌系列・AI 廚房」確實失敗。於nuxt-site執行`pnpm exec node --env-file=.env scripts/update-footer-navigation-20261020.mjs --apply`，本機發布至revision5／8bafa374-ab23-4e26-ac3e-3bac9c59f7d0，舊5a182e33-b3df-4a8e-ae84-aae4c68e5168保留，其餘64份文件revision／草稿／發布ID同transaction核對不變；再次dry-run為UNCHANGED。
+- 修正後本機已發布CMS與首頁、/news/latest實際Footer SSR均通過指定名稱與三入口檢查，三個消息分類目的頁均HTTP200；另驗純函式不修改輸入、保留其他欄位／原品牌目的頁／設定、冪等及自訂內容衝突，CLI正式目標於連線前拒絕。兩腳本node --check與git diff --check通過；保留本機SQL既有IP TLS ServerName棄用警告，不降低正式TLS設定。純內容變更未改Vue版型，未重跑build／typecheck或含業務POST的完整回歸，未驗瀏覽器展開排版。
+- 延續使用者「先保留本機，暫不部署」，不commit／push／部署；既有拍立配、Hero運鏡及Kitchen進場修改保留。本輪只發布本機CMS，不是正式發布；之後單推Git也不會把本機Footer版本同步到正式CMS，正式更新仍需另行明確執行與驗收，不能據本機revision5宣稱正式完成。
+
+## 2026-10-20 首頁Kitchen大字由下向上顯示
+
+- 依10:58:36比較圖註記，目標為首頁Hero底部Kitchen大字，不替換成左圖Footer的SAKURA Logo，也不修改Footer。現有大字為fadeInUp；按註記改成在自身遮罩內由下向上滑出，沿用既有slideInUp、250ms延遲、1.25秒ease及可見時只播一次，背景五秒輪播不重啟大字。
+- ponytail只改首頁大字的遮罩class與現有reveal種類，保持字族／字級／金色漸層／64%透明度／位置／斷點、CMS文案、CTA及前輪左右交替背景與拍立配連結不變。先加入既有check-hero-media的遮罩／方向／原文案／不重播防護，再修改元件，不寫資料庫或新增套件／文件。
+- 延續「先保留本機，暫不部署」，不commit／push／部署或修改正式CMS；尚未作實際瀏覽器動畫驗收，不以靜態截圖、SSR或建置通過宣稱動態與左圖完全一致。
+- 遮罩僅加在大字自身容器，不加在固定120px高的watermark-slot（桌機字行高240px），避免將最終字形硬裁成120px，也不裁切旁邊的圓形CTA；沿用全站減少動態偏好的ev立即顯示與animation:none!important。
+- 建置後pnpm typecheck通過。未執行帶DB模式的CMS驗證或業務表單POST，未新增資料版本；瀏覽器URL安全限制不繞過，實際上滑節奏／遮罩邊界與手機視覺仍待驗收。
+- check-hero-media新增斷言於修改前確實因缺少遮罩失敗，修改後通過；本機首頁SSR200確認大字自身遮罩、data-ev=slideInUp與250ms延遲，原字族／64%透明度／金色漸層／Kitchen、Footer原Logo及前輪左右運鏡／拍立配入口保留。pnpm build、既有純檢查、腳本語法與git diff --check通過；編譯模板／CSS核對遮罩、slideInUp、原時長與減少動態。第一次CSS驗證假定overflow-hidden獨立rule而誤報，實際與truncate合併同樣overflow:hidden，依真實規則重跑通過，未為檢查改樣式。
+
+## 2026-10-20 右側拍立配指定網址另開分頁
+
+- 依10:52:16截圖，將共用FloatingButtons的停用拍立配button換成原生a，完整網址為https://sakura-ai-one.vercel.app/consumer?entry=official，target=_blank及rel=noopener noreferrer；ARIA明示另開分頁。原拍立配SVG／70px圖示／72px與74px入口／灰色列／分隔線／位置及捲動、手機顯示規則保留，其他設計案例／丈量／客服入口不變。
+- 原來沒有拍立配CMS網址欄位，程式明確disabled；本輪修正固定服務入口，不新增CMS欄位、不更新或同步資料庫，保留原有圖示來源及全部版本。舊copy.field3「拍立配連結待提供」不刪資料，只移除已過期的title顯示；不將Vue範例當作資料庫已更新。
+- 沿用ponytail最小修改，既有前台回歸補實際首頁SSR的精確網址／entry參數、安全新分頁／原圖示／不得停用與舊提示防護。延續使用者「先保留本機，暫不部署」，不commit／push／部署，不操作外站表單；未經瀏覽器點擊前不宣稱外站流程或新分頁互動已驗收。
+- 本次限定回歸以既有腳本的實際斷言分別驗首頁、/design-inspiration及/home-style/loft-chic，均SSR200、指定完整網址／target／rel／可用入口／原SVG通過；其他三個浮動目的地與已發布CMS相符，SVG HTTP200。pnpm build、建置後pnpm typecheck、腳本語法、git diff --check及編譯SSR入口檢查通過；保留既有Tailwind sourcemap與地區JSON匯入屬性警告。編譯碼的中文標籤為Unicode escape，初次直接搜尋中文字誤報後改以實際渲染SSR核對中文、不改元件。沒有執行完整含業務POST回歸，未修改CMS或外站資料，未驗瀏覽器實際開新分頁與外站功能。
+
 ## 2026-10-20 首頁Hero背景逐張左右交替
 
 - 依10:42:08截圖註記，只調整首頁背景照片：第一張向左、第二張向右，依CMS輪播順序奇偶交替；文字、原五秒輪播、雙層向下揭幕、圖片／手機選圖／焦點／連結保留。既有共用Ken Burns固定向左，首頁與系列頁共用，不可直接反轉全部頁面。
@@ -17,7 +56,9 @@
 - 對照使用者 10:32:48 截圖及正式 Vercel 原始 request logs：10:32:35 的 `/api/preview-access` 執行 11ms 並回 200，接續首頁 `/` 執行 53,654ms；另一筆同時進站的首頁等候排程後執行 28,721ms。Vercel 未標示該次為冷啟動，不能將 54 秒算成密碼驗證或 Chrome 本身卡住。原 CLI 摘要省略 duration，本輪沿用同一唯讀 logs API 取得原始 duration，不輸出權杖、IP 或 Cookie。
 - 正式 SQL 唯讀查核為 `GeneralPurpose / GP_S_Gen5_2`（Serverless），與本 README 既有免費 Azure SQL 閒置休眠、60 秒連線等待設定一致；Microsoft 說明自動喚醒通常約 1 分鐘，為本次現象最符合的原因，但尚未取得 Azure Activity Log 的確切 resume 事件。資料庫已啟動後，正式登入 HTTP 約 163ms，三次首頁約 560／340／257ms；同一個 Chrome 實際點擊約 835ms 進入首頁，不能據此宣稱休眠延遲已根治。
 - 密碼頁原本在 `location.assign()` 後立刻解除 pending，首頁仍在等待時按鈕卻顯示「進入網站」。改為驗證成功後顯示「載入網站中…」與首次啟動等待提示，期間不重送密碼；75 秒仍未完成導航則完整顯示階段及等待秒數，解除鎖定可重試。從瀏覽器歷史快取返回時重置等待，保留原 15 秒驗證逾時、底層錯誤細節、密碼／Cookie／期限及指定目的頁。
-- 僅修改預覽頁、既有 `scripts/check-preview-access.mjs` 與本 README；驗證進行中。未變更 Azure 計費、自動休眠或資料庫內容，未建立保活排程、未新增套件、未部署；不將提示改善稱為消除資料庫喚醒時間。
+- 使用者明確選擇「維持免費，改善等待提示」。`pnpm exec node scripts/check-preview-access.mjs` 通過真實 15 秒驗證逾時、錯誤細節／不重送／重試／目的頁保留，以及目的頁等待保持 pending、75 秒模擬時鐘逾時、歷史快取返回重置；舊版成功後 pending=false、新版保持 true 的對照亦通過。`pnpm typecheck`、`pnpm build`、腳本語法與 `git diff --check` 通過，保留既有建置警告。Chrome 本機正式產物搭配暫存代理，實際延後目的頁 8 秒仍可完成導覽，返回後表單可再次操作；導航中的 DOM 觀察受到瀏覽器等待限制，未取得過渡狀態截圖，該狀態以行為測試驗證。
+- 僅修改預覽頁、既有檢查與本 README；正式 SQL 只做服務層級 SELECT，未變更 Azure 計費、自動休眠或資料庫內容，未建立保活排程、未新增套件。本對話未執行提交、推送或部署；工作期間其他流程提交為 `6bfdda39`，正式站於 10:50:35 更新為 Ready 部署 `dpl_8MFf23utEtXWr57rXhEiHz6H13xi`，最後唯讀核對實際網域載入的 `CAikS-9U.js` 已包含載入網站提示、75 秒及原 15 秒處理，不將原部署狀態沿用為「尚未上線」。初次舊新版對照誤取已更新的 HEAD，已改用原始 `14e7951d` 重驗並通過。
+- 測試密碼僅用於 localhost，測試分頁／暫存服務於驗收後關閉；不將提示改善稱為消除資料庫喚醒時間。Chrome 已正常進入正式首頁，但閒置後仍可能需要喚醒；未驗證 Safari／Firefox，未強制正式資料庫休眠重測，未取得 Azure Activity Log 的 resume 事件。
 
 ## 2026-10-20 主導覽品牌館名稱正式發布漏項追查
 

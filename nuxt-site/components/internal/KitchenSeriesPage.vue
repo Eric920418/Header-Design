@@ -9,7 +9,8 @@ const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_
 
 
 const { data } = defineProps<{ data: KitchenSeriesPageData }>()
-const heroTitle = data.slug === 'clever' && data.name === 'Clever Kitchen' ? 'Clever' : data.name
+const homeHero = await useCmsResource('view-components-home-HomeHero', { slides: [] as { route?: string; title: string }[], cmsSettings: { visible: true, seoTitle: '', seoDescription: '' } })
+const heroTitle = homeHero.slides.find(slide => slide.route?.split(/[?#]/)[0] === `/home-style/${data.slug}`)?.title.trim() || data.name
 const reducedMotion = useReducedMotion()
 const currentHero = ref(0)
 const previousHero = ref(0)
@@ -203,16 +204,6 @@ useSeoMeta({
       </div>
 
       <div class="ai-hero__inner">
-        <!-- 保留原標題佔位，定位調整不推動 CTA。 -->
-        <div aria-hidden="true" class="ai-hero__title-slot" />
-
-        <div v-reveal="{ anim: 'fadeIn', delay: 900, duration: 'slow' }" class="inline-block">
-          <NuxtLink to="/design-inspiration" aria-label="前往設計靈感" class="hero-start-project ai-hero__cta">
-            <span>Start<br>Project</span>
-            <span class="ai-hero__cta-label--hover" aria-hidden="true">設計靈感</span>
-          </NuxtLink>
-        </div>
-
         <div class="ai-hero__bottom">
           <div class="ai-hero__story-controls" :aria-label="`${data.name} 輪播控制`">
             <button type="button" :disabled="data.heroSlides.length < 2" aria-label="上一張品牌圖片" @click="showHero(currentHero - 1)"><ChevronLeft /></button>
@@ -429,20 +420,13 @@ useSeoMeta({
 .ai-kitchen-page { overflow: clip; background: #fff; color: #1c1c1d; }
 .ai-hero { position: relative; height: 840px; overflow: hidden; background: #6f6d69; color: #fff; }
 .ai-hero__inner { position: relative; z-index: 5; width: min(1584px, calc(100% - 60px)); height: 100%; margin-inline: auto; padding-top: 118px; }
-.ai-hero__title-slot { margin-top: 56px; min-height: 242px; }
 .ai-hero__heading h1 { max-width: 100%; text-transform: none; }
-.ai-hero__cta { position: relative; display: inline-flex; width: 120px; height: 120px; overflow: visible; align-items: center; justify-content: center; margin: 30px 0 0 30px; border: 1px solid rgb(255 255 255 / 25%); border-radius: 50%; background: rgb(255 255 255 / 10%); color: #fff; text-align: center; backdrop-filter: blur(12px); transition: background .4s, border-color .4s; }
-.ai-hero__cta > span { position: absolute; z-index: 2; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 15px; line-height: 19px; transition: opacity .3s ease; }
-.ai-hero__cta > .ai-hero__cta-label--hover { opacity: 0; font-family: var(--font-cjk-sans); }
-.ai-hero__cta:hover, .ai-hero__cta:focus-visible { border-color: #caa05c; background: #caa05c; }
-.ai-hero__cta:hover > span:first-child, .ai-hero__cta:focus-visible > span:first-child { opacity: 0; }
-.ai-hero__cta:hover > .ai-hero__cta-label--hover, .ai-hero__cta:focus-visible > .ai-hero__cta-label--hover { opacity: 1; }
 .ai-hero__bottom { position: absolute; right: 86px; bottom: 28px; display: flex; width: max-content; align-items: center; gap: 22px; }
 .ai-hero__actions { display: grid; min-height: 142px; grid-template-columns: 108px 140px; align-items: center; gap: 22px; border: 1px solid rgb(255 255 255 / 15%); border-radius: 24px; background: rgb(37 35 35 / 48%); padding: 14px 18px; backdrop-filter: blur(18px); }
-.ai-hero__explore-link { display: inline-flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 12px; color: #fff; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 20px; }
+.ai-hero__explore-link { display: inline-flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 12px; color: #fff; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 20px; }
 .ai-hero__explore-link:hover { color: #caa05c; }
 .ai-hero__explore-link:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; border-radius: 4px; }
-.ai-hero__explore-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+.ai-hero__explore-link svg { width: 22px; height: 22px; flex-shrink: 0; }
 .ai-hero__catalogue-link { display: inline-flex; width: 98px; height: 98px; align-items: center; justify-content: center; border: 1px solid rgb(202 160 92 / 72%); border-radius: 50%; color: #fff; font-family: var(--font-cjk-sans); font-size: 13px; line-height: 18px; text-align: center; transition: color .3s ease, background-color .3s ease, transform .3s ease; }
 .ai-hero__catalogue-link:hover, .ai-hero__catalogue-link:focus-visible { color: #1c1c1d; background: #caa05c; transform: translateY(-3px); }
 .ai-hero__story-controls { display: flex; justify-content: flex-end; gap: 8px; }
@@ -595,8 +579,6 @@ useSeoMeta({
 @media (max-width: 1024px) {
   .ai-hero { height: 720px; }
   .ai-hero__inner { padding-top: 80px; }
-  .ai-hero__title-slot { min-height: 188px; }
-  .ai-hero__cta { width: 105px; height: 105px; margin-top: 24px; }
   .ai-centered-heading:not(.ai-finish-heading):not(.ai-appliance-heading) h2 { font-size: 48px; line-height: 53px; }
   .ai-intro__content { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); gap: 14px; }
   .ai-suite-stage { grid-template-columns: minmax(0, 1fr) 148px minmax(0, 1fr); grid-template-rows: 320px; gap: 14px; }
@@ -627,9 +609,6 @@ useSeoMeta({
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
   .ai-hero__heading { width: auto; margin: 0 93px 0 15px; }
-  .ai-hero__title-slot { margin-top: 50px; min-height: 134px; }
-  .ai-hero__cta { width: 82px; height: 82px; margin-top: 22px; margin-left: 15px; }
-  .ai-hero__cta > span { font-size: 13px; line-height: 16px; }
   .ai-hero__bottom { right: 0; bottom: 18px; flex-direction: column; align-items: flex-end; gap: 12px; }
   .ai-hero__actions { min-height: 98px; grid-template-columns: 70px 98px; gap: 12px; border-radius: 18px; padding: 14px; }
   .ai-hero__explore-link { gap: 6px; font-size: 12px; line-height: 18px; }
@@ -677,7 +656,6 @@ useSeoMeta({
 }
 
 @media (max-width: 390px) {
-  .ai-hero__title-slot { min-height: 83px; }
   .ai-suite-stage { grid-template-rows: auto 220px; }
   .ai-suite-tabs button { grid-template-columns: 24px 1fr; gap: 7px; }
   .ai-suite-tabs__icon { width: 22px; height: 22px; }

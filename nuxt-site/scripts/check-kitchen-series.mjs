@@ -30,6 +30,9 @@ const password = process.env.PREVIEW_PASSWORD || /previewPassword: '([^']+)'/.ex
 const login = await fetch(`${base}/api/preview-access`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password }) })
 assert.equal(login.status, 200, '本機預覽登入失敗')
 const cookie = login.headers.getSetCookie().map(value => value.split(';')[0]).join('; ')
+const homeHeroResponse = await fetch(`${base}/api/content/view-components-home-HomeHero`, { headers: { cookie } })
+assert.equal(homeHeroResponse.status, 200, '需讀取本機已發布首頁Hero名稱')
+const homeHero = await homeHeroResponse.json()
 if (process.argv.includes('--cutouts')) {
   const response = await fetch(`${base}/api/content/data-kitchenSeries`, { headers: { cookie } })
   assert.equal(response.status, 200)
@@ -72,8 +75,11 @@ for (const page of pages) {
   const borderlessFinish = page.finishes.some(finish => page.slug === 'basic-plus' && finish.code === 'K540D')
   assert.equal(html.includes('ai-finishes__image--light'), lightFinish, `${page.slug}: 白色色卡細框範圍錯誤`)
   assert.equal(html.includes('ai-finishes__image--borderless'), borderlessFinish, `${page.slug}: 只裁除 BASIC+ 瓷白原圖灰框`)
-  const heroTitle = page.slug === 'clever' && page.name === 'Clever Kitchen' ? 'Clever' : page.name
-  assert.equal(html.match(/<h1\b[^>]*id="ai-kitchen-hero-title"[^>]*>(.*?)<\/h1>/s)?.[1], heroTitle, `${page.slug}: SSR 標題錯誤`)
+  const heroTitle = homeHero.slides.find(slide => slide.route?.split(/[?#]/)[0] === `/home-style/${page.slug}`)?.title.trim() || page.name
+  const escapedHeroTitle = heroTitle.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+  assert.equal(html.match(/<h1\b[^>]*id="ai-kitchen-hero-title"[^>]*>(.*?)<\/h1>/s)?.[1], escapedHeroTitle, `${page.slug}: Hero需與已發布首頁對應名稱一致`)
+  assert(!html.includes('ai-hero__cta')&&!html.includes('Start<br>Project'), `${page.slug}: 不可保留左側Start Project CTA`)
+  for(const marker of ['ai-hero__story-controls','ai-hero__catalogue-link','ai-hero__explore-link'])assert(html.includes(marker),`${page.slug}: 右側控制不可刪除：${marker}`)
   assert(html.includes('hero-slide-copy') && html.includes('hero-template-title'), `${page.slug}: 未共用首頁標題`)
   for (const marker of ['ai-suite-stage', 'ai-finishes__grid', 'ai-equipment__grid', 'https://pse.is/9kq37z']) assert(html.includes(marker), `${page.slug}: ${marker} 遺失`)
   assert(html.includes(page.suites[0].name.replaceAll('&', '&amp;')), `${page.slug}: 套系內容錯誤`)

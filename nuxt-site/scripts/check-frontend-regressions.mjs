@@ -5,6 +5,24 @@ import {createHash} from 'node:crypto'
 import sharp from 'sharp'
 import {franchiseInitialValues,franchiseChoiceGroups,franchiseErrors} from '../shared/franchise-form.mjs'
 import {addFranchiseExtras} from './update-header-franchise-links-20261015.mjs'
+import {updateFooterNavigation} from './update-footer-navigation-20261020.mjs'
+
+const footerFixture={sitemapGroups:[{title:'設計案例',links:[['品牌系列・AI 廚房','/home-style/aikitchen'],['設計靈感','/design-inspiration']]},{title:'優惠消息',links:[['優惠消息','/news']]},{title:'保留',links:[['其他','/other']]}],copy:{logo:'keep'},cmsSettings:{visible:true}}
+const footerBefore=structuredClone(footerFixture),footerUpdated=updateFooterNavigation(footerFixture)
+assert.deepEqual(footerFixture,footerBefore,'轉換不得原地修改資料')
+assert.equal(footerUpdated.sitemapGroups[0].links[0][0],'品牌系列')
+assert.equal(footerUpdated.sitemapGroups[0].links[0][1],footerBefore.sitemapGroups[0].links[0][1],'只改名稱，不更改原目的頁')
+assert.deepEqual(footerUpdated.sitemapGroups[0].links[1],footerBefore.sitemapGroups[0].links[1])
+assert.deepEqual(footerUpdated.sitemapGroups[1].links,[['優惠活動','/news/activities'],['最新消息','/news/latest'],['媒體影音','/news/video']])
+assert.deepEqual(footerUpdated.sitemapGroups[2],footerBefore.sitemapGroups[2])
+assert.deepEqual(footerUpdated.copy,footerBefore.copy)
+assert.deepEqual(footerUpdated.cmsSettings,footerBefore.cmsSettings)
+assert.deepEqual(updateFooterNavigation(footerUpdated),footerUpdated,'重跑不得新增重複入口')
+const footerConflict=structuredClone(footerFixture)
+footerConflict.sitemapGroups[1].links.push(['自訂','/custom'])
+assert.throws(()=>updateFooterNavigation(footerConflict),/已另行修改/)
+assert.throws(()=>updateFooterNavigation({sitemapGroups:[]}),/分類必須唯一/)
+console.log('PASS Footer限定轉換、不變更原物件、保留其他資料、冪等及衝突保護')
 
 const headerFixture={rightNav:[{label:'其他',children:[{label:'保留'}]},{label:'我要加盟',to:'/franchising/intro',children:[{label:'加盟介紹',to:'/franchising/intro#introduction'}]}],copy:{custom:'保留'},cmsSettings:{visible:true}}
 const headerFixtureBefore=structuredClone(headerFixture)
@@ -33,6 +51,21 @@ assert.equal(login.status,200)
 const cookie=login.headers.getSetCookie().map(v=>v.split(';')[0]).join('; ')
 async function get(path,status=200){const r=await fetch(base+path,{signal:AbortSignal.timeout(45000),headers:{cookie}});assert.equal(r.status,status,path);return r}
 const content=async id=>(await get('/api/content/'+id)).json()
+const floatingMarkup=(await(await get('/')).text()).match(/<aside\b[^>]*aria-label="快速服務"[\s\S]*?<\/aside>/)?.[0]||''
+const pailipeiLink=floatingMarkup.match(/<a\b[^>]*aria-label="拍立配（另開分頁）"[^>]*>[\s\S]*?<\/a>/)?.[0]||''
+assert(pailipeiLink.includes('href="https://sakura-ai-one.vercel.app/consumer?entry=official"'),'拍立配需使用指定完整網址與entry參數')
+assert(pailipeiLink.includes('target="_blank"')&&pailipeiLink.includes('rel="noopener noreferrer"'),'拍立配需安全另開分頁')
+assert(pailipeiLink.includes('/floating-icons/pailipei.svg')&&!pailipeiLink.includes('disabled'),'原圖示保留並解除停用')
+assert(!floatingMarkup.includes('拍立配連結待提供'),'不可仍顯示過期的待提供提示')
+console.log('PASS 拍立配指定入口、安全新分頁、原圖示及解除停用')
+const footerPublished=await content('view-components-SiteFooter')
+assert.equal(footerPublished.sitemapGroups.find(g=>g.title==='設計案例').links.find(link=>link[1]==='/home-style/aikitchen')[0],'品牌系列','需驗證本機已發布CMS，不是Vue範例')
+assert.deepEqual(footerPublished.sitemapGroups.find(g=>g.title==='優惠消息').links,[['優惠活動','/news/activities'],['最新消息','/news/latest'],['媒體影音','/news/video']])
+const footerRendered=(await(await get('/')).text()).match(/<footer\b[\s\S]*?<\/footer>/)?.[0]||''
+const footerNewsSection=[...footerRendered.matchAll(/<section\b[\s\S]*?<\/section>/g)].map(m=>m[0]).find(section=>/<h2\b[^>]*><span[^>]*>優惠消息<\/span><\/h2>/.test(section))||''
+assert(!footerRendered.includes('品牌系列・AI 廚房'),'實際Footer不應保留AI廚房後綴')
+for(const [label,path] of footerPublished.sitemapGroups.find(g=>g.title==='優惠消息').links)assert(footerNewsSection.includes(`href="${path}"`)&&footerNewsSection.includes(label),'實際消息欄需有指定入口：'+label)
+console.log('PASS 本機Footer已發布CMS與實際SSR：品牌系列、三個消息分類')
 const productBrandSource=await readFile(new URL('../components/internal/ProductBrandPage.vue',import.meta.url),'utf8')
 assert(/\.sakura-product-brands__link\s*\{[^}]*font-size: 16px;[^}]*font-weight: 600;/.test(productBrandSource),'SAKURA／SVAGO／TEKA切換按鈕統一16px SemiBold600')
 assert(/\.sakura-product-brands__link\s*\{[^}]*min-height: 52px;[^}]*padding: 12px 8px;/.test(productBrandSource),'改字級不得變更原按鈕高度與內距')
@@ -336,12 +369,16 @@ for(const width of [768,900,1190,1280,1920])for(const inset of [0,30,58]){
 }
 console.log('PASS 全站十字標題47px共用間距、來源／斷點覆寫移除、加盟內距補償與首頁廚電欄位定位')
 const seriesHeroSource=await readFile(new URL('../components/internal/KitchenSeriesPage.vue',import.meta.url),'utf8')
-const resolveSeriesHeroTitle=new Function('data','return '+seriesHeroSource.match(/^const heroTitle = (.+)$/m)?.[1])
-assert.equal(resolveSeriesHeroTitle({slug:'clever',name:'Clever Kitchen'}),'Clever','Clever內頁Hero只保留Clever')
-for(const data of [{slug:'aikitchen',name:'AI Kitchen'},{slug:'other',name:'Clever Kitchen'},{slug:'clever',name:'Clever'},{slug:'clever',name:'自訂系列名稱'}])assert.equal(resolveSeriesHeroTitle(data),data.name,'其他系列及CMS自訂名稱不得被刪字')
+const resolveSeriesHeroTitle=new Function('data','homeHero','return '+seriesHeroSource.match(/^const heroTitle = (.+)$/m)?.[1])
+const matchingHomeHero={slides:[{route:'/home-style/aikitchen',title:'AI Kitchen'},{route:'/home-style/loft-chic',title:'Loft Chic'},{route:'/home-style/basic-plus?source=home#intro',title:'Basic +'},{route:'/home-style/clever',title:'Clever Kitchen'}]}
+for(const [slug,name,expected] of [['aikitchen','AI Kitchen','AI Kitchen'],['loft-chic','Loft Chic Kitchen','Loft Chic'],['basic-plus','Basic+','Basic +'],['clever','Clever Kitchen','Clever Kitchen']])assert.equal(resolveSeriesHeroTitle({slug,name},matchingHomeHero),expected,'有對應首頁Hero時需完整同名，不能一律刪Kitchen')
+for(const slides of [[],[{route:'/home-style/other',title:'其他'}],[{route:'/home-style/custom',title:''}],[{route:'/home-style/custom',title:'  '}]])assert.equal(resolveSeriesHeroTitle({slug:'custom',name:'自訂系列名稱'},{slides}),'自訂系列名稱','缺少對應或空白首頁名稱時保留系列名稱')
+assert.equal(resolveSeriesHeroTitle({slug:'loft-chic',name:'Loft Chic Kitchen'},{slides:[{route:'/home-style/loft-chic',title:'自訂 Kitchen 名稱'}]}),'自訂 Kitchen 名稱','應保留首頁自訂文字，不硬編碼十個名稱')
+assert(seriesHeroSource.includes("useCmsResource('view-components-home-HomeHero'"),'名稱來源須為已發布首頁CMS，不是型別範例或靜態副本')
 assert(/<h1\b[^>]*id="ai-kitchen-hero-title"[^>]*>\{\{ heroTitle \}\}<\/h1>/.test(seriesHeroSource),'Hero需使用限定顯示文案')
 assert(seriesHeroSource.includes('title: `${data.name}｜櫻花整體廚房`'),'原SEO系列名稱保留')
-console.log('PASS Clever Hero刪除Kitchen、其他系列／自訂CMS名稱／SEO保留')
+assert(!seriesHeroSource.includes('ai-hero__cta')&&!seriesHeroSource.includes('Start<br>Project')&&!seriesHeroSource.includes('ai-hero__title-slot'),'移除左側Start Project圓鈕及專用佔位／樣式，保留右側控制框')
+console.log('PASS 品牌Hero跟隨首頁對應標題、缺少時回退、自訂文字／SEO保留與移除Start Project')
 assert(!seriesHeroSource.includes('ai-hero__story-thumb')&&!seriesHeroSource.includes('ai-hero__story-copy')&&!seriesHeroSource.includes('activeHeroStory')&&!seriesHeroSource.includes('const heroStories'),'品牌系列Hero底欄需移除縮圖／文案及未使用資料')
 const heroBottomSource=seriesHeroSource.slice(seriesHeroSource.indexOf('<div class="ai-hero__bottom">'),seriesHeroSource.indexOf('<span class="ai-hero__watermark"'))
 assert(heroBottomSource.includes('/catalogues/kitchenware-catalog?series=${data.slug}')&&heroBottomSource.includes('target="_blank" rel="noopener noreferrer"'),'保留型錄系列query、新分頁及安全屬性')
@@ -350,6 +387,8 @@ assert.equal((heroBottomSource.match(/:disabled="data.heroSlides.length < 2"/g)|
 assert(/\.ai-hero__bottom \{[^}]*right: 86px;[^}]*display: flex;[^}]*width: max-content;/.test(seriesHeroSource),'桌機需保留靠右控制組')
 assert(heroBottomSource.indexOf('class="ai-hero__story-controls"')<heroBottomSource.indexOf('class="ai-hero__actions"'),'箭頭需放在框外左側，框內只放型錄及探索CTA')
 assert(heroBottomSource.includes('to="/design-inspiration" class="ai-hero__explore-link"')&&heroBottomSource.includes('<span>探索設計案例</span><ArrowUpRight aria-hidden="true" />'),'探索設計案例需連向設計靈感並保留右上箭頭')
+assert(/\.ai-hero__explore-link \{[^}]*min-height: 44px;[^}]*font-size: 16px;/.test(seriesHeroSource)&&seriesHeroSource.includes('.ai-hero__explore-link svg { width: 22px; height: 22px; flex-shrink: 0; }'),'探索設計案例桌機／平板16px、右上箭頭22px，保留點擊高度')
+assert(seriesHeroSource.includes('.ai-hero__explore-link { gap: 6px; font-size: 12px; line-height: 18px; }')&&seriesHeroSource.includes('.ai-hero__explore-link svg { width: 16px; height: 16px; }'),'手機保留緊湊字級及箭頭，避免控制框溢出')
 assert(/\.ai-hero__actions \{[^}]*grid-template-columns: 108px 140px;[^}]*backdrop-filter: blur\(18px\);/.test(seriesHeroSource),'深色框需限定型錄及探索CTA兩欄')
 assert(seriesHeroSource.includes('grid-template-columns: 98px 140px; gap: 16px;')&&seriesHeroSource.includes('min-height: 98px; grid-template-columns: 70px 98px;'),'平板／手機需緊湊適配新CTA')
 assert(seriesHeroSource.includes('flex-direction: column; align-items: flex-end; gap: 12px;'),'手機箭頭置於框外上方，避免橫向溢出')
@@ -449,7 +488,7 @@ assert(/\.ai-cases__heading > h2 \{[^}]*font-size: 50px;[^}]*line-height: 1.2;/.
 assert(seriesHeroSource.includes('padding: 24px 72px 30px 0; font-size: 30px;'),'手機案例標題需避開固定右側服務列')
 console.log('PASS 品牌系列推薦案例雙語標題')
 assert(seriesHeroSource.includes('ai-hero__heading hero-template-top')&&seriesHeroSource.includes('translate-y-[24px]'),'品牌系列標題需共用首頁定位')
-assert(seriesHeroSource.includes('aria-hidden="true" class="ai-hero__title-slot"'),'調整標題位置時不得移動原 CTA 佔位')
+assert(!seriesHeroSource.includes('ai-hero__title-slot'),'左側CTA刪除後不保留其專用空白佔位')
 assert(seriesHeroSource.includes('top: calc(50% - 72px)')&&seriesHeroSource.includes('width: 40px; height: 144px'),'品牌浮標需以按鈕本身置中，不能被面板高度拉高')
 assert(seriesHeroSource.includes('@media (max-width: 1023px)')&&seriesHeroSource.includes(':inert="seriesOpen ? undefined : true"'),'浮標斷點與收合鍵盤焦點需和首頁一致')
 assert(homeRailLayout.includes("'has-home-brand-rail': route.path === '/'"),'左側品牌浮標安全距離只套用首頁')
