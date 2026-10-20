@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-news-latest-slug-', {"copy":{"text1":"NEWS","field2":"/news","text3":"優惠消息","field4":"/news/latest","text5":"最新消息","text6":" 報名QR code ","field7":"/news/activities","text8":"優惠活動","field9":"/news/latest","text10":"最新消息","field11":"/news/video","text12":"媒體影音"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-news-latest-slug-', {"copy":{"text1":"News","field2":"/news","text3":"優惠消息","field4":"/news/latest","text5":"最新消息","text6":" 報名QR code ","field7":"/news/activities","text8":"優惠活動","field9":"/news/latest","text10":"最新消息","field11":"/news/video","text12":"媒體影音"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { Camera, Images, PlaySquare } from 'lucide-vue-next'
 import { latestArticleDetails as cmsSeed_latestArticleDetails } from '~/data/latestArticles'
@@ -185,6 +185,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   font-size: 60px;
   font-weight: 400;
   line-height: 64px;
+  text-transform: none;
+}
+
+@media (min-width: 1024px) {
+  .latest-detail-breadcrumb__title { font-size: 80px; line-height: 1.1; }
 }
 
 .latest-detail-breadcrumb__trail {

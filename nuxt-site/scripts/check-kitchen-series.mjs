@@ -82,6 +82,9 @@ for (const page of pages) {
   for(const marker of ['ai-hero__story-controls','ai-hero__catalogue-link','ai-hero__explore-link'])assert(html.includes(marker),`${page.slug}: 右側控制不可刪除：${marker}`)
   assert(html.includes('hero-slide-copy') && html.includes('hero-template-title'), `${page.slug}: 未共用首頁標題`)
   for (const marker of ['ai-suite-stage', 'ai-finishes__grid', 'ai-equipment__grid', 'https://pse.is/9kq37z']) assert(html.includes(marker), `${page.slug}: ${marker} 遺失`)
+  const equipmentSection=html.match(/<section\b[^>]*aria-labelledby="equipment-heading"[\s\S]*?<\/section>/)?.[0]||''
+  assert.equal((equipmentSection.match(/class="ai-equipment__item"/g)||[]).length,page.equipment.length,`${page.slug}: 輪播不可截斷或複製產品資料`)
+  for(const label of ['上一個推薦廚電','下一個推薦廚電'])assert(equipmentSection.includes(`aria-label="${label}"`),`${page.slug}: 缺少輪播方向控制`)
   assert(html.includes(page.suites[0].name.replaceAll('&', '&amp;')), `${page.slug}: 套系內容錯誤`)
   if (!page.cases.length) assert(html.includes('此系列目前尚無公開推薦案例。'))
   console.log(`PASS ${style.route}: ${page.suites.length} 套系、${page.finishes.length} 板材、${page.equipment.length} 廚電、${page.cases.length} 案例`)
@@ -101,6 +104,24 @@ if (process.argv.includes('--images')) {
   }))
 }
 const component = readFileSync(new URL('../components/internal/KitchenSeriesPage.vue', import.meta.url), 'utf8')
+assert(/\.ai-equipment__grid \{[^}]*--columns: 5;[^}]*flex-wrap: nowrap;[^}]*touch-action: pan-y pinch-zoom;/.test(component),'廚電桌機單排五產品，保留垂直觸控捲動及縮放')
+assert(component.includes('.ai-equipment__viewport { overflow: hidden; }')&&component.includes('.ai-equipment__grid { --columns: 2; --gap: 14px; }'),'輪播需裁切且手機維持兩產品')
+assert(component.includes("slidesToScroll: 1, duration: reducedMotion.value ? 0 : 24")&&component.includes("loop: false, align: 'start' as const"),'每次一產品、不複製循環並尊重減少動態偏好')
+assert(component.includes('@keydown.left.prevent="equipmentApi?.scrollPrev()"')&&component.includes('@keydown.right.prevent="equipmentApi?.scrollNext()"'),'廚電輪播需支援左右方向鍵')
+assert(component.includes(':disabled="!equipmentCanPrev"')&&component.includes(':disabled="!equipmentCanNext"'),'輪播到頭尾或不足一屏時需停用對應箭頭')
+const equipmentWatch=component.slice(component.indexOf('watch(equipmentApi,'),component.indexOf('const activeSuite ='))
+const createEquipmentWatch=new Function('api',`const equipmentApi={},equipmentCanPrev={value:false},equipmentCanNext={value:false}; let cleanup; const watch=(_source,run)=>run(api,undefined,fn=>{cleanup=fn}); ${equipmentWatch} return {previous:equipmentCanPrev,next:equipmentCanNext,cleanup};`)
+for(const count of [0,1,4,5,6,10])for(const columns of [2,5]){
+  let index=0;const last=Math.max(0,count-columns),events=new Map()
+  const api={canScrollPrev:()=>index>0,canScrollNext:()=>index<last,on:(event,fn)=>{events.set(event,fn);return api},off:(event,fn)=>{assert.equal(events.get(event),fn);events.delete(event);return api}}
+  const state=createEquipmentWatch(api)
+  assert.equal(state.previous.value,false);assert.equal(state.next.value,last>0)
+  index=last;events.get('select')();assert.equal(state.previous.value,last>0);assert.equal(state.next.value,false)
+  index=0;events.get('reInit')();assert.equal(state.previous.value,false);assert.equal(state.next.value,last>0)
+  state.cleanup();assert.equal(events.size,0,'切換頁面需解除輪播監聽')
+}
+assert.equal(createEquipmentWatch(undefined).previous.value,false,'輪播尚未初始化時箭頭停用')
+console.log('PASS 廚電五／兩產品單排、完整資料、箭頭邊界與重設／清理、鍵盤及減少動態來源防護')
 assert(component.includes('.ai-finishes__image--borderless :deep(img) { transform: scale(1.012); }'), 'BASIC+ 原圖自帶灰框需以微幅裁邊隱藏，不改原圖顏色')
 assert(component.includes('KITCHEN_EQUIPMENT_CUTOUTS[equipment.image] || equipment.image'), '去背只替換已知舊網址，未來後台換圖應保留')
 assert(component.includes('title-${heroTransition}') && component.includes('heroTransition.value += 1'), '標題動畫必須隨輪播重啟')

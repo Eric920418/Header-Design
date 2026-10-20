@@ -1,42 +1,16 @@
-<script setup lang="ts">
-import { ArrowDown } from 'lucide-vue-next'
-
-const copy = ref<HTMLElement | null>(null)
-const pavilionLabel = ref<HTMLElement | null>(null)
-const scrollButton = ref<HTMLAnchorElement | null>(null)
-let alignmentObserver: ResizeObserver | undefined
-
-function alignScrollButton() {
-  if (!copy.value || !pavilionLabel.value || !scrollButton.value) return
-  const label = pavilionLabel.value.getBoundingClientRect()
-  scrollButton.value.style.marginLeft = `${label.left + label.width / 2 - copy.value.getBoundingClientRect().left - scrollButton.value.offsetWidth / 2}px`
-}
-
-onMounted(() => {
-  alignmentObserver = new ResizeObserver(alignScrollButton)
-  alignmentObserver.observe(copy.value!)
-  alignmentObserver.observe(pavilionLabel.value!)
-  alignScrollButton()
-})
-onBeforeUnmount(() => alignmentObserver?.disconnect())
-</script>
-
 <template>
   <section class="brand-h8-hero hero-includes-header" aria-labelledby="brand-h8-title">
     <div class="brand-h8-intro">
       <div class="brand-h8-intro__rail">
-        <div ref="copy" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
+        <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="brand-h8-copy ev">
           <InternalSectionPill>OUR COMMITMENT</InternalSectionPill>
           <h1 id="brand-h8-title" class="hero-template-title">Why Choose<br /><span>SAKURA KITCHEN</span><br />For Your Home</h1>
           <div class="brand-h8-navigation">
             <nav class="brand-h8-nav" aria-label="品牌承諾頁面">
               <NuxtLink to="/about/advantage" aria-current="page"><b aria-hidden="true">。</b><span>品牌優勢</span></NuxtLink>
-              <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span ref="pavilionLabel">集團品牌館</span></NuxtLink>
+              <NuxtLink to="/about/exhibition"><b aria-hidden="true">。</b><span>集團品牌館</span></NuxtLink>
               <NuxtLink to="/about/introduce"><b aria-hidden="true">。</b><span>關於我們</span></NuxtLink>
             </nav>
-            <a ref="scrollButton" href="#brand-family-title" class="brand-h8-scroll hero-start-project" aria-label="向下查看品牌優勢內容">
-              <ArrowDown aria-hidden="true" />
-            </a>
           </div>
         </div>
 
@@ -72,7 +46,7 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
 .brand-h8-copy { min-width: 0; }
 .brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: clamp(40px, 4vw, 80px); font-weight: 400; line-height: 1.2; letter-spacing: -.01em; white-space: nowrap; text-transform: none; }
 .brand-h8-copy h1 span { color: #caa05c; }
-.brand-h8-navigation { padding-top: 48px; }
+.brand-h8-navigation { padding-top: 140px; }
 .brand-h8-nav { display: flex; max-width: 570px; margin-inline: auto; border-top: 1px solid #d2d1cf; }
 .brand-h8-nav > * { display: flex; min-width: 0; flex: 1; align-items: baseline; justify-content: center; gap: 8px; padding: 16px 8px 0; color: #9f9fa4; text-decoration: none; }
 .brand-h8-nav > * + * { border-left: 1px solid #d2d1cf; }
@@ -81,9 +55,6 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
 .brand-h8-nav b { color: #caa05c; }
 .brand-h8-nav a[aria-current="page"] span { color: #1c1c1d; }
 .brand-h8-nav > span[aria-disabled="true"] { opacity: .55; }
-.brand-h8-scroll { display: flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin: 38px auto 0; border: 1px solid rgb(202 160 92 / 35%); border-radius: 50%; background: #caa05c; color: #fff; box-shadow: 0 14px 30px rgb(28 28 29 / 12%); transition: transform .35s ease, box-shadow .35s ease; }
-.brand-h8-scroll svg { width: 18px; height: 18px; stroke-width: 1.8; }
-.brand-h8-scroll:hover { transform: translateY(4px); box-shadow: 0 8px 18px rgb(28 28 29 / 16%); }
 .brand-h8-aside { display: flex; min-width: 0; flex-direction: column; align-items: flex-end; gap: 30px; padding-right: 74px; }
 .brand-h8-aside__image { width: min(510px, 100%); height: 267px; border-radius: 28px; }
 .brand-h8-aside__image :deep(img) { object-position: 62% 45%; }
@@ -115,7 +86,6 @@ onBeforeUnmount(() => alignmentObserver?.disconnect())
   .brand-h8-copy h1 { margin-inline: auto; font-size: 60px; line-height: 60px; }
   .brand-h8-navigation { padding-top: 24px; }
   .brand-h8-nav { margin-inline: auto; text-align: left; }
-  .brand-h8-scroll { margin-inline: auto; }
   .brand-h8-aside { align-items: center; }
   .brand-h8-aside p { text-align: center; }
   .brand-h8-stage { width: calc(100% - 60px); margin-top: 60px; }

@@ -102,14 +102,10 @@ html {
   scroll-behavior: smooth;
 }
 
-/* 指南文章保留與標題式 Hero 相同的高度，不額外杜撰文章主標。 */
+/* 無主標的指南文章沿用案例 Hero 留白，麵包屑不額外預留標題高度。 */
 section.hero-includes-header:is(.knowledge-article-breadcrumb, .knowledge-detail-breadcrumb)[data-hero-photo] { display: block; }
 section.hero-includes-header:is(.knowledge-article-breadcrumb, .knowledge-detail-breadcrumb)[data-hero-photo] > nav {
-  padding-top: calc(var(--hero-copy-top) + 88px);
-  line-height: 22px;
-}
-@media (max-width: 767px) {
-  section.hero-includes-header:is(.knowledge-article-breadcrumb, .knowledge-detail-breadcrumb)[data-hero-photo] > nav { padding-top: calc(var(--hero-copy-top) + 120px); }
+  line-height: 20px;
 }
 
 body,

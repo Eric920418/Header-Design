@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import {readFileSync} from 'node:fs'
 import {resolve} from 'node:path'
 import {pathToFileURL} from 'node:url'
 import {database,query,transaction} from '../server/cms/database.mjs'
@@ -23,31 +24,44 @@ export function updateFooterNavigation(original){
 }
 
 async function main(){
-  assert.equal(process.env.NUXT_DESIGN_DB_SERVER,'127.0.0.1','僅限本機CMS，不得修改正式端')
-  assert.equal(process.env.CMS_DB_DATABASE||process.env.NUXT_DESIGN_DB_DATABASE,'SakuraWebsiteDev','禁止修改其他資料庫')
-  assert(process.argv.slice(2).every(arg=>arg==='--apply'),'只接受--apply；預設dry-run')
+  const production=process.argv.includes('--production'),target=production?'production':'local'
+  if(production){
+    const runtime=readFileSync(new URL('../../.env.azure-runtime.local',import.meta.url),'utf8')
+    const expectedServer=/^NUXT_DESIGN_DB_SERVER=(.+)$/m.exec(runtime)?.[1]?.trim().replace(/^['"]|['"]$/g,'')
+    assert(expectedServer?.endsWith('.database.windows.net'),'缺少既有正式Azure目標')
+    assert.equal(process.env.NUXT_DESIGN_DB_SERVER,expectedServer,'正式目標必須與既有runtime檔一致')
+    assert.equal(process.env.CMS_DB_DATABASE||process.env.NUXT_DESIGN_DB_DATABASE,'SakuraWebsiteTest','禁止修改其他資料庫')
+    assert.equal(process.env.CMS_DB_USER,'sakura_website_cms','只能使用既有CMS應用權限')
+    assert.notEqual(process.env.NUXT_DESIGN_DB_TRUST_SERVER_CERTIFICATE,'true','正式TLS不可降低驗證')
+  }else{
+    assert.equal(process.env.NUXT_DESIGN_DB_SERVER,'127.0.0.1','非本機CMS必須明確指定--production')
+    assert.equal(process.env.CMS_DB_DATABASE||process.env.NUXT_DESIGN_DB_DATABASE,'SakuraWebsiteDev','禁止修改其他資料庫')
+  }
+  assert(process.argv.slice(2).every(arg=>['--apply','--production'].includes(arg)),'只接受--apply／--production；預設dry-run')
   try{
     await transaction(async tx=>{
       const doc=await getDocument('view-components-SiteFooter',tx)
       assert(doc.publishedId&&doc.draftId===doc.publishedId,'有未發布草稿，停止以免覆蓋')
       const previous=(await query('SELECT body FROM cms.Versions WHERE id=@id',{id:doc.publishedId},tx)).recordset[0].body
       const original=JSON.parse(previous),body=updateFooterNavigation(original)
-      if(JSON.stringify(body)===JSON.stringify(original)){console.log('UNCHANGED local Footer navigation');return}
+      if(JSON.stringify(body)===JSON.stringify(original)){console.log(`UNCHANGED ${target} Footer navigation`);return}
       validate(body,JSON.parse(doc.schemaJson))
       const unchanged=structuredClone(body)
       for(const title of ['設計案例','優惠消息'])unchanged.sitemapGroups.find(g=>g.title===title).links=original.sitemapGroups.find(g=>g.title===title).links
       assert.deepEqual(unchanged,original,'其他分類／文案／圖示／設定不得修改')
-      console.log(`CHECK local Footer revision ${doc.revision}; 品牌系列去後綴；優惠活動／最新消息／媒體影音三入口`)
+      console.log(`CHECK ${target} Footer revision ${doc.revision}; 品牌系列去後綴；優惠活動／最新消息／媒體影音三入口`)
       if(!process.argv.includes('--apply'))return
       const others=(await query('SELECT id,revision,draftId,publishedId FROM cms.Documents WHERE id<>@id ORDER BY id',{id:doc.id},tx)).recordset
+      const history=(await query('SELECT id,body FROM cms.Versions WHERE documentId=@id ORDER BY id',{id:doc.id},tx)).recordset
       const user=(await query("SELECT id,role FROM cms.Users WHERE email='admin@sakura.local' AND role='admin' AND disabled=0",{},tx)).recordset[0]
       assert(user,'找不到既有有效管理員，停止')
       const saved=await changeDocument(doc.id,{action:'save',revision:doc.revision,body},user,tx)
       const published=await changeDocument(doc.id,{action:'publish',revision:saved.revision},user,tx)
       assert.deepEqual((await query('SELECT id,revision,draftId,publishedId FROM cms.Documents WHERE id<>@id ORDER BY id',{id:doc.id},tx)).recordset,others,'其他文件不得改動')
       assert.equal((await query('SELECT body FROM cms.Versions WHERE id=@id',{id:doc.publishedId},tx)).recordset[0].body,previous,'舊版本不得覆蓋')
-      assert.equal(published.draftId,published.publishedId,'本機新版本必須發布成功')
-      console.log(`UPDATED local Footer revision ${published.revision}; published ${published.publishedId}; retained ${doc.publishedId}; other ${others.length} documents unchanged`)
+      assert.deepEqual((await query('SELECT id,body FROM cms.Versions WHERE documentId=@id AND id<>@newId ORDER BY id',{id:doc.id,newId:published.publishedId},tx)).recordset,history,'所有舊版本皆須保留且內容不變')
+      assert.equal(published.draftId,published.publishedId,'新版本必須發布成功')
+      console.log(`UPDATED ${target} Footer revision ${published.revision}; published ${published.publishedId}; retained ${doc.publishedId}; other ${others.length} documents unchanged`)
     })
   }finally{await(await database()).close()}
 }

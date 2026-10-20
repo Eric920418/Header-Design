@@ -17,6 +17,11 @@ async function get(path){
  return response
 }
 const content=await(await get('/api/content/view-components-SiteHeader')).json()
+const footerContent=await(await get('/api/content/view-components-SiteFooter')).json()
+const designLinks=footerContent.sitemapGroups.find(group=>group.title==='設計案例')?.links
+assert.equal(designLinks?.find(link=>link[1]==='/home-style/aikitchen')?.[0],'品牌系列',base.origin+' 正式已發布Footer品牌系列名稱錯誤')
+const newsLinks=[['優惠活動','/news/activities'],['最新消息','/news/latest'],['媒體影音','/news/video']]
+assert.deepEqual(footerContent.sitemapGroups.find(group=>group.title==='優惠消息')?.links,newsLinks,base.origin+' Footer消息分類須為三個指定入口')
 const pavilion=content.rightNav.flatMap(item=>item.children||[]).filter(item=>item.to==='/about/exhibition')
 assert.equal(pavilion.length,1,base.origin+' 品牌館入口必須唯一')
 assert.equal(pavilion[0].label,'櫻花集團品牌館',base.origin+' 正式已發布Header名稱錯誤，不得以本機結果替代')
@@ -30,4 +35,14 @@ for(const path of ['/','/news']){
  assert(labels.length>0&&labels.every(label=>label==='櫻花集團品牌館'),base.origin+path+' 真實SSR主導覽仍為舊名稱')
  assert(header.includes('aria-controls="franchise-extra-desktop"'),'原加盟伸縮箭頭不得消失')
  console.log(`PASS ${base.origin}${path} Header: 櫻花集團品牌館；加盟箭頭及兩筆入口保留`)
+ const footer=html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0]
+ assert(footer,base.origin+path+' 頁尾不存在')
+ const footerLabels=[...footer.matchAll(/<a\b[^>]*href="\/home-style\/aikitchen"[^>]*>([\s\S]*?)<\/a>/g)].map(m=>m[1].replace(/<[^>]+>/g,'').trim())
+ assert.deepEqual(footerLabels,['品牌系列'],base.origin+path+' 真實Footer品牌系列名稱錯誤')
+ const news=[...footer.matchAll(/<section\b[\s\S]*?<\/section>/g)].map(m=>m[0]).find(section=>/<h2\b[^>]*><span[^>]*>優惠消息<\/span><\/h2>/.test(section))||''
+ const renderedLinks=[...news.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)].map(m=>[m[2].replace(/<[^>]+>/g,'').trim(),m[1]])
+ assert.deepEqual(renderedLinks,newsLinks,base.origin+path+' 真實Footer消息分類錯誤')
+ console.log(`PASS ${base.origin}${path} Footer: 品牌系列；優惠活動／最新消息／媒體影音`)
 }
+for(const [,path] of newsLinks)await get(path)
+console.log(`PASS ${base.origin} Footer三個消息分類目的頁HTTP200`)

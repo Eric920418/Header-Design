@@ -6,6 +6,16 @@ import sharp from 'sharp'
 import {franchiseInitialValues,franchiseChoiceGroups,franchiseErrors} from '../shared/franchise-form.mjs'
 import {addFranchiseExtras} from './update-header-franchise-links-20261015.mjs'
 import {updateFooterNavigation} from './update-footer-navigation-20261020.mjs'
+import {updateNewsHeroTitle} from './update-news-title-20261020.mjs'
+
+const newsTitleFixture={copy:{text1:'NEWS',field2:'/news',custom:'保留'},cmsSettings:{visible:true}}
+const newsTitleBefore=structuredClone(newsTitleFixture),newsTitleUpdated=updateNewsHeroTitle(newsTitleFixture)
+assert.deepEqual(newsTitleFixture,newsTitleBefore,'標題轉換不得修改輸入')
+assert.deepEqual(newsTitleUpdated,{...newsTitleBefore,copy:{...newsTitleBefore.copy,text1:'News'}},'只能更改News大小寫')
+assert.deepEqual(updateNewsHeroTitle(newsTitleUpdated),newsTitleUpdated,'重跑不得重複修改')
+assert.throws(()=>updateNewsHeroTitle({copy:{text1:'自訂標題'}}),/已另行修改/)
+assert.throws(()=>updateNewsHeroTitle({}),/已另行修改/)
+console.log('PASS 最新消息Hero僅改News大小寫、保留其他內容、冪等及衝突防護')
 
 const footerFixture={sitemapGroups:[{title:'設計案例',links:[['品牌系列・AI 廚房','/home-style/aikitchen'],['設計靈感','/design-inspiration']]},{title:'優惠消息',links:[['優惠消息','/news']]},{title:'保留',links:[['其他','/other']]}],copy:{logo:'keep'},cmsSettings:{visible:true}}
 const footerBefore=structuredClone(footerFixture),footerUpdated=updateFooterNavigation(footerFixture)
@@ -182,6 +192,28 @@ const brandHeroSource=await readFile(new URL('../components/internal/BrandAdvant
 assert(brandHeroSource.includes('<h1 id="brand-h8-title" class="hero-template-title">Why Choose<br /><span>SAKURA KITCHEN</span><br />For Your Home</h1>'),'品牌承諾Hero需完整三行標題，只有品牌行金色')
 assert(brandHeroSource.includes('font-size: clamp(40px, 4vw, 80px);')&&brandHeroSource.includes('white-space: nowrap; text-transform: none;')&&brandHeroSource.includes('font-size: clamp(24px, 7.8vw, 40px);'),'長標題需局部響應式字級、三行不再拆行及原大小寫')
 const brandHeroGlobalStyles=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
+const guideHeroSelector='section.hero-includes-header:is(.knowledge-article-breadcrumb, .knowledge-detail-breadcrumb)[data-hero-photo] > nav'
+const guideHeroRules=[...brandHeroGlobalStyles.matchAll(new RegExp(guideHeroSelector.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s*\\{([^}]+)\\}','g'))].map(match=>match[1].trim())
+assert.deepEqual(guideHeroRules,['line-height: 20px;'],'指南文章需沿用案例Hero共同留白，不再加88／120px的標題佔位')
+assert(brandHeroGlobalStyles.includes('padding-block: var(--hero-copy-top) calc(32px + var(--hero-title-lift));')&&brandHeroGlobalStyles.includes('padding-bottom: calc(24px + var(--hero-title-lift));'),'案例與指南共用桌機／手機留白及招牌安全區')
+assert(brandHeroGlobalStyles.includes('section.hero-includes-header:is(.knowledge-article-breadcrumb, .knowledge-detail-breadcrumb)[data-hero-photo] { display: block; }'),'指南網格需停用，避免隱含header空列撐高Hero')
+console.log('PASS 指南文章Hero沿用案例招牌安全區與共同留白，無額外標題佔位')
+const activityHeroSource=await readFile(new URL('../pages/news/activities/[slug].vue',import.meta.url),'utf8')
+assert(/@media \(min-width: 1024px\) \{\s*\.activity-detail-breadcrumb__title \{ font-size: 80px; line-height: 1\.1; \}/.test(activityHeroSource),'優惠活動內頁Promotions桌機80px，行高需容納大字且不得擴大全站p')
+assert(activityHeroSource.includes('<p class="activity-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>')&&activityHeroSource.includes('class="entry-title">{{ article.title }}</h1>'),'保留CMS Hero文案與原文章h1，不更改標籤層級')
+assert(activityHeroSource.includes('.activity-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }'),'手機原30px標題與35px行高保留')
+console.log('PASS 優惠活動內頁Hero桌機80px／手機30px，保留CMS標題與文章h1')
+const latestHeroSource=await readFile(new URL('../pages/news/latest/[slug].vue',import.meta.url),'utf8')
+assert(/@media \(min-width: 1024px\) \{\s*\.latest-detail-breadcrumb__title \{ font-size: 80px; line-height: 1\.1; \}/.test(latestHeroSource),'最新消息內頁桌機80px／1.1行高')
+assert(/\.latest-detail-breadcrumb__title \{[^}]*text-transform: none;/.test(latestHeroSource)&&latestHeroSource.includes('<p class="latest-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>'),'大小寫使用CMS原文，不以轉換或硬編碼掩蓋資料')
+assert(latestHeroSource.includes('.latest-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }')&&latestHeroSource.includes('class="entry-title">{{ article.title }}</h1>'),'保留手機30px／35px與原文章h1')
+assert.equal((await content('view-pages-news-latest-slug-')).copy.text1,'News','本機已發布CMS必須實際改為News，不能只改Vue範例')
+console.log('PASS 最新消息內頁Hero實際CMS News、桌機80px／手機30px及文章主標保留')
+const mediaHeroSource=await readFile(new URL('../pages/news/video/[slug].vue',import.meta.url),'utf8')
+assert(/@media \(min-width: 1024px\) \{\s*\.media-detail-breadcrumb__title \{ font-size: 80px; line-height: 1\.1; \}/.test(mediaHeroSource),'媒體影音內頁Media桌機80px／1.1行高')
+assert(mediaHeroSource.includes('<p class="media-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>')&&mediaHeroSource.includes('class="entry-title">{{ article.title }}</h1>'),'保留CMS Hero文案及正文h1')
+assert(mediaHeroSource.includes('.media-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }')&&mediaHeroSource.includes(':video-id="detail.videoId"'),'保留手機30px／35px及原影片來源')
+console.log('PASS 媒體影音內頁Hero桌機80px／手機30px，保留CMS文案、文章主標及影片來源')
 assert(brandHeroGlobalStyles.includes('h1:not(.sr-only, .hero-template-title)'),'局部hero-template-title需避開全站80px!important覆寫，不修改全站規則')
 assert(brandHeroSource.includes('.brand-h8-copy h1 span { color: #caa05c; }')&&brandHeroSource.includes('.brand-h8-copy h1 { color: #fff; }'),'桌機保留白色兩行及品牌金色')
 assert(brandHeroSource.includes('inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0;')&&brandHeroSource.includes("url('/section-3/store-chengde.jpg')) center 20% / cover no-repeat"),'品牌背景需保留承德店原圖及CMS素材，將招牌焦點置於導覽下安全區')
@@ -204,12 +236,15 @@ assert.equal(brandHeroTitleMarkup,'Why Choose<br><span>SAKURA KITCHEN</span><br>
 const brandHeroStage=brandHeroHtml.match(/<div\b[^>]*class="brand-h8-stage ev(?: ev)?"[^>]*>[\s\S]*?<\/div>/)?.[0]
 assert(brandHeroStage?.includes('data-ev="opalMoveUp"')&&brandHeroStage.includes('SAKURA 品牌優勢廚房空間'),'大圖原進場與替代文字需保留')
 assert(brandHeroStage.includes('<img')&&brandHeroStage.includes('loading="eager"'),'保留原圖片元件及優先載入')
-assert(brandHeroHtml.includes('href="#brand-family-title"'),'原向下內容導覽仍可使用')
+assert(!brandHeroHtml.includes('brand-h8-scroll')&&!brandHeroHtml.includes('href="#brand-family-title"'),'依新稿移除Hero金色向下按鈕')
+assert(!brandHeroSource.includes('alignScrollButton')&&!brandHeroSource.includes('ResizeObserver')&&!brandHeroSource.includes('scrollButton')&&!brandHeroSource.includes('ArrowDown'),'移除僅供向下按鈕使用的定位程式、監聽與圖示')
 assert(brandHeroSource.indexOf('class="brand-h8-navigation"')>brandHeroSource.indexOf('class="brand-h8-copy ev"')&&brandHeroSource.indexOf('class="brand-h8-navigation"')<brandHeroSource.indexOf('class="brand-h8-aside ev"'),'品牌三項導覽需留在左側照片文案欄內')
-assert(brandHeroSource.includes('.brand-h8-navigation { padding-top: 48px; }')&&brandHeroSource.includes('max-width: 570px; margin-inline: auto;')&&brandHeroSource.includes('justify-content: center; gap: 8px; padding: 16px 8px 0;'),'桌機整組下移48px、570px內置中，三項等分置中')
+assert(brandHeroSource.includes('.brand-h8-navigation { padding-top: 140px; }')&&brandHeroSource.includes('max-width: 570px; margin-inline: auto;')&&brandHeroSource.includes('justify-content: center; gap: 8px; padding: 16px 8px 0;'),'桌機將原按鈕54px＋margin38px改為選單上方留白，整組下移92px並維持570px內等分置中')
+assert.equal(140-48,54+38,'桌機選單下移量應抵消刪除按鈕高度，保留照片與右側內容幾何')
 assert(brandHeroSource.includes('.brand-h8-navigation { padding-top: 24px; }'),'平板手機減少下移間距')
 const brandNavigation=brandHeroHtml.match(/<div\b[^>]*class="brand-h8-navigation"[^>]*>([\s\S]*?)<\/div>/)?.[1]||''
-for(const path of ['/about/advantage','/about/exhibition','/about/introduce','#brand-family-title'])assert(brandNavigation.includes(`href="${path}"`),'原三項導覽與向下按鈕應同組保留：'+path)
+for(const path of ['/about/advantage','/about/exhibition','/about/introduce'])assert(brandNavigation.includes(`href="${path}"`),'原三項導覽需保留：'+path)
+assert.equal((brandNavigation.match(/<a\b/g)||[]).length,3,'左側只保留三項品牌導覽，不多加CTA')
 console.log('PASS 品牌優勢大圖原進場、延後首頁Ken Burns、減少動態與SSR內容保留')
 const brandFamilySource=await readFile(new URL('../pages/about/advantage.vue',import.meta.url),'utf8')
 const familyTitleExpression=brandFamilySource.match(/const familyTitle = (.+)/)?.[1]

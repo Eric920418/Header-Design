@@ -21,6 +21,20 @@ const casesPaused = ref(false)
 const casesInteracted = ref(false)
 const seriesOpen = ref(false)
 const [casesViewport, casesApi] = emblaCarouselVue({ loop: true, align: 'start', skipSnaps: false, duration: 24 })
+const [equipmentViewport, equipmentApi] = emblaCarouselVue(computed(() => ({ loop: false, align: 'start' as const, slidesToScroll: 1, duration: reducedMotion.value ? 0 : 24 })))
+const equipmentCanPrev = ref(false)
+const equipmentCanNext = ref(false)
+
+watch(equipmentApi, (api, _oldApi, onCleanup) => {
+  if (!api) return
+  const update = () => {
+    equipmentCanPrev.value = api.canScrollPrev()
+    equipmentCanNext.value = api.canScrollNext()
+  }
+  update()
+  api.on('select', update).on('reInit', update)
+  onCleanup(() => { api.off('select', update).off('reInit', update) })
+}, { immediate: true })
 
 const activeSuite = computed(() => data.suites[activeSuiteIndex.value]!)
 const activeSuiteImages = computed(() => activeSuite.value.images)
@@ -357,16 +371,24 @@ useSeoMeta({
           <p v-reveal="{ anim: 'opalMoveUp' }">Explore Our</p>
           <h2 id="equipment-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }"><span class="ai-appliance-heading__chinese">廚房電器推薦</span><span>Kitchen Appliance</span></h2>
         </div>
-        <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="ai-equipment__grid" :aria-label="`${data.name} 推薦廚電`">
-          <article v-for="equipment in visibleEquipment" :key="equipment.model" class="ai-equipment__item">
-            <component :is="equipment.route ? NuxtLink : 'div'" :to="equipment.route || undefined" :target="equipment.route.startsWith('https://') ? '_blank' : undefined" :rel="equipment.route.startsWith('https://') ? 'noopener noreferrer' : undefined" class="ai-equipment__card" :aria-label="equipment.route ? `查看 ${equipment.model} ${equipment.name}` : undefined">
-              <div class="ai-equipment__visual">
-                <InternalBrandImage :src="KITCHEN_EQUIPMENT_CUTOUTS[equipment.image] || equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
-                <span v-if="equipment.route" class="ai-equipment__action" aria-hidden="true"><ArrowRight /></span>
-              </div>
-              <h3><span>{{ equipment.model }}</span>{{ equipment.name }}</h3>
-            </component>
-          </article>
+        <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="ai-equipment__carousel" role="region" aria-roledescription="carousel" :aria-label="`${data.name} 推薦廚電`" tabindex="0" @keydown.left.prevent="equipmentApi?.scrollPrev()" @keydown.right.prevent="equipmentApi?.scrollNext()">
+          <div id="equipment-carousel" ref="equipmentViewport" class="ai-equipment__viewport">
+            <div class="ai-equipment__grid">
+              <article v-for="equipment in visibleEquipment" :key="equipment.model" class="ai-equipment__item">
+                <component :is="equipment.route ? NuxtLink : 'div'" :to="equipment.route || undefined" :target="equipment.route.startsWith('https://') ? '_blank' : undefined" :rel="equipment.route.startsWith('https://') ? 'noopener noreferrer' : undefined" class="ai-equipment__card" :aria-label="equipment.route ? `查看 ${equipment.model} ${equipment.name}` : undefined">
+                  <div class="ai-equipment__visual">
+                    <InternalBrandImage :src="KITCHEN_EQUIPMENT_CUTOUTS[equipment.image] || equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
+                    <span v-if="equipment.route" class="ai-equipment__action" aria-hidden="true"><ArrowRight /></span>
+                  </div>
+                  <h3><span>{{ equipment.model }}</span>{{ equipment.name }}</h3>
+                </component>
+              </article>
+            </div>
+          </div>
+          <div class="ai-equipment__controls" aria-label="推薦廚電切換">
+            <button type="button" aria-label="上一個推薦廚電" aria-controls="equipment-carousel" :disabled="!equipmentCanPrev" @click="equipmentApi?.scrollPrev()"><ChevronLeft aria-hidden="true" /></button>
+            <button type="button" aria-label="下一個推薦廚電" aria-controls="equipment-carousel" :disabled="!equipmentCanNext" @click="equipmentApi?.scrollNext()"><ChevronRight aria-hidden="true" /></button>
+          </div>
         </div>
       </div>
     </section>
@@ -516,10 +538,17 @@ useSeoMeta({
 .ai-equipment { position: relative; overflow: hidden; padding-top: 60px; background: #fafafa; }
 .ai-equipment::before { position: absolute; inset: 0; opacity: .035; background-image: linear-gradient(#1c1c1d 1px, transparent 1px), linear-gradient(90deg, #1c1c1d 1px, transparent 1px); background-size: 46px 46px; content: ''; pointer-events: none; }
 .ai-equipment .page-container { position: relative; }
-.ai-equipment__grid { --columns: 5; --gap: 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); margin-top: 60px; }
+.ai-equipment__carousel { margin-top: 60px; }
+.ai-equipment__viewport { overflow: hidden; }
+.ai-equipment__grid { --columns: 5; --gap: 24px; display: flex; flex-wrap: nowrap; gap: var(--gap); touch-action: pan-y pinch-zoom; }
 .ai-equipment__item { min-width: 0; flex: 0 0 calc((100% - (var(--columns) - 1) * var(--gap)) / var(--columns)); }
+.ai-equipment__controls { display: flex; justify-content: center; gap: 12px; margin-top: 30px; }
+.ai-equipment__controls button { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid #d7d7da; border-radius: 50%; color: #59585d; background: #fff; cursor: pointer; }
+.ai-equipment__controls button:not(:disabled):hover { color: #fff; background: #caa05c; border-color: #caa05c; }
+.ai-equipment__controls button:disabled { opacity: .35; cursor: default; }
+.ai-equipment__controls svg { width: 20px; height: 20px; }
 .ai-equipment__card { position: relative; display: block; color: inherit; }
-.ai-equipment__card:focus-visible { outline: 2px solid #caa05c; outline-offset: 6px; }
+.ai-equipment__card:focus-visible { outline: 2px solid #caa05c; outline-offset: -2px; }
 .ai-equipment__visual { position: relative; }
 .ai-equipment__image { aspect-ratio: 1.2; background: transparent; }
 .ai-equipment__image :deep(img) { transition: opacity .35s ease; }
@@ -645,7 +674,8 @@ useSeoMeta({
   .ai-equipment { padding-top: 40px; }
   .ai-finishes__grid { --columns: 2; --gap: 14px; row-gap: 20px; margin-top: 38px; }
   .ai-finishes__image { border-radius: 16px; }
-  .ai-equipment__grid { --columns: 2; --gap: 14px; row-gap: 24px; margin-top: 38px; }
+  .ai-equipment__carousel { margin-top: 38px; }
+  .ai-equipment__grid { --columns: 2; --gap: 14px; }
   .ai-equipment__action { width: 52px; height: 52px; opacity: 1; transform: translate(-50%, -50%); }
   .ai-cases__heading { display: block; text-align: center; }
   .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 72px 30px 0; font-size: 30px; line-height: 1.2; }

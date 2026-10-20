@@ -36,12 +36,18 @@ async function main() {
     assert.equal(await css('.latest-detail-cover img', 'objectFit'), 'cover')
     await shot('.latest-detail-cover', '01-news')
     await go('/about/advantage')
-    const pavilion = await rect('.brand-h8-nav a[href="/about/exhibition"] span'), arrow = await rect('.brand-h8-scroll')
-    assert(Math.abs(center(pavilion) - center(arrow)) < 2, '箭頭必須對齊集團品牌館文字，而非整排導覽中心')
+    assert.equal(await page.locator('.brand-h8-scroll').count(), 0, '品牌Hero金色向下按鈕已刪除')
+    assert.equal(await page.locator('.brand-h8-nav a').count(), 3, '品牌Hero保留三項導覽')
     for (const width of [1920, 1366, 1024, 768, 390]) {
       await page.setViewportSize({ width, height: 1000 })
       await page.waitForTimeout(200)
-      assert(Math.abs(center(await rect('.brand-h8-nav a[href="/about/exhibition"] span')) - center(await rect('.brand-h8-scroll'))) < 2, `${width}px 集團品牌館箭頭偏移`)
+      const nav = await rect('.brand-h8-nav'), copy = await rect('.brand-h8-copy')
+      assert(Math.abs(center(nav) - center(copy)) < 2, `${width}px 三項選單需在左側文案欄置中`)
+      assert.equal(await css('.brand-h8-navigation', 'paddingTop'), width > 1024 ? '140px' : '24px', `${width}px 選單下移間距`)
+      if (width > 1024) {
+        const stage = await rect('.brand-h8-stage')
+        assert(nav.y + nav.height <= stage.y, `${width}px 選單不可被下方大圖覆蓋`)
+      }
     }
     await page.setViewportSize({ width: 1440, height: 1000 })
     assert.equal(await css('.brand-h8-intro', 'paddingTop'), '104px')

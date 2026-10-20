@@ -1,5 +1,55 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-20 品牌承諾Hero選單再下移與移除向下按鈕
+
+- 依12:12:48截圖，三項品牌導覽仍在左側照片文案欄內，下移並整組置中；刪除其下金色向下按鈕，不移到整個Hero外。保留原三條連結、當前項目標記、570px內等分置中及手機單欄排列。
+- 沿用ponytail最小修改：桌機brand-h8-navigation上方留白48→140px，下移92px，正好替代刪除按鈕54px＋上margin38px的高度，避免無意改變照片裁切／右側內容位置。平板／手機仍採24px間距，刪按鈕後不保留空白。清除只供按鈕使用的ArrowDown／三個ref／ResizeObserver與定位函式、按鈕CSS；不動主標、招牌原圖、右側照片、下方大圖動畫或其他頁面。
+- 既有前台回歸與check-partnership-ppt對應斷言改驗按鈕移除、三條連結保留及桌機／手機置中與間距，不再要求已刪除箭頭對齊。先改本機，不commit／push／部署或CMS寫入，不新增套件與其他文件，只維護本README。
+- pnpm build、建置後pnpm typecheck、限定品牌Hero及相鄰消息Hero來源／實際SSR回歸、兩檢查腳本語法與git diff --check通過。SSR確認按鈕與向下錨點入口移除、三條品牌連結與完整三行主標、原大圖及進場保留；編譯CSS確認桌機140px／平板手機24px、570px內置中與刪除按鈕樣式。與當前HEAD逐段比對右側照片／文案及下方大圖模板、背景／照片及主標幾何規則相同，92px高度抵消僅屬原樣式的靜態模型。沒有執行check-partnership-ppt的瀏覽器流程或其他業務表單，實際下移後與建物招牌的視覺距離、超寬／手機版面仍未驗收，不以來源、SSR或模型宣稱像素一致；未繞過既有瀏覽器URL安全限制，未改正式內容。
+
+## 2026-10-20 媒體影音內頁Media桌機80px
+
+- 依12:12:25截圖，只調媒體影音文章Hero的Media標題，於min-width:1024px局部設80px／1.1行高，保留平板60px／64px及手機30px／35px。保留既有CMS文案、原p標籤／正文h1、松竹店招牌背景及安全區、麵包屑、影片ID／播放器、文章與相關影音，不更改其他消息頁或資料庫。
+- 沿用ponytail最小修改，在既有回歸加入桌機／手機尺寸、CMS標題及影片來源防護；不新增套件或文件，僅維護本README，保留其他既有變更。先改本機，不commit／push／部署或正式CMS發布。
+- pnpm build、限定來源回歸、檢查腳本語法與git diff --check通過；編譯CSS確認桌機80px／1.1、平板60px／64px及手機30px／35px。實際本機CMS原文已為Media，無須新增內容版本；三篇內頁american_urban、wabisabi、business SSR200，Media文案、招牌背景標記、原麵包屑、正文h1及播放入口保留。初次SSR檢查誤認播放按鈕標籤為「播放影片」而失敗，讀取現有播放器後改驗真實的「播放：文章標題」並重跑通過，未為測試改動播放器。此次僅改CSS，未重跑型別／全站測試，未驗瀏覽器字形／裁切／手機排版或實際影片播放，不以SSR及編譯樣式宣稱互動或像素驗收。
+
+## 2026-10-20 最新消息內頁News大小寫與桌機80px
+
+- 依12:12:17截圖，最新消息文章Hero顯示News（非NEWS），桌機字級80px／1.1行高，保留手機30px／35px與平板60px／64px。與Promotions相同，這裡為獨立p而非h1，需局部桌機樣式；保留CMS原文並明定text-transform:none，不改文章h1、招牌背景／安全區、麵包屑或其他消息頁。
+- 沿用ponytail最小修改，同步Vue型別範例與實際本機CMS。新增限定127.0.0.1／SakuraWebsiteDev的update-news-title-20261020.mjs，預設dry-run，--apply才透過既有CMS版本流程只改view-pages-news-latest-slug-的copy.text1；遇未發布草稿／非NEWS或News自訂標題／revision衝突停止，其他欄位、64份文件及舊版本保留，不seed或整庫同步。既有前台回歸增加純轉換與實際已發布CMS、桌機／手機樣式防護。
+- 本輪先改本機，不commit／push／部署，不更新正式CMS；僅維護本README，保留其他既有變更。不能以本機CMS或Vue範例更新宣稱正式完成。
+- 本機dry-run為revision1，發布前實際已發布API驗收確實因NEWS≠News而失敗；於nuxt-site執行`pnpm exec node --env-file=.env scripts/update-news-title-20261020.mjs --apply`，發布至revision3／874ccd96-f505-48d3-a26a-d2b94195a0eb，保留舊a0afb08f-f0bf-4bc3-a6fd-2fb457780f9e及全部歷史body；其他64份文件revision／草稿／發布ID同transaction不變。再次dry-run為UNCHANGED，不重複新增版本。
+- pnpm build、限定純函式／來源／已發布CMS回歸、兩腳本語法、git diff --check及錯誤正式目標／其他DB連線前拒絕通過。編譯CSS確認桌機80px／1.1、平板60px／64px、手機30px／35px及text-transform:none；三篇本機實際SSR（2026-franchise-seminar、kaohsiung_opening、2025-franchise-exhibition）均為News，台中招牌背景標記、麵包屑及正文h1保留。只改尺寸與單一文案，未重跑型別或含業務POST的全站測試；保留本機SQL既有IP TLS ServerName棄用警告，不降低正式TLS。實際瀏覽器字形、背景裁切與手機視覺尚未驗收，不把SSR或編譯樣式當成像素驗收。
+
+## 2026-10-20 優惠活動內頁Promotions桌機80px
+
+- 依12:12:09截圖，只調優惠活動文章Hero的Promotions，非內文文章標題或其他消息頁。原全站桌機80px只套h1，這個Hero為p，仍使用局部60px；在原活動內頁加入min-width:1024px的局部80px／1.1行高，保留原手機30px／35px、平板60px／64px及原CMS文案、標籤、正文h1、招牌圖與安全區、麵包屑和內容。
+- 沿用ponytail最小修改，不擴大全站CSS選擇器、不新增套件或修改CMS；既有前台回歸加入桌機80px與手機／文章標題保留防護。先改本機，不commit／push／部署；保留既有其他變更，僅維護本README。
+- pnpm build、限定來源回歸、檢查腳本語法與git diff --check通過；編譯CSS確認桌機min-width1024的80px／1.1、平板原60px／64px與手機30px／35px。讀取本機已發布活動資料及Hero文案，比對2025_ro_water_sp、2025KC、2025B2C_Q2SP三篇實際SSR200，原CMS標題、招牌圖標記、麵包屑與正文h1保留。本次僅改CSS，未重跑型別或全站測試；實際瀏覽器字形、裁切與手機排版尚未驗收，不以SSR或編譯樣式宣稱像素驗收，未更新正式CMS或部署。
+
+## 2026-10-20 品牌系列廚電單排五產品與左右箭頭
+
+- 依12:11:45截圖，廚房電器推薦維持桌機一屏五產品，改單排水平輪播，第六個之後不換到第二排；保留全部CMS產品順序、型號／文案、透明圖來源、商品目的頁與新分頁設定，不截斷或複製產品補滿。
+- 沿用ponytail及元件既有embla-carousel-vue，不新增套件。每次切換一個產品、不自動輪播，到頭尾或不足一屏時停用對應箭頭；提供44px原生按鈕、方向標籤、左右鍵及觸控滑動，手機沿用一次兩產品。減少動態時輪播duration為0；監聽select／reInit同步按鈕並在清理時解除，產品焦點框改向內避免被輪播視窗裁掉。
+- 修改共用KitchenSeriesPage，十系列一起套用；既有十系列回歸加入SSR產品總數／箭頭、桌機與手機來源規則及0／1／4／5／6／10產品的兩種一屏容量邊界／重設／監聽清理檢查。先改本機，不commit／push／部署，不修改CMS或其他內容；僅維護本README。
+- pnpm build、建置後pnpm typecheck、check-kitchen-series、腳本語法與git diff --check通過。十系列SSR保留完整45個廚電位置（AI Kitchen的6個也保留）、型錄／Hero／套系／色卡／案例及404，215圖片來源／既有淡化及鍵盤防護通過；新箭頭狀態測試使用實際watch程式配合模擬API驗起點／終點／reInit／清理，並非真實瀏覽器操作。建置CSS確認五欄／兩欄、nowrap、裁切與44px控制；320–1920px只做靜態寬度模型。尚未驗收瀏覽器實際按鈕／拖動／Tab自動帶入可見卡片及桌機／手機版面，不繞過既有瀏覽器URL安全限制；未跑含業務POST的全站測試，保留既有建置警告。
+
+## 2026-10-20 指南文章Hero對齊案例頁
+
+- 依12:11:31截圖的實際頁面，左側是廚房裝修指南systemcabinet文章，並非截圖紅標的品牌系列Hero；以右側門市案例Hero的高度、招牌安全區及麵包屑位置為對齊目標，不改文章內容或將麵包屑文字替換成案例分類。
+- 差異在assets/css/main.css：帶data-hero-photo的指南文章額外增加桌機88px／手機120px的標題高度，但這些頁面沒有Hero主標。最小修正移除額外padding-top，麵包屑行高改為與案例一致的20px，沿用共同--hero-copy-top與上下留白；保留display:block避免systemcabinet的網格空列。現有systemcabinet、插座規劃及knowledge31三篇松竹店招牌Hero一起修正，未標記的其他文章及案例頁不改。
+- 沿用ponytail與既有版型／真實照片，不新增元件、素材、CMS欄位、資料版本或套件；此為現有網站局部註記調整，非Product Design全頁重製，不啟動生成素材或重建網站流程。既有前台回歸補入共同留白與不留空標題高度防護。修改前該檢查已因額外88／120px而失敗；本次先改本機，不延伸上一項Footer的正式發布授權，不commit／push／部署。
+- pnpm build、限定Hero來源回歸、既有檢查腳本語法與git diff --check通過；編譯後CSS確認指南麵包屑20px、沿用共同留白且不含舊額外88／120px規則。本機上述三篇指南及/gallery/case10 HTTP SSR200，招牌Hero、原麵包屑入口／分類與正文標題保留、不新增Hero主標；320／390／768／1024／1440／1920／2560px僅靜態幾何模型檢查招牌位於麵包屑上方。此為CSS修改，未重跑型別及含業務POST的完整測試，未繞過既有瀏覽器URL安全限制；實際同視口裁切／高度／手機視覺與互動仍未驗收，不以SSR、模型或建置宣稱像素一致。未修改正式CMS或其他內容。
+
+## 2026-10-20 正式Footer兩項內容同步
+
+- 使用者12:09截圖回報正式Footer仍舊，唯讀核對兩個正式網域的已發布CMS及首頁SSR皆為「品牌系列・AI 廚房」及單一/news；API為private,no-store／Vercel MISS。本機CMS及SSR已是新名稱與三分類，不能以本機完成或Git更新宣稱正式發布，也不把這項差異說成快取或已發布後回滾。
+- 使用者確認「所以去改啊」，本輪授權只涵蓋正式Footer兩項：品牌入口改名「品牌系列」（保留原網址），消息欄改優惠活動／最新消息／媒體影音。沿用ponytail最小修改，在既有修補腳本加入--production與既有Azure目標／應用帳號／TLS守門；預設dry-run，--apply才以CMS版本流程儲存發布。遇草稿、自訂內容／分類衝突停止，其他文件與舊版本保留，不匯入、reset或整庫同步。
+- 擴充既有check-site-header.mjs，以明確指定origin檢查Header及Footer已發布API、首頁與/news的實際SSR及三個分類目的頁，不用本機資料代替正式驗收。發布前正式驗收確實因「品牌系列・AI 廚房」不等於「品牌系列」而失敗；dry-run確認revision3及限定兩項修改。
+- 執行`pnpm exec node --env-file=../.env.azure-runtime.local scripts/update-footer-navigation-20261020.mjs --production --apply`，正式Footer已發布至revision5／143bc763-a091-4caf-8c21-3fd6ca19f23c；舊7eccba2b-b638-4e95-a97b-0b24da9293c7與全部Footer舊版本body同transaction核對不變，其他64份文件revision／草稿／發布ID不變。再次正式dry-run為UNCHANGED，未重複新增版本。
+- 兩個既有正式網域sakura-demo-vanlantech.com與header-design-two.vercel.app分別執行明確TEST_BASE_URL的check-site-header，已發布Header／Footer API、首頁及/news真實SSR、三個消息分類目的頁HTTP200全部通過；原品牌館名稱、加盟箭頭及兩筆額外入口仍保留。Footer純函式的原物件不變、限定修改、其他內容保留、冪等及衝突測試，CLI錯誤目標／資料庫／帳號／降低TLS／未知參數在連線前拒絕、腳本語法與git diff --check通過。
+- 此次為正式CMS內容發布，不需重建前端；未commit／push／部署其他功能，未跑build／typecheck或含業務寫入的完整套件，未做瀏覽器桌機／手機展開與像素驗收，不以SSR代替這些檢查。沒有新增套件或其他文件，只維護本README。先前「正式尚未發布」僅描述先前本機回合，本節記錄本次正式發布完成。
+
 ## 2026-10-20 品牌系列Hero探索案例字級與箭頭
 
 - 依10:59:21截圖，共用品牌系列Hero右下「探索設計案例」桌機／平板字級由14px改16px，旁邊右上箭頭由18px改22px；保留原控制框、型錄圓鈕、框外分頁箭頭、設計靈感目的頁與鍵盤焦點樣式。不改CMS或新增套件。

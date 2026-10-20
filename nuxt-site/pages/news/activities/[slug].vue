@@ -161,6 +161,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   line-height: 64px;
 }
 
+@media (min-width: 1024px) {
+  .activity-detail-breadcrumb__title { font-size: 80px; line-height: 1.1; }
+}
+
 .activity-detail-breadcrumb__trail {
   display: flex;
   align-items: center;
