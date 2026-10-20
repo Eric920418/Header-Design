@@ -1,5 +1,14 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-20 建商廚房系列八組素材與相簿視窗
+
+- 依13:48:46截圖與使用者「請他們補，先上有的」確認，先做資料夾現有8組／18張圖片；缺第03組「原色系列0.5」，不放假圖或拿其他系列補位。順序依素材01／02／04至09；英文依實際資料夾NEUTRAL COLOR（截圖NUTRAL少E），其餘HORIZON／LUMINOUS SPACE／MODERN CHIC保留。
+- 沿用ponytail最小修改及既有BuilderImage／原生dialog做法，保留原卡片字型、三欄／手機單欄、圓角及其他Hero／預約內容；新增每卡英文副標與可選相簿，舊版只有單圖的內容仍可使用。後台讀取及儲存／發布／還原在既有schema邊界針對此文件加入可選欄位，不改SQL schema或seed舊資料。
+- 新增限定本機的update-builder-series-20261020.mjs，預設dry-run，--apply才透過既有CMS版本流程只改系列。遇草稿、自訂清單、revision衝突停止，其他文件及所有舊版本保留，不整庫匯入／reset。來源原圖不覆蓋，網站新增日期分目錄的WebP版本；本輪只做本機，不commit／push／正式部署。
+- 圖片已由218.5MB轉為4.4MB／2400px WebP，原素材未更動；check-builder-series直接測試實際頁面處理函式、換圖首尾／單張／清理焦點、可選schema與舊單圖相容、拒絕不安全URL和自訂清單覆蓋。首次本機HTTP發現新共用schema被Nitro external錯誤解析至工作區外，已依既有hero-media等模式加入inline清單，不以建置成功取代實際HTTP檢查。
+- 已先核對本機發布API仍為6組、8組預期確實失敗，再執行限定本機--apply：revision1→3，發布412b8946-2432-44d5-b1ef-02c5b5394bea，保留cae644b6-abc1-4c6d-82bd-ec678aba1442與所有歷史body，其他64份文件同transaction比對不變；再次dry-run為UNCHANGED。不是只改Vue樣本，沒有修改正式CMS。
+- pnpm build、pnpm typecheck、pnpm exec node scripts/check-builder-series.mjs --http與腳本語法／git diff --check通過。實際本機API清單與manifest逐值一致，SSR為8卡／中英名稱／封面／關閉的原生dialog，三處預約入口與其他文案保留；18張網址均200及image/webp。編譯CSS保留三欄／手機單欄、原26px／手機23px字型、44px按鈕與開窗背景捲動鎖。首次SSR卡數檢查因既有v-reveal重複ev class被過嚴比對漏算，改為完整卡片class token後通過，未為測試修改版面。保留既有建置及本機SQL IP TLS警告，未降低TLS；未跑含業務POST的全站測試或實際瀏覽器彈窗／鍵盤／手機視覺驗收，不繞過既有URL安全限制，也不把處理函式模擬測試稱作瀏覽器驗收。
+
 ## 2026-10-20 建商深色廚房大圖動畫參照品牌優勢
 
 - 依13:48:30截圖，目標為/builders的builders-hero-media深色廚房大圖，參照BrandAdvantageHero白色廚房大圖的「向上淡入後慢速Ken Burns」。原建商僅有向上淡入，保留其220ms延遲與1.25秒進場，在圖片img加入同一個hero-kenburns 5秒ease-out，延遲1.47秒後播放一次並保留終態；不對錯誤提示或整個頁框加運鏡。
