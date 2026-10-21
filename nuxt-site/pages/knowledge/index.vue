@@ -41,9 +41,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header class="kitchen-guide-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Straight From The Newsroom" class="kitchen-guide-heading__label" />
           <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <span class="kitchen-guide-heading__eyebrow">Explore Our</span>
-            <span class="kitchen-guide-heading__chinese">廚房裝修指南</span><br class="kitchen-guide-heading__mobile-break">
-            Take A Look At <span class="kitchen-guide-heading__accent">Our</span> Latest Articles.
+            <span class="bilingual-heading-lead"><span class="kitchen-guide-heading__eyebrow">Explore Our</span>
+            <span class="kitchen-guide-heading__chinese">廚房裝修指南</span></span><br class="kitchen-guide-heading__mobile-break">
+            Take A <span class="kitchen-guide-heading__accent">Look At Our</span> Latest Articles
           </h2>
         </header>
 

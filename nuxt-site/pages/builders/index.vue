@@ -247,7 +247,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
           <InternalSectionPill>{{ cmsCopy.copy.text33 }}</InternalSectionPill>
           <div>
-            <h2 id="builders-contact-title"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese">櫻花集團品牌館</b>The Art <span>of</span><br /> <span>Kitchen</span> Showrooms</h2>
+            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese">櫻花集團品牌館</b></span>The Art <span>of</span><br /> <span>Kitchen</span> Showrooms</h2>
           </div>
         </header>
 
@@ -405,9 +405,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-lifetime__visual { aspect-ratio: 16 / 9; border-radius: 24px; }
 .builders-contact { scroll-margin-top: 60px; padding: 120px 30px 130px; background: #fafafa var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) top right / auto no-repeat; }
 .builders-contact__heading { margin-bottom: 58px; }
-#builders-contact-title { min-width: 0; max-width: 100%; font-size: 58px; line-height: 1.2; text-transform: none; }
-#builders-contact-title .builders-contact-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 16px; line-height: 20px; letter-spacing: 0; vertical-align: baseline; }
-.builders-contact-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 38px; font-weight: 600; line-height: 1.2; letter-spacing: 0; vertical-align: baseline; }
+#builders-contact-title { min-width: 0; max-width: 100%; font-size: 50px; line-height: 1.2; text-transform: none; }
+#builders-contact-title .builders-contact-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; letter-spacing: 0; vertical-align: baseline; }
+.builders-contact-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; letter-spacing: 0; vertical-align: baseline; }
 .builders-contact__grid { display: grid; grid-template-columns: 42% 58%; align-items: start; }
 .builders-contact__aside { padding-right: 55px; }
 .builders-contact__copy { padding: 10px 0 42px; }
@@ -457,7 +457,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-section-heading--split { grid-template-columns: 1fr; gap: 25px; }
   #builders-team-title { font-size: 42px; }
   .builders-brand-chinese { font-size: 32px; }
-  #builders-contact-title { font-size: 48px; }
+  #builders-contact-title { font-size: 42px; }
   .builders-contact-chinese { font-size: 32px; }
   .builders-section-heading--split :deep(.template-heading-rail__line) { display: none; }
   .builders-section-heading--team > p { max-width: 680px; }

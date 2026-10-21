@@ -128,9 +128,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div class="store-location-heading grid grid-cols-1 items-start gap-5 lg:grid-cols-[30%_70%] lg:gap-0">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" :label="cmsCopy.copy.text1" source="home4" class="store-location-heading-rail" />
           <h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="store-location-title">
-            <span class="store-location-title__eyebrow">Explore Our</span>
-            <span class="store-location-title__chinese">{{ cmsCopy.copy.text2 }}</span>
-            Find Us <span class="text-[#CAA05C]">Stores at</span><br />
+            <span class="bilingual-heading-lead"><span class="store-location-title__eyebrow">Explore Our</span>
+            <span class="store-location-title__chinese">{{ cmsCopy.copy.text2 }}</span></span>
+            Find Us <span class="text-[#CAA05C]">Stores At</span><br />
             <span class="store-location-title__chinese">{{ cmsCopy.copy.text3 }}</span>
             SAKURA KITCHEN
           </h2>

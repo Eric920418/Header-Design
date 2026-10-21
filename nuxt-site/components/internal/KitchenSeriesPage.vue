@@ -259,8 +259,8 @@ useSeoMeta({
         <div class="ai-section-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Kitchen Collections" />
           <h2 id="ai-collections-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <span class="ai-collections-eyebrow">Explore Our</span>
-            <span class="ai-collections-chinese">探索廚房美學</span><br class="ai-collections-mobile-break">
+            <span class="bilingual-heading-lead"><span class="ai-collections-eyebrow">Explore Our</span>
+            <span class="ai-collections-chinese">探索廚房美學</span></span><br class="ai-collections-mobile-break">
             Creative <span class="ai-collections-accent">Projects That</span> Define Our Style
           </h2>
         </div>
@@ -398,9 +398,9 @@ useSeoMeta({
         <div class="ai-cases__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Recommended Cases" class="ai-cases__heading-label" />
           <h2 id="cases-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 90 }">
-            <span class="ai-collections-eyebrow">Explore Our</span>
-            <span class="ai-collections-chinese">風格廚房實例</span><br class="ai-collections-mobile-break">
-            Take A <span class="ai-collections-accent">Look At Our</span> Latest Articles.
+            <span class="bilingual-heading-lead"><span class="ai-collections-eyebrow">Explore Our</span>
+            <span class="ai-collections-chinese">風格廚房實例</span></span><br class="ai-collections-mobile-break">
+            Take A <span class="ai-collections-accent">Look At Our</span> Latest Articles
           </h2>
         </div>
         <div

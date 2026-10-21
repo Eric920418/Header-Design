@@ -37,7 +37,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <InternalBrandStoreSection />
     <InternalFaqAccordion class="brand-advantage-faq" :groups="brandAdvantageFaqGroups" section-id="brand-advantage-faq-title" safe-rail>
       <template #title>
-        <span class="brand-faq-eyebrow">Explore Our</span><b class="brand-faq-chinese">一站式專業服務</b>Clear <span class="brand-faq-accent">Answers</span> To<br /><b class="brand-faq-chinese">實現理想廚房</b>Your <span class="brand-faq-accent">Main</span> Questions
+        <span class="bilingual-heading-lead"><span class="brand-faq-eyebrow">Explore Our</span><b class="brand-faq-chinese">一站式專業服務</b></span>Clear <span class="brand-faq-accent">Answers</span> To<br /><b class="brand-faq-chinese">實現理想廚房</b>Your <span class="brand-faq-accent">Main</span> Questions
       </template>
     </InternalFaqAccordion>
   </main>

@@ -37,7 +37,7 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
           <InternalSectionPill class="sakura-product-story__eyebrow">Kitchen Appliances</InternalSectionPill>
           <h2 id="sakura-product-story-title">
             <span class="sakura-product-story__chinese-title">廚房產品</span>
-            Elevate Your<br><span>Kitchen with</span><br>{{ info.name }}
+            Enjoy <span>Kitchen<br>Living</span> With<br>{{ info.name }}
           </h2>
           <p>{{ info.description }}</p>
         </div>

@@ -214,7 +214,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header class="source-split-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="CELEBRITY STORIES" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <h2 id="franchise-marketing-title"><span class="franchise-celebrity-eyebrow">Explore Our</span><b class="franchise-celebrity-chinese">品牌信賴</b>Celebrity <span>Stories</span><br />Of Inspired <span>Living</span></h2>
+            <h2 id="franchise-marketing-title"><span class="bilingual-heading-lead"><span class="franchise-celebrity-eyebrow">Explore Our</span><b class="franchise-celebrity-chinese">品牌信賴</b></span>Celebrity <span>Stories</span><br />Of Inspired <span>Living</span></h2>
             <p>{{ cmsCopy.copy.text42 }}</p>
           </div>
         </header>
@@ -325,7 +325,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section id="franchise-news" class="franchise-news elementor-836324d" aria-labelledby="franchise-news-title">
       <div class="source-rail internal-rail-safe">
         <InternalSectionPill>{{ cmsCopy.copy.text58 }}</InternalSectionPill>
-        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }"><span class="franchise-news-eyebrow">Explore Our</span><b class="franchise-news-chinese">最新加盟資訊</b>Latest Franchise News<br />With <span>SAKURA KITCHEN</span></h2>
+        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }"><span class="bilingual-heading-lead"><span class="franchise-news-eyebrow">Explore Our</span><b class="franchise-news-chinese">最新加盟資訊</b></span>Latest Franchise News<br />With <span>SAKURA KITCHEN</span></h2>
         <div class="franchise-news__list">
           <NuxtLink v-for="article in franchiseNews" :key="article.id" :to="article.legacyPath" class="franchise-news-row">
             <i aria-hidden="true" /><h3>{{ article.title }}</h3><ArrowRight aria-hidden="true" />
@@ -548,9 +548,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .franchise-news { padding: 108px 30px 86px; background: #fff var(--cms-image-asset_39582b0b, url('/section-6/franchise/antra-original/h5-bg02.png')) top right / auto no-repeat; }
 .franchise-news h2 { max-width: 786px; margin-top: 28px; }
-#franchise-news-title { min-width: 0; max-width: 100%; font-size: 58px; line-height: 1.2; text-transform: none; }
-#franchise-news-title .franchise-news-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 16px; line-height: 20px; letter-spacing: 0; vertical-align: baseline; }
-.franchise-news-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 38px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
+#franchise-news-title { min-width: 0; max-width: 100%; font-size: 50px; line-height: 1.2; text-transform: none; }
+#franchise-news-title .franchise-news-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; letter-spacing: 0; vertical-align: baseline; }
+.franchise-news-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .franchise-news__list { margin-top: 60px; border-top: 1px solid #e3e3e8; }
 .franchise-news-row { display: grid; grid-template-columns: 14px 1fr 46px; gap: 18px; align-items: center; min-height: 84px; border-bottom: 1px solid #e3e3e8; }
 .franchise-news-row > i { width: 6px; height: 6px; border-radius: 50%; background: #caa05c; }
@@ -619,7 +619,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (max-width: 1023px) {
-  #franchise-news-title { font-size: 48px; }
+  #franchise-news-title { font-size: 42px; }
   .franchise-news-chinese { font-size: 32px; }
   .franchise-faq__heading h2 { font-size: 42px; }
   .franchise-faq-chinese { font-size: 32px; }

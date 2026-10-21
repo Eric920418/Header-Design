@@ -1,5 +1,74 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-21 服務流程移除Explore Our、To大寫與標籤對齊
+
+- 依10:36:56截圖，移除服務流程介紹標題上方的Explore Our及未使用樣式，保留FAQ區本來的Explore Our；左Service Process膠囊改對齊中文首行中心。沿用ponytail最小修改，依既有64／70px頂距與40／32px中文1.2倍行高，膠囊頂距為桌機72px、1024px邊界78px、768–1023px73.2px；手機原上下排列／隱藏線及0頂距保留，不挪十字線或右側主標。
+- 已確認本機已發布view-pages-service-process的copy.text5仍為「 to Life 」，不是只改Vue樣本就會更新。新增限定本機update-service-title-20261021.mjs，預設dry-run、--apply才經既有save／publish版本流程將單一欄位改「 To Life 」，保留空白、其他文案、歷史與其他文件；遇草稿／自訂文字／revision衝突停止，禁止其他DB／正式端。
+- 不改流程圖／八步內容、FAQ、圖片、字級／金黑範圍、47px水平間距或SEO，不push／部署，僅維護README。
+- 本機CMS限定更新已完成：revision1→3，發布a39d75d2-478d-4c63-a43c-d3ca45e57ebc，保留06da7a00-604f-4120-8d17-8042d8cbef94及全部歷史body，其他64份文件同transaction比對不變；再次dry-run為UNCHANGED。Vue型別樣本同步To Life，前台仍取真實已發布資料；正式CMS未修改。
+- pnpm build、限定To純函式／衝突／冪等／空白保留與介紹／FAQ來源回歸、錯誤正式主機／其他DB／旗標連線前拒絕、兩腳本語法及git diff --check通過。實際本機API與舊版body比對僅copy.text5改T，/service-process SSR200，介紹無Explore Our、主標Bringing Your Dream Kitchen To Life、原金色／描述／流程圖／影片與FAQ眉標保留；編譯CSS三斷點膠囊頂距及刪除介紹眉標樣式確認。未另跑獨立typecheck或含業務POST的全站回歸；未驗瀏覽器實際字形中心／手機視覺／FAQ與流程互動或正式端，不以SSR、編譯CSS與行框公式宣稱像素和操作驗收。保留本機SQL IP TLS既有警告，未降低TLS設定。
+
+## 2026-10-21 無Explore Our的主標與小標籤平行
+
+- 依10:09:36截圖「只調整位置、不調整內容／全站統一」，補齊沒有Explore Our行框的三種同款版型：廚房商品型錄的選購指南、加盟夥伴分享、加盟FAQ。沿用ponytail最小修改，只在既有全站CSS補同一個標籤頂距規則：以原標題頂距（64px／加盟分享70px）加桌機14px／平板9.2px，讓32px膠囊中心對齊50px／42px標題第一行1.2倍行框中心；重用既有TemplateHeadingRail可選頂距，不加JS或位移整個區塊。
+- 不改右側標題／FAQ／圖片／分類／原文案、字級、47px十字線水平間距／線長、原16組有Explore Our版型或手機上下排列；不改CMS／資料庫、不push／部署、不新增套件／文件。既有回歸加入三類共享規則與行框公式防護，僅維護README。
+- pnpm build、限定共用47px／原16組雙語／三類無眉標行框及選購指南來源回歸、腳本語法與git diff --check通過；本機型錄與加盟頁SSR200，三個標題及小標籤文字不變，選購指南分類／FAQ／媒體區塊保留。最終編譯CSS確認三類桌機14px／平板9.2px補償及分享區原70px頂距存在。僅CSS改動未另跑typecheck或含業務POST的全站測試；未驗實際瀏覽器字形中心／手機視覺、FAQ／篩選互動及正式端，行框公式與SSR不能代替視覺和操作驗收。
+
+## 2026-10-21 商品詳情相關產品英文品牌Noto Sans TC
+
+- 依10:09:28截圖紅框，只將商品詳情KITCHEN PRODUCT輪播標題的英文品牌名（SAKURA／SVAGO／TEKA）改用既有--font-cjk-sans（Noto Sans TC），以span局部套用；中文「廚電」仍沿用原Noto Serif TC，文案／字級／行高／字重、平板38px與手機34px不動。沿用ponytail最小修改，不擴大全站字型或改到商品卡文字。
+- 保留原相關商品、圖片／型號／價格／連結、箭頭及輪播操作，三品牌共用ProductDetailPage同步生效；不改CMS／資料庫、不push／部署、不新增套件／文件，既有回歸補字型範圍與控制保留防護，僅維護README。pnpm build、限定字型／中文與原尺寸／箭頭來源回歸、腳本語法及git diff --check通過；三品牌代表詳情80377／82140／82062均SSR200，原18個相關商品位置之型號／價格／連結及控制保留，英文品牌獨立span與中文文字正確。編譯CSS確認英文span用sans token、中文strong仍serif。僅模板span與CSS改動，未另跑typecheck或含資料庫寫入／業務POST的全站測試；未驗實際瀏覽器字型下載／字形／手機寬度、輪播點擊或正式端，不以SSR與編譯CSS宣稱視覺或操作驗收。
+
+## 2026-10-21 三品牌商品列表Smart Kitchen Living
+
+- 依10:09:14截圖，將ProductListPage的英文統一為Smart Kitchen Living，移除原SAKURA部分分類限定Smart Appliances for Better Living、其餘品牌Kitchen Appliances的文字分支；三品牌全部產品／分類頁與除油煙機／近吸舊路徑共用生效。沿用ponytail最小修改，模板僅改一行，保留金色、字級／間距、Kitchen Appliances Hero、中文分類與除油煙機系列副標。
+- 不更動商品／總數、篩選／分頁／搜尋、卡片／型錄／SEO或錯誤顯示，不改CMS／資料庫，不push／部署；既有前台及唯讀分類封面回歸同步更新，不新增套件／文件，僅維護README。
+- pnpm build、限定前台來源／33組唯讀SSR與API比對、兩腳本語法及git diff --check通過。SAKURA15組、SVAGO／TEKA各9組涵蓋三品牌全部產品、25個頂層分類、除油煙機／近吸舊網址、淨水／龍頭與第2頁；均為Smart Kitchen Living且保留API原中文／總數／當頁型號、搜尋顯示範圍與Kitchen Appliances Hero。編譯CSS仍為#caa05c及原40／36／30px響應式字級。本輪未執行check-products資料庫寫入測試，亦未執行check-product-covers整支的外部圖片HEAD檢查；靜態模板改動未另跑typecheck。未驗瀏覽器實際篩選／搜尋／分頁點擊、手機視覺或正式端，不將SSR視為視覺與互動驗收。
+
+## 2026-10-21 三品牌產品頁Enjoy Kitchen Living With主標題
+
+- 依10:09:03截圖，只改三品牌共用ProductBrandPage故事區主標題：Elevate Your／Kitchen with／品牌改為Enjoy Kitchen／Living With／品牌，Kitchen Living金色，Enjoy／With／品牌黑色，With大寫；品牌仍取已發布CMS的info.name，不硬編碼SVAGO。截圖上方SAAGO為誤植，保留正確SVAGO品牌。
+- 沿用ponytail最小修改，模板僅改一行，保留Kitchen Appliances小標、廚房產品中文、原桌機50／40px600與手機尺寸／安全區、品牌圖／介紹／切換／分類／錯誤顯示及SEO，不更改CMS資料、不push／部署。既有前台與產品回歸同步更新，不新增文件／套件，僅維護README。
+- pnpm build、限定產品品牌來源與三頁SSR回歸、兩腳本語法及git diff --check通過；/products/sakura、/products/svago、/products/teka均200，逐字核對新標題、三行結構、Kitchen Living金色span與With大寫，已發布CMS的品牌圖／介紹逐值保留，三品牌切換與分類格仍存在。首次測試只比對不帶屬性的br導致丟掉SSR的換行空格，已兼容Vue scoped屬性後三頁通過，未更動畫面補測試空白。check-products含資料庫匯入／回滾／權限操作，本輪只執行其已更新的SSR斷言，不執行整支資料寫入測試；靜態模板文字修改未另跑typecheck。未驗瀏覽器實際配色／字形／手機分行、分類互動或正式端，不把SSR當成視覺與操作驗收。
+
+## 2026-10-21 廚房裝修指南列表標題金色與刪除句點
+
+- 依10:08:44截圖，列表標題已套前一輪共用雙語行框／小標籤下緣對齊，本輪不重複移動版面；沿用ponytail最小修改，只將Look At納入原Our的金色span，並刪除Latest Articles末尾句點。保留Explore Our、廚房裝修指南、完整英文詞句、小標籤、18／40px600／50px、47px十字線、手機分行與文章清單／內容／圖片／路徑。
+- 僅改knowledge/index.vue標題一行與既有回歸預期，CMS型別樣本及發布資料不動，不push／部署，不新增文件／套件，僅維護README。pnpm build、限定指南來源／共用47px與16組雙語對齊回歸、腳本語法及git diff --check通過；本機/knowledge SSR200，標題詞句逐字保留且無句點、Look At Our落在原金色span，文章區塊與目的頁連結保留，編譯CSS金色仍#caa05c。首次產物檢查漏含帶數字的index-styles-6檔名，擴充檔名過濾後找到原規則，未為檢查更動CSS。本次僅靜態文字與span範圍，未另跑typecheck或含業務POST的全站測試；未驗瀏覽器實際字形／窄欄分行／手機視覺、文章點擊及正式端，不以SSR或來源公式宣稱像素驗收。
+
+## 2026-10-21 品牌系列推薦案例位置與刪除句點
+
+- 依09:17:38截圖，風格廚房實例區已套前一輪共用行框／左標籤下緣對齊，不重複挪動區塊；沿用ponytail最小修改，僅刪除Take A Look At Our Latest Articles末尾句點，十系列共用元件同步生效。保留Recommended Cases、Explore Our、中文、金黑字範圍、原文案／案例資料／圖片、18／40px600／50px、47px十字線與手機分行；不改廚房裝修指南其他標題的句點。
+- 既有check-kitchen-series加入十頁推薦案例標題完整逐字／無句點／共用組檢查，前台來源回歸同步更新；本機修改，不寫CMS／資料庫、不push／部署，僅維護README。pnpm build、check-kitchen-series、限定47px／16組雙語對齊與句點來源回歸、兩腳本語法及git diff --check通過；十系列SSR200且末尾無句點，原套系／板材／45個廚電位置／案例、404及215圖片來源檢查通過。首次標題逐字測試誤假設眉標與中文之間SSR會留空格，已依Vue既有輸出調整預期後十頁通過，沒有為測試新增畫面空白。靜態文字修改未另跑typecheck或含業務POST的全站測試；未驗實際瀏覽器字形位置／輪播與鍵盤互動／手機視覺及正式端，不將SSR或來源防護當作像素與操作驗收。
+
+## 2026-10-21 品牌系列探索廚房美學位置複核
+
+- 依09:17:21截圖「只調整位置、不調整內容」，十個品牌系列共用KitchenSeriesPage，先前已套16組共用雙語行框與左標籤下緣對齊；不重複挪動版面。沿用ponytail最小修改，保留Kitchen Collections、Explore Our、探索廚房美學、Creative Projects That Define Our Style與原70px頂距／30%＋70%欄位、18／40px600／50px、47px十字線水平間距及手機分行，不換成右圖BRAND SERIES或品牌系列文案。
+- 本輪只補check-kitchen-series十頁實際SSR標題／小標籤／共用對齊組保留防護及來源位置規則，不改應用程式、CMS資料、Hero、下方文案或圖片，不push／部署，僅維護README。pnpm exec node scripts/check-kitchen-series.mjs、限定47px／16組雙語對齊來源回歸、腳本語法及git diff --check通過；十系列SSR200，原標題與小標籤／套系／色卡／完整45個廚電位置／案例、404、215圖片來源、輪播邊界及鍵盤／減少動態來源防護均通過。僅修改測試與文件，未重建或另跑typecheck；未執行瀏覽器標題位置量測、真實輪播／鍵盤／手機互動或正式端檢查，未加--images檢查遠端圖片HTTP，不將SSR與來源公式稱為像素驗收。
+
+## 2026-10-21 首頁尋找門市位置與At大小寫
+
+- 依09:17:09截圖「只調整位置、不調整內容」，門市標題已套前一輪共用雙語行框置中、左標籤下緣對齊與47px十字線間距，本輪不重複挪動區塊；沿用ponytail最小修改，僅將Stores at改Stores At。保留原CMS中英文、Explore Our、Find Us、SAKURA KITCHEN、金黑配色、18／40px600／50px層級、兩行結構及手機／平板上下排列。
+- 不改Google地圖、門市清單／翻牌、篩選／定位、電話及地址資料，不寫CMS或資料庫，不push／部署；既有回歸同步檢查At大寫，僅維護README。pnpm build、限定門市標題／共用47px與雙語對齊回歸、腳本語法及git diff --check通過；本機首頁SSR200確認Stores At、原共用標題、區域／城市選單與定位入口保留。這次只改靜態文字，未另跑typecheck或含業務POST的全站測試，未實測地圖操作／定位權限／篩選互動及瀏覽器字形／手機像素，也未檢查正式端；不將SSR當成視覺驗收。
+
+## 2026-10-21 首頁廚房產品位置與For大小寫
+
+- 依09:11:05截圖「只調整位置、不調整內容」，此區已套前一輪16組共用雙語行框置中與左標籤下緣對齊，不重複搬動標題區／卡片。沿用ponytail最小修改，僅將Designed for改為Designed For，遵照截圖F大寫；Explore Our、原CMS中文、Smart Appliances／Better Living、金白配色、18／40px600／50px層級、47px水平間距、卡片素材與品牌入口均保留。
+- 既有前台回歸補For大小寫斷言，僅維護README；本機修改，不push／部署、不寫CMS／資料庫。pnpm build、限定For／共用47px／16組雙語對齊回歸、腳本語法與git diff --check通過；本機首頁SSR200，確認For、共用組、原中文綁定與其他英文／深色小標籤／三品牌入口保留。這次只改靜態文字，未重跑獨立typecheck或含業務POST的全站測試；未驗瀏覽器實際字形位置／手機視覺或正式端，不將SSR與來源公式視為像素驗收。
+
+## 2026-10-21 雙語主標題置中與小標籤下緣對齊
+
+- 依08:46:36截圖，沿用ponytail最小修改，針對Explore Our＋中文的同款標題加入共用inline-flex行框，眉標與中文垂直置中；手機display:contents保留原本分行。桌機統一18／40px SemiBold／50px，平板保留42／32px層級，不更動非同款的獨立眉標、圖卡、Hero或CMS文案。
+- 左側標籤以各標題既有頂距加行框補償下移，對齊眉標22px與標籤14px文字行框下緣；47px十字線水平定位、箭頭與線長不變，並保留上下排列區塊不對位、手機十字線隱藏。本機修改，不push／部署或寫入資料庫。
+- 共16組同款標題套用，共用CSS取消組內中文原-.06em位移、以主標1.2em行框置中；無Explore Our的標題、服務流程上方獨立眉標、首頁案例80px標題均未改。建商聯繫及加盟消息原16／38／58px改18／40／50px，平板48→42px；服務FAQ眉標16→18px。其他頁文案／CMS綁定及既有手機分行保留。
+- pnpm build、建置後pnpm typecheck、限定共用47px及本輪雙語回歸、腳本語法與git diff --check通過；最終編譯CSS確認共同行框、桌機／平板中文字級、標籤補償與原版型回退均存在。10個代表頁SSR均200，共16組標題正確回傳；逐頁h2文字與HEAD比較不變。沒有執行含業務表單POST的全站回歸或瀏覽器視覺量測；補償公式只驗文字行框，不能當成已驗實際字形墨跡下緣、窄欄換行或手機像素結果，不繞過既有瀏覽器URL限制。保留既有建置警告，未更新正式CMS或部署。
+
+## 2026-10-21 全站主標題與十字垂直線間距複核
+
+- 依08:46:23截圖重新盤點，目前程式已具備10月13日完成的共用47px間距，並非本次才修正；沿用ponytail最小修改，不重複移動標題／正文、不改字級或文案，也不把示意圖紅線／藍線加入介面。共13份Vue檔、17處共用標題軌；各來源版型沿用同一水平定位，加盟58px／窄桌機30px內距補償、手機隱藏裝飾線保持不變。
+- 既有check-frontend-regressions加入自動掃描components／pages，防止任何標題軌使用者重新覆寫垂直線left／right。限定共用定位回歸、腳本語法與git diff --check通過；本輪沒有應用程式樣式變更、不新增套件或文件，不寫入CMS／資料庫、不push或部署。
+- 本機3100原未啟動，已以pnpm dev --port 3100恢復預覽（目前綁定localhost／IPv6，非127.0.0.1）；10個代表頁唯讀SSR均200，共18個標題軌實例（FAQ共用元件會重複呈現）。範圍為首頁、潮派系列、品牌優勢／關於我們／品牌館、服務流程、廚房知識、加盟、廚房商品型錄與case10；進場動畫及手機原規則不更動。dev型別監看0錯誤；因僅補回歸測試與文件，未重建或重跑含表單POST的全站測試。未執行瀏覽器像素量測或正式端檢查，不將來源公式／SSR結果稱為本輪視覺驗收，亦未繞過既有瀏覽器URL限制。
+
 ## 2026-10-20 建商廚房系列八組素材與相簿視窗
 
 - 依13:48:46截圖與使用者「請他們補，先上有的」確認，先做資料夾現有8組／18張圖片；缺第03組「原色系列0.5」，不放假圖或拿其他系列補位。順序依素材01／02／04至09；英文依實際資料夾NEUTRAL COLOR（截圖NUTRAL少E），其餘HORIZON／LUMINOUS SPACE／MODERN CHIC保留。

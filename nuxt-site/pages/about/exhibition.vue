@@ -47,7 +47,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <section class="pavilion-gallery" aria-labelledby="pavilion-gallery-title">
             <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
               <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Gallery" />
-              <h2 id="pavilion-gallery-title"><span class="pavilion-gallery-eyebrow">Explore Our</span><b class="pavilion-gallery-chinese">櫻花集團品牌館</b>Memories are made<br /><span>when we’re together</span></h2>
+              <h2 id="pavilion-gallery-title"><span class="bilingual-heading-lead"><span class="pavilion-gallery-eyebrow">Explore Our</span><b class="pavilion-gallery-chinese">櫻花集團品牌館</b></span>Memories are made<br /><span>when we’re together</span></h2>
             </header>
 
             <div v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-filter ev" role="tablist" aria-label="選擇集團品牌館">

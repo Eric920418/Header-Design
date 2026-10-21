@@ -61,7 +61,7 @@ const slots = useSlots()
   box-sizing: border-box;
   min-width: 0;
   min-height: var(--rail-min-height);
-  padding-top: var(--rail-padding-top);
+  padding-top: var(--template-bilingual-label-top, var(--rail-padding-top));
   color: var(--rail-ink);
 }
 

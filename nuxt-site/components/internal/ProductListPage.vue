@@ -48,7 +48,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
     <section class="near-suction-products" aria-labelledby="near-suction-products-title">
       <div class="near-suction-rail internal-rail-safe">
         <h2 id="near-suction-products-title" v-reveal="{ anim: 'opalMoveUp' }">
-          <em>{{ brand === 'sakura' && (category === 6 || category === 9 || category === 83205) ? 'Smart Appliances for Better Living' : `${info.name} Kitchen Appliances` }}</em>
+          <em>Smart Kitchen Living</em>
           <span>{{ heading }}{{ brand === 'sakura' && category === 6 && !heading.endsWith('系列') ? '系列' : '' }}</span>
         </h2>
         <form v-if="!category" class="product-search" role="search" @submit.prevent="submitSearch">

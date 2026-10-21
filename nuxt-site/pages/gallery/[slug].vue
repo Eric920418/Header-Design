@@ -170,7 +170,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <section class="case-detail-related" aria-labelledby="related-cases-title">
           <div class="case-detail-related__heading">
             <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="FEATURED PROJECTS" class="case-detail-related__label-wrap" />
-            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }"><span class="case-related-eyebrow">Explore Our</span><b class="case-related-chinese">精選廚房案例</b>Real <span>Spaces</span><br /><span>That</span> Inspire Living</h2>
+            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }"><span class="bilingual-heading-lead"><span class="case-related-eyebrow">Explore Our</span><b class="case-related-chinese">精選廚房案例</b></span>Real <span>Spaces</span><br /><span>That</span> Inspire Living</h2>
           </div>
           <div ref="relatedViewport" class="case-detail-related__viewport" aria-label="相關案例輪播">
             <div class="case-detail-related__track">

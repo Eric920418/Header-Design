@@ -76,7 +76,9 @@ for (const [brand,total] of Object.entries(totals)) {
   await get(`/api/products/${brand}/items/99999999`,404)
   assert.equal((await get(`/api/products/${brand}/items?q=${encodeURIComponent("' OR 1=1 --")}`)).total,0)
   const html = await get(`/products/${brand}`)
-  assert(html.includes(`Elevate Your`) && html.includes(brand.toUpperCase()))
+  const brandHeading=html.match(/<h2\b[^>]*id="sakura-product-story-title"[\s\S]*?<\/h2>/)?.[0]||''
+  assert.equal(brandHeading.replaceAll(/<br\b[^>]*>/g,' ').replaceAll(/<[^>]*>/g,'').replaceAll(/\s+/g,' ').trim(),`廚房產品 Enjoy Kitchen Living With ${brand.toUpperCase()}`)
+  assert(/Enjoy <span[^>]*>Kitchen<br\b[^>]*>Living<\/span> With<br\b[^>]*>/.test(brandHeading),'保留Kitchen Living金色、With黑色大寫及三行結構')
   assert(!html.includes('分類快照'))
   console.log(`PASS ${brand}: ${total} 項，${first.pages} 頁，${categories.allCategories.length} 分類，搜尋／SSR／參數驗證`)
 }

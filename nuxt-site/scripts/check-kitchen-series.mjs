@@ -71,6 +71,12 @@ for (const page of pages) {
   const response = await fetch(`${base}${style.route}`, { headers: { cookie } })
   assert.equal(response.status, 200, style.route)
   const html = await response.text()
+  const collectionsHeading=html.match(/<div\b[^>]*class="ai-section-heading"[\s\S]*?<\/h2>/)?.[0]||''
+  assert(collectionsHeading.includes('Kitchen Collections')&&collectionsHeading.includes('class="bilingual-heading-lead"'),`${page.slug}: 原小標籤與雙語共用對齊組不得遺漏`)
+  for(const text of ['Explore Our','探索廚房美學','Creative','Projects That','Define Our Style'])assert(collectionsHeading.includes(text),`${page.slug}: 只調位置，不得更改原標題：${text}`)
+  const casesHeading=html.match(/<h2\b[^>]*id="cases-heading"[\s\S]*?<\/h2>/)?.[0]||''
+  assert(casesHeading.includes('class="bilingual-heading-lead"')&&casesHeading.includes('風格廚房實例'),`${page.slug}: 推薦案例保留原中文與共用對齊`)
+  assert.equal(casesHeading.replaceAll(/<[^>]*>/g,'').replaceAll(/\s+/g,' ').trim(),'Explore Our風格廚房實例 Take A Look At Our Latest Articles',`${page.slug}: 只刪除英文末尾句點，其他字詞不變`)
   const lightFinish = page.finishes.some(finish => finish.code === 'D0032' || (page.slug === 'clever' && finish.code === 'D8410'))
   const borderlessFinish = page.finishes.some(finish => page.slug === 'basic-plus' && finish.code === 'K540D')
   assert.equal(html.includes('ai-finishes__image--light'), lightFinish, `${page.slug}: 白色色卡細框範圍錯誤`)
@@ -104,6 +110,10 @@ if (process.argv.includes('--images')) {
   }))
 }
 const component = readFileSync(new URL('../components/internal/KitchenSeriesPage.vue', import.meta.url), 'utf8')
+const headingCss=readFileSync(new URL('../assets/css/main.css',import.meta.url),'utf8')
+assert(/\.ai-section-heading \{[^}]*grid-template-columns: 30% 70%;/.test(component)&&/\.ai-section-heading h2 \{[^}]*margin: 70px 0 0;[^}]*font-size: 50px;/.test(component),'保留系列標題原欄位、頂距與桌機50px')
+assert(headingCss.includes('.ai-section-heading, .about-services__heading')&&headingCss.includes('--bilingual-heading-top: 70px;'),'系列左側標籤需依原70px標題頂距套共用補償')
+assert(headingCss.includes('--template-heading-title-gap: 47px;')&&headingCss.includes('align-items: center;')&&headingCss.includes('.bilingual-heading-lead { display: contents; }'),'保留共用47px／置中與手機原分行')
 assert(/\.ai-equipment__grid \{[^}]*--columns: 5;[^}]*flex-wrap: nowrap;[^}]*touch-action: pan-y pinch-zoom;/.test(component),'廚電桌機單排五產品，保留垂直觸控捲動及縮放')
 assert(component.includes('.ai-equipment__viewport { overflow: hidden; }')&&component.includes('.ai-equipment__grid { --columns: 2; --gap: 14px; }'),'輪播需裁切且手機維持兩產品')
 assert(component.includes("slidesToScroll: 1, duration: reducedMotion.value ? 0 : 24")&&component.includes("loop: false, align: 'start' as const"),'每次一產品、不複製循環並尊重減少動態偏好')

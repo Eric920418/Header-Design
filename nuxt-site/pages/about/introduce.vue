@@ -136,7 +136,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="about-rail">
         <header class="about-services__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="About Us" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="about-stories-eyebrow">Explore Our</span><b class="about-stories-chinese">櫻花整體廚房</b>SAKURA KITCHEN<br /><b class="about-stories-chinese">紀事</b><span>Stories</span></h2>
+          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="bilingual-heading-lead"><span class="about-stories-eyebrow">Explore Our</span><b class="about-stories-chinese">櫻花整體廚房</b></span>SAKURA KITCHEN<br /><b class="about-stories-chinese">紀事</b><span>Stories</span></h2>
         </header>
 
         <div class="about-services__panel">
@@ -257,7 +257,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="about-identity__rail">
         <header class="about-identity__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="DISTINCTIVE BRAND IDENTITY" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="about-identity-eyebrow">Explore Our</span><b class="about-identity-chinese">專屬品牌識別</b>Signature<br /><span>Brand Identity</span></h2>
+          <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="bilingual-heading-lead"><span class="about-identity-eyebrow">Explore Our</span><b class="about-identity-chinese">專屬品牌識別</b></span>Signature<br /><span>Brand Identity</span></h2>
         </header>
 
         <p class="about-identity__description">{{ cmsCopy.copy.text9 }}</p>

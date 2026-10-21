@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const cmsVisuals=await useCmsResource('site-visuals',{"images":{"asset_7692def0":"/section-3/store-songzhu.jpg","asset_7a7fece6":"/section-6/franchise/antra-original/h5-bg1.png","asset_39582b0b":"/section-6/franchise/antra-original/h5-bg02.png","asset_18ed1982":"/section-6/franchise/antra-original/h1-bg01.png","asset_52e702e4":"/section-6/franchise/antra-original/h1-bg01-1.png","asset_d0922f9d":"/section-6/franchise/antra-original/h1-bg02.png","asset_82b9dd3e":"/section-6/franchise/antra-original/h1-bg05.png","asset_38bb39f2":"/section-6/franchise/antra-original/h6-bg-3.png","asset_b3dcb152":"/section-6/builders/builder-hero.jpg","asset_1795db00":"/section-6/franchise/hero-store.jpg","asset_98d304fd":"/section-3/service-process/breadcrumb-df.jpg","asset_44761f00":"/section-5/brand-pavilion/pavilion-taichung.jpg","asset_9b0c0f62":"/home-2026/footer/kitchen-background.webp","asset_73c853de":"/services/h6-bg-2.jpg","asset_809f4bbe":"/section-3/store-chengde.jpg","asset_daa09d8d":"/section-5/brand-pavilion/banner.jpg","asset_10b5a86c":"/home-2026/brand-commitment-opening-frame.webp"},"brandVideoId":"wH374AF9wLI","franchiseVideoId":"sAuAjtpvZYk"})
 
-const cmsCopy = await useCmsResource('view-pages-service-process', {"copy":{"text1":"Our Process","text2":"從設計到實現，打造理想廚房","text3":" Bringing Your ","text4":"Dream Kitchen","text5":" to Life ","text6":"堅持用專業的服務，依照您的需求提供設計，希望以更完整、更貼心的服務，讓您最滿意。","field7":"SAKURA 整體廚房品牌影片封面"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-service-process', {"copy":{"text1":"Our Process","text2":"從設計到實現，打造理想廚房","text3":" Bringing Your ","text4":"Dream Kitchen","text5":" To Life ","text6":"堅持用專業的服務，依照您的需求提供設計，希望以更完整、更貼心的服務，讓您最滿意。","field7":"SAKURA 整體廚房品牌影片封面"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 useSeoMeta({
   title: '服務流程｜SAKURA 整體廚房',
@@ -36,7 +36,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header class="antra-service-intro__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Service Process" />
           <div v-reveal="{ anim: 'opalMoveLeft' }">
-            <span class="service-intro-eyebrow">Explore Our</span>
             <h2 id="service-intro-title">
               <b class="service-intro-chinese-title">{{ cmsCopy.copy.text2 }}</b>{{ cmsCopy.copy.text3 }}<span>{{ cmsCopy.copy.text4 }}</span>{{ cmsCopy.copy.text5 }}</h2>
             <p>{{ cmsCopy.copy.text6 }}</p>
@@ -60,7 +59,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
     <InternalFaqAccordion safe-rail class="service-guide-faq">
       <template #title>
-        <span class="service-faq-eyebrow">Explore Our</span><b class="service-faq-chinese-title">服務指南</b>Clear <span class="service-faq-accent">Answers</span> To Your <span class="service-faq-accent">Main</span> Questions
+        <span class="bilingual-heading-lead"><span class="service-faq-eyebrow">Explore Our</span><b class="service-faq-chinese-title">服務指南</b></span>Clear <span class="service-faq-accent">Answers</span> To Your <span class="service-faq-accent">Main</span> Questions
       </template>
     </InternalFaqAccordion>
   </main>
@@ -82,8 +81,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   margin-right: 16px;
   border-bottom: 1px solid #bdbdbd;
   color: #1c1c1d;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   vertical-align: baseline;
 }
 
@@ -170,6 +169,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 .antra-service-intro__heading {
+  --template-bilingual-label-top: 72px;
   display: grid;
   grid-template-columns: 30% 70%;
 }
@@ -190,7 +190,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 .antra-service-intro h2 span { color: #caa05c; }
-.service-intro-eyebrow { display: block; margin-bottom: 8px; color: #1c1c1d; font-family: var(--font-display); font-size: 16px; line-height: 20px; }
 .service-intro-chinese-title { display: block; margin-bottom: 8px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; text-wrap: balance; }
 
 .antra-service-intro p {
@@ -220,11 +219,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .antra-breadcrumb { min-height: 285px; }
   .antra-breadcrumb__inner { padding-block: 80px; }
   .antra-service-intro { padding-block: 80px; }
+  .antra-service-intro__heading { --template-bilingual-label-top: 78px; }
   .antra-service-intro__heading > div:last-child { padding: 70px 0 40px; }
 }
 
 @media (max-width: 1023px) {
   .antra-service-intro h2 { font-size: 42px; }
+  .antra-service-intro__heading { --template-bilingual-label-top: 73.2px; }
   .service-intro-chinese-title { font-size: 32px; }
 }
 

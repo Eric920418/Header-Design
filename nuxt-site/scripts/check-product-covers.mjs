@@ -19,6 +19,8 @@ for (const [brand, total, count] of [['sakura', 749, 9], ['svago', 60, 8], ['tek
   assert.equal(data.categories.length, count)
   if (brand === 'sakura') assert.deepEqual(data.categories.map(category => category.id), [6, 7, 162, 8, 48, 83307, 5, 83227, 9], 'SAKURA 分類須符合客戶截圖的九項及順序')
   const html = await (await get(`/products/${brand}`)).text()
+  const allProducts=await(await get(`/products/${brand}/all`)).text()
+  assert.match(allProducts,/<em[^>]*>Smart Kitchen Living<\/em>/,`${brand}: 全部產品英文需一致`)
   for (const category of data.allCategories) {
     if (brand === 'sakura' && covers[category.id]) {
       assert.equal(category.image, `/products/categories/${covers[category.id]}`)
@@ -36,14 +38,16 @@ for (const [brand, total, count] of [['sakura', 749, 9], ['svago', 60, 8], ['tek
     assert(html.includes(`href="${category.route}"`))
     const list = await (await get(`/api/products/${brand}/items?category=${category.id}`)).json()
     assert.equal(list.total, category.count)
+    const categoryPage=await(await get(category.route)).text()
+    assert.match(categoryPage,/<em[^>]*>Smart Kitchen Living<\/em>/,`${brand}/${category.title}: 分類列表英文需一致`)
     const response = await fetch(new URL(category.image, base), { method: 'HEAD', signal: AbortSignal.timeout(15000) })
     assert.equal(response.status, 200, `${category.title} 圖片無法載入`)
   }
   console.log(`PASS ${brand}: ${count} 張分類封面、SSR、列表連結、子分類選圖及 ${total} 項產品總數`)
 }
 const waterPage = await (await get('/products/sakura/category/9')).text()
-assert.match(waterPage, /<em[^>]*>Smart Appliances for Better Living<\/em>/)
+assert.match(waterPage, /<em[^>]*>Smart Kitchen Living<\/em>/)
 assert.match(waterPage, /<h1[^>]*>Kitchen Appliances<\/h1>/)
 const faucetPage = await (await get('/products/sakura/category/83098')).text()
-assert.match(faucetPage, /<em[^>]*>SAKURA Kitchen Appliances<\/em>/)
-console.log('PASS 淨水設備列表新標題，Hero 與其他分類標題不變')
+assert.match(faucetPage, /<em[^>]*>Smart Kitchen Living<\/em>/)
+console.log('PASS 三品牌全部產品／分類／淨水／龍頭列表統一英文標題，Hero保留')

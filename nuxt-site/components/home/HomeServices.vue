@@ -26,10 +26,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="KITCHEN PRODUCTS" tone="dark" source="home6" class="home-services-heading__rail" />
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="home-services-heading__copy">
           <h2 id="services-heading" class="home-services-title">
-            <span class="home-services-title__eyebrow">Explore Our</span>
-            <span class="home-services-title__chinese">{{ cmsCopy.copy.text1 }}{{ cmsCopy.copy.text2 }}</span>
+            <span class="bilingual-heading-lead"><span class="home-services-title__eyebrow">Explore Our</span>
+            <span class="home-services-title__chinese">{{ cmsCopy.copy.text1 }}{{ cmsCopy.copy.text2 }}</span></span>
             <span class="home-services-title__english">Smart Appliances</span><br />
-            Designed for <span class="text-[#CAA05C]">Better Living</span>
+            Designed For <span class="text-[#CAA05C]">Better Living</span>
           </h2>
         </div>
       </div>

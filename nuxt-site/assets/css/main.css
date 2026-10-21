@@ -25,6 +25,62 @@
   --template-heading-title-gap: 47px;
 }
 
+/* 手機沿用各頁原本分行；並排標題以同一行框置中眉標與中文。 */
+.bilingual-heading-lead { display: contents; }
+@media (min-width: 768px) {
+  .bilingual-heading-lead {
+    display: inline-flex;
+    max-width: 100%;
+    min-height: 1.2em;
+    align-items: center;
+    vertical-align: top;
+  }
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-lead > :first-child {
+    flex: none;
+    font-size: 18px;
+    line-height: 22px;
+  }
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-lead > :last-child {
+    position: static;
+    min-width: 0;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  :is(header, .home-project-heading, .home-services-heading, .store-location-heading, .ai-section-heading, .ai-cases__heading, .case-detail-related__heading):has(.bilingual-heading-lead) {
+    /* 眉標22px／標籤14px行框，扣除標籤上方9px邊框與內距。 */
+    --template-bilingual-label-top: calc(var(--bilingual-heading-top, 64px) + 13.2px);
+  }
+  .home-project-heading { --bilingual-heading-top: 63px; }
+  .home-services-heading { --bilingual-heading-top: 38px; }
+  :is(.ai-section-heading, .about-services__heading, .about-identity__heading, .pavilion-gallery-heading) { --bilingual-heading-top: 70px; }
+  .source-split-heading { --bilingual-heading-top: 65px; }
+  :is(.product-care__header, .franchise-about__grid, .franchise-faq__heading) {
+    --template-bilingual-label-top: calc(var(--bilingual-heading-top, 64px) + 9.2px);
+  }
+  .franchise-about__grid { --bilingual-heading-top: 70px; }
+}
+@media (min-width: 1024px) {
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-lead > :last-child { font-size: 40px; }
+  :is(header, .home-project-heading, .home-services-heading, .store-location-heading, .ai-section-heading, .ai-cases__heading, .case-detail-related__heading):has(.bilingual-heading-lead) {
+    --template-bilingual-label-top: calc(var(--bilingual-heading-top, 64px) + 18px);
+  }
+  .builders-contact__heading > .section-pill { margin-top: 18px; }
+  :is(.product-care__header, .franchise-about__grid, .franchise-faq__heading) {
+    --template-bilingual-label-top: calc(var(--bilingual-heading-top, 64px) + 14px);
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .case-detail-related__heading { --bilingual-heading-top: 50px; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .store-location-heading { --template-bilingual-label-top: initial; }
+}
+@media (min-width: 768px) and (max-width: 880px) {
+  .home-project-heading { --bilingual-heading-top: 50px; }
+  .home-services-heading { --template-bilingual-label-top: initial; }
+}
+
 /* 招牌安全區：圖片依 Hero 寬度縮放，Logo 固定在導覽下方，文案從招牌下緣開始。 */
 section.hero-includes-header[data-hero-photo] {
   --hero-photo-width: max(100vw, 740px);

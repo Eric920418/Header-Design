@@ -1,12 +1,21 @@
 // Read-only regression check. Requires the local dev server and published local CMS.
 import assert from 'node:assert/strict'
-import {readFile} from 'node:fs/promises'
+import {readFile,readdir} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
 import sharp from 'sharp'
 import {franchiseInitialValues,franchiseChoiceGroups,franchiseErrors} from '../shared/franchise-form.mjs'
 import {addFranchiseExtras} from './update-header-franchise-links-20261015.mjs'
 import {updateFooterNavigation} from './update-footer-navigation-20261020.mjs'
 import {updateNewsHeroTitle} from './update-news-title-20261020.mjs'
+import {updateServiceHeroTitle} from './update-service-title-20261021.mjs'
+
+const serviceTitleFixture={copy:{text5:' to Life ',other:'保留'},cmsSettings:{visible:true}}
+const serviceTitleBefore=structuredClone(serviceTitleFixture),serviceTitleUpdated=updateServiceHeroTitle(serviceTitleFixture)
+assert.deepEqual(serviceTitleFixture,serviceTitleBefore,'大小寫轉換不得修改輸入')
+assert.deepEqual(serviceTitleUpdated,{...serviceTitleBefore,copy:{...serviceTitleBefore.copy,text5:' To Life '}},'只能改T，保留前後空白與其他內容')
+assert.deepEqual(updateServiceHeroTitle(serviceTitleUpdated),serviceTitleUpdated,'重跑不得重複修改')
+for(const value of [{}, {copy:{text5:'自訂內容'}}])assert.throws(()=>updateServiceHeroTitle(value),/已另行修改/)
+console.log('PASS 服務流程To大寫、保留空白及其他內容、冪等與自訂文案防護')
 
 const newsTitleFixture={copy:{text1:'NEWS',field2:'/news',custom:'保留'},cmsSettings:{visible:true}}
 const newsTitleBefore=structuredClone(newsTitleFixture),newsTitleUpdated=updateNewsHeroTitle(newsTitleFixture)
@@ -362,11 +371,10 @@ const homeBilingualGallery=await readFile(new URL('../components/home/HomeGaller
 assert(homeBilingualProject.includes('Explore Our')&&homeBilingualProject.includes('Creative <span class="text-[#CAA05C]">Projects That</span> Define Our Style'),'品牌系列需保留已確認英文並新增Explore Our')
 assert(homeBilingualProject.includes('{{ cmsCopy.copy.text1 }}{{ cmsCopy.copy.text2 }}'),'品牌系列中文需沿用CMS，不能覆寫資料')
 assert(homeRailCss.includes('.home-project-title { font-size: 50px; }')&&homeRailCss.includes('.home-project-title__chinese { font-size: 40px; }'),'品牌系列桌機英文50px／中文40px')
-const homeBilingualChineseCss=homeRailCss.match(/\.home-project-title__chinese\s*\{([^}]+)\}/)[1]
-assert(homeBilingualChineseCss.includes('vertical-align: baseline;')&&homeBilingualChineseCss.includes('top: -.06em;'),'中文需按基線加字形補償對齊，不得再被middle向下推移')
+assert(homeBilingualProject.includes('class="bilingual-heading-lead"'),'首頁品牌系列眉標與中文需由共用行框置中')
 const homeBilingualServices=await readFile(new URL('../components/home/HomeServices.vue',import.meta.url),'utf8')
-const homeServicesChineseCss=homeBilingualServices.match(/\.home-services-title__chinese\s*\{([^}]+)\}/)[1]
-assert(homeServicesChineseCss.includes('vertical-align: baseline;')&&homeServicesChineseCss.includes('top: -.06em;'),'廚房產品同列中文需同步基線與字形補償')
+assert(homeBilingualServices.includes('class="bilingual-heading-lead"'),'廚房產品眉標與中文需由共用行框置中')
+assert(homeBilingualServices.includes('Designed For <span class="text-[#CAA05C]">Better Living</span>')&&!homeBilingualServices.includes('Designed for'),'首頁廚房產品只補For大寫，保留Better Living金色及共用置中位置')
 assert(homeRailCss.includes('.home-project-title__eyebrow')&&homeRailCss.includes('font-size: 18px;')&&homeRailCss.includes('.home-project-title__break { display: initial; }'),'品牌系列小標18px及手機分行需保留')
 assert(homeBilingualGallery.includes('class="gallery-heading-title__chinese">{{ cmsCopy.copy.text3 }}</span>Kitchen<br />Design'),'設計案例需保留CMS中文並以兩行呈現英文')
 assert(homeRailCss.includes('.gallery-heading-title { font-size: 80px; }')&&homeRailCss.includes('.gallery-heading-title__chinese { font-size: 38px; }'),'設計案例桌機英文80px／中文38px')
@@ -380,11 +388,11 @@ assert(homeRailCss.includes('.what-we-do-title { font-size: 50px; }')&&homeRailC
 assert(/@media \(max-width: 767px\)\s*\{\s*\.what-we-do-copy \{ padding-right: 72px; \}/.test(homeRailCss),'手機品牌承諾文字需避開右側服務列')
 console.log('PASS 首頁品牌承諾上方中文、正確英文、原CMS小標與影片保留')
 const homeStoreHeadingSource=await readFile(new URL('../components/home/HomeStoreLocation.vue',import.meta.url),'utf8')
-assert(homeStoreHeadingSource.includes('Explore Our')&&homeStoreHeadingSource.includes('Find Us <span class="text-[#CAA05C]">Stores at</span>')&&homeStoreHeadingSource.includes('SAKURA KITCHEN'),'門市需保留指定英文雙語標題')
+assert(homeStoreHeadingSource.includes('Explore Our')&&homeStoreHeadingSource.includes('Find Us <span class="text-[#CAA05C]">Stores At</span>')&&!homeStoreHeadingSource.includes('Stores at')&&homeStoreHeadingSource.includes('SAKURA KITCHEN'),'門市只補At大寫，保留指定英文及原金色範圍')
 assert(homeStoreHeadingSource.includes('{{ cmsCopy.copy.text2 }}</span>')&&homeStoreHeadingSource.includes('{{ cmsCopy.copy.text3 }}</span>'),'門市中文仍取原CMS兩段資料')
 assert(homeStoreHeadingSource.includes('lg:grid-cols-[30%_70%]')&&homeStoreHeadingSource.includes('class="store-location-heading-rail"'),'門市標題需沿用30／70分欄與共用十字軌')
 assert(homeStoreHeadingSource.includes('.store-location-title { padding-top: 64px; font-size: 50px; }')&&homeStoreHeadingSource.includes('.store-location-title__chinese { font-size: 40px; }'),'門市桌機英文50px／中文40px')
-assert(homeStoreHeadingSource.includes('vertical-align: baseline;')&&homeStoreHeadingSource.includes('top: -.06em;'),'門市中英同列需採字形基線補償')
+assert(homeStoreHeadingSource.includes('class="bilingual-heading-lead"'),'門市眉標與中文需由共用行框置中')
 console.log('PASS 首頁尋找門市雙語標題、指定字級、CMS中文與共用十字軌')
 const headingRailSource=await readFile(new URL('../components/internal/TemplateHeadingRail.vue',import.meta.url),'utf8')
 const headingGlobalCss=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
@@ -392,6 +400,11 @@ assert(headingGlobalCss.includes('--template-heading-title-gap: 47px;'),'十字�
 assert(headingRailSource.includes('--rail-vertical-right: calc(var(--template-heading-title-gap, 47px) + 14px - var(--template-heading-title-inset, 0px));'),'共用十字線定位需扣除標題已有左內距並保留箭頭14px補償')
 assert.equal((headingRailSource.match(/--rail-vertical-right:/g)||[]).length,1,'來源版型或斷點不得另外覆寫十字間距')
 assert.equal((headingRailSource.match(/--rail-vertical-left:/g)||[]).length,1,'十字線不得再用來源版型固定left像素值')
+for(const directory of ['components','pages'])for(const file of await readdir(new URL(`../${directory}/`,import.meta.url),{recursive:true})){
+  if(!file.endsWith('.vue'))continue
+  const source=await readFile(new URL(`../${directory}/${file}`,import.meta.url),'utf8')
+  if(source.includes('<InternalTemplateHeadingRail'))assert(!/--rail-vertical-(?:left|right)\s*:/.test(source),`${directory}/${file} 不得覆寫共用十字線水平座標`)
+}
 const headingServicesSource=await readFile(new URL('../components/home/HomeServices.vue',import.meta.url),'utf8')
 assert(/\.home-services-heading__rail \{\s*grid-column: 1;/.test(headingServicesSource),'首頁廚房產品十字線需以第一欄為定位基準，不能橫跨全部欄位')
 assert(headingServicesSource.includes('.home-services-heading__rail :deep(.template-heading-rail__line)'),'上下排列的首頁廚房產品需隱藏無對位十字線')
@@ -403,6 +416,35 @@ for(const width of [768,900,1190,1280,1920])for(const inset of [0,30,58]){
   assert.equal(Math.round(titleLeft-(railRight-(verticalRight-14))),47,'欄寬與標題內距變動後仍需保留47px間距')
 }
 console.log('PASS 全站十字標題47px共用間距、來源／斷點覆寫移除、加盟內距補償與首頁廚電欄位定位')
+const bilingualHeadingCss=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
+assert(bilingualHeadingCss.includes('.bilingual-heading-lead { display: contents; }'),'手機保留既有文字順序與分行')
+assert(/\.bilingual-heading-lead \{\s*display: inline-flex;[^}]*min-height: 1.2em;[^}]*align-items: center;[^}]*vertical-align: top;/.test(bilingualHeadingCss),'眉標與中文需共用主標行框垂直置中，不能靠任意translate')
+assert(/:first-child \{[^}]*font-size: 18px;[^}]*line-height: 22px;/.test(bilingualHeadingCss),'統一18px眉標／22px行高')
+assert(/:last-child \{[^}]*position: static;[^}]*font-size: 32px;[^}]*font-weight: 600;[^}]*line-height: 1.2;/.test(bilingualHeadingCss),'取消原-.06em位移，平板中文32px600')
+assert(bilingualHeadingCss.includes(':last-child { font-size: 40px; }'),'桌機中文40px')
+assert(headingRailSource.includes('padding-top: var(--template-bilingual-label-top, var(--rail-padding-top));'),'僅雙語標題套標籤新頂距，其他保留原值')
+assert(bilingualHeadingCss.includes('+ 18px)')&&bilingualHeadingCss.includes('+ 13.2px)'),'桌機／平板標籤行框補償')
+assert(bilingualHeadingCss.includes('.store-location-heading { --template-bilingual-label-top: initial; }')&&bilingualHeadingCss.includes('.home-services-heading { --template-bilingual-label-top: initial; }'),'上下排列不可套左右標籤對位')
+let bilingualHeadingCount=0
+for(const directory of ['components','pages'])for(const file of await readdir(new URL(`../${directory}/`,import.meta.url),{recursive:true})){
+  if(!file.endsWith('.vue'))continue
+  const source=await readFile(new URL(`../${directory}/${file}`,import.meta.url),'utf8')
+  const pairs=[...source.matchAll(/<span class="bilingual-heading-lead">\s*<span class="[^\"]*eyebrow">Explore Our<\/span>\s*<(?:span|b) class="[^\"]*chinese[^\"]*">[^<]*<\/(?:span|b)><\/span>/g)]
+  assert.equal(pairs.length,(source.match(/class="bilingual-heading-lead"/g)||[]).length,file+' 必須恰好包住眉標與中文，不吞英文或其他標題')
+  assert(!/<span class="[^\"]*eyebrow">Explore Our<\/span>\s*<(?:span|b) class="[^\"]*chinese/.test(source.replaceAll(/<span class="bilingual-heading-lead">[\s\S]*?<\/(?:span|b)><\/span>/g,'')),file+' 不得漏套同款眉標與中文')
+  bilingualHeadingCount+=pairs.length
+}
+assert.equal(bilingualHeadingCount,16,'16組同款標題均需套用，獨立眉標與無Explore Our的標題排除')
+for(const [font,offset] of [[50,18],[42,13.2]])for(const top of [38,50,63,64,65,70]){
+  const eyebrowBottom=top+(font*1.2-22)/2+22
+  const labelBottom=top+offset+9+14
+  assert(Math.abs(eyebrowBottom-labelBottom)<.001,'行框對齊公式（非瀏覽器字形量測）')
+}
+console.log('PASS 16組雙語標題共同行框置中、18／40px600／50px層級、標籤下緣公式及手機／上下排列保留')
+assert.equal((bilingualHeadingCss.match(/:is\(\.product-care__header, \.franchise-about__grid, \.franchise-faq__heading\)/g)||[]).length,2,'三種無眉標標題需共用平板／桌機標籤對位規則')
+assert(bilingualHeadingCss.includes('+ 9.2px)')&&bilingualHeadingCss.includes('+ 14px)')&&bilingualHeadingCss.includes('.franchise-about__grid { --bilingual-heading-top: 70px; }'),'無Explore Our的標籤需依原主標頂距置中，不挪主標或十字線')
+for(const [font,offset] of [[42,9.2],[50,14]])for(const top of [64,70])assert(Math.abs((top+font*1.2/2)-(top+offset+16))<.001,'32px膠囊中心應對齊第一行主標中心（來源行框公式，非瀏覽器量測）')
+console.log('PASS 選購指南／加盟夥伴／加盟FAQ無眉標版型標籤平行，手機原規則保留')
 const seriesHeroSource=await readFile(new URL('../components/internal/KitchenSeriesPage.vue',import.meta.url),'utf8')
 const resolveSeriesHeroTitle=new Function('data','homeHero','return '+seriesHeroSource.match(/^const heroTitle = (.+)$/m)?.[1])
 const matchingHomeHero={slides:[{route:'/home-style/aikitchen',title:'AI Kitchen'},{route:'/home-style/loft-chic',title:'Loft Chic'},{route:'/home-style/basic-plus?source=home#intro',title:'Basic +'},{route:'/home-style/clever',title:'Clever Kitchen'}]}
@@ -465,12 +507,17 @@ for(const [index,[model,route]] of Object.entries(expectedCleverRoutes).entries(
 console.log('PASS Clever推薦五筆詳細頁API與整卡SSR連結')
 const productBrandHeadingSource=await readFile(new URL('../components/internal/ProductBrandPage.vue',import.meta.url),'utf8')
 assert(productBrandHeadingSource.includes('class="sakura-product-story__eyebrow">Kitchen Appliances</InternalSectionPill>')&&productBrandHeadingSource.includes('class="sakura-product-story__chinese-title">廚房產品</span>'),'三品牌需統一英文眉標及中文主標')
-assert(productBrandHeadingSource.includes('Elevate Your<br><span>Kitchen with</span><br>{{ info.name }}'),'品牌名稱需取原資料且黑色，只有Kitchen with金色')
-assert(/\.sakura-product-story h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(productBrandHeadingSource)&&/\.sakura-product-story__chinese-title \{[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(productBrandHeadingSource)&&productBrandHeadingSource.includes('padding-right: 72px;'),'品牌標題桌機50／40px600、保留with大小寫及手機避讓')
+assert(productBrandHeadingSource.includes('Enjoy <span>Kitchen<br>Living</span> With<br>{{ info.name }}')&&!productBrandHeadingSource.includes('Elevate Your'),'三品牌採Enjoy Kitchen／Living With／動態品牌三行，僅Kitchen Living金色且With大寫')
+assert(/\.sakura-product-story h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(productBrandHeadingSource)&&/\.sakura-product-story__chinese-title \{[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(productBrandHeadingSource)&&productBrandHeadingSource.includes('padding-right: 72px;'),'品牌標題桌機50／40px600、保留With大小寫及手機避讓')
 console.log('PASS 廚電品牌介紹中英文案與動態品牌保留')
+const relatedBrandFontSource=await readFile(new URL('../components/internal/ProductDetailPage.vue',import.meta.url),'utf8')
+assert(relatedBrandFontSource.includes('<strong><span class="related-products__brand">{{ info.name }}</span> 廚電</strong>'),'相關產品只包住動態英文品牌，中文廚電保留')
+assert(relatedBrandFontSource.includes('.related-products__brand { font-family: var(--font-cjk-sans); }')&&/\.related-products__heading h2 strong \{[^}]*font-family: var\(--font-cjk-serif\);[^}]*font-size: 40px;/.test(relatedBrandFontSource),'英文用既有Noto Sans TC token，中文與原字級維持不變')
+assert(relatedBrandFontSource.includes('@click="moveRelated(-1)"')&&relatedBrandFontSource.includes('@click="moveRelated(1)"')&&relatedBrandFontSource.includes('v-for="item in relatedProducts"'),'相關商品及原輪播控制保留')
+console.log('PASS 相關產品英文品牌Noto Sans TC、原中文／字級／輪播保留')
 const productListHeadingSource=await readFile(new URL('../components/internal/ProductListPage.vue',import.meta.url),'utf8')
-assert(productListHeadingSource.includes("brand === 'sakura' && (category === 6 || category === 9 || category === 83205) ? 'Smart Appliances for Better Living'")&&productListHeadingSource.includes("brand === 'sakura' && category === 6 && !heading.endsWith('系列') ? '系列' : ''"),'SAKURA除油煙機及近吸列表需指定英文，系列副標只加於分類6，其他分類不改')
-assert(/\.near-suction-products h2 em \{[^}]*text-transform: none;/.test(productListHeadingSource)&&productListHeadingSource.includes('v-if="!category" class="product-search"'),'保留英文小寫for及原分類頁無搜尋')
+assert(productListHeadingSource.includes('<em>Smart Kitchen Living</em>')&&productListHeadingSource.includes("brand === 'sakura' && category === 6 && !heading.endsWith('系列') ? '系列' : ''"),'三品牌全部商品列表統一Smart Kitchen Living，原中文分類／系列副標保留')
+assert(/\.near-suction-products h2 em \{[^}]*text-transform: none;/.test(productListHeadingSource)&&productListHeadingSource.includes('v-if="!category" class="product-search"'),'保留標題大小寫及原分類頁無搜尋')
 console.log('PASS SAKURA除油煙機列表標題')
 assert(productListHeadingSource.includes('class="near-suction-catalogue__chinese">廚房商品型錄</span>')&&productListHeadingSource.includes('<span>Kitchen <em>Product<br>Catalogues</em></span>'),'型錄介紹需新增中文及複數Catalogues並依來源分行')
 assert(/\.near-suction-catalogue__copy h2 span \{[^}]*font-size: 50px;/.test(productListHeadingSource)&&/\.near-suction-catalogue__copy h2 \.near-suction-catalogue__chinese \{[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(productListHeadingSource)&&productListHeadingSource.includes('to="/catalogues/catalog" class="site-content-cta near-suction-catalogue__cta"'),'型錄介紹50／40px600及原CTA入口需保留')
@@ -483,20 +530,22 @@ console.log('PASS 型錄選購问答雙語標題')
 const serviceIntroHeadingSource=await readFile(new URL('../pages/service-process.vue',import.meta.url),'utf8')
 const serviceFaqHeadingSource=await readFile(new URL('../components/internal/FaqAccordion.vue',import.meta.url),'utf8')
 const brandFaqHeadingSource=await readFile(new URL('../pages/about/advantage.vue',import.meta.url),'utf8')
-assert(brandFaqHeadingSource.includes('一站式專業服務</b>Clear <span class="brand-faq-accent">Answers</span> To<br /><b class="brand-faq-chinese">實現理想廚房</b>Your <span class="brand-faq-accent">Main</span> Questions'),'品牌優勢FAQ需指定雙語兩列與金色範圍')
+assert(brandFaqHeadingSource.includes('一站式專業服務</b></span>Clear <span class="brand-faq-accent">Answers</span> To<br /><b class="brand-faq-chinese">實現理想廚房</b>Your <span class="brand-faq-accent">Main</span> Questions'),'品牌優勢FAQ需指定雙語兩列與金色範圍')
 assert(/\.brand-advantage-faq :deep\(\.antra-faq-title\) \{[^}]*width: 100%;[^}]*font-size: 50px;/.test(brandFaqHeadingSource)&&/\.brand-advantage-faq :deep\(\.brand-faq-chinese\) \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(brandFaqHeadingSource)&&brandFaqHeadingSource.includes('.brand-advantage-faq :deep(.antra-faq-heading) { grid-template-columns: 30% 70%; }'),'品牌FAQ局部50／40px600與右欄寬度／基線補償')
 const caseRelatedHeadingSource=await readFile(new URL('../pages/gallery/[slug].vue',import.meta.url),'utf8')
-assert(caseRelatedHeadingSource.includes('精選廚房案例</b>Real <span>Spaces</span><br /><span>That</span> Inspire Living'),'門市案例內頁相關案例需指定雙語標題／金色範圍及That起行')
+assert(caseRelatedHeadingSource.includes('精選廚房案例</b></span>Real <span>Spaces</span><br /><span>That</span> Inspire Living'),'門市案例內頁相關案例需指定雙語標題／金色範圍及That起行')
 assert(/\.case-detail-related__heading > h2 \{[^}]*font-size: 50px;[^}]*line-height: 1.2;/.test(caseRelatedHeadingSource)&&/\.case-related-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(caseRelatedHeadingSource),'門市相關案例標題50／40px600及同列基線補償')
 assert(caseRelatedHeadingSource.includes('emblaCarouselVue({ loop: true, align: \u0027start\u0027, duration: 18 })')&&caseRelatedHeadingSource.includes('v-for="(related, relatedIndex) in storeCases"'),'保留原相關案例資料與循環輪播')
 assert(serviceFaqHeadingSource.includes('<slot name="title">Quick And Clear <span>Answers<br /> To Your Key</span> Questions</slot>'),'共用FAQ保留舊標題fallback，其他頁不可一起改')
-assert(serviceIntroHeadingSource.includes('<InternalFaqAccordion safe-rail class="service-guide-faq">')&&serviceIntroHeadingSource.includes('服務指南</b>Clear <span class="service-faq-accent">Answers</span> To Your <span class="service-faq-accent">Main</span> Questions')&&serviceIntroHeadingSource.includes('.service-guide-faq :deep(.service-faq-accent) { color: #caa05c; }'),'服務流程FAQ使用局部插槽及指定文案／金色範圍')
+assert(serviceIntroHeadingSource.includes('<InternalFaqAccordion safe-rail class="service-guide-faq">')&&serviceIntroHeadingSource.includes('服務指南</b></span>Clear <span class="service-faq-accent">Answers</span> To Your <span class="service-faq-accent">Main</span> Questions')&&serviceIntroHeadingSource.includes('.service-guide-faq :deep(.service-faq-accent) { color: #caa05c; }'),'服務流程FAQ使用局部插槽及指定文案／金色範圍')
 assert(/\.service-guide-faq :deep\(\.antra-faq-title\) \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(serviceIntroHeadingSource),'FAQ英文50px，保留原大小寫')
-assert(/\.service-guide-faq :deep\(\.service-faq-chinese-title\) \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(serviceIntroHeadingSource)&&serviceIntroHeadingSource.includes('font-size: 16px;'),'FAQ中文40px600／同列等高及16px眉標')
-assert(serviceIntroHeadingSource.includes('class="service-intro-eyebrow">Explore Our</span>')&&serviceIntroHeadingSource.includes('{{ cmsCopy.copy.text2 }}</b>{{ cmsCopy.copy.text3 }}<span>{{ cmsCopy.copy.text4 }}</span>{{ cmsCopy.copy.text5 }}'),'服務流程標題需原CMS中英與指定Explore Our，不能另複製流程英文')
-assert(/\.service-intro-eyebrow \{[^}]*font-size: 16px;/.test(serviceIntroHeadingSource)&&/\.service-intro-chinese-title \{[^}]*color: #caa05c;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(serviceIntroHeadingSource)&&/\.antra-service-intro h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(serviceIntroHeadingSource),'服務流程需16／40px600／50px，中文金色並保留to大小寫')
+assert(/\.service-guide-faq :deep\(\.service-faq-chinese-title\) \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(serviceIntroHeadingSource)&&/\.service-guide-faq :deep\(\.antra-faq-title \.service-faq-eyebrow\) \{[^}]*font-size: 18px;[^}]*line-height: 22px;/.test(serviceIntroHeadingSource),'FAQ中文40px600／共同行框及18px眉標')
+assert(!serviceIntroHeadingSource.includes('service-intro-eyebrow')&&serviceIntroHeadingSource.includes('{{ cmsCopy.copy.text2 }}</b>{{ cmsCopy.copy.text3 }}<span>{{ cmsCopy.copy.text4 }}</span>{{ cmsCopy.copy.text5 }}'),'僅移除介紹Explore Our，主標仍取CMS四段、不硬編碼替代')
+assert(/\.service-intro-chinese-title \{[^}]*color: #caa05c;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(serviceIntroHeadingSource)&&/\.antra-service-intro h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(serviceIntroHeadingSource),'服務流程保留40px600／50px及原金色，不對全標題使用capitalize')
+for(const top of ['72px','78px','73.2px'])assert(serviceIntroHeadingSource.includes('--template-bilingual-label-top: '+top+';'),'中文首行／膠囊中心依原頂距和斷點對齊：'+top)
+for(const [top,font,labelTop] of [[64,40,72],[70,40,78],[70,32,73.2]])assert(Math.abs(top+font*1.2/2-labelTop-16)<.001,'服務流程首行中心行框公式，非瀏覽器字形量測')
 console.log('PASS 服務流程介紹標題字級與CMS保留')
-assert(guideHeadingSource.includes('class="kitchen-guide-heading__eyebrow">Explore Our</span>')&&guideHeadingSource.includes('class="kitchen-guide-heading__chinese">廚房裝修指南</span>')&&guideHeadingSource.includes('Take A Look At <span class="kitchen-guide-heading__accent">Our</span> Latest Articles.'),'裝修指南列表需呈現指定雙語標題，Only Our為英文金色')
+assert(guideHeadingSource.includes('class="kitchen-guide-heading__eyebrow">Explore Our</span>')&&guideHeadingSource.includes('class="kitchen-guide-heading__chinese">廚房裝修指南</span>')&&guideHeadingSource.includes('Take A <span class="kitchen-guide-heading__accent">Look At Our</span> Latest Articles')&&!guideHeadingSource.match(/<h2\b[^>]*id="kitchen-guide-heading"[\s\S]*?<\/h2>/)?.[0].includes('Latest Articles.'),'裝修指南列表保留共用對齊，Look At加入原Our金色範圍，僅刪除末尾句點')
 assert(/\.kitchen-guide-heading h2 \{[^}]*font-size: 50px;[^}]*line-height: 1.2;/.test(guideHeadingSource)&&/\.kitchen-guide-heading__chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;[^}]*vertical-align: baseline;/.test(guideHeadingSource),'裝修指南標題50／40px600及同列字形補償')
 assert(guideHeadingSource.includes('.kitchen-guide-newsroom { padding: 60px 93px 60px 15px; }')&&guideHeadingSource.includes('.kitchen-guide-heading__mobile-break { display: initial; }'),'保留指南手機右側避讓與分行')
 console.log('PASS 廚房裝修指南列表雙語標題')
@@ -518,7 +567,7 @@ console.log('PASS 品牌系列色卡標題與獨立中英層級')
 assert(seriesHeroSource.includes('class="ai-centered-heading ai-appliance-heading"')&&seriesHeroSource.includes('>Explore Our</p>')&&seriesHeroSource.includes('class="ai-appliance-heading__chinese">廚房電器推薦</span><span>Kitchen Appliance</span>'),'廚電需依来源呈現Explore Our眉標及中英主標')
 assert(seriesHeroSource.includes('.ai-appliance-heading h2 { font-size: 50px; line-height: 1.2; }')&&/\.ai-appliance-heading h2 \.ai-appliance-heading__chinese \{[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(seriesHeroSource),'廚電桌機英文50px／中文40px600')
 console.log('PASS 品牌系列廚電推薦中英標題')
-assert(seriesHeroSource.includes('class="ai-collections-chinese">風格廚房實例</span>')&&seriesHeroSource.includes('Take A <span class="ai-collections-accent">Look At Our</span> Latest Articles.'),'推薦案例需新增指定中文並移除Blog與&')
+assert(seriesHeroSource.includes('class="ai-collections-chinese">風格廚房實例</span>')&&seriesHeroSource.includes('Take A <span class="ai-collections-accent">Look At Our</span> Latest Articles')&&!seriesHeroSource.includes('Latest Articles.'),'推薦案例保留原中英文及共用對齊，只刪除英文末尾句點')
 assert(/\.ai-cases__heading > h2 \{[^}]*font-size: 50px;[^}]*line-height: 1.2;/.test(seriesHeroSource)&&seriesHeroSource.includes('.ai-section-heading h2, .ai-cases__heading > h2 { font-size: 42px; }'),'案例標題需50px桌機、42px平板並沿用同列中文樣式')
 assert(seriesHeroSource.includes('padding: 24px 72px 30px 0; font-size: 30px;'),'手機案例標題需避開固定右側服務列')
 console.log('PASS 品牌系列推薦案例雙語標題')
@@ -534,7 +583,7 @@ assert(!homeRailRules.slice(0,homeRailRules.indexOf('padding-left: 64px;')).incl
 for(const selector of ['.home-project-heading','.home-project-carousel-reveal','section[aria-label="廚房風格"]','section[aria-labelledby="services-heading"]','.what-we-do-section','#contact > div','.footer-navigation-shell','#footer-sitemap','.gallery-main-layout','.hero-template-bottom','[aria-label="集團品牌"]'])assert(homeRailRules.includes(selector),'首頁浮標安全距離遺漏：'+selector)
 const benefits=await readFile(new URL('../components/internal/BrandBenefits.vue',import.meta.url),'utf8')
 const brandStoreHeadingSource=await readFile(new URL('../components/internal/BrandStoreSection.vue',import.meta.url),'utf8')
-assert(brandStoreHeadingSource.includes('全台廚具通路</b>Shaping <span>Kitchens</span><br /><b class="brand-store-chinese">專業服務</b>Across <span>Taiwan</span>'),'品牌通路需指定雙語兩列、Kitchens及Taiwan金色')
+assert(brandStoreHeadingSource.includes('全台廚具通路</b></span>Shaping <span>Kitchens</span><br /><b class="brand-store-chinese">專業服務</b>Across <span>Taiwan</span>'),'品牌通路需指定雙語兩列、Kitchens及Taiwan金色')
 assert(/\.brand-store-heading h2 \{[^}]*font-size: 50px;/.test(brandStoreHeadingSource)&&/\.brand-store-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(brandStoreHeadingSource),'品牌通路需50／40px600及同列字形補償')
 assert(benefits.includes('<b class="brand-benefits-chinese">櫻花品牌優勢</b>Discover What Makes <span>SAKURA<br /> KITCHEN</span> Different'),'優勢標題需中文在上、指定完整英文及KITCHEN起行／金色品牌')
 assert(/\.brand-benefits-heading h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(benefits)&&/\.brand-benefits-chinese \{[^}]*display: block;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(benefits),'優勢標題需50／40px600，中文独立分行')
@@ -551,12 +600,12 @@ console.log('PASS 品牌特色自動依序播放設定、靜態 SSR 內容與減
 const exhibition=await(await get('/about/exhibition')).text()
 const aboutStoriesHeadingSource=await readFile(new URL('../pages/about/introduce.vue',import.meta.url),'utf8')
 const aboutIdentityHeadingSource=aboutStoriesHeadingSource
-assert(aboutIdentityHeadingSource.includes('專屬品牌識別</b>Signature<br /><span>Brand Identity</span>'),'專屬品牌識別依英文註記，Brand Identity金色及第二行')
+assert(aboutIdentityHeadingSource.includes('專屬品牌識別</b></span>Signature<br /><span>Brand Identity</span>'),'專屬品牌識別依英文註記，Brand Identity金色及第二行')
 assert(/\.about-identity__heading h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(aboutIdentityHeadingSource)&&/\.about-identity-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(aboutIdentityHeadingSource),'專屬品牌識別50／40px600及同列補償')
-assert(aboutStoriesHeadingSource.includes('櫻花整體廚房</b>SAKURA KITCHEN<br /><b class="about-stories-chinese">紀事</b><span>Stories</span>'),'關於我們依明確註記使用廚房紀事與SAKURA KITCHEN Stories')
+assert(aboutStoriesHeadingSource.includes('櫻花整體廚房</b></span>SAKURA KITCHEN<br /><b class="about-stories-chinese">紀事</b><span>Stories</span>'),'關於我們依明確註記使用廚房紀事與SAKURA KITCHEN Stories')
 assert(/\.about-services__heading h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(aboutStoriesHeadingSource)&&/\.about-stories-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(aboutStoriesHeadingSource),'廚房紀事50／40px600及基線補償')
 const pavilionGalleryHeadingSource=await readFile(new URL('../pages/about/exhibition.vue',import.meta.url),'utf8')
-assert(pavilionGalleryHeadingSource.includes('櫻花集團品牌館</b>Memories are made<br /><span>when we’re together</span>'),'集團品牌館以明確英文註記及指定中文／金色後半句呈現')
+assert(pavilionGalleryHeadingSource.includes('櫻花集團品牌館</b></span>Memories are made<br /><span>when we’re together</span>'),'集團品牌館以明確英文註記及指定中文／金色後半句呈現')
 assert(/\.pavilion-gallery-heading h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(pavilionGalleryHeadingSource)&&/\.pavilion-gallery-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(pavilionGalleryHeadingSource),'集團品牌館50／40px600及同列補償')
 const pavilionHero=await readFile(new URL('../components/internal/BrandPavilionHero.vue',import.meta.url),'utf8')
 assert(/class="pavilion-single-hero__eyebrow"[^>]*>櫻花集團品牌館<\/p>/.test(exhibition),'品牌館Hero需在英文標題前新增中文小標')
@@ -665,8 +714,8 @@ const counterBeforeUnmount=counterHarness();counterBeforeUnmount.mount();counter
 for(const value of ['AI','0','-1']){const test=counterHarness(value);test.mount();test.intersect(true);assert.equal(test.api.moduleCount.value,value);assert.equal(test.frames.size,0);test.unchanged()}
 const counterCustom=counterHarness('72');counterCustom.mount();counterCustom.intersect(true);counterCustom.tick(0);counterCustom.tick(2000);assert.equal(counterCustom.api.moduleCount.value,'72','不得把CMS自訂數值強制改成45')
 console.log('PASS 建商Home7雙欄／sticky／手機／指定文案、兩秒計數一次／SSR／CMS不變／減少動態／無observer／卸載清理')
-assert(buildersSource.includes('櫻花集團品牌館</b>The Art <span>of</span><br /> <span>Kitchen</span> Showrooms'),'建商聯繫區指定中文／完整英文及of／Kitchen金色')
-assert(/#builders-contact-title \{[^}]*font-size: 58px;/.test(buildersSource)&&/\.builders-contact-chinese \{[^}]*top: -.06em;[^}]*font-size: 38px;[^}]*font-weight: 600;/.test(buildersSource)&&/#builders-contact-title \.builders-contact-eyebrow \{[^}]*font-size: 16px;/.test(buildersSource),'聯繫區16／38px600／58px專用字級與同列補償')
+assert(buildersSource.includes('櫻花集團品牌館</b></span>The Art <span>of</span><br /> <span>Kitchen</span> Showrooms'),'建商聯繫區指定中文／完整英文及of／Kitchen金色')
+assert(/#builders-contact-title \{[^}]*font-size: 50px;/.test(buildersSource)&&/\.builders-contact-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(buildersSource)&&/#builders-contact-title \.builders-contact-eyebrow \{[^}]*font-size: 18px;/.test(buildersSource),'聯繫區統一18／40px600／50px')
 const builderSeriesSource=await readFile(new URL('../pages/builders/sakura-kitchen.vue',import.meta.url),'utf8')
 const homeHeroCtaSource=await readFile(new URL('../components/home/HomeHero.vue',import.meta.url),'utf8')
 const homeHeroCta=homeHeroCtaSource.match(/<NuxtLink\b[^>]*class="hero-start-project[^\"]*"[^>]*>/)?.[0]||''
@@ -793,12 +842,12 @@ assert(/@media \(min-width: 768px\) \{\s*\.franchise-testimonials \{ row-gap: 24
 assert(franchise.slice(franchise.indexOf('@media (max-width: 767px)')).includes('.franchise-testimonials { grid-template-columns: 1fr; gap: 28px; }'),'手機需保留自然單欄與原間距，不套雙欄共用列')
 assert(franchise.includes('<blockquote>「{{ testimonial.quote }}」</blockquote>')&&franchise.includes(':src="testimonial.portrait"')&&franchise.includes('{{ testimonial.tenure }} · {{ testimonial.store }}'),'保留完整CMS心得、頭像、姓名及門市，不裁字或補空白資料')
 console.log('PASS 加盟心得兩欄共用列、人物上緣對齊、手機自然單欄與CMS資料保留')
-assert(franchise.includes('品牌信賴</b>Celebrity <span>Stories</span><br />Of Inspired <span>Living</span>'),'品牌信賴需完整指定文案與Stories／Living金色')
+assert(franchise.includes('品牌信賴</b></span>Celebrity <span>Stories</span><br />Of Inspired <span>Living</span>'),'品牌信賴需完整指定文案與Stories／Living金色')
 assert(/#franchise-marketing-title \{[^}]*font-size: 50px;/.test(franchise)&&/\.franchise-celebrity-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(franchise),'品牌信賴50／40px600及同列補償')
 assert(franchise.includes('了解加盟資訊</b>Clear <span>Answers</span> To<br /> Your <span>Main</span> Questions'),'加盟FAQ依使用者確認採了解加盟資訊與指定英文，手機隱藏換行仍保留To Your空白')
 assert(/\.franchise-faq__heading h2 \{[^}]*font-size: 50px;/.test(franchise)&&/\.franchise-faq-chinese \{[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(franchise),'加盟FAQ50／40px600')
-assert(franchise.includes('最新加盟資訊</b>Latest Franchise News<br />With <span>SAKURA KITCHEN</span>'),'最新加盟消息採指定中英與品牌金色')
-assert(/#franchise-news-title \{[^}]*font-size: 58px;/.test(franchise)&&/\.franchise-news-chinese \{[^}]*font-size: 38px;[^}]*font-weight: 600;/.test(franchise)&&/#franchise-news-title \.franchise-news-eyebrow \{[^}]*font-size: 16px;/.test(franchise),'消息區專用16／38px600／58px規格，不可套用其他標題字級')
+assert(franchise.includes('最新加盟資訊</b></span>Latest Franchise News<br />With <span>SAKURA KITCHEN</span>'),'最新加盟消息採指定中英與品牌金色')
+assert(/#franchise-news-title \{[^}]*font-size: 50px;/.test(franchise)&&/\.franchise-news-chinese \{[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(franchise)&&/#franchise-news-title \.franchise-news-eyebrow \{[^}]*font-size: 18px;/.test(franchise),'消息區統一18／40px600／50px')
 assert(franchise.includes('專業品牌實力</b>Success<br /><span>Starts</span> Here'),'加盟實力標題依使用者確認改Success Starts Here，移除Franchise及重複Starts')
 assert(/#franchise-advantage-title \{[^}]*font-size: 50px;/.test(franchise)&&/\.franchise-strength-chinese \{[^}]*display: block;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(franchise),'加盟實力中文40px600獨立分行、英文50px')
 assert(franchise.includes('加盟夥伴真實分享</b>Here <span>from Our</span><br /><span>Partners</span>'),'加盟夥伴依明確文案保留Here、不加Franchise及金色範圍')

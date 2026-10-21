@@ -181,7 +181,7 @@ useSeoMeta({
           <div>
             <InternalSectionPill>KITCHEN PRODUCT</InternalSectionPill>
             <h2 id="related-products-title">
-              <strong>{{ info.name }} 廚電</strong>
+              <strong><span class="related-products__brand">{{ info.name }}</span> 廚電</strong>
             </h2>
           </div>
           <div class="related-products__controls" aria-label="切換相關產品">
@@ -358,6 +358,7 @@ useSeoMeta({
 .related-products__heading { display: flex; align-items: end; justify-content: space-between; gap: 36px; margin-bottom: 54px; }
 .related-products__heading h2 { display: flex; margin: 11px 0 0; color: #1c1c1d; flex-direction: column; font-weight: 500; }
 .related-products__heading h2 strong { font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 500; line-height: 50px; }
+.related-products__brand { font-family: var(--font-cjk-sans); }
 .related-products__controls { display: flex; flex: none; gap: 8px; padding-bottom: 5px; }
 .related-products__viewport { overflow: hidden; }
 .related-products__grid { display: flex; touch-action: pan-y pinch-zoom; margin: 0 0 0 -30px; padding: 0; list-style: none; }
