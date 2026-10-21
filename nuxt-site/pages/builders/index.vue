@@ -21,6 +21,12 @@ const strengths = cmsCopy.strengths
 
 const services = cmsCopy.services
 
+const homeOne = ref<HTMLElement>()
+const homeOneReady = ref(false)
+onMounted(() => {
+  if (homeOne.value?.querySelector('img')?.complete) homeOneReady.value = true
+})
+
 const moduleCounter = ref<HTMLElement>()
 const moduleCount = ref(strengths[0]?.value[0] ?? '')
 const reducedMotion = useReducedMotion()
@@ -211,7 +217,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
       <div class="builders-rail internal-rail-safe">
         <div class="builders-capability__showcase">
-          <div v-reveal="{ anim: 'fadeIn' }" class="builders-home-one">
+          <div ref="homeOne" v-reveal="{ anim: 'fadeIn' }" class="builders-home-one" :data-image-ready="homeOneReady || undefined" @load.capture="homeOneReady = true" @error.capture="homeOneReady = true">
             <InternalBuilderImage
               src="/section-6/builders/proposal-20261002/home-in-one.webp"
               alt="HOME IN O.N.E：ONE-STOP 一站式服務、NUMEROUS 多樣產品選擇、EFFICIENT 輕鬆擁有"
@@ -388,6 +394,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-solution__visual--platform { aspect-ratio: 16 / 9; }
 .builders-solution__visual { overflow: hidden; border-radius: 24px; }
 .builders-home-one__visual { aspect-ratio: 2.7 / 1; }
+.builders-home-one:not([data-image-ready]) { animation-play-state: paused; }
 @media (prefers-reduced-motion: no-preference) {
   .builders-home-one.ev.is-visible { animation-name: builders-home-one-reveal; }
 }

@@ -792,7 +792,15 @@ assert(/@media \(max-width: 1023px\) \{[\s\S]*?\.builders-services \{ padding-bl
 assert(/@media \(max-width: 767px\) \{[\s\S]*?\.builders-services \{ padding-block: 30px 60px; \}/.test(buildersSource),'手機服務區需縮小上下留白')
 assert(buildersSource.includes('font-weight: 700; line-height: 1.6')&&buildersSource.includes('color: #c4a574'))
 const buildersGlobalCss=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
-assert(buildersSource.includes('<div v-reveal="{ anim: \'fadeIn\' }" class="builders-home-one">'),'HOME IN O.N.E整圖需共用可見觸發淡入')
+assert(buildersSource.includes('<div ref="homeOne" v-reveal="{ anim: \'fadeIn\' }" class="builders-home-one" :data-image-ready="homeOneReady || undefined" @load.capture="homeOneReady = true" @error.capture="homeOneReady = true">'),'HOME IN O.N.E需等待圖片load才播放，error仍顯示既有錯誤提示；使用data屬性避免reactive class清掉reveal狀態')
+assert(buildersSource.includes('.builders-home-one:not([data-image-ready]) { animation-play-state: paused; }'),'圖片尚未就緒必須暫停整圖動畫，不能先播完空容器')
+const homeOneReadySource=buildersSource.slice(buildersSource.indexOf('const homeOne ='),buildersSource.indexOf('const moduleCounter =')).replace('ref<HTMLElement>()','ref()')
+for(const complete of [false,true]){
+  const mounts=[]
+  const state=new Function('ref','onMounted',homeOneReadySource+';return {homeOne,homeOneReady}')((value)=>({value}),fn=>mounts.push(fn))
+  state.homeOne.value={querySelector:()=>({complete})};mounts.forEach(fn=>fn())
+  assert.equal(state.homeOneReady.value,complete,'已快取／已失敗圖片需直接就緒，未載入圖片等待capture事件')
+}
 assert(/@media \(prefers-reduced-motion: no-preference\) \{\s*\.builders-home-one\.ev\.is-visible \{ animation-name: builders-home-one-reveal; \}/.test(buildersSource),'僅此圖且無減少動態偏好時啟用局部放大')
 assert(/@keyframes builders-home-one-reveal \{\s*from \{ opacity: 0; transform: scale\(\.97\); \}\s*to \{ opacity: 1; transform: scale\(1\); \}/.test(buildersSource),'整圖97%至100%淡入放大，不裁切內容或套全站60%縮放')
 assert(buildersSource.includes('<div v-reveal="{ anim: \'opalMoveUp\' }" class="builders-services-panel">'),'三大服務圖片與文字需整組向上浮現／淡入，不拆三張動畫')

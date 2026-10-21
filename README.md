@@ -1,5 +1,22 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-22 建商HOME IN O.N.E等待圖片完成後淡入放大並正式交付
+
+- 依01:33:53截圖，只修建商HOME IN O.N.E整張圖淡入＋輕微放大，不改圖或文字。既有外層reveal在進入視窗時就啟動，但內部BuilderImage為lazy載入，沒有等待圖片load，存在動畫先播完空容器、圖片後出現的時序問題。本輪圖片未就緒先暫停原動畫，捕獲load後播放；error也解除暫停以保留原完整錯誤提示，mounted時檢查complete涵蓋快取或已失敗圖片。
+- 依investigate追蹤來源與正式SSR／CSS，沿用ponytail最小修改，使用data-image-ready屬性而非動態class，避免Vue更新class清掉directive加入的ev／is-visible。原97%→100%、opacity0→1、1.25秒ease、整張圖比例／位置／圖片、三大服務與減少動態／直接錨點立即顯示保留，不新增套件、不改CMS／資料庫。本輪包含正式程式部署與正式輸出核對。
+- pnpm build（含專案typecheck）、Vue模板／樣式編譯、限定HOME IN O.N.E／三大服務回歸、腳本語法及git diff --check通過；mounted pure check涵蓋未載入／complete圖片，正式原SSR確認lazy圖片與原動畫CSS存在。尚未以實際瀏覽器節流重現，因此將圖片載入競態列為已由程式消除的可能原因，不以CSS／來源檢查冒充實際動畫驗收。程式將以既有main／header-design專案同步正式端，部署結果續記於下。
+
+## 2026-10-22 正式CMS指定差異發布與首頁大字同步交付
+
+- 使用者明確要求正式端也要更新；本輪將正式CMS四項已確認差異納入交付，不再只以本機完成回覆。依ponytail重用既有標題／系列轉換與save／publish交易，不整庫匯入、不重跑seed、不修改其他內容。目標沿用既有Azure runtime所指SakuraWebsiteTest／CMS應用帳號，TLS驗證保留。
+- 正式dry-run已確認三份文件無未發布草稿：服務流程revision1的to Life改To Life、品牌家庭revision3改Creating Kitchen For Every Family、建商SAKURA revision1刪標題逗點並將舊6組系列換成核准8組／18張相簿。18張圖片在正式Vercel網域均HTTP200且為圖片MIME，先確認素材可用才發布。只修改指定欄位，對全部其他文件metadata與全部既有歷史body作同交易完整比對；任何自訂文案／版本衝突或素材缺失均停止並回滾。
+- 首頁Kitchen動畫只改每張重播key，英文與樣式保留；沿用Vercel部署／CLI技能核對既有團隊header-design專案與正式環境，不另建專案、不改環境變數或存取保護。
+- 四項正式內容已在單一SERIALIZABLE交易完成並提交，僅新增3個內容版本：服務流程revision1→3／e535ac8c-5e06-483e-b3d2-41224b285486（保留06da7a00-604f-4120-8d17-8042d8cbef94）、品牌家庭revision3→5／f37b183a-3944-49cd-959a-b0d58497f45b（保留0ee73bf3-e71f-4e83-ad8e-5f9db53ead7a）、建商SAKURA revision1→3／2b5e8e4e-a832-41bb-a449-4efad0d79ffc（保留cae644b6-abc1-4c6d-82bd-ec678aba1442）。全部127筆既有歷史body及其餘62份文件完整metadata／schema同交易核對不變，三份更新後body逐欄核對僅指定欄位不同。再次正式dry-run確認無需重複寫入。
+- 兩個正式網域header-design-two.vercel.app及sakura-demo-vanlantech.com的三份已發布API與三個實際頁面均HTTP200，確認To Life、Creating Kitchen For Every Family、無逗點兩行標題、8組系列與18張相簿資料正確，原圖片實際HTTP已通過。check-hero-media預設無DB模式與pnpm typecheck通過。
+- 動畫程式commit6797fbfabbce011af5986dee762c508ca9f6fe95已由既有main推送，核對遠端相同，保留使用者的提交、不重複commit／push或建立部署；Vercel Production部署dpl_HERgRNpzdMX5LQVJnyxRriaG859g已READY，GitHub Vercel check成功，部署header-design-32wzmpj89-erics-projects-57e51613.vercel.app，兩個正式網域均已指向此部署。
+- 新部署完成後再驗兩站首頁SSR200、Kitchen原遮罩／slideInUp／250ms延遲，並逐一讀取首頁真正載入的modulepreload程式包，確認/_nuxt/CTTWFt3g.js含hero-watermark每張重建key及slideInUp，三份API新版／8組18張資料仍正確。這是正式程式與資料驗證，不冒充瀏覽器逐幀動畫／手機視覺驗收，既有瀏覽器限制未繞過。
+- 此專案正式交付需分別確認程式部署、CMS已發布版本與正式API／頁面，不能只改Vue樣本或本機資料便宣稱正式完成；延續使用者要求主動補齊已確認範圍，不擴大為整庫覆蓋、未確認新內容或權限變更。
+
 ## 2026-10-22 首頁Kitchen大字每張重新向上顯示
 
 - 依01:24:33比較圖與「英文不用改、只調整動畫」，只處理首頁HomeHero底部CMS大字，不改Kitchen文案、不換成Footer Logo、不改系列內頁水印。前版slideInUp掛在無key節點，只在首次進入時播放；到第三張Basic+時已成靜態。本輪以activeSlide為key重建實際動畫節點，讓每張切換與最後回第一張都重新從遮罩底部向上滑出，保留原250ms延遲／1.25秒ease、不改成淡入。
