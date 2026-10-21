@@ -124,7 +124,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--team">
           <InternalSectionPill>EXPLORE OUR COLLECTIONS</InternalSectionPill>
-          <h2 id="builders-team-title"><b class="builders-brand-chinese">{{ cmsCopy.copy.text9 }}</b>Creating the <span>Ideal Kitchen</span><br /> <span>for Every</span> Family</h2>
+          <h2 id="builders-team-title"><b class="builders-brand-chinese">{{ cmsCopy.copy.text9 }}</b>Creating the <span>Ideal Kitchen</span><br /> <span>For Every</span> Family</h2>
           <p>{{ cmsCopy.copy.text9 }}，{{ cmsCopy.copy.text11 }}</p>
         </header>
         <div class="builders-team__grid">
@@ -176,13 +176,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <header class="builders-strengths-copy">
             <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-strengths-heading">
               <InternalSectionPill tone="dark">OUR STRENGTHS</InternalSectionPill>
-              <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>for Better<br />Living</span> Spaces</h2>
+              <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>for</span><br /><span>Better Living</span></h2>
               <p>以多元設計模組、AI 智能製造與數位案件管理，<br />為建商提供從設計規劃到交付的整合服務。</p>
-              <div v-if="strengths[0]" class="builders-solution__copy">
-                <p class="builders-solution__lead">{{ strengths[0].lines[1].replaceAll('\n', '') }}</p>
-                <p ref="moduleCounter" class="builders-solution__number" :aria-label="`${strengths[0].value[0]}+${strengths[0].value[1]}`"><span aria-hidden="true">{{ moduleCount }}+{{ strengths[0].value[1] }}</span></p>
-                <h3>{{ strengths[0].lines[0] }} {{ strengths[0].lines[2] }}</h3>
-              </div>
+            </div>
+            <div v-if="strengths[0]" v-reveal="{ anim: 'opalMoveUp' }" class="builders-solution__copy">
+              <p class="builders-solution__lead">{{ strengths[0].lines[1].replaceAll('\n', '') }}</p>
+              <p ref="moduleCounter" class="builders-solution__number" :aria-label="`${strengths[0].value[0]}+${strengths[0].value[1]}`"><span aria-hidden="true">{{ moduleCount }}+{{ strengths[0].value[1] }}</span></p>
+              <h3>{{ strengths[0].lines[0] }} {{ strengths[0].lines[2] }}</h3>
             </div>
           </header>
           <div class="builders-strengths-list">
@@ -245,9 +245,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section id="appointment" class="builders-contact" aria-labelledby="builders-contact-title">
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
-          <InternalSectionPill>{{ cmsCopy.copy.text33 }}</InternalSectionPill>
+          <InternalTemplateHeadingRail :label="cmsCopy.copy.text33" />
           <div>
-            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese">櫻花集團品牌館</b></span>The Art <span>of</span><br /> <span>Kitchen</span> Showrooms</h2>
+            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese">櫻花集團品牌館</b></span>The Art <span>Of</span><br /> <span>Kitchen</span> Showrooms</h2>
           </div>
         </header>
 
@@ -364,8 +364,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .builders-strengths-section { padding: 75px 30px 105px; color: #fff; background: #241c18; }
-.builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 30px; }
-.builders-strengths-copy { position: sticky; top: calc(var(--site-header-height, 60px) + 50px); min-width: 0; padding-top: 35px; }
+.builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
+.builders-strengths-copy { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-width: 0; padding: 35px 0 6px; }
+.builders-strengths-heading { position: sticky; top: calc(var(--site-header-height, 60px) + 50px); align-self: start; }
 .builders-strengths-heading h2 { max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
 .builders-strengths-heading h2 b { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
@@ -375,7 +376,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-capability__showcase { width: min(1280px, 100%); margin: 70px auto 0; container-type: inline-size; font-family: var(--font-cjk-sans); }
 .builders-capability__showcase :deep(.builder-image) { height: auto; background: transparent; }
 .builders-solution { margin: 0; overflow: hidden; border-radius: 24px; }
-.builders-solution__copy { margin-top: 48px; }
+.builders-solution__copy { margin-top: 0; }
 .builders-solution__copy h3,
 .builders-solution__copy p { margin: 0; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 400; line-height: 1.4; }
 .builders-solution__copy .builders-solution__lead { margin-bottom: 8px; }
@@ -405,7 +406,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-lifetime__visual { aspect-ratio: 16 / 9; border-radius: 24px; }
 .builders-contact { scroll-margin-top: 60px; padding: 120px 30px 130px; background: #fafafa var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) top right / auto no-repeat; }
 .builders-contact__heading { margin-bottom: 58px; }
-#builders-contact-title { min-width: 0; max-width: 100%; font-size: 50px; line-height: 1.2; text-transform: none; }
+#builders-contact-title { min-width: 0; max-width: 100%; padding-top: 64px; font-size: 50px; line-height: 1.2; text-transform: none; }
 #builders-contact-title .builders-contact-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; letter-spacing: 0; vertical-align: baseline; }
 .builders-contact-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; letter-spacing: 0; vertical-align: baseline; }
 .builders-contact__grid { display: grid; grid-template-columns: 42% 58%; align-items: start; }
@@ -457,7 +458,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-section-heading--split { grid-template-columns: 1fr; gap: 25px; }
   #builders-team-title { font-size: 42px; }
   .builders-brand-chinese { font-size: 32px; }
-  #builders-contact-title { font-size: 42px; }
+  #builders-contact-title { padding-top: 0; font-size: 42px; }
+  .builders-contact__heading :deep(.template-heading-rail) { min-height: auto; padding-top: 0; text-align: left; }
+  .builders-contact__heading :deep(.template-heading-rail__pill) { margin-inline: 0; }
   .builders-contact-chinese { font-size: 32px; }
   .builders-section-heading--split :deep(.template-heading-rail__line) { display: none; }
   .builders-section-heading--team > p { max-width: 680px; }
@@ -483,7 +486,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-capability > .builders-rail { width: calc(100% - 30px); }
   .builders-strengths-section { padding: 60px 15px; }
   .builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
-  .builders-strengths-copy { position: static; padding-top: 0; }
+  .builders-strengths-copy { display: block; padding: 0; }
+  .builders-strengths-heading { position: static; }
   .builders-strengths-heading h2 { margin-bottom: 20px; font-size: 30px; }
   .builders-strengths-heading h2 b { font-size: 28px; }
   .builders-solution__copy { margin-top: 30px; }

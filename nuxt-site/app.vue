@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
+const cmsPreviewRevision=useState('cms-preview-revision',()=>0)
 const previewExpiresAt = useCookie<number | string | null>('sakura_preview_expires_at')
 let previewExpiryTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -41,6 +42,6 @@ onBeforeUnmount(() => {
 
 <template>
   <NuxtLayout>
-    <NuxtPage />
+    <NuxtPage :key="route.query.cmsPreview ? cmsPreviewRevision : undefined" />
   </NuxtLayout>
 </template>

@@ -8,7 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const router = useRouter()
   let lenis: Lenis | undefined
   const syncRoute = (path: string) => {
-    const admin = path === '/admin' || path.startsWith('/admin/')
+    const admin = path === '/admin' || path.startsWith('/admin/') || new URLSearchParams(window.location.search).has('cmsPreview')
     if (admin || reducedMotion.matches || window.innerWidth <= 992) {
       lenis?.destroy()
       lenis = undefined

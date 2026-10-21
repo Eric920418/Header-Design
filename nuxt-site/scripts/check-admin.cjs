@@ -1,169 +1,59 @@
-// Existing Playwright installation required (NODE_PATH). No packages are installed by this script.
-// Set PREVIEW_URL, PREVIEW_PASSWORD, CMS_TEST_EMAIL, CMS_TEST_PASSWORD to local test credentials.
-const assert=require('node:assert/strict')
-const {chromium}=require('playwright')
-const {mkdtempSync}=require('node:fs')
-const {join}=require('node:path')
-const {tmpdir}=require('node:os')
+// Local acceptance only: inputs are previewed, never saved or published.
+const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkdtempSync}=require('node:fs'),{tmpdir}=require('node:os'),{join}=require('node:path')
 ;(async()=>{
- const base=process.env.PREVIEW_URL||'http://localhost:3100'
- for(const key of ['PREVIEW_PASSWORD','CMS_TEST_EMAIL','CMS_TEST_PASSWORD'])assert(process.env[key],`Set ${key}`)
- assert(['localhost','127.0.0.1'].includes(new URL(base).hostname),'Only run against the local acceptance environment')
- const browser=await chromium.launch({headless:true}),context=await browser.newContext(),page=await context.newPage(),errors=[],screenshots=mkdtempSync(join(tmpdir(),'sakura-cms-'))
- const go=async url=>{await page.goto(url);await page.waitForFunction(()=>document.querySelector('#__nuxt')?.__vue_app__?.config.globalProperties.$nuxt?.isHydrating===false)}
- page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(/hydration|duplicate keys/i.test(m.text()))errors.push(m.text())})
+ const base=process.env.PREVIEW_URL||'http://localhost:3100';assert(['localhost','127.0.0.1'].includes(new URL(base).hostname))
+ for(const key of ['PREVIEW_PASSWORD','CMS_TEST_EMAIL','CMS_TEST_PASSWORD'])assert(process.env[key],`Missing ${key}`)
+ const browser=await chromium.launch(),context=await browser.newContext(),page=await context.newPage(),errors=[],shots=mkdtempSync(join(tmpdir(),'sakura-workflow-'))
+ page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(/hydration|duplicate keys/i.test(m.text()))errors.push(m.text())});page.on('dialog',d=>d.accept())
+ const go=async path=>{await page.goto(base+path);await page.waitForFunction(()=>document.querySelector('#__nuxt')?.__vue_app__?.config.globalProperties.$nuxt?.isHydrating===false)}
+ const api=async(path,body)=>page.evaluate(async({path,body})=>{const s=await(await fetch('/api/admin/session')).json(),r=await fetch('/api/admin/'+path,body?{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':s.csrf},body:JSON.stringify(body)}:{});return{status:r.status,body:await r.json()}},{path,body})
  try{
-  await go(base+'/admin');await page.getByLabel('預覽密碼',{exact:true}).fill(process.env.PREVIEW_PASSWORD);await page.getByRole('button',{name:'進入網站'}).click()
-  await page.waitForURL(base+'/admin/login');await page.waitForFunction(()=>document.querySelector('#__nuxt')?.__vue_app__?.config.globalProperties.$nuxt?.isHydrating===false)
-  await page.getByLabel('電子郵件',{exact:true}).fill(process.env.CMS_TEST_EMAIL);await page.getByLabel('密碼',{exact:true}).fill(process.env.CMS_TEST_PASSWORD);await page.getByRole('button',{name:'登入',exact:true}).click();await Promise.race([page.waitForURL(base+'/admin'),page.locator('.cms-login .cms-error').waitFor().then(async()=>{throw Error(await page.locator('.cms-login .cms-error').textContent())})])
-  const removed='view-components-FloatingButtons',documents=await page.evaluate(async()=>(await(await fetch('/api/admin/documents')).json()))
-  assert(!documents.some(d=>d.id===removed));assert.equal((await context.request.get(base+'/api/admin/documents/'+removed)).status(),404);assert.equal((await context.request.get(base+'/api/content/'+removed)).status(),200)
-  assert.equal(await page.evaluate(async id=>{const session=await(await fetch('/api/admin/session')).json();return(await fetch('/api/admin/documents/'+id,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':session.csrf},body:JSON.stringify({action:'unpublish',revision:0})})).status},removed),404)
-  for(const width of [1440,1024,768,390]){
-   await page.setViewportSize({width,height:960})
-   for(const route of ['/admin','/admin/home','/admin/content','/admin/media','/']){
-    await go(base+route);await page.locator(route==='/'?'#top':'.cms-page').waitFor();await page.evaluate(()=>document.fonts.ready)
-    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Overflow: ${route} at ${width}`)
-    assert.equal(await page.locator('.cms-error').count(),0)
-    if(route==='/admin/home'){await page.locator('.cms-location-context').waitFor();assert.equal(await page.locator('figure.cms-location-diagram').count(),1)}
-    if(route==='/admin/content')assert((await page.locator('.cms-resource-location').count())>0)
-    if(route==='/'){
-     await page.waitForFunction(()=>{const img=document.querySelector('.hero-page1-image-layer-final img');return img?.complete&&img.naturalWidth>0})
-     const geometry=await page.locator('.hero-template-section').evaluate(el=>({height:el.getBoundingClientRect().height,imageHeight:el.querySelector('.hero-page1-image-layer-final .home-hero-media').getBoundingClientRect().height}))
-     assert.equal(geometry.height,({1440:952,1024:719,768:489,390:587})[width]);assert.equal(geometry.imageHeight,geometry.height)
-    }
-    if(route!=='/')assert.equal(await page.locator('.site-header-spacer').count(),0)
-    await page.screenshot({path:join(screenshots,`${width}-${route.replaceAll('/','_')||'home'}.png`)})
-   }
+ await go('/admin');if(page.url().includes('preview-access')){await page.getByLabel('預覽密碼',{exact:true}).fill(process.env.PREVIEW_PASSWORD);await page.getByRole('button',{name:'進入網站',exact:true}).click();await page.waitForURL(base+'/admin/login')}
+ await go('/admin/login')
+ await page.getByLabel('電子郵件',{exact:true}).fill(process.env.CMS_TEST_EMAIL);await page.getByLabel('密碼',{exact:true}).fill(process.env.CMS_TEST_PASSWORD);await page.getByRole('button',{name:'登入',exact:true}).click();await page.waitForURL(base+'/admin');await page.getByRole('heading',{name:'今天要修改什麼？'}).waitFor()
+ const before=await api('documents'),id='view-components-home-HomeProject'
+ // Preview APIs must include unsaved collections and remain private.
+ const productDoc=(await api('documents/catalog-sakura')).body,liveProducts=await(await context.request.get(base+'/api/products/sakura/items?page=1')).json()
+ const first=liveProducts.items[0];assert(first);productDoc.body.items.find(i=>String(i.id)===String(first.id)).enabled=false
+ const productPreview=await api('workspaces/catalog-sakura',{action:'preview',documents:[{id:productDoc.id,revision:productDoc.revision,body:productDoc.body}]});assert.equal(productPreview.status,200)
+ const previewProducts=await context.request.get(base+'/api/products/sakura/items?page=1&cmsPreview=catalog-sakura&cmsDraft='+productPreview.body.previewToken);assert.equal(previewProducts.status(),200);const productList=await previewProducts.json();assert.equal(productList.total,liveProducts.total-1);assert(productList.items.every(i=>String(i.id)!==String(first.id)))
+ const cases=(await api('documents/custom-cases')).body,entry=JSON.parse(JSON.stringify(cases.schema.fields.items.template));Object.assign(entry,{id:require('node:crypto').randomUUID(),title:'未儲存的案例預覽',description:'只用於預覽',form:'一字型',style:'現代風'});cases.body.items.unshift(entry)
+ const casePreview=await api('workspaces/custom-cases',{action:'preview',documents:[{id:cases.id,revision:cases.revision,body:cases.body}]});assert.equal(casePreview.status,200)
+ const caseResponse=await context.request.get(base+'/api/design-inspiration/cases/'+entry.id+'?cmsPreview=custom-cases&cmsDraft='+casePreview.body.previewToken);assert.equal(caseResponse.status(),200);assert.equal((await caseResponse.json()).title,entry.title);assert.match(caseResponse.headers()['cache-control'],/no-store/)
+ const invalidToken=await context.request.get(base+'/api/content/custom-cases?preview=custom-cases&cmsDraft=invalid');assert.equal(invalidToken.status(),404)
+ const csrf=await context.request.post(base+'/api/admin/workspaces/custom-cases',{headers:{Origin:base},data:{action:'preview',documents:[]}});assert.equal(csrf.status(),403)
+ const news=(await api('documents/news-articles')).body;news.body.items[0].summary.title='未儲存的文章預覽';const newsPreview=await api('workspaces/news-articles',{action:'preview',documents:[{id:news.id,revision:news.revision,body:news.body}]});assert.equal(newsPreview.status,200)
+ const alias=await(await context.request.get(base+'/api/content/data-news?preview=news-articles&cmsDraft='+newsPreview.body.previewToken)).json();assert(alias.newsArticles.some(n=>n.title==='未儲存的文章預覽'))
+ const text=(await api('documents/'+id)).body,series=(await api('documents/data-kitchenStyles')).body;text.body.copy.text1=42;const validation=await api('workspaces/'+id,{action:'preview',documents:[text,series].map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(validation.status,400);assert.equal(validation.body.data.fieldErrors[0].path,'copy.text1');assert(!validation.body.message.includes('copy.text1'))
+ console.log('PASS: unsaved product filtering, new case detail, article aliases, private/no-store preview, CSRF and readable field errors')
+
+ for(const width of [1440,1024,768,390]){
+  await page.setViewportSize({width,height:960})
+  for(const path of ['/admin','/admin/home',...['pages','news','cases','products','stores','settings'].map(a=>'/admin/content?area='+a),'/admin/media','/admin/inbox','/admin/users','/admin/audit','/']){
+   await go(path);await page.locator(path==='/'?'#top':'.cms-page').waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Overflow ${width}: ${path}`);assert.equal(await page.locator('.cms-main>.cms-error,.cms-page>.cms-error').count(),0,`${width}: ${path}`)
+   if(path==='/admin/home'){assert.equal(await page.locator('.cms-section-card').count(),8);await page.screenshot({path:join(shots,`${width}-home.png`),fullPage:true})}
   }
-  await page.setViewportSize({width:1440,height:960});await go(base+'/admin/content');await page.getByLabel('搜尋內容').fill('消息');assert((await page.locator('.cms-guided-resource').count())>1)
-  await page.getByLabel('內容分類').selectOption('文章管理');await page.waitForFunction(()=>document.querySelectorAll('.cms-guided-resource').length===1);assert.equal(await page.locator('.cms-guided-resource').count(),1)
-  await go(base+'/admin/home?edit=view-components-home-HomeProject')
-  await page.getByRole('link',{name:'管理系列卡片',exact:true}).click();await page.waitForURL(/edit=data-kitchenStyles/)
-  await page.locator('.cms-location-impacts li').nth(4).waitFor();assert.equal(await page.locator('.cms-location-impacts li').count(),5)
-  await page.getByRole('heading',{name:'設計系列導覽',exact:true}).waitFor()
-  const styles=await page.evaluate(async()=>(await(await fetch('/api/admin/documents/data-kitchenStyles')).json()).body.KITCHEN_STYLES)
-  assert.deepEqual(await page.locator('.cms-array>.cms-array-row>summary').allTextContents(),styles.slice(0,10).map(i=>i.zh||i.en))
-  assert.equal(await page.getByRole('link',{name:'查看官網位置',exact:true}).getAttribute('href'),'/#kitchen-series')
-  assert.equal(await page.getByRole('link',{name:'查看官網位置',exact:true}).getAttribute('target'),'_blank')
-  await go(base+'/admin/home?edit=view-components-home-HomeProject');await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor()
-  assert.equal(await page.locator('figure.cms-location-diagram').count(),1)
-  assert(await page.getByLabel('介紹文字',{exact:true}).isVisible())
-  {
-   await go(base+'/admin/home?edit=view-components-home-HomeServices')
-   const brands=page.locator('.cms-array'),summaries=brands.locator('.cms-array-row>summary');await summaries.first().waitFor()
-   await page.waitForFunction(()=>getComputedStyle(document.querySelector('.cms-page')).opacity==='1')
-   const expected=await page.evaluate(async()=>(await(await fetch('/api/admin/documents/view-components-home-HomeServices')).json()).body.services.map(i=>i.alt))
-   assert.deepEqual(await summaries.allTextContents(),expected)
-   for(const name of ['廚房產品','設計案例','設計風格'])assert(await page.getByRole('navigation',{name:'首頁區塊'}).getByRole('link',{name,exact:true}).isVisible())
-   await summaries.first().focus();await page.keyboard.press('Enter');const name=brands.locator('.cms-array-row').first().getByLabel('品牌名稱（決定商品頁連結）',{exact:true})
-   assert(await brands.locator('.cms-array-row').first().getByLabel('顯示編號',{exact:true}).isVisible())
-   assert(await brands.locator('.cms-array-row').first().getByLabel('產品圖片',{exact:true}).isVisible())
-   const brand=brands.locator('.cms-array-row').first(),size=brand.getByLabel('標誌尺寸',{exact:true}),caption=brand.getByLabel('品牌標誌與介紹置於圖片上方',{exact:true}),oldSize=await size.inputValue(),oldCaption=await caption.isChecked()
-   assert(await brand.getByLabel('品牌標誌',{exact:true}).isVisible());assert.equal(await size.locator('option').count(),3)
-   await size.selectOption({label:'大（32–39px）'});assert.equal(await size.inputValue(),'h-[32px] sm:h-[36px] antra:h-[39px]');await size.selectOption(oldSize)
-   await caption.focus();await page.keyboard.press('Space');assert.equal(await caption.isChecked(),!oldCaption);await page.keyboard.press('Space');assert.equal(await caption.isChecked(),oldCaption)
-   await name.fill(expected[0]+'驗收');await page.waitForFunction(value=>document.querySelector('.cms-array-row>summary')?.textContent===value,expected[0]+'驗收');await name.fill(expected[0])
-   const first=brands.locator('.cms-array-row').filter({has:page.locator('summary',{hasText:expected[0]})});await first.getByRole('button',{name:'下移',exact:true}).click();assert.deepEqual(await summaries.allTextContents(),[expected[1],expected[0],...expected.slice(2)]);if(!(await first.evaluate(el=>el.open)))await first.locator('summary').click();await first.getByRole('button',{name:'上移',exact:true}).click();assert.deepEqual(await summaries.allTextContents(),expected)
-   await page.waitForFunction(()=>[...document.querySelectorAll('button')].find(el=>el.textContent==='儲存草稿')?.disabled)
-  }
-  {
-   await go(base+'/admin/home?edit=view-components-home-HomeStyleMarquee')
-   const styles=page.locator('.cms-resource-form>.cms-fields>.cms-array'),rows=styles.locator(':scope>.cms-array-row'),captions=rows.locator(':scope>summary .cms-array-summary-content>span:last-child');await captions.first().waitFor()
-   const original=await page.evaluate(async()=>(await(await fetch('/api/admin/documents/view-components-home-HomeStyleMarquee')).json()).body.styles)
-   assert.equal(await page.getByLabel('按鈕連結',{exact:true}).count(),0)
-   assert.equal(await page.getByLabel('預覽圖片掛載位置',{exact:true}).count(),0)
-   assert.deepEqual(await captions.allTextContents(),original.map(s=>s.zh||s.en));assert.equal(await rows.locator(':scope>summary img').count(),original.length)
-   assert.equal(await rows.first().locator(':scope>summary img').getAttribute('src'),original[0].images[0])
-   await rows.first().locator('summary').first().focus();await page.keyboard.press('Enter');const name=rows.first().getByLabel('中文名稱',{exact:true});await name.fill(original[0].zh+'驗收');assert.equal(await captions.first().textContent(),original[0].zh+'驗收');await name.fill(original[0].zh)
-   assert(await page.getByRole('button',{name:'儲存草稿',exact:true}).isDisabled())
-  }
-  {
-   await go(base+'/admin/home?edit=view-components-home-HomeStoreLocation')
-   const settings=page.locator('.cms-store-regions'),region=settings.getByLabel('區域',{exact:true});await region.waitFor()
-   const original=await page.evaluate(async()=>(await(await fetch('/api/admin/documents/view-components-home-HomeStoreLocation')).json()).body.regions)
-   assert.deepEqual(await region.locator('option').allTextContents(),['北部','中部','南部','東部','離島'])
-   for(const name of Object.keys(original)){await region.selectOption(name);assert.deepEqual(await settings.locator('.cms-store-city-row select').evaluateAll(els=>els.map(el=>el.value)),original[name]);assert(await page.getByRole('button',{name:'儲存草稿',exact:true}).isDisabled())}
-   await region.selectOption('北部');const cities=original['北部'],last=cities.at(-1)
-   await settings.getByRole('button',{name:'移除'+last,exact:true}).click();assert(await page.getByRole('button',{name:'儲存草稿',exact:true}).isEnabled())
-   await settings.getByRole('button',{name:'新增縣市',exact:true}).click();await settings.locator('.cms-store-city-row select').last().selectOption(last);assert.deepEqual(await settings.locator('.cms-store-city-row select').evaluateAll(els=>els.map(el=>el.value)),cities)
-   assert.equal(await page.evaluate(()=>document.activeElement.tagName),'SELECT');assert(await page.getByRole('button',{name:'儲存草稿',exact:true}).isDisabled())
-   const stores=page.locator('.cms-resource-form>.cms-fields>.cms-array'),first=stores.locator('.cms-array-row').first();await first.locator('summary').click()
-   const storeId=first.getByLabel('識別碼',{exact:true}),storeRegion=first.getByLabel('區域',{exact:true}),storeCity=first.getByLabel('縣市',{exact:true}),oldRegion=await storeRegion.inputValue(),oldCity=await storeCity.inputValue()
-   assert(!(await storeId.isEditable()));const oldId=await storeId.inputValue();await storeRegion.selectOption('東部');assert.equal(await storeCity.inputValue(),'');assert.deepEqual(await storeCity.locator('option').allTextContents(),['請選擇縣市','花蓮縣','臺東縣']);await storeRegion.selectOption(oldRegion);await storeCity.selectOption(oldCity);assert.equal(await storeId.inputValue(),oldId)
-   await stores.getByRole('button',{name:'新增項目',exact:true}).click();const added=stores.locator('.cms-array-row').last();await added.locator('summary').click();const newId=Number(await added.getByLabel('識別碼',{exact:true}).inputValue());assert(Number.isSafeInteger(newId)&&newId>=0);assert(!(await added.getByLabel('識別碼',{exact:true}).isEditable()));await added.getByRole('button',{name:'移除此項',exact:true}).click();assert(await page.getByRole('button',{name:'儲存草稿',exact:true}).isDisabled())
-  }
-  {
-   await go(base+'/admin/home?edit=view-components-home-HomeGallery')
-   const original=await page.evaluate(async()=>(await(await fetch('/api/admin/documents/view-components-home-HomeGallery')).json()).body.cases)
-   const library=await page.evaluate(async()=>(await(await fetch('/api/admin/case-library')).json()))
-   const source=library.find(i=>i.source==='來源案例'&&i.image&&!original.some(o=>o.slug===i.slug)),store=library.find(i=>i.slug===original[0].slug)
-   assert(source&&store)
-   const anonymous=await browser.newContext();await anonymous.addCookies((await context.cookies()).filter(c=>c.name!=='sakura_cms_session'));assert.equal((await anonymous.request.get(base+'/api/admin/case-library')).status(),401);await anonymous.close()
-   const cases=page.locator('.cms-home-cases'),add=cases.getByRole('button',{name:'新增案例',exact:true})
-   await add.waitFor();assert((await cases.locator('.cms-section-heading>strong').textContent()).startsWith('輪播案例'));assert.equal(await cases.getAttribute('aria-label'),'首頁輪播案例')
-   const headingSettings=page.getByRole('group',{name:'標題與按鈕設定',exact:true});assert(await headingSettings.isVisible());for(const label of ['英文小標','區塊標題','按鈕連結','按鈕文字'])assert(await headingSettings.getByLabel(label,{exact:true}).isVisible())
-   for(const width of [1440,1024,768,390]){
-    await page.setViewportSize({width,height:960});await add.click();await page.getByLabel('搜尋案例庫').fill(original[0].slug)
-    const duplicate=page.getByRole('button',{name:`選取${store.store||store.title}（${store.slug}）`,exact:true});await duplicate.waitFor();assert(await duplicate.isDisabled())
-    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:join(screenshots,`${width}-case-picker.png`)})
-    await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog[open]'));assert.equal(await page.evaluate(()=>document.activeElement.textContent.trim()),'新增案例')
-   }
-   await page.setViewportSize({width:1440,height:960})
-   await page.route('**/api/admin/case-library',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({message:'案例庫讀取驗收錯誤',data:{traceId:'gallery-check'}})}))
-   await add.click();await page.getByRole('alert').filter({hasText:'案例庫讀取驗收錯誤'}).waitFor();assert((await page.getByRole('alert').textContent()).includes('gallery-check'))
-   await page.unroute('**/api/admin/case-library');await page.getByRole('button',{name:'重新整理',exact:true}).click();await page.getByLabel('搜尋案例庫').fill(source.slug)
-   await page.getByRole('button',{name:`選取${source.store||source.title}（${source.slug}）`,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('dialog[open]'))
-   const added=cases.locator('.cms-array-row').last();await added.getByLabel('案例識別碼',{exact:true}).waitFor()
-   assert.equal(await added.getByLabel('案例識別碼',{exact:true}).inputValue(),source.slug);assert(!(await added.getByLabel('案例識別碼',{exact:true}).isEditable()))
-   assert.equal(await added.getByLabel('案例圖片',{exact:true}).inputValue(),source.image);assert.equal(await added.getByLabel('門市名稱',{exact:true}).inputValue(),source.store)
-   assert.equal(await added.getByRole('link',{name:'查看案例 ↗',exact:true}).getAttribute('href'),source.route);assert.equal(await added.getByRole('link',{name:'查看案例 ↗',exact:true}).getAttribute('target'),'_blank')
-   await added.getByLabel('門市名稱',{exact:true}).fill('驗收門市');const selected=cases.locator('.cms-array-row').filter({has:page.locator('summary',{hasText:'驗收門市'})})
-   await selected.getByRole('button',{name:'上移',exact:true}).click();assert.equal(await cases.locator('.cms-array-row>summary').nth(original.length-1).textContent(),'驗收門市')
-   await selected.getByRole('button',{name:'下移',exact:true}).click();await selected.getByRole('button',{name:'移除此項',exact:true}).click()
-   await page.waitForFunction(()=>[...document.querySelectorAll('button')].find(el=>el.textContent==='儲存草稿')?.disabled)
-   assert.deepEqual(await cases.locator('.cms-array-row>summary').allTextContents(),original.map(i=>i.store||i.title||i.slug))
-   const first=cases.locator('.cms-array-row').first();await first.locator('summary').click();await first.getByRole('button',{name:'更換案例',exact:true}).click();await page.getByLabel('搜尋案例庫').fill(store.slug)
-   await page.getByRole('button',{name:`選取${store.store||store.title}（${store.slug}）`,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('dialog[open]'))
-   assert.equal(await first.getByLabel('門市名稱',{exact:true}).inputValue(),store.store);assert.equal(await first.getByLabel('案例圖片',{exact:true}).inputValue(),store.image);assert.equal(await first.getByLabel('案例連結',{exact:true}).inputValue(),store.route)
-   await page.screenshot({path:join(screenshots,'1440-home-case-editor.png')})
-   page.once('dialog',dialog=>dialog.accept());await page.reload();await page.waitForFunction(()=>document.querySelector('#__nuxt')?.__vue_app__?.config.globalProperties.$nuxt?.isHydrating===false);await add.waitFor()
-   assert.equal((await context.request.get(base+source.route)).status(),200)
-   await page.emulateMedia({reducedMotion:'reduce'})
-   await page.route('**/api/content/view-components-home-HomeGallery*',async route=>{const response=await route.fetch(),body=await response.json();body.cases=[{slug:source.slug,store:'',title:source.title,image:original[0].image,route:source.route}];await route.fulfill({response,json:body})})
-   await page.evaluate(()=>document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router.push('/'))
-   await page.locator('.gallery-section').waitFor()
-   for(const width of [1440,1024,768,390]){await page.setViewportSize({width,height:960});assert.equal(await page.locator(`.gallery-section a[href="${source.route}"]`).count(),3);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth))}
-   await page.unroute('**/api/content/view-components-home-HomeGallery*');await page.emulateMedia({reducedMotion:'no-preference'})
-   await go(base+'/admin/home?edit=view-components-home-HomeGallery');await page.locator('.cms-home-cases .cms-array-row>summary').first().waitFor();assert.deepEqual(await page.locator('.cms-home-cases .cms-array-row>summary').allTextContents(),original.map(i=>i.store||i.title||i.slug))
-  }
-  await go(base+'/#kitchen-series');await page.locator('#kitchen-series').waitFor();assert(Math.abs(await page.locator('#kitchen-series').evaluate(el=>el.getBoundingClientRect().top)-60)<5)
-  await go(base+'/admin/home');await page.getByText('AI Kitchen',{exact:true}).click();const row=page.locator('.cms-array-row[open]'),title=row.getByLabel('輪播標題',{exact:true}),original=await title.inputValue();await title.fill(original+'驗收');assert(await page.getByRole('button',{name:'儲存草稿',exact:true}).isEnabled());await title.fill(original)
-  const desktop=row.getByLabel('桌機圖片',{exact:true}),mobile=row.getByLabel('手機圖片',{exact:true}),focus=row.getByRole('slider',{name:'手機水平焦點'}),oldMobile=await mobile.inputValue()
-  const oldFocus=await focus.inputValue(),oldDesktop=await desktop.inputValue()
-  for(const width of [1440,1024,768,390]){await page.setViewportSize({width,height:960});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Crop editor overflow at ${width}`);assert.equal(await row.locator('.cms-hero-crop-frame').count(),2);await row.locator('.cms-hero-images').screenshot({path:join(screenshots,`${width}-hero-crop.png`)})}
-  await page.setViewportSize({width:1440,height:960})
-  await mobile.fill('');assert.equal(await row.locator('.cms-hero-crop-mobile img').getAttribute('src'),oldDesktop)
-  await row.getByRole('region',{name:'手機圖片設定'}).getByRole('button',{name:'從媒體庫選擇'}).click();await page.getByLabel('搜尋素材').fill('clever');const selection=page.getByRole('button',{name:'選擇 clever.webp',exact:true}).first(),selectedSrc=await selection.locator('img').getAttribute('src');await selection.click();await page.waitForFunction(()=>!document.querySelector('dialog[open]'));assert.equal(await mobile.inputValue(),selectedSrc);assert.equal(await row.locator('.cms-hero-crop-mobile img').getAttribute('src'),selectedSrc);assert.equal(await desktop.inputValue(),oldDesktop);assert.equal(await page.evaluate(()=>document.activeElement.textContent.trim()),'從媒體庫選擇')
-  await focus.focus();await page.keyboard.press('Home');await page.keyboard.press('ArrowRight');assert.equal(await row.locator('.cms-hero-crop-mobile img').evaluate(el=>getComputedStyle(el).objectPosition),'1% 50%')
-  assert.equal(await page.evaluate(()=>document.activeElement.textContent||document.activeElement.getAttribute('aria-label')),'手機水平焦點')
-  await row.getByLabel('動態裁切預覽',{exact:true}).selectOption('end');assert(await row.locator('.cms-hero-crop-mobile img').evaluate(el=>getComputedStyle(el).transform!=='none'))
-  await mobile.fill('/missing-crop-preview-check.webp');await row.locator('.cms-hero-crop-mobile [role="alert"]').waitFor();assert((await row.locator('.cms-hero-crop-mobile [role="alert"]').textContent()).includes('圖片載入失敗'))
-  await mobile.fill(oldMobile);await focus.evaluate((el,value)=>{el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}))},oldFocus)
-  // Remove optional fields introduced by this check so the original draft stays untouched.
-  page.once('dialog',dialog=>dialog.accept());await page.reload();await page.getByText('AI Kitchen',{exact:true}).click()
-  await page.getByRole('button',{name:'儲存並預覽'}).click();await page.frameLocator('iframe[title="官網草稿預覽"]').getByRole('heading',{name:original,exact:true}).waitFor();await page.keyboard.press('Escape');assert.equal(await page.locator('dialog[open]').count(),0);assert.equal(await page.evaluate(()=>document.activeElement.textContent.trim()),'儲存並預覽')
-  await page.getByRole('button',{name:'從媒體庫選擇'}).first().click();await page.getByLabel('搜尋素材').fill('aikitchen');await page.getByRole('button',{name:'選擇 aikitchen.webp'}).waitFor();await page.keyboard.press('Escape')
-  await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('.cms-button').first().evaluate(el=>getComputedStyle(el).transitionDuration),'0s')
-  // Exercise the real public component with browser-only media/focus fixtures; no CMS writes.
-  await page.route('**/api/content/view-components-home-HomeHero*',async route=>{const response=await route.fetch(),body=await response.json();for(const slide of body.slides)Object.assign(slide,{image:'/home-2026/hero/10bn/aikitchen.webp',mobileImage:'/home-2026/hero/10bn/clever.webp',desktopFocusX:20,desktopFocusY:40,mobileFocusX:80,mobileFocusY:25});await route.fulfill({response,json:body})})
-  await page.evaluate(()=>document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router.push('/'))
-  for(const width of [1440,1024,768,390]){
-   await page.setViewportSize({width,height:960})
-   await page.waitForFunction(mobile=>{const img=document.querySelector('.hero-page1-image-layer-final img');return img?.complete&&img.naturalWidth>0&&img.currentSrc.endsWith(mobile?'/clever.webp':'/aikitchen.webp')},width<=767)
-   const image=page.locator('.hero-page1-image-layer-final img');assert.equal(await image.evaluate(el=>getComputedStyle(el).objectPosition),width<=767?'80% 25%':'20% 40%');assert.equal(await image.evaluate(el=>getComputedStyle(el).animationName),'none');assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth))
-  }
-  await page.unroute('**/api/content/view-components-home-HomeHero*')
-  assert.deepEqual(errors,[]);console.log('PASS: website locations, shared impacts, home editor links, Chinese labels, section anchors, navigation, search/filter, editing, published case library/autofill/reordering/errors/links, desktop/mobile crop previews, image picking/fallback, keyboard focus, image errors, preview, media picker, focus return, reduced motion and 4 widths. Screenshots:',screenshots)
- }catch(error){console.error('UI failure:',page.url(),await page.locator('.cms-error,[role="alert"]').allTextContents());await page.screenshot({path:join(screenshots,'failure.png')}).catch(()=>{});throw error}finally{await browser.close()}
+  await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert(await page.getByRole('link',{name:'查看官網位置',exact:true}).isVisible())
+  if(width<1200){await page.getByRole('button',{name:'看效果',exact:true}).first().click();assert(await page.locator('.cms-effect-panel').isVisible());await page.getByRole('button',{name:'修改內容',exact:true}).click()}
+  await page.screenshot({path:join(shots,`${width}-editor.png`),fullPage:true})
+ }
+ await page.setViewportSize({width:1440,height:960});await go('/admin/home?edit='+id);const field=page.getByLabel('區塊標題（前半段）',{exact:true});await field.waitFor();await field.fill('未儲存的即時測試')
+ await page.frameLocator('iframe[title="目前輸入的官網效果"]').getByText('未儲存的即時測試',{exact:false}).first().waitFor({timeout:45000});assert.deepEqual((await api('documents')).body,before.body);await page.screenshot({path:join(shots,'live-unsaved-preview.png'),fullPage:true})
+ await page.route('**/api/admin/workspaces/'+id,async r=>r.request().postDataJSON().action==='save'?r.fulfill({status:409,contentType:'application/json',body:JSON.stringify({message:'有人已修改這個區塊。你的輸入已保留。',data:{traceId:'ui-conflict-check'}})}):r.continue())
+ await page.getByRole('button',{name:'儲存',exact:true}).click();await page.getByRole('alert').filter({hasText:'ui-conflict-check'}).waitFor();assert.equal(await field.inputValue(),'未儲存的即時測試');await page.unroute('**/api/admin/workspaces/'+id)
+ await page.getByRole('button',{name:'系列卡片',exact:true}).click();const rows=page.locator('.cms-array-row');await rows.first().locator('summary').focus();await page.keyboard.press('Enter');await rows.nth(1).locator('summary').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.cms-array-row[open]').count(),1)
+ console.log('PASS: live preview, conflict retention and single-item editing');
+ const choose=rows.nth(1).getByRole('button',{name:'更換圖片',exact:true}).first();await choose.click();const dialog=page.getByRole('dialog',{name:'選擇圖片',exact:true});await dialog.waitFor();await dialog.getByRole('button',{name:'上傳新檔案'}).waitFor();await dialog.getByRole('button',{name:/^選擇 /}).first().click();await dialog.waitFor({state:'hidden'});assert(await choose.evaluate(el=>el===document.activeElement))
+ console.log('PASS: image selection and focus return');await page.getByRole('button',{name:'更新官網',exact:true}).click();await page.getByRole('dialog',{name:'確認要更新到官網的內容'}).waitFor();assert(await page.getByText('會更新的位置',{exact:true}).isVisible());await page.getByRole('button',{name:'返回修改',exact:true}).click()
+ console.log('PASS: update summary');await page.getByRole('dialog',{name:'確認要更新到官網的內容'}).waitFor({state:'hidden'});await page.evaluate(()=>document.querySelector('#__nuxt').__vue_app__.config.globalProperties.$router.push('/admin/inbox'));await page.waitForURL(base+'/admin/inbox');await page.waitForFunction(()=>document.querySelector('.cms-page')?.__vueParentComponent?.isMounted);await page.getByLabel('處理狀態篩選').selectOption('已完成');await page.waitForURL(/status=/);await go('/admin/users');await page.getByRole('button',{name:'新增帳號',exact:true}).click();assert(await page.getByLabel('可以做的工作').isVisible());await page.getByRole('button',{name:'關閉視窗'}).click()
+ await go('/admin/content?area=pages');await page.getByLabel('搜尋內容').fill('加盟');await page.waitForURL(/q=/);await page.waitForTimeout(300);const list=page.url();await page.locator('.cms-section-card').first().click();await page.getByRole('link',{name:'← 返回列表'}).click();await page.waitForURL(list);assert.equal(page.url(),list)
+ await go('/admin/content?edit=data-kitchenStyles');await page.waitForURL(/\/admin\/home\?.*edit=view-components-home-HomeProject/);await page.getByRole('button',{name:'系列卡片',exact:true}).waitFor();assert(await page.locator('.cms-array').count());
+ await go('/admin/media');const upload=page.getByLabel('上傳圖片或檔案',{exact:true}),image=await require('sharp')({create:{width:4,height:4,channels:3,background:'#caa05c'}}).png().toBuffer()
+ await upload.setInputFiles({name:'workflow-acceptance.png',mimeType:'image/png',buffer:image});await page.getByRole('status').filter({hasText:'檔案已上傳'}).waitFor()
+ const {PDFDocument}=require('pdf-lib'),pdf=await PDFDocument.create();pdf.addPage();await upload.setInputFiles({name:'workflow-acceptance.pdf',mimeType:'application/pdf',buffer:Buffer.from(await pdf.save())});await page.getByRole('status').filter({hasText:'檔案已上傳'}).waitFor()
+ await upload.setInputFiles({name:'invalid.txt',mimeType:'text/plain',buffer:Buffer.from('invalid')});await page.getByRole('alert').filter({hasText:'請選擇 JPG'}).waitFor()
+ await page.emulateMedia({reducedMotion:'reduce'});await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor();assert.equal(await page.locator('.cms-page').evaluate(el=>getComputedStyle(el).animationName),'none')
+ console.log('PASS: actual image and PDF uploads (temporary acceptance files)')
+ assert.deepEqual((await api('documents')).body,before.body);assert.deepEqual(errors,[]);console.log('PASS: 4 widths, all navigation, live preview without saving, conflicts, single-item editing, image selection/focus, confirmation, filters, accounts and website. Screenshots:',shots)
+ }catch(e){console.error('Original UI failure:',e);console.error('UI failure:',page.url(),await page.locator('[role=alert]').allTextContents().catch(()=>[]));await page.screenshot({path:join(shots,'failure.png'),fullPage:true}).catch(()=>{});console.error('Screenshots:',shots);throw e}finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1})

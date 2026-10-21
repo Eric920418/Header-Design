@@ -5,6 +5,7 @@ import { homeGallerySchema } from '../../../shared/cms/gallery-cases.mjs'
 import { builderSeriesSchema } from '../../../shared/cms/builder-series.mjs'
 import { caseLibrary } from '../../cms/case-library.mjs'
 import { cmsHandler, cmsUser, cmsWrite, sameOrigin, cmsSession } from '../../utils/cms'
+import {workspaceSummaries,changeWorkspace} from '../../cms/workspaces.mjs'
 
 export default defineEventHandler(event=>cmsHandler(event,async()=>{
  const path=(getRouterParam(event,'path')||'').split('/'),method=event.method
@@ -25,6 +26,10 @@ export default defineEventHandler(event=>cmsHandler(event,async()=>{
   const hash=passwordHash(b.password);await transaction(async(tx:any)=>{await query('UPDATE cms.Users SET password=@hash,mustChange=0,revision=revision+1 WHERE id=@id; DELETE cms.Sessions WHERE userId=@id',{id:user.id,hash},tx);await audit(user.id,'password-change',user.email,tx)});await cmsSession(event,user.id);return{ok:true}
  }
  if(path[0]==='case-library'&&method==='GET')return caseLibrary()
+ if(path[0]==='workspaces'){
+  if(!path[1]&&method==='GET')return workspaceSummaries()
+  if(path[1]&&method==='POST')return changeWorkspace(path[1],await readBody(event),user)
+ }
  if(path[0]==='documents'){
   if(!path[1]&&method==='GET')return(await query("SELECT id,title,category,route,revision,draftId,publishedId,updatedAt FROM cms.Documents WHERE id NOT IN (N'data-kitchenGuides',N'data-kitchenGuideDetails',N'data-news',N'data-latestArticles',N'data-activityArticles',N'data-mediaVideos',N'view-components-FloatingButtons') ORDER BY category,title")).recordset
   if(path[1]?.trim().toLowerCase()==='view-components-floatingbuttons')fail(404,'此項目已從後台移除，官網快速服務按鈕仍保留。')

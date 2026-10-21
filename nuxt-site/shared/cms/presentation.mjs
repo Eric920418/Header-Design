@@ -73,17 +73,18 @@ for(const[key,title,contents,href,visual]of [
 ])guides['view-components-'+key]={title:title+'・'+contents,location:['全站設定',title,contents],href,visual,summary:'共用元件：發布後會同步影響所有使用此元件的官網頁面。',impacts:[target('所有官網頁面 → '+title,href)],related:key==='SiteHeader'?['data-kitchenStyles']:[]}
 for(const[key,name]of [['sakura','櫻花'],['svago','SVAGO'],['teka','TEKA'],['cases','來源設計案例']]){const cases=key==='cases',href=cases?'/design-inspiration':'/products/'+key+'/all';guides['catalog-'+key]={title:name+'・上架、推薦與排序',location:[cases?'設計案例':'廚房產品',cases?name:name+'商品','上架狀態與順序'],href,visual:'cards',summary:'僅調整上架、推薦及顯示順序。來源名稱、價格、規格與圖片由原系統提供。',impacts:[target(name+' → 分類、列表與搜尋結果',href),target(name+' → 內容內頁的公開狀態',href)],related:cases?['custom-cases']:['data-productBrands']}}
 
-guides['view-components-home-HomeProject'].summary='此處修改首頁品牌系列的區塊標題與介紹文字。卡片圖片、名稱、介紹與連結請使用上方「管理系列卡片」。'
+guides['view-components-home-HomeProject'].summary='修改首頁品牌系列的標題、介紹與系列卡片。'
 guides['view-components-home-HomeProject'].relatedLabels={'data-kitchenStyles':'修改卡片圖片與文字','data-kitchenSeries':'修改系列內頁內容'}
 guides['view-components-home-HomeGallery'].summary='從案例庫新增或更換已發布案例，自動帶入圖片、門市與連結；此處的精選順序與圖片只影響首頁。'
 guides['view-components-home-HomeGallery'].relatedLabels={'data-storeCases':'編輯門市案例','custom-cases':'新增自建案例','catalog-cases':'管理來源案例上架'}
 
 export const homeResources=home.map(([name])=>'view-components-home-'+name)
 export function resourceGuide(id){return guides[id]}
+export const resourceGuides=guides
 export function resourceSearchText(doc){const g=resourceGuide(doc.id);return [g?.title,g?.location.join(' '),g?.summary,...(g?.impacts||[]).map(i=>i.label),doc.title,doc.category].filter(Boolean).join(' ').toLowerCase()}
 
 const labels={
- title:'區塊標題',name:'名稱',shortTitle:'簡短標題',englishTitle:'英文標題',description:'介紹文字',desc:'介紹文字',descriptions:'介紹段落',excerpt:'摘要文字',expandedDescription:'展開後介紹文字',intro:'簡介',introduction:'介紹文字',closing:'結語',conclusion:'結語',subtitle:'副標題',subheading:'副標題',eyebrow:'區塊小標',heading:'段落標題',headlines:'標題文字',body:'段落文字',text:'文字內容',copy:'版面文字與圖片',summary:'文章列表資訊',detail:'文章內文',sections:'內容段落',paragraphs:'段落文字',bullets:'條列說明',points:'重點項目',items:'內容項目',lines:'說明文字',highlights:'重點說明',features:'特色說明',details:'詳細說明',tip:'使用提醒',note:'補充說明',quote:'分享內容',question:'問題文字',templateQuestion:'問題範本',questions:'問題清單',answer:'解答文字',steps:'步驟內容',
+ title:'區塊標題',name:'名稱',shortTitle:'簡短標題',englishTitle:'英文標題',description:'介紹文字',desc:'介紹文字',descriptions:'介紹段落',excerpt:'摘要文字',expandedDescription:'展開後介紹文字',intro:'簡介',introduction:'介紹文字',closing:'結語',conclusion:'結語',subtitle:'副標題',subheading:'副標題',eyebrow:'區塊小標',heading:'段落標題',headlines:'標題文字',body:'段落文字',text:'文字內容',copy:'標題、圖片與按鈕',summary:'文章列表資訊',detail:'文章內文',sections:'內容段落',paragraphs:'段落文字',bullets:'條列說明',points:'重點項目',items:'內容項目',lines:'說明文字',highlights:'重點說明',features:'特色說明',details:'詳細說明',tip:'使用提醒',note:'補充說明',quote:'分享內容',question:'問題文字',templateQuestion:'問題範本',questions:'問題清單',answer:'解答文字',steps:'步驟內容',
  image:'圖片',images:'圖片集',img:'卡片圖片',src:'圖片檔案',cover:'封面圖片',alt:'圖片替代文字',imageAlt:'圖片替代文字',background:'背景圖片',logo:'品牌標誌圖片',portrait:'人物照片',heroSlides:'主視覺輪播圖片',slides:'輪播內容',gallery:'展示圖片',captionTop:'文字顯示於圖片上方',emphasized:'強調顯示',logoClass:'標誌顯示樣式',imageLayout:'圖片排版方式',
  label:'按鈕文字',actionLabel:'按鈕文字',href:'按鈕連結',to:'按鈕連結',url:'連結網址',route:'前往頁面連結',links:'相關連結',children:'子選單項目',external:'使用外部連結',newTab:'另開新分頁',leftNav:'左側主選單',rightNav:'右側主選單',mega:'品牌圖文選單',seriesMega:'顯示系列圖文選單',sitemapGroups:'頁尾網站地圖',primaryItem:'主要服務按鈕',serviceItems:'其他服務按鈕',
  id:'內容識別碼',slug:'固定網址識別碼',articleId:'對應文章識別碼',code:'項目代號',n:'顯示編號',number:'顯示編號',numbers:'條款編號',value:'顯示內容',values:'比較內容',year:'年份',date:'日期',publishedAt:'發布日期',displayDate:'日期顯示文字',category:'文章分類',categoryLabel:'分類顯示名稱',recentRank:'最新文章顯示順序',legacyUrl:'原官網文章網址',legacyPath:'原官網文章連結',detailRoute:'文章內頁連結',source:'資料來源',
@@ -143,9 +144,13 @@ export function editingSchema(schema,resourceId,path=''){
   result.editor='hero-images'
   for(const key of ['image','mobileImage','desktopFocusX','desktopFocusY','mobileFocusX','mobileFocusY'])result.fields[key]={...result.fields[key],hidden:true}
  }
+ if(path==='items'&&['news-articles','knowledge-articles','custom-cases'].includes(resourceId)){result.label=resourceId==='news-articles'?'消息、活動與影片':resourceId==='knowledge-articles'?'廚房知識文章':'設計案例';result.newItemLabel=resourceId==='news-articles'?'消息或活動':resourceId==='knowledge-articles'?'文章':'案例'}
  if(resourceId==='data-builders'&&path==='builderProjectCards'||resourceId==='data-franchise'&&path==='franchiseProcessSteps')result.hidden=true
  if(path==='sitemapGroups.*.links.*')result.itemLabels=['連結文字','連結網址']
  if(path.split('.').at(-1)==='imageLayout'||path.split('.').at(-1)==='logoClass'&&!(resourceId==='view-components-home-HomeServices'&&path==='services.*.logoClass'))result.hidden=true
+ if(['id','articleId','slug','code'].includes(path.split('.').at(-1))&&schema.format!=='youtube')result.hidden=true
+ if(['alt','imageAlt'].includes(path.split('.').at(-1)))result.label='圖片說明'
+ if(schema.format==='youtube')result.label='YouTube 影片連結'
  if(path==='copy')result.hidden=Object.values(result.fields||{}).every(f=>f.hidden)
  return result
 }

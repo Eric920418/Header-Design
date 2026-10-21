@@ -4,7 +4,8 @@ import {cmsUser} from './cms'
 import {readContent} from '../cms/content.mjs'
 import type {StoreCaseDetail} from '~/types/content'
 import type {DesignCase} from '~/types/designCloud'
-async function read(id:string,event?:H3Event){const preview=event?getQuery(event).cmsPreview:undefined;if(preview&&event){await cmsUser(event);setResponseHeader(event,'Cache-Control','private, no-store');setResponseHeader(event,'X-Robots-Tag','noindex, nofollow')}return readContent(id,preview===id)}
+import {readDraftPreview} from '../cms/previews.mjs'
+async function read(id:string,event?:H3Event){const preview=event?getQuery(event).cmsPreview:undefined,draft=event?getQuery(event).cmsDraft:undefined;if((preview||draft)&&event){const user=await cmsUser(event);setResponseHeader(event,'Cache-Control','private, no-store');setResponseHeader(event,'X-Robots-Tag','noindex, nofollow');if(draft){const body=readDraftPreview(draft,user.id,id);if(body)return body}}return readContent(id,preview===id)}
 export async function cmsCatalog(key:string,event?:H3Event){return await read('catalog-'+key,event) as {items:{id:string;enabled:boolean;featured:boolean;sort:number}[]}}
 export async function cmsCases(event?:H3Event){return (await read('custom-cases',event)).items as any[]}
 export async function cmsStoreCases(event?:H3Event):Promise<DesignCase[]>{

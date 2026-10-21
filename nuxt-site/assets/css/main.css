@@ -65,7 +65,6 @@
   :is(header, .home-project-heading, .home-services-heading, .store-location-heading, .ai-section-heading, .ai-cases__heading, .case-detail-related__heading):has(.bilingual-heading-lead) {
     --template-bilingual-label-top: calc(var(--bilingual-heading-top, 64px) + 18px);
   }
-  .builders-contact__heading > .section-pill { margin-top: 18px; }
   :is(.product-care__header, .franchise-about__grid, .franchise-faq__heading) {
     --template-bilingual-label-top: calc(var(--bilingual-heading-top, 64px) + 14px);
   }

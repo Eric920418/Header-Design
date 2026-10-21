@@ -11,7 +11,7 @@ const { brand, category } = defineProps<{ brand: ProductBrand; category?: number
 const info = PRODUCT_BRANDS[brand]
 const route = useRoute()
 const query = computed(() => ({ ...(category ? { category } : {}), page: route.query.page ?? '1', q: route.query.q ?? '' }))
-const { data, error, status, refresh } = await useFetch<ProductList>(`/api/products/${brand}/items`, { query:computed(()=>({...query.value,...(useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview}:{})})) })
+const { data, error, status, refresh } = await useFetch<ProductList>(`/api/products/${brand}/items`, { query:computed(()=>({...query.value,...(useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview,...(useRoute().query.cmsDraft?{cmsDraft:useRoute().query.cmsDraft}:{})}:{})})) })
 const search = ref(typeof route.query.q === 'string' ? route.query.q : '')
 watch(() => route.query.q, q => { search.value = typeof q === 'string' ? q : '' })
 const heading = computed(() => data.value?.category?.title ?? `${info.name} 全部產品`)

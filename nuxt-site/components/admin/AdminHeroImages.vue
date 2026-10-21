@@ -22,9 +22,9 @@ function select(src: string) { set(picking.value === 'mobile' ? 'mobileImage' : 
       <section v-for="device in devices" :key="device.key" class="cms-hero-image-card" :aria-label="`${device.label}圖片設定`">
         <header><strong>{{ device.label }}圖片</strong><span v-if="device.key === 'mobile' && !modelValue.mobileImage" class="cms-count">沿用桌機圖</span></header>
         <p class="cms-field-help">建議 {{ device.size }} px · JPG／PNG／WebP</p>
-        <label class="cms-field"><span class="sr-only">{{ device.label }}圖片</span><input :value="modelValue[device.field] || ''" :placeholder="device.key === 'mobile' ? '留空時沿用桌機圖片' : '選擇圖片或輸入圖片網址'" @input="set(device.field, ($event.target as HTMLInputElement).value)" /></label>
+
         <div class="cms-actions">
-          <button type="button" class="cms-button" @click="($event.currentTarget as HTMLButtonElement).focus(); picking = device.key">從媒體庫選擇</button>
+          <button type="button" class="cms-button" @click="($event.currentTarget as HTMLButtonElement).focus(); picking = device.key">選擇或上傳圖片</button>
           <button v-if="device.key === 'mobile' && modelValue.mobileImage" type="button" class="cms-button" @click="set('mobileImage', '')">沿用桌機圖片</button>
         </div>
         <figure class="cms-hero-crop">
@@ -40,7 +40,7 @@ function select(src: string) { set(picking.value === 'mobile' ? 'mobileImage' : 
         </label>
       </section>
     </div>
-    <p class="cms-field-help">焦點與選圖即時套用於預覽。官網會依螢幕比例滿版裁切，輪播含緩慢放大與平移，重要主體請保留邊界；發布後才會更新官網。</p>
+    <p class="cms-field-help">焦點與選圖即時套用於預覽。官網會依螢幕比例滿版裁切，輪播含緩慢放大與平移，重要主體請保留邊界；更新官網後才會讓訪客看到。</p>
     <AdminDialog :open="Boolean(picking)" :title="`選擇${picking === 'mobile' ? '手機' : '桌機'}輪播圖片`" wide @close="picking = null"><AdminMediaGrid picking kind="image" @select="select($event.src)" /></AdminDialog>
   </section>
 </template>

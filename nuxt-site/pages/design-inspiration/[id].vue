@@ -7,7 +7,7 @@ import type { DesignCaseDetail } from '~/types/designCloud'
 const route = useRoute()
 const router = useRouter()
 const url = computed(() => `/api/design-inspiration/cases/${encodeURIComponent(String(route.params.id))}`)
-const { data: item, error, status, refresh } = await useFetch<DesignCaseDetail>(url,{query:computed(()=>route.query.cmsPreview?{cmsPreview:route.query.cmsPreview}:{})})
+const { data: item, error, status, refresh } = await useFetch<DesignCaseDetail>(url,{query:computed(()=>route.query.cmsPreview?{cmsPreview:route.query.cmsPreview,...(route.query.cmsDraft?{cmsDraft:route.query.cmsDraft}:{})}:{})})
 const listRoute = computed(() => router.resolve({ path: '/design-inspiration', query: Object.fromEntries(
   ['form', 'style', 'page'].flatMap(key => typeof route.query[key] === 'string' ? [[key, route.query[key]]] : []),
 ) }).fullPath)

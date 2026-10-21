@@ -6,7 +6,8 @@ import { homeGallerySchema, HOME_GALLERY_ID } from '../../shared/cms/gallery-cas
 import { builderSeriesSchema } from '../../shared/cms/builder-series.mjs'
 import { HOME_STORES_ID, storeLocationIssue } from '../../shared/cms/store-location.mjs'
 import { caseLibrary, validateGalleryCases } from './case-library.mjs'
-export const contentAliases = {'data-kitchenGuides':'knowledge-articles','data-kitchenGuideDetails':'knowledge-articles','data-news':'news-articles','data-latestArticles':'news-articles','data-activityArticles':'news-articles','data-mediaVideos':'news-articles'}
+import {contentAliases,publicContent} from '../../shared/cms/public-content.mjs'
+export {contentAliases}
 export function safeLink(value) {
  if(typeof value!=='string'||value.length>2000||/[\u0000-\u001f\\]/.test(value)) return false
  if(value==='')return true
@@ -77,23 +78,12 @@ export async function sourceItems(id,tx){
 export async function alignSource(id,body,tx){const live=await sourceItems(id,tx),settings=new Map(body.items.map(i=>[i.id,i]));return{items:live.map((i,index)=>({...i,enabled:true,featured:false,sort:index,...settings.get(i.id),id:i.id,name:i.name})).sort((a,b)=>a.sort-b.sort)}}
 export async function getDocument(id,tx){const d=(await query('SELECT * FROM cms.Documents WHERE id=@id',{id},tx)).recordset[0];if(!d)fail(404,'找不到內容');return d}
 export async function readContent(id,preview=false){
- if(contentAliases[id]){
-  const all=(await readContent(contentAliases[id],preview)).items.filter(i=>i.enabled)
-  if(id==='data-kitchenGuides')return{KITCHEN_GUIDE_ARTICLES:all.map(i=>({...i.summary,id:i.id,detailRoute:`/knowledge/design/${i.slug}`,legacyUrl:`https://www.sakura-kitchenlife.com.tw/knowledge/design/${i.slug}`}))}
-  if(id==='data-kitchenGuideDetails')return{KITCHEN_GUIDE_DETAILS:all.filter(i=>i.slug!=='systemcabinet').map(i=>({...i.detail,articleId:i.id,slug:i.slug}))}
-  const newsArticles=all.map(i=>({...i.summary,id:i.id,legacyPath:`/news/${i.summary.category}/${i.slug}`})).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))
-  if(id==='data-news')return{newsArticles,recentNewsArticles:newsArticles.filter(i=>i.recentRank!==undefined).sort((a,b)=>(a.recentRank??99)-(b.recentRank??99))}
-  const types={'data-latestArticles':['latest','latestArticleDetails'],'data-activityArticles':['activities','activityArticleDetails'],'data-mediaVideos':['video','mediaVideoDetails']},[category,key]=types[id]
-  return{[key]:all.filter(i=>i.summary.category===category).map(i=>({...i.detail,id:i.id,slug:i.slug,cover:i.detail.cover||{src:i.summary.cover,alt:i.summary.title},sections:i.detail.sections||[],paragraphs:i.detail.paragraphs||[]}))}
- }
-
- const d=await getDocument(id);const vid=preview?d.draftId:d.publishedId;if(!vid)fail(404,'內容未發布')
- const v=(await query('SELECT body FROM cms.Versions WHERE id=@id',{id:vid})).recordset[0];const body=JSON.parse(v.body)
- if(id==='data-storeCases')body.storeCaseSummaries=body.storeCases.map(({images,meta,contact,article,...summary})=>summary)
- if(id==='data-aboutUs')body.brandHistoryHighlights=body.brandHistory.filter(i=>['1978','1992','2016','2020'].includes(i.year))
- if(id==='data-kitchenSeries')body.AI_KITCHEN_PAGE=body.KITCHEN_SERIES_PAGES.find(i=>i.slug===body.AI_KITCHEN_PAGE.slug)||body.KITCHEN_SERIES_PAGES[0]
- return body
+ const source=contentAliases[id]||id
+ const d=await getDocument(source);const vid=preview?d.draftId:d.publishedId;if(!vid)fail(404,'內容未發布')
+ const v=(await query('SELECT body FROM cms.Versions WHERE id=@id',{id:vid})).recordset[0]
+ return publicContent(id,JSON.parse(v.body))
 }
+
 function checkIdentities(previous,next,schema,path='內容'){
  if(schema.type==='object'){for(const [key,field] of Object.entries(schema.fields)){if(field.identity&&previous?.[key]!==undefined&&next?.[key]!==previous[key])fail(400,`${path}.${key} 已發布，不可更改`);if(next?.[key]!==undefined)checkIdentities(previous?.[key],next[key],field,`${path}.${key}`)}}
  else if(schema.type==='array'&&schema.item.type==='object')for(const n of next){const identity=Object.keys(schema.item.fields).find(k=>schema.item.fields[k].identity);const p=identity?previous?.find(x=>x[identity]===n[identity]):undefined;if(p)checkIdentities(p,n,schema.item,path)}

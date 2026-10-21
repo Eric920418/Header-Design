@@ -29,7 +29,7 @@ export async function withDesignDb<T>(event: H3Event, run: (pool: sql.Connection
 
 export function designQuery(query: Record<string, unknown>) {
   for (const key of Object.keys(query)) {
-    if (!['form', 'style', 'page', 'cmsPreview'].includes(key)) throw createError({ statusCode: 400, message: `不支援參數：${key}` })
+    if (!['form', 'style', 'page', 'cmsPreview','cmsDraft'].includes(key)) throw createError({ statusCode: 400, message: `不支援參數：${key}` })
     if (typeof query[key] !== 'string') throw createError({ statusCode: 400, message: `${key} 必須是單一字串` })
   }
   let form = String(query.form ?? '').trim()

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-about-advantage', {"copy":{"text1":"Creating Ideal Kitchens for Every Family","text2":"打造符合每個家庭的理想廚房","text3":"源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
-// shortcut: 僅校正既有舊標題，後台發布指定文案後可移除此相容分支。
-const familyTitle = cmsCopy.copy.text1 === 'Creating Ideal Kitchens for Every Family' ? 'Creating the Ideal Kitchen for Every Family' : cmsCopy.copy.text1
+const cmsCopy = await useCmsResource('view-pages-about-advantage', {"copy":{"text1":"Creating Kitchens for Every Family","text2":"打造符合每個家庭的理想廚房","text3":"源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { brandAdvantageFaqGroups as cmsSeed_brandAdvantageFaqGroups } from '~/data/brandAdvantage'
 const { brandAdvantageFaqGroups } = await useCmsResource('data-brandAdvantage', { brandAdvantageFaqGroups: cmsSeed_brandAdvantageFaqGroups })
@@ -25,7 +23,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section class="brand-family-section" aria-labelledby="brand-family-title">
       <div class="brand-family-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-family-heading ev">
-          <h2 id="brand-family-title">{{ familyTitle }}</h2>
+          <h2 id="brand-family-title">{{ cmsCopy.copy.text1 }}</h2>
           <h3>{{ cmsCopy.copy.text2 }}</h3>
           <p>{{ cmsCopy.copy.text3 }}</p>
         </header>

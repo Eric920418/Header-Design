@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { homeResources, resourceGuide } from '~/shared/cms/presentation.mjs'
+import {editorLink} from '~/shared/cms/workflow.mjs'
 definePageMeta({layout:'admin'})
-const route=useRoute(),{api}=useCmsAdmin()
-const {data:docs,error:loadError}=await useAsyncData<any[]>('cms-home-documents',()=>api('documents'))
-const homeDocs=computed(()=>homeResources.map((id:string)=>(docs.value||[]).find(d=>d.id===id)).filter(Boolean))
-const selected=computed(()=>typeof route.query.edit==='string'?route.query.edit:homeDocs.value[0]?.id)
+const route=useRoute(),{api,message}=useCmsAdmin()
+if(typeof route.query.edit==='string'){
+ const target=editorLink(route.query.edit,route.query)
+ if(target.path!==route.path||target.query.edit!==route.query.edit||(target.query.area&&target.query.area!==route.query.area))await navigateTo(target,{replace:true})
+}
+const {data:sections,error,refresh}=await useAsyncData<any[]>('cms-workspaces',()=>api('workspaces'))
 </script>
-<template><div class="cms-page"><p v-if="loadError" class="cms-error" role="alert">{{ useCmsAdmin().message(loadError) }}</p><nav class="cms-tabs cms-home-tabs" aria-label="首頁區塊"><NuxtLink v-for="d in homeDocs" :key="d.id" :to="{path:'/admin/home',query:{edit:d.id}}" class="cms-button" :class="{'cms-button-gold':selected===d.id}">{{ resourceGuide(d.id)?.tabTitle||d.title }}</NuxtLink></nav><AdminResourceEditor v-if="selected" :key="selected" :id="selected" /></div></template>
+<template><div class="cms-page"><AdminResourceEditor v-if="typeof route.query.edit==='string'" :key="route.query.edit" :id="route.query.edit" /><template v-else><div class="cms-heading"><div><h1>首頁</h1><p class="cms-muted">選擇要修改的區塊</p></div><a href="/" target="_blank" rel="noopener noreferrer" class="cms-button">查看官網 ↗</a></div><p v-if="error" class="cms-error" role="alert">{{ message(error) }} <button class="cms-button" @click="refresh()">重試</button></p><div class="cms-section-grid"><NuxtLink v-for="(s,i) in sections?.filter(s=>s.area==='home')" :key="s.id" :to="editorLink(s.id)" class="cms-section-card cms-panel"><div class="cms-section-photo"><AdminImage v-if="s.thumbnail" :src="s.thumbnail" :alt="s.title+'官網內容縮圖'" /><span v-else>{{ s.title }}</span><span class="cms-section-order">{{ String(i+1).padStart(2,'0') }}</span></div><div class="cms-section-caption"><strong>{{ s.title }}</strong><span class="cms-status" :class="s.pending?'draft':'published'">{{ s.missing?'內容尚未備齊':s.pending?'有待確認修改':'官網已更新' }}</span><small>{{ s.updatedAt?new Date(s.updatedAt).toLocaleString('zh-TW'):'' }}</small></div></NuxtLink></div></template></div></template>

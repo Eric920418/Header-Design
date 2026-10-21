@@ -126,7 +126,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Partners" source="home5" class="source-heading-rail" />
 
           <div class="franchise-about__content">
-            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }"><b class="franchise-partners-chinese">加盟夥伴真實分享</b>Here <span>from Our</span><br /><span>Partners</span></h2>
+            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }"><b class="franchise-partners-chinese">加盟夥伴真實分享</b>Here <span>From Our</span><br />Franchise <span>Partners</span></h2>
             <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="franchise-about__video ev">
               <InternalFranchiseVideo :video-id="cmsVisuals.franchiseVideoId" :title="cmsCopy.copy.field17" />
             </div>

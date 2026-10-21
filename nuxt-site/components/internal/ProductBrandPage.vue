@@ -7,7 +7,7 @@ const { PRODUCT_BRANDS } = await useCmsResource('data-productBrands', { PRODUCT_
 
 const { brand } = defineProps<{ brand: ProductBrand }>()
 const info = PRODUCT_BRANDS[brand]
-const { data, error, status, refresh } = await useFetch<ProductCategories>(`/api/products/${brand}/categories`, {query:useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview}:{}})
+const { data, error, status, refresh } = await useFetch<ProductCategories>(`/api/products/${brand}/categories`, {query:useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview,...(useRoute().query.cmsDraft?{cmsDraft:useRoute().query.cmsDraft}:{})}:{}})
 const productCategories = computed(() => data.value?.categories ?? [])
 if (import.meta.server && error.value) setResponseStatus(error.value.statusCode ?? 500)
 useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, description: info.description, ogImage: info.image })

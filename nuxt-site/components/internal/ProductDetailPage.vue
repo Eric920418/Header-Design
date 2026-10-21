@@ -11,7 +11,7 @@ const { PRODUCT_BRANDS } = await useCmsResource('data-productBrands', { PRODUCT_
 const { brand, identifier } = defineProps<{ brand: ProductBrand; identifier: string }>()
 const info = PRODUCT_BRANDS[brand]
 const route = useRoute()
-const { data: product, error, status, refresh } = await useFetch<ProductDetail>(`/api/products/${brand}/items/${encodeURIComponent(identifier)}`, {query:useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview}:{}})
+const { data: product, error, status, refresh } = await useFetch<ProductDetail>(`/api/products/${brand}/items/${encodeURIComponent(identifier)}`, {query:useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview,...(useRoute().query.cmsDraft?{cmsDraft:useRoute().query.cmsDraft}:{})}:{}})
 if (import.meta.server && error.value) setResponseStatus(error.value.statusCode ?? 500)
 const listPath = computed(() => {
   const id = Number(route.query.category)

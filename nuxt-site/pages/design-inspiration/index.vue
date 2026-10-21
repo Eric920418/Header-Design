@@ -19,8 +19,8 @@ watch([selectedForm, selectedStyle], ([form, style]) => {
   draftStyle.value = style
 })
 
-const query = computed(() => ({ ...(route.query.cmsPreview?{cmsPreview:route.query.cmsPreview}:{}), form: route.query.form ?? '', style: route.query.style ?? '', page: route.query.page ?? '1' }))
-const { data: filters, error: filterError, status: filterStatus, refresh: refreshFilters } = await useFetch<DesignFilters>('/api/design-inspiration/filters',{query:computed(()=>route.query.cmsPreview?{cmsPreview:route.query.cmsPreview}:{})})
+const query = computed(() => ({ ...(route.query.cmsPreview?{cmsPreview:route.query.cmsPreview,...(route.query.cmsDraft?{cmsDraft:route.query.cmsDraft}:{})}:{}), form: route.query.form ?? '', style: route.query.style ?? '', page: route.query.page ?? '1' }))
+const { data: filters, error: filterError, status: filterStatus, refresh: refreshFilters } = await useFetch<DesignFilters>('/api/design-inspiration/filters',{query:computed(()=>route.query.cmsPreview?{cmsPreview:route.query.cmsPreview,...(route.query.cmsDraft?{cmsDraft:route.query.cmsDraft}:{})}:{})})
 const { data: result, error: casesError, status: casesStatus, refresh: refreshCases } = await useFetch<DesignCasePage>('/api/design-inspiration/cases', { query })
 const loading = computed(() => filterStatus.value === 'pending' || casesStatus.value === 'pending')
 const error = computed(() => filterError.value || casesError.value)

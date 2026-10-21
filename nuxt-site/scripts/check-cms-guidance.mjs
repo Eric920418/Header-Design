@@ -75,6 +75,7 @@ const files={...Object.fromEntries(homeResources.map(id=>[id,'components/home/'+
 const viewPaths=['about/advantage','about/exhibition','about/introduce','builders/catalogues','builders/index','builders/sakura-kitchen','catalogues/catalog','catalogues/kitchenware-catalog','design-inspiration/[id]','design-inspiration/index','franchising/download','franchising/form','franchising/intro','gallery/[slug]','gallery/index','knowledge/design/[slug]','knowledge/design/systemcabinet','knowledge/index','news/activities/[slug]','news/activities/index','news/index','news/latest/[slug]','news/latest/index','news/video/[slug]','news/video/index','privacy','service-process']
 for(const file of viewPaths)files['view-pages-'+file.replace(/[^a-zA-Z0-9]+/g,'-')]='pages/'+file+'.vue'
 for(const[id,file]of Object.entries(files)){
+ if(id==='view-components-FloatingButtons')continue // Removed management entry; public component is tested separately.
  const source=await readFile(new URL(file,root),'utf8'),schema=editingSchema(seed.find(d=>d.id===id).schema,id)
  const used=new Set([...source.matchAll(/cmsCopy\.copy\.([a-zA-Z0-9_]+)/g)].map(m=>m[1]))
  for(const[key,s]of Object.entries(schema.fields.copy?.fields||{}))if(!Object.hasOwn(s,'fixed')){
@@ -85,8 +86,8 @@ for(const[id,file]of Object.entries(files)){
  if(href.startsWith('/#')&&!['SiteHeader','SiteFooter','FloatingButtons'].some(k=>id.endsWith(k))){const anchor=href.split('#')[1];assert(source.includes(`id="${anchor}"`),`Missing home location anchor: ${id} ${href}`)}
 }
 const editor=await readFile(new URL('components/admin/AdminResourceEditor.vue',root),'utf8')
-assert(editor.includes('<AdminResourceContext :id="id" />'))
-assert(editor.includes(':schema="formSchema"'))
+assert(editor.includes('cms-effect-panel')&&editor.includes('會影響哪些頁面'))
+assert(editor.includes(':schema="activeSchema"'))
 assert(editor.includes("path.includes('?')?'&':'?'")&&editor.includes("anchor?'#'+anchor:''"),'Preview query must precede the section hash')
 if(process.env.CMS_GUIDANCE_READ_DB==='1'){
  const{query,database}=await import('../server/cms/database.mjs')

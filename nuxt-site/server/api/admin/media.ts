@@ -9,7 +9,7 @@ import { normalizeMedia,saveMedia } from '../../cms/media.mjs'
 export default defineEventHandler(event=>cmsHandler(event,async()=>{
  if(event.method==='GET'){
   await cmsUser(event)
-  const rows=(await query(`SELECT m.*, (SELECT d.title FROM cms.MediaRefs r JOIN cms.Versions v ON v.id=r.versionId JOIN cms.Documents d ON d.id=v.documentId WHERE r.mediaId=m.id GROUP BY d.title FOR JSON PATH) AS uses FROM cms.Media m ORDER BY createdAt DESC`)).recordset
+  const rows=(await query(`SELECT m.*, (SELECT d.id AS documentId,d.title FROM cms.MediaRefs r JOIN cms.Versions v ON v.id=r.versionId JOIN cms.Documents d ON d.id=v.documentId WHERE r.mediaId=m.id GROUP BY d.id,d.title FOR JSON PATH) AS uses FROM cms.Media m ORDER BY createdAt DESC`)).recordset
   return rows.map((m:any)=>({...m,src:`/media/${m.id}`,uses:JSON.parse(m.uses)}))
  }
  const user=await cmsWrite(event)

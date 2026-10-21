@@ -47,7 +47,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <section class="pavilion-gallery" aria-labelledby="pavilion-gallery-title">
             <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
               <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Gallery" />
-              <h2 id="pavilion-gallery-title"><span class="bilingual-heading-lead"><span class="pavilion-gallery-eyebrow">Explore Our</span><b class="pavilion-gallery-chinese">櫻花集團品牌館</b></span>Memories are made<br /><span>when we’re together</span></h2>
+              <h2 id="pavilion-gallery-title"><span class="bilingual-heading-lead"><span class="pavilion-gallery-eyebrow">Explore Our</span><b class="pavilion-gallery-chinese">櫻花集團品牌館</b></span>Inspiring <span>Kitchen</span><br />Designs In Our <span>Gallery</span></h2>
             </header>
 
             <div v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-filter ev" role="tablist" aria-label="選擇集團品牌館">
@@ -137,7 +137,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .pavilion-gallery-heading h2 .pavilion-gallery-eyebrow { display: inline-block; margin-right: 16px; border-bottom: 1px solid #bdbdbd; color: #1c1c1d; font-size: 18px; line-height: 22px; vertical-align: baseline; }
 .pavilion-gallery-chinese { position: relative; top: -.06em; margin-right: 12px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; vertical-align: baseline; }
 .pavilion-filter { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-bottom: 40px; }
-.pavilion-filter button { min-height: 46px; padding: 9px 18px; border: 1px solid #e3e3e8; border-radius: 100px; color: #59585d; background: #fff; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; text-align: left; cursor: pointer; transition: color .3s ease, border-color .3s ease, background .3s ease; }
+.pavilion-filter button { min-height: 46px; padding: 9px 18px; border: 1px solid #e3e3e8; border-radius: 100px; color: #59585d; background: #fff; font-family: var(--font-cjk-sans); font-size: 16px; font-weight: 500; line-height: 24px; text-align: left; cursor: pointer; transition: color .3s ease, border-color .3s ease, background .3s ease; }
 .pavilion-filter button::after { content: "+"; float: right; color: #9f9fa4; }
 .pavilion-filter button[aria-selected="true"] { border-color: #caa05c; color: #fff; background: #caa05c; }
 .pavilion-filter button[aria-selected="true"]::after { content: "−"; color: #fff; }

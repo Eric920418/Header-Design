@@ -44,7 +44,7 @@
 .brand-h8-intro::before { position: absolute; inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), var(--cms-image-asset_809f4bbe, url('/section-3/store-chengde.jpg')) center 20% / cover no-repeat; content: ''; pointer-events: none; }
 .brand-h8-intro__rail { position: relative; display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; }
-.brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: clamp(40px, 4vw, 80px); font-weight: 400; line-height: 1.2; letter-spacing: -.01em; white-space: nowrap; text-transform: none; }
+.brand-h8-copy h1 { max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: 56px; font-weight: 400; line-height: 1.2; letter-spacing: -.01em; white-space: nowrap; text-transform: none; }
 .brand-h8-copy h1 span { color: #caa05c; }
 .brand-h8-navigation { padding-top: 140px; }
 .brand-h8-nav { display: flex; max-width: 570px; margin-inline: auto; border-top: 1px solid #d2d1cf; }
@@ -83,7 +83,7 @@
   .brand-h8-intro::before { display: none; }
   .brand-h8-intro__rail { grid-template-columns: 1fr; }
   .brand-h8-copy { text-align: center; }
-  .brand-h8-copy h1 { margin-inline: auto; font-size: 60px; line-height: 60px; }
+  .brand-h8-copy h1 { margin-inline: auto; line-height: 60px; }
   .brand-h8-navigation { padding-top: 24px; }
   .brand-h8-nav { margin-inline: auto; text-align: left; }
   .brand-h8-aside { align-items: center; }

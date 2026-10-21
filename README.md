@@ -1,5 +1,89 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-21 建商SAKURA系列標題For大寫
+
+- 依11:22:06截圖，僅將SAKURA KITCHEN系列頁探索品牌系列主標的for Every改For Every；保留原中文／字級、Ideal Kitchen與For Every金色、Family黑色、兩行及置中。沿用ponytail最小修改，靜態模板只改單一字母並同步既有回歸；不讀取該舊CMS text28欄位，因此不宣稱更新CMS，既有刪逗點修改、8組圖卡／相簿及其他同步工作全部保留。不寫資料庫、不push／部署，只維護README。
+- 限定來源回歸、單字母差異與前輪逗點樣本保留比對、Vue模板解析／編譯、回歸腳本語法及本輪程式檔git diff --check通過；本機/builders/sakura-kitchen SSR200，新For Every及原金色em範圍／換行正確，先前CMS刪逗點及8組圖卡名稱／圖片保留。僅靜態一字母改動，未重跑全站build／typecheck或業務POST回歸；瀏覽器實際字形／手機視覺及相簿互動尚未驗收。
+
+## 2026-10-21 後台操作流程改版
+
+- 依 UI/UX Pro Max 與師培平台的工作流程，改為「選頁面 → 選區塊 → 修改 → 看效果 → 儲存／更新官網」。保留官網黑金白與 Noto Sans TC；不新增套件，樣式限定 `.cms`。
+- 48 個工作入口涵蓋所有現有可管理內容；側欄分修改網站、日常處理、管理設定。首頁與其他頁面使用真實內容縮圖；同區塊資料集中處理，舊 `/admin/home?edit=…`、`/admin/content?edit=…` 仍可直接開啟，會導向對應新位置；原本選到的卡片編輯分頁保留並可重新整理。
+- 桌機左側表單、右側官網效果，平板／手機切換「修改內容／看效果」。列表一次展開一筆，保留搜尋與返回位置；隱藏系統代碼，圖片直接選取或上傳，官網連結優先選頁面。顯示與搜尋設定、影響範圍、過去修改收合呈現。
+- 固定底部操作列區分儲存與更新官網；更新前列出本區所有待更新項目和影響位置。儲存期間鎖定表單，失敗保留輸入並顯示中文欄位原因與追蹤編號。收件、檔案及帳號也提供未儲存提醒。
+- 新增 `/api/admin/workspaces` 與 `/api/admin/workspaces/:id`：同區多份資料在單一交易內儲存／更新，保留版本衝突與權限檢查；伺服器沿用內容驗證規則，不把介面的尺寸建議當成新限制，以保留既有自訂內容。原有 API、官網網址與唯讀來源資料維持相容；儲存後即回傳最新時間及修改紀錄。
+- 未儲存預覽共用正式官網元件與資料轉換，支援商品、文章、新案例及同區多份資料，不建立資料版本。內容只放記憶體，限原登入者存取、五分鐘到期、限制數量且禁止快取／索引；「重新載入」取得新預覽。跨視窗只接受同網站與指定預覽視窗的訊息，連續輸入等上一輪官網頁面載入完成後才套用最新更新，並核對完成回應，避免中斷中的讀取被誤判為內容缺漏；預覽表單不會送出申請，預覽停用平滑捲動。Nitro 共用模組依既有方式內嵌，避免開發路徑解析失敗。
+- 圖片與檔案可在編輯處直接上傳，顯示進度、說明及使用位置；被目前或過去版本使用的檔案不能收起。申請／留言可按種類、處理狀態篩選；帳號資料、重設密碼及停用分開操作，操作紀錄顯示中文工作名稱。
+- 驗證：`pnpm typecheck`、`pnpm build`、`check-cms-guidance.mjs`（59 組位置／1085 欄位）、`check-admin-workflow.mjs`、Hero／案例／門市純檢查及 `check-frontend-regressions.mjs` 通過。建置保留原有 Tailwind sourcemap 與地區 JSON import attributes 警告。
+- 真實 SQL：在 `nuxt-site` 執行 `CMS_WORKFLOW_DB=1 node --env-file=.env scripts/check-admin-workflow.mjs`，驗證預覽不寫入、草稿、管理員更新／暫停、編輯者限制及衝突；成功流程全數回滾，另驗證後一份衝突會回滾前一份儲存，既有內容／版本指紋不變。
+- 瀏覽器：`NODE_PATH=/Users/eric/.agents/skills/gstack/node_modules PREVIEW_URL=http://localhost:3100 PREVIEW_PASSWORD=… CMS_TEST_EMAIL=… CMS_TEST_PASSWORD=… node scripts/check-admin.cjs`，需本機測試管理員。1440／1024／768／390px 的全導覽、官網回歸、即時預覽不儲存、商品顯示設定、新案例與文章共用列表、CSRF／私人預覽／中文錯誤、409 保留輸入、單筆展開、選圖焦點、更新摘要、返回篩選及實際 PNG／PDF 上傳已通過；測試不儲存或發布原內容。
+- 驗收上傳會建立臨時檔案，應只用測試帳號；本次已清除僅屬測試帳號的上傳暫存、檔案、操作紀錄及帳號，原內容指紋不變。此輪不部署、不重建／重匯資料、不修改師培平台、不使用 accept-data-loss。
+
+## 2026-10-21 建商SAKURA優勢主標刪逗點與置中
+
+- 依11:21:58截圖，刪除突破未來格局後的全形逗點，兩行沿用既有.sakura-kitchen-heading置中；不新增位移或CSS，不更動開啟廚房智高點金色、字型／尺寸、兩段說明、全景圖片及系列圖卡。
+- 前台直接讀取CMS copy.text18，沿用ponytail最小修改，已透過既有save／publish版本流程只更新本機這個欄位，檢查無草稿、已知文案、schema及revision；Vue型別樣本與既有回歸同步，不新增腳本／文件、不push／部署、不動正式資料庫，保留其他同步後台工作。
+- 本機revision3→5，發布a1670f01-8b5b-4fd9-92db-6125b49af19a，保留412b8946-2432-44d5-b1ef-02c5b5394bea及全部歷史body；其他64份文件revision／草稿／發布／schemaJson同交易核對不變。首次使用文件舊schema驗證因既有series.subtitle拒絕並回滾、無寫入；改用系統既有builderSeriesSchema擴充驗證後完成，未刪副標或相簿，也未更動schema。實際API與保留舊版完整比對僅copy.text18少逗點，原8組圖卡／全部相簿保留。
+- 限定標點更新純函式／不變輸入／冪等／自訂文案拒絕、來源與實際API／SSR回歸、Vue模板獨立編譯、腳本語法及本輪程式檔git diff --check通過；/builders/sakura-kitchen SSR200，兩行無逗點、原金色／兩段說明／全景圖片及8卡保留，元件與HEAD僅型別樣本少一逗點，既有置中CSS不變。全站建置先遇其他Nuxt程序鎖，未中止或繞過；該程序結束後重跑pnpm build通過。保留SQL IP TLS及既有建置警告；未另跑獨立typecheck或業務POST全站回歸，亦未做瀏覽器實際置中／字形／手機視覺及相簿互動驗收。
+
+## 2026-10-21 建商聯繫標題十字線與Of大寫
+
+- 依11:21:51截圖，聯繫區膠囊改用既有TemplateHeadingRail，label仍取CMS copy.text33；原30／70欄位保留，主標補64px頂距，沿用全站47px十字線水平間距與雙語行框／標籤下緣規則，不新增定位JS。of改Of（標題式大寫），Of／Kitchen維持金色，其他文案與18／40px600／50px不變。
+- 平板≤1023px沿用既有上下排列／隱藏線條，取消新軌道最小高度、膠囊頂距與主標64px頂距，保留膠囊靠左；手機延用原尺寸。刪除不再使用的全站直接膠囊margin規則，避免重複位移。沿用ponytail最小修改，同步既有回歸，只維護README；不動預約表單／館別切換／資料庫、不push／部署，保留其他同步後台工作。
+- pnpm build、限定聯繫標題／共用47px與16組雙語／手機回退來源回歸、Vue模板／CSS編譯、腳本語法及本輪程式檔git diff --check通過。/builders SSR200，Of及金色span、CMS原小標、共用橫／直線各一、原預約欄位與三館頁籤標記保留；表單與館別區模板逐字比對HEAD不變。最終編譯CSS含桌機64px頂距、平板零頂距／無軌道空白，已移除舊膠囊margin。保留既有建置警告，未另跑獨立typecheck、業務表單POST或瀏覽器像素量測，十字線實際對位、手機視覺、館別切換及表單操作仍待驗收。
+
+## 2026-10-21 建商實力英文與統計下緣對齊
+
+- 依11:21:40截圖，能力區英文改兩行Smart Solutions for／Better Living，刪除Spaces，保留for及Better Living金色、中文／字級／說明與原三圖。左45+萬統計從標題進場容器移至同欄獨立底列，雙欄拉伸共底，左底6px對應右caption底內距；上方標題保留sticky並限於第一列，統計另保留向上進場。手機恢復block／原30px統計上距，不拉伸、不sticky，無新增JS或寫死高度。
+- 沿用ponytail最小修改與既有Grid，保留計數器／ARIA、CMS資料綁定、圖片錯誤顯示及三圖順序；同步既有回歸，保留上一輪For Every及其他同步後台工作。不寫資料庫、不push／部署，只維護README。
+- pnpm build、限定標題／雙欄底列／手機規則與計數器純函式回歸、Vue模板／CSS編譯、AST確認標題與統計為兩個直接子列、腳本語法及本輪程式檔git diff --check通過。計數包含兩秒一次、CMS自訂值、減少動態／無observer／卸載清理。同步後台修編後本機預覽已恢復，/builders SSR200，新標題、實際CMS原3項strengths／圖片各一次且順序不變、文案與45+萬ARIA保留；最終編譯CSS含stretch／1fr auto／6px底內距及手機block／static回退。保留既有建置警告，未另跑獨立typecheck或含業務POST全站回歸；未做瀏覽器像素量測、窄桌機黏住捲動／字形下緣、手機或實際計數進場驗收，不把SSR／編譯CSS當成視覺完成。
+
+## 2026-10-21 建商品牌區For大寫
+
+- 依11:21:32截圖，僅將建商專區EXPLORE OUR COLLECTIONS品牌區主標for Every改For Every；Creating the Ideal Kitchen與Family、金黑範圍、原換行、50px／40px600及手機字級、CMS中文、品牌卡片及其他區塊不改。沿用ponytail最小修改，元件只改一個字母，兩項既有來源／SSR預期同步；不擴大到建商SAKURA系列內頁或品牌優勢的for，不寫資料庫、不push／部署，只維護README。
+- 單字母HEAD差異比對、限定標題來源／預期文案fixture、Vue SFC解析與模板編譯、回歸腳本語法及本輪程式檔git diff --check通過。實際SSR仍被本機預覽API500阻擋：Cannot find module '/nuxt-site/shared/cms/presentation.mjs' imported from .nuxt-dev/dev/index.mjs；未改同步後台工作，不以fixture稱為頁面驗收。僅靜態字母改動，本輪未重跑全站build／typecheck或業務POST回歸，瀏覽器與手機視覺尚未驗收。
+
+## 2026-10-21 加盟夥伴分享標題補Franchise
+
+- 依11:21:07截圖上方示意，英文改為Here From Our／Franchise Partners兩行，From大寫並補Franchise；From Our、Partners金色，Here、Franchise沿用主標色。保留加盟夥伴真實分享、Our Partners小標、無Explore Our版型、40px600／50px與既有共用膠囊對齊、47px十字線／58px內距補償，不重複位移。
+- 已提醒Here在「聽聽夥伴分享」語意應為Hear，本輪先按圖稿明文保留Here。沿用ponytail最小修改，只換加盟標題一行與既有回歸；該標題為靜態模板，不讀CMS copy.text15舊文案，不宣稱更新CMS。影片／心得／人物列及資料庫不動，不push／部署，只維護README；保留其他同步後台工作。
+- 限定標題／心得列、共用47px與16組雙語／無眉標膠囊對齊來源回歸、腳本語法及本輪程式檔git diff --check通過；與HEAD逐字比對加盟元件只替換一行主標。實際SSR未能執行：本機/api/preview-access回500，錯誤Cannot find module '/nuxt-site/shared/cms/presentation.mjs' imported from .nuxt-dev/dev/index.mjs；pnpm build亦受同步後台修改影響，useCmsResource.ts(8,29) TS7053（string無法索引固定key映射）退出2。未修改後台檔案或掩蓋錯誤，不能宣稱本輪建置／頁面輸出通過；瀏覽器／手機視覺、影片播放與心得互動及正式端尚未驗收。完整建置記錄位於/tmp/sakura-franchise-partners-title-build.log。
+
+## 2026-10-21 專屬品牌識別英文標題更新
+
+- 依11:20:59截圖上方示意，英文改為Signature Details／That Reflect Our Identity兩行，Details、That、Our Identity金色，Signature與Reflect沿用主標色。Explore Our、專屬品牌識別、DISTINCTIVE BRAND IDENTITY小標、18／40px600／50px與共用對齊／47px十字線間距不變。
+- 沿用ponytail最小修改，只換introduce識別標題一行並同步既有回歸，保留上一輪品牌歷程修改；此為模板靜態文案，未讀CMS的copy.text7舊欄位，不宣稱更新CMS。說明、識別圖卡、輪播、放大功能及資料庫不動，不push／部署，僅維護README。
+- pnpm build、限定兩組標題／共用47px與16組雙語對齊來源回歸、腳本語法及本輪程式檔git diff --check通過；與HEAD比對introduce僅含前後兩輪指定標題替換，script／CSS均未更動。/about/introduce SSR200，新英文／金色span、原中文／小標、已發布說明、6張識別圖片與標題、輪播控制保留。檢查結束時另有後台檔案及README尾段同步修改，全worktree diff提示該尾段多一空行，保留其他工作未代改，該後台修改不在本輪驗證範圍。保留既有建置警告；靜態文字與span改動未另跑typecheck或含業務POST全站回歸，尚未驗瀏覽器字形／窄欄換行、手機視覺、輪播／鍵盤／放大互動及正式端。
+
+## 2026-10-21 關於我們品牌歷程標題更新
+
+- 依11:20:48截圖上方示意，僅將第二行紀事／Stories改為品牌歷程／Story of Growth，品牌歷程與of Growth金色、Story黑色；首行Explore Our／櫻花整體廚房／SAKURA KITCHEN、About Us小標、18／40px600／50px及原共用置中／標籤下緣與47px十字線間距保留，不重複位移。
+- 沿用ponytail最小修改，只換introduce標題一行並同步既有回歸；這段為模板靜態文案，未讀CMS的copy.text1／text2舊欄位，不宣稱更新CMS。沿革／圖片／輪播／識別與其他文案不動，不寫資料庫、不push／部署，僅維護README。
+- pnpm build、限定標題／共用47px與16組雙語對齊來源回歸、腳本語法及git diff --check通過；與HEAD逐字比對元件僅替換第二行標題。/about/introduce SSR200，新文案／金色span、原首行與About Us小標、已發布4則重點沿革與16則時間軸文案／年份／圖片來源保留。保留既有建置警告；靜態文字及span改動未另跑typecheck或含業務POST的全站回歸，未驗瀏覽器實際字形／換行、手機視覺、沿革切換／輪播互動及正式端。
+
+## 2026-10-21 品牌館切換按鈕字重500
+
+- 依10:38:12截圖，僅將台北館／台中館／高雄館共用.pavilion-filter button補font-weight:500，選中與未選中、桌機與手機均沿用；原Noto Sans TC、16px／24px行高、46px高度、間距／配色／加減號與切換邏輯保留。沿用ponytail最小修改，同步既有回歸；不改其他按鈕、各館資料／CMS、不push／部署，僅維護README。
+- pnpm build、限定來源回歸、腳本語法及git diff --check通過；本機/about/exhibition SSR200，三館名稱／tab角色／panel對應／預設台北館選取與預約入口保留。與HEAD比對按鈕規則只增加字重，script及資料綁定不變；編譯CSS確認500、無狀態或斷點字重覆寫，原16px／24px／46px與選中金色仍在。保留既有建置警告；純CSS修改未另跑typecheck或含業務POST的全站測試，尚未驗瀏覽器實際字型粗細、手機視覺或點擊切換，不將SSR／編譯CSS視為操作與視覺驗收。
+
+## 2026-10-21 櫻花集團品牌館展示標題更新
+
+- 依10:38:04截圖上方英文示意，標題改為Inspiring Kitchen／Designs In Our Gallery兩行，Kitchen與Gallery沿用既有金色span。保留Explore Our、櫻花集團品牌館、Our Gallery小標、18／40px600／50px層級、既有共用雙語置中／標籤下緣與47px十字線間距，不重複位移。
+- 沿用ponytail最小修改，只替換exhibition標題一行與既有回歸；目前標題為模板靜態文案，不讀CMS的copy.text9／text10舊欄位，本輪不宣稱更新CMS。三館資訊／圖片／切換／預約／注意事項及其他文案不動，不寫資料庫、不push／部署，僅維護README。
+- pnpm build、限定標題／共用47px與16組雙語對齊來源回歸、腳本語法及git diff --check通過；與HEAD逐字比對元件僅改標題一行。/about/exhibition SSR200，新英文、Kitchen／Gallery金色span、原中文／Our Gallery、3館頁籤、台北館已發布地址／時間／圖片、預約與全部注意事項保留。保留既有建置警告，靜態文字與span修改未另跑typecheck或含業務POST全站回歸；尚未驗瀏覽器實際字形／窄欄換行／手機視覺、館別切換及預約互動，也未檢查正式端。
+
+## 2026-10-21 品牌優勢家庭英文標題更新
+
+- 依10:37:40截圖，家庭區英文改為Creating Kitchens for Every Family，保留for小寫。移除前台familyTitle舊文案轉換，直接顯示已發布CMS的copy.text1，Vue型別範例同步；中文、說明、圖片、字級與其他頁相似英文不改。
+- 沿用ponytail最小修改及既有CMS版本流程；限定本機更新腳本預設dry-run、--apply才save／publish，僅接受已知舊標題或目標標題，遇草稿／自訂文字／revision衝突停止，保留歷史並同transaction比對其他文件不變。同步既有回歸，不push／部署，不改正式資料庫，僅維護README。
+- 本機CMS已由revision3→5，發布08d57908-348b-4333-a667-b254b9c4a455，保留653a533c-0342-44b9-9e4a-0fc509f6b35e及全部歷史body；其他64份文件同transaction比對未變。實際API與保留舊版完整比對僅copy.text1變更，再次dry-run為UNCHANGED。
+- pnpm build、純函式三種已知標題／冪等／輸入不變／自訂文案防護、錯誤正式主機／其他DB／旗標連線前拒絕、限定來源／SSR回歸、腳本語法及git diff --check通過。/about/advantage SSR200，新標題、原中文／說明及5張家庭圖卡來源與文字、40／36／30px響應式字級保留。圖卡附加驗證首次誤用不存在class及以首個div結尾截斷巢狀內容，已改核對完整family section後通過，未為測試更動畫面。保留本機SQL IP TLS及既有Tailwind sourcemap等建置警告；未另跑獨立typecheck、含業務POST的全站回歸或正式端檢查，瀏覽器／手機視覺及輪播互動尚未驗收。
+
+## 2026-10-21 品牌優勢首屏主標56px
+
+- 依10:37:30截圖，只調整BrandAdvantageHero三行主標字級為56px，移除平板60px覆寫；手機保留原clamp(24px, 7.8vw, 40px)，原字型／行高、文案、金白配色、圖片及導覽下移置中／刪除向下按鈕維持不變。沿用ponytail最小修改，同步既有回歸；不改CMS／資料庫、不push／部署，僅維護README。
+- pnpm build、15項限定Hero來源回歸、腳本語法與git diff --check通過；/about/advantage SSR200，三行文案、原圖片、三項導覽與已刪除向下按鈕狀態保留。最終編譯CSS確認56px、無舊60／80px字級覆寫、手機縮放與桌機白字保留。保留既有Tailwind sourcemap等建置警告；純CSS改動未另跑typecheck或含業務POST的全站測試。瀏覽器實際字形、窄桌機寬度及手機視覺尚未驗收，不以SSR／編譯CSS宣稱像素驗收。
+
 ## 2026-10-21 服務流程移除Explore Our、To大寫與標籤對齊
 
 - 依10:36:56截圖，移除服務流程介紹標題上方的Explore Our及未使用樣式，保留FAQ區本來的Explore Our；左Service Process膠囊改對齊中文首行中心。沿用ponytail最小修改，依既有64／70px頂距與40／32px中文1.2倍行高，膠囊頂距為桌機72px、1024px邊界78px、768–1023px73.2px；手機原上下排列／隱藏線及0頂距保留，不挪十字線或右側主標。

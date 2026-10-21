@@ -19,7 +19,7 @@ export function requireProductBrand(value: unknown): ProductBrand {
   return value
 }
 export function productQuery(query: Record<string, unknown>) {
-  for (const key of Object.keys(query)) if (!['page','category','q','cmsPreview'].includes(key) || typeof query[key] !== 'string') throw createError({ statusCode: 400, message: `不支援或重複參數：${key}` })
+  for (const key of Object.keys(query)) if (!['page','category','q','cmsPreview','cmsDraft'].includes(key) || typeof query[key] !== 'string') throw createError({ statusCode: 400, message: `不支援或重複參數：${key}` })
   const page = String(query.page ?? '1'), category = String(query.category ?? ''), q = String(query.q ?? '').trim()
   if (!/^[1-9]\d{0,5}$/.test(page) || (category && !/^[1-9]\d{0,8}$/.test(category)) || q.length > 100) throw createError({ statusCode: 400, message: 'page／category 必須是正整數；搜尋最多 100 字' })
   return { page: Number(page), category: category ? Number(category) : null, q }
