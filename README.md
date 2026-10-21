@@ -1,5 +1,11 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-22 首頁Kitchen大字每張重新向上顯示
+
+- 依01:24:33比較圖與「英文不用改、只調整動畫」，只處理首頁HomeHero底部CMS大字，不改Kitchen文案、不換成Footer Logo、不改系列內頁水印。前版slideInUp掛在無key節點，只在首次進入時播放；到第三張Basic+時已成靜態。本輪以activeSlide為key重建實際動畫節點，讓每張切換與最後回第一張都重新從遮罩底部向上滑出，保留原250ms延遲／1.25秒ease、不改成淡入。
+- 依ponytail最小修改，只改動畫節點key與既有回歸，原CMS內容、字型／尺寸／金色漸層／64%透明度／斷點位置、外層字形遮罩、CTA與背景左右運鏡不動；減少動態仍由既有ev規則直接顯示。前面正式CMS四項同步未授權，不在本輪執行；不新增套件／文件、不改資料庫、不部署。
+- pnpm build、check-hero-media預設無DB模式、Vue模板編譯、腳本語法與git diff --check通過；元件與HEAD逐字比對，除了動畫節點key外完全一致。額外以真正Vue自訂renderer驗證10次換張（含第三張Basic+及末張回首張）都重建大字節點、CTA節點不變，確認不是只改動畫名稱。這是Vue節點生命週期測試，不是瀏覽器動畫驗收；既有URL安全限制未繞過，實際動畫幀、遮罩邊界／時機、手機與正式端視覺仍未驗收，不宣稱已與參考動態一致。未另跑獨立typecheck／全站業務POST回歸，保留原建置警告。
+
 ## 2026-10-21 建商實力左欄整組黏住及For大寫
 
 - 依23:27:11截圖，Smart Solutions for改For，原For／Better Living金色及兩行保留。原先只有heading sticky、統計放在整個右欄高度的底列，因此統計會隨頁面滑走；改為共同父層copy sticky並align-self:start，解除heading內層sticky，統計保留同一容器內的底列與原進場／計數。

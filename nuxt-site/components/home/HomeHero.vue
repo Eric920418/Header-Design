@@ -65,7 +65,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
       <div class="hero-template-watermark-slot pointer-events-none">
         <div class="hero-template-watermark overflow-hidden select-none whitespace-nowrap text-right font-display opacity-[0.64]">
-          <div v-reveal="{ anim: 'slideInUp', delay: 250 }"><span aria-hidden="true" class="block bg-[linear-gradient(180deg,#CAA05C_14.9%,rgba(159,159,164,0)_80.95%)] bg-clip-text text-transparent">{{ cmsCopy.copy.text10 }}</span></div>
+          <div :key="`hero-watermark-${activeSlide}`" v-reveal="{ anim: 'slideInUp', delay: 250 }"><span aria-hidden="true" class="block bg-[linear-gradient(180deg,#CAA05C_14.9%,rgba(159,159,164,0)_80.95%)] bg-clip-text text-transparent">{{ cmsCopy.copy.text10 }}</span></div>
         </div>
       </div>
     </div>
