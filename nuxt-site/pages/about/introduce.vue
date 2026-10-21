@@ -136,7 +136,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="about-rail">
         <header class="about-services__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="About Us" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="bilingual-heading-lead"><span class="about-stories-eyebrow">Explore Our</span><b class="about-stories-chinese">櫻花整體廚房</b></span>SAKURA KITCHEN<br /><b class="about-stories-chinese">品牌歷程</b>Story <span>of Growth</span></h2>
+          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="bilingual-heading-lead"><span class="about-stories-eyebrow">Explore Our</span><b class="about-stories-chinese">櫻花整體廚房</b></span>SAKURA KITCHEN<br /><b class="about-stories-chinese">品牌歷程</b>Story <span>Of Growth</span></h2>
         </header>
 
         <div class="about-services__panel">

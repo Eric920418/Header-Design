@@ -5,8 +5,8 @@ import {database,query,transaction} from '../server/cms/database.mjs'
 import {getDocument,changeDocument,validate} from '../server/cms/content.mjs'
 
 export function updateBrandFamilyTitle(original){
-  assert(['Creating Ideal Kitchens for Every Family','Creating the Ideal Kitchen for Every Family','Creating Kitchens for Every Family'].includes(original.copy?.text1),'文案已另行修改，停止以免覆蓋')
-  return {...original,copy:{...original.copy,text1:'Creating Kitchens for Every Family'}}
+  assert(['Creating Ideal Kitchens for Every Family','Creating the Ideal Kitchen for Every Family','Creating Kitchens for Every Family','Creating Kitchen For Every Family'].includes(original.copy?.text1),'文案已另行修改，停止以免覆蓋')
+  return {...original,copy:{...original.copy,text1:'Creating Kitchen For Every Family'}}
 }
 
 async function main(){
@@ -22,7 +22,7 @@ async function main(){
       if(JSON.stringify(body)===JSON.stringify(original)){console.log('UNCHANGED local brand family title');return}
       validate(body,JSON.parse(doc.schemaJson))
       assert.deepEqual({...body,copy:{...body.copy,text1:original.copy.text1}},original,'只能修改copy.text1，其他內容不得變更')
-      console.log(`CHECK local brand family revision ${doc.revision}; only copy.text1 -> Creating Kitchens for Every Family`)
+      console.log(`CHECK local brand family revision ${doc.revision}; only copy.text1 -> Creating Kitchen For Every Family`)
       if(!process.argv.includes('--apply'))return
       const others=(await query('SELECT id,revision,draftId,publishedId FROM cms.Documents WHERE id<>@id ORDER BY id',{id:doc.id},tx)).recordset
       const history=(await query('SELECT id,body FROM cms.Versions WHERE documentId=@id ORDER BY id',{id:doc.id},tx)).recordset

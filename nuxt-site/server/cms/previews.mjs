@@ -1,4 +1,4 @@
-import {randomUUID,fail} from './database.mjs'
+import {randomUUID} from './database.mjs'
 import {contentAliases,publicContent} from '../../shared/cms/public-content.mjs'
 const previews=new Map(),ttl=5*60*1000
 // Ephemeral previews are private to the authenticated author, never database versions.
@@ -11,7 +11,7 @@ export function createDraftPreview(userId,documents){
 }
 export function readDraftPreview(token,userId,id){
  const preview=typeof token==='string'?previews.get(token):null
- if(!preview||preview.userId!==userId||preview.expires<Date.now())fail(404,'預覽已過期或無法存取，請回後台重新看效果。')
+ if(!preview||preview.userId!==userId||preview.expires<Date.now())throw Object.assign(new Error('預覽已過期或無法存取，請回後台重新看效果。'),{statusCode:404,data:{cmsPreviewExpired:true}})
  const body=preview.bodies[contentAliases[id]||id]
  return body?publicContent(id,body):undefined
 }

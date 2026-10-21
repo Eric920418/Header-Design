@@ -55,9 +55,6 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
           <label for="product-search">搜尋產品名稱／型號</label>
           <div><input id="product-search" v-model="search" type="search" maxlength="100" placeholder="輸入產品名稱或型號"><button type="submit">搜尋</button></div>
         </form>
-        <nav v-if="data?.children.length" class="product-subcategories" aria-label="產品子分類">
-          <NuxtLink v-for="child in data.children" :key="child.id" :to="child.route">{{ child.title }}（{{ child.count }}）</NuxtLink>
-        </nav>
         <InternalDesignLoadState label="商品列表" :pending="status === 'pending' && !data" :error="error" @retry="refresh()" />
         <p v-if="data && !error && status === 'pending'" class="sr-only" role="status">正在更新商品列表…</p>
         <p v-if="data && !error" class="mb-6 font-cjk-sans" role="status">共 {{ data.total }} 項產品 · 第 {{ data.page }}／{{ data.pages }} 頁</p>
@@ -164,10 +161,6 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
 .product-search > div { display: flex; gap: 12px; }
 .product-search input { min-width: 0; flex: 1; border: 1px solid #c8c8cc; border-radius: 999px; padding: 12px 22px; background: #fff; }
 .product-search button { border-radius: 999px; padding: 12px 24px; background: #1c1c1d; color: #fff; cursor: pointer; }
-.product-subcategories { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0; font-family: var(--font-cjk-sans); }
-.product-subcategories a { border: 1px solid #caa05c; border-radius: 999px; padding: 10px 18px; }
-.product-subcategories a { display: inline-flex; width: 144px; max-width: 100%; min-height: 46px; align-items: center; justify-content: center; padding-inline: 8px; text-align: center; }
-.product-subcategories a:hover { background: #caa05c; color: white; }
 
 .near-suction-catalogue__copy h2 em { color: #caa05c; font-style: normal; }
 .near-suction-page { overflow: clip; color: #59585d; background: #fafafa; }

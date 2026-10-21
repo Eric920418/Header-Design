@@ -17,8 +17,12 @@ for(const d of seed.filter(d=>!contentAliases[d.id])){const original=JSON.string
 const token=createDraftPreview('author',[{id:sample.id,body:before}])
 assert.deepEqual(readDraftPreview(token,'author',sample.id),publicContent(sample.id,before))
 assert.throws(()=>readDraftPreview(token,'other',sample.id),e=>e.statusCode===404)
-assert.throws(()=>readDraftPreview('invalid','author',sample.id),e=>e.statusCode===404)
-const time=Date.now;try{Date.now=()=>time()+6*60*1000;assert.throws(()=>readDraftPreview(token,'author',sample.id),e=>e.statusCode===404)}finally{Date.now=time}
+assert.throws(()=>readDraftPreview('invalid','author',sample.id),e=>e.statusCode===404&&e.data.cmsPreviewExpired===true)
+for(let i=0;i<40;i++)createDraftPreview('author',[{id:sample.id,body:before}])
+assert.throws(()=>readDraftPreview(token,'author',sample.id),e=>e.statusCode===404,'The editor must recover when its older preview is evicted')
+const freshToken=createDraftPreview('author',[{id:sample.id,body:next}])
+assert.deepEqual(readDraftPreview(freshToken,'author',sample.id),publicContent(sample.id,next))
+const time=Date.now;try{Date.now=()=>time()+6*60*1000;assert.throws(()=>readDraftPreview(freshToken,'author',sample.id),e=>e.statusCode===404)}finally{Date.now=time}
 console.log(`PASS: ${workspaces.length} tasks cover every managed resource once; grouped sections, validation, complete pending-change summaries and immutable public projections.`)
 if(process.env.CMS_WORKFLOW_DB==='1'){
  const {query,database,sql,passwordHash,randomUUID}=await import('../server/cms/database.mjs')

@@ -14,7 +14,7 @@ const impacts=computed(()=>[...new Map((workspace.value?.ids||[]).flatMap((id:st
 const related=computed(()=>[...new Set((workspace.value?.ids||[]).flatMap((id:string)=>resourceGuide(id).related||[]))].filter(id=>!workspace.value?.ids.includes(id)))
 const returnLink=computed(()=>{const {edit,part,...query}=route.query;return{path:route.path,query}})
 provide('cms-field-errors',fieldErrors)
-let timer:ReturnType<typeof setTimeout>|undefined,sequence=0,previewTimer:ReturnType<typeof setTimeout>|undefined
+let timer:ReturnType<typeof setTimeout>|undefined,sequence=0,previewTimer:ReturnType<typeof setTimeout>|undefined,previewNeedsReload=false,previewRecoveryAttempts=0
 const activeDoc=computed(()=>docs.value.find(d=>d.id===active.value))
 const activeSchema=computed(()=>activeDoc.value?editingSchema(activeDoc.value.schema,active.value):null)
 const partTitle=(id:string)=>id.startsWith('view-')?'標題、圖片與按鈕':id==='data-kitchenStyles'?'系列卡片':resourceGuide(id)?.title||'內容'
@@ -31,13 +31,19 @@ const previewScale=computed(()=>Math.min(1,previewSize.value.width/(mobile.value
 const frameStyle=computed(()=>({width:(mobile.value?390:1440)+'px',height:previewSize.value.height/(previewScale.value||1)+'px',transform:`scale(${previewScale.value})`}))
 let observer:ResizeObserver|undefined
 watch(previewFrame,frame=>{observer?.disconnect();if(frame?.parentElement){observer=new ResizeObserver(([entry])=>{if(entry)previewSize.value={width:entry.contentRect.width,height:entry.contentRect.height}});observer.observe(frame.parentElement)}},{flush:'post'})
-function sendPreview(){if(!previewReady.value||!previewResult.value)return;previewState.value='正在更新效果…';previewFrame.value?.contentWindow?.postMessage(JSON.parse(JSON.stringify({type:'sakura:preview',documents:previewResult.value.documents,previewToken:previewResult.value.previewToken})),location.origin);clearTimeout(previewTimer);previewTimer=setTimeout(()=>{previewError.value='官網預覽沒有回應，請重新載入預覽。'},20000)}
+function failPreview(reason:string){clearTimeout(previewTimer);previewError.value=reason;previewState.value='目前輸入尚未套用，請重新載入預覽'}
+function sendPreview(){if(!previewReady.value||!previewResult.value||previewNeedsReload)return;previewState.value='正在更新效果…';previewFrame.value?.contentWindow?.postMessage(JSON.parse(JSON.stringify({type:'sakura:preview',documents:previewResult.value.documents,previewToken:previewResult.value.previewToken})),location.origin);clearTimeout(previewTimer);previewTimer=setTimeout(()=>failPreview('官網預覽沒有回應，請重新載入預覽。'),20000)}
 function receive(event:MessageEvent){if(event.origin!==location.origin||event.source!==previewFrame.value?.contentWindow)return
  if(event.data?.type==='sakura:ready'){previewReady.value=true;sendPreview()}
- if(event.data?.type==='sakura:applied'&&event.data.previewToken===previewResult.value?.previewToken){clearTimeout(previewTimer);previewState.value='目前輸入的效果・尚未更新官網';previewError.value=''}
- if(event.data?.type==='sakura:preview-error'){clearTimeout(previewTimer);previewError.value=event.data.message||'官網預覽載入失敗。'}
+ if(event.data?.type==='sakura:applied'&&!previewNeedsReload&&event.data.previewToken===previewResult.value?.previewToken){clearTimeout(previewTimer);previewState.value='目前輸入的效果・尚未更新官網';previewError.value='';previewRecoveryAttempts=0}
+ if(event.data?.type==='sakura:preview-error'&&!previewNeedsReload){
+  failPreview(event.data.message||'官網預覽載入失敗。')
+  if(event.data.statusCode===404&&event.data.previewExpired===true&&previewRecoveryAttempts<1){previewRecoveryAttempts++;void reloadPreview(false)}
+ }
 }
-async function checkPreview(){if(!docs.value.length)return;const n=++sequence,snapshot=JSON.stringify(payload('preview'));previewState.value='正在檢查目前輸入…';try{const r=await api('workspaces/'+workspace.value?.id,{method:'POST',body:payload('preview')});if(n!==sequence||snapshot!==JSON.stringify(payload('preview')))return;fieldErrors.value=[];previewError.value='';previewResult.value=r;if(!initialToken.value)initialToken.value=r.previewToken;sendPreview();return r}catch(e:any){if(n!==sequence)return;fieldErrors.value=e.data?.data?.fieldErrors||[];previewError.value=message(e);previewState.value='目前輸入尚未套用，畫面保留上次效果'}}
+async function checkPreview(){if(!docs.value.length)return;const n=++sequence,snapshot=JSON.stringify(payload('preview'));previewState.value='正在檢查目前輸入…';try{const r=await api('workspaces/'+workspace.value?.id,{method:'POST',body:payload('preview')});if(n!==sequence||snapshot!==JSON.stringify(payload('preview')))return;fieldErrors.value=[];previewError.value='';previewResult.value=r;
+ if(!initialToken.value||previewNeedsReload){previewNeedsReload=false;previewReady.value=false;initialToken.value=r.previewToken;previewState.value='正在載入官網畫面…';clearTimeout(previewTimer);previewTimer=setTimeout(()=>failPreview('官網畫面無法載入，請確認網路後重試。'),20000)}
+ else sendPreview();return r}catch(e:any){if(n!==sequence)return;previewNeedsReload=false;fieldErrors.value=e.data?.data?.fieldErrors||[];failPreview(message(e))}}
 watch(bodies,()=>{clearTimeout(timer);timer=setTimeout(()=>void checkPreview(),600)},{deep:true})
 watch(()=>route.query.part,value=>{if(docs.value.length)active.value=docs.value.some(d=>d.id===value)?String(value):docs.value[0].id})
 watch(previewUrl,()=>{previewReady.value=false;previewState.value='正在載入官網畫面…'})
@@ -47,7 +53,7 @@ async function unpublish(){if(!window.confirm(`暫停「${title.value}」會影�
 async function restore(id:string,version:string){if(dirty.value){error.value='請先儲存目前修改，再選擇以前的內容。';return}if(!window.confirm('將這份內容另存為待確認內容；官網不會立即改變。確定繼續？'))return;busy.value=true;try{const d=docs.value.find(d=>d.id===id);await api('documents/'+id,{method:'POST',body:{action:'restore',revision:d.revision,version}});await load();notice.value='已取回以前的內容；確認後再更新官網。'}catch(e){error.value=message(e)}finally{busy.value=false}}
 function reload(){if(!dirty.value||window.confirm('重新載入會捨棄尚未儲存內容，確定繼續？'))void load()}
 watch(previewPath,()=>{if(previewResult.value)initialToken.value=previewResult.value.previewToken})
-async function reloadPreview(){const result=await checkPreview();if(!result)return;previewReady.value=false;previewError.value='';initialToken.value=result.previewToken;clearTimeout(previewTimer);previewTimer=setTimeout(()=>{if(!previewReady.value)previewError.value='官網畫面無法載入，請確認網路後重試。'},20000)}
+async function reloadPreview(manual=true){if(manual)previewRecoveryAttempts=0;previewNeedsReload=true;previewReady.value=false;clearTimeout(previewTimer);await checkPreview()}
 function beforeUnload(e:BeforeUnloadEvent){if(dirty.value){e.preventDefault();e.returnValue=''}}
 watch(()=>props.id,load,{immediate:true})
 onMounted(()=>{window.addEventListener('beforeunload',beforeUnload);window.addEventListener('message',receive)})
@@ -72,7 +78,7 @@ onBeforeRouteUpdate((to,from)=>to.query.edit===from.query.edit||!dirty.value||wi
      <details v-if="related.length" class="cms-panel cms-secondary"><summary>其他相關內容</summary><NuxtLink v-for="id in related" :key="id as string" :to="editorLink(id)" class="cms-button">{{ workspaceFor(id)?.title||resourceGuide(id)?.location[0] }}</NuxtLink></details>
      <details class="cms-panel cms-secondary"><summary>過去的修改</summary><section v-for="d in docs" :key="d.id"><h3>{{ partTitle(d.id) }}</h3><div v-for="v in d.versions" :key="v.id" class="cms-history-row"><span>{{ new Date(v.createdAt).toLocaleString('zh-TW') }} · {{ v.actor||'初始內容' }}</span><button v-if="session?.role==='admin'" class="cms-button" :disabled="busy||dirty" @click="restore(d.id,v.id)">取回這份內容</button></div></section></details>
     </fieldset>
-    <aside class="cms-effect-panel cms-panel" aria-label="官網效果"><div class="cms-effect-toolbar"><strong>官網效果</strong><button type="button" class="cms-button" @click="mobile=!mobile">{{ mobile?'看桌機':'看手機' }}</button><button type="button" class="cms-button" @click="reloadPreview">重新載入</button></div><select v-if="choices.length" v-model="previewPath" aria-label="選擇預覽頁面"><option value="">列表頁面</option><option v-for="p in choices" :key="p.path" :value="p.path">{{ p.label }}</option></select><p class="cms-field-help" role="status">{{ previewState }}</p><p v-if="previewError" class="cms-error" role="alert">{{ previewError }}</p><div class="cms-effect-viewport" :class="{'cms-effect-mobile':mobile}"><iframe v-if="previewResult" ref="previewFrame" :style="frameStyle" :src="previewUrl" title="目前輸入的官網效果" @error="previewError='預覽載入失敗，請重試。'" /></div></aside>
+    <aside class="cms-effect-panel cms-panel" aria-label="官網效果"><div class="cms-effect-toolbar"><strong>官網效果</strong><button type="button" class="cms-button" @click="mobile=!mobile">{{ mobile?'看桌機':'看手機' }}</button><button type="button" class="cms-button" @click="reloadPreview()">重新載入</button></div><select v-if="choices.length" v-model="previewPath" aria-label="選擇預覽頁面"><option value="">列表頁面</option><option v-for="p in choices" :key="p.path" :value="p.path">{{ p.label }}</option></select><p class="cms-field-help" role="status">{{ previewState }}</p><p v-if="previewError" class="cms-error" role="alert">{{ previewError }}</p><div class="cms-effect-viewport" :class="{'cms-effect-mobile':mobile}"><iframe v-if="previewResult" :key="initialToken" ref="previewFrame" :style="frameStyle" :src="previewUrl" title="目前輸入的官網效果" @error="failPreview('預覽載入失敗，請重試。')" /></div></aside>
    </div>
    <footer class="cms-savebar" aria-label="目前內容操作"><span class="cms-save-status" role="status">{{ status }}</span><div class="cms-actions"><details v-if="session?.role==='admin'" class="cms-more-actions"><summary class="cms-button">更多操作</summary><div><button class="cms-button" :disabled="busy||dirty||!docs.some(d=>d.publishedId)" @click="unpublish">暫停官網顯示</button></div></details><button class="cms-button" :disabled="busy" @click="display='preview';checkPreview()">看效果</button><button class="cms-button" :class="{'cms-button-gold':dirty||session?.role!=='admin'}" :disabled="busy||!dirty" @click="save()">{{ busy?'處理中…':'儲存' }}</button><button v-if="session?.role==='admin'" class="cms-button" :class="{'cms-button-gold':!dirty}" :disabled="busy||(!dirty&&!pending)" @click="confirmPublish">更新官網</button></div></footer>
   </template>

@@ -33,6 +33,9 @@ const cookie = login.headers.getSetCookie().map(value => value.split(';')[0]).jo
 const homeHeroResponse = await fetch(`${base}/api/content/view-components-home-HomeHero`, { headers: { cookie } })
 assert.equal(homeHeroResponse.status, 200, '需讀取本機已發布首頁Hero名稱')
 const homeHero = await homeHeroResponse.json()
+const publishedSeriesResponse = await fetch(`${base}/api/content/data-kitchenSeries`, { headers: { cookie } })
+assert.equal(publishedSeriesResponse.status, 200, '需讀取已發布套系說明，不以型別樣本代替')
+const publishedSeries = (await publishedSeriesResponse.json()).KITCHEN_SERIES_PAGES
 if (process.argv.includes('--cutouts')) {
   const response = await fetch(`${base}/api/content/data-kitchenSeries`, { headers: { cookie } })
   assert.equal(response.status, 200)
@@ -71,6 +74,15 @@ for (const page of pages) {
   const response = await fetch(`${base}${style.route}`, { headers: { cookie } })
   assert.equal(response.status, 200, style.route)
   const html = await response.text()
+  if(page.slug==='clever'||page.slug==='elegant'){
+    const activePublishedSuite=publishedSeries.find(item=>item.slug===page.slug)?.suites[0]
+    assert(activePublishedSuite,`${page.slug}: 缺少已發布套系`)
+    const details=html.match(/<div\b[^>]*class="[^"]*\bai-suite-details\b[^"]*"[^>]*>([\s\S]*?)<\/section>/)?.[1]||''
+    const descriptions=[...details.matchAll(/<p\b[^>]*class="ai-suite-details__description"[^>]*>([\s\S]*?)<\/p>/g)].map(match=>match[1])
+    const expected=page.slug==='clever'&&activePublishedSuite.descriptions.length>1?[activePublishedSuite.descriptions.join(' ')]:activePublishedSuite.descriptions
+    const escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')
+    assert.deepEqual(descriptions,expected.map(escape),`${page.slug}: Clever僅合併說明為一段，Elegant維持原段落與內容`)
+  }
   const collectionsHeading=html.match(/<div\b[^>]*class="ai-section-heading"[\s\S]*?<\/h2>/)?.[0]||''
   assert(collectionsHeading.includes('Kitchen Collections')&&collectionsHeading.includes('class="bilingual-heading-lead"'),`${page.slug}: 原小標籤與雙語共用對齊組不得遺漏`)
   for(const text of ['Explore Our','探索廚房美學','Creative','Projects That','Define Our Style'])assert(collectionsHeading.includes(text),`${page.slug}: 只調位置，不得更改原標題：${text}`)
@@ -110,6 +122,18 @@ if (process.argv.includes('--images')) {
   }))
 }
 const component = readFileSync(new URL('../components/internal/KitchenSeriesPage.vue', import.meta.url), 'utf8')
+const suiteDescriptionsExpression=component.match(/^const suiteDescriptions = computed\(\(\) => (.+)\)$/m)?.[1]
+assert(suiteDescriptionsExpression,'Clever說明需由原始資料衍生，不能覆寫CMS')
+const renderSuiteDescriptions=new Function('data','activeSuite','return '+suiteDescriptionsExpression)
+for(const page of publishedSeries)for(const suite of page.suites){
+  const before=structuredClone(suite),result=renderSuiteDescriptions(page,{value:suite})
+  assert.deepEqual(result,page.slug==='clever'&&suite.descriptions.length>1?[suite.descriptions.join(' ')]:suite.descriptions,`${page.slug}/${suite.id}: 只合併Clever，其他系列不變`)
+  assert.deepEqual(suite,before,'段落顯示不能改寫原始文案、圖片或配備')
+}
+assert.deepEqual(renderSuiteDescriptions({slug:'clever'},{value:{descriptions:[]}}),[],'空說明不新增空段落')
+assert.deepEqual(renderSuiteDescriptions({slug:'clever'},{value:{descriptions:['單段原文']}}),['單段原文'],'單段說明保留原文')
+assert(component.includes('v-for="description in suiteDescriptions"'),'前台需實際使用段落顯示結果')
+console.log('PASS Clever全部套系合成單段、逐字保留／無原地寫入，其他九系列段落與資料不變')
 const headingCss=readFileSync(new URL('../assets/css/main.css',import.meta.url),'utf8')
 assert(/\.ai-section-heading \{[^}]*grid-template-columns: 30% 70%;/.test(component)&&/\.ai-section-heading h2 \{[^}]*margin: 70px 0 0;[^}]*font-size: 50px;/.test(component),'保留系列標題原欄位、頂距與桌機50px')
 assert(headingCss.includes('.ai-section-heading, .about-services__heading')&&headingCss.includes('--bilingual-heading-top: 70px;'),'系列左側標籤需依原70px標題頂距套共用補償')

@@ -37,6 +37,7 @@ watch(equipmentApi, (api, _oldApi, onCleanup) => {
 }, { immediate: true })
 
 const activeSuite = computed(() => data.suites[activeSuiteIndex.value]!)
+const suiteDescriptions = computed(() => data.slug === 'clever' && activeSuite.value.descriptions.length > 1 ? [activeSuite.value.descriptions.join(' ')] : activeSuite.value.descriptions)
 const activeSuiteImages = computed(() => activeSuite.value.images)
 const activeSuitePrimaryImage = computed(() => activeSuiteImages.value[activeSuiteImageIndex.value]!)
 const activeSuiteSecondaryImage = computed(() => activeSuiteImages.value[(activeSuiteImageIndex.value + 1) % activeSuiteImages.value.length]!)
@@ -320,7 +321,7 @@ useSeoMeta({
             <h3 v-for="headline in activeSuite.headlines" :key="headline">{{ headline }}</h3>
           </div>
           <div>
-            <p v-for="description in activeSuite.descriptions" :key="description" class="ai-suite-details__description">{{ description }}</p>
+            <p v-for="description in suiteDescriptions" :key="description" class="ai-suite-details__description">{{ description }}</p>
             <a v-for="link in activeSuite.links" :key="link.url" :href="link.url" target="_blank" rel="noopener noreferrer" class="text-[#8d6b35] underline">{{ link.label }}（另開分頁）</a>
           </div>
           <div v-if="activeSuite.equipment.length">

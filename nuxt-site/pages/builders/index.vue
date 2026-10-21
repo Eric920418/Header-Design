@@ -176,7 +176,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <header class="builders-strengths-copy">
             <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-strengths-heading">
               <InternalSectionPill tone="dark">OUR STRENGTHS</InternalSectionPill>
-              <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>for</span><br /><span>Better Living</span></h2>
+              <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>For</span><br /><span>Better Living</span></h2>
               <p>以多元設計模組、AI 智能製造與數位案件管理，<br />為建商提供從設計規劃到交付的整合服務。</p>
             </div>
             <div v-if="strengths[0]" v-reveal="{ anim: 'opalMoveUp' }" class="builders-solution__copy">
@@ -365,8 +365,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .builders-strengths-section { padding: 75px 30px 105px; color: #fff; background: #241c18; }
 .builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
-.builders-strengths-copy { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-width: 0; padding: 35px 0 6px; }
-.builders-strengths-heading { position: sticky; top: calc(var(--site-header-height, 60px) + 50px); align-self: start; }
+.builders-strengths-copy { position: sticky; top: calc(var(--site-header-height, 60px) + 15px); align-self: start; display: grid; grid-template-rows: 1fr auto; gap: 48px; min-width: 0; min-height: calc(100svh - var(--site-header-height, 60px) - 65px); padding: 35px 0 6px; }
 .builders-strengths-heading h2 { max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
 .builders-strengths-heading h2 b { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
@@ -486,8 +485,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-capability > .builders-rail { width: calc(100% - 30px); }
   .builders-strengths-section { padding: 60px 15px; }
   .builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
-  .builders-strengths-copy { display: block; padding: 0; }
-  .builders-strengths-heading { position: static; }
+  .builders-strengths-copy { position: static; display: block; min-height: auto; padding: 0; }
   .builders-strengths-heading h2 { margin-bottom: 20px; font-size: 30px; }
   .builders-strengths-heading h2 b { font-size: 28px; }
   .builders-solution__copy { margin-top: 30px; }
@@ -515,6 +513,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-contact__tabs { gap: 8px; margin-bottom: 12px; }
   .builders-contact__tabs button { padding-inline: 10px; }
   .builders-contact__copy dl div { grid-template-columns: 1fr; gap: 6px; }
+}
+
+@media (max-height: 759px) {
+  .builders-strengths-copy { position: static; min-height: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

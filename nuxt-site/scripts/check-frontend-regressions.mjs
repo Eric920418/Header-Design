@@ -10,11 +10,11 @@ import {updateNewsHeroTitle} from './update-news-title-20261020.mjs'
 import {updateServiceHeroTitle} from './update-service-title-20261021.mjs'
 import {updateBrandFamilyTitle} from './update-brand-family-title-20261021.mjs'
 
-for(const title of ['Creating Ideal Kitchens for Every Family','Creating the Ideal Kitchen for Every Family','Creating Kitchens for Every Family']){
+for(const title of ['Creating Ideal Kitchens for Every Family','Creating the Ideal Kitchen for Every Family','Creating Kitchens for Every Family','Creating Kitchen For Every Family']){
   const original={copy:{text1:title,text2:'保留中文',text3:'保留說明'},cmsSettings:{visible:true}}
   const before=structuredClone(original),updated=updateBrandFamilyTitle(original)
   assert.deepEqual(original,before,'更新家庭標題不得修改輸入')
-  assert.deepEqual(updated,{...before,copy:{...before.copy,text1:'Creating Kitchens for Every Family'}},'只能更新家庭英文標題')
+  assert.deepEqual(updated,{...before,copy:{...before.copy,text1:'Creating Kitchen For Every Family'}},'只能更新家庭英文標題為最新指定的單數Kitchen及大寫For')
   assert.deepEqual(updateBrandFamilyTitle(updated),updated,'重跑家庭標題更新不得改動資料')
 }
 for(const value of [{},{copy:{text1:'後台自訂家庭標題'}}])assert.throws(()=>updateBrandFamilyTitle(value),/已另行修改/)
@@ -97,29 +97,31 @@ assert(!footerRendered.includes('品牌系列・AI 廚房'),'實際Footer不應�
 for(const [label,path] of footerPublished.sitemapGroups.find(g=>g.title==='優惠消息').links)assert(footerNewsSection.includes(`href="${path}"`)&&footerNewsSection.includes(label),'實際消息欄需有指定入口：'+label)
 console.log('PASS 本機Footer已發布CMS與實際SSR：品牌系列、三個消息分類')
 const productBrandSource=await readFile(new URL('../components/internal/ProductBrandPage.vue',import.meta.url),'utf8')
-assert(/\.sakura-product-brands__link\s*\{[^}]*font-size: 16px;[^}]*font-weight: 600;/.test(productBrandSource),'SAKURA／SVAGO／TEKA切換按鈕統一16px SemiBold600')
-assert(/\.sakura-product-brands__link\s*\{[^}]*min-height: 52px;[^}]*padding: 12px 8px;/.test(productBrandSource),'改字級不得變更原按鈕高度與內距')
-assert(productBrandSource.includes('grid-template-columns: repeat(3, minmax(0, 116px))'),'三品牌橢圓按鈕需共用等寬欄位')
-assert(productBrandSource.includes('repeat(3, minmax(0, 1fr))'),'手機品牌列需等分縮小，避免換行或溢出')
+assert(!productBrandSource.includes('sakura-product-brands'),'移除品牌切換列及桌機／手機空白佔位')
+assert(productBrandSource.includes(`<div v-if="status === 'pending' || error" class="page-container">`),'成功載入後不得留下空白狀態容器')
 assert(productBrandSource.includes('<InternalDesignLoadState label="商品分類"'),'移除多餘 CTA 不得移除載入／錯誤提示')
+assert(productBrandSource.includes('@retry="refresh()"'),'商品分類錯誤需保留重試')
 assert(!productBrandSource.includes('查看全部'),'分類頁不再顯示查看全部／搜尋型號 CTA')
 for(const brand of ['sakura','svago','teka']){
   const page=await(await get('/products/'+brand)).text()
-  const nav=page.match(/<nav[^>]*aria-label="切換廚電品牌"[^>]*>([\s\S]*?)<\/nav>/)?.[1]
-  assert(nav,'分類頁需保留品牌導覽')
-  for(const slug of ['sakura','svago','teka'])assert(nav.includes('href="/products/'+slug+'"'),'不得改掉品牌切換連結')
-  assert.equal((nav.match(/aria-current="page"/g)||[]).length,1,'僅當前品牌標記選取')
+  assert(!page.includes('aria-label="切換廚電品牌"')&&!page.includes('sakura-product-brands'),'分類頁不得保留品牌切換列與佔位')
+  const categories=(await(await get('/api/products/'+brand+'/categories')).json()).categories
+  const grid=page.match(/<ul[^>]*aria-label="廚房產品分類"[^>]*>([\s\S]*?)<\/ul>/)?.[1]||''
+  assert(categories.length>0,brand+' 分類資料需保留')
+  assert.equal((grid.match(/<li\b/g)||[]).length,categories.length,brand+' 分類卡片數需與API一致')
+  for(const category of categories)assert(grid.includes(`href="${category.route}"`)&&grid.includes(category.title)&&grid.includes(`${category.count} 項產品`),brand+' 分類連結、名稱與數量需保留')
   assert(!page.includes('查看全部'),'分類頁 SSR 不得留下舊 CTA')
 }
-console.log('PASS 三品牌等寬切換列、手機欄位、SSR 品牌連結與移除多餘 CTA')
+console.log('PASS 三品牌切換列及空白移除、分類卡片／連結／數量保留與錯誤重試')
 const productListSource=await readFile(new URL('../components/internal/ProductListPage.vue',import.meta.url),'utf8')
 assert(productListSource.includes('<form v-if="!category" class="product-search"'),'只移除分類／系列內頁搜尋，保留全部產品搜尋')
-assert(/\.product-subcategories a\s*\{[^}]*width: 144px;[^}]*max-width: 100%;[^}]*min-height: 46px;/.test(productListSource),'所有子分類（含配備）需等寬且不超出容器')
+assert(!productListSource.includes('product-subcategories')&&!productListSource.includes('aria-label="產品子分類"'),'移除上方子分類按鈕及原佔位間距')
 assert(productListSource.includes('InternalDesignLoadState label="商品列表"'),'商品完整錯誤與重試不可移除')
 for(const path of ['/products/sakura/range-hood','/products/sakura/category/29','/products/sakura/range-hood/near-suction']){
   const page=await(await get(path)).text()
   assert(!page.includes('class="product-search"'),path+' 不得保留分類頁搜尋表單')
   assert(page.includes('aria-label="產品清單"'),path+' 商品清單應保留')
+  assert(!page.includes('aria-label="產品子分類"')&&!page.includes('product-subcategories'),path+' 不得留下上方子分類列或佔位')
 }
 const hoodList=await(await get('/api/products/sakura/items?category=6')).json()
 assert.equal(hoodList.children.length,8)
@@ -130,7 +132,16 @@ assert(hoodPage.includes('href="/products/sakura/range-hood?page=2"'),'分類分
 const allProductPage=await(await get('/products/sakura/all?q=DR7396')).text()
 assert(allProductPage.includes('class="product-search"')&&allProductPage.includes('value="DR7396"'),'全部產品搜尋及 query 回填需保留')
 assert(allProductPage.includes('DR7396'),'搜尋結果需保留')
-console.log('PASS 分類／系列移除搜尋、配備等寬、分類連結／數量／分頁及全部產品搜尋保留')
+for(const brand of ['sakura','svago','teka']){
+  const page=await(await get(`/products/${brand}/all`)).text()
+  const list=await(await get(`/api/products/${brand}/items`)).json()
+  const grid=page.match(/<ul[^>]*aria-label="產品清單"[^>]*>([\s\S]*?)<\/ul>/)?.[1]||''
+  assert(!page.includes('product-subcategories')&&!page.includes('aria-label="產品子分類"'),brand+' 共用列表需移除子分類列')
+  assert.equal((grid.match(/<li\b/g)||[]).length,list.items.length,brand+' 商品卡片數需保留')
+  for(const item of list.items)assert(grid.includes(item.model)&&grid.includes(item.route),brand+' 型號與商品連結需保留')
+  assert(page.includes(`共 ${list.total} 項產品`),brand+' 商品總數需保留')
+}
+console.log('PASS 子分類列／佔位移除、三品牌商品卡片／型號／連結／數量、原分類連結／分頁與全部產品搜尋保留')
 assert(productListSource.includes('<InternalListPagination')&&productListSource.includes('label="產品分頁"'),'產品頁需沿用設計靈感的共用分頁')
 assert(!productListSource.includes('const pageNumbers')&&!productListSource.includes('.product-pagination a'),'不得留下舊分頁邏輯或外框樣式')
 for(const page of [1,2,4]){
@@ -210,7 +221,7 @@ for(const slug of ['case10','case35','case56']){
 console.log('PASS 三篇門市案例預約箭頭 hover／焦點、減少動態及原連結保留')
 const brandHeroSource=await readFile(new URL('../components/internal/BrandAdvantageHero.vue',import.meta.url),'utf8')
 assert(brandHeroSource.includes('<h1 id="brand-h8-title" class="hero-template-title">Why Choose<br /><span>SAKURA KITCHEN</span><br />For Your Home</h1>'),'品牌承諾Hero需完整三行標題，只有品牌行金色')
-assert(/\.brand-h8-copy h1 \{[^}]*font-size: 56px;/.test(brandHeroSource)&&!brandHeroSource.includes('font-size: 60px;')&&!brandHeroSource.includes('clamp(40px, 4vw, 80px)')&&brandHeroSource.includes('white-space: nowrap; text-transform: none;')&&brandHeroSource.includes('font-size: clamp(24px, 7.8vw, 40px);'),'品牌優勢主標桌機／平板56px，保留手機縮放、三行及原大小寫')
+assert(/\.brand-h8-copy h1 \{[^}]*font-size: 80px;/.test(brandHeroSource)&&/@media \(max-width: 1439px\)\s*\{\s*\.brand-h8-copy h1 \{ font-size: 56px; \}/.test(brandHeroSource)&&brandHeroSource.includes('white-space: nowrap; text-transform: none;')&&brandHeroSource.includes('font-size: clamp(24px, 7.8vw, 40px);'),'品牌優勢主標1440px以上80px，窄桌機／平板56px，保留手機縮放、三行及原大小寫')
 const brandHeroGlobalStyles=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
 const guideHeroSelector='section.hero-includes-header:is(.knowledge-article-breadcrumb, .knowledge-detail-breadcrumb)[data-hero-photo] > nav'
 const guideHeroRules=[...brandHeroGlobalStyles.matchAll(new RegExp(guideHeroSelector.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s*\\{([^}]+)\\}','g'))].map(match=>match[1].trim())
@@ -268,10 +279,10 @@ assert.equal((brandNavigation.match(/<a\b/g)||[]).length,3,'左側只保留三�
 console.log('PASS 品牌優勢大圖原進場、延後首頁Ken Burns、減少動態與SSR內容保留')
 const brandFamilySource=await readFile(new URL('../pages/about/advantage.vue',import.meta.url),'utf8')
 assert(brandFamilySource.includes('<h2 id="brand-family-title">{{ cmsCopy.copy.text1 }}</h2>')&&!brandFamilySource.includes('const familyTitle'),'家庭標題需直接顯示已發布CMS，不在前台轉換或覆蓋自訂文案')
-assert.equal(brandHeroHtml.match(/<h2\b[^>]*id="brand-family-title"[^>]*>([^<]+)<\/h2>/)?.[1],'Creating Kitchens for Every Family','SSR需顯示完整新標題')
-assert(/\.brand-family-heading h2\s*\{[^}]*text-transform: none;/.test(brandFamilySource),'需保留for的小寫，不得由CSS轉成For')
+assert.equal(brandHeroHtml.match(/<h2\b[^>]*id="brand-family-title"[^>]*>([^<]+)<\/h2>/)?.[1],'Creating Kitchen For Every Family','SSR需顯示完整新標題')
+assert(/\.brand-family-heading h2\s*\{[^}]*text-transform: none;/.test(brandFamilySource),'需直接保留CMS指定大小寫，不使用CSS轉換文案')
 const brandFamilyCopy=await content('view-pages-about-advantage')
-assert.equal(brandFamilyCopy.copy.text1,'Creating Kitchens for Every Family','需更新本機已發布CMS，不只改Vue範例')
+assert.equal(brandFamilyCopy.copy.text1,'Creating Kitchen For Every Family','需更新本機已發布CMS，不只改Vue範例')
 for(const key of ['text2','text3'])assert(brandHeroHtml.includes(brandFamilyCopy.copy[key]),'保留原中文與說明')
 console.log('PASS 品牌優勢家庭英文標題、大小寫、CMS自訂文案及中文說明保留')
 const headerPavilions=(await content('view-components-SiteHeader')).rightNav.flatMap(item=>item.children||[]).filter(child=>child.to==='/about/exhibition')
@@ -609,7 +620,7 @@ const aboutStoriesHeadingSource=await readFile(new URL('../pages/about/introduce
 const aboutIdentityHeadingSource=aboutStoriesHeadingSource
 assert(aboutIdentityHeadingSource.includes('專屬品牌識別</b></span>Signature <span>Details</span><br /><span>That</span> Reflect <span>Our Identity</span>'),'專屬品牌識別改為Signature Details／That Reflect Our Identity，Details／That／Our Identity金色，保留中文與共用對齊')
 assert(/\.about-identity__heading h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(aboutIdentityHeadingSource)&&/\.about-identity-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(aboutIdentityHeadingSource),'專屬品牌識別50／40px600及同列補償')
-assert(aboutStoriesHeadingSource.includes('櫻花整體廚房</b></span>SAKURA KITCHEN<br /><b class="about-stories-chinese">品牌歷程</b>Story <span>of Growth</span>'),'關於我們保留首行及共用對齊，第二行品牌歷程Story of Growth，of Growth金色')
+assert(aboutStoriesHeadingSource.includes('櫻花整體廚房</b></span>SAKURA KITCHEN<br /><b class="about-stories-chinese">品牌歷程</b>Story <span>Of Growth</span>'),'關於我們保留首行及共用對齊，第二行品牌歷程Story Of Growth，Of Growth金色且O大寫')
 assert(/\.about-services__heading h2 \{[^}]*font-size: 50px;[^}]*text-transform: none;/.test(aboutStoriesHeadingSource)&&/\.about-stories-chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;/.test(aboutStoriesHeadingSource),'廚房紀事50／40px600及基線補償')
 const pavilionGalleryHeadingSource=await readFile(new URL('../pages/about/exhibition.vue',import.meta.url),'utf8')
 assert(/\.pavilion-filter button \{[^}]*min-height: 46px;[^}]*padding: 9px 18px;[^}]*font-size: 16px;[^}]*font-weight: 500;[^}]*line-height: 24px;/.test(pavilionGalleryHeadingSource),'三館切換按鈕統一字重500，保留原尺寸／字級／行高')
@@ -690,18 +701,20 @@ assert(buildersSource.includes('.builders-hero-media :deep(img) { object-positio
 console.log('PASS 建商深色大圖同品牌優勢進場後5秒Ken Burns、減少動態及原照片／裁切保留')
 assert(buildersHtml.includes('OUR STRENGTHS')&&buildersHtml.includes('智能整合，打造建築新價值'),'建商Home7實力区需指定中英標題')
 const strengthsTitle=buildersHtml.match(/<h2\b[^>]*id="builders-capability-title"[^>]*>([\s\S]*?)<\/h2>/)?.[1]||''
-assert.equal(strengthsTitle.replace(/<br\b[^>]*>/g,' ').replace(/<[^>]+>/g,''),'智能整合，打造建築新價值Smart Solutions for Better Living')
+assert.equal(strengthsTitle.replace(/<br\b[^>]*>/g,' ').replace(/<[^>]+>/g,''),'智能整合，打造建築新價值Smart Solutions For Better Living')
 assert(buildersHtml.includes('以多元設計模組、AI 智能製造與數位案件管理，')&&buildersHtml.includes('為建商提供從設計規劃到交付的整合服務。'))
-assert(buildersSource.includes('Smart Solutions <span>for</span><br /><span>Better Living</span>'),'指定兩行Smart Solutions for／Better Living，刪除Spaces，保留for與Better Living金色')
+assert(buildersSource.includes('Smart Solutions <span>For</span><br /><span>Better Living</span>'),'指定兩行Smart Solutions For／Better Living，For大寫並保留金色')
 assert(buildersSource.includes(':fit="index === 1 ? \'cover\' : \'contain\'"')&&buildersSource.includes('.builders-solution__visual--factory { aspect-ratio: 1280 / 460; }')&&buildersSource.includes('.builders-solution__visual--factory :deep(img) { object-position: bottom; }'),'保留AI圖原空白裁切與其他兩圖contain')
 const strengthsSsr=buildersHtml.slice(buildersHtml.indexOf('id="builders-solutions"'),buildersHtml.indexOf('class="builders-home-one'))
 assert.equal((strengthsSsr.match(/class="builders-solution ev/g)||[]).length,3,'前三項實力不得增刪或重複')
 assert(strengthsSsr.includes('aria-label="45+萬"')&&strengthsSsr.includes('aria-hidden="true"')&&strengthsSsr.includes('45+萬'),'SSR及輔助閱讀保持原最終值')
-assert(/\.builders-strengths-layout \{[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);[^}]*align-items: stretch;[^}]*gap: 30px;/.test(buildersSource)&&/\.builders-strengths-copy \{[^}]*grid-template-rows: 1fr auto;[^}]*gap: 48px;[^}]*padding: 35px 0 6px;/.test(buildersSource),'雙等欄共底線，統計獨立底列，左底6px對齊右caption底內距')
-assert(/\.builders-strengths-heading \{[^}]*position: sticky;[^}]*top: calc\(var\(--site-header-height, 60px\) \+ 50px\);[^}]*align-self: start;/.test(buildersSource)&&buildersSource.includes('</div>\n            <div v-if="strengths[0]" v-reveal="{ anim: \'opalMoveUp\' }" class="builders-solution__copy">'),'只有標題黏住捲動，統計在獨立底列保留進場')
+assert(/\.builders-strengths-layout \{[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);[^}]*align-items: stretch;[^}]*gap: 30px;/.test(buildersSource)&&/\.builders-strengths-copy \{[^}]*grid-template-rows: 1fr auto;[^}]*gap: 48px;[^}]*padding: 35px 0 6px;/.test(buildersSource),'保留雙欄、統計獨立底列與原內距')
+assert(/\.builders-strengths-copy \{[^}]*position: sticky;[^}]*top: calc\(var\(--site-header-height, 60px\) \+ 15px\);[^}]*align-self: start;[^}]*min-height: calc\(100svh - var\(--site-header-height, 60px\) - 65px\);/.test(buildersSource)&&!buildersSource.includes('.builders-strengths-heading { position: sticky;'),'左側標題及統計整組黏住，解除內層sticky避免分離')
+assert(buildersSource.includes('</div>\n            <div v-if="strengths[0]" v-reveal="{ anim: \'opalMoveUp\' }" class="builders-solution__copy">'),'統計仍在左側共同sticky容器內且保留進場')
+assert(/@media \(max-height: 759px\) \{\s*\.builders-strengths-copy \{ position: static; min-height: auto; \}/.test(buildersSource),'低高度視窗解除固定，不裁切或困住統計')
 assert(/\.builders-strengths-section \{[^}]*padding: 75px 30px 105px;[^}]*background: #241c18;/.test(buildersSource),'Home7原版棕黑底與上下節奏')
 const strengthsMobileCss=buildersSource.slice(buildersSource.indexOf('@media (max-width: 767px)'))
-assert(strengthsMobileCss.includes('.builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }')&&strengthsMobileCss.includes('.builders-strengths-copy { display: block; padding: 0; }')&&strengthsMobileCss.includes('.builders-strengths-heading { position: static; }')&&strengthsMobileCss.includes('.builders-solution__copy { margin-top: 30px; }'),'手機自然單欄／30px間距，取消底列拉伸與sticky，避免遮擋圖文')
+assert(strengthsMobileCss.includes('.builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }')&&strengthsMobileCss.includes('.builders-strengths-copy { position: static; display: block; min-height: auto; padding: 0; }')&&strengthsMobileCss.includes('.builders-solution__copy { margin-top: 30px; }'),'手機自然單欄／30px間距，取消底列拉伸與sticky，避免遮擋圖文')
 assert(buildersSource.includes('duration: \'slow\'')&&buildersSource.includes('aria-hidden="true">{{ moduleCount }}+')&&buildersSource.includes('font-variant-numeric: tabular-nums'),'保留Home7向上進場、最終值ARIA與等寬計數')
 const moduleCounterSource=buildersSource.slice(buildersSource.indexOf('const moduleCounter ='),buildersSource.indexOf('const activePavilionId =')).replace('ref<HTMLElement>()','ref()').replace(/: (?:IntersectionObserver|number) \| undefined/g,'').replace('(time: number)','(time)')
 function counterHarness(value='45',{reduced=false,observer=true}={}){
