@@ -1,10 +1,22 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-22 補齊建商原色系列0.5
+
+- 依14:48:07截圖與使用者提供Downloads/03 原色系列0.5 NEUTRAL COLOR資料夾，新增「原色系列 0.5／NEUTRAL COLOR」於兩組HORIZON之後、原色01之前。截圖NUTRAL拼字依來源資料夾修為NEUTRAL；原8組及其18張圖片、字型、卡片與相簿互動不動。
+- 來源6.2.1NEUTRALCOLOR0.5-1及-2雖無副檔名，實際是6000×3375 TIFF；已縮圖目視確認正面／斜角的白色木質廚房，第一張作封面、兩張依序放入原生dialog相簿。保留來源原檔及Thumbs.db，只新增2400px WebP網站素材，不裁切或重新生成圖片。此輪採ponytail最小範圍，需部署素材並更新本機／正式CMS，完成後總計9組／20張。
+- add-builder-neutral-half-20261022.mjs明確指定local／production、預設dry-run，僅插入第三張新卡；不同已存在0.5、HORIZON順序變更或未發布草稿均停止。實際apply使用既有CMS儲存／發布與SERIALIZABLE交易，逐筆驗證其餘8組／文案、其他文件及所有歷史版本不變；正式apply前先確認新素材已部署可讀。舊6→8歷史遷移測試仍使用原8組fixture，不改成覆寫9組。check-builder-series擴充9組／20圖、0.5兩圖相簿、順序／覆蓋／冪等與可指定兩正式網域的HTTP檢查。
+- 新圖為2400×1350、219266及265686 bytes（合計約474KiB），已目視核對轉檔結果，原TIFF SHA-256前後相同；HTTP驗收對新兩圖再與本地WebP逐位元比較，避免只驗證圖片URL存在。本機CMS revision 5→7，新6894cd89-3006-45d6-b196-b97e1757f178保留舊a1670f01-8b5b-4fd9-92db-6125b49af19a，其他64文件／146版本逐筆不變。正式dry-run確認目前8組且無未發布草稿，等待素材部署才apply。
+- pnpm build（含typecheck）、腳本語法、git diff --check、純schema／新增保護／相簿控制回歸及本機已發布API／SSR／全部20圖HTTP通過；正式發布前新驗收確認仍只有原8組而失敗，作為資料確實需要更新的對照。前台Vue、既有schema及其他系列照片均未修改，不引入套件。
+
 ## 2026-10-22 建商實力區小螢幕完整閱讀與黏住
 
 - 對照14:47:19截圖，根因是舊759px以下直接position:static取消效果，且固定大字／48px間隔加min-height不能保證左欄放進短視窗。依investigate先確認既有規則與前輪變更，本輪只調整/builders的實力區與對應回歸，不改文字、三圖、計數、HOME IN O.N.E或CMS資料。
 - ≥768px且高度≤899px採局部cqw／svh字級與緊湊留白，保留可閱讀的下限及兩欄sticky；一般大桌面原字級／節奏不變。左欄用實際offsetHeight、導覽高度與可見視窗高度計算sticky top：放得下時停在導覽下15px，仍超高時讓內容先自然捲到完整底部、再貼底停住，不裁字、不強制壓縮、不建立巢狀捲軸。極短視窗無法同時看到全部文字屬物理限制，優先確保每段可讀，不能宣稱永遠整塊同屏。
 - 監聽左欄／導覽ResizeObserver、視窗／visualViewport resize與字型完成，避免縮放或換字型後位置過期；沒有全頁scroll事件或fixed定位。手機≤767px仍正常單欄，卸載解除所有監聽。驗證與正式交付結果續記。
+- scripts/check-builder-strengths.mjs新增實際TS函式mock：7種寬度×9種高度×5種內容高度共315組，涵蓋正常固定／超高底部可達、縮放／字型／導覽變動、手機切換、無observer／visualViewport／字型API與卸載清理；重用原兩秒計數器全部回歸，不執行含業務POST的整份frontend-regressions。新版已在本機SSR、三張原圖HEAD200與原CMS統計通過；正式舊版在新高度／欄寬規則斷言確實失敗，作部署前對照。首版標題SSR斷言漏考慮Vue scoped屬性，已只修測試辨識，不改文案。
+- pnpm build（含typecheck）、新增／既有回歸腳本語法及git diff --check通過。尚未做瀏覽器實際拖曳縮放與捲動驗收，不能把315組mock幾何測試宣稱為315種瀏覽器畫面；保留既有瀏覽器限制，不以其他方式繞過。
+- 期間觀察到修正已被正常提交並推送為77befd1b9ed8d833aa4d73370ab564a2a38726e9（未重複提交或覆蓋），Vercel Production dpl_EaKdgvjMihABtAUaZXWNggtiXDJQ已READY／GitHub成功；Nuxt 3部署header-design-3rvkuyoob-erics-projects-57e51613.vercel.app已接上兩正式網域。兩站check-builder-strengths由部署前缺新規則失敗轉為通過；實際載入/_nuxt/BhDo2Hz2.js確認offsetHeight／visualViewport／ResizeObserver／字型監聽及sticky變數，新CSS有899px緊湊規則、不再含759px取消固定。三圖HEAD200／順序／原文及CMS統計通過，前輪AI CABINET／FAUCET／LIGHT及Footer slideInUp也保留。本輪未寫入CMS／資料庫或變更部署設定。
+- investigate交付狀態：DONE_WITH_CONCERNS。根因、邊界模型、實際程式／樣式部署及SSR已驗證；實際瀏覽器的縮放排版、捲動釘住時機與區塊底部解除仍未驗收。重要限制與學習：不能只用固定高度斷點決定sticky，也不能用min-height假定內容一定放得下，應量測實際內容並在超高時保留自然閱讀路徑。未跑含業務表單POST的全站測試，未宣稱有新增持續監控。
 
 ## 2026-10-22 品牌系列AI Hero圖文逐張配對
 
