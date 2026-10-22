@@ -21,6 +21,7 @@ interface RevealOptions {
   anim?: RevealAnimation
   delay?: number
   duration?: RevealDuration
+  viewportEdge?: boolean
 }
 
 const revealAnimations = new Set<RevealAnimation>([
@@ -113,6 +114,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     ) {
       prepareElement(element, binding)
 
+      const viewportEdge = optionsFrom(binding).viewportEdge === true
       const show = () => {
         if (element.classList.contains('is-visible')) return
         requestAnimationFrame(() => element.classList.add('is-visible'))
@@ -132,7 +134,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         ([entry]) => {
           if (entry?.isIntersecting) show()
         },
-        { threshold: 0.01, rootMargin: '0px 0px -10% 0px' },
+        { threshold: 0.01, rootMargin: viewportEdge ? '0px' : '0px 0px -10% 0px' },
       )
 
       observers.set(element, observer)
@@ -140,7 +142,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       requestAnimationFrame(() => {
         const rect = element.getBoundingClientRect()
-        if (rect.top <= window.innerHeight * 0.9) show()
+        if (rect.top <= window.innerHeight * (viewportEdge ? 1 : 0.9)) show()
       })
     },
     beforeUnmount(element: HTMLElement) {

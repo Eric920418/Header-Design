@@ -1,6 +1,34 @@
 // Read-only acceptance against the requested origin, never the local CMS as a proxy for production.
 import assert from 'node:assert/strict'
 import {readFileSync} from 'node:fs'
+import {transpileModule,ScriptTarget,ModuleKind} from 'typescript'
+import {normalizeClass,normalizeStyle} from 'vue'
+
+const footerSource=readFileSync(new URL('../components/SiteFooter.vue',import.meta.url),'utf8')
+assert(footerSource.includes('class="footer-logo-mask absolute bottom-[30px] left-1/2 z-10 w-[calc(100%-30px)] max-w-[1410px] -translate-x-1/2 overflow-hidden"'),'Footer Logo保留原尺寸與位置，另設向上顯示遮罩')
+assert(footerSource.includes('<div v-reveal="{ anim: \'slideInUp\', viewportEdge: true }" class="footer-logo-reveal">'),'動畫必須掛在Footer Logo，不是首頁Kitchen')
+assert(footerSource.includes(':src="cmsCopy.copy.field13" :alt="cmsCopy.copy.field14" width="3156" height="245"'),'保留CMS Logo與替代文字，用圖片原比例預留觀察範圍')
+const revealTs=readFileSync(new URL('../plugins/reveal.ts',import.meta.url),'utf8')
+const revealJs=transpileModule(revealTs,{compilerOptions:{target:ScriptTarget.ES2022,module:ModuleKind.ESNext}}).outputText
+  .replace(/^import .* from ['"]vue['"];?\s*$/m,'').replace('export default defineNuxtPlugin','return defineNuxtPlugin')
+function checkReveal({edge=false,top=940,reduced=false,observer=true}={}){
+  const classes=new Set(),frames=[];let directive,io
+  const element={dataset:{},style:{},classList:{add:(...items)=>items.forEach(item=>classes.add(item)),remove:(...items)=>items.forEach(item=>classes.delete(item)),contains:item=>classes.has(item)},getBoundingClientRect:()=>({top})}
+  class Observer {constructor(callback,options){this.callback=callback;this.options=options;this.disconnects=0;io=this}observe(el){this.element=el}disconnect(){this.disconnects++}}
+  const plugin=new Function('defineNuxtPlugin','normalizeClass','normalizeStyle','window','IntersectionObserver','requestAnimationFrame',revealJs)(fn=>fn,normalizeClass,normalizeStyle,{innerHeight:1000,matchMedia:()=>({matches:reduced}),...(observer?{IntersectionObserver:Observer}:{})},Observer,fn=>frames.push(fn))
+  plugin({vueApp:{directive:(_name,value)=>directive=value}})
+  directive.mounted(element,{value:{anim:'slideInUp',viewportEdge:edge}})
+  const flush=()=>{while(frames.length)frames.shift()()};flush()
+  return {classes,io,element,flush,unmount:()=>directive.beforeUnmount(element)}
+}
+const footerAtBottom=checkReveal({edge:true})
+assert.equal(footerAtBottom.io.options.rootMargin,'0px');assert(footerAtBottom.classes.has('is-visible'),'Logo貼底仍需觸發');assert.equal(footerAtBottom.io.disconnects,1)
+const normalAtBottom=checkReveal()
+assert.equal(normalAtBottom.io.options.rootMargin,'0px 0px -10% 0px');assert(!normalAtBottom.classes.has('is-visible'),'其他區塊原90%觸發點不變');normalAtBottom.unmount();assert.equal(normalAtBottom.io.disconnects,1)
+const offscreen=checkReveal({edge:true,top:1100})
+assert(!offscreen.classes.has('is-visible'),'Footer未進入畫面不得先播完');offscreen.io.callback([{isIntersecting:true}]);offscreen.flush();assert(offscreen.classes.has('is-visible'));assert.equal(offscreen.io.disconnects,1)
+for(const option of [{edge:true,reduced:true},{edge:true,observer:false}]){const result=checkReveal(option);assert(result.classes.has('is-visible'));assert(!result.io)}
+console.log('PASS Footer Logo upward-reveal target, bottom-edge observer, offscreen wait, original default, reduced motion and cleanup')
 
 const base=new URL(process.env.TEST_BASE_URL||'http://localhost:3100')
 assert(['http:','https:'].includes(base.protocol)&&!base.username&&!base.password&&base.pathname==='/'&&!base.search&&!base.hash,'只能指定完整網站origin')
@@ -37,6 +65,8 @@ for(const path of ['/','/news']){
  console.log(`PASS ${base.origin}${path} Header: 櫻花集團品牌館；加盟箭頭及兩筆入口保留`)
  const footer=html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0]
  assert(footer,base.origin+path+' 頁尾不存在')
+ assert(/class="footer-logo-reveal ev"[^>]*data-ev="slideInUp"/.test(footer),'正式Footer Logo需真正有slideInUp動畫標記')
+ assert(footer.includes('footer-logo-mask')&&footer.includes(`src="${footerContent.copy.field13}"`),'正式Footer遮罩內保留原Logo圖片')
  const footerLabels=[...footer.matchAll(/<a\b[^>]*href="\/home-style\/aikitchen"[^>]*>([\s\S]*?)<\/a>/g)].map(m=>m[1].replace(/<[^>]+>/g,'').trim())
  assert.deepEqual(footerLabels,['品牌系列'],base.origin+path+' 真實Footer品牌系列名稱錯誤')
  const news=[...footer.matchAll(/<section\b[\s\S]*?<\/section>/g)].map(m=>m[0]).find(section=>/<h2\b[^>]*><span[^>]*>優惠消息<\/span><\/h2>/.test(section))||''

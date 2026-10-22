@@ -98,7 +98,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <span>{{ cmsCopy.copy.text10 }}</span><span class="text-[#CAA05C]">{{ cmsCopy.copy.text11 }}</span><span>{{ cmsCopy.copy.text12 }}</span>
     </div>
     <div class="relative h-[100px] lg:h-[310px]">
-      <img :src="cmsCopy.copy.field13" :alt="cmsCopy.copy.field14" class="absolute bottom-[30px] left-1/2 z-10 w-[calc(100%-30px)] max-w-[1410px] -translate-x-1/2 object-contain object-bottom" />
+      <div class="footer-logo-mask absolute bottom-[30px] left-1/2 z-10 w-[calc(100%-30px)] max-w-[1410px] -translate-x-1/2 overflow-hidden">
+        <div v-reveal="{ anim: 'slideInUp', viewportEdge: true }" class="footer-logo-reveal">
+          <img :src="cmsCopy.copy.field13" :alt="cmsCopy.copy.field14" width="3156" height="245" class="block h-auto w-full object-contain object-bottom" />
+        </div>
+      </div>
     </div>
   </footer>
   <button

@@ -1,10 +1,20 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-22 修正實際Footer底部Logo由下往上顯示
+
+- 依14:30:26明確補充，需求是Footer的SAKURA KITCHEN大Logo，不是首頁Kitchen；前幾輪改錯目標，SiteFooter原本只有普通img，確實完全沒有動畫。本輪只在Footer Logo新增獨立遮罩與slideInUp包覆層，不修改Logo／CMS英文、不改首頁Kitchen、copyright、網站地圖或社群連結。
+- 沿用ponytail最小修改與既有reveal：保留底30px、寬calc(100%-30px)／最大1410px／水平置中、桌機310px／手機100px預留區；圖片用原3156×245比例預留高度，動畫層與水平置中transform分開，不橫跳。捲到Logo才由底部遮罩向上滑出，不是淡入或整個Footer移動。
+- Footer貼底且手機Logo較矮，既有observer底部-10%可能永遠碰不到；reveal新增明確viewportEdge=true選用完整視窗，observer與首次rAF都同步使用底緣，其餘呼叫保留原90%規則。減少動態／無observer仍直接顯示，離場清理保留。既有check-site-header加入實際插件mock回歸（貼底／未入場／原預設／無observer／減少動態／清理）與正式Footer專屬SSR斷言，避免再拿首頁動畫當作驗收。本輪包含正式程式部署，不改資料庫；驗證進行中。
+- pnpm build（含typecheck）、腳本語法、git diff --check與插件觸發回歸通過；部署前對header-design-two.vercel.app實跑新斷言，確實在「正式Footer Logo需真正有slideInUp動畫標記」失敗，重現正式版本缺動畫，而非僅靠本地推測。已核對既有header-design正式專案，接續正常main部署後重跑兩正式站。
+
 ## 2026-10-22 建商HOME IN O.N.E等待圖片完成後淡入放大並正式交付
 
 - 依01:33:53截圖，只修建商HOME IN O.N.E整張圖淡入＋輕微放大，不改圖或文字。既有外層reveal在進入視窗時就啟動，但內部BuilderImage為lazy載入，沒有等待圖片load，存在動畫先播完空容器、圖片後出現的時序問題。本輪圖片未就緒先暫停原動畫，捕獲load後播放；error也解除暫停以保留原完整錯誤提示，mounted時檢查complete涵蓋快取或已失敗圖片。
 - 依investigate追蹤來源與正式SSR／CSS，沿用ponytail最小修改，使用data-image-ready屬性而非動態class，避免Vue更新class清掉directive加入的ev／is-visible。原97%→100%、opacity0→1、1.25秒ease、整張圖比例／位置／圖片、三大服務與減少動態／直接錨點立即顯示保留，不新增套件、不改CMS／資料庫。本輪包含正式程式部署與正式輸出核對。
 - pnpm build（含專案typecheck）、Vue模板／樣式編譯、限定HOME IN O.N.E／三大服務回歸、腳本語法及git diff --check通過；mounted pure check涵蓋未載入／complete圖片，正式原SSR確認lazy圖片與原動畫CSS存在。尚未以實際瀏覽器節流重現，因此將圖片載入競態列為已由程式消除的可能原因，不以CSS／來源檢查冒充實際動畫驗收。程式將以既有main／header-design專案同步正式端，部署結果續記於下。
+- 程式commit c8e4fd571772f3c8ebf7181bcaaafdd32ba91b99已正常push既有main；Vercel Production dpl_9uQWaJjY9rVSBRFN3AC7Wn3tXD3D為READY／GitHub check成功，部署header-design-b1bf4m98w-erics-projects-57e51613.vercel.app，兩正式網域均已指向新部署，未改環境變數或存取保護。
+- header-design-two.vercel.app及sakura-demo-vanlantech.com實際/builders SSR200、圖片HTTP200；正式scoped CSS含未ready暫停與原淡入／97%→100% keyframe，兩站實際載入/_nuxt/DV_KhZih.js均有data-image-ready及load/error捕獲。初版正式檢查對scoped屬性位置假設錯誤而失敗，檢視實際輸出後修正臨時測試、未為測試改版面，兩站重跑通過。正式錯誤日誌掃描無error結果；前輪三份CMS標題／8組系列再次核對保留不變。
+- 本輪未驗瀏覽器實際逐幀／手機視覺／慢網路操作，未繞過既有瀏覽器限制；不得將正式CSS與程式包存在宣稱為動態視覺驗收完成。系統減少動態或直接錨點／歷史恢復依既有規則立即顯示，不強制播放。
 
 ## 2026-10-22 正式CMS指定差異發布與首頁大字同步交付
 
