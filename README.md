@@ -6,6 +6,8 @@
 - 本輪依investigate追查實際函式，沿用ponytail限縮四檔：builders頁、兩份既有回歸及本README。固定位置只准導覽高度＋15px；保留短窗緊湊字級／間距，新增獨立內容層量測完整高度，必要時等比例縮至可見範圍，外層高度同步補償，避免transform留下多餘占位或改到右欄。最低80%避免極矮窗無限縮字；超出此可讀下限時自然閱讀、不固定、不裁切。手機仍單欄，正常大桌面不縮放。
 - 監聽實際內容而非補償後外層，避免ResizeObserver自我回饋；保留字型／導覽／visualViewport變動與卸載清理、原計數與三圖。不寫CMS／資料庫、不新增套件、不更動其他動畫。驗證及正式交付結果續記，幾何模型不當成瀏覽器視覺驗收。
 - pnpm build（含typecheck）、腳本語法、git diff --check、315組函式幾何模型、縮放邊界／重複量測穩定性／手機清理／觀察來源／卸載及原計數器回歸通過；另只執行既有frontend-regressions中實力區的版面斷言，避開業務POST。新正式檢查於部署前在缺少builders-strengths-content時確實失敗，本機SSR／原文／三圖HEAD200通過。HTTP檢查再加入此頁實際載入JS的量測／縮放標記，避免只驗SSR或本地原始碼。未以幾何mock宣稱實際瀏覽器縮放／捲動通過。
+- commit 2bfa92504222f941d571abc48c478786380cad39正常push main，Vercel Production dpl_FxGnedtbjkh4EVxo46YRBcgffn27為READY／GitHub成功，部署header-design-35lqcbbmo-erics-projects-57e51613.vercel.app接上兩既有正式網域。兩站check-builder-strengths均通過，實際載入/_nuxt/CXkHzltc.js含新量測／高度補償／縮放標記；原中文主標、OUR STRENGTHS、Smart Solutions For、Better Living、CMS計數及三圖順序／HTTP200保留。本輪沒有CMS／資料庫寫入、沒有改部署設定。
+- investigate狀態DONE_WITH_CONCERNS：負top根因與新函式、正式SSR／實際JS／CSS已驗；未做實際瀏覽器小筆電縮放、捲動停留／區塊尾端解除的視覺驗收，不能宣稱該體驗已驗收完成。極端矮窗縮至80%仍放不下時刻意自然閱讀、不固定，這是避免裁字與無限縮小的明確邊界，不再把頂部藏到導覽上方。根本教訓：驗收不可只守住統計底部，必須同時約束頂部標題及底部；幾何mock也不能代替實際捲動畫面。
 
 ## 2026-10-22 補齊建商原色系列0.5
 
