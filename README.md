@@ -1,5 +1,12 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-22 建商實力區固定頂部不得遮字
+
+- 15:41:16正式站截圖顯示中文主標被導覽遮住，上一版以負sticky top照顧底部的策略不符合整組可見需求。實跑舊函式：720px視窗／1000px內容會產生-300px，確定不是CMS未同步。撤回「超高先向上捲再貼底」作為此需求的解法。
+- 本輪依investigate追查實際函式，沿用ponytail限縮四檔：builders頁、兩份既有回歸及本README。固定位置只准導覽高度＋15px；保留短窗緊湊字級／間距，新增獨立內容層量測完整高度，必要時等比例縮至可見範圍，外層高度同步補償，避免transform留下多餘占位或改到右欄。最低80%避免極矮窗無限縮字；超出此可讀下限時自然閱讀、不固定、不裁切。手機仍單欄，正常大桌面不縮放。
+- 監聽實際內容而非補償後外層，避免ResizeObserver自我回饋；保留字型／導覽／visualViewport變動與卸載清理、原計數與三圖。不寫CMS／資料庫、不新增套件、不更動其他動畫。驗證及正式交付結果續記，幾何模型不當成瀏覽器視覺驗收。
+- pnpm build（含typecheck）、腳本語法、git diff --check、315組函式幾何模型、縮放邊界／重複量測穩定性／手機清理／觀察來源／卸載及原計數器回歸通過；另只執行既有frontend-regressions中實力區的版面斷言，避開業務POST。新正式檢查於部署前在缺少builders-strengths-content時確實失敗，本機SSR／原文／三圖HEAD200通過。HTTP檢查再加入此頁實際載入JS的量測／縮放標記，避免只驗SSR或本地原始碼。未以幾何mock宣稱實際瀏覽器縮放／捲動通過。
+
 ## 2026-10-22 補齊建商原色系列0.5
 
 - 依14:48:07截圖與使用者提供Downloads/03 原色系列0.5 NEUTRAL COLOR資料夾，新增「原色系列 0.5／NEUTRAL COLOR」於兩組HORIZON之後、原色01之前。截圖NUTRAL拼字依來源資料夾修為NEUTRAL；原8組及其18張圖片、字型、卡片與相簿互動不動。
@@ -7,6 +14,9 @@
 - add-builder-neutral-half-20261022.mjs明確指定local／production、預設dry-run，僅插入第三張新卡；不同已存在0.5、HORIZON順序變更或未發布草稿均停止。實際apply使用既有CMS儲存／發布與SERIALIZABLE交易，逐筆驗證其餘8組／文案、其他文件及所有歷史版本不變；正式apply前先確認新素材已部署可讀。舊6→8歷史遷移測試仍使用原8組fixture，不改成覆寫9組。check-builder-series擴充9組／20圖、0.5兩圖相簿、順序／覆蓋／冪等與可指定兩正式網域的HTTP檢查。
 - 新圖為2400×1350、219266及265686 bytes（合計約474KiB），已目視核對轉檔結果，原TIFF SHA-256前後相同；HTTP驗收對新兩圖再與本地WebP逐位元比較，避免只驗證圖片URL存在。本機CMS revision 5→7，新6894cd89-3006-45d6-b196-b97e1757f178保留舊a1670f01-8b5b-4fd9-92db-6125b49af19a，其他64文件／146版本逐筆不變。正式dry-run確認目前8組且無未發布草稿，等待素材部署才apply。
 - pnpm build（含typecheck）、腳本語法、git diff --check、純schema／新增保護／相簿控制回歸及本機已發布API／SSR／全部20圖HTTP通過；正式發布前新驗收確認仍只有原8組而失敗，作為資料確實需要更新的對照。前台Vue、既有schema及其他系列照片均未修改，不引入套件。
+- 素材／資料定義commit 76fa30d0004bae67363cfae6b2948e0f90055cd0已正常push main；Vercel Production dpl_AbszpFMhGeRdqo1ym4kToZ371wwg為READY／GitHub成功，Nuxt 3部署header-design-ifxh3er79-erics-projects-57e51613.vercel.app接上兩個既有正式網域。確認新圖HEAD200及image/webp後，正式CMS revision 3→5，新publishedId 9626acb3-a1f9-49a5-87d8-4580ee993e24保留原2b5e8e4e-a832-41bb-a449-4efad0d79ffc；其他64文件及131歷史版本逐筆未變，正式／本機dry-run再跑均UNCHANGED。
+- header-design-two.vercel.app及sakura-demo-vanlantech.com兩站完整check-builder-series --http通過：已發布API9組、SSR9卡且0.5第三張、正確中英文與封面、dialog初始關閉、三處預約入口保留、全20圖WebP200；兩張新圖與本地已目視核對的WebP逐位元一致。最近10分鐘error日誌查詢無結果。未更動資料庫結構、seed、其他頁面文案、環境變數或部署設定。
+- 未做瀏覽器實際點開相簿／手機的視覺驗收，也未執行含業務POST的全站測試；原生dialog實際函式的兩圖切換與焦點mock不等同瀏覽器操作，維持既有瀏覽器限制，不繞過。原始TIFF與Thumbs.db均未變動，前台圖片只作格式／尺寸轉換，沒有生成新影像。
 
 ## 2026-10-22 建商實力區小螢幕完整閱讀與黏住
 

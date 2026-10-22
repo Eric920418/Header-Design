@@ -28,29 +28,40 @@ onMounted(() => {
 })
 
 const strengthsCopy = ref<HTMLElement>()
+const strengthsContent = ref<HTMLElement>()
 let strengthsObserver: ResizeObserver | undefined
 function updateStrengthsSticky() {
   const copy = strengthsCopy.value
-  if (!copy) return
+  const content = strengthsContent.value
+  if (!copy || !content) return
   if (window.innerWidth < 768) {
     copy.style.removeProperty('--strengths-sticky-top')
+    copy.style.removeProperty('--strengths-copy-height')
+    copy.style.removeProperty('--strengths-content-scale')
+    delete copy.dataset.strengthsOverflow
     return
   }
-  const headerHeight = document.querySelector<HTMLElement>('[data-breadcrumb-root]')?.offsetHeight ?? 60
+  const headerHeight = document.querySelector<HTMLElement>('header[data-breadcrumb-root]')?.offsetHeight ?? 60
   const viewportHeight = window.visualViewport?.height ?? window.innerHeight
-  // Oversized copy scrolls into view before pinning its bottom; never clip readable text.
-  const top = Math.min(headerHeight + 15, viewportHeight - copy.offsetHeight - 20)
+  const top = headerHeight + 15
+  const contentHeight = content.offsetHeight
+  const scale = Math.min(1, Math.max(0, viewportHeight - top - 20) / Math.max(1, contentHeight))
+  // Never hide the heading above the nav or shrink readable copy without a lower bound.
+  const overflow = scale < 0.8
+  copy.dataset.strengthsOverflow = String(overflow)
   copy.style.setProperty('--strengths-sticky-top', `${top}px`)
+  copy.style.setProperty('--strengths-content-scale', String(overflow ? 1 : scale))
+  copy.style.setProperty('--strengths-copy-height', `${contentHeight * (overflow ? 1 : scale)}px`)
 }
 onMounted(() => {
   updateStrengthsSticky()
   window.addEventListener('resize', updateStrengthsSticky, { passive: true })
   window.visualViewport?.addEventListener('resize', updateStrengthsSticky, { passive: true })
   document.fonts?.addEventListener('loadingdone', updateStrengthsSticky)
-  if ('ResizeObserver' in window && strengthsCopy.value) {
+  if ('ResizeObserver' in window && strengthsContent.value) {
     strengthsObserver = new ResizeObserver(updateStrengthsSticky)
-    strengthsObserver.observe(strengthsCopy.value)
-    const header = document.querySelector<HTMLElement>('[data-breadcrumb-root]')
+    strengthsObserver.observe(strengthsContent.value)
+    const header = document.querySelector<HTMLElement>('header[data-breadcrumb-root]')
     if (header) strengthsObserver.observe(header)
   }
 })
@@ -214,15 +225,17 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="builders-strengths-section">
         <div id="builders-solutions" class="builders-rail builders-strengths-layout internal-rail-safe">
           <header ref="strengthsCopy" class="builders-strengths-copy">
-            <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-strengths-heading">
-              <InternalSectionPill tone="dark">OUR STRENGTHS</InternalSectionPill>
-              <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>For</span><br /><span>Better Living</span></h2>
-              <p>以多元設計模組、AI 智能製造與數位案件管理，<br />為建商提供從設計規劃到交付的整合服務。</p>
-            </div>
-            <div v-if="strengths[0]" v-reveal="{ anim: 'opalMoveUp' }" class="builders-solution__copy">
-              <p class="builders-solution__lead">{{ strengths[0].lines[1].replaceAll('\n', '') }}</p>
-              <p ref="moduleCounter" class="builders-solution__number" :aria-label="`${strengths[0].value[0]}+${strengths[0].value[1]}`"><span aria-hidden="true">{{ moduleCount }}+{{ strengths[0].value[1] }}</span></p>
-              <h3>{{ strengths[0].lines[0] }} {{ strengths[0].lines[2] }}</h3>
+            <div ref="strengthsContent" class="builders-strengths-content">
+              <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-strengths-heading">
+                <InternalSectionPill tone="dark">OUR STRENGTHS</InternalSectionPill>
+                <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>For</span><br /><span>Better Living</span></h2>
+                <p>以多元設計模組、AI 智能製造與數位案件管理，<br />為建商提供從設計規劃到交付的整合服務。</p>
+              </div>
+              <div v-if="strengths[0]" v-reveal="{ anim: 'opalMoveUp' }" class="builders-solution__copy">
+                <p class="builders-solution__lead">{{ strengths[0].lines[1].replaceAll('\n', '') }}</p>
+                <p ref="moduleCounter" class="builders-solution__number" :aria-label="`${strengths[0].value[0]}+${strengths[0].value[1]}`"><span aria-hidden="true">{{ moduleCount }}+{{ strengths[0].value[1] }}</span></p>
+                <h3>{{ strengths[0].lines[0] }} {{ strengths[0].lines[2] }}</h3>
+              </div>
             </div>
           </header>
           <div class="builders-strengths-list">
@@ -405,7 +418,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .builders-strengths-section { padding: 75px 30px 105px; color: #fff; background: #241c18; }
 .builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
-.builders-strengths-copy { position: sticky; top: var(--strengths-sticky-top, calc(var(--site-header-height, 60px) + 15px)); align-self: start; display: grid; grid-template-rows: 1fr auto; gap: 48px; min-width: 0; min-height: calc(100svh - var(--site-header-height, 60px) - 65px); padding: 35px 0 6px; container-type: inline-size; }
+.builders-strengths-copy { position: sticky; top: var(--strengths-sticky-top, calc(var(--site-header-height, 60px) + 15px)); align-self: start; min-width: 0; height: var(--strengths-copy-height, auto); container-type: inline-size; }
+.builders-strengths-copy[data-strengths-overflow="true"] { position: static; }
+.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: calc(100svh - var(--site-header-height, 60px) - 65px); padding: 35px 0 6px; transform: scale(var(--strengths-content-scale, 1)); transform-origin: top left; }
 .builders-strengths-heading h2 { max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
 .builders-strengths-heading h2 b { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
@@ -510,7 +525,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (min-width: 768px) and (max-height: 899px) {
-  .builders-strengths-copy { gap: clamp(16px, 3svh, 28px); padding: 16px 0 6px; }
+  .builders-strengths-content { gap: clamp(16px, 3svh, 28px); padding: 16px 0 6px; }
   .builders-strengths-heading h2 { margin: 18px 0 20px; font-size: clamp(28px, min(10cqw, 6.4svh), 52px); }
   .builders-strengths-heading h2 b { margin-bottom: 12px; font-size: clamp(24px, min(6.7cqw, 4.4svh), 36px); }
   .builders-strengths-heading > p { font-size: 14px; line-height: 22px; }
@@ -535,7 +550,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-capability > .builders-rail { width: calc(100% - 30px); }
   .builders-strengths-section { padding: 60px 15px; }
   .builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
-  .builders-strengths-copy { position: static; display: block; min-height: auto; padding: 0; }
+  .builders-strengths-copy { position: static; height: auto; }
+  .builders-strengths-content { display: block; min-height: auto; padding: 0; transform: none; }
   .builders-strengths-heading h2 { margin-bottom: 20px; font-size: 30px; }
   .builders-strengths-heading h2 b { font-size: 28px; }
   .builders-solution__copy { margin-top: 30px; }
