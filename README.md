@@ -1,5 +1,11 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-22 建商實力區小螢幕完整閱讀與黏住
+
+- 對照14:47:19截圖，根因是舊759px以下直接position:static取消效果，且固定大字／48px間隔加min-height不能保證左欄放進短視窗。依investigate先確認既有規則與前輪變更，本輪只調整/builders的實力區與對應回歸，不改文字、三圖、計數、HOME IN O.N.E或CMS資料。
+- ≥768px且高度≤899px採局部cqw／svh字級與緊湊留白，保留可閱讀的下限及兩欄sticky；一般大桌面原字級／節奏不變。左欄用實際offsetHeight、導覽高度與可見視窗高度計算sticky top：放得下時停在導覽下15px，仍超高時讓內容先自然捲到完整底部、再貼底停住，不裁字、不強制壓縮、不建立巢狀捲軸。極短視窗無法同時看到全部文字屬物理限制，優先確保每段可讀，不能宣稱永遠整塊同屏。
+- 監聽左欄／導覽ResizeObserver、視窗／visualViewport resize與字型完成，避免縮放或換字型後位置過期；沒有全頁scroll事件或fixed定位。手機≤767px仍正常單欄，卸載解除所有監聽。驗證與正式交付結果續記。
+
 ## 2026-10-22 品牌系列AI Hero圖文逐張配對
 
 - 對照14:46:54截圖與三張原圖：ai-kitchen-01為AI CABINET／感應閘門櫃、02為AI FAUCET／AI智能感應龍頭、03為AI LIGHT／廚下手掃可調光LED照明。只調整AI系列內頁Hero文案，保留原圖片、順序、5秒輪播、左右控制、動畫與其他九系列；不是首頁Hero。
@@ -7,6 +13,10 @@
 - 此輪須同步本機與正式已發布data-kitchenSeries，只允許AI項目新增heroStories，保留其他欄位、九系列、原版本與未發布草稿防護。驗證與正式發布結果完成後續記。
 - scripts/update-ai-kitchen-hero-20261022.mjs預設dry-run，必須指定--target=local或--target=production及--apply才寫入；對目標DB／帳號／正式TLS做檢查，使用既有儲存／發布與SERIALIZABLE交易，拒絕不同既有文案或未發布草稿，重跑不新增版本，逐筆核對其他文件及所有歷史版本不變。新增欄位走執行期可選schema，不執行seed或資料表遷移。
 - 已確認正式舊資料缺heroStories，部署前新正式檢查會失敗；本機已發布revision 3→5，保留原c5243653-6f25-4631-9450-440f434d74f5，新版2211c674-8144-43f7-9682-ef08a640335b，其他64文件／145版本不變。本機十系列SSR、404、215圖片來源、鍵盤／輪播／套系回歸與pnpm build／pnpm typecheck通過。另加入實際輪播函式＋Vue computed連續四輪圖文同步／反向回捲，以及可選schema相容、後台欄位名稱、惡意網址與覆蓋防護檢查。舊色卡測試誤把SSR內嵌CSS視為DOM class，已限縮class屬性，未為測試改產品色卡。
+- 正式資料已透過受保護腳本在SERIALIZABLE交易發布：data-kitchenSeries revision 3→5，新publishedId為07a875b9-27bc-43b8-bf14-82d79ea49781，原513c7e28-65d4-40e6-8fad-3800250c8411保留；其他64文件及130歷史版本逐筆不變。正式／本機重跑均UNCHANGED，未使用seed、import、reset、資料表遷移或accept-data-loss。
+- 正式部署：Nuxt 3、commit 9151819f7378da93ce4b110b92a6224d3079cba5正常push main，Vercel Production dpl_EFdktqEe7fr1zgrtjDyJ1rJPbFsx為READY／GitHub成功；header-design-f0kcv0z3a-erics-projects-57e51613.vercel.app已接上header-design-two.vercel.app及sakura-demo-vanlantech.com。兩正式站check-kitchen-series全部通過：十系列SSR、首張閘門櫃正確文案、其餘九系列原標題、404、215圖片來源與鍵盤／輪播回歸；兩站實際API三組文案及相容入口一致，載入/_nuxt/5ZqanV7V.js確有以圖片鍵配對的動態邏輯，三張原圖HEAD200、桌機／手機Hero樣式存在。正式自訂網域check-site-header也通過，前輪Footer向上顯示標記與原導覽均保留。
+- 已逐張目視核對本地原圖與提供截圖，但受既有瀏覽器存取限制，未以瀏覽器實播輪播或完成手機視覺驗收，未繞過限制。正式API／SSR／JS／CSS與Vue computed檢查不等同實際逐幀視覺驗收；不宣稱像素級對圖通過。
+- 部署後最近10分鐘日誌查詢只回傳本次not-a-series預期404的兩筆h3 statusMessage格式警告（兩網域各一筆），未見本次Hero正常頁的錯誤；未新增或宣稱已設定持續監控。
 
 ## 2026-10-22 修正實際Footer底部Logo由下往上顯示
 

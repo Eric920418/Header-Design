@@ -27,6 +27,40 @@ onMounted(() => {
   if (homeOne.value?.querySelector('img')?.complete) homeOneReady.value = true
 })
 
+const strengthsCopy = ref<HTMLElement>()
+let strengthsObserver: ResizeObserver | undefined
+function updateStrengthsSticky() {
+  const copy = strengthsCopy.value
+  if (!copy) return
+  if (window.innerWidth < 768) {
+    copy.style.removeProperty('--strengths-sticky-top')
+    return
+  }
+  const headerHeight = document.querySelector<HTMLElement>('[data-breadcrumb-root]')?.offsetHeight ?? 60
+  const viewportHeight = window.visualViewport?.height ?? window.innerHeight
+  // Oversized copy scrolls into view before pinning its bottom; never clip readable text.
+  const top = Math.min(headerHeight + 15, viewportHeight - copy.offsetHeight - 20)
+  copy.style.setProperty('--strengths-sticky-top', `${top}px`)
+}
+onMounted(() => {
+  updateStrengthsSticky()
+  window.addEventListener('resize', updateStrengthsSticky, { passive: true })
+  window.visualViewport?.addEventListener('resize', updateStrengthsSticky, { passive: true })
+  document.fonts?.addEventListener('loadingdone', updateStrengthsSticky)
+  if ('ResizeObserver' in window && strengthsCopy.value) {
+    strengthsObserver = new ResizeObserver(updateStrengthsSticky)
+    strengthsObserver.observe(strengthsCopy.value)
+    const header = document.querySelector<HTMLElement>('[data-breadcrumb-root]')
+    if (header) strengthsObserver.observe(header)
+  }
+})
+onBeforeUnmount(() => {
+  strengthsObserver?.disconnect()
+  window.removeEventListener('resize', updateStrengthsSticky)
+  window.visualViewport?.removeEventListener('resize', updateStrengthsSticky)
+  document.fonts?.removeEventListener('loadingdone', updateStrengthsSticky)
+})
+
 const moduleCounter = ref<HTMLElement>()
 const moduleCount = ref(strengths[0]?.value[0] ?? '')
 const reducedMotion = useReducedMotion()
@@ -179,7 +213,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section class="builders-capability" aria-labelledby="builders-capability-title">
       <div class="builders-strengths-section">
         <div id="builders-solutions" class="builders-rail builders-strengths-layout internal-rail-safe">
-          <header class="builders-strengths-copy">
+          <header ref="strengthsCopy" class="builders-strengths-copy">
             <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-strengths-heading">
               <InternalSectionPill tone="dark">OUR STRENGTHS</InternalSectionPill>
               <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>For</span><br /><span>Better Living</span></h2>
@@ -371,7 +405,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
 .builders-strengths-section { padding: 75px 30px 105px; color: #fff; background: #241c18; }
 .builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
-.builders-strengths-copy { position: sticky; top: calc(var(--site-header-height, 60px) + 15px); align-self: start; display: grid; grid-template-rows: 1fr auto; gap: 48px; min-width: 0; min-height: calc(100svh - var(--site-header-height, 60px) - 65px); padding: 35px 0 6px; }
+.builders-strengths-copy { position: sticky; top: var(--strengths-sticky-top, calc(var(--site-header-height, 60px) + 15px)); align-self: start; display: grid; grid-template-rows: 1fr auto; gap: 48px; min-width: 0; min-height: calc(100svh - var(--site-header-height, 60px) - 65px); padding: 35px 0 6px; container-type: inline-size; }
 .builders-strengths-heading h2 { max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
 .builders-strengths-heading h2 b { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
@@ -475,6 +509,15 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-contact__aside { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 30px; padding: 0 0 48px; }
 }
 
+@media (min-width: 768px) and (max-height: 899px) {
+  .builders-strengths-copy { gap: clamp(16px, 3svh, 28px); padding: 16px 0 6px; }
+  .builders-strengths-heading h2 { margin: 18px 0 20px; font-size: clamp(28px, min(10cqw, 6.4svh), 52px); }
+  .builders-strengths-heading h2 b { margin-bottom: 12px; font-size: clamp(24px, min(6.7cqw, 4.4svh), 36px); }
+  .builders-strengths-heading > p { font-size: 14px; line-height: 22px; }
+  .builders-solution__copy h3, .builders-solution__copy p { font-size: 18px; }
+  .builders-solution__copy .builders-solution__number { min-height: 0; font-size: clamp(48px, 9svh, 72px); }
+}
+
 @media (max-width: 767px) {
   .builders-page .internal-rail-safe { padding-right: 0; }
   .builders-rail-wide { width: calc(100% - 30px); }
@@ -520,10 +563,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-contact__tabs { gap: 8px; margin-bottom: 12px; }
   .builders-contact__tabs button { padding-inline: 10px; }
   .builders-contact__copy dl div { grid-template-columns: 1fr; gap: 6px; }
-}
-
-@media (max-height: 759px) {
-  .builders-strengths-copy { position: static; min-height: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
