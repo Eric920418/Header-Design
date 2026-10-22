@@ -120,6 +120,7 @@ export function fieldPresentation(resourceId,path,schema={}){
   if(key==='image')return{label:'桌機圖片'}
   if(schema.label)return{label:schema.label}
  }
+ if(resourceId==='data-kitchenSeries'&&normalized.includes('heroStories')&&schema.label)return{label:schema.label}
  const contextual={'KITCHEN_STYLES.*.image':'卡片圖片','KITCHEN_STYLES.*.zh':'系列中文名稱','KITCHEN_STYLES.*.en':'系列英文名稱','KITCHEN_STYLES.*.desc':'卡片介紹文字','KITCHEN_STYLES.*.route':'卡片連結','services.*.copy':'卡片介紹文字','slides.*.title':'輪播標題','slides.*.description':'輪播介紹文字','slides.*.route':'輪播連結','slides.*.image':'輪播圖片','items.*.summary.title':'文章標題','items.*.summary.excerpt':'文章摘要','items.*.summary.cover':'文章封面圖片','storeCases.*.title':'案例文章標題','brandPavilions.*.name':'品牌館名稱','stores.*.name':'門市名稱','services.*.excerpt':'卡片介紹文字','copy.*':'段落文字'}
  if(contextual[normalized])return{label:contextual[normalized]}
  if(key==='id'&&schema.format==='youtube')return{label:'YouTube 影片連結或識別碼'}

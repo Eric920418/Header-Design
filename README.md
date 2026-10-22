@@ -1,11 +1,22 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-22 品牌系列AI Hero圖文逐張配對
+
+- 對照14:46:54截圖與三張原圖：ai-kitchen-01為AI CABINET／感應閘門櫃、02為AI FAUCET／AI智能感應龍頭、03為AI LIGHT／廚下手掃可調光LED照明。只調整AI系列內頁Hero文案，保留原圖片、順序、5秒輪播、左右控制、動畫與其他九系列；不是首頁Hero。
+- 新增可選heroStories，以圖片路徑配對英文標題／中文標題／說明段落，避免改輪播順序造成圖文錯配。截圖「雙出手模式」校正為「雙出水模式」，LED句尾多餘右括號移除。前台沿用原Hero文字動畫並只對有配對文案的Hero套左下排列；CMS讀取、編輯、預覽、儲存及發布使用相同可選schema，舊版本仍有效，不更改資料表或覆蓋整份資料庫。
+- 此輪須同步本機與正式已發布data-kitchenSeries，只允許AI項目新增heroStories，保留其他欄位、九系列、原版本與未發布草稿防護。驗證與正式發布結果完成後續記。
+- scripts/update-ai-kitchen-hero-20261022.mjs預設dry-run，必須指定--target=local或--target=production及--apply才寫入；對目標DB／帳號／正式TLS做檢查，使用既有儲存／發布與SERIALIZABLE交易，拒絕不同既有文案或未發布草稿，重跑不新增版本，逐筆核對其他文件及所有歷史版本不變。新增欄位走執行期可選schema，不執行seed或資料表遷移。
+- 已確認正式舊資料缺heroStories，部署前新正式檢查會失敗；本機已發布revision 3→5，保留原c5243653-6f25-4631-9450-440f434d74f5，新版2211c674-8144-43f7-9682-ef08a640335b，其他64文件／145版本不變。本機十系列SSR、404、215圖片來源、鍵盤／輪播／套系回歸與pnpm build／pnpm typecheck通過。另加入實際輪播函式＋Vue computed連續四輪圖文同步／反向回捲，以及可選schema相容、後台欄位名稱、惡意網址與覆蓋防護檢查。舊色卡測試誤把SSR內嵌CSS視為DOM class，已限縮class屬性，未為測試改產品色卡。
+
 ## 2026-10-22 修正實際Footer底部Logo由下往上顯示
 
 - 依14:30:26明確補充，需求是Footer的SAKURA KITCHEN大Logo，不是首頁Kitchen；前幾輪改錯目標，SiteFooter原本只有普通img，確實完全沒有動畫。本輪只在Footer Logo新增獨立遮罩與slideInUp包覆層，不修改Logo／CMS英文、不改首頁Kitchen、copyright、網站地圖或社群連結。
 - 沿用ponytail最小修改與既有reveal：保留底30px、寬calc(100%-30px)／最大1410px／水平置中、桌機310px／手機100px預留區；圖片用原3156×245比例預留高度，動畫層與水平置中transform分開，不橫跳。捲到Logo才由底部遮罩向上滑出，不是淡入或整個Footer移動。
 - Footer貼底且手機Logo較矮，既有observer底部-10%可能永遠碰不到；reveal新增明確viewportEdge=true選用完整視窗，observer與首次rAF都同步使用底緣，其餘呼叫保留原90%規則。減少動態／無observer仍直接顯示，離場清理保留。既有check-site-header加入實際插件mock回歸（貼底／未入場／原預設／無observer／減少動態／清理）與正式Footer專屬SSR斷言，避免再拿首頁動畫當作驗收。本輪包含正式程式部署，不改資料庫；驗證進行中。
 - pnpm build（含typecheck）、腳本語法、git diff --check與插件觸發回歸通過；部署前對header-design-two.vercel.app實跑新斷言，確實在「正式Footer Logo需真正有slideInUp動畫標記」失敗，重現正式版本缺動畫，而非僅靠本地推測。已核對既有header-design正式專案，接續正常main部署後重跑兩正式站。
+- 程式commit 09072031d23e38cd6d36fe4565432194994c04a8已正常push main；Vercel Production dpl_GhdhgFgq3GmYQiGDVvgNyadcBmEN為READY／GitHub check成功，header-design-legnz9k26-erics-projects-57e51613.vercel.app已接上兩個既有正式網域。兩站check-site-header全部通過，首頁與/news的Footer專屬斷言由部署前失敗轉為通過，原Header／Footer導覽與三個消息頁HTTP200均保留。
+- 兩站實際HTML載入的/_nuxt/D0cDCQBD.js含Footer Logo動畫層與viewportEdge=true，/_nuxt/DVRZSRgv.js含選用底緣observer；原Logo圖片HTTP200，正式CSS含slideInUp完整100%→0向上位移及對應啟動規則。初版臨時CSS斷言只接受translate3d而失敗，檢視產物確認壓縮器等價改成translateY，修正臨時檢查後兩站通過，未為斷言更動產品CSS。正式error日誌查詢無結果。
+- 本輪沒有資料庫／CMS寫入，也沒有改首頁Kitchen。受既有瀏覽器存取限制，未做實際逐幀或手機捲動驗收，未繞過限制；正式HTML／JS／CSS與插件mock通過不等同看過實際播放。系統減少動態或既有直接錨點規則仍可能刻意立即顯示，不強制動畫。
 
 ## 2026-10-22 建商HOME IN O.N.E等待圖片完成後淡入放大並正式交付
 

@@ -54,6 +54,7 @@ export type KitchenSeriesPageData = {
   slug: string
   name: string
   heroSlides: string[]
+  heroStories?: { image: string; title: string; subtitle: string; paragraphs: string[] }[]
   intro: {
     title: string
     paragraphs: string[]
@@ -73,6 +74,33 @@ export const AI_KITCHEN_PAGE: KitchenSeriesPageData = {
     `${base}/hero/ai-kitchen-01.jpg`,
     `${base}/hero/ai-kitchen-02.jpg`,
     `${base}/hero/ai-kitchen-03.jpg`,
+  ],
+  heroStories: [
+    {
+      image: `${base}/hero/ai-kitchen-01.jpg`,
+      title: 'AI CABINET',
+      subtitle: '感應閘門櫃',
+      paragraphs: [
+        '輕鬆省力的開啟與下降，操作簡便，無需過多力氣即可開啟和關閉。',
+        '隱藏廚房凌亂，能夠有效隱藏調味料或廚房器具，保持廚房整潔和有序。',
+      ],
+    },
+    {
+      image: `${base}/hero/ai-kitchen-02.jpg`,
+      title: 'AI FAUCET',
+      subtitle: 'AI智能感應龍頭',
+      paragraphs: [
+        'AI智能感應開關。',
+        '即時監控水溫變化，三段光氛切換，冷暖看得見。',
+        '多工機能，伸縮磁吸回歸，單手切換雙出水模式(花灑 / 水柱)。',
+      ],
+    },
+    {
+      image: `${base}/hero/ai-kitchen-03.jpg`,
+      title: 'AI LIGHT',
+      subtitle: '廚下手掃可調光LED照明',
+      paragraphs: ['只需輕輕一揮手，即可控制燈光開關，為您的廚房帶來便利。'],
+    },
   ],
   intro: {
     title: '突破未來格局 開啟廚房智高點',

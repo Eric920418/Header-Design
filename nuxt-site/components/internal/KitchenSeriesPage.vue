@@ -4,6 +4,7 @@ import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { KITCHEN_EQUIPMENT_DETAIL_ROUTES, type KitchenSeriesPageData } from '~/data/kitchenSeries'
 import { KITCHEN_EQUIPMENT_CUTOUTS } from '~/data/kitchenEquipmentCutouts'
+import { kitchenHeroStory } from '~/shared/cms/kitchen-series-hero.mjs'
 import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
 const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
 
@@ -13,6 +14,7 @@ const homeHero = await useCmsResource('view-components-home-HomeHero', { slides:
 const heroTitle = homeHero.slides.find(slide => slide.route?.split(/[?#]/)[0] === `/home-style/${data.slug}`)?.title.trim() || data.name
 const reducedMotion = useReducedMotion()
 const currentHero = ref(0)
+const activeHeroStory = computed(() => kitchenHeroStory(data, data.heroSlides[currentHero.value]))
 const previousHero = ref(0)
 const heroTransition = ref(0)
 const activeSuiteIndex = ref(0)
@@ -211,10 +213,14 @@ useSeoMeta({
       <span class="absolute inset-0 z-[3] bg-gradient-to-r from-black/55 via-black/15 to-black/10" aria-hidden="true" />
       <span class="absolute inset-x-0 bottom-0 z-[3] h-[45%] bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true" />
 
-      <div class="ai-hero__heading hero-template-top pointer-events-none translate-y-[24px] z-[5] transition-transform duration-500" :class="seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0'">
+      <div class="ai-hero__heading hero-template-top pointer-events-none translate-y-[24px] z-[5] transition-transform duration-500" :class="[seriesOpen ? 'lg:translate-x-[200px]' : 'lg:translate-x-0', { 'ai-hero__heading--story': activeHeroStory }]">
         <div :key="`title-${heroTransition}`" class="hero-slide-copy">
           <div aria-hidden="true" class="mb-[20px] h-[30px]" />
-          <h1 id="ai-kitchen-hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ heroTitle }}</h1>
+          <h1 id="ai-kitchen-hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ activeHeroStory?.title || heroTitle }}</h1>
+          <template v-if="activeHeroStory">
+            <h2 class="ai-hero__subtitle">{{ activeHeroStory.subtitle }}</h2>
+            <div class="ai-hero__description"><p v-for="paragraph in activeHeroStory.paragraphs" :key="paragraph">{{ paragraph }}</p></div>
+          </template>
         </div>
       </div>
 
@@ -444,6 +450,10 @@ useSeoMeta({
 .ai-hero { position: relative; height: 840px; overflow: hidden; background: #6f6d69; color: #fff; }
 .ai-hero__inner { position: relative; z-index: 5; width: min(1584px, calc(100% - 60px)); height: 100%; margin-inline: auto; padding-top: 118px; }
 .ai-hero__heading h1 { max-width: 100%; text-transform: none; }
+.ai-hero__heading--story { top: auto; bottom: 150px; width: min(1584px, calc(100% - 120px)); text-align: left; }
+.ai-hero__subtitle { margin: 36px 0 18px; font-family: var(--font-cjk-sans); font-size: 24px; font-weight: 700; line-height: 1.5; }
+.ai-hero__description { max-width: min(820px, calc(100% - 420px)); font-family: var(--font-cjk-sans); font-size: 18px; line-height: 1.7; }
+.ai-hero__description p { margin: 0; }
 .ai-hero__bottom { position: absolute; right: 86px; bottom: 28px; display: flex; width: max-content; align-items: center; gap: 22px; }
 .ai-hero__actions { display: grid; min-height: 142px; grid-template-columns: 108px 140px; align-items: center; gap: 22px; border: 1px solid rgb(255 255 255 / 15%); border-radius: 24px; background: rgb(37 35 35 / 48%); padding: 14px 18px; backdrop-filter: blur(18px); }
 .ai-hero__explore-link { display: inline-flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 12px; color: #fff; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 20px; }
@@ -639,6 +649,9 @@ useSeoMeta({
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
   .ai-hero__heading { width: auto; margin: 0 93px 0 15px; }
+  .ai-hero__heading--story { bottom: 260px; }
+  .ai-hero__subtitle { margin: 24px 0 12px; font-size: 20px; }
+  .ai-hero__description { max-width: none; font-size: 14px; }
   .ai-hero__bottom { right: 0; bottom: 18px; flex-direction: column; align-items: flex-end; gap: 12px; }
   .ai-hero__actions { min-height: 98px; grid-template-columns: 70px 98px; gap: 12px; border-radius: 18px; padding: 14px; }
   .ai-hero__explore-link { gap: 6px; font-size: 12px; line-height: 18px; }

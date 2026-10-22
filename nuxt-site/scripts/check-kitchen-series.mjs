@@ -2,6 +2,11 @@ import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
 import ts from 'typescript'
 import sharp from 'sharp'
+import {kitchenSeriesHeroSchema,kitchenHeroStory,KITCHEN_SERIES_ID} from '../shared/cms/kitchen-series-hero.mjs'
+import {validate} from '../server/cms/content.mjs'
+import {updateAiKitchenHero} from './update-ai-kitchen-hero-20261022.mjs'
+import {computed,ref} from 'vue'
+import {editingSchema} from '../shared/cms/presentation.mjs'
 
 function loadData(path) {
   const url = new URL(path, import.meta.url)
@@ -24,6 +29,28 @@ for (const image of Object.values(cutouts)) {
 }
 assert.equal(pages.length, 10)
 assert.equal(new Set(pages.map(page => page.slug)).size, 10)
+const ai=pages.find(page=>page.slug==='aikitchen')
+assert.deepEqual(ai.heroStories.map(story=>story.image),ai.heroSlides,'三張圖依序為閘門櫃／龍頭／LED，不能互換文案')
+assert.deepEqual(ai.heroStories.map(story=>[story.title,story.subtitle]),[['AI CABINET','感應閘門櫃'],['AI FAUCET','AI智能感應龍頭'],['AI LIGHT','廚下手掃可調光LED照明']])
+assert(ai.heroStories[1].paragraphs[2].includes('雙出水模式(花灑 / 水柱)'))
+assert.equal(ai.heroStories[2].paragraphs[0],'只需輕輕一揮手，即可控制燈光開關，為您的廚房帶來便利。')
+for(const image of [...ai.heroSlides].reverse())assert.equal(kitchenHeroStory(ai,image),ai.heroStories.find(story=>story.image===image),'改輪播排序仍按圖片找文案，不按陣列位置')
+assert.equal(kitchenHeroStory(ai,'/future-image.jpg'),undefined,'未配對圖片不得套錯文案')
+for(const page of pages.filter(page=>page.slug!=='aikitchen'))assert.equal(kitchenHeroStory(page,page.heroSlides[0]),undefined,'其他九系列保留既有標題')
+const seed=JSON.parse(readFileSync(new URL('../shared/cms/seed.json',import.meta.url),'utf8')).find(item=>item.id===KITCHEN_SERIES_ID)
+const beforeSchema=structuredClone(seed.schema),schema=kitchenSeriesHeroSchema(KITCHEN_SERIES_ID,seed.schema)
+const original=structuredClone(seed.data),updated=updateAiKitchenHero(original,ai.heroStories)
+assert.deepEqual(original,seed.data);assert.equal(updateAiKitchenHero(updated,ai.heroStories),updated,'發布重跑必須不新增版本')
+assert.deepEqual(updated.KITCHEN_SERIES_PAGES.filter(page=>page.slug!=='aikitchen'),original.KITCHEN_SERIES_PAGES.filter(page=>page.slug!=='aikitchen'))
+assert.throws(()=>updateAiKitchenHero({...updated,AI_KITCHEN_PAGE:{...updated.AI_KITCHEN_PAGE,heroStories:[{title:'另存的文案'}]}},ai.heroStories),/停止以免覆蓋/)
+validate(seed.data,schema);validate({...seed.data,AI_KITCHEN_PAGE:ai,KITCHEN_SERIES_PAGES:pages},schema)
+assert.deepEqual(seed.schema,beforeSchema,'新增可選欄位不得原地改寫舊schema')
+assert.equal(kitchenSeriesHeroSchema('another-document',seed.schema),seed.schema)
+const storyEditor=editingSchema(schema,KITCHEN_SERIES_ID).fields.KITCHEN_SERIES_PAGES.item.fields.heroStories
+assert.equal(storyEditor.label,'輪播圖文配對');assert.equal(storyEditor.item.fields.image.label,'對應輪播圖片');assert.equal(storyEditor.item.fields.title.label,'英文標題')
+assert.throws(()=>validate({...ai.heroStories[0],image:'javascript:alert(1)'},schema.fields.KITCHEN_SERIES_PAGES.item.fields.heroStories.item),/網址不安全/)
+assert.throws(()=>validate({image:ai.heroSlides[0]},schema.fields.KITCHEN_SERIES_PAGES.item.fields.heroStories.item),/必填/)
+console.log('PASS AI Hero三組圖文、圖片鍵配對／重排／無配對、九系列回退、舊schema相容及輸入驗證')
 const base = process.env.TEST_BASE_URL || 'http://localhost:3100'
 const config = readFileSync(new URL('../nuxt.config.ts', import.meta.url), 'utf8')
 const password = process.env.PREVIEW_PASSWORD || /previewPassword: '([^']+)'/.exec(config)?.[1]
@@ -36,6 +63,7 @@ const homeHero = await homeHeroResponse.json()
 const publishedSeriesResponse = await fetch(`${base}/api/content/data-kitchenSeries`, { headers: { cookie } })
 assert.equal(publishedSeriesResponse.status, 200, '需讀取已發布套系說明，不以型別樣本代替')
 const publishedSeries = (await publishedSeriesResponse.json()).KITCHEN_SERIES_PAGES
+assert.deepEqual(publishedSeries.find(page=>page.slug==='aikitchen')?.heroStories,ai.heroStories,'必須更新目前網站真正已發布的AI Hero圖文，不得只改型別樣本')
 if (process.argv.includes('--cutouts')) {
   const response = await fetch(`${base}/api/content/data-kitchenSeries`, { headers: { cookie } })
   assert.equal(response.status, 200)
@@ -91,11 +119,19 @@ for (const page of pages) {
   assert.equal(casesHeading.replaceAll(/<[^>]*>/g,'').replaceAll(/\s+/g,' ').trim(),'Explore Our風格廚房實例 Take A Look At Our Latest Articles',`${page.slug}: 只刪除英文末尾句點，其他字詞不變`)
   const lightFinish = page.finishes.some(finish => finish.code === 'D0032' || (page.slug === 'clever' && finish.code === 'D8410'))
   const borderlessFinish = page.finishes.some(finish => page.slug === 'basic-plus' && finish.code === 'K540D')
-  assert.equal(html.includes('ai-finishes__image--light'), lightFinish, `${page.slug}: 白色色卡細框範圍錯誤`)
-  assert.equal(html.includes('ai-finishes__image--borderless'), borderlessFinish, `${page.slug}: 只裁除 BASIC+ 瓷白原圖灰框`)
-  const heroTitle = homeHero.slides.find(slide => slide.route?.split(/[?#]/)[0] === `/home-style/${page.slug}`)?.title.trim() || page.name
+  assert.equal(/class="[^"]*\bai-finishes__image--light\b/.test(html), lightFinish, `${page.slug}: 白色色卡細框範圍錯誤`)
+  assert.equal(/class="[^"]*\bai-finishes__image--borderless\b/.test(html), borderlessFinish, `${page.slug}: 只裁除 BASIC+ 瓷白原圖灰框`)
+  const publishedPage=publishedSeries.find(item=>item.slug===page.slug)
+  const firstStory=kitchenHeroStory(publishedPage,publishedPage.heroSlides[0])
+  const heroTitle = firstStory?.title || homeHero.slides.find(slide => slide.route?.split(/[?#]/)[0] === `/home-style/${page.slug}`)?.title.trim() || page.name
   const escapedHeroTitle = heroTitle.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
   assert.equal(html.match(/<h1\b[^>]*id="ai-kitchen-hero-title"[^>]*>(.*?)<\/h1>/s)?.[1], escapedHeroTitle, `${page.slug}: Hero需與已發布首頁對應名稱一致`)
+  if(firstStory){
+    const hero=html.match(/<section\b[^>]*aria-labelledby="ai-kitchen-hero-title"[\s\S]*?<\/section>/)?.[0]||''
+    assert(hero.includes('ai-hero__heading--story')&&hero.includes(firstStory.subtitle),'AI首張圖需顯示自己的中文標題')
+    for(const paragraph of firstStory.paragraphs)assert(hero.includes(paragraph),'AI首張圖說明需逐字保留')
+    assert(!hero.includes('AI FAUCET')&&!hero.includes('AI LIGHT'),'其他張文案不可顯示在閘門櫃上')
+  }
   assert(!html.includes('ai-hero__cta')&&!html.includes('Start<br>Project'), `${page.slug}: 不可保留左側Start Project CTA`)
   for(const marker of ['ai-hero__story-controls','ai-hero__catalogue-link','ai-hero__explore-link'])assert(html.includes(marker),`${page.slug}: 右側控制不可刪除：${marker}`)
   assert(html.includes('hero-slide-copy') && html.includes('hero-template-title'), `${page.slug}: 未共用首頁標題`)
@@ -122,6 +158,16 @@ if (process.argv.includes('--images')) {
   }))
 }
 const component = readFileSync(new URL('../components/internal/KitchenSeriesPage.vue', import.meta.url), 'utf8')
+assert(component.includes('kitchenHeroStory(data, data.heroSlides[currentHero.value])')&&component.includes('activeHeroStory?.title || heroTitle')&&component.includes('v-for="paragraph in activeHeroStory.paragraphs"'),'輪播當下圖片必須實際驅動整組標題與段落，不得寫死第一張')
+const storyExpression=component.match(/^const activeHeroStory = (.+)$/m)?.[1],showHeroSource=component.match(/function showHero\(index: number\) \{[\s\S]*?\n\}/)?.[0]
+assert(storyExpression&&showHeroSource)
+const heroState=new Function('data','ref','computed','kitchenHeroStory',`const currentHero=ref(0),previousHero=ref(0),heroTransition=ref(0); const activeHeroStory=${storyExpression}; ${showHeroSource.replace('index: number','index')} return {currentHero,previousHero,heroTransition,activeHeroStory,showHero};`)(ai,ref,computed,kitchenHeroStory)
+for(let step=0;step<12;step++){
+  const index=step%3;assert.equal(heroState.currentHero.value,index);assert.equal(heroState.activeHeroStory.value,ai.heroStories[index]);assert.equal(heroState.heroTransition.value,step)
+  heroState.showHero(heroState.currentHero.value+1);assert.equal(heroState.previousHero.value,index)
+}
+heroState.showHero(-1);assert.equal(heroState.activeHeroStory.value.title,'AI LIGHT');heroState.showHero(0);assert.equal(heroState.activeHeroStory.value.title,'AI CABINET')
+console.log('PASS 實際輪播索引／computed連續四輪圖文同步、上一張回捲與動畫重啟計數')
 const suiteDescriptionsExpression=component.match(/^const suiteDescriptions = computed\(\(\) => (.+)\)$/m)?.[1]
 assert(suiteDescriptionsExpression,'Clever說明需由原始資料衍生，不能覆寫CMS')
 const renderSuiteDescriptions=new Function('data','activeSuite','return '+suiteDescriptionsExpression)
