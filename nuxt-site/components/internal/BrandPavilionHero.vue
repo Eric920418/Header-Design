@@ -67,8 +67,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape))
 .pavilion-single-hero__video-card:hover .pavilion-single-hero__video-play { color: #fff; background: #caa05c; transform: scale(1.04); }
 .pavilion-single-hero__video-card:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
 .pavilion-video-modal { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: 60px 30px; background: rgb(0 0 0 / 82%); backdrop-filter: blur(10px); }
-.pavilion-video-modal__content { width: min(1100px, 100%); }
-.pavilion-video-modal__close { position: absolute; top: 22px; right: 22px; display: flex; width: 46px; height: 46px; align-items: center; justify-content: center; border: 1px solid rgb(255 255 255 / 35%); border-radius: 50%; color: #fff; background: transparent; cursor: pointer; }
+.pavilion-video-modal__content { width: min(1100px, 100%, calc((100dvh - 120px) * 16 / 9)); }
+.pavilion-video-modal__close { position: absolute; z-index: 1; top: 22px; right: 22px; display: flex; width: 46px; height: 46px; align-items: center; justify-content: center; border: 1px solid rgb(255 255 255 / 35%); border-radius: 50%; color: #fff; background: transparent; cursor: pointer; }
 .pavilion-video-modal__close svg { width: 22px; height: 22px; }
 .pavilion-video-modal__close:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 
