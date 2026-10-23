@@ -7,6 +7,8 @@
 - 首輪瀏覽器390px確認建商sakura-kitchen頁另有:global(.floating-buttons)的display:none!important，載入樣式後連首頁也被隱藏；已移除這條跨頁規則，不用更高優先權硬蓋，避免導頁後重現。
 - 本機pnpm build含typecheck、check-site-header唯讀回歸與git diff --check通過。實際瀏覽器64個不同內容網址於320×640逐頁核對真實path、三個連結／圖示載入、72px觸控高度、固定底緣、回頂避讓、底部占位及整頁寬；另首頁320／390／767／768／1024／1366六個斷點驗收，手機三欄、平板桌面原74px側欄與0px底部占位正確。不是以SSR代替實際顯示，也未重掃正式資料庫。
 - 首頁實際捲到底，Footer bottom771.78位於390×844底列top772之上；服務列仍在y772–844且transform:none。實際展開／關閉手機選單、搜尋、品牌識別放大圖，覆蓋層均在服務列之上且可關閉。390×360短窗自然捲動後聚焦聯絡電話，input y63–121、服務列y288–360，無遮擋；未輸入或送出業務資料。跨頁至/builders/sakura-kitchen後底列仍正常。實體手機軟鍵盤、Safari安全區與跨瀏覽器仍待硬體驗證，不宣稱模擬等同真機。
+- 正式發布：64064778a1372630a083878509d2727d41ab5a17／Nuxt，Production dpl_2ufXyYZaYLLvJBF83kTWn1fAczVk已READY／GitHub成功；header-design-90t70lawe-erics-projects-57e51613.vercel.app接上sakura-demo-vanlantech.com及header-design-two.vercel.app，未改設定／環境／DB，未另量測遠端建置時長。正式瀏覽器品牌館、SAKURA廚電、加盟表單、建商SAKURA KITCHEN及首頁五頁390×844通過；另首頁320／767／768／1366四個斷點與實際捲到底通過，Footer bottom771.78／底列top772／bottom844／回頂bottom752。首次產品頁客服圖示尚未載完時斷言確實擋下，待正常載入後重驗通過，沒有忽略載入狀態。
+- 兩正式網域check-site-header唯讀回歸皆通過，最近10分鐘有界error日誌未回傳錯誤；未新增監控或查詢log drain設定，沒有以空日誌宣稱長期穩定。正式手機畫面存於/tmp/sakura-mobile-services-production.png並保留既有驗收頁籤。本機preview已停止；正式驗收後本段僅文件提交、不再觸發純文件部署。外部三服務本身的流程、實體鍵盤與Safari／Firefox未驗，連結及另開分頁設定保留。
 
 ## 2026-10-23 全站RWD完整續查（公開前台已完成，跨瀏覽器未驗）
 
