@@ -1,10 +1,10 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
-## 2026-10-23 全站RWD完整續查（進行中）
+## 2026-10-23 全站RWD完整續查（公開前台已完成，跨瀏覽器未驗）
 
 - 使用者再次明確要求檢查全站是否存在爆版，不是只修單一區塊或追求修改數量。本輪以36個公開頁面模板、前輪盤點的1119個有效公開網址為清單；後台與預覽入口另行標記，不用抽查9頁宣稱全站完成。沿用QA與ponytail，確認問題才修，保留README單一文件。
 - 已核對本機環境實際連至127.0.0.1／SakuraWebsiteDev，非剛轉Basic的Azure正式資料庫；將用既有production build在3100做大量唯讀瀏覽器檢查，正式站只做少量修正驗收。不執行seed、import、CMS寫入或業務表單提交。完整URL清單暫存/tmp/sakura-rwd-public-routes.json供實際瀏覽器逐筆導頁，清單筆數不當成驗收筆數。
-- 尺寸、逐頁檢查結果、展開狀態與問題修正將續記；目前尚未完成此輪全站檢查。
+- 尺寸、逐頁檢查、展開狀態、修正及正式驗收逐項記於本節；不把列出清單當成已完成檢查，最終結論與限制見本節末。
 - 預覽登入中途到期，首輪928筆實際落在登入頁，已全部剔除並向使用者更正有效數為191；補跑時每頁核對實際path、要求viewport及h1，必要時正常重新登入，錯頁立即停止而不計通過。補跑完成後1119筆唯一有效公開網址、缺漏0、登入頁混入0，320×640未見整頁水平溢出。所有資料來自本機DB，沒有重掃Azure。
 - 36個公開模板以64個不同內容網址涵蓋，逐頁驗320×640／390×844／768×1024／1024×768／1280×720／1366×600／1920×1080及844×390／1024×390／993×500，共640組；包含十系列、九新聞、三門市案例、三品牌四層商品及舊型號入口、設計案例。仍須逐一核對裁切候選與展開狀態，不把幾何量測冒充全部視覺通過。
 - ISSUE-RWD-004已重現兩次：商品82000等圖片失敗時，縮圖按鈕高76px，內部錯誤節點min-height220px／scrollHeight1056px，畫面只剩被裁斷的網址。共用ProductDetailPage供三品牌及舊近吸型號入口使用；僅對縮圖內fallback縮小內距與字級並隱藏重複alt／URL，保留完整失敗標題、原選圖按鈕及選取後主圖區完整錯誤／URL，不動ProductCategoryImage其他場合、商品資料或圖片來源。純CSS修正，待本機建置及實際畫面重驗。
@@ -20,6 +20,11 @@
 - 最終production build再次重跑64頁×10尺寸共640組（與修前矩陣分開）：實際path及viewport逐筆符合，整頁水平溢出0、元素跨出viewport0、代表頁alert0。文字scrollWidth候選僅規格CTA的箭頭裝飾／進場範圍；320px實際捲入後，按鈕x15–305、完整文字span x43–115（72px）且可正常開啟規格，未修改動效以湊修正數量。新聞／案例／指南摘要等垂直候選經來源核對皆為既定-webkit-line-clamp 2／3，保留正常省略設計。SAKURA規格無資料狀態也已實際開啟，未裁錯誤或替換文案。
 - 本機check-site-header唯讀回歸及git diff --check通過；四項各自原子提交081537aa（縮圖）、7d7ee4af（影片）、67480ce7（放大圖）、c8e2efb5（一般選單）。沒有更動既有測試、CI、依賴、CMS或資料庫。部署前已核對原erics-projects-57e51613/header-design（prj_TQUBfjU2vY6LFwvf7s5a78Dt7zYy），將正常push既有main；正式READY、四項畫面及導覽回歸結果待續記。
 - 覆蓋為全站公開前台；後台登入／管理頁、Safari／Firefox、實體手機與所有滑鼠hover預覽未驗。不以本次RWD結果宣稱所有功能、圖片來源、效能或可用性皆100分。掃描過程另觀察8個商品／分類頁外部圖片失敗，未替換素材，失敗提示縮圖裁切已修；素材失效不是整頁RWD爆版。建商極短窗自然閱讀的既定保護不在本輪RWD範圍中偷偷撤回。
+- 正式發布完成：cf37ce413979fe6470370330d5dcee6c3f730b6f／Nuxt，Production dpl_CuUsdRAJCvcvt2PNSsWY6dZBv31Y為READY／GitHub成功，header-design-5vbysjgwa-erics-projects-57e51613.vercel.app接上兩既有正式網域；未改環境或連線，未另量測遠端建置時長。四個原子修正都已發布，不是僅本機有效。
+- 正式瀏覽器重驗：影片在320×640／844×390／1024×320／1366×600／1920×1080五尺寸完整，844×390實際播放器480×270；品牌放大圖同五尺寸完整，844×390圖高240／圖說bottom350，已切下一張及關閉；1024×320加盟選單scrollTop74後下載入口267–311，背景scrollY2892.5前後不變，點擊確實抵達正式/franchising/download。商品82000以真實外部失效來源重驗320×640／390×844／768×600／1024×320／1920×1080，縮圖錯誤均不裁字，主圖完整診斷／URL仍保留，320頁寬=320。
+- 正式證據：[品牌放大圖](/tmp/sakura-rwd-identity-formal-after.png)、[可捲到的加盟下載入口](/tmp/sakura-rwd-dropdown-formal-after.png)、[商品縮圖錯誤標示](/tmp/sakura-rwd-thumbnail-formal-after.png)。本機修前／修後對照另有/tmp/sakura-rwd-video-landscape-before.png與/tmp/sakura-rwd-video-landscape-after.png、/tmp/sakura-rwd-identity-landscape-before.png與/tmp/sakura-rwd-identity-landscape-after.png、/tmp/sakura-rwd-product-thumbnail-before.png與/tmp/sakura-rwd-product-thumbnail-after.png、/tmp/sakura-rwd-franchise-dropdown-before.png與/tmp/sakura-rwd-franchise-dropdown-after.png；皆為本次實際瀏覽器截圖，暫存證據不保證跨機器保留。
+- 兩正式網域check-site-header全數通過，部署最近10分鐘／最多5筆error日誌無結果；沒有新增監控或宣稱零風險。本機preview已停止、測試視窗覆寫已復原，保留正式品牌館頁。最終RWD結論：1119頁窄手機檢查及全36公開模板的640組最終矩陣未見未處理的整頁水平爆版；展開／錯誤狀態確認的四類裁切及不可達問題已修並在正式重驗。狀態DONE_WITH_CONCERNS，限制為本節列出的後台、跨瀏覽器／硬體、hover與外部素材，未提交業務表單或變動任何資料。
+- 本輪教訓：單有h1不能證明檢查到目標頁，須逐頁比對實際path與viewport、遇預覽登入失效剔除再補跑；水平scrollWidth也不能取代彈窗高度／圖說／控制鈕的實際展開驗證。以真實錯誤圖片重現縮圖版型，完整診斷留在主圖，不用截掉內容或換圖掩蓋問題。沿用QA逐項重現與ponytail的局部CSS修正，未新增依賴、文件或全站重構。
 
 ## 2026-10-23 RWD續查：正式互動重驗與建商相簿短窗修正
 
