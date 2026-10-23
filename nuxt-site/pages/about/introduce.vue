@@ -417,7 +417,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 .identity-lightbox { position: fixed; z-index: 310; inset: 0; display: grid; grid-template-columns: auto minmax(0, 900px) auto; align-items: center; justify-content: center; gap: 24px; padding: 70px 30px 40px; background: rgb(0 0 0 / 88%); backdrop-filter: blur(10px); }
 .identity-lightbox__figure { min-width: 0; margin: 0; color: #fff; text-align: center; }
-.identity-lightbox__image { width: min(660px, 72vh); max-width: 100%; margin-inline: auto; aspect-ratio: 660 / 800; border-radius: 24px; }
+.identity-lightbox__image { width: min(660px, 72vh, calc((100dvh - 150px) * 660 / 800)); max-width: 100%; margin-inline: auto; aspect-ratio: 660 / 800; border-radius: 24px; }
 .identity-lightbox__figure figcaption { margin-top: 16px; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 24px; }
 .identity-lightbox__close,
 .identity-lightbox__nav { display: grid; width: 48px; height: 48px; place-items: center; border: 1px solid rgb(255 255 255 / 48%); border-radius: 50%; color: #fff; background: rgb(0 0 0 / 30%); cursor: pointer; }
