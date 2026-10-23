@@ -439,7 +439,7 @@ useSeoMeta({
   .related-products,
   .product-catalogue { padding-block: 96px; }
   .related-products__heading h2 strong { font-size: 38px; line-height: 45px; }
-  .product-catalogue__copy h2 span { font-size: 50px; line-height: 55px; }
+  .product-catalogue__copy h2 span { font-size: clamp(43px, 5.5vw, 50px); line-height: 55px; }
   .related-products__grid > li { flex-basis: 50%; }
   .product-catalogue__grid { gap: 42px; }
 }
