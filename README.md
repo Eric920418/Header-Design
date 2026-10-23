@@ -1,6 +1,6 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
-## 2026-10-23 全站公開頁RWD檢查（進行中）
+## 2026-10-23 全站公開頁RWD檢查（兩項已修，正式驗收受資料庫額度暫停阻擋）
 
 - 使用者同意先提交上一輪README驗收紀錄，已以9fa34ede保存，工作樹整理後開始QA。只檢查公開網站與公開內容，不登入管理員、不提交加盟／預約表單、不寫CMS／資料庫。主要檢查320／390／768／1024／1280／1366／1920px，手機橫向與短視窗另抽查；採實際瀏覽器，不用建置或SSR代替排版驗證。
 - 正式路由／已發布API盤點：24個固定公開路由、10系列、9新聞、3知識、3門市案例、193個產品分類、28個設計靈感案例，另有847筆產品（SAKURA749／SVAGO60／TEKA38）。先建立311個具體網址及60個版型／內容代表頁，後續補齊產品與掃描結果會明確記錄，不將代表頁冒充所有產品內頁。首次knowledge-articles併行讀取503，單獨重試200；降低資料API併發，僅記為暫時服務錯誤，不擅改資料庫設定。
@@ -15,6 +15,10 @@
 - 短窗互動另外重現：正式1024×390的廚房產品大型選單bottom464.5px，型錄CTA bottom432.5px大於視窗390px，overflowY為visible，重複點選仍相同，底部入口無法在選單內捲到。只對兩個大型選單共用desktop-nav-mega設定可見剩餘高度與內部overflow-y:auto／overscroll containment，並加已安裝Lenis支援的data-lenis-prevent，避免攔截選單原生捲動；正常桌面自然高度及既有關閉行為不改。手機320×640展開系列選單量測width320、bottom640、scrollHeight1132>clientHeight579，內部可捲動且已核對畫面，不改手機選單。
 - 第二次pnpm build／typecheck通過；1024×390本機選單bottom390、scrollHeight405>clientHeight330，捲到底scrollTop74.5後型錄按鈕top306／bottom358完整可見、背景scrollY0、wheel未被Lenis阻止，實際點擊可前往型錄。已核對底部截圖。320×640實際開啟TEKA規格dialog位於x15–305／y152–488，表格scrollWidth250=clientWidth250、關閉按鈕在內。既有check-site-header唯讀檢查通過，Footer／原導覽保留，未提交業務表單。
 - 額外互動抽查曾遇正式TEKA頁503錯誤畫面，與先前完整掃描結果分開記錄，不以排版修正掩蓋服務問題、不擅改資料庫；正式部署後會再開頁重驗。尚未驗Safari／Firefox／實機觸控，幾何掃描亦不代表所有動畫逐幀皆完成視覺驗收。
+- 邊界追加本機844×390／767×600／993×500／1025×600，各8代表頁共32筆無溢位；加盟額外選單1024×390展開未超窗。大型選單1366×768與1920×1080均自然高449px、scrollHeight=clientHeight，正常桌面未強制捲動或縮小。
+- 程式分別提交0f9e4b27（平板標題）及2117d9a40ea5b40ae1d517f312c997485cfae0c0（短窗選單），正常push既有main。Vercel Production dpl_rZLSGKVNZRWuhoCBcp3ypJsNiJWg為READY／GitHub成功，header-design-m8280ofy1-erics-projects-57e51613.vercel.app已接上兩個既有正式網域，未變更部署環境、資料表、CMS或任何資料。
+- **正式驗收未通過，不能宣稱全站已驗收完成。** 部署後兩站check-site-header在/api/content/view-components-SiteHeader皆503，瀏覽器TEKA頁亦503。Vercel有界error日誌明確回報ELOGIN：Azure SQL已達2026年10月每月免費額度，資料庫被暫停至11月1日00:00 UTC（台灣08:00）。這不是CSS錯誤，也不是要重灌／匯入資料；立即恢復需在Azure該資料庫Compute + Storage選擇Continue using database with additional charges，會產生費用，尚未取得授權，未操作。
+- 已停止正式網站／資料API測試與重試，未自動開付費、切資料庫、改連線、重跑seed或降安全設定。本輪大量公開GET可能增加正式資料庫使用量；尚無用量明細，不能斷言是否由本輪掃描耗盡。後續大量RWD矩陣應優先使用獨立測試資料庫／既有資料快照，正式只做少量驗收。待使用者選擇付費恢復或等免費額度更新後，再重跑正式兩項修正／原導覽與關鍵尺寸；目前狀態BLOCKED（正式資料庫額度），本機兩修正與建置通過，另保留失效商品圖片及跨瀏覽器未驗事項。
 
 ## 2026-10-23 品牌承諾首屏英文標題放大
 
