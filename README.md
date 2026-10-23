@@ -7,6 +7,10 @@
 - 建商固定欄1280×600實測scrollY2400→2580時左欄top75／bottom550不變、右側首圖top-398.375→-578.375，確認正常短筆電有左右差速。1024×390則觸發既有可讀性保護，position:static、完整內容高371px；此極短窗不是固定效果通過，不以裁中文主標或無限縮字恢復效果，也不把這輪正常尺寸結果當成使用者所有縮放條件均已排除。
 - 新問題ISSUE-RWD-003：/builders/sakura-kitchen原色0.5相簿在844×390重複開啟兩次，dialog高360／scrollHeight420，換圖按鈕bottom419.289大於視窗390，初始畫面看不到按鈕。原因是65dvh圖片加上標題／44px操作鈕與間距超出彈窗剩餘高度。僅將既有相簿panel改為有高度上限的直向flex、標題／控制不縮、圖片min-height:0允許縮小；保留原圖片contain比例、44px觸控目標、鍵盤／焦點／關閉與原生溢位閱讀保護，不改CMS或素材。純CSS變更採實際瀏覽器回歸，不改既有測試檔。
 - pnpm build（含typecheck）及diff檢查通過；本機production preview以實際瀏覽器驗320×640／390×844／768×600／844×390／1024×390／1280×720／1920×1080七尺寸，相簿均scrollHeight=clientHeight、頁寬未超窗，三顆按鈕完整可見且保留44×44px。844×390的換圖按鈕bottom由419.289修為359，dialog仍高360，圖片等比例縮為剩餘區域；實際點擊換至第2張、鍵盤ArrowRight回第1張，關閉後dialog已關且焦點返回原色0.5入口。修改後正式部署／回歸待續記，不宣稱全站所有狀態或跨瀏覽器驗收完畢。
+- 既有check-builder-series純本機回歸通過（9組／20素材、schema與冪等防護、相簿換圖／焦點），未加--http、不執行內容更新腳本。另於正式about/advantage、service-process、news/latest以320×640／768×600／1024×390抽查，實測innerWidth與頁寬一致、操作控制未跨畫面；品牌館手機高雄頁籤已實際切換。合計本輪實際導航9個公開代表網址，不把少量代表頁冒充再次完整掃描1119頁。視窗覆寫依當前分頁套用，追加量測明確核對innerWidth／innerHeight，排除曾套在另一分頁的無效尺寸樣本。
+- 正式交付：ab1a0801ab3caa96cbf28e56031429dcf785202e正常push既有main，Vercel Production dpl_C76RYQUNypVMRu7HfynDf2PcUCD1為READY／GitHub成功，Nuxt部署header-design-bmdlrdxgv-erics-projects-57e51613.vercel.app接上sakura-demo-vanlantech.com與header-design-two.vercel.app。未修改專案設定、環境變數或資料庫；未另量測遠端建置時長。
+- 最新正式相簿重新導航後，同七尺寸逐一斷言實際viewport與要求相符、頁寬無溢位、dialog scrollHeight=clientHeight、三顆44px按鈕都在畫面內；844×390正式畫面已目視核對及存圖，實際1→2換圖與關閉／入口焦點返回正常。兩正式網域check-site-header唯讀回歸通過；正式相簿分頁console error為0，部署限定最近10分鐘／最多5筆error日誌無結果。未查Drains或新增監控，空日誌不代表未來永不出錯。
+- 本機preview已停止，瀏覽器測試尺寸已復原。只有相簿CSS及本README變更，QA／ponytail採最小修正；既有商品外部失效圖片未替換，極短窗建商左欄的可讀性退讓仍在，Safari／Firefox、實體手機觸控／鍵盤及Basic多人效能未驗。沒有跑含業務POST的整份frontend-regressions，也沒有對正式資料庫做大量掃描。
 
 ## 2026-10-23 Azure SQL Basic 已生效，正式站恢復
 
