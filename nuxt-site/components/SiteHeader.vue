@@ -174,7 +174,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </div>
 
               <div v-else-if="item.children && !item.seriesMega" class="desktop-nav-dropdown absolute left-0 top-full z-[70] pt-2 transition-all" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
-                <ul class="series-dropdown-list relative z-[70] min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl" :class="{ 'w-[190px]': item.label === '門市與服務' }">
+                <ul data-lenis-prevent class="series-dropdown-list relative z-[70] min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl" :class="{ 'w-[190px]': item.label === '門市與服務' }">
                   <li
                     v-for="child in item.children"
                     :key="child.label"
@@ -282,7 +282,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               >{{ item.label }}</a>
               <NuxtLink v-else :to="item.to || '#'" class="whitespace-nowrap py-2 text-[15px] text-white">{{ item.label }}</NuxtLink>
               <div v-if="item.children" class="desktop-nav-dropdown absolute right-0 top-full z-50 pt-2 transition-all" :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'">
-                <ul class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
+                <ul data-lenis-prevent class="min-w-[190px] rounded-xl border border-[#E3E3E8] bg-white py-2 shadow-xl">
                   <li v-for="child in navChildren(item)" :key="child.label">
                     <span v-if="child.disabled" aria-disabled="true" class="block cursor-not-allowed whitespace-nowrap px-5 py-2.5 text-sm text-[#9F9FA4]">{{ child.label }}</span>
                     <NuxtLink v-else :to="child.to || '/'" class="block whitespace-nowrap px-5 py-2.5 text-sm text-[#59585D] hover:bg-[#F6F6F6] hover:text-[#CAA05C]">{{ child.label }}</NuxtLink>
@@ -459,6 +459,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .desktop-nav-dropdown {
   transition-duration: 220ms;
   transition-property: opacity, visibility;
+}
+
+.desktop-nav-dropdown:not(.desktop-nav-mega) > ul {
+  max-height: calc(100dvh - var(--site-header-height) - 8px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .desktop-nav-mega {
