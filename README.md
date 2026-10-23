@@ -1,5 +1,13 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-23 Azure SQL Basic 已生效，正式站恢復
+
+- 使用者在確認固定規格預估US$4.90／月、5 DTU／2 GB及無法恢復此資料庫免費優惠後，明確授權使用Basic方案。Azure Portal實際核對目標為rg-sakura-website-test／sakura-website-test-20260929／SakuraWebsiteTest，原狀態Paused、免費vCore秒數0、資料使用量約132 MB，非儲存空間不足。
+- 原地調整服務層為Basic（5 DTU、最大2 GB），套用前成本摘要仍為US$4.90／月；保留原伺服器、資料庫名稱、連線、區域及本地備援，未匯入／重建／刪除資料、未執行seed／accept-data-loss。未啟用原2 vCore Serverless超額計費，也不修改前端或Vercel部署。
+- Azure已回報「調整資料庫成功」及「擴充作業已完成」；總覽實際定價層為基本、狀態Online，最大2 GB、使用132.69 MB／配置176 MB，原伺服器及資料庫名稱保留。不是只送出要求或預覽未儲存。月費為入口網站估算，非整個Azure帳單上限，稅及其他服務費另計。
+- 兩正式網域check-site-header唯讀檢查均通過：正式CMS Header／Footer、首頁、消息頁與三分類目的頁HTTP200，先前相同CMS API的503已解除。另以實際瀏覽器開啟sakura-demo-vanlantech.com/products/teka/item/82062，既有TEKA商品、圖片／特色／價錢正常顯示，實際點開詳細規格可讀MAESTRO系列、高45cm、220V，再正常關閉。未提交任何業務表單或修改CMS內容。
+- 本輪沒有前端程式、環境變數、連線或Vercel部署變更，只更新本README；Azure成功總覽與正式規格視窗另存截圖供交付。僅執行少量恢復檢查，沒有再掃千頁。資料庫額度阻擋已解除，但未做Basic壓力測試／多人同時驗收，也不以本輪HTTP通過宣稱前輪全站所有尺寸或Safari／Firefox視覺驗收完成。
+
 ## 2026-10-23 全站公開頁RWD檢查（兩項已修，正式驗收受資料庫額度暫停阻擋）
 
 - 使用者同意先提交上一輪README驗收紀錄，已以9fa34ede保存，工作樹整理後開始QA。只檢查公開網站與公開內容，不登入管理員、不提交加盟／預約表單、不寫CMS／資料庫。主要檢查320／390／768／1024／1280／1366／1920px，手機橫向與短視窗另抽查；採實際瀏覽器，不用建置或SSR代替排版驗證。
