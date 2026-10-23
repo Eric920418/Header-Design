@@ -353,6 +353,10 @@ useSeoMeta({
 .product-thumbnails button { width: 92px; height: 92px; overflow: hidden; border: 1px solid #e3e3e8; border-radius: 14px; padding: 6px; background: #fff; cursor: pointer; transition: border-color .3s ease, box-shadow .3s ease; }
 .product-thumbnails button.is-active { border-color: #caa05c; box-shadow: 0 0 0 1px #caa05c; }
 .product-thumbnails button:focus-visible { outline: 2px solid #caa05c; outline-offset: 3px; }
+/* Full diagnostics remain in the selected main image, not the tiny thumbnail. */
+.product-thumbnails :deep(.product-category-image-error) { min-height: 0; gap: 0; padding: 4px; font-size: 12px; line-height: 18px; }
+.product-thumbnails :deep(.product-category-image-error > span),
+.product-thumbnails :deep(.product-category-image-error > code) { display: none; }
 
 .related-products { padding: 120px 30px 135px; background: #fff; }
 .related-products__heading { display: flex; align-items: end; justify-content: space-between; gap: 36px; margin-bottom: 54px; }
