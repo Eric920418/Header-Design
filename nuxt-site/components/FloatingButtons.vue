@@ -9,8 +9,6 @@ const rail = ref<HTMLElement | null>(null)
 const offset = ref(0)
 const RAIL_BOTTOM_PX = 88
 const reduced = useReducedMotion()
-const route = useRoute()
-const isFocusedMobileForm = computed(() => ['/franchising/intro', '/franchising/download', '/franchising/form', '/builders', '/about/exhibition', '/about/introduce'].includes(route.path) || route.path.startsWith('/gallery/') || route.path.startsWith('/news') || route.path.startsWith('/products'))
 let frame = 0
 
 const update = () => {
@@ -43,12 +41,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
-  <aside ref="rail" aria-label="快速服務" class="floating-buttons fixed right-0 z-[90]" :class="{ 'floating-buttons--focused-mobile-form': isFocusedMobileForm }" :style="{ bottom: `${RAIL_BOTTOM_PX}px`, transform: `translateY(${offset}px)` }">
-    <a :href="primaryItem.href" :aria-label="primaryItem.label" class="relative mb-5 block h-[72px] w-[72px] bg-[#B79258] text-white sm:h-[74px] sm:w-[74px]">
+  <div class="mobile-service-spacer" aria-hidden="true" />
+  <aside ref="rail" aria-label="快速服務" class="floating-buttons fixed right-0 z-[90]" :style="{ bottom: `${RAIL_BOTTOM_PX}px`, transform: `translateY(${offset}px)` }">
+    <a :href="primaryItem.href" :aria-label="primaryItem.label" class="floating-primary relative mb-5 block h-[72px] w-[72px] bg-[#B79258] text-white sm:h-[74px] sm:w-[74px]">
       <img :src="primaryItem.icon" :alt="cmsCopy.copy.field1" class="absolute top-[13px] left-1/2 h-[29px] w-[29px] -translate-x-1/2 sm:top-[14px] sm:h-[30px] sm:w-[30px]" />
       <span class="absolute inset-x-0 bottom-[11px] block whitespace-nowrap text-center font-['Noto_Sans_TC'] text-xs leading-3 sm:bottom-3">{{ primaryItem.label }}</span>
     </a>
-    <div class="bg-[#737373]">
+    <div class="floating-services bg-[#737373]">
       <template v-for="(item, index) in serviceItems" :key="item.label">
         <div v-if="index" aria-hidden="true" class="h-px w-full bg-white/50" />
         <a :href="item.href" :aria-label="item.label" :target="item.newTab ? '_blank' : undefined" :rel="item.newTab ? 'noopener noreferrer' : undefined" class="block p-2">
@@ -62,7 +61,32 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 </template>
 
 <style scoped>
+.mobile-service-spacer { height: var(--mobile-service-clearance, 0px); }
 @media (max-width: 767px) {
-  .floating-buttons--focused-mobile-form { display: none; }
+  .floating-buttons {
+    left: 0;
+    bottom: 0 !important;
+    /* Desktop scroll-following must not move the mobile service bar. */
+    transform: none !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: #737373;
+    box-shadow: 0 -2px 12px rgb(0 0 0 / 12%);
+  }
+  .floating-primary { display: none; }
+  .floating-services { display: flex; }
+  .floating-services > div { width: 1px; height: auto; }
+  .floating-services > a {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    height: 72px;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-top: 0;
+  }
+  .floating-services > a:last-child { border-left: 1px solid rgb(255 255 255 / 50%); }
+  .floating-services img { width: 64px; height: 64px; object-fit: contain; }
+  .floating-services a:focus-visible { outline: 2px solid white; outline-offset: -4px; }
 }
 </style>

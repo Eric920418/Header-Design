@@ -10,6 +10,14 @@
   height: var(--site-header-height);
 }
 
+@media (max-width: 767px) {
+  html:has(.floating-buttons) {
+    --mobile-service-clearance: calc(72px + env(safe-area-inset-bottom, 0px));
+    scroll-padding-bottom: calc(var(--mobile-service-clearance) + 16px);
+  }
+  input, textarea, select { scroll-margin-bottom: calc(var(--mobile-service-clearance, 0px) + 16px); }
+}
+
 /* Hero 的設計高度已包含 60px 主導覽；導覽固定覆蓋在首屏上方。 */
 .hero-includes-header {
   margin-top: calc(-1 * var(--site-header-height));

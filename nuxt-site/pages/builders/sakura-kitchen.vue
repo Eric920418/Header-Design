@@ -268,7 +268,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (max-width: 767px) {
-  :global(.floating-buttons) { display: none !important; }
   .sakura-kitchen-hero-shell { padding: 80px 15px 0; }
   .sakura-kitchen-hero { min-height: 720px; aspect-ratio: auto; border-radius: 18px; }
   .sakura-kitchen-hero__image :deep(img) { object-position: 57% center; }
