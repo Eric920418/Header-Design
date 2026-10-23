@@ -1,5 +1,13 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-23 RWD續查：正式互動重驗與建商相簿短窗修正
+
+- 先依使用者已同意的README提交決定保存Azure恢復紀錄（99e7e28b），再以實際瀏覽器接續正式驗收。僅少量代表頁導航並在同頁切換尺寸，不重跑千頁掃描、不送出業務表單、不寫CMS／資料庫。
+- 先前兩項程式已在正式站確認生效：TEKA商品768×1024的型錄標題為43px、欄寬及scrollWidth同為226px；1024×390大型產品選單top60／bottom390、clientHeight330／scrollHeight405，內部捲至74.5後型錄CTA位於306–358px，背景scrollY保持2350，實際點擊成功抵達/catalogues/catalog。另320×640搜尋覆蓋層、型錄FAQ第二題展開、品牌館切換高雄館及加盟表單欄位均未水平溢位；表單另量測768×600／1024×390，未送出任何資料。
+- 建商固定欄1280×600實測scrollY2400→2580時左欄top75／bottom550不變、右側首圖top-398.375→-578.375，確認正常短筆電有左右差速。1024×390則觸發既有可讀性保護，position:static、完整內容高371px；此極短窗不是固定效果通過，不以裁中文主標或無限縮字恢復效果，也不把這輪正常尺寸結果當成使用者所有縮放條件均已排除。
+- 新問題ISSUE-RWD-003：/builders/sakura-kitchen原色0.5相簿在844×390重複開啟兩次，dialog高360／scrollHeight420，換圖按鈕bottom419.289大於視窗390，初始畫面看不到按鈕。原因是65dvh圖片加上標題／44px操作鈕與間距超出彈窗剩餘高度。僅將既有相簿panel改為有高度上限的直向flex、標題／控制不縮、圖片min-height:0允許縮小；保留原圖片contain比例、44px觸控目標、鍵盤／焦點／關閉與原生溢位閱讀保護，不改CMS或素材。純CSS變更採實際瀏覽器回歸，不改既有測試檔。
+- pnpm build（含typecheck）及diff檢查通過；本機production preview以實際瀏覽器驗320×640／390×844／768×600／844×390／1024×390／1280×720／1920×1080七尺寸，相簿均scrollHeight=clientHeight、頁寬未超窗，三顆按鈕完整可見且保留44×44px。844×390的換圖按鈕bottom由419.289修為359，dialog仍高360，圖片等比例縮為剩餘區域；實際點擊換至第2張、鍵盤ArrowRight回第1張，關閉後dialog已關且焦點返回原色0.5入口。修改後正式部署／回歸待續記，不宣稱全站所有狀態或跨瀏覽器驗收完畢。
+
 ## 2026-10-23 Azure SQL Basic 已生效，正式站恢復
 
 - 使用者在確認固定規格預估US$4.90／月、5 DTU／2 GB及無法恢復此資料庫免費優惠後，明確授權使用Basic方案。Azure Portal實際核對目標為rg-sakura-website-test／sakura-website-test-20260929／SakuraWebsiteTest，原狀態Paused、免費vCore秒數0、資料使用量約132 MB，非儲存空間不足。

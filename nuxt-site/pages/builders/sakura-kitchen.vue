@@ -228,8 +228,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .sakura-kitchen-series__open:focus-visible { outline: 2px solid #caa05c; outline-offset: -4px; }
 .builder-series-dialog { width: min(1200px, calc(100% - 30px)); max-width: none; max-height: calc(100dvh - 30px); margin: auto; padding: 0; overflow-y: auto; border: 0; border-radius: 18px; background: #1c1c1d; color: #fff; overscroll-behavior: contain; }
 .builder-series-dialog::backdrop { background: rgb(16 8 1 / 80%); }
-.builder-series-dialog__panel { padding: 16px; }
-.builder-series-dialog__header { display: flex; align-items: start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.builder-series-dialog__panel { display: flex; flex-direction: column; max-height: calc(100dvh - 30px); padding: 16px; }
+.builder-series-dialog__header { display: flex; flex: none; align-items: start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
 .builder-series-dialog__header h2 { margin: 0; font-family: var(--font-brand-serif); font-size: 24px; font-weight: 400; line-height: 1.4; text-transform: none; }
 .builder-series-dialog__header h2 span { display: block; font-size: 18px; }
 .builder-series-dialog button { display: grid; width: 44px; height: 44px; flex: none; place-items: center; border: 1px solid rgb(255 255 255 / 40%); border-radius: 50%; color: #fff; background: transparent; cursor: pointer; }
@@ -237,8 +237,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builder-series-dialog button:hover { color: #caa05c; border-color: #caa05c; }
 .builder-series-dialog button:disabled { opacity: .35; cursor: default; }
 .builder-series-dialog button svg { width: 22px; height: 22px; }
-.builder-series-dialog__image { height: min(65dvh, 700px); background: #1c1c1d; }
-.builder-series-dialog__controls { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 16px; font-family: var(--font-cjk-sans); }
+.builder-series-dialog__image { min-height: 0; height: min(65dvh, 700px); background: #1c1c1d; }
+.builder-series-dialog__controls { display: flex; flex: none; align-items: center; justify-content: center; gap: 24px; margin-top: 16px; font-family: var(--font-cjk-sans); }
 .builder-series-dialog__controls span { min-width: 48px; text-align: center; }
 :global(html:has(.builder-series-dialog[open])) { overflow: hidden; }
 .sakura-kitchen-series__cta { display: flex; justify-content: center; margin-top: 58px; }
