@@ -139,7 +139,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
               <div
                 v-if="item.mega"
-                class="desktop-nav-dropdown fixed inset-x-0 top-[var(--site-header-height)] z-50 pt-7 transition-all duration-300"
+                data-lenis-prevent
+                class="desktop-nav-dropdown desktop-nav-mega fixed inset-x-0 top-[var(--site-header-height)] z-50 pt-7 transition-all duration-300"
                 :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'"
                 @pointerenter="clearDesktopMenuCloseTimer"
                 @pointerleave="scheduleDesktopMenuClose"
@@ -193,7 +194,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
               <div
                 v-if="item.seriesMega"
-                class="fixed inset-x-0 top-[var(--site-header-height)] z-[60] pt-7 transition-all duration-300"
+                data-lenis-prevent
+                class="desktop-nav-mega fixed inset-x-0 top-[var(--site-header-height)] z-[60] pt-7 transition-all duration-300"
                 :class="activeDesktopMenu === item.label ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0'"
                 @pointerenter="clearDesktopMenuCloseTimer"
                 @pointerleave="scheduleDesktopMenuClose"
@@ -457,5 +459,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .desktop-nav-dropdown {
   transition-duration: 220ms;
   transition-property: opacity, visibility;
+}
+
+.desktop-nav-mega {
+  max-height: calc(100dvh - var(--site-header-height));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 </style>

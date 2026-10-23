@@ -12,6 +12,9 @@
 - 已完成七尺寸420筆代表頁掃描；自檢passed。768px產品型錄區在三品牌重複量測並實際捲動截圖確認，Catalogue文字236px大於226px左欄，雖未超出整頁，仍吃掉欄間留白。追查所有ProductDetailPage入口後，只將既有平板50px改為clamp(43px,5.5vw,50px)，保留桌面60px／手機43px、行高、兩欄及文案，修正待本機與正式瀏覽器重驗。公開產品分頁GET已讀完72頁、847筆，具體掃描清單擴充為1122個不重複網址；先於最窄320px逐頁檢查，不將產品總數當成已驗筆數。
 - 清單校正：設計靈感含三筆storeSlug門市案例，前台實際導向/gallery，不是/design-inspiration/case10等舊ID；剔除三個錯組網址後正確公開清單1119筆。三筆HTTP400屬掃描器輸入錯誤，未修改API驗證。文字超框須同時具備文字Range越界與scrollWidth超框，避免CTA裝飾箭頭／雷達的動畫範圍誤報；保留實際文字及整頁寬度判定。
 - 320px1119個正確網址與768px308個具體網址已於正式瀏覽器逐頁完成；平板36產品內頁同為共用型錄標題問題，其餘未見水平爆版。另商品80906之LFD-0211_2.jpg回傳HTTP200但content-type為text/html，前台有完整圖片錯誤提示且未爆版，屬素材來源問題，未擅改圖片或資料庫。修正後本機production build／typecheck、腳本語法、diff檢查、自檢passed；三品牌於320／390／767／768／900／1024／1280／1920px共24筆回歸均無溢位或alert，768px標題43px且scrollWidth226=clientWidth226，已移除檢查樣式並實際捲動核對截圖。
+- 短窗互動另外重現：正式1024×390的廚房產品大型選單bottom464.5px，型錄CTA bottom432.5px大於視窗390px，overflowY為visible，重複點選仍相同，底部入口無法在選單內捲到。只對兩個大型選單共用desktop-nav-mega設定可見剩餘高度與內部overflow-y:auto／overscroll containment，並加已安裝Lenis支援的data-lenis-prevent，避免攔截選單原生捲動；正常桌面自然高度及既有關閉行為不改。手機320×640展開系列選單量測width320、bottom640、scrollHeight1132>clientHeight579，內部可捲動且已核對畫面，不改手機選單。
+- 第二次pnpm build／typecheck通過；1024×390本機選單bottom390、scrollHeight405>clientHeight330，捲到底scrollTop74.5後型錄按鈕top306／bottom358完整可見、背景scrollY0、wheel未被Lenis阻止，實際點擊可前往型錄。已核對底部截圖。320×640實際開啟TEKA規格dialog位於x15–305／y152–488，表格scrollWidth250=clientWidth250、關閉按鈕在內。既有check-site-header唯讀檢查通過，Footer／原導覽保留，未提交業務表單。
+- 額外互動抽查曾遇正式TEKA頁503錯誤畫面，與先前完整掃描結果分開記錄，不以排版修正掩蓋服務問題、不擅改資料庫；正式部署後會再開頁重驗。尚未驗Safari／Firefox／實機觸控，幾何掃描亦不代表所有動畫逐幀皆完成視覺驗收。
 
 ## 2026-10-23 品牌承諾首屏英文標題放大
 
