@@ -221,7 +221,7 @@ for(const slug of ['case10','case35','case56']){
 console.log('PASS 三篇門市案例預約箭頭 hover／焦點、減少動態及原連結保留')
 const brandHeroSource=await readFile(new URL('../components/internal/BrandAdvantageHero.vue',import.meta.url),'utf8')
 assert(brandHeroSource.includes('<h1 id="brand-h8-title" class="hero-template-title">Why Choose<br /><span>SAKURA KITCHEN</span><br />For Your Home</h1>'),'品牌承諾Hero需完整三行標題，只有品牌行金色')
-assert(/\.brand-h8-copy h1 \{[^}]*font-size: 80px;/.test(brandHeroSource)&&/@media \(max-width: 1439px\)\s*\{\s*\.brand-h8-copy h1 \{ font-size: 56px; \}/.test(brandHeroSource)&&brandHeroSource.includes('white-space: nowrap; text-transform: none;')&&brandHeroSource.includes('font-size: clamp(24px, 7.8vw, 40px);'),'品牌優勢主標1440px以上80px，窄桌機／平板56px，保留手機縮放、三行及原大小寫')
+assert(/\.brand-h8-copy \{[^}]*container-type: inline-size;/.test(brandHeroSource)&&/\.brand-h8-copy h1 \{[^}]*width: 100%;[^}]*font-size: clamp\(56px, 12\.4cqw, 80px\);[^}]*line-height: 1\.2;/.test(brandHeroSource)&&!brandHeroSource.includes('@media (max-width: 1439px)')&&!brandHeroSource.includes('line-height: 60px;')&&brandHeroSource.includes('white-space: nowrap; text-transform: none;')&&brandHeroSource.includes('font-size: clamp(24px, 7.8vw, 40px);'),'品牌優勢主標依左欄寬度放大至80px，不再將窄桌機固定56px；保留手機縮放、三行及原大小寫')
 const brandHeroGlobalStyles=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
 const guideHeroSelector='section.hero-includes-header:is(.knowledge-article-breadcrumb, .knowledge-detail-breadcrumb)[data-hero-photo] > nav'
 const guideHeroRules=[...brandHeroGlobalStyles.matchAll(new RegExp(guideHeroSelector.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s*\\{([^}]+)\\}','g'))].map(match=>match[1].trim())
