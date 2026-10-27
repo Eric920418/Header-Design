@@ -14,15 +14,8 @@ for(const mutation of [{...input,action:'delete'},{...input,documents:[input.doc
 const sample=seed.find(d=>d.id==='data-kitchenStyles'),before=structuredClone(sample.data),next=structuredClone(before);next.KITCHEN_STYLES[0].zh='變更卡片名稱';next.KITCHEN_STYLES[1].desc='另一筆先前的修改'
 const changes=changedItems(before,next,editingSchema(sample.schema,sample.id));assert(changes.some(c=>c.includes('變更卡片名稱')));assert(changes.length>=2);assert(firstImage(before))
 for(const d of seed.filter(d=>!contentAliases[d.id])){const original=JSON.stringify(d.data);publicContent(d.id,d.data);assert.equal(JSON.stringify(d.data),original,'Projection must not mutate inputs')}
-const token=createDraftPreview('author',[{id:sample.id,body:before}])
-assert.deepEqual(readDraftPreview(token,'author',sample.id),publicContent(sample.id,before))
-assert.throws(()=>readDraftPreview(token,'other',sample.id),e=>e.statusCode===404)
-assert.throws(()=>readDraftPreview('invalid','author',sample.id),e=>e.statusCode===404&&e.data.cmsPreviewExpired===true)
-for(let i=0;i<40;i++)createDraftPreview('author',[{id:sample.id,body:before}])
-assert.throws(()=>readDraftPreview(token,'author',sample.id),e=>e.statusCode===404,'The editor must recover when its older preview is evicted')
-const freshToken=createDraftPreview('author',[{id:sample.id,body:next}])
-assert.deepEqual(readDraftPreview(freshToken,'author',sample.id),publicContent(sample.id,next))
-const time=Date.now;try{Date.now=()=>time()+6*60*1000;assert.throws(()=>readDraftPreview(freshToken,'author',sample.id),e=>e.statusCode===404)}finally{Date.now=time}
+await assert.rejects(()=>readDraftPreview('invalid','author',sample.id),e=>e.statusCode===404&&e.data.cmsPreviewExpired===true)
+await assert.rejects(()=>createDraftPreview('author',[{id:'too-large',body:{text:'字'.repeat(1024*1024)}}]),e=>e.statusCode===413)
 console.log(`PASS: ${workspaces.length} tasks cover every managed resource once; grouped sections, validation, complete pending-change summaries and immutable public projections.`)
 if(process.env.CMS_WORKFLOW_DB==='1'){
  const {query,database,sql,passwordHash,randomUUID}=await import('../server/cms/database.mjs')
@@ -36,8 +29,8 @@ if(process.env.CMS_WORKFLOW_DB==='1'){
   const documents=[]
   for(const id of project.ids){const d=(await query('SELECT d.*,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.draftId WHERE d.id=@id',{id},tx)).recordset[0];documents.push({id,revision:d.revision,body:JSON.parse(d.body)})}
   const body={action:'preview',documents},counts=await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)
-  // Preview's read path intentionally has no write transaction.
-  await changeWorkspace(project.id,body,user)
+  // Only the temporary snapshot is written; content versions remain unchanged.
+  await changeWorkspace(project.id,body,user,tx)
   assert.equal((await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n,counts.recordset[0].n)
   documents.find(d=>d.id==='data-kitchenStyles').body.KITCHEN_STYLES[0].desc+='（僅限回滾交易驗證）'
   const saved=await changeWorkspace(project.id,{...body,action:'save'},user,tx);assert(saved.documents.some(d=>d.draftId!==d.publishedId))

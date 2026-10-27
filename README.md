@@ -1,5 +1,16 @@
 # SAKURA Kitchen — Nuxt 3 品牌網站
 
+## 2026-10-27 線上後台共用預覽修正
+
+- 線上站再次重現預覽 404；原 `Map` 只在建立預覽的程序內有效，以兩份獨立模組重現「剛建立、尚未到期，在另一程序立即 404」。10/21 的自動重新載入只處理失效後的恢復，未解決不同程序無法共用預覽的根因，先前僅首頁的驗收不足以代表線上環境。
+- 預覽改存獨立 `cms.PreviewSessions` 暫存表，各程序透過既有 MSSQL 讀取；五分鐘到期，每人最多 40 份／全站 400 份，保留使用者檢查、伺服器驗證及 private/no-store/noindex。使用 Node 標準 gzip 壓縮暫存以減少 SQL 傳輸與空間，解壓上限沿用 2MB 寫入限制。隨機預覽憑證只存雜湊；內容、草稿、發布版本、來源 sync 與操作紀錄不因看效果而改變。這取代舊版「完全不寫入資料庫、只放程序記憶體」的做法：只寫可到期清除的預覽暫存，不等於儲存內容。
+- 資料結構採僅新增的冪等 SQL，不覆寫既有表或資料。正式環境需先套用 `nuxt-site/server/cms/schema.sql` 中 `cms.PreviewSessions` 的獨立 CREATE 區段，既有 CMS 帳號沿用 schema 的 SELECT／INSERT／UPDATE／DELETE 權限，不授予建表權限。此表與工作階段一樣不納入正式內容備份；還原後使用者重新看效果即可。
+- 重跑共用預覽檢查：在 `nuxt-site` 執行 `node --env-file=.env scripts/check-cms-previews.mjs`，限本機 `SakuraWebsiteDev`，使用可清除的測試編輯帳號；真正啟動另一個 Node 程序建立／讀取預覽，驗證建立端結束仍能讀取、使用者隔離、到期、數量上限及全部工作入口，不以兩次同一程序呼叫代替跨程序驗證。內容／版本指紋必須不變。
+- 使用者明確要求以正式端為準，改在既有 Azure `SakuraWebsiteTest` 的獨立預覽範圍驗證，不依賴本機 Docker。新增 `cms-preview-schema.mjs` 僅接受既定正式伺服器與資料庫、私有環境中的既有管理憑證；預設唯讀檢查，`--apply` 才在交易內新增預覽表並核對既有內容未變，遇不同結構拒絕覆蓋，不執行整庫 init／seed／import。共用預覽測試僅以 `CMS_PREVIEW_TEST_TARGET=production` 明確選定此固定正式目標時允許執行，使用臨時編輯帳號並清除，不使用真實申請資料。
+- 正式資料庫已以獨立交易新增預覽表及兩個索引，65 份既有內容與 132 份歷史版本保留；未執行整庫初始化／資料匯入、修改連線／帳號權限或升級 SQL 費率。正式指令：於 `nuxt-site` 執行 `node --env-file=../.env.azure-sql.local --env-file=../.env.azure-runtime.local scripts/cms-preview-schema.mjs --apply`；省略 `--apply` 則為檢查。
+- 正式 SQL 檢查已通過：`CMS_PREVIEW_TEST_TARGET=production node --env-file=../.env.azure-runtime.local scripts/check-cms-previews.mjs`。建立程序結束後另兩個程序仍可讀取、憑證／作者隔離、不可變快照、到期、每人上限及全部 48 組工作範圍通過；正式內容與全部版本指紋不變，臨時編輯帳號／預覽已清除。`pnpm build`、型別及純流程檢查通過。
+- 正式程式發布及實際畫面驗證進行中。本機 SQL／Docker 連線問題不再作為正式端修正的前置條件；沒有重建資料或重啟其他專案。
+
 ## 2026-10-24 手機底部三項快速服務
 
 - 依手機需求，僅將到府丈量／線上客服／拍立配改為≤767px底部固定三欄；上方金色設計案例不加入底列，≥768px原側欄及捲動跟隨保留。移除依表單／商品等網址直接隱藏服務列的限制，沿用原CMS可見設定、圖示、連結與另開分頁保護，不改CMS或資料庫。

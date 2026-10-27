@@ -9,6 +9,13 @@ IF OBJECT_ID('cms.Users') IS NULL CREATE TABLE cms.Users (
  role varchar(10) NOT NULL CHECK(role IN ('admin','editor')),disabled bit NOT NULL DEFAULT 0,mustChange bit NOT NULL DEFAULT 1,revision int NOT NULL DEFAULT 1);
 IF OBJECT_ID('cms.Sessions') IS NULL CREATE TABLE cms.Sessions (
  id varchar(64) PRIMARY KEY,userId uniqueidentifier NOT NULL REFERENCES cms.Users(id),csrf varchar(64) NOT NULL,expiresAt datetime2 NOT NULL);
+IF OBJECT_ID('cms.PreviewSessions') IS NULL BEGIN
+ CREATE TABLE cms.PreviewSessions (
+  id varchar(64) PRIMARY KEY,userId uniqueidentifier NOT NULL REFERENCES cms.Users(id) ON DELETE CASCADE,
+  body varbinary(max) NOT NULL,createdAt datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),expiresAt datetime2 NOT NULL);
+ CREATE INDEX cms_preview_owner_created ON cms.PreviewSessions(userId,createdAt DESC);
+ CREATE INDEX cms_preview_expiry ON cms.PreviewSessions(expiresAt);
+END;
 IF OBJECT_ID('cms.Media') IS NULL CREATE TABLE cms.Media (
  id uniqueidentifier PRIMARY KEY,name nvarchar(255) NOT NULL,alt nvarchar(500) NOT NULL DEFAULT '',category nvarchar(80) NOT NULL DEFAULT N'未分類',
  mime varchar(80) NOT NULL,size int NOT NULL,filename varchar(100) NOT NULL UNIQUE,hash varchar(64) NOT NULL,archived bit NOT NULL DEFAULT 0,revision int NOT NULL DEFAULT 1,createdAt datetime2 NOT NULL DEFAULT SYSUTCDATETIME());

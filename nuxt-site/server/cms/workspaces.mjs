@@ -52,8 +52,8 @@ export async function changeWorkspace(key,input,user,connection){
     const history=input.action==='preview'?{}:{updatedAt:(await query('SELECT updatedAt FROM cms.Documents WHERE id=@id',{id:d.id},tx)).recordset[0].updatedAt,versions:(await query('SELECT v.id,v.createdAt,u.name AS actor FROM cms.Versions v LEFT JOIN cms.Users u ON u.id=v.actor WHERE documentId=@id ORDER BY createdAt DESC',{id:d.id},tx)).recordset}
     result.push({id:d.id,...state,...history,body,changes:changedItems(published?JSON.parse(published.body):null,body,schema),title:resourceGuide(d.id).tabTitle||resourceGuide(d.id).title})
    }catch(e){throw readableError(e,d.id,schema)}
-  }return{documents:result,...(input.action==='preview'?{previewToken:createDraftPreview(user.id,result)}:{}),impacts:[...new Map(w.ids.flatMap(id=>resourceGuide(id).impacts).map(i=>[i.href+'|'+i.label,i])).values()]}
+  }return{documents:result,...(input.action==='preview'?{previewToken:await createDraftPreview(user.id,result,tx)}:{}),impacts:[...new Map(w.ids.flatMap(id=>resourceGuide(id).impacts).map(i=>[i.href+'|'+i.label,i])).values()]}
  }
- // Preview performs only reads and validation; no versions, refs or audit records.
- return input.action==='preview'?run():connection?run(connection):transaction(run)
+ // Preview validates and creates only a short-lived snapshot; no versions, refs or audit records.
+ return input.action==='preview'?run(connection):connection?run(connection):transaction(run)
 }
