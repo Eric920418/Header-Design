@@ -514,7 +514,8 @@
 .cms .cms-section-caption {padding:12px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;}
 .cms .cms-section-caption>strong {font-size:16px;}
 .cms .cms-section-caption>small {flex-basis:100%;color:var(--cms-muted);font-size:11px;}
-.cms .cms-editor-breadcrumb {display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;color:var(--cms-muted);font-size:13px;}
+.cms .cms-editor-breadcrumb {display:flex;align-items:center;margin:0;color:var(--cms-muted);font-size:13px;}
+.cms .cms-editor-breadcrumb a {display:inline-flex;align-items:center;min-height:44px;white-space:nowrap;}
 .cms .cms-editor-breadcrumb a {text-decoration:underline;text-underline-offset:3px;}
 .cms .cms-work-editor {padding-bottom:84px;min-width:0;}
 .cms .cms-edit-columns {display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:12px;align-items:start;}
@@ -604,3 +605,11 @@
  .cms .cms-sidebar-toggle:active {transform:scale(.94);}
 }
 @keyframes cms-nav-label-in {from{opacity:0}to{opacity:1}}
+
+/* Put the workspace identity and section switcher on one desktop row. */
+.cms .cms-heading.cms-editor-heading {display:grid;grid-template-columns:auto minmax(180px,1fr) auto auto;align-items:center;gap:8px 12px;margin-bottom:8px;}
+.cms .cms-heading.cms-editor-heading h1 {font-size:19px;line-height:1.4;}
+.cms .cms-editor-heading .cms-part-tabs {min-width:0;margin:0;}
+.cms .cms-editor-heading .cms-editor-visit {grid-column:4;grid-row:1;font-size:13px;}
+@media(max-width:1199px){.cms .cms-heading.cms-editor-heading{grid-template-columns:auto minmax(0,1fr) auto}.cms .cms-editor-heading .cms-part-tabs{grid-column:1/-1;grid-row:2}.cms .cms-editor-heading .cms-editor-visit{grid-column:3}}
+@media(max-width:600px){.cms .cms-heading.cms-editor-heading{gap:6px 8px}.cms .cms-editor-heading h1{grid-column:1/-1;grid-row:2}.cms .cms-editor-heading .cms-part-tabs{grid-row:3}.cms .cms-editor-heading .cms-editor-visit{font-size:12px}.cms .cms-editor-breadcrumb{grid-column:1/3;grid-row:1}}

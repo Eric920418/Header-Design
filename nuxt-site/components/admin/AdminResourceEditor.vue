@@ -67,8 +67,12 @@ onBeforeRouteUpdate((to,from)=>to.query.edit===from.query.edit||!dirty.value||wi
 </script>
 <template>
  <section class="cms-work-editor" :aria-busy="busy">
-  <div class="cms-editor-breadcrumb"><NuxtLink :to="returnLink">← {{ returnLink.path==='/admin/home'?'首頁區塊':'返回列表' }}</NuxtLink><span>›</span><span>{{ workspace?.sectionTitle||'首頁' }}</span><span>›</span><span>{{ title }}</span></div>
-  <div class="cms-heading"><h1>{{ title }}</h1><a aria-label="查看官網位置" :href="workspace?.href||guide?.href" target="_blank" rel="noopener noreferrer" class="cms-button">查看官網位置 ↗</a></div>
+  <div class="cms-heading cms-editor-heading">
+   <nav class="cms-editor-breadcrumb" aria-label="返回內容列表"><NuxtLink :to="returnLink">← {{ returnLink.path==='/admin/home'?'首頁區塊':'返回列表' }}</NuxtLink></nav>
+   <h1>{{ title }}</h1>
+   <nav v-if="docs.length>1" class="cms-tabs cms-part-tabs" aria-label="這個區塊的內容"><button v-for="d in docs" :key="d.id" type="button" class="cms-button" :class="{'cms-button-gold':active===d.id}" :disabled="busy" @click="setPart(d.id)">{{ partTitle(d.id) }}</button></nav>
+   <a aria-label="查看官網位置" :href="workspace?.href||guide?.href" target="_blank" rel="noopener noreferrer" class="cms-button cms-editor-visit">查看官網位置 ↗</a>
+  </div>
   <p v-if="error" class="cms-error" role="alert">{{ error }} <button type="button" class="cms-button" @click="reload">查看最新內容</button></p>
   <p v-if="notice" class="cms-notice" role="status">{{ notice }}</p>
   <p v-if="!docs.length&&!error" role="status" class="cms-empty">正在載入內容…</p>
@@ -76,7 +80,6 @@ onBeforeRouteUpdate((to,from)=>to.query.edit===from.query.edit||!dirty.value||wi
    <div class="cms-editor-view-tabs"><button type="button" class="cms-button" :class="{'cms-button-gold':display==='edit'}" @click="display='edit'">修改內容</button><button type="button" class="cms-button" :class="{'cms-button-gold':display==='preview'}" @click="display='preview';checkPreview()">看效果</button></div>
    <div class="cms-edit-columns" :class="{'cms-show-preview':display==='preview'}">
     <fieldset :disabled="busy" class="cms-edit-form">
-     <nav v-if="docs.length>1" class="cms-tabs cms-part-tabs" aria-label="這個區塊的內容"><button v-for="d in docs" :key="d.id" type="button" class="cms-button" :class="{'cms-button-gold':active===d.id}" @click="setPart(d.id)">{{ partTitle(d.id) }}</button></nav>
      <div v-if="activeDoc" class="cms-panel cms-resource-form"><AdminFields :key="active" v-model="bodies[active]" :schema="activeSchema" :document-id="active" path="" /><p class="cms-field-help">本區最近儲存：{{ cmsDate(activeDoc.updatedAt) }}</p></div>
      <details class="cms-panel cms-secondary"><summary>會影響哪些頁面（{{ impacts.length }}）</summary><ul><li v-for="i in impacts" :key="i.href+i.label"><a :href="i.href" target="_blank" rel="noopener noreferrer">{{ i.label }} ↗</a></li></ul></details>
      <details v-if="related.length" class="cms-panel cms-secondary"><summary>其他相關內容</summary><NuxtLink v-for="id in related" :key="id as string" :to="editorLink(id)" class="cms-button">{{ namedWorkspace(id as string)?.title||resourceGuide(id)?.location[0] }}</NuxtLink></details>
