@@ -100,3 +100,9 @@ export function matchesWorkspace(workspace,search){const words=String(search).to
 export function navigationSections(rows=[]){
  return siteSections.map(s=>{const w=rows.find(w=>w.section===s.key);return{...s,label:w?.sectionTitle||s.label,order:w?.sectionOrder??siteSections.indexOf(s)+100}}).sort((a,b)=>a.order-b.order)
 }
+
+export function namedEditorSchema(schema,id,pageTitle){
+ const key=id.startsWith('catalog-')||['news-articles','knowledge-articles','custom-cases'].includes(id)?'items':({'data-kitchenStyles':'KITCHEN_STYLES','data-kitchenSeries':'KITCHEN_SERIES_PAGES','data-storeCases':'storeCases'})[id]
+ if(!key||!schema.fields?.[key]||!pageTitle)return schema
+ return{...schema,fields:{...schema.fields,[key]:{...schema.fields[key],label:pageTitle}}}
+}

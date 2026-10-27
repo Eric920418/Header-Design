@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {namedEditorSchema} from '~/shared/cms/navigation.mjs'
 import {editingSchema,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {workspaceFor,workspaceDefaults,editorLink,cmsDate} from '~/shared/cms/workflow.mjs'
 const props=defineProps<{id:string}>()
@@ -18,7 +19,7 @@ const returnLink=computed(()=>{const {edit,part,returnPath,...query}=route.query
 provide('cms-field-errors',fieldErrors)
 let timer:ReturnType<typeof setTimeout>|undefined,sequence=0,previewTimer:ReturnType<typeof setTimeout>|undefined,previewNeedsReload=false,previewRecoveryAttempts=0
 const activeDoc=computed(()=>docs.value.find(d=>d.id===active.value))
-const activeSchema=computed(()=>activeDoc.value?editingSchema(activeDoc.value.schema,active.value):null)
+const activeSchema=computed(()=>activeDoc.value?namedEditorSchema(editingSchema(activeDoc.value.schema,active.value),active.value,workspace.value?.pageTitle):null)
 const partTitle=(id:string)=>id.startsWith('view-')?'標題、圖片與按鈕':id==='data-kitchenStyles'?'系列卡片':namedWorkspace(id)?.purpose||'內容'
 const status=computed(()=>dirty.value?'尚未儲存':pending.value?'已儲存，官網尚未更新':'官網已更新')
 const choices=computed(()=>{const all:any[]=[];for(const d of docs.value){const b=bodies.value[d.id];if(!b)continue

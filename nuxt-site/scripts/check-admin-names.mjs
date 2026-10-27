@@ -3,11 +3,12 @@ import {spawnSync} from 'node:child_process'
 import {readFile} from 'node:fs/promises'
 import {workspaces,workspaceFor,editorLink,cmsDate} from '../shared/cms/workflow.mjs'
 import {workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
-import {nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace} from '../shared/cms/navigation.mjs'
+import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace} from '../shared/cms/navigation.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url))),published=Object.fromEntries(seed.map(d=>[d.id,structuredClone(d.data)])),original=JSON.stringify(published)
 const names=workspaceNames(workspaces,published),find=(rows,id)=>rows.find(w=>w.id===workspaceFor(id)?.id)
 assert.equal(names.length,48);assert.deepEqual(Object.keys(nameBindings).sort(),workspaces.map(w=>w.id).sort());assert.equal(new Set(names.map(w=>w.title)).size,48)
 for(const w of names){assert(w.pageTitle&&w.purpose&&w.sectionTitle);assert.equal(w.title,w.pageTitle+'｜'+w.purpose);assert(w.href.startsWith('/'));assert.equal(w.location.at(-1),w.purpose);assert(matchesWorkspace(w,w.title));assert(matchesWorkspace(w,workspaces.find(i=>i.id===w.id).title));assert(siteSections.some(s=>s.key===w.section)||w.section==='home')}
+for(const id of ['news-articles','knowledge-articles','custom-cases','catalog-sakura']){const schema={fields:{items:{label:'原有清單標題',type:'array'}}},title=find(names,id).pageTitle;const result=namedEditorSchema(schema,id,title);assert.equal(result.fields.items.label,title);assert.equal(schema.fields.items.label,'原有清單標題')}
 assert.equal(find(names,'knowledge-articles').section,'design');assert.equal(find(names,'data-brandPavilions').section,'brand');assert.equal(find(names,'data-service').section,'service')
 const changed=structuredClone(published),header=changed['view-components-SiteHeader'];header.leftNav.reverse();const news=header.leftNav.find(n=>n.to==='/news');news.label='櫻花新消息';news.children.find(n=>n.to==='/news/latest').label='最新品牌動態'
 changed['view-components-home-HomeProject'].copy.text1='全新';changed['view-components-home-HomeProject'].copy.text2='廚房系列'
