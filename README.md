@@ -2,9 +2,14 @@
 
 - 正式 Chrome 重現預覽載入錯誤；Console 出現多個 `/_nuxt/*.js` 404，瀏覽器 `__vdpl` 仍固定在較舊發布版本。僅清除此版本紀錄後，同一建商頁可載入並回報「目前輸入的效果」，提案與 CMS 登入保留。
 - Nitro 明確停用自動文件版本固定，既有共用入口只在收到 `__vdpl` 時將它到期；不清理登入、不修改內容或資料庫。已開著的舊頁仍需重新整理才能載入新版程式。
-- `check-preview-access.mjs` 補實際 config／middleware 回歸：啟用 Vercel 環境時仍不固定文件版本；後台、預覽、API、密碼頁僅清版本紀錄；未授權 API 仍為 401，無版本紀錄不重寫 Cookie。舊程式先失敗，修正後含登入逾時／重試的全檢查通過。型別檢查與正式建置通過；正式發布及輸入預覽驗證待續記。
+- `check-preview-access.mjs` 補實際 config／middleware 回歸：啟用 Vercel 環境時仍不固定文件版本；後台、預覽、API、密碼頁僅清版本紀錄；未授權 API 仍為 401，無版本紀錄不重寫 Cookie。舊程式先失敗，修正後含登入逾時／重試的全檢查通過。型別檢查、正式建置、預覽狀態全回歸通過；另以 Vercel preset 與啟用版本保護的環境建置，實際 output/config.json 確認不再產生固定版本的 Set-Cookie 路由。
 
 # SAKURA Kitchen — Nuxt 3 品牌網站
+
+- 已發布 `55a746a4e57b33522a5134a9dceef58737561cd3`，正式 Vercel `dpl_EaNCrBBeVYSsfDSStwCRnGjPfJFM` READY。依平台支援的版本分界將 `skewProtectionBoundaryAt` 設為此版建立時間 `1793084822796`，舊版固定請求改回目前發布；原 `skewProtectionMaxAge=43200` 保留，未調整登入保護。
+- 正式 HTTP 以無版本紀錄及舊 `dpl_ETMo…` 紀錄各驗一次：200、各 20 個程式檔全為 200；新訪客不建立版本 Cookie，帶舊紀錄時伺服器回覆到期，未重寫 CMS 工作階段。
+- 正式 Chrome 重新整理建商編輯頁，原登入保留；將主視覺標題暫加「【預覽檢查】」，右側實際標題同步並完成套用，再還原原文，儲存恢復停用且顯示官網已更新，未儲存／發布測試內容。成功狀態截圖 `/tmp/sakura-cms-builders-preview-fixed-20261027.png`，還原後 `/tmp/sakura-cms-builders-preview-restored-20261027.png`。首頁品牌系列入口亦完成預覽載入。主控台未見 Nuxt 程式檔 404 或 hydration 錯誤；仍有 Chrome 擴充功能 runtime.lastError 及翻譯訊息。
+- 本輪限預覽發布版本問題，未逐一重驗全部入口、其他瀏覽器／手機或完整業務流程。已開著的舊分頁需重新整理；有未儲存輸入時應先保留再重整。文件驗收紀錄另提交，不為文件再觸發發布。
 
 ## 2026-10-27 品牌優勢Hero行距與招牌裁切
 
