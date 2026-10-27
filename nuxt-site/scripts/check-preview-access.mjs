@@ -8,6 +8,31 @@ const require = createRequire(import.meta.url)
 const { transpile } = require('typescript')
 const nuxtRequire = createRequire(realpathSync(new URL('../node_modules/nuxt/package.json', import.meta.url)))
 const { ofetch } = nuxtRequire('ofetch')
+// Run the actual config and middleware: a stale deployment pin must not outlive a release.
+const configSource = readFileSync(new URL('../nuxt.config.ts', import.meta.url), 'utf8').replace(/^import .*\n/gm, '')
+const config = vm.runInNewContext(transpile(configSource.replace('export default ', 'this.config = '), { target: 99 }) + '\nconfig', {
+  defineNuxtConfig: value => value, tailwindcss: () => ({}), process: { env: { VERCEL: '1', VERCEL_SKEW_PROTECTION_ENABLED: '1' } },
+})
+assert.equal(config.nitro.vercel.skewProtection, false, 'Document requests must not be pinned to an old release')
+const lockSource = readFileSync(new URL('../server/middleware/preview-lock.ts', import.meta.url), 'utf8').replace(/^import .*\n/gm, '').replace('export default ', 'this.handler = ')
+const removed = [], gate = { defineEventHandler: value => value, getRequestURL: event => new URL(event.url),
+  getCookie: (event, name) => event.cookies[name], deleteCookie: (event, name) => removed.push(name),
+  useRuntimeConfig: () => ({ previewPassword: 'test' }), isPreviewAccessTokenValid: token => token === 'valid',
+  createError: options => Object.assign(Error(options.statusMessage), options), sendRedirect: (event, url) => url,
+}
+vm.runInNewContext(transpile(lockSource, { target: 99 }), gate)
+for (const url of ['/admin/content', '/builders?cmsPreview=builders', '/api/content/site-visuals', '/preview-access']) {
+  removed.length = 0
+  gate.handler({ url: 'https://cms.example' + url, cookies: { __vdpl: 'old-release', sakura_preview_access: 'valid', sakura_cms_session: 'signed-in' } })
+  assert.deepEqual(removed, ['__vdpl'], 'Clear only the old deployment pin, preserving both sign-ins')
+}
+removed.length = 0
+assert.throws(() => gate.handler({ url: 'https://cms.example/api/admin/workspaces', cookies: { __vdpl: 'old-release' } }), error => error.statusCode === 401)
+assert.deepEqual(removed, ['__vdpl', 'sakura_preview_access', 'sakura_preview_expires_at'])
+removed.length = 0
+gate.handler({ url: 'https://cms.example/admin', cookies: { sakura_preview_access: 'valid' } })
+assert.deepEqual(removed, [], 'Current sessions need no cookie rewrite')
+console.log('PASS: release pins are disabled and retired; proposal protection and CMS sign-in remain intact')
 const source = readFileSync(new URL('../pages/preview-access.vue', import.meta.url), 'utf8').match(/<script setup lang="ts">([\s\S]*?)<\/script>/)[1]
 const script = transpile(source, { target: 99 })
 

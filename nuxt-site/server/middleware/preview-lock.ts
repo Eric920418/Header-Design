@@ -2,6 +2,8 @@ import { createError, deleteCookie, getCookie, getRequestURL, sendRedirect } fro
 import { isPreviewAccessTokenValid } from '../utils/previewAccess'
 
 export default defineEventHandler((event) => {
+  // 舊版 Nitro 留下的版本固定紀錄，與提案／後台登入無關。
+  if (getCookie(event, '__vdpl')) deleteCookie(event, '__vdpl', { path: '/' })
   const url = getRequestURL(event)
   const path = url.pathname
   const isPublicRequest = path === '/preview-access'

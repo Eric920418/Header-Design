@@ -58,6 +58,8 @@ export default defineNuxtConfig({
     strict: true,
   },
   nitro: {
+    // 文件導覽須取得目前版本，避免 CMS 與預覽持續使用已失效的程式檔。
+    vercel: { skewProtection: false },
     // 共用純 JS 驗證必須內嵌，避免 dev external 相對路徑指向工作區外。
     externals: { inline: [/shared\/franchise-form\.mjs$/, /shared\/cms\/(hero-media|gallery-cases|store-location|builder-series|presentation|workflow|public-content)\.mjs$/] },
     // Nuxt 位於 workspace 子目錄；Vercel 的 Build Output API 必須落在 Repository 根目錄。
