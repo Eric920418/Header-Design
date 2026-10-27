@@ -594,7 +594,7 @@
 @media(min-width:992px){
  .cms {overflow-x:clip;--cms-nav-shift:0px;--cms-nav-content:196px;--cms-nav-ease:cubic-bezier(.22,1,.36,1);}
  .cms.cms-nav-collapsed {--cms-nav-shift:-144px;--cms-nav-content:60px;}
- .cms .cms-sidebar {width:220px;transform:translateX(var(--cms-nav-shift));transition:transform 240ms var(--cms-nav-ease);}
+ .cms .cms-sidebar {width:220px;overflow-x:hidden;transform:translateX(var(--cms-nav-shift));transition:transform 240ms var(--cms-nav-ease);}
  .cms .cms-sidebar>* {width:var(--cms-nav-content);flex-shrink:0;transform:translateX(calc(-1 * var(--cms-nav-shift)));transition:transform 240ms var(--cms-nav-ease);}
  .cms .cms-sidebar :is(.cms-nav-label,.cms-nav-short) {animation:cms-nav-label-in 160ms ease-out;}
  .cms .cms-sidebar-toggle {transition:background 160ms,transform 120ms;}

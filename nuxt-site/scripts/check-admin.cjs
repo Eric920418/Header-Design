@@ -43,7 +43,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
    assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
    const expand=page.getByRole('button',{name:'展開選單',exact:true});assert.equal(await expand.getAttribute('aria-expanded'),'false');await expand.press('Enter')
    assert.deepEqual(await geometry(),{rail:220,main:220,save:220})
-   assert.equal(await page.locator('.cms-sidebar').evaluate(el=>getComputedStyle(el).transitionProperty),'transform')
+   assert.equal(await page.locator('.cms-sidebar').evaluate(el=>getComputedStyle(el).transitionProperty),'transform');assert.equal(await page.locator('.cms-sidebar').evaluate(el=>getComputedStyle(el).overflowX),'hidden')
    await page.getByRole('button',{name:'收合選單',exact:true}).click();await expand.click();assert.deepEqual(await geometry(),{rail:220,main:220,save:220})
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth))
    const lastPart=page.locator('.cms-part-tabs button').last();await lastPart.click();assert(await lastPart.evaluate(el=>el.classList.contains('cms-button-gold')));assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
