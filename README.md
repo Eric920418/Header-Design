@@ -9,6 +9,9 @@
 - 實際鍵盤切換時另外重現Hero自身scrollTop158（clientHeight840／scrollHeight998），使文字／背景上移、底部露出灰色，不能只看CSS top244就算位置正確。僅對含story的AI Hero改overflow:clip，維持裁切但不允許焦點觸發容器內部捲動；其他九系列仍沿用原hidden，正常頁面捲動不變。新增相應回歸，待重新建置及切圖量測。
 - pnpm build含typecheck及完整check-kitchen-series通過：三圖配對、原文與schema相容、十系列SSR／404、215個圖片來源檢查、四輪圖文索引、原廚電輪播與鍵盤回歸；未開--images／--cutouts額外遠端掃圖，不執行CMS儲存／發布或業務POST。3100 preview僅沿用既有Azure runtime環境唯讀已發布內容，未重啟Docker、寫DB或切正式連線設定。
 - 實際瀏覽器三張×15尺寸共45組與首頁基準比對通過，包含1512×900、1280×720、1024×768、768×1024、390×844、320×640及767／880／881／1025／1200／1201／1920px斷點、1024×390／844×390短橫窗。每組真實path、標題top／欄位x、字體／行高／內文寬度、圖文配對、全文段落數、頁面寬度與控制組不重疊皆核對，切圖後Hero scrollTop=0。桌面三圖同x70／top318、100／24／15px、內文寬522；手機同x15／top154、30／20／15px，文字與原底部服務列目視正常。
+- 已發布7257fb043aa34c1d03d8d63bccc62d203945e790／Nuxt／Production，Vercel dpl_3J23y8zHjDMrHF4HLaSRi9VVHdHN為READY／GitHub成功；header-design-ia4ys5wmb-erics-projects-57e51613.vercel.app接上兩個既有正式網域。原專案與環境設定未變，遠端建置時長未另量測。前台變更僅KitchenSeriesPage、既有回歸及本README，不修改CMS／DB／素材。
+- 正式主網域再跑三張×同15尺寸共45組全部通過，每組確認實際載入overflow:clip及scrollTop0，不用本機結果代替正式；正式check-kitchen-series十系列完整回歸亦通過。最近10分鐘有界error查詢未回傳內容，未查drain或新增監控，不宣稱長期無錯誤；測試中的not-a-series為預期404。純來源檢查的215圖片不當成215張遠端載入或視覺驗收。
+- 正式AI FAUCET交付畫面/tmp/sakura-ai-hero-production-after.png已目視核對：1512×900、首頁同位置、三層完整、原三段文案與龍頭圖片配對、背景不再因容器內部捲動露灰。預覽server已停止、測試viewport已還原、正式頁籤保留。未驗實體觸控裝置／Safari／Firefox，也未重掃全站全部網址；正式後紀錄僅本機文件提交，不為純文件再次部署。
 
 ## 2026-10-27 縮短預覽等待
 
