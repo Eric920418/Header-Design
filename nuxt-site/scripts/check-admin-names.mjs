@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
+import {spawnSync} from 'node:child_process'
 import {readFile} from 'node:fs/promises'
-import {workspaces,workspaceFor,editorLink} from '../shared/cms/workflow.mjs'
+import {workspaces,workspaceFor,editorLink,cmsDate} from '../shared/cms/workflow.mjs'
 import {workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
 import {nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace} from '../shared/cms/navigation.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url))),published=Object.fromEntries(seed.map(d=>[d.id,structuredClone(d.data)])),original=JSON.stringify(published)
@@ -23,6 +24,10 @@ const link=editorLink('data-kitchenStyles',{area:'pages',q:'品牌',page:'2',sec
 const latest=find(names,'view-pages-news-latest-slug-');assert(latest.pageLinks.every(p=>p.href==='/news/latest'),'shared text must not masquerade as a single article')
 for(const brand of ['sakura','svago','teka'])assert(find(names,'catalog-'+brand).pageLinks.some(p=>p.href==='/products/'+brand))
 assert.equal(JSON.stringify(published),original,'Name resolution must not mutate published content')
+const dateCode="import {cmsDate} from './shared/cms/workflow.mjs';console.log(cmsDate('2026-09-28T14:02:46Z'))"
+const formatted=['UTC','Asia/Taipei'].map(TZ=>{const r=spawnSync(process.execPath,['--input-type=module','-e',dateCode],{cwd:new URL('../',import.meta.url),env:{...process.env,TZ},encoding:'utf8'});assert.equal(r.status,0,r.stderr);return r.stdout.trim()})
+assert.equal(formatted[0],formatted[1]);assert.equal(formatted[0],'2026/9/28 下午10:02:46');assert.equal(cmsDate('invalid'),'尚無時間');assert.equal(cmsDate(null),'尚無時間')
+console.log('PASS: matching server/browser dates across UTC and Taipei; missing dates remain readable')
 console.log('PASS: 48 unique entries, official categories, published names/reordering, missing-name defaults, shared pages, legacy search/URLs, return conditions and page choices')
 if(process.env.CMS_NAMES_PRODUCTION==='1'){
  assert.equal(process.env.NUXT_DESIGN_DB_SERVER,'sakura-website-test-20260929.database.windows.net');assert.equal(process.env.CMS_DB_DATABASE,'SakuraWebsiteTest')

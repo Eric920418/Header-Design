@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {editingSchema,resourceGuide} from '~/shared/cms/presentation.mjs'
-import {workspaceFor,workspaceDefaults,editorLink} from '~/shared/cms/workflow.mjs'
+import {workspaceFor,workspaceDefaults,editorLink,cmsDate} from '~/shared/cms/workflow.mjs'
 const props=defineProps<{id:string}>()
 const route=useRoute(),router=useRouter(),{api,session,message}=useCmsAdmin()
 const {data:names}=useNuxtData<any[]>('cms-workspaces')
@@ -75,10 +75,10 @@ onBeforeRouteUpdate((to,from)=>to.query.edit===from.query.edit||!dirty.value||wi
    <div class="cms-edit-columns" :class="{'cms-show-preview':display==='preview'}">
     <fieldset :disabled="busy" class="cms-edit-form">
      <nav v-if="docs.length>1" class="cms-tabs cms-part-tabs" aria-label="這個區塊的內容"><button v-for="d in docs" :key="d.id" type="button" class="cms-button" :class="{'cms-button-gold':active===d.id}" @click="setPart(d.id)">{{ partTitle(d.id) }}</button></nav>
-     <div v-if="activeDoc" class="cms-panel cms-resource-form"><AdminFields :key="active" v-model="bodies[active]" :schema="activeSchema" :document-id="active" path="" /><p class="cms-field-help">本區最近儲存：{{ new Date(activeDoc.updatedAt).toLocaleString('zh-TW') }}</p></div>
+     <div v-if="activeDoc" class="cms-panel cms-resource-form"><AdminFields :key="active" v-model="bodies[active]" :schema="activeSchema" :document-id="active" path="" /><p class="cms-field-help">本區最近儲存：{{ cmsDate(activeDoc.updatedAt) }}</p></div>
      <details class="cms-panel cms-secondary"><summary>會影響哪些頁面（{{ impacts.length }}）</summary><ul><li v-for="i in impacts" :key="i.href+i.label"><a :href="i.href" target="_blank" rel="noopener noreferrer">{{ i.label }} ↗</a></li></ul></details>
      <details v-if="related.length" class="cms-panel cms-secondary"><summary>其他相關內容</summary><NuxtLink v-for="id in related" :key="id as string" :to="editorLink(id)" class="cms-button">{{ namedWorkspace(id as string)?.title||resourceGuide(id)?.location[0] }}</NuxtLink></details>
-     <details class="cms-panel cms-secondary"><summary>過去的修改</summary><section v-for="d in docs" :key="d.id"><h3>{{ partTitle(d.id) }}</h3><div v-for="v in d.versions" :key="v.id" class="cms-history-row"><span>{{ new Date(v.createdAt).toLocaleString('zh-TW') }} · {{ v.actor||'初始內容' }}</span><button v-if="session?.role==='admin'" class="cms-button" :disabled="busy||dirty" @click="restore(d.id,v.id)">取回這份內容</button></div></section></details>
+     <details class="cms-panel cms-secondary"><summary>過去的修改</summary><section v-for="d in docs" :key="d.id"><h3>{{ partTitle(d.id) }}</h3><div v-for="v in d.versions" :key="v.id" class="cms-history-row"><span>{{ cmsDate(v.createdAt) }} · {{ v.actor||'初始內容' }}</span><button v-if="session?.role==='admin'" class="cms-button" :disabled="busy||dirty" @click="restore(d.id,v.id)">取回這份內容</button></div></section></details>
     </fieldset>
     <aside class="cms-effect-panel cms-panel" aria-label="官網效果"><div class="cms-effect-toolbar"><strong>官網效果</strong><button type="button" class="cms-button" @click="mobile=!mobile">{{ mobile?'看桌機':'看手機' }}</button><button type="button" class="cms-button" @click="reloadPreview()">重新載入</button></div><select v-if="choices.length" v-model="previewPath" aria-label="選擇預覽頁面"><option value="">列表頁面</option><option v-for="p in choices" :key="p.path" :value="p.path">{{ p.label }}</option></select><p class="cms-field-help" role="status">{{ previewState }}</p><p v-if="previewError" class="cms-error" role="alert">{{ previewError }}</p><div class="cms-effect-viewport" :class="{'cms-effect-mobile':mobile}"><iframe v-if="previewResult" :key="initialToken" ref="previewFrame" :style="frameStyle" :src="previewUrl" title="目前輸入的官網效果" @error="failPreview('預覽載入失敗，請重試。')" /></div></aside>
    </div>

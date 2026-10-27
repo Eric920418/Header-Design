@@ -50,3 +50,9 @@ export function changedItems(previous,next,schema){
   else result.push(label)
  }return [...new Set(result)]
 }
+
+export function cmsDate(value,dateOnly=false){
+ if(!value)return '尚無時間'
+ const date=new Date(value);if(!Number.isFinite(date.getTime()))return '尚無時間'
+ return dateOnly?date.toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'}):date.toLocaleString('zh-TW',{timeZone:'Asia/Taipei'})
+}
