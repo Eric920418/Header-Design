@@ -7,10 +7,11 @@ assert(!source.includes('@media (max-height: 759px)'),'矮桌機不得直接取�
 assert(source.includes('ref="strengthsCopy" class="builders-strengths-copy"'))
 assert(source.includes('top: var(--strengths-sticky-top, calc(var(--site-header-height, 60px) + 15px))'))
 assert(source.includes('@media (min-width: 768px) and (max-height: 899px)'))
-for(const rule of ['container-type: inline-size','clamp(28px, min(10cqw, 6.4svh), 52px)','clamp(24px, min(6.7cqw, 4.4svh), 36px)','clamp(48px, 9svh, 72px)'])assert(source.includes(rule),rule)
+const shortCss=source.slice(source.indexOf('@media (min-width: 768px) and (max-height: 899px)'),source.indexOf('@media (max-width: 767px)'))
+assert(!shortCss.includes('font-size:'),'短視窗只能調間距，不能因高度縮字')
 assert(source.includes('.builders-strengths-copy { position: static; height: auto; }')&&source.includes('.builders-strengths-content { display: block; min-height: auto; padding: 0; transform: none; }'),'手機維持單欄自然捲動')
 assert(source.includes('ref="strengthsContent" class="builders-strengths-content"'))
-assert(source.includes('transform: scale(var(--strengths-content-scale, 1)); transform-origin: top left;'))
+assert(!source.includes('--strengths-content-scale'),'不得再對左欄整組縮放造成二次縮字')
 assert(source.includes('.builders-strengths-copy[data-strengths-overflow="true"] { position: static; }'))
 const stickySource=source.slice(source.indexOf('const strengthsCopy ='),source.indexOf('const moduleCounter ='))
 assert(stickySource.startsWith('const strengthsCopy ='))
@@ -25,36 +26,33 @@ function harness({width=1280,height=720,copyHeight=560,headerHeight=60,observer=
   class Observer{constructor(callback){this.callback=callback;this.targets=[];this.disconnected=false;io=this}observe(target){this.targets.push(target)}disconnect(){this.disconnected=true}}
   const api=new Function('ref','onMounted','onBeforeUnmount','window','document','ResizeObserver',js+';return {strengthsCopy,strengthsContent,updateStrengthsSticky};')(value=>({value}),fn=>mounted.push(fn),fn=>unmounted.push(fn),window,document,Observer)
   api.strengthsCopy.value=copy;api.strengthsContent.value=content;mounted.forEach(fn=>fn())
-  return {api,window,viewport,fontSet,styles,copy,content,header,get io(){return io},top:()=>Number.parseFloat(styles.get('--strengths-sticky-top')),scale:()=>Number(styles.get('--strengths-content-scale')),unmount:()=>{unmounted.forEach(fn=>fn());api.strengthsCopy.value=undefined;api.strengthsContent.value=undefined}}
+  return {api,window,viewport,fontSet,styles,copy,content,header,get io(){return io},top:()=>Number.parseFloat(styles.get('--strengths-sticky-top')),unmount:()=>{unmounted.forEach(fn=>fn());api.strengthsCopy.value=undefined;api.strengthsContent.value=undefined}}
 }
 for(const width of [768,1024,1199,1280,1366,1440,1920])for(const height of [480,600,667,700,720,768,800,900,1080])for(const copyHeight of [320,420,560,684,1000]){
   const test=harness({width,height,copyHeight})
   assert.equal(test.top(),75,'任何高度都不得把中文主標推到導覽上方')
-  const expectedScale=Math.min(1,(height-95)/copyHeight)
-  if(expectedScale>=0.8){
+  if(copyHeight<=height-95){
     assert.equal(test.copy.dataset.strengthsOverflow,'false')
-    assert.equal(test.scale(),expectedScale)
-    assert(test.top()+copyHeight*test.scale()<=height-20+0.001,'固定時頂部與統計底部必須同時可見')
+    assert(test.top()+copyHeight<=height-20,'固定時頂部與統計底部必須同時可見')
   }else{
-    assert.equal(test.copy.dataset.strengthsOverflow,'true','低於可讀下限應自然閱讀，不得負top或裁切')
-    assert.equal(test.scale(),1)
+    assert.equal(test.copy.dataset.strengthsOverflow,'true','放不下應自然閱讀，不得縮字、負top或裁切')
   }
-  assert.equal(Number.parseFloat(test.styles.get('--strengths-copy-height')),copyHeight*test.scale(),'固定外層高度必須與可見內容相同')
+  assert.equal(Number.parseFloat(test.styles.get('--strengths-copy-height')),copyHeight,'不得用縮小整組的方式讓內容塞進視窗')
   assert.deepEqual(test.io.targets,[test.content,test.header])
   const stable=[...test.styles];test.io.callback();assert.deepEqual([...test.styles],stable,'重複量測不得累積縮放')
   test.unmount();assert(test.io.disconnected);assert.equal(test.window.listeners.size+test.viewport.listeners.size+test.fontSet.listeners.size,0)
 }
-const resizing=harness();resizing.content.offsetHeight=640;resizing.io.callback();assert.equal(resizing.top(),75);assert.equal(resizing.scale(),625/640)
+const resizing=harness();resizing.content.offsetHeight=640;resizing.io.callback();assert.equal(resizing.top(),75);assert.equal(resizing.copy.dataset.strengthsOverflow,'true')
 resizing.viewport.height=600;resizing.viewport.listeners.get('resize')();assert.equal(resizing.top(),75);assert.equal(resizing.copy.dataset.strengthsOverflow,'true')
-resizing.content.offsetHeight=400;resizing.fontSet.listeners.get('loadingdone')();assert.equal(resizing.scale(),1);assert.equal(resizing.copy.dataset.strengthsOverflow,'false')
+resizing.content.offsetHeight=400;resizing.fontSet.listeners.get('loadingdone')();assert.equal(resizing.copy.dataset.strengthsOverflow,'false')
 resizing.header.offsetHeight=80;resizing.io.callback();assert.equal(resizing.top(),95,'導覽高度變更也必須重算')
 resizing.window.innerWidth=767;resizing.window.listeners.get('resize')();assert.equal(resizing.styles.size,0,'進入手機版移除桌機位置')
 assert.deepEqual(resizing.copy.dataset,{},'手機清除極矮窗狀態')
 resizing.window.innerWidth=1280;resizing.window.listeners.get('resize')();assert.equal(resizing.top(),95)
 resizing.unmount();const before=[...resizing.styles];resizing.io.callback();assert.deepEqual([...resizing.styles],before,'卸載後遲到回呼不得更新')
-const fallback=harness({observer:false,visual:false,fonts:false});assert.equal(fallback.top(),75);fallback.window.innerHeight=600;fallback.window.listeners.get('resize')();assert.equal(fallback.top(),75);assert.equal(fallback.scale(),505/560);fallback.unmount()
-const boundary=harness({height:575,copyHeight:600});assert.equal(boundary.scale(),0.8);assert.equal(boundary.copy.dataset.strengthsOverflow,'false');boundary.viewport.height=574;boundary.api.updateStrengthsSticky();assert.equal(boundary.copy.dataset.strengthsOverflow,'true');boundary.unmount()
-console.log('PASS 315組寬／高／內容尺寸：頂部不遮字、固定時上下同時可見、80%可讀下限與自然閱讀；縮放／字型／導覽重算、手機、穩定量測及卸載清理')
+const fallback=harness({observer:false,visual:false,fonts:false});assert.equal(fallback.top(),75);fallback.window.innerHeight=600;fallback.window.listeners.get('resize')();assert.equal(fallback.top(),75);assert.equal(fallback.copy.dataset.strengthsOverflow,'true');fallback.unmount()
+const boundary=harness({height:695,copyHeight:600});assert.equal(boundary.copy.dataset.strengthsOverflow,'false');boundary.viewport.height=694;boundary.api.updateStrengthsSticky();assert.equal(boundary.copy.dataset.strengthsOverflow,'true');boundary.unmount()
+console.log('PASS 315組寬／高／內容尺寸：不依高度縮字或整組縮放、固定時上下同時可見、放不下自然閱讀；字型／導覽重算、手機、穩定量測及卸載清理')
 const regression=readFileSync(new URL('./check-frontend-regressions.mjs',import.meta.url),'utf8')
 const counter=regression.slice(regression.indexOf('const moduleCounterSource='),regression.indexOf("console.log('PASS 建商Home7雙欄"))
 assert(counter.startsWith('const moduleCounterSource='));new Function('assert','buildersSource',counter)(assert,source)
@@ -74,11 +72,11 @@ assert(strengths.includes(`aria-label="${cms.strengths[0].value[0]}+${cms.streng
 assert.equal((strengths.match(/class="builders-solution ev/g)||[]).length,3)
 let previous=-1
 for(const item of cms.strengths){const at=strengths.indexOf(`src="${item.background}"`);assert(at>previous);previous=at;assert.equal(strengths.split(`src="${item.background}"`).length-1,1);await get(item.background,'HEAD')}
-assert(html.includes('--strengths-sticky-top')&&html.includes('--strengths-content-scale')&&html.includes('--strengths-copy-height')&&html.includes('10cqw')&&html.includes('6.4svh'),'實際SSR必須帶新內容量測與縮放規則')
+assert(html.includes('--strengths-sticky-top')&&html.includes('--strengths-copy-height')&&!html.includes('--strengths-content-scale')&&!html.includes('6.4svh'),'實際SSR必須帶不縮字的量測規則')
 assert(!html.includes('max-height:759px'),'正式頁不得仍載入取消固定的舊規則')
 const bundles=[...new Set([...html.matchAll(/(?:src|href)="(\/_nuxt\/[^"?#]+\.js)"/g)].map(match=>match[1]))]
 assert(bundles.length>0&&bundles.length<=40,'限定檢查此頁實際載入的同站程式包')
 let stickyBundle
-for(const path of bundles){const code=await(await get(path)).text();if(code.includes('--strengths-content-scale')&&code.includes('--strengths-copy-height')&&code.includes('header[data-breadcrumb-root]')){stickyBundle=path;break}}
-assert(stickyBundle,'實際載入的JS必須含完整內容量測及縮放修正，不只SSR有樣式')
+for(const path of bundles){const code=await(await get(path)).text();if(!code.includes('--strengths-content-scale')&&code.includes('--strengths-copy-height')&&code.includes('header[data-breadcrumb-root]')){stickyBundle=path;break}}
+assert(stickyBundle,'實際載入的JS必須移除整組縮放，不只SSR有樣式')
 console.log('PASS',base.origin,'建商SSR／實際JS',stickyBundle,'、完整三圖與原文／CMS統計、矮螢幕CSS及圖片HTTP200')

@@ -37,7 +37,6 @@ function updateStrengthsSticky() {
   if (window.innerWidth < 768) {
     copy.style.removeProperty('--strengths-sticky-top')
     copy.style.removeProperty('--strengths-copy-height')
-    copy.style.removeProperty('--strengths-content-scale')
     delete copy.dataset.strengthsOverflow
     return
   }
@@ -45,13 +44,11 @@ function updateStrengthsSticky() {
   const viewportHeight = window.visualViewport?.height ?? window.innerHeight
   const top = headerHeight + 15
   const contentHeight = content.offsetHeight
-  const scale = Math.min(1, Math.max(0, viewportHeight - top - 20) / Math.max(1, contentHeight))
-  // Never hide the heading above the nav or shrink readable copy without a lower bound.
-  const overflow = scale < 0.8
+  // Preserve readable type; if the full column cannot fit, let it scroll naturally.
+  const overflow = contentHeight > Math.max(0, viewportHeight - top - 20)
   copy.dataset.strengthsOverflow = String(overflow)
   copy.style.setProperty('--strengths-sticky-top', `${top}px`)
-  copy.style.setProperty('--strengths-content-scale', String(overflow ? 1 : scale))
-  copy.style.setProperty('--strengths-copy-height', `${contentHeight * (overflow ? 1 : scale)}px`)
+  copy.style.setProperty('--strengths-copy-height', `${contentHeight}px`)
 }
 onMounted(() => {
   updateStrengthsSticky()
@@ -420,7 +417,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
 .builders-strengths-copy { position: sticky; top: var(--strengths-sticky-top, calc(var(--site-header-height, 60px) + 15px)); align-self: start; min-width: 0; height: var(--strengths-copy-height, auto); container-type: inline-size; }
 .builders-strengths-copy[data-strengths-overflow="true"] { position: static; }
-.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: calc(100svh - var(--site-header-height, 60px) - 65px); padding: 35px 0 6px; transform: scale(var(--strengths-content-scale, 1)); transform-origin: top left; }
+.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: calc(100svh - var(--site-header-height, 60px) - 65px); padding: 35px 0 6px; }
 .builders-strengths-heading h2 { max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
 .builders-strengths-heading h2 b { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
@@ -525,12 +522,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (min-width: 768px) and (max-height: 899px) {
-  .builders-strengths-content { gap: clamp(16px, 3svh, 28px); padding: 16px 0 6px; }
-  .builders-strengths-heading h2 { margin: 18px 0 20px; font-size: clamp(28px, min(10cqw, 6.4svh), 52px); }
-  .builders-strengths-heading h2 b { margin-bottom: 12px; font-size: clamp(24px, min(6.7cqw, 4.4svh), 36px); }
-  .builders-strengths-heading > p { font-size: 14px; line-height: 22px; }
-  .builders-solution__copy h3, .builders-solution__copy p { font-size: 18px; }
-  .builders-solution__copy .builders-solution__number { min-height: 0; font-size: clamp(48px, 9svh, 72px); }
+  .builders-strengths-content { gap: 16px; padding: 8px 0 6px; }
+  .builders-strengths-heading h2 { margin: 14px 0 16px; }
+  .builders-strengths-heading h2 b { margin-bottom: 10px; }
 }
 
 @media (max-width: 767px) {
