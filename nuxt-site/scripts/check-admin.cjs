@@ -41,9 +41,10 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
    assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
    const expand=page.getByRole('button',{name:'展開選單',exact:true});assert.equal(await expand.getAttribute('aria-expanded'),'false');await expand.press('Enter')
    assert.deepEqual(await geometry(),{rail:220,main:220,save:220})
-   await page.locator('.cms-part-tabs button').last().click();assert.equal(await page.getByRole('button',{name:'收合選單',exact:true}).getAttribute('aria-expanded'),'true')
-   await page.locator('.cms-part-tabs button').first().click();await page.getByLabel('區塊標題（前半段）',{exact:true}).fill('側欄操作檢查')
-   assert.deepEqual(await geometry(),{rail:220,main:220,save:220});await page.getByRole('button',{name:'收合選單',exact:true}).click();assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
+   const lastPart=page.locator('.cms-part-tabs button').last();await lastPart.click();assert(await lastPart.evaluate(el=>el.classList.contains('cms-button-gold')));assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
+   await page.locator('.cms-part-tabs button').first().click();await expand.click()
+   const titleField=page.getByLabel('區塊標題（前半段）',{exact:true});await titleField.click();assert(await titleField.evaluate(el=>el===document.activeElement));await page.keyboard.type('側欄操作檢查');assert((await titleField.inputValue()).includes('側欄操作檢查'));assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
+   await expand.click();await page.locator('#cms-main').click({position:{x:2,y:2}});assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
    await page.locator('.cms-editor-breadcrumb').getByRole('link').click();assert.equal(await page.locator('.cms-sidebar').evaluate(el=>el.getBoundingClientRect().width),220)
    await page.locator('.cms-section-card').first().click();assert.equal(await page.locator('.cms-sidebar').evaluate(el=>el.getBoundingClientRect().width),76)
    await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor()
@@ -61,6 +62,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
  }
  await page.setViewportSize({width:1440,height:960});await go('/admin/home?edit='+id);const field=page.getByLabel('區塊標題（前半段）',{exact:true});await field.waitFor();await field.fill('未儲存的即時測試')
  await page.frameLocator('iframe[title="目前輸入的官網效果"]').getByText('未儲存的即時測試',{exact:false}).first().waitFor({timeout:45000});await page.waitForFunction(()=>document.querySelector('.cms-effect-panel')?.textContent.includes('目前輸入的效果'));const frame=page.frames().find(f=>f.url().includes('cmsPreview='));assert(frame);await frame.waitForFunction(()=>{const r=document.getElementById('kitchen-series')?.getBoundingClientRect();return r&&r.top>=-1&&r.top<innerHeight/2});assert.deepEqual((await api('documents')).body,before.body);await page.screenshot({path:join(shots,'live-unsaved-preview.png'),fullPage:true})
+ await page.getByRole('button',{name:'展開選單',exact:true}).click();await frame.getByText('未儲存的即時測試',{exact:false}).first().click();assert.equal(await page.getByRole('button',{name:'展開選單',exact:true}).getAttribute('aria-expanded'),'false')
  const oldPreviewToken=new URL(frame.url()).searchParams.get('cmsDraft'),initialPreviewToken=new URL(await page.locator('iframe[title="目前輸入的官網效果"]').getAttribute('src'),base).searchParams.get('cmsDraft'),previewDocuments=[]
  for(const documentId of [id,'data-kitchenStyles']){const d=(await api('documents/'+documentId)).body;previewDocuments.push({id:d.id,revision:d.revision,body:d.body})}
  for(let i=0;i<41;i++)assert.equal((await api('workspaces/'+id,{action:'preview',documents:previewDocuments})).status,200)
