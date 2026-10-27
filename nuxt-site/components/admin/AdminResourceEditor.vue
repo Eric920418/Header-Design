@@ -34,7 +34,7 @@ const previewScale=computed(()=>Math.min(1,previewSize.value.width/(mobile.value
 const frameStyle=computed(()=>({width:(mobile.value?390:1440)+'px',height:previewSize.value.height/(previewScale.value||1)+'px',transform:`scale(${previewScale.value})`}))
 let observer:ResizeObserver|undefined
 watch(previewFrame,frame=>{observer?.disconnect();if(frame?.parentElement){observer=new ResizeObserver(([entry])=>{if(entry)previewSize.value={width:entry.contentRect.width,height:entry.contentRect.height}});observer.observe(frame.parentElement)}},{flush:'post'})
-function failPreview(reason:string){clearTimeout(previewTimer);previewError.value=reason;previewState.value='目前輸入尚未套用，請重新載入預覽'}
+function failPreview(reason:string){clearTimeout(previewTimer);previewReady.value=false;previewNeedsReload=true;previewError.value=reason;previewState.value='目前輸入尚未套用，請重新載入預覽'}
 function sendPreview(){if(!previewReady.value||!previewResult.value||previewNeedsReload)return;previewState.value='正在更新效果…';previewFrame.value?.contentWindow?.postMessage(JSON.parse(JSON.stringify({type:'sakura:preview',documents:previewResult.value.documents,previewToken:previewResult.value.previewToken})),location.origin);clearTimeout(previewTimer);previewTimer=setTimeout(()=>failPreview('官網預覽沒有回應，請重新載入預覽。'),20000)}
 function receive(event:MessageEvent){if(event.origin!==location.origin||event.source!==previewFrame.value?.contentWindow)return
  if(event.data?.type==='sakura:ready'){previewReady.value=true;sendPreview()}
@@ -44,9 +44,10 @@ function receive(event:MessageEvent){if(event.origin!==location.origin||event.so
   if(event.data.statusCode===404&&event.data.previewExpired===true&&previewRecoveryAttempts<1){previewRecoveryAttempts++;void reloadPreview(false)}
  }
 }
-async function checkPreview(){if(!docs.value.length)return;const n=++sequence,snapshot=JSON.stringify(payload('preview'));previewState.value='正在檢查目前輸入…';try{const r=await api('workspaces/'+workspace.value?.id,{method:'POST',body:payload('preview')});if(n!==sequence||snapshot!==JSON.stringify(payload('preview')))return;fieldErrors.value=[];previewError.value='';previewResult.value=r;
- if(!initialToken.value||previewNeedsReload){previewNeedsReload=false;previewReady.value=false;initialToken.value=r.previewToken;previewState.value='正在載入官網畫面…';clearTimeout(previewTimer);previewTimer=setTimeout(()=>failPreview('官網畫面無法載入，請確認網路後重試。'),20000)}
- else sendPreview();return r}catch(e:any){if(n!==sequence)return;previewNeedsReload=false;fieldErrors.value=e.data?.data?.fieldErrors||[];failPreview(message(e))}}
+async function checkPreview(){if(!docs.value.length)return;const n=++sequence,snapshot=JSON.stringify(payload('preview'));previewState.value='正在檢查目前輸入…';try{const r=await api('workspaces/'+workspace.value?.id,{method:'POST',body:payload('preview'),timeout:20000,retry:0});if(n!==sequence||snapshot!==JSON.stringify(payload('preview')))return;fieldErrors.value=[];previewError.value='';previewResult.value=r;
+ // A failed or not-yet-ready frame cannot acknowledge new input; load the validated snapshot instead.
+ if(!initialToken.value||previewNeedsReload||!previewReady.value){previewNeedsReload=false;previewReady.value=false;initialToken.value=r.previewToken;previewState.value='正在載入官網畫面…';clearTimeout(previewTimer);previewTimer=setTimeout(()=>failPreview('官網畫面無法載入，請確認網路後重試。'),20000)}
+ else sendPreview();return r}catch(e:any){if(n!==sequence)return;previewNeedsReload=false;fieldErrors.value=e.data?.data?.fieldErrors||[];failPreview(e.cause?.name==='TimeoutError'?'預覽檢查超過 20 秒，請重新載入預覽；目前輸入仍保留。':message(e))}}
 watch(bodies,()=>{clearTimeout(timer);timer=setTimeout(()=>void checkPreview(),600)},{deep:true})
 watch(()=>route.query.part,value=>{if(docs.value.length)active.value=docs.value.some(d=>d.id===value)?String(value):docs.value[0].id})
 watch(previewUrl,()=>{previewReady.value=false;previewState.value='正在載入官網畫面…'})
