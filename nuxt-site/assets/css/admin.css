@@ -589,3 +589,15 @@
 .cms .cms-section-caption>strong {flex-basis:100%;min-width:0;overflow-wrap:anywhere;}
 .cms .cms-heading h1,.cms .cms-editor-breadcrumb,.cms .cms-resource-row>strong {min-width:0;overflow-wrap:anywhere;}
 .cms .cms-sidebar .cms-nav-label {min-width:0;overflow-wrap:anywhere;}
+
+/* Move the sidebar canvas instead of resizing the iframe on every animation frame. */
+@media(min-width:992px){
+ .cms {overflow-x:clip;--cms-nav-shift:0px;--cms-nav-content:196px;--cms-nav-ease:cubic-bezier(.22,1,.36,1);}
+ .cms.cms-nav-collapsed {--cms-nav-shift:-144px;--cms-nav-content:60px;}
+ .cms .cms-sidebar {width:220px;transform:translateX(var(--cms-nav-shift));transition:transform 240ms var(--cms-nav-ease);}
+ .cms .cms-sidebar>* {width:var(--cms-nav-content);flex-shrink:0;transform:translateX(calc(-1 * var(--cms-nav-shift)));transition:transform 240ms var(--cms-nav-ease);}
+ .cms .cms-sidebar :is(.cms-nav-label,.cms-nav-short) {animation:cms-nav-label-in 160ms ease-out;}
+ .cms .cms-sidebar-toggle {transition:background 160ms,transform 120ms;}
+ .cms .cms-sidebar-toggle:active {transform:scale(.94);}
+}
+@keyframes cms-nav-label-in {from{opacity:0}to{opacity:1}}

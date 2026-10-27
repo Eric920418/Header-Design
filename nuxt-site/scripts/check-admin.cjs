@@ -37,16 +37,21 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
   }
   await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert(await page.getByRole('link',{name:'查看官網位置',exact:true}).isVisible())
   if(width>=992){
-   const geometry=()=>page.evaluate(()=>({rail:document.querySelector('.cms-sidebar').getBoundingClientRect().width,main:document.querySelector('.cms-shell').getBoundingClientRect().left,save:document.querySelector('.cms-savebar').getBoundingClientRect().left}))
+   const settleSidebar=()=>page.locator('.cms').evaluate(el=>Promise.all(el.getAnimations({subtree:true}).filter(a=>a.effect?.getTiming().iterations!==Infinity).map(a=>a.finished.catch(()=>{}))))
+   const rail=async()=>{await settleSidebar();return page.locator('.cms-sidebar').evaluate(el=>Math.round(el.getBoundingClientRect().right))}
+   const geometry=async()=>{await settleSidebar();return page.evaluate(()=>({rail:Math.round(document.querySelector('.cms-sidebar').getBoundingClientRect().right),main:Math.round(document.querySelector('.cms-shell').getBoundingClientRect().left),save:Math.round(document.querySelector('.cms-savebar').getBoundingClientRect().left)}))}
    assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
    const expand=page.getByRole('button',{name:'展開選單',exact:true});assert.equal(await expand.getAttribute('aria-expanded'),'false');await expand.press('Enter')
    assert.deepEqual(await geometry(),{rail:220,main:220,save:220})
+   assert.equal(await page.locator('.cms-sidebar').evaluate(el=>getComputedStyle(el).transitionProperty),'transform')
+   await page.getByRole('button',{name:'收合選單',exact:true}).click();await expand.click();assert.deepEqual(await geometry(),{rail:220,main:220,save:220})
+   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth))
    const lastPart=page.locator('.cms-part-tabs button').last();await lastPart.click();assert(await lastPart.evaluate(el=>el.classList.contains('cms-button-gold')));assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
    await page.locator('.cms-part-tabs button').first().click();await expand.click()
    const titleField=page.getByLabel('區塊標題（前半段）',{exact:true});await titleField.click();assert(await titleField.evaluate(el=>el===document.activeElement));await page.keyboard.type('側欄操作檢查');assert((await titleField.inputValue()).includes('側欄操作檢查'));assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
    await expand.click();await page.locator('#cms-main').click({position:{x:2,y:2}});assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
-   await page.locator('.cms-editor-breadcrumb').getByRole('link').click();assert.equal(await page.locator('.cms-sidebar').evaluate(el=>el.getBoundingClientRect().width),220)
-   await page.locator('.cms-section-card').first().click();assert.equal(await page.locator('.cms-sidebar').evaluate(el=>el.getBoundingClientRect().width),76)
+   await page.locator('.cms-editor-breadcrumb').getByRole('link').click();assert.equal(await rail(),220)
+   await page.locator('.cms-section-card').first().click();assert.equal(await rail(),76)
    await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor()
   }else{
    assert(!await page.locator('.cms-sidebar').isVisible());assert(!await page.locator('.cms-sidebar-toggle').isVisible())
@@ -90,7 +95,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
  await upload.setInputFiles({name:'workflow-acceptance.png',mimeType:'image/png',buffer:image});await page.getByRole('status').filter({hasText:'檔案已上傳'}).waitFor()
  const {PDFDocument}=require('pdf-lib'),pdf=await PDFDocument.create();pdf.addPage();await upload.setInputFiles({name:'workflow-acceptance.pdf',mimeType:'application/pdf',buffer:Buffer.from(await pdf.save())});await page.getByRole('status').filter({hasText:'檔案已上傳'}).waitFor()
  await upload.setInputFiles({name:'invalid.txt',mimeType:'text/plain',buffer:Buffer.from('invalid')});await page.getByRole('alert').filter({hasText:'請選擇 JPG'}).waitFor()
- await page.emulateMedia({reducedMotion:'reduce'});await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor();assert.equal(await page.locator('.cms-page').evaluate(el=>getComputedStyle(el).animationName),'none')
+ await page.emulateMedia({reducedMotion:'reduce'});await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor();assert.equal(await page.locator('.cms-page').evaluate(el=>getComputedStyle(el).animationName),'none');assert.equal(await page.locator('.cms-sidebar').evaluate(el=>getComputedStyle(el).transitionDuration),'0s')
  console.log('PASS: actual image and PDF uploads (temporary acceptance files)')
  assert.deepEqual((await api('documents')).body,before.body);assert.deepEqual(errors,[]);console.log('PASS: 4 widths, all navigation, live preview without saving, conflicts, single-item editing, image selection/focus, confirmation, filters, accounts and website. Screenshots:',shots)
  }catch(e){console.error('Original UI failure:',e);console.error('UI failure:',page.url(),await page.locator('[role=alert]').allTextContents().catch(()=>[]));await page.screenshot({path:join(shots,'failure.png'),fullPage:true}).catch(()=>{});console.error('Screenshots:',shots);throw e}finally{await browser.close()}
