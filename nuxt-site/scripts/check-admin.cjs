@@ -35,6 +35,22 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
    if(path==='/admin/home'){assert.equal(await page.locator('.cms-section-card').count(),8);await page.screenshot({path:join(shots,`${width}-home.png`),fullPage:true})}
   }
   await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert(await page.getByRole('link',{name:'查看官網位置',exact:true}).isVisible())
+  if(width>=992){
+   const geometry=()=>page.evaluate(()=>({rail:document.querySelector('.cms-sidebar').getBoundingClientRect().width,main:document.querySelector('.cms-shell').getBoundingClientRect().left,save:document.querySelector('.cms-savebar').getBoundingClientRect().left}))
+   assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
+   const expand=page.getByRole('button',{name:'展開選單',exact:true});assert.equal(await expand.getAttribute('aria-expanded'),'false');await expand.press('Enter')
+   assert.deepEqual(await geometry(),{rail:220,main:220,save:220})
+   await page.locator('.cms-part-tabs button').last().click();assert.equal(await page.getByRole('button',{name:'收合選單',exact:true}).getAttribute('aria-expanded'),'true')
+   await page.locator('.cms-part-tabs button').first().click();await page.getByLabel('區塊標題（前半段）',{exact:true}).fill('側欄操作檢查')
+   assert.deepEqual(await geometry(),{rail:220,main:220,save:220});await page.getByRole('button',{name:'收合選單',exact:true}).click();assert.deepEqual(await geometry(),{rail:76,main:76,save:76})
+   await page.locator('.cms-editor-breadcrumb').getByRole('link').click();assert.equal(await page.locator('.cms-sidebar').evaluate(el=>el.getBoundingClientRect().width),220)
+   await page.locator('.cms-section-card').first().click();assert.equal(await page.locator('.cms-sidebar').evaluate(el=>el.getBoundingClientRect().width),76)
+   await go('/admin/home?edit='+id);await page.getByLabel('區塊標題（前半段）',{exact:true}).waitFor()
+  }else{
+   assert(!await page.locator('.cms-sidebar').isVisible());assert(!await page.locator('.cms-sidebar-toggle').isVisible())
+   const menu=page.getByRole('button',{name:'開啟後台選單',exact:true});await menu.click();await page.getByRole('dialog',{name:'管理選單',exact:true}).waitFor();await page.getByRole('button',{name:'關閉視窗',exact:true}).press('Escape');assert(await menu.evaluate(el=>el===document.activeElement))
+   assert.equal(await page.locator('.cms-savebar').evaluate(el=>el.getBoundingClientRect().left),0)
+  }
   if(width<1200){await page.getByRole('button',{name:'看效果',exact:true}).first().click();assert(await page.locator('.cms-effect-panel').isVisible());await page.getByRole('button',{name:'修改內容',exact:true}).click()}
   await page.screenshot({path:join(shots,`${width}-editor.png`),fullPage:true})
  }
