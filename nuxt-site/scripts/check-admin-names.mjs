@@ -27,7 +27,7 @@ for(const brand of ['sakura','svago','teka'])assert(find(names,'catalog-'+brand)
 assert.equal(JSON.stringify(published),original,'Name resolution must not mutate published content')
 const dateCode="import {cmsDate} from './shared/cms/workflow.mjs';console.log(cmsDate('2026-09-28T14:02:46Z'))"
 const formatted=['UTC','Asia/Taipei'].map(TZ=>{const r=spawnSync(process.execPath,['--input-type=module','-e',dateCode],{cwd:new URL('../',import.meta.url),env:{...process.env,TZ},encoding:'utf8'});assert.equal(r.status,0,r.stderr);return r.stdout.trim()})
-assert.equal(formatted[0],formatted[1]);assert.equal(formatted[0],'2026/9/28 下午10:02:46');assert.equal(cmsDate('invalid'),'尚無時間');assert.equal(cmsDate(null),'尚無時間')
+assert.equal(formatted[0],formatted[1]);assert.equal(formatted[0],'2026/9/28 下午10:02:46');assert.equal(cmsDate('invalid'),'尚無時間');assert.equal(cmsDate(null),'尚無時間');assert.equal(cmsDate('2026-09-28T16:00:00Z'),'2026/9/29 上午12:00:00');assert.equal(cmsDate('2026-09-28T16:00:00Z',true),'2026/9/29')
 console.log('PASS: matching server/browser dates across UTC and Taipei; missing dates remain readable')
 console.log('PASS: 48 unique entries, official categories, published names/reordering, missing-name defaults, shared pages, legacy search/URLs, return conditions and page choices')
 if(process.env.CMS_NAMES_PRODUCTION==='1'){

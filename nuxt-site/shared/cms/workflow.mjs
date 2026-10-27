@@ -51,8 +51,11 @@ export function changedItems(previous,next,schema){
  }return [...new Set(result)]
 }
 
+const cmsClock=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric',hourCycle:'h23'})
 export function cmsDate(value,dateOnly=false){
  if(!value)return '尚無時間'
  const date=new Date(value);if(!Number.isFinite(date.getTime()))return '尚無時間'
- return dateOnly?date.toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'}):date.toLocaleString('zh-TW',{timeZone:'Asia/Taipei'})
+ const p=Object.fromEntries(cmsClock.formatToParts(date).map(part=>[part.type,part.value])),day=`${p.year}/${Number(p.month)}/${Number(p.day)}`,hour=Number(p.hour)
+ // Build the text explicitly: browser and Node locale data can use different spaces.
+ return dateOnly?day:`${day} ${hour<12?'上午':'下午'}${hour%12||12}:${p.minute.padStart(2,'0')}:${p.second.padStart(2,'0')}`
 }
