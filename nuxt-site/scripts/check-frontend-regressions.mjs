@@ -120,7 +120,7 @@ assert(productListSource.includes('InternalDesignLoadState label="商品列表"'
 for(const path of ['/products/sakura/range-hood','/products/sakura/category/29','/products/sakura/range-hood/near-suction']){
   const page=await(await get(path)).text()
   assert(!page.includes('class="product-search"'),path+' 不得保留分類頁搜尋表單')
-  assert(page.includes('aria-label="產品清單"'),path+' 商品清單應保留')
+  assert(page.includes(path === '/products/sakura/range-hood' ? 'aria-label="產品系列"' : 'aria-label="產品清單"'),path+' 父分類先選系列、葉分類顯示商品')
   assert(!page.includes('aria-label="產品子分類"')&&!page.includes('product-subcategories'),path+' 不得留下上方子分類列或佔位')
 }
 const hoodList=await(await get('/api/products/sakura/items?category=6')).json()
@@ -128,7 +128,7 @@ assert.equal(hoodList.children.length,8)
 assert.equal(hoodList.children.find(child=>child.id===34)?.count,8,'配備數量不得因版型修改改變')
 const hoodPage=await(await get('/products/sakura/range-hood')).text()
 assert(hoodPage.includes('href="/products/sakura/category/34"'),'配備仍需連向原分類')
-assert(hoodPage.includes('href="/products/sakura/range-hood?page=2"'),'分類分頁仍需可用')
+assert(!hoodPage.includes('aria-label="產品分頁"'),'系列選擇頁不顯示全產品分頁')
 const allProductPage=await(await get('/products/sakura/all?q=DR7396')).text()
 assert(allProductPage.includes('class="product-search"')&&allProductPage.includes('value="DR7396"'),'全部產品搜尋及 query 回填需保留')
 assert(allProductPage.includes('DR7396'),'搜尋結果需保留')
@@ -141,17 +141,18 @@ for(const brand of ['sakura','svago','teka']){
   for(const item of list.items)assert(grid.includes(item.model)&&grid.includes(item.route),brand+' 型號與商品連結需保留')
   assert(page.includes(`共 ${list.total} 項產品`),brand+' 商品總數需保留')
 }
-console.log('PASS 子分類列／佔位移除、三品牌商品卡片／型號／連結／數量、原分類連結／分頁與全部產品搜尋保留')
+console.log('PASS 舊篩選列／佔位移除、父分類先選系列、三品牌全部商品／型號／連結／數量及搜尋保留')
 assert(productListSource.includes('<InternalListPagination')&&productListSource.includes('label="產品分頁"'),'產品頁需沿用設計靈感的共用分頁')
 assert(!productListSource.includes('const pageNumbers')&&!productListSource.includes('.product-pagination a'),'不得留下舊分頁邏輯或外框樣式')
-for(const page of [1,2,4]){
-  const html=await(await get('/products/sakura/range-hood?page='+page)).text()
+const productPaginationList=await(await get('/api/products/sakura/items')).json()
+for(const page of [1,2,productPaginationList.pages]){
+  const html=await(await get('/products/sakura/all?page='+page)).text()
   const nav=html.match(/<nav[^>]*aria-label="產品分頁"[^>]*>[\s\S]*?<\/nav>/)?.[0]
   assert(nav,'多頁商品需顯示分頁')
   assert(nav.includes('list-pagination__current')&&nav.includes(`aria-label="第${page}頁，目前頁面"`),'選中頁需為共用金色圓底')
   assert.equal((nav.match(/aria-current="page"/g)||[]).length,1)
   assert.equal(nav.includes('aria-label="上一頁"'),page>1)
-  assert.equal(nav.includes('aria-label="下一頁"'),page<4)
+  assert.equal(nav.includes('aria-label="下一頁"'),page<productPaginationList.pages)
   assert(nav.includes('<svg'),'上一頁／下一頁需使用既有箭頭圖示')
 }
 const accessoryPage=await(await get('/products/sakura/category/34')).text()

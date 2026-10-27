@@ -57,12 +57,12 @@ for (const [brand,total] of Object.entries(totals)) {
     assert(result.items.every(item=>item.classIds.includes(category.id)))
     if (!checkedSeriesLinks && result.children.length) {
       const html = await get(category.route)
-      const marquee = html.match(/<section[^>]*class="near-suction-series"[\s\S]*?<\/section>/)?.[0]
-      assert(marquee, `${brand} 產品系列跑馬燈應存在`)
-      const links = [...marquee.matchAll(/<a\b[^>]*>/g)].map(match=>match[0])
-      assert.equal(links.length,result.children.length*2)
-      for (const child of result.children) assert.equal(links.filter(link=>link.includes(`href="${child.route}"`)).length,2, `${child.title} 必須連到自己的列表`)
-      assert.equal(links.filter(link=>link.includes('tabindex="-1"')).length,result.children.length, '複製組不重複進入 Tab 順序')
+      const series = html.match(/<ul[^>]*aria-label="產品系列"[\s\S]*?<\/ul>/)?.[0]
+      assert(series, `${brand} 必須先顯示系列選擇`)
+      const links = [...series.matchAll(/<a\b[^>]*>/g)].map(match=>match[0])
+      assert.equal(links.length,result.children.length)
+      for (const child of result.children) assert.equal(links.filter(link=>link.includes(`href="${child.route}"`)).length,1, `${child.title} 必須連到自己的列表`)
+      assert(!html.includes('aria-label="產品清單"'), '選系列前不顯示全產品')
       checkedSeriesLinks = true
     }
   }

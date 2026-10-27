@@ -19,6 +19,7 @@ const catalogueHighlights = PRODUCT_CATALOGUES
   .filter(item => ['sakura-kitchen-2026', 'kitchenware-2026'].includes(item.id))
   .map(item => item.id === 'kitchenware-2026' ? { ...item, title: '櫻花整廚廚房配備型錄' } : item)
 const productCategories = computed(() => data.value?.children.map(item => ({ ...item, groupLabel: info.name })) ?? [])
+const showSeries = computed(() => productCategories.value.length > 0 && !route.query.q)
 const breadcrumbs = computed(() => [{ label: '首頁', to: '/' }, { label: info.label, to: `/products/${brand}` },
   ...(data.value?.ancestors.length ? data.value.ancestors.map((item, index, list) => ({ label: item.title, to: index < list.length - 1 ? item.route : undefined })) : [{ label: '全部產品' }])])
 const productRoute = (item: { route: string }) => ({ path: item.route, query: { ...(category ? { category: String(category) } : {}), ...(route.query.q ? { q: route.query.q } : {}), page: String(data.value?.page ?? 1) } })
@@ -57,9 +58,26 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
         </form>
         <InternalDesignLoadState label="商品列表" :pending="status === 'pending' && !data" :error="error" @retry="refresh()" />
         <p v-if="data && !error && status === 'pending'" class="sr-only" role="status">正在更新商品列表…</p>
-        <p v-if="data && !error" class="mb-6 font-cjk-sans" role="status">共 {{ data.total }} 項產品 · 第 {{ data.page }}／{{ data.pages }} 頁</p>
+        <p v-if="data && !error && showSeries" class="mb-6 font-cjk-sans" role="status">請選擇系列 · 共 {{ productCategories.length }} 個系列、{{ data.total }} 項產品</p>
+        <p v-else-if="data && !error" class="mb-6 font-cjk-sans" role="status">共 {{ data.total }} 項產品 · 第 {{ data.page }}／{{ data.pages }} 頁</p>
         <p v-if="data && !error && !data.total" class="py-12 text-center" role="status">沒有符合條件的產品，請更換搜尋文字。</p>
-        <ul v-if="data && !error" class="near-suction-product-grid" aria-label="產品清單" :aria-busy="status === 'pending'" :inert="status === 'pending'">
+        <ul v-if="data && !error && showSeries" class="near-suction-product-grid near-suction-category-grid" aria-label="產品系列" :aria-busy="status === 'pending'" :inert="status === 'pending'">
+          <li v-for="(series, index) in productCategories" :key="series.id" v-reveal="{ anim: 'opalMoveUp', delay: Math.min(index * 60, 240) }">
+            <NuxtLink :to="series.route" class="near-suction-product-card" :aria-label="`查看${series.title}，共 ${series.count} 項產品`">
+              <div class="near-suction-product-card__image">
+                <InternalProductCategoryImage v-if="series.image" :src="series.image" :alt="`${series.title}代表商品`" />
+                <span v-else class="flex h-full items-center justify-center p-6">此系列尚未提供圖片</span>
+                <span class="near-suction-product-card__shade" aria-hidden="true" />
+                <span class="near-suction-product-card__action" aria-hidden="true"><ArrowRight /></span>
+              </div>
+              <div class="near-suction-product-card__text">
+                <h3>{{ series.title }}</h3>
+                <p>{{ series.count }} 項產品</p>
+              </div>
+            </NuxtLink>
+          </li>
+        </ul>
+        <ul v-else-if="data && !error" class="near-suction-product-grid" aria-label="產品清單" :aria-busy="status === 'pending'" :inert="status === 'pending'">
           <li
             v-for="(product, index) in data.items"
             :key="product.id"
@@ -87,11 +105,11 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
             </NuxtLink>
           </li>
         </ul>
-        <InternalListPagination v-if="data && !error && data.pages > 1" class="product-pagination" :current-page="data.page" :total-pages="data.pages" label="產品分頁" />
+        <InternalListPagination v-if="data && !error && !showSeries && data.pages > 1" class="product-pagination" :current-page="data.page" :total-pages="data.pages" label="產品分頁" />
       </div>
     </section>
 
-    <section v-if="productCategories.length" class="near-suction-series" aria-labelledby="near-suction-series-title">
+    <section v-if="!error && !showSeries && productCategories.length" class="near-suction-series" aria-labelledby="near-suction-series-title">
       <div class="near-suction-rail internal-rail-safe">
         <h2 id="near-suction-series-title" v-reveal="{ anim: 'opalMoveUp' }">
           <strong>{{ info.name }}</strong> 廚電產品
@@ -205,6 +223,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
 .near-suction-product-card__action svg { width: 24px; height: 24px; }
 .near-suction-product-card__text { padding: 20px 4px 0; }
 .near-suction-product-card__text h3 { min-height: 54px; margin: 0; color: #1c1c1d; font-family: var(--font-cjk-serif); font-size: 20px; font-weight: 500; line-height: 27px; transition: color .3s ease; }
+.near-suction-category-grid .near-suction-product-card__text h3 { min-height: 0; overflow-wrap: anywhere; }
 .near-suction-product-card__text p { margin: 5px 0 13px; color: #85858a; font-family: var(--font-cjk-sans); font-size: 16px; line-height: 22px; }
 .near-suction-product-card__text span { color: #59585d; font-family: var(--font-cjk-sans); font-size: 14px; line-height: 21px; }
 .near-suction-product-card__text strong { color: #1c1c1d; font-family: var(--font-cjk-sans); font-size: 17px; font-weight: 700; }
@@ -286,6 +305,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
   .near-suction-products h2 em { font-size: 30px; line-height: 35px; }
   .near-suction-products h2 span { font-size: 30px; line-height: 40px; }
   .near-suction-product-grid { grid-template-columns: 1fr; gap: 42px; }
+  .near-suction-category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 16px; }
   .near-suction-product-card__image,
   .near-suction-catalogue-card__cover { border-radius: 18px; }
   .near-suction-product-card__action { top: auto; right: 18px; bottom: 18px; left: auto; width: 48px; height: 48px; opacity: 1; background: #caa05c; transform: none; }
