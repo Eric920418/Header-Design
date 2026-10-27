@@ -1,7 +1,7 @@
+import {nameBindings,workspaceNames} from './navigation.mjs'
 import {contentAliases} from './public-content.mjs'
 import {resourceGuides,resourceGuide,homeResources} from './presentation.mjs'
 
-export const areas=[{key:'pages',label:'其他頁面'},{key:'news',label:'消息與文章'},{key:'cases',label:'設計案例'},{key:'products',label:'廚房產品'},{key:'stores',label:'門市與品牌館'},{key:'settings',label:'選單與頁尾'}]
 const assigned=new Set(),groups=[]
 function add(id,area,title,extra=[]){const ids=[id,...extra].filter(i=>resourceGuide(i)&&!assigned.has(i));if(!ids.length)return;ids.forEach(i=>assigned.add(i));groups.push({id,area,title,ids,href:resourceGuide(id).href})}
 for(const id of homeResources)add(id,'home',resourceGuide(id).tabTitle,id.endsWith('HomeProject')?['data-kitchenStyles']:[])
@@ -22,8 +22,13 @@ for(const [id,area,title,extra] of [
 ])add(id,area,title,extra)
 for(const [id,guide]of Object.entries(resourceGuides))if(!assigned.has(id)&&id!=='view-components-FloatingButtons')add(id,'pages',guide.location[0])
 export const workspaces=groups
+export const workspaceDefaults=workspaceNames(groups)
 export function workspaceFor(id){id=contentAliases[id]||id;return groups.find(w=>w.id===id||w.ids.includes(id))}
-export function editorLink(id,query={}){const w=workspaceFor(id);return{path:w?.area==='home'?'/admin/home':'/admin/content',query:{...query,...(w&&id!==w.id&&w.ids.includes(id)?{part:id}:{}),...(w?.area!=='home'?{area:w?.area||'pages'}:{}),edit:w?.id||id}}}
+export function editorLink(id,query={}){
+ const w=workspaceFor(id),home=w?.area==='home',section=nameBindings[w?.id]?.section||'all'
+ const {area,edit,part,...rest}=query
+ return{path:home?'/admin/home':'/admin/content',query:{...rest,...(home&&rest.section?{returnPath:'/admin/content'}:{}),...(!home?{section:rest.section||section}:{}),...(w&&id!==w.id&&w.ids.includes(id)?{part:id}:part&&w?.ids.includes(part)?{part}:{}),edit:w?.id||id}}
+}
 export function rowName(value,index=0){return value?.summary?.title||value?.title||value?.name||value?.zh||value?.en||value?.store||value?.question||value?.label||value?.heading||`第 ${index+1} 項`}
 export function firstImage(value){
  if(!value||typeof value!=='object')return ''

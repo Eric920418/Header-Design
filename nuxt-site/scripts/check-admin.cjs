@@ -12,6 +12,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
  await go('/admin');if(page.url().includes('preview-access')){await page.getByLabel('預覽密碼',{exact:true}).fill(process.env.PREVIEW_PASSWORD);await page.getByRole('button',{name:'進入網站',exact:true}).click();await page.waitForURL(base+'/admin/login')}
  await go('/admin/login')
  await page.getByLabel('電子郵件',{exact:true}).fill(process.env.CMS_TEST_EMAIL);await page.getByLabel('密碼',{exact:true}).fill(process.env.CMS_TEST_PASSWORD);await page.getByRole('button',{name:'登入',exact:true}).click();await page.waitForURL(base+'/admin');await page.getByRole('heading',{name:'今天要修改什麼？'}).waitFor()
+ const names=(await api('workspaces')).body;assert.equal(names.length,48);for(const w of names){assert(w.section&&w.pageTitle&&w.purpose);assert.equal(w.title,w.pageTitle+'｜'+w.purpose)}
  const before=await api('documents'),id='view-components-home-HomeProject'
  // Preview APIs must include unsaved collections and remain private.
  const productDoc=(await api('documents/catalog-sakura')).body,liveProducts=(await read('/api/products/sakura/items?page=1')).body
@@ -30,7 +31,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
 
  for(const width of [1440,1024,768,390]){
   await page.setViewportSize({width,height:960})
-  for(const path of ['/admin','/admin/home',...['pages','news','cases','products','stores','settings'].map(a=>'/admin/content?area='+a),'/admin/media','/admin/inbox','/admin/users','/admin/audit','/']){
+  for(const path of ['/admin','/admin/home',...['design','products','service','news','brand','franchise','builders','shared','all'].map(s=>'/admin/content?section='+s),...['pages','news','cases','products','stores','settings'].map(a=>'/admin/content?area='+a),'/admin/media','/admin/inbox','/admin/users','/admin/audit','/']){
    await go(path);await page.locator(path==='/'?'#top':'.cms-page').waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Overflow ${width}: ${path}`);assert.equal(await page.locator('.cms-main>.cms-error,.cms-page>.cms-error').count(),0,`${width}: ${path}`)
    if(path==='/admin/home'){assert.equal(await page.locator('.cms-section-card').count(),8);await page.screenshot({path:join(shots,`${width}-home.png`),fullPage:true})}
   }
@@ -52,7 +53,11 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
    assert.equal(await page.locator('.cms-savebar').evaluate(el=>el.getBoundingClientRect().left),0)
   }
   if(width<1200){await page.getByRole('button',{name:'看效果',exact:true}).first().click();assert(await page.locator('.cms-effect-panel').isVisible());await page.getByRole('button',{name:'修改內容',exact:true}).click()}
+  assert.equal(await page.locator('.cms-work-editor h1').innerText(),names.find(w=>w.id===id).title)
   await page.screenshot({path:join(shots,`${width}-editor.png`),fullPage:true})
+  await go('/admin/content?section=design&q='+encodeURIComponent('廚房知識文章'))
+  const knowledge=names.find(w=>w.id==='knowledge-articles');await page.getByRole('link').filter({has:page.getByText(knowledge.title,{exact:true})}).click();assert.equal(await page.locator('.cms-work-editor h1').innerText(),knowledge.title)
+  await page.locator('.cms-editor-breadcrumb').getByRole('link').click();assert.equal(new URL(page.url()).searchParams.get('q'),'廚房知識文章');assert.equal(await page.locator('input[aria-label="搜尋內容"]').inputValue(),'廚房知識文章')
  }
  await page.setViewportSize({width:1440,height:960});await go('/admin/home?edit='+id);const field=page.getByLabel('區塊標題（前半段）',{exact:true});await field.waitFor();await field.fill('未儲存的即時測試')
  await page.frameLocator('iframe[title="目前輸入的官網效果"]').getByText('未儲存的即時測試',{exact:false}).first().waitFor({timeout:45000});await page.waitForFunction(()=>document.querySelector('.cms-effect-panel')?.textContent.includes('目前輸入的效果'));const frame=page.frames().find(f=>f.url().includes('cmsPreview='));assert(frame);await frame.waitForFunction(()=>{const r=document.getElementById('kitchen-series')?.getBoundingClientRect();return r&&r.top>=-1&&r.top<innerHeight/2});assert.deepEqual((await api('documents')).body,before.body);await page.screenshot({path:join(shots,'live-unsaved-preview.png'),fullPage:true})

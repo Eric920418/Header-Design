@@ -1,3 +1,4 @@
+import {workspaceNames} from '../../shared/cms/navigation.mjs'
 import {query,transaction,fail} from './database.mjs'
 import {getDocument,changeDocument,validate,normalizeVideos} from './content.mjs'
 import {homeHeroSchema} from '../../shared/cms/hero-media.mjs'
@@ -24,10 +25,15 @@ export function readableError(error,id,schema){
  }
  return error
 }
-export async function workspaceSummaries(){
- const rows=(await query('SELECT d.id,d.revision,d.draftId,d.publishedId,d.updatedAt,v.body FROM cms.Documents d LEFT JOIN cms.Versions v ON v.id=d.draftId')).recordset
- return workspaces.map(w=>{const docs=w.ids.map(id=>rows.find(d=>d.id===id)).filter(Boolean);return{...w,thumbnail:docs.map(d=>d.body?firstImage(JSON.parse(d.body)):'').find(Boolean)||'',updatedAt:docs.map(d=>d.updatedAt).sort((a,b)=>new Date(b)-new Date(a))[0],pending:docs.some(d=>d.draftId!==d.publishedId),published:docs.some(d=>d.publishedId),missing:docs.length!==w.ids.length}})
+export function workspaceSummariesFromRows(rows){
+ const published=Object.fromEntries(rows.filter(d=>d.publishedBody).map(d=>[d.id,JSON.parse(d.publishedBody)]))
+ return workspaceNames(workspaces,published).map(w=>{const docs=w.ids.map(id=>rows.find(d=>d.id===id)).filter(Boolean);return{...w,thumbnail:docs.map(d=>d.body?firstImage(JSON.parse(d.body)):'').find(Boolean)||'',updatedAt:docs.map(d=>d.updatedAt).sort((a,b)=>new Date(b)-new Date(a))[0],pending:docs.some(d=>d.draftId!==d.publishedId),published:docs.some(d=>d.publishedId),missing:docs.length!==w.ids.length}})
 }
+export async function workspaceSummaries(){
+ const rows=(await query('SELECT d.id,d.revision,d.draftId,d.publishedId,d.updatedAt,v.body,p.body AS publishedBody FROM cms.Documents d LEFT JOIN cms.Versions v ON v.id=d.draftId LEFT JOIN cms.Versions p ON p.id=d.publishedId')).recordset
+ return workspaceSummariesFromRows(rows)
+}
+
 export async function changeWorkspace(key,input,user,connection){
  const w=workspaceInput(key,input)
  if(['publish','unpublish'].includes(input.action)&&user.role!=='admin')fail(403,'只有管理員可以更新官網或暫停顯示')

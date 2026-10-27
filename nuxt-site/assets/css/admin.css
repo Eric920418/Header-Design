@@ -584,3 +584,8 @@
 
 .cms :is(.cms-content-tools,.cms-media-tools)>select {width:auto;min-width:140px;flex:0 1 auto;}
 @media(max-width:600px){.cms :is(.cms-content-tools,.cms-media-tools)>select {width:100%;flex:1 0 100%;}}
+
+/* Official page names may be longer than the former internal task labels. */
+.cms .cms-section-caption>strong {flex-basis:100%;min-width:0;overflow-wrap:anywhere;}
+.cms .cms-heading h1,.cms .cms-editor-breadcrumb,.cms .cms-resource-row>strong {min-width:0;overflow-wrap:anywhere;}
+.cms .cms-sidebar .cms-nav-label {min-width:0;overflow-wrap:anywhere;}
