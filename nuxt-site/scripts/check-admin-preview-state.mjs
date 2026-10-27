@@ -4,6 +4,8 @@ import {runInNewContext} from 'node:vm'
 import {createRequire} from 'node:module'
 import {createServer} from 'node:http'
 import ts from 'typescript'
+import {ref,computed,watch,nextTick} from 'vue'
+import {contentAliases,publicContent} from '../shared/cms/public-content.mjs'
 
 // Exercise the editor's actual handlers without a browser, SQL or content writes.
 const source=await readFile(new URL('../components/admin/AdminResourceEditor.vue',import.meta.url),'utf8')
@@ -52,6 +54,37 @@ pending[1]({previewToken:'latest',documents:[]});await latest
 pending[0]({previewToken:'old',documents:[]});await old
 assert.equal(overlap.state.initialToken.value,'latest','A late response must not replace the newest preview')
 console.log('PASS: failed-frame recovery, bounded requests, fresh snapshots, current-token acknowledgement, retained inputs and stale-response isolation')
+const initial=editor();let initialChecks=0
+Object.assign(initial.state,{docs:ref([]),bodies:ref({}),baseline:ref(''),active:ref(''),error:ref(''),props:{id:'home'},route:{query:{}},watch,timer:undefined})
+initial.state.dirty=computed(()=>JSON.stringify(initial.state.bodies.value)!==initial.state.baseline.value)
+initial.state.api=async()=>({id:'home',body:{title:'初始文字'}})
+initial.state.checkPreview=()=>{initialChecks++}
+const load=parsed.statements.find(s=>ts.isFunctionDeclaration(s)&&s.name?.text==='load').getText(parsed)
+const bodyWatcher=parsed.statements.find(s=>ts.isExpressionStatement(s)&&s.getText(parsed).startsWith('watch(bodies,')).getText(parsed)
+runInNewContext(ts.transpileModule(load+'\n'+bodyWatcher+'\nthis.loadBody=load;',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,initial.state)
+await initial.state.loadBody();await nextTick()
+for(const [id,timer]of initial.timers){initial.timers.delete(id);timer.fn()}
+assert.equal(initialChecks,1,'Initial document loading must not start a second preview that interrupts the first iframe')
+console.log('PASS: one initial preview check instead of two')
+
+const resourceSource=await readFile(new URL('../composables/useCmsResource.ts',import.meta.url),'utf8')
+function resources(preview=true,client=true){
+ const states=new Map(),route={query:preview?{cmsPreview:'home',cmsDraft:'first'}:{}},requests=[]
+ const context={contentAliases,publicContent,useRoute:()=>route,useState:(key,init)=>{if(!states.has(key))states.set(key,ref(init()));return states.get(key)},
+  useAsyncData:async(key,fetch)=>({data:ref(await fetch()),error:ref(null)}),useNuxtApp:()=>({isHydrating:false,payload:{data:{}}}),
+  useRequestFetch:()=>async path=>{requests.push(path);return{title:'官網原有文字'}},createError:options=>Object.assign(Error(options.message),options)}
+ const code=ts.transpileModule(resourceSource.replace(/^import .*\n/,'').replace('export async function','async function').replaceAll('import.meta.client',String(client)),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
+ runInNewContext(code+'\nthis.read=useCmsResource;',context)
+ return{context,route,states,requests}
+}
+const cached=resources()
+await cached.context.read('site-visuals',{});cached.route.query.cmsDraft='next';await cached.context.read('site-visuals',{})
+assert.equal(cached.requests.length,1,'Unedited preview resources must not be fetched again on every text change')
+cached.states.get('cms-unsaved-preview').value['site-visuals']={title:'目前修改的文字'}
+assert.equal((await cached.context.read('site-visuals',{})).title,'目前修改的文字');assert.equal(cached.requests.length,1)
+for(const fixture of [resources(false),resources(true,false)]){await fixture.context.read('site-visuals',{});await fixture.context.read('site-visuals',{});assert.equal(fixture.requests.length,2,'Published requests and server renders must remain fresh')}
+const fresh=resources();await fresh.context.read('site-visuals',{});assert.equal(fresh.requests.length,1,'A new preview must load a fresh baseline')
+console.log('PASS: unedited preview resources are reused; current input wins; fresh previews, SSR and the published site still fetch current data')
 // Use the installed fetch client against a real silent server to verify cancellation.
 const require=createRequire(import.meta.url),{$fetch}=await import(createRequire(require.resolve('nuxt/package.json')).resolve('ofetch'))
 let attempts=0
