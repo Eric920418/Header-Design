@@ -19,6 +19,9 @@
 - pnpm build含typecheck、315組幾何／生命週期回歸、原計數器及限定建商SSR／版面／圖片／手機斷言通過，未執行含業務POST的整份frontend-regressions。本機SQL14333未開，未重啟Docker或其他專案；本次3100 production preview明確用既有Azure runtime環境少量唯讀取得已發布內容，尺寸測試只調同一頁viewport，不做CMS／DB寫入或全站遠端掃描。
 - 實際瀏覽器11尺寸通過：1280×600／683／768／900、1366×600、1024×600、1920×1080、1280×390、768×1024、390×844、320×640；頁寬不溢出、標題行框不溢出、整組transform:none。1280四種高度皆英文60／中文40／統計80px；600px高內容492.03px可完整容納，左欄top75不動、右欄top63.125→-77.375。1024px寬保留42／32／60px、手機30／28／48px；1280×390自然閱讀不縮字。768px高平板右欄較短時沒有額外固定行程，不宣稱所有尺寸都有視差距離。
 - 區塊尾端實際捲動：1280×600左欄top46.27開始自然解除，左右bottom同為538.27，不把固定內容帶入下一區；正常固定期間不以負top藏標題。修前／修後圖片存/tmp/sakura-strengths-small-before.png與/tmp/sakura-strengths-small-local-after.png。這不是全站重新驗收；正式發布與少量正式瀏覽器回歸待完成。
+- 正式發布cdede08ba337a97f0766c7e0714896b8eb2eebd0，Nuxt／Production dpl_HHTq95hF4dpMEL769a6KCaQeZg45已READY／GitHub成功；header-design-muqnrlnce-erics-projects-57e51613.vercel.app接上兩既有正式網域，未更動部署／環境設定，遠端建置時長未另量測。兩站check-builder-strengths均通過，實際載入/_nuxt/BVNwZ28H.js已移除整組scale，原文、CMS統計及三圖200保留。最近10分鐘有界error日誌無結果，未查drain或新增監控，不據此宣稱長期無錯誤。
+- 正式瀏覽器8尺寸：1280×600／683／768／900、1366×600、1024×600、1280×390、390×844通過。1280四高度字級60／40／80px不變；固定期間連續兩次原生滾動，左欄均top75、右欄持續移動，例如1280×683右欄-39.375→-230.375。量測必須取進入固定區後的兩幀，不能把仍在進場／Lenis尚在捲動的首幀當失敗或成功；本次測試曾因取樣過早擋下，未修改產品程式迎合測試，重新在固定期間取樣後才計通過。
+- 正式對照畫面/tmp/sakura-strengths-small-production-after.png：1280×683左欄top75／bottom633、右圖top63.125，中英標題與45+萬完整可見。測試viewport已還原、此輪preview已停止、既有正式頁籤保留。DEBUG REPORT：症狀為矮窗縮字；根因為svh公式與整組scale；修正限本頁／兩份既有回歸；315組斷言、建置、11組本機與8組正式瀏覽器證據完整。Status: DONE_WITH_CONCERNS，未驗實體裝置／Safari／Firefox／實際瀏覽器縮放；沒有宣稱本輪重驗每個全站網址。正式驗收紀錄僅本機文件提交，避免再次純文件部署。
 
 ## 2026-10-24 手機底部三項快速服務
 
