@@ -158,6 +158,11 @@ if (process.argv.includes('--images')) {
   }))
 }
 const component = readFileSync(new URL('../components/internal/KitchenSeriesPage.vue', import.meta.url), 'utf8')
+assert(component.includes('class="ai-hero__description hero-template-description"'),'AI輪播內文需共用首頁欄寬與對齊')
+assert(!/\.ai-hero__heading--story\s*\{[^}]*(?:top:|bottom:|text-align:)/.test(component),'AI三張圖不得另設靠底定位或覆寫首頁對齊')
+assert(/\.ai-hero__description\s*\{[^}]*font-size: 15px;[^}]*line-height: 26px;/.test(component),'AI小字沿用首頁15px／26px行高')
+assert(component.includes('.ai-hero__subtitle')&&component.includes('font-size: 24px; font-weight: 700;'),'保留中文中標，不能把三層字級合成兩層')
+assert(component.includes('.ai-hero:has(.ai-hero__heading--story) { overflow: clip; }'),'AI輪播控制聚焦不得使Hero裁切容器內部捲動')
 assert(component.includes('kitchenHeroStory(data, data.heroSlides[currentHero.value])')&&component.includes('activeHeroStory?.title || heroTitle')&&component.includes('v-for="paragraph in activeHeroStory.paragraphs"'),'輪播當下圖片必須實際驅動整組標題與段落，不得寫死第一張')
 const storyExpression=component.match(/^const activeHeroStory = (.+)$/m)?.[1],showHeroSource=component.match(/function showHero\(index: number\) \{[\s\S]*?\n\}/)?.[0]
 assert(storyExpression&&showHeroSource)

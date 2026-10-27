@@ -219,7 +219,7 @@ useSeoMeta({
           <h1 id="ai-kitchen-hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ activeHeroStory?.title || heroTitle }}</h1>
           <template v-if="activeHeroStory">
             <h2 class="ai-hero__subtitle">{{ activeHeroStory.subtitle }}</h2>
-            <div class="ai-hero__description"><p v-for="paragraph in activeHeroStory.paragraphs" :key="paragraph">{{ paragraph }}</p></div>
+            <div class="ai-hero__description hero-template-description"><p v-for="paragraph in activeHeroStory.paragraphs" :key="paragraph">{{ paragraph }}</p></div>
           </template>
         </div>
       </div>
@@ -448,11 +448,12 @@ useSeoMeta({
 <style scoped>
 .ai-kitchen-page { overflow: clip; background: #fff; color: #1c1c1d; }
 .ai-hero { position: relative; height: 840px; overflow: hidden; background: #6f6d69; color: #fff; }
+/* Keep focus on carousel controls from scrolling the clipped hero content. */
+.ai-hero:has(.ai-hero__heading--story) { overflow: clip; }
 .ai-hero__inner { position: relative; z-index: 5; width: min(1584px, calc(100% - 60px)); height: 100%; margin-inline: auto; padding-top: 118px; }
 .ai-hero__heading h1 { max-width: 100%; text-transform: none; }
-.ai-hero__heading--story { top: auto; bottom: 150px; width: min(1584px, calc(100% - 120px)); text-align: left; }
-.ai-hero__subtitle { margin: 36px 0 18px; font-family: var(--font-cjk-sans); font-size: 24px; font-weight: 700; line-height: 1.5; }
-.ai-hero__description { max-width: min(820px, calc(100% - 420px)); font-family: var(--font-cjk-sans); font-size: 18px; line-height: 1.7; }
+.ai-hero__subtitle { margin: 30px 0 12px; font-family: var(--font-cjk-sans); font-size: 24px; font-weight: 700; line-height: 1.5; }
+.ai-hero__description { font-family: var(--font-cjk-sans); font-size: 15px; line-height: 26px; }
 .ai-hero__description p { margin: 0; }
 .ai-hero__bottom { position: absolute; right: 86px; bottom: 28px; display: flex; width: max-content; align-items: center; gap: 22px; }
 .ai-hero__actions { display: grid; min-height: 142px; grid-template-columns: 108px 140px; align-items: center; gap: 22px; border: 1px solid rgb(255 255 255 / 15%); border-radius: 24px; background: rgb(37 35 35 / 48%); padding: 14px 18px; backdrop-filter: blur(18px); }
@@ -649,9 +650,8 @@ useSeoMeta({
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
   .ai-hero__heading { width: auto; margin: 0 93px 0 15px; }
-  .ai-hero__heading--story { bottom: 260px; }
+  .ai-hero__heading--story { width: calc(100% - 30px); margin-inline: auto; }
   .ai-hero__subtitle { margin: 24px 0 12px; font-size: 20px; }
-  .ai-hero__description { max-width: none; font-size: 14px; }
   .ai-hero__bottom { right: 0; bottom: 18px; flex-direction: column; align-items: flex-end; gap: 12px; }
   .ai-hero__actions { min-height: 98px; grid-template-columns: 70px 98px; gap: 12px; border-radius: 18px; padding: 14px; }
   .ai-hero__explore-link { gap: 6px; font-size: 12px; line-height: 18px; }
