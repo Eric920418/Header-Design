@@ -43,7 +43,7 @@ async function main() {
       await page.waitForTimeout(200)
       const nav = await rect('.brand-h8-nav'), copy = await rect('.brand-h8-copy')
       assert(Math.abs(center(nav) - center(copy)) < 2, `${width}px 三項選單需在左側文案欄置中`)
-      assert.equal(await css('.brand-h8-navigation', 'paddingTop'), width > 1024 ? '140px' : '24px', `${width}px 選單下移間距`)
+      assert.equal(await css('.brand-h8-navigation', 'paddingTop'), width > 1024 ? '80px' : '24px', `${width}px 選單間距`)
       if (width > 1024) {
         const stage = await rect('.brand-h8-stage')
         assert(nav.y + nav.height <= stage.y, `${width}px 選單不可被下方大圖覆蓋`)

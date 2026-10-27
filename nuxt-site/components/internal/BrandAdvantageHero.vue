@@ -40,13 +40,13 @@
 <style scoped>
 .brand-h8-hero { overflow: hidden; background: #fafafa; }
 .brand-h8-intro { position: relative; padding: 104px 30px 376px; background: linear-gradient(90deg, #eae9e7 0 50%, #fafafa 50% 100%); }
-/* 原圖上方 SAKURA 招牌約在20%高度，定位於導覽下方並為前景文案留安全區。 */
-.brand-h8-intro::before { position: absolute; inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), var(--cms-image-asset_809f4bbe, url('/section-3/store-chengde.jpg')) center 20% / cover no-repeat; content: ''; pointer-events: none; }
+/* 招牌保留在導覽下方；照片向右移，避免窄桌機的 cover 裁切吃掉左側標誌。 */
+.brand-h8-intro::before { position: absolute; inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0; background: linear-gradient(rgb(18 18 18 / 54%), rgb(18 18 18 / 54%)), var(--cms-image-asset_809f4bbe, url('/section-3/store-chengde.jpg')) 35% 20% / cover no-repeat; content: ''; pointer-events: none; }
 .brand-h8-intro__rail { position: relative; display: grid; width: min(1770px, 100%); margin-inline: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
 .brand-h8-copy { min-width: 0; container-type: inline-size; }
-.brand-h8-copy h1 { width: 100%; max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: clamp(56px, 12.4cqw, 80px); font-weight: 400; line-height: 1.2; letter-spacing: -.01em; white-space: nowrap; text-transform: none; }
+.brand-h8-copy h1 { width: 100%; max-width: 850px; margin: 20px 0 42px; color: #1c1c1d; font-family: var(--font-display); font-size: clamp(56px, 12.4cqw, 80px); font-weight: 400; line-height: 1.0625; letter-spacing: -.01em; white-space: nowrap; text-transform: none; }
 .brand-h8-copy h1 span { color: #caa05c; }
-.brand-h8-navigation { padding-top: 140px; }
+.brand-h8-navigation { padding-top: 80px; }
 .brand-h8-nav { display: flex; max-width: 570px; margin-inline: auto; border-top: 1px solid #d2d1cf; }
 .brand-h8-nav > * { display: flex; min-width: 0; flex: 1; align-items: baseline; justify-content: center; gap: 8px; padding: 16px 8px 0; color: #9f9fa4; text-decoration: none; }
 .brand-h8-nav > * + * { border-left: 1px solid #d2d1cf; }

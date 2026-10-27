@@ -222,7 +222,7 @@ for(const slug of ['case10','case35','case56']){
 console.log('PASS 三篇門市案例預約箭頭 hover／焦點、減少動態及原連結保留')
 const brandHeroSource=await readFile(new URL('../components/internal/BrandAdvantageHero.vue',import.meta.url),'utf8')
 assert(brandHeroSource.includes('<h1 id="brand-h8-title" class="hero-template-title">Why Choose<br /><span>SAKURA KITCHEN</span><br />For Your Home</h1>'),'品牌承諾Hero需完整三行標題，只有品牌行金色')
-assert(/\.brand-h8-copy \{[^}]*container-type: inline-size;/.test(brandHeroSource)&&/\.brand-h8-copy h1 \{[^}]*width: 100%;[^}]*font-size: clamp\(56px, 12\.4cqw, 80px\);[^}]*line-height: 1\.2;/.test(brandHeroSource)&&!brandHeroSource.includes('@media (max-width: 1439px)')&&!brandHeroSource.includes('line-height: 60px;')&&brandHeroSource.includes('white-space: nowrap; text-transform: none;')&&brandHeroSource.includes('font-size: clamp(24px, 7.8vw, 40px);'),'品牌優勢主標依左欄寬度放大至80px，不再將窄桌機固定56px；保留手機縮放、三行及原大小寫')
+assert(/\.brand-h8-copy \{[^}]*container-type: inline-size;/.test(brandHeroSource)&&/\.brand-h8-copy h1 \{[^}]*width: 100%;[^}]*font-size: clamp\(56px, 12\.4cqw, 80px\);[^}]*line-height: 1\.0625;/.test(brandHeroSource)&&!brandHeroSource.includes('@media (max-width: 1439px)')&&!brandHeroSource.includes('line-height: 60px;')&&brandHeroSource.includes('white-space: nowrap; text-transform: none;')&&brandHeroSource.includes('font-size: clamp(24px, 7.8vw, 40px); line-height: 1.2;'),'品牌優勢80px主標配85px行高；保留欄寬縮放、手機1.2行高、三行及原大小寫')
 const brandHeroGlobalStyles=await readFile(new URL('../assets/css/main.css',import.meta.url),'utf8')
 const guideHeroSelector='section.hero-includes-header:is(.knowledge-article-breadcrumb, .knowledge-detail-breadcrumb)[data-hero-photo] > nav'
 const guideHeroRules=[...brandHeroGlobalStyles.matchAll(new RegExp(guideHeroSelector.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s*\\{([^}]+)\\}','g'))].map(match=>match[1].trim())
@@ -248,7 +248,7 @@ assert(mediaHeroSource.includes('.media-detail-breadcrumb__title { margin-bottom
 console.log('PASS 媒體影音內頁Hero桌機80px／手機30px，保留CMS文案、文章主標及影片來源')
 assert(brandHeroGlobalStyles.includes('h1:not(.sr-only, .hero-template-title)'),'局部hero-template-title需避開全站80px!important覆寫，不修改全站規則')
 assert(brandHeroSource.includes('.brand-h8-copy h1 span { color: #caa05c; }')&&brandHeroSource.includes('.brand-h8-copy h1 { color: #fff; }'),'桌機保留白色兩行及品牌金色')
-assert(brandHeroSource.includes('inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0;')&&brandHeroSource.includes("url('/section-3/store-chengde.jpg')) center 20% / cover no-repeat"),'品牌背景需保留承德店原圖及CMS素材，將招牌焦點置於導覽下安全區')
+assert(brandHeroSource.includes('inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0;')&&brandHeroSource.includes("url('/section-3/store-chengde.jpg')) 35% 20% / cover no-repeat"),'品牌背景保留原圖及CMS素材，右移以保留招牌')
 assert(/@media \(min-width: 1025px\)\s*\{\s*\.brand-h8-copy \{ padding-top: 32px; \}/.test(brandHeroSource),'只調桌機左側文案間距，不推動手機或右側内容')
 assert(brandHeroSource.includes('.brand-h8-intro::before { display: none; }'),'平板／手機仍保留原單欄及背景隱藏規則')
 for(const width of [1025,1280,1440,1920,2560,3840])for(const height of [900,1020,1200]){
@@ -257,6 +257,8 @@ for(const width of [1025,1280,1440,1920,2560,3840])for(const height of [900,1020
   const imageTop=-height*.25+offset+(pseudoHeight-371*scale)*.2
   const signTop=imageTop+74*scale,signBottom=imageTop+84*scale
   assert(signTop>=header+12&&signBottom<=104+32-12,'承德店原圖招牌上／下緣應避開導覽與文案（僅靜態幾何模型）')
+  const imageLeft=(width/2-500*scale)*.35
+  assert(imageLeft+146*scale>=12&&imageLeft+195*scale<=width/2-12,'招牌左右緣不可被左欄裁切（原圖幾何模型）')
 }
 assert(brandHeroSource.includes('v-reveal="{ anim: \'opalMoveUp\' }" data-ev="opalMoveUp" class="brand-h8-stage ev"'),'品牌優勢保留原大圖進場')
 assert(brandHeroSource.includes('.brand-h8-stage__image :deep(img) { position: absolute; inset: 0; width: 100%; height: 100%; }'),'大圖需填滿手機最小高度，避免動畫露出底色')
@@ -271,8 +273,7 @@ assert(brandHeroStage.includes('<img')&&brandHeroStage.includes('loading="eager"
 assert(!brandHeroHtml.includes('brand-h8-scroll')&&!brandHeroHtml.includes('href="#brand-family-title"'),'依新稿移除Hero金色向下按鈕')
 assert(!brandHeroSource.includes('alignScrollButton')&&!brandHeroSource.includes('ResizeObserver')&&!brandHeroSource.includes('scrollButton')&&!brandHeroSource.includes('ArrowDown'),'移除僅供向下按鈕使用的定位程式、監聽與圖示')
 assert(brandHeroSource.indexOf('class="brand-h8-navigation"')>brandHeroSource.indexOf('class="brand-h8-copy ev"')&&brandHeroSource.indexOf('class="brand-h8-navigation"')<brandHeroSource.indexOf('class="brand-h8-aside ev"'),'品牌三項導覽需留在左側照片文案欄內')
-assert(brandHeroSource.includes('.brand-h8-navigation { padding-top: 140px; }')&&brandHeroSource.includes('max-width: 570px; margin-inline: auto;')&&brandHeroSource.includes('justify-content: center; gap: 8px; padding: 16px 8px 0;'),'桌機將原按鈕54px＋margin38px改為選單上方留白，整組下移92px並維持570px內等分置中')
-assert.equal(140-48,54+38,'桌機選單下移量應抵消刪除按鈕高度，保留照片與右側內容幾何')
+assert(brandHeroSource.includes('.brand-h8-navigation { padding-top: 80px; }')&&brandHeroSource.includes('max-width: 570px; margin-inline: auto;')&&brandHeroSource.includes('justify-content: center; gap: 8px; padding: 16px 8px 0;'),'桌機導覽減少60px上方留白並保留570px等分置中')
 assert(brandHeroSource.includes('.brand-h8-navigation { padding-top: 24px; }'),'平板手機減少下移間距')
 const brandNavigation=brandHeroHtml.match(/<div\b[^>]*class="brand-h8-navigation"[^>]*>([\s\S]*?)<\/div>/)?.[1]||''
 for(const path of ['/about/advantage','/about/exhibition','/about/introduce'])assert(brandNavigation.includes(`href="${path}"`),'原三項導覽需保留：'+path)
