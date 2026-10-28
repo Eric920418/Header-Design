@@ -13,6 +13,11 @@
 - 已發布9349c5d1105d04921213032f5cdf68363ada8252，Vercel dpl_HZP3B4AekMYmcaNjzXmbCDZUsHMa為READY／Production／GitHub成功，兩個既有正式網域已接上此版。正式瀏覽器同16尺寸複驗通過，各桌面實際computed偏移換算招牌左緣與標籤座標誤差小於0.1px；1440×900交付圖/tmp/sakura-brand-logo-label-production.png已目視確認，85px最大行高、原導覽與右欄保留。
 - 預覽server停止、viewport還原，未寫CMS／資料庫或執行業務POST；未驗Safari／Firefox及實體裝置，也未驗更換背景圖後的招牌位置，原圖座標校準只適用承德店這張素材。正式後紀錄只提交文件，不為文件再部署。
 
+
+- 已發布 `5700aa5e3d178138e6bc677ab3d6411f1841e1cb`，正式 `dpl_CoJyGsW2kTYYrG2X5adZeuKE86FV` READY。Chrome圖片庫DOM確認頂列節點為0、同1512px寬主標題top64→16px，無空白占位；實際點側欄收合／展開及主內容自動收合通過。
+- 實際1440／1024／768／390px均無根頁水平溢出；390px選單44px可開啟「管理選單」，關閉後焦點返回原按鈕。已清除viewport覆寫並回到原圖片庫；截圖 `/tmp/sakura-cms-no-topbar-final-20261028.png`（上方330px）、調整前 `/tmp/sakura-cms-topbar-before-20261028.png`。
+- 建商編輯頁亦無頂列、預覽sticky top為12px、既有內容與儲存停用狀態保留；但新開編輯頁及按重新載入後仍顯示「官網畫面無法載入，請確認網路後重試」，不列為預覽通過，本輪不將其歸因於橫列移除，亦未修復此問題。未輸入或儲存內容、未改資料庫、未驗Safari／Firefox／實體手機或全部後台入口。
+
 ## 2026-10-27 編輯頁頂部合併
 
 - 依15:28截圖修正頂端結構：返回、唯一頁面標題、區塊切換與查看官網集中成同一桌機列，刪除重複顯示的路徑名稱；表單與預覽直接接在下方並頂端對齊，不再將區塊切換獨占左側一層。
