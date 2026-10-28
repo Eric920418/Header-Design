@@ -43,7 +43,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <span class="bilingual-heading-lead"><span class="kitchen-guide-heading__eyebrow">Explore Our</span>
             <span class="kitchen-guide-heading__chinese">廚房裝修指南</span></span><br class="kitchen-guide-heading__mobile-break">
-            Take A <span class="kitchen-guide-heading__accent">Look At Our</span> Latest Articles
+            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">Take A <span class="kitchen-guide-heading__accent">Look At Our</span> Latest Articles</span>
           </h2>
         </header>
 

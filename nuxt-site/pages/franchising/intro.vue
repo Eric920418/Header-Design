@@ -214,7 +214,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header class="source-split-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="CELEBRITY STORIES" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <h2 id="franchise-marketing-title"><span class="bilingual-heading-lead"><span class="franchise-celebrity-eyebrow">Explore Our</span><b class="franchise-celebrity-chinese">品牌信賴</b></span>Celebrity <span>Stories</span><br />Of Inspired <span>Living</span></h2>
+            <h2 id="franchise-marketing-title"><span class="bilingual-heading-lead"><span class="franchise-celebrity-eyebrow">Explore Our</span><b class="franchise-celebrity-chinese">品牌信賴</b></span><span class="bilingual-heading-english" style="color: inherit">Celebrity <span>Stories</span><br /> Of Inspired <span>Living</span></span></h2>
             <p>{{ cmsCopy.copy.text42 }}</p>
           </div>
         </header>
@@ -325,7 +325,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section id="franchise-news" class="franchise-news elementor-836324d" aria-labelledby="franchise-news-title">
       <div class="source-rail internal-rail-safe">
         <InternalSectionPill>{{ cmsCopy.copy.text58 }}</InternalSectionPill>
-        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }"><span class="bilingual-heading-lead"><span class="franchise-news-eyebrow">Explore Our</span><b class="franchise-news-chinese">最新加盟資訊</b></span>Latest Franchise News<br />With <span>SAKURA KITCHEN</span></h2>
+        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }"><span class="bilingual-heading-lead"><span class="franchise-news-eyebrow">Explore Our</span><b class="franchise-news-chinese">最新加盟資訊</b></span><span class="bilingual-heading-english" style="color: inherit">Latest Franchise News<br /> With <span>SAKURA KITCHEN</span></span></h2>
         <div class="franchise-news__list">
           <NuxtLink v-for="article in franchiseNews" :key="article.id" :to="article.legacyPath" class="franchise-news-row">
             <i aria-hidden="true" /><h3>{{ article.title }}</h3><ArrowRight aria-hidden="true" />

@@ -65,7 +65,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <h2 id="home-project-heading" class="home-project-title">
           <span class="bilingual-heading-lead"><span class="home-project-title__eyebrow">Explore Our</span>
           <span class="home-project-title__chinese">{{ cmsCopy.copy.text1 }}{{ cmsCopy.copy.text2 }}</span></span><br class="home-project-title__break" />
-          Creative <span class="text-[#CAA05C]">Projects That</span> Define Our Style
+          {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">Creative <span class="text-[#CAA05C]">Projects That</span> Define Our Style</span>
         </h2>
         <p class="home-project-heading-description">{{ cmsCopy.copy.text3 }}</p>
       </div>

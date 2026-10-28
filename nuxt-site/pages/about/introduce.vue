@@ -136,7 +136,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="about-rail">
         <header class="about-services__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="About Us" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="bilingual-heading-lead"><span class="about-stories-eyebrow">Explore Our</span><b class="about-stories-chinese">櫻花整體廚房</b></span>SAKURA KITCHEN<br /><b class="about-stories-chinese">品牌歷程</b>Story <span>Of Growth</span></h2>
+          <h2 id="about-services-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="bilingual-heading-lead"><span class="about-stories-eyebrow">Explore Our</span><b class="about-stories-chinese">櫻花整體廚房</b></span><span class="bilingual-heading-english" style="color: inherit">SAKURA KITCHEN</span><br /><b class="about-stories-chinese bilingual-heading-chinese-part">品牌歷程</b><span class="bilingual-heading-english" style="color: inherit">Story <span>Of Growth</span></span></h2>
         </header>
 
         <div class="about-services__panel">
@@ -257,7 +257,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="about-identity__rail">
         <header class="about-identity__heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="DISTINCTIVE BRAND IDENTITY" data-ev="opalMoveRight" class="ev" />
-          <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="bilingual-heading-lead"><span class="about-identity-eyebrow">Explore Our</span><b class="about-identity-chinese">專屬品牌識別</b></span>Signature <span>Details</span><br /><span>That</span> Reflect <span>Our Identity</span></h2>
+          <h2 id="about-identity-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><span class="bilingual-heading-lead"><span class="about-identity-eyebrow">Explore Our</span><b class="about-identity-chinese">專屬品牌識別</b></span><span class="bilingual-heading-english" style="color: inherit">Signature <span>Details</span><br /> <span>That</span> Reflect <span>Our Identity</span></span></h2>
         </header>
 
         <p class="about-identity__description">{{ cmsCopy.copy.text9 }}</p>

@@ -59,7 +59,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
     <InternalFaqAccordion safe-rail class="service-guide-faq">
       <template #title>
-        <span class="bilingual-heading-lead"><span class="service-faq-eyebrow">Explore Our</span><b class="service-faq-chinese-title">服務指南</b></span>Clear <span class="service-faq-accent">Answers</span> To Your <span class="service-faq-accent">Main</span> Questions
+        <span class="bilingual-heading-lead"><span class="service-faq-eyebrow">Explore Our</span><b class="service-faq-chinese-title">服務指南</b></span><span class="bilingual-heading-english" style="color: inherit">Clear <span class="service-faq-accent">Answers</span> To Your <span class="service-faq-accent">Main</span> Questions</span>
       </template>
     </InternalFaqAccordion>
   </main>

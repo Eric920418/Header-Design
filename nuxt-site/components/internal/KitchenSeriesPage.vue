@@ -268,7 +268,7 @@ useSeoMeta({
           <h2 id="ai-collections-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <span class="bilingual-heading-lead"><span class="ai-collections-eyebrow">Explore Our</span>
             <span class="ai-collections-chinese">探索廚房美學</span></span><br class="ai-collections-mobile-break">
-            Creative <span class="ai-collections-accent">Projects That</span> Define Our Style
+            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">Creative <span class="ai-collections-accent">Projects That</span> Define Our Style</span>
           </h2>
         </div>
         <div class="ai-intro__content">
@@ -407,7 +407,7 @@ useSeoMeta({
           <h2 id="cases-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 90 }">
             <span class="bilingual-heading-lead"><span class="ai-collections-eyebrow">Explore Our</span>
             <span class="ai-collections-chinese">風格廚房實例</span></span><br class="ai-collections-mobile-break">
-            Take A <span class="ai-collections-accent">Look At Our</span> Latest Articles
+            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">Take A <span class="ai-collections-accent">Look At Our</span> Latest Articles</span>
           </h2>
         </div>
         <div

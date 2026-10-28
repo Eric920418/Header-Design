@@ -297,7 +297,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
           <InternalTemplateHeadingRail :label="cmsCopy.copy.text33" />
           <div>
-            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese">櫻花集團品牌館</b></span>The Art <span>Of</span><br /> <span>Kitchen</span> Showrooms</h2>
+            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese">櫻花集團品牌館</b></span><span class="bilingual-heading-english" style="color: inherit">The Art <span>Of</span><br /> <span>Kitchen</span> Showrooms</span></h2>
           </div>
         </header>
 

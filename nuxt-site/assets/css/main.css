@@ -33,10 +33,16 @@
   --template-heading-title-gap: 47px;
 }
 
-/* 手機沿用各頁原本分行；並排標題以同一行框置中眉標與中文。 */
+/* 英文包裹不產生桌面行框；手機才按眉標、中文、英文排序。 */
 .bilingual-heading-lead { display: contents; }
+.bilingual-heading-english { display: contents; }
 @media (max-width: 767px) {
   h2:has(> .bilingual-heading-lead) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    column-gap: 8px;
     width: 100%;
     max-width: 100%;
     justify-self: stretch;
@@ -44,6 +50,38 @@
     padding-inline: 0;
     text-align: center;
   }
+  h2:has(> .bilingual-heading-lead)::before,
+  h2:has(> .bilingual-heading-lead)::after {
+    content: "";
+    flex: 0 0 100%;
+    height: 8px;
+  }
+  h2:has(> .bilingual-heading-lead)::before { order: 1; }
+  h2:has(> .bilingual-heading-lead)::after { order: 3; }
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-lead { display: contents; }
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-lead > :first-child {
+    order: 0;
+    margin: 0 auto !important;
+  }
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-lead > :last-child,
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-chinese-part {
+    order: 2;
+    position: static;
+    margin: 0 !important;
+    line-height: 1.2;
+  }
+  h2:has(> .bilingual-heading-chinese-part) > .bilingual-heading-lead > :last-child,
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-chinese-part {
+    font-size: clamp(20px, 6vw, 28px) !important;
+  }
+  h2:has(> .bilingual-heading-lead) > .bilingual-heading-english {
+    display: block;
+    order: 4;
+    max-width: 100%;
+    text-wrap: balance;
+  }
+  h2:has(> .bilingual-heading-lead) > br,
+  .bilingual-heading-english br { display: none; }
 }
 @media (min-width: 768px) {
   .bilingual-heading-lead {
