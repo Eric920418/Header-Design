@@ -10,7 +10,7 @@ export function useCmsSidebarMotion(collapsed:Readonly<Ref<boolean>>,root:Ref<HT
   // Transforming an ancestor of the fixed action bar would move it off the viewport.
   const parts=(element:HTMLElement):HTMLElement[]=>element!==savebar&&savebar&&element.contains(savebar)?Array.from(element.children).flatMap(child=>parts(child as HTMLElement)):[element]
   const main=root.value.querySelector<HTMLElement>('.cms-main')
-  const targets=[...root.value.querySelectorAll<HTMLElement>('.cms-sidebar nav a,.cms-topbar'),...(main?Array.from(main.children).flatMap(child=>parts(child as HTMLElement)):[])]
+  const targets=[...root.value.querySelectorAll<HTMLElement>('.cms-sidebar nav a'),...(main?Array.from(main.children).flatMap(child=>parts(child as HTMLElement)):[])]
   const before=targets.map(element=>({element,rect:element.getBoundingClientRect()}))
   cancel();const current=sequence
   await nextTick()

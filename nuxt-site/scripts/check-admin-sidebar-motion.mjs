@@ -15,14 +15,14 @@ function fixture(){
   animate(frames,options){const animation={id,frames,options,cancelled:false,cancel(){this.cancelled=true}};created.push(animation);return animation}})
  const bar=node('savebar',220,76),heading=node('heading',244,100),columns=node('columns',244,100)
  const editor=node('editor',244,100,[heading,columns,bar]),page=node('page',244,100,[editor])
- const nav=node('nav-link',24,8),header=node('topbar',220,76),main={children:[page]}
- const root={value:{querySelector:selector=>selector==='.cms-savebar'?bar:main,querySelectorAll:()=>[nav,header]}}
+ const nav=node('nav-link',24,8),main={children:[page]}
+ const root={value:{querySelector:selector=>selector==='.cms-savebar'?bar:main,querySelectorAll:()=>[nav]}}
  const context={window:{innerWidth:1440,innerHeight:960},useReducedMotion:()=>reduced,watch:(target,callback)=>hooks.set(target,callback),onBeforeUnmount:callback=>cleanup=callback,nextTick:async()=>{phase='after'}}
  runInNewContext(code+'\nthis.install=useCmsSidebarMotion;',context);context.install(collapsed,root)
  return{created,context,root,reduced,heading,columns,bar,change:()=>hooks.get(collapsed)(),reduce:()=>hooks.get(reduced)(true),cleanup:()=>cleanup(),before:()=>{phase='before'},get reads(){return reads}}
 }
 const f=fixture();await f.change()
-assert.deepEqual(f.created.map(a=>a.id),['nav-link','topbar','heading','columns','savebar'])
+assert.deepEqual(f.created.map(a=>a.id),['nav-link','heading','columns','savebar'])
 assert.equal(f.created.find(a=>a.id==='savebar').frames[0].transform,'translate(144px,0px)')
 for(const animation of f.created){assert.equal(animation.options.duration,240);assert.deepEqual(Object.keys(animation.frames[0]),['transform'])}
 assert(!f.created.some(a=>['page','editor'].includes(a.id)),'Never transform the fixed action bar ancestors')
