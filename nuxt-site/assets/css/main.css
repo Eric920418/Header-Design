@@ -35,6 +35,16 @@
 
 /* 手機沿用各頁原本分行；並排標題以同一行框置中眉標與中文。 */
 .bilingual-heading-lead { display: contents; }
+@media (max-width: 767px) {
+  h2:has(> .bilingual-heading-lead) {
+    width: 100%;
+    max-width: 100%;
+    justify-self: stretch;
+    margin-inline: auto;
+    padding-inline: 0;
+    text-align: center;
+  }
+}
 @media (min-width: 768px) {
   .bilingual-heading-lead {
     display: inline-flex;

@@ -633,7 +633,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 @media (max-width: 767px) {
   #franchise-news-title { font-size: 34px; line-height: 39px; }
-  #franchise-news-title .franchise-news-eyebrow { display: block; width: fit-content; margin: 0 0 8px; }
+  #franchise-news-title .franchise-news-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
   .franchise-news-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
   .franchise-faq-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
   #franchise-marketing-title { font-size: 30px; line-height: 35px; }

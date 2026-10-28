@@ -361,6 +361,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .product-care__header h2 span { color: #caa05c; }
 .product-care__header h2 .product-care__chinese { display: inline-block; position: relative; top: -.06em; margin-right: 12px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; vertical-align: baseline; }
 @media (max-width: 1023px) { .product-care__header h2 { font-size: 42px; } .product-care__header h2 .product-care__chinese { font-size: 32px; } }
-@media (max-width: 767px) { .product-care__header { grid-template-columns: 1fr; gap: 24px; } .product-care__header h2 { margin-top: 20px; font-size: 30px; line-height: 35px; } }
+@media (max-width: 767px) { .product-care__header { grid-template-columns: 1fr; gap: 24px; } .product-care__header h2 { width: 100%; justify-self: center; margin-top: 20px; font-size: 30px; line-height: 35px; text-align: center; } }
 @media (max-width: 767px) { .product-care__header h2 .product-care__chinese { display: block; margin: 0 0 8px; font-size: 28px; top: auto; } }
 </style>

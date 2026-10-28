@@ -352,15 +352,15 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   .knowledge-related__text-box h3 { font-size: 26px; line-height: 28px; }
 
   .knowledge-related--home07 {
-    width: calc(100% - 108px);
+    width: calc(100% - 30px);
     grid-template-columns: minmax(0, 1fr);
     gap: 38px;
     margin-right: auto;
-    margin-left: 15px;
+    margin-left: auto;
     padding: 55px 15px 60px;
   }
 
-  .knowledge-related-home07__intro { padding-bottom: 3px; }
+  .knowledge-related-home07__intro { padding-bottom: 3px; text-align: center; }
   .knowledge-related-home07__intro h2 { margin-block: 26px 22px; font-size: 30px; }
   .knowledge-related-home07__chinese { font-size: 28px; }
   .knowledge-related-home07__cta { margin-top: 32px; }
