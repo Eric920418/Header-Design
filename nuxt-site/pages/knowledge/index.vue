@@ -367,6 +367,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   }
 
   .kitchen-guide-heading h2 {
+    width: 100%;
     margin: 20px 0 0;
     padding: 0;
     font-size: 30px;
