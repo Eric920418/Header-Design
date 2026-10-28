@@ -6,6 +6,9 @@
 - 本機第一批五尺寸另抓到型錄指南在767px仍被max-width:732px及justify-self:start限制，剩5px欄寬造成中心偏左2.5px；手機補justify-self:center。原有自動進場的短暫位移不以offsetParent虛擬座標誤差修改動畫，文字對齊、內距、實際寬度與穩定後畫面分開核對。
 - pnpm build含typecheck通過；全部36種公開模板1280×900標題與父層樣式修前／修後完全一致，12個相關頁面再驗768×1024及1920×1080共24組也無差異。兩個不同分頁尺寸不等的中途嘗試未計入，正式比對使用同一分頁切換新舊來源並斷言實際viewport。
 - 本機65網址×320／390／402／430／767px共325組雙語／延伸／型錄標題檢查完成：文字center、左右內距相等、無文字欄裁切與整頁溢位；最後一筆型錄對齊修正再建置後，型錄及品牌館各五尺寸中心誤差0。品牌館原本用translateX(-50%)定位，不能把結構性transform當成進場動畫扣除；更正量測後同樣中心誤差0。知識延伸實際捲動目視小標、標題、CTA置中，截圖/tmp/sakura-heading-knowledge-local.png；不把原有段落／表單／商品資訊靠左當成錯誤強制修改。
+- 92505be77b86a6b371abb1fe085f955fcf5fa5ba已發布，Vercel dpl_D937esnz8nQXfM8CeQC2Gxpuq6Ng為READY／Production／GitHub成功，兩個既有正式網域皆已接上。使用者的header-design-two.vercel.app實際65網址×320／402／767px共195組手機標題複驗完成，文字center、左右padding對稱、無超欄裁字與整頁橫向溢位；未把中途預覽登入頁計入，正常重新登入後續驗。
+- 正式品牌館另以真實rect重驗三尺寸中心160／201／383.5，誤差0；自動中心候選曾誤將結構性平移扣除，保留原始候選JSON、不把誤報當成版面修正。主網域型錄指南三尺寸中心同樣160／201／383.5；知識延伸進場完成後中心201、欄寬342。推薦案例402px中心201、左右padding0、原底部三服務保留，實際捲動目視標籤／中英文層級與換行，證據/tmp/sakura-heading-recommended-production.png；知識延伸證據/tmp/sakura-heading-knowledge-production.png。
+- 既有check-kitchen-series.mjs於本機正式建置通過10系列SSR／404／215圖片來源／原圖文配對、動畫及鍵盤回歸，僅預覽登入POST與已發布資料GET，沒有內容更新。最終部署最近10分鐘最多5筆error查詢無回傳，不代表長期監控。自開preview停止、尺寸還原；不新增套件、不寫CMS／資料庫、不改桌面樣式。未驗實體iPhone／Safari／Firefox，不以Chromium通過宣稱實機已通過；截圖與新開正式頁不同的載入狀態尚無裝置端證據，因此交付連結附一般版本查詢參數方便直接開啟本輪檢查頁，未新增強制重新整理或變更快取／驗證機制。正式後只提交本README紀錄，不為文件再部署。
 
 ## 2026-10-28 更新預覽登入密碼
 
