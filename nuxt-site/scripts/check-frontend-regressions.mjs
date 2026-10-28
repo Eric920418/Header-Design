@@ -248,7 +248,7 @@ assert(mediaHeroSource.includes('.media-detail-breadcrumb__title { margin-bottom
 console.log('PASS 媒體影音內頁Hero桌機80px／手機30px，保留CMS文案、文章主標及影片來源')
 assert(brandHeroGlobalStyles.includes('h1:not(.sr-only, .hero-template-title)'),'局部hero-template-title需避開全站80px!important覆寫，不修改全站規則')
 assert(brandHeroSource.includes('.brand-h8-copy h1 span { color: #caa05c; }')&&brandHeroSource.includes('.brand-h8-copy h1 { color: #fff; }'),'桌機保留白色兩行及品牌金色')
-assert(brandHeroSource.includes('inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0;')&&brandHeroSource.includes("url('/section-3/store-chengde.jpg')) 35% 20% / cover no-repeat"),'品牌背景保留原圖及CMS素材，右移以保留招牌')
+assert(brandHeroSource.includes('inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0;')&&/\.brand-h8-hero \{[^}]*container-type: inline-size;/.test(brandHeroSource)&&brandHeroSource.includes("url('/section-3/store-chengde.jpg')) calc(29.2% - 14.6cqw + max(30px, (100cqw - 1770px) / 2)) 20% / cover no-repeat"),'品牌原圖招牌需依滿寬Hero對齊1770px版心內的小標籤，不使用扣除內距的內容寬')
 assert(/@media \(min-width: 1025px\)\s*\{\s*\.brand-h8-copy \{ padding-top: 32px; \}/.test(brandHeroSource),'只調桌機左側文案間距，不推動手機或右側内容')
 assert(brandHeroSource.includes('.brand-h8-intro::before { display: none; }'),'平板／手機仍保留原單欄及背景隱藏規則')
 for(const width of [1025,1280,1440,1920,2560,3840])for(const height of [900,1020,1200]){
@@ -257,7 +257,9 @@ for(const width of [1025,1280,1440,1920,2560,3840])for(const height of [900,1020
   const imageTop=-height*.25+offset+(pseudoHeight-371*scale)*.2
   const signTop=imageTop+74*scale,signBottom=imageTop+84*scale
   assert(signTop>=header+12&&signBottom<=104+32-12,'承德店原圖招牌上／下緣應避開導覽與文案（僅靜態幾何模型）')
-  const imageLeft=(width/2-500*scale)*.35
+  const labelLeft=Math.max(30,(width-1770)/2)
+  const imageLeft=(width/2-500*scale)*.292-width*.146+labelLeft
+  assert(Math.abs(imageLeft+146*scale-labelLeft)<.01,'招牌左緣需對齊小標籤，不能只驗證沒有裁切')
   assert(imageLeft+146*scale>=12&&imageLeft+195*scale<=width/2-12,'招牌左右緣不可被左欄裁切（原圖幾何模型）')
 }
 assert(brandHeroSource.includes('v-reveal="{ anim: \'opalMoveUp\' }" data-ev="opalMoveUp" class="brand-h8-stage ev"'),'品牌優勢保留原大圖進場')
