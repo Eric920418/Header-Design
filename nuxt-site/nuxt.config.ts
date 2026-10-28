@@ -40,7 +40,7 @@ export default defineNuxtConfig({
       server: '', port: 14333, database: '', user: '', password: '',
       encrypt: true, trustServerCertificate: false,
     },
-    previewPassword: '520VANLAN@2026',
+    previewPassword: '520VANLAN',
     public: {
       googleMapsApiKey: '',
       franchiseApplicationEndpoint: '',
