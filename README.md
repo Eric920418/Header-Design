@@ -4,6 +4,8 @@
 - 沿用frontend-design與Ponytail，限縮共用Hero CSS與既有回歸，不新增套件或JavaScript量測。回歸新增招牌／標籤左緣誤差小於0.01px的幾何斷言，瀏覽器與正式驗收待續記。
 - 實際量測將查詢容器設於滿寬Hero，避開intro左右內距造成8.76px偏移；不改原版心、文案欄寬或手機padding。以瀏覽器computed定位與小標籤實際座標核對，不能只用抽象幾何模型宣稱通過。
 - pnpm build含typecheck、既有品牌Hero來源／18組原圖幾何／SSR及導覽回歸通過。實際瀏覽器16尺寸（3840至320px，含1280／844×390短窗）核對computed背景偏移、cover縮放後招牌原圖座標與標籤實際座標；桌面誤差小於0.1px，1440px兩者皆x30、1920px皆x75、2560px皆x395、3840px皆x1035，無橫向溢位、標題裁字或導覽覆蓋。1440×900已目視招牌在小標籤正上方；平板手機沿用隱藏照片的原單欄。
+- 已發布9349c5d1105d04921213032f5cdf68363ada8252，Vercel dpl_HZP3B4AekMYmcaNjzXmbCDZUsHMa為READY／Production／GitHub成功，兩個既有正式網域已接上此版。正式瀏覽器同16尺寸複驗通過，各桌面實際computed偏移換算招牌左緣與標籤座標誤差小於0.1px；1440×900交付圖/tmp/sakura-brand-logo-label-production.png已目視確認，85px最大行高、原導覽與右欄保留。
+- 預覽server停止、viewport還原，未寫CMS／資料庫或執行業務POST；未驗Safari／Firefox及實體裝置，也未驗更換背景圖後的招牌位置，原圖座標校準只適用承德店這張素材。正式後紀錄只提交文件，不為文件再部署。
 
 ## 2026-10-27 編輯頁頂部合併
 
