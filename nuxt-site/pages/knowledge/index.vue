@@ -354,7 +354,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     line-height: 52px;
   }
 
-  .kitchen-guide-newsroom { padding: 60px 93px 60px 15px; }
+  .kitchen-guide-newsroom { padding: 60px 15px; }
   .kitchen-guide-newsroom__rail { padding-inline: 0; }
 
   .kitchen-guide-heading {

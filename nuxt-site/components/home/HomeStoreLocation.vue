@@ -123,7 +123,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <section id="contact" aria-labelledby="store-location-heading" class="store-location-section relative overflow-hidden bg-[#fafafa] py-[60px]">
-    <div class="mx-auto w-full max-w-[1512px] pl-5 pr-[88px] sm:pl-8 sm:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
+    <div class="mx-auto w-full max-w-[1512px] pl-5 pr-5 sm:pl-8 sm:pr-8 md:pr-[90px] lg:pl-[51px] lg:pr-[86px]">
       <div class="relative mb-[60px]">
         <div class="store-location-heading grid grid-cols-1 items-start gap-5 lg:grid-cols-[30%_70%] lg:gap-0">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" :label="cmsCopy.copy.text1" source="home4" class="store-location-heading-rail" />

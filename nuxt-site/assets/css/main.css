@@ -2,8 +2,8 @@
 @import "../../../src/styles/globals.css";
 @source "../../**/*.{vue,ts}";
 
-.internal-rail-safe {
-  padding-right: 86px;
+@media (min-width: 768px) {
+  .internal-rail-safe { padding-right: 86px; }
 }
 
 .site-header-spacer {

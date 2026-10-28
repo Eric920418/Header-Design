@@ -106,7 +106,7 @@ onBeforeUnmount(() => storyObserver?.disconnect())
 
 @media (max-width: 767px) {
   .brand-benefits { padding: 60px 15px; }
-  .brand-benefits-rail.internal-rail-safe { padding-right: 72px; }
+  .brand-benefits-rail.internal-rail-safe { padding-right: 0; }
   .brand-benefits-heading { margin-bottom: 45px; }
   .brand-benefits-heading h2 { font-size: 30px; line-height: 35px; }
   .brand-benefits-chinese { font-size: 28px; }

@@ -315,7 +315,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .product-catalogue-hero { min-height: 288px; background-attachment: scroll; }
   .product-catalogue-hero__inner { width: calc(100% - 30px); padding: 80px 0 60px; }
   .product-catalogue-hero h1 { margin-bottom: 25px; font-size: 46px; line-height: 50px; }
-  .product-catalogue-projects { padding: 60px 93px 36px 15px; }
+  .product-catalogue-projects { padding: 60px 15px 36px; }
   .product-catalogue-projects .internal-rail-safe,
   .product-care .internal-rail-safe { padding-inline: 0; }
   .product-catalogue-grid { grid-template-columns: 1fr; gap: 44px; }
@@ -324,7 +324,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .product-catalogue-card__text strong { font-size: 20px; line-height: 28px; }
   .product-catalogue-card__download { min-width: 44px; width: 44px; height: 44px; padding: 0; }
   .product-catalogue-card__download span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .product-care { padding: 32px 93px 92px 15px; }
+  .product-care { padding: 32px 15px 92px; }
   .product-care__header { grid-template-columns: 1fr; gap: 0; margin-bottom: 38px; }
   .product-care__header > p { grid-column: auto; }
   .product-care__header h2 { margin-top: 20px; font-size: 30px; line-height: 40px; }

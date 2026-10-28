@@ -1000,7 +1000,8 @@ body {
 }
 
 @media (max-width: 767px) {
-  .what-we-do-copy { padding-right: 72px; }
+  .what-we-do-copy { padding-right: 0; }
+  .what-we-do-description h3 { text-wrap: balance; }
 }
 
 @media (min-width: 768px) {

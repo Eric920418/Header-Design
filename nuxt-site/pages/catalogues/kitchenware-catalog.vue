@@ -308,7 +308,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .catalogue-hero { min-height: 288px; background-attachment: scroll; }
   .catalogue-hero__inner { width: calc(100% - 30px); padding: 80px 0 60px; }
   .catalogue-hero h1 { margin-bottom: 25px; font-size: 48px; line-height: 52px; }
-  .catalogue-projects { padding: 60px 93px 80px 15px; }
+  .catalogue-projects { padding: 60px 15px 80px; }
   .catalogue-projects__rail.internal-rail-safe { padding-inline: 0; }
   .catalogue-grid { grid-template-columns: 1fr; gap: 42px; }
   .catalogue-card__action { right: 18px; bottom: 18px; gap: 10px; opacity: 1; visibility: visible; transform: none; }

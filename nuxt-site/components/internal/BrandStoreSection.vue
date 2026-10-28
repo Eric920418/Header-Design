@@ -59,7 +59,7 @@
 
 @media (max-width: 767px) {
   .brand-store-section { padding: 60px 15px; }
-  .brand-store-rail.internal-rail-safe { padding-right: 72px; }
+  .brand-store-rail.internal-rail-safe { padding-right: 0; }
   .brand-store-heading { grid-template-columns: 1fr; margin-bottom: 35px; text-align: center; }
   .brand-store-heading-copy { padding-top: 20px; }
   .brand-store-heading h2 { font-size: 30px; line-height: 35px; }

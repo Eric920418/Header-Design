@@ -477,7 +477,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   }
 
   .knowledge-article {
-    padding: 60px 93px 0 15px;
+    padding: 60px 15px 0;
   }
 
   .knowledge-article__header h1 { font-size: 30px; line-height: 41px; }

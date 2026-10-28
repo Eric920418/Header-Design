@@ -303,7 +303,7 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
   .sakura-product-source__rail.internal-rail-safe,
   .sakura-product-list__rail.internal-rail-safe { padding-inline: 0; }
   .sakura-product-story__rail { grid-template-columns: 1fr; gap: 34px; }
-  .sakura-product-story__copy { min-width: 0; padding-right: 72px; }
+  .sakura-product-story__copy { min-width: 0; padding-right: 0; }
   .sakura-product-story h2 { font-size: 30px; }
   .sakura-product-story__chinese-title { font-size: 28px; }
   .sakura-product-story__image { aspect-ratio: 1.35; border-radius: 18px; }

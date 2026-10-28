@@ -341,7 +341,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .case-detail-related { margin-top: 0; padding-top: 60px; }
   .case-detail-related__heading { grid-template-columns: 1fr; }
   .case-detail-related__label-wrap { text-align: center; }
-  .case-detail-related__heading > h2 { padding: 20px 72px 30px 0; font-size: 30px; line-height: 35px; text-align: center; }
+  .case-detail-related__heading > h2 { padding: 20px 0 30px; font-size: 30px; line-height: 35px; text-align: center; }
   .case-detail-related__heading > h2 .case-related-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
   .case-related-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; text-wrap: balance; }
   .case-detail-related__viewport { margin-top: 38px; }

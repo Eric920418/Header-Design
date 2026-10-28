@@ -290,12 +290,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builder-catalogue-hero h1 { margin-bottom: 25px; font-size: 48px; line-height: 52px; }
   .builder-catalogue-hero__trail { flex-wrap: wrap; }
   .builder-catalogue-projects { padding: 60px 15px 36px; }
-  .builder-catalogue-notice { margin-top: 40px; padding-right: 72px; }
+  .builder-catalogue-notice { margin-top: 40px; padding-right: 0; }
   .builder-catalogue-projects__rail.internal-rail-safe { padding-inline: 0; }
   .builder-catalogue-grid { grid-template-columns: 1fr; gap: 42px; }
-  .builder-catalogue-card__action { right: 78px; bottom: 18px; gap: 9px; opacity: 1; visibility: visible; transform: none; }
+  .builder-catalogue-card__action { right: 18px; bottom: 18px; gap: 9px; opacity: 1; visibility: visible; transform: none; }
   .builder-catalogue-card__arrow { width: 54px; height: 54px; }
-  .builder-catalogue-card__text { padding-right: 72px; }
+  .builder-catalogue-card__text { padding-right: 0; }
   .builder-catalogue-card__text strong { min-height: 0; font-size: 25px; line-height: 32px; }
 }
 

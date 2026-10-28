@@ -196,7 +196,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
   .antra-faq-section { padding: 60px 15px; }
   .antra-faq-rail.internal-rail-safe {
     box-sizing: border-box;
-    padding-right: 72px;
+    padding-right: 0;
   }
   .antra-faq-heading { grid-template-columns: 1fr; margin-bottom: 30px; text-align: center; }
   .antra-faq-title { width: 100%; margin-top: 20px; font-size: 30px; line-height: 35px; }

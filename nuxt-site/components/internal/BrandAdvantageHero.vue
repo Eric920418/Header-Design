@@ -98,7 +98,7 @@
   .brand-h8-nav > * { padding: 10px 0; }
   .brand-h8-nav > * + * { padding-left: 0; border-left: 0; border-top: 1px solid #d2d1cf; }
   .brand-h8-aside { gap: 20px; }
-  .brand-h8-aside { padding-right: 72px; }
+  .brand-h8-aside { padding-right: 0; }
   .brand-h8-aside__image { height: 250px; }
   .brand-h8-aside p { font-size: 15px; line-height: 24px; }
   .brand-h8-stage { width: calc(100% - 30px); margin-top: 30px; }

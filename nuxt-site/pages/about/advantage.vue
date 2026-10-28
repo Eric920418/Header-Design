@@ -77,7 +77,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .brand-advantage-faq :deep(.antra-faq-title .brand-faq-eyebrow) { display: block; width: fit-content; margin: 0 auto 8px; }
   .brand-advantage-faq :deep(.brand-faq-chinese) { display: block; top: auto; margin: 0 0 8px; font-size: 28px; text-wrap: balance; }
   .brand-family-section { padding: 30px 15px 40px; }
-  .brand-family-rail.internal-rail-safe { padding-right: 72px; }
+  .brand-family-rail.internal-rail-safe { padding-right: 0; }
   .brand-family-heading { margin-bottom: 35px; text-align: center; }
   .brand-family-heading h2 { font-size: 30px; line-height: 35px; }
   .brand-family-heading h3 { margin-top: 20px; font-size: 22px; line-height: 32px; }

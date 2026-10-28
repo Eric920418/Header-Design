@@ -476,8 +476,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-identity__heading { display: block; margin-bottom: 30px; text-align: center; }
   .about-services__heading h2,
   .about-identity__heading h2 { margin-top: 20px; font-size: 30px; line-height: 35px; }
-  .about-services__heading h2 { padding-right: 72px; }
-  .about-identity__heading h2 { padding-right: 72px; }
+  .about-services__heading h2 { padding-right: 0; }
+  .about-identity__heading h2 { padding-right: 0; }
   .about-identity__heading h2 .about-identity-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }
   .about-identity-chinese { display: block; top: auto; margin: 0 0 8px; font-size: 28px; }
   .about-services__heading h2 .about-stories-eyebrow { display: block; width: fit-content; margin: 0 auto 8px; }

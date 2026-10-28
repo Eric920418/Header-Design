@@ -648,8 +648,8 @@ useSeoMeta({
 
 @media (max-width: 767px) {
   .ai-hero { height: 760px; }
-  .ai-hero__inner { width: auto; margin: 0 93px 0 15px; padding-top: 66px; }
-  .ai-hero__heading { width: auto; margin: 0 93px 0 15px; }
+  .ai-hero__inner { width: auto; margin: 0 15px; padding-top: 66px; }
+  .ai-hero__heading { width: auto; margin: 0 15px; }
   .ai-hero__heading--story { width: calc(100% - 30px); margin-inline: auto; }
   .ai-hero__subtitle { margin: 24px 0 12px; font-size: 20px; }
   .ai-hero__bottom { right: 0; bottom: 18px; flex-direction: column; align-items: flex-end; gap: 12px; }
@@ -692,7 +692,7 @@ useSeoMeta({
   .ai-equipment__grid { --columns: 2; --gap: 14px; }
   .ai-equipment__action { width: 52px; height: 52px; opacity: 1; transform: translate(-50%, -50%); }
   .ai-cases__heading { display: block; text-align: center; }
-  .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 72px 30px 0; font-size: 30px; line-height: 1.2; }
+  .ai-cases__heading > h2 { margin-inline: auto; padding: 24px 0 30px; font-size: 30px; line-height: 1.2; }
   .ai-cases__viewport { margin-top: 38px; }
   .ai-cases__slide { flex-basis: 100%; }
   .ai-case-card__body { min-height: 0; padding-top: 18px; }

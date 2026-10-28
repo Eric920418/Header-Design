@@ -236,7 +236,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .antra-service-intro { padding: 60px 15px; }
   .antra-service-intro__rail {
     box-sizing: border-box;
-    padding-right: 72px;
+    padding-right: 0;
   }
   .antra-service-intro__heading { grid-template-columns: 1fr; text-align: center; }
   .antra-service-intro__heading > div:first-child { display: none; }

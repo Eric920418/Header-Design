@@ -453,7 +453,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .knowledge-detail-section--cases .knowledge-detail-point__body { grid-template-columns: 1fr; gap: 24px; }
   .knowledge-detail-section--cases .knowledge-detail-point__copy > p:first-child { margin-top: 0; }
   .knowledge-detail-page--ppt-article .knowledge-detail {
-    padding-right: 93px;
+    padding-right: 15px;
   }
 
   .knowledge-detail-page--ppt-article .knowledge-detail__header h1 {
