@@ -3,9 +3,27 @@ import {spawnSync} from 'node:child_process'
 import {readFile} from 'node:fs/promises'
 import {workspaces,workspaceFor,editorLink,cmsDate} from '../shared/cms/workflow.mjs'
 import {workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
-import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace} from '../shared/cms/navigation.mjs'
+import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace,orderDesignWorkspaces} from '../shared/cms/navigation.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url))),published=Object.fromEntries(seed.map(d=>[d.id,structuredClone(d.data)])),original=JSON.stringify(published)
 const names=workspaceNames(workspaces,published),find=(rows,id)=>rows.find(w=>w.id===workspaceFor(id)?.id)
+const design=names.filter(w=>w.section==='design'),beforeDesign=design.map(w=>w.id)
+const expectedDesign=[
+ 'data-kitchenSeries',
+ 'custom-cases','catalog-cases','view-pages-design-inspiration-index','view-pages-design-inspiration-id-',
+ 'view-pages-knowledge-design-systemcabinet','knowledge-articles','view-pages-knowledge-index','view-pages-knowledge-design-slug-',
+ 'view-pages-catalogues-kitchenware-catalog',
+]
+assert.deepEqual(orderDesignWorkspaces(design).map(w=>w.id),expectedDesign)
+assert.deepEqual(design.map(w=>w.id),beforeDesign,'Display ordering must not mutate the shared workspace list')
+const retitled=design.map(w=>({...w,title:'自訂官網名稱',pageTitle:'自訂分類名稱'}))
+assert.deepEqual(orderDesignWorkspaces(retitled).map(w=>w.id),expectedDesign,'Published title changes must not scatter related settings')
+const unknown={id:'future-design-entry',title:'新增入口'}
+assert.deepEqual(orderDesignWorkspaces([unknown,...design]).map(w=>w.id),[...expectedDesign,unknown.id],'Unknown entries remain available after known categories')
+assert.deepEqual(orderDesignWorkspaces([]),[])
+assert.deepEqual(orderDesignWorkspaces(orderDesignWorkspaces(design)).map(w=>w.id),expectedDesign)
+assert.deepEqual(orderDesignWorkspaces(design.filter(w=>matchesWorkspace(w,'設計靈感'))).map(w=>w.id),expectedDesign.slice(1,5))
+assert.deepEqual(orderDesignWorkspaces([...design].reverse()).filter(w=>w.id.startsWith('view-pages-knowledge')).map(w=>w.id),['view-pages-knowledge-design-slug-','view-pages-knowledge-index','view-pages-knowledge-design-systemcabinet'],'Order within the same category stays stable, including article subpages')
+console.log('PASS: design entries follow website category order, retain related article settings, and survive renamed titles without mutations or omissions')
 assert.equal(names.length,48);assert.deepEqual(Object.keys(nameBindings).sort(),workspaces.map(w=>w.id).sort());assert.equal(new Set(names.map(w=>w.title)).size,48)
 for(const w of names){assert(w.pageTitle&&w.purpose&&w.sectionTitle);assert.equal(w.title,w.pageTitle+'｜'+w.purpose);assert(w.href.startsWith('/'));assert.equal(w.location.at(-1),w.purpose);assert(matchesWorkspace(w,w.title));assert(matchesWorkspace(w,workspaces.find(i=>i.id===w.id).title));assert(siteSections.some(s=>s.key===w.section)||w.section==='home')}
 for(const id of ['news-articles','knowledge-articles','custom-cases','catalog-sakura']){const schema={fields:{items:{label:'原有清單標題',type:'array'}}},title=find(names,id).pageTitle;const result=namedEditorSchema(schema,id,title);assert.equal(result.fields.items.label,title);assert.equal(schema.fields.items.label,'原有清單標題')}

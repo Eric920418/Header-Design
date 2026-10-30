@@ -97,6 +97,16 @@ export function sectionForQuery(query={}){
 }
 export function matchesWorkspace(workspace,search){const words=String(search).toLocaleLowerCase().trim().split(/\s+/);return words.every(word=>(workspace.title+' '+workspace.searchTerms).toLocaleLowerCase().includes(word))}
 
+export function orderDesignWorkspaces(rows){
+ const routes=['series','/design-inspiration','/knowledge','/catalogues/kitchenware-catalog']
+ const rank=workspace=>{
+  const route=nameBindings[workspace.id]?.route||''
+  const index=routes.findIndex(parent=>route===parent||route.startsWith(parent+'/'))
+  return index<0?routes.length:index
+ }
+ return [...rows].sort((a,b)=>rank(a)-rank(b))
+}
+
 export function navigationSections(rows=[]){
  return siteSections.map(s=>{const w=rows.find(w=>w.section===s.key);return{...s,label:w?.sectionTitle||s.label,order:w?.sectionOrder??siteSections.indexOf(s)+100}}).sort((a,b)=>a.order-b.order)
 }

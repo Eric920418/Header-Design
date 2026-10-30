@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {editorLink,cmsDate} from '~/shared/cms/workflow.mjs'
-import {navigationSections,sectionForQuery,matchesWorkspace} from '~/shared/cms/navigation.mjs'
+import {navigationSections,sectionForQuery,matchesWorkspace,orderDesignWorkspaces} from '~/shared/cms/navigation.mjs'
 definePageMeta({layout:'admin'})
 const route=useRoute(),router=useRouter(),{api,message}=useCmsAdmin()
 const section=computed(()=>sectionForQuery(route.query))
@@ -11,7 +11,7 @@ if(typeof route.query.edit==='string'){
 }
 const {data:sections,error,refresh}=await useCmsWorkspaces()
 const title=computed(()=>navigationSections(sections.value).find(s=>s.key===section.value)?.label||'全部可修改頁面')
-const inArea=computed(()=>(sections.value||[]).filter(s=>section.value==='all'||s.section===section.value))
+const inArea=computed(()=>{const rows=(sections.value||[]).filter(s=>section.value==='all'||s.section===section.value);return section.value==='design'?orderDesignWorkspaces(rows):rows})
 const categories=computed(()=>['全部',...new Set(inArea.value.map(s=>s.pageTitle))])
 const filtered=computed(()=>inArea.value.filter(s=>(category.value==='全部'||s.pageTitle===category.value)&&matchesWorkspace(s,query.value)))
 watch(categories,values=>{if(!values.includes(category.value))category.value='全部'},{immediate:true})
