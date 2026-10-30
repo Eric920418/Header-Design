@@ -358,24 +358,28 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .kitchen-guide-newsroom__rail { padding-inline: 0; }
 
   .kitchen-guide-heading {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
     margin-bottom: 35px;
   }
 
   .kitchen-guide-heading__label {
-    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
   }
 
   .kitchen-guide-heading h2 {
     width: 100%;
-    margin: 20px 0 0;
+    margin: 0;
     padding: 0;
     font-size: 30px;
     line-height: 1.2;
     text-align: center;
   }
   .kitchen-guide-heading__chinese { margin-right: 0; font-size: 28px; }
-  .kitchen-guide-heading__mobile-break { display: initial; }
 
   .kitchen-guide-list-item {
     display: block;
