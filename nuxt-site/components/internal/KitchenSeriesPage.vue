@@ -661,8 +661,9 @@ useSeoMeta({
   .ai-hero__story-controls { justify-content: flex-start; }
   .ai-hero__watermark { right: 15px; bottom: -26px; font-size: 100px; }
   .ai-intro, .ai-finishes, .ai-equipment, .ai-cases { padding: 60px 0; }
-  .ai-section-heading { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+  .ai-section-heading { display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center; }
   .ai-section-heading h2 { margin-top: 0; }
+  .ai-section-heading .ai-collections-mobile-break { display: none; }
   .ai-centered-heading h2, .ai-centered-heading--compact h2 { font-size: 32px; line-height: 37px; }
   .ai-finish-heading h2, .ai-appliance-heading h2 { font-size: 30px; line-height: 1.2; }
   .ai-finish-heading h2 .ai-finish-heading__chinese, .ai-appliance-heading h2 .ai-appliance-heading__chinese { font-size: 28px; }
