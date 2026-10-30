@@ -2,7 +2,9 @@
 
 - 依凌晨3.25.24截圖，正式手機首屏的小標與預約按鈕靠左，320／390／430／767px的CTA到圖片間距約160／146.59／137.83／136px，來自固定668px首屏高度。僅max-width:767px將首屏文字置中、按鈕列flex置中，取消固定最小高度，改用內容高度加183px底距，扣除既有圖片向上重疊135px後保留48px間距；保留上方內距、字級／字色／文案、圖片310px高度及既有重疊效果、預約連結與動畫。
 - pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px四組小標／眉標／h1／CTA中心與視窗中心誤差小於0.004px，CTA到圖片均48px、圖片高度310px，文字／字級／行高／預約目的地保留，小標到眉標24px；圖片分別上移112／98.59／89.83／88px，無水平溢位。768／1024／1280／1920px完整首屏量測與正式修前一致，其他建商區塊與CMS／資料庫不改。
-- 本機390×844實際目視置中與縮短留白通過，320×500及667×375短視窗仍48px、標題完整且無水平溢位，console error 0。修前基準/tmp/sakura-builders-hero-before.json、修前圖/tmp/sakura-builders-hero-before.png、本機圖/tmp/sakura-builders-hero-local.png、完整量測/tmp/sakura-builders-hero-qa.json；正式發布複驗待續記，未提交預約表單。
+- 本機390×844實際目視置中與縮短留白通過，320×500及667×375短視窗仍48px、標題完整且無水平溢位，console error 0。
+- b87c4227已發布至dpl_AiHZmACo5983oFCHVspZebvkS4bv，Vercel READY／Production、GitHub成功；兩個既有正式網域分別inspect確認同版本。正式八寬度及兩種短視窗量測與本機完全一致，手機四元素置中誤差小於0.004px、圖片間距48px且無水平溢位，768px以上首屏完整量測與修前一致。正式390×844原生目視對齊及縮短通過、console error 0。另一網域Cookie到期，透過原預覽頁正常登入後確認390px亦置中、48px間距、310px圖片且無溢位。
+- 修前基準/tmp/sakura-builders-hero-before.json、修前圖/tmp/sakura-builders-hero-before.png、本機圖/tmp/sakura-builders-hero-local.png、正式圖/tmp/sakura-builders-hero-production.png、完整量測/tmp/sakura-builders-hero-qa.json。未提交預約表單、無CMS／資料庫寫入；自開server已停、viewport已還原。未驗實體手機或Safari／Firefox；完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-10-31 手機最新加盟資訊列表字級縮小
 
