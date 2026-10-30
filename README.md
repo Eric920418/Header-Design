@@ -4,7 +4,8 @@
 - 保留圖片來源、裁切焦點、圓角、動畫、首屏置中、文案／字級、預約目的地及768px以上正常版面；無CMS／資料庫修改。手機圖片載入錯誤時容器改為自然高度，避免縮小後裁掉既有role=alert完整錯誤資訊。暫移開本機建置副本實測，發現初始化前失敗的SSR圖片complete=true／naturalWidth=0卻未觸發既有@error提示；在共用BuilderImage mounted補查該狀態，保留原@error與src重設，不改正常圖片排版。原始素材不動，建置副本已還原；需重建後複驗該失敗分支。
 - 最後pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px圖片分別約290×132／360×164／400×182／737×335px（offsetHeight取整），保持CTA到圖片48px、圖片上緣與首屏文字／字級／中心及預約目的地保留，無水平溢位；768／1024／1280／1920px完整首屏量測與正式修前一致。320×500、667×375兩種短視窗亦48px且無溢位，390px原生目視橫幅與跨黑底約1/3效果通過，圖片載入完整、object-fit:cover且無變形。
 - 只暫移開.output/public的圖片副本重測320px初始化前載圖失敗，既有完整錯誤文案／路徑已進入role=alert，容器及提示均237px、無裁切／溢位，瀏覽器斷言通過；原始素材不動、測試後建置副本已還原。正常建商頁無誤報，另一共用BuilderImage的/builders/sakura-kitchen在390／1280px均錯誤提示0、已完成破圖0、無溢位。八尺寸重測曾因viewport作用到另一分頁及進場尚未完成取得無效資料，已排除並在僅保留目標頁後重測，未據此更改CSS。
-- 修前基準/tmp/sakura-builders-image-before.json、本機圖/tmp/sakura-builders-image-local.png、失敗分支圖/tmp/sakura-builders-image-error-local.png、完整量測/tmp/sakura-builders-image-qa.json；正式發布複驗待續記，未提交業務表單。
+- e263c751已發布至dpl_AWBqwAdATSUa8u1Joa6Jv2ixjTvg，Vercel READY／Production、GitHub成功，兩個既有正式網域均接上該版本。主網域八寬度及兩種短視窗完整量測與本機一致，四組手機CTA到圖片皆48px，圖片依2.2:1縮放且無水平溢位；四組768px以上正常首屏完整量測與修前一致。正式390×844目視圖片360×164px、跨黑底約55px、載入完整、圖片錯誤提示0、console error 0；另一網域390px亦360×164px、48px間距且無溢位。
+- 修前基準/tmp/sakura-builders-image-before.json、本機圖/tmp/sakura-builders-image-local.png、失敗分支圖/tmp/sakura-builders-image-error-local.png、正式圖/tmp/sakura-builders-image-production.png、完整量測/tmp/sakura-builders-image-qa.json。未提交業務表單、無CMS／資料庫寫入；自開server已停、viewport已還原，原始及建置圖片皆保留。未驗實體手機或Safari／Firefox；完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-10-31 手機建商首屏置中與圖片間距縮短
 
