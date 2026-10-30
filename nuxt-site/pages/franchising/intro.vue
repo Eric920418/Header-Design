@@ -691,6 +691,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-marquee--reverse .franchise-marquee__track > :deep(.franchise-image) { height: 180px; }
 
   .franchise-advantages__layout { grid-template-columns: 1fr; }
+  .franchise-advantages { padding-bottom: 0; }
   .franchise-advantages__intro { position: static; padding: 0 0 38px; }
   .franchise-advantages__intro > strong { display: none; }
   .franchise-advantage-scene { padding-bottom: 44px; }
@@ -706,7 +707,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .project-block:nth-child(even) { margin-top: 0; }
   .project-block__overlay h3 { font-size: 20px; line-height: 26px; }
 
-  .franchise-newsletter { width: calc(100% - 30px); min-height: 560px; margin-top: 75px; padding: 80px 20px; border-radius: 20px; }
+  .franchise-newsletter { width: calc(100% - 30px); min-height: 560px; margin-top: 48px; padding: 80px 20px; border-radius: 20px; }
   .franchise-newsletter p { font-size: 15px; line-height: 24px; }
   .franchise-process__rail-scroll { overflow-x: auto; overscroll-behavior-inline: contain; padding-bottom: 10px; scrollbar-color: #caa05c #e3e3e8; scrollbar-width: thin; }
   .franchise-process__rail { width: 820px; min-height: 146px; }

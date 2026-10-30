@@ -1,3 +1,10 @@
+## 2026-10-31 手機加盟優勢與Join區塊留白縮短
+
+- 依凌晨1.46.16截圖實測正式站：最後一組優勢圖示至Join SAKURA KITCHEN卡片間距為155px，由加盟優勢padding-bottom:80px及Join margin-top:75px疊加，最後場景本身底距已0px。
+- 僅max-width:767px將前區塊底距歸零、後卡上距設48px，總留白縮短107px；不改優勢內容／圖示、卡片尺寸／內距／文字、動畫、768px以上版面或CMS／資料庫。
+- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px皆48px、卡片上移107px、前區塊高度減少80px，卡片本身560px高度與內距／字級不變、無水平溢位；768／1024／1280／1920px的前區塊高度、交界間距、圖示與卡片尺寸／內距／字級與正式修前完全一致。本機390×844實際捲入交界目視通過，完整內容與CTA可見，console error 0。
+- 修前基準/tmp/sakura-franchise-join-space-before.json；本機畫面/tmp/sakura-franchise-join-space-local.png及完整量測/tmp/sakura-franchise-join-space-qa.json；正式發布複驗待續記。未播放影片或送出業務表單。
+
 ## 2026-10-31 手機加盟夥伴小標籤與標題左緣對齊
 
 - 依凌晨1.45.48截圖重新核對正式站：Our Partners到中文標題已24px，但手機標籤仍由共用TemplateHeadingRail置中，390px時左緣127.78px、標題左緣15px，確實未完整符合指定位置。
