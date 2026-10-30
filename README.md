@@ -1,3 +1,9 @@
+## 2026-10-31 手機加盟夥伴小標籤與標題左緣對齊
+
+- 依凌晨1.45.48截圖重新核對正式站：Our Partners到中文標題已24px，但手機標籤仍由共用TemplateHeadingRail置中，390px時左緣127.78px、標題左緣15px，確實未完整符合指定位置。
+- 僅max-width:767px覆寫franchise-about__grid直屬標籤列為justify-content:flex-start，並清除該列小標籤繼承的margin-inline:auto；兩者必須一起處理，才能與中文／英文標題及影片左緣對齊。保留全站24px間距，不改其他加盟區塊與768px以上排版，也不改文案、影片或CMS／資料庫。
+- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）；進場完成後比對正式修前320／390／430／767／768／1024／1280／1920px八尺寸，四組手機標籤與標題left皆15px、間距皆24px、無水平溢位，影片、標題及列高位置保留。四組768px以上的標籤列、標題、影片幾何及justify樣式與修前完全一致；本機390px目視對齊通過，沒有把進場平移中的負x座標當作完成值。正式發布及複驗待續記。
+
 ## 2026-10-31 關於我們手機品牌理念依原官網獨立滿版展示
 
 - 依凌晨1.24.59截圖，實際開啟原官網https://www.sakura-kitchenlife.com.tw/about/introduce核對：四個理念為各自圖片的獨立滿版區塊，首屏是廚房背景、白色斜體Our Brand與中文標題，非目前四個400px短列共用作用中背景。原官網390×844每屏804px（扣40px頁首）、遮罩40%黑色、英文20/30px及中文30/45px。

@@ -671,6 +671,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-news { padding: 75px 15px 80px; }
   .franchise-about { background-size: 70% auto; }
   .franchise-about__grid { grid-template-columns: 1fr; }
+  .franchise-about__grid > .source-heading-rail { justify-content: flex-start; }
+  .franchise-about__grid > .source-heading-rail :deep(.section-pill) { margin-inline: 0; }
   .franchise-about__content { padding: 38px 0 50px; }
   .franchise-about h2,
   .franchise-advantages h2,
