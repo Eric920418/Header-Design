@@ -95,7 +95,7 @@
   .brand-h8-intro { padding: 84px 15px 0; }
   .brand-h8-copy h1 { margin-bottom: 30px; font-size: clamp(24px, 7.8vw, 40px); line-height: 1.2; }
   .brand-h8-nav { display: grid; grid-template-columns: 1fr; }
-  .brand-h8-nav > * { padding: 10px 0; }
+  .brand-h8-nav > * { display: grid; grid-template-columns: 16px 80px; padding: 10px 0; }
   .brand-h8-nav > * + * { padding-left: 0; border-left: 0; border-top: 1px solid #d2d1cf; }
   .brand-h8-aside { gap: 20px; }
   .brand-h8-aside { padding-right: 0; }
