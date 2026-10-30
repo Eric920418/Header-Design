@@ -649,7 +649,8 @@ useSeoMeta({
 @media (max-width: 767px) {
   .ai-hero { height: 760px; }
   .ai-hero__inner { width: auto; margin: 0 15px; padding-top: 66px; }
-  .ai-hero__heading { width: auto; margin: 0 15px; }
+  .ai-hero__heading { top: 96px; width: auto; margin: 0 15px; }
+  .ai-hero__heading h1 { font-size: 50px; line-height: 60px; }
   .ai-hero__heading--story { width: calc(100% - 30px); margin-inline: auto; }
   .ai-hero__subtitle { margin: 24px 0 12px; font-size: 20px; }
   .ai-hero__bottom { right: 0; bottom: 18px; flex-direction: column; align-items: flex-end; gap: 12px; }
