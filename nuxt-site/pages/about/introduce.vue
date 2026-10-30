@@ -237,6 +237,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               @focus="activeValueId = value.id"
               @click="activeValueId = value.id"
             >
+              <InternalBrandImage
+                :src="value.image"
+                :alt="value.title.replace('\n', ' ')"
+                class="about-values__mobile-image"
+                aria-hidden="true"
+              />
               <div class="about-values__copy banner-process-caption">
                 <span class="number">{{ String(index + 1).padStart(2, '0') }}</span>
                 <span class="about-values__eyebrow">{{ value.eyebrow }}</span>
@@ -359,6 +365,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .about-values__shade { z-index: 1; background: linear-gradient(180deg, rgb(185 183 174 / 0%) 0%, rgb(134 132 126 / 54%) 19.25%, rgb(0 0 0 / 64%) 64%); pointer-events: none; }
 .about-values__columns { z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .about-values__card { position: relative; min-width: 0; overflow: hidden; border-right: 1px solid rgb(255 255 255 / 24%); color: #fff; cursor: pointer; outline-offset: -3px; }
+.about-values__mobile-image { display: none; }
 .about-values__copy { position: absolute; inset-inline: 0; bottom: 0; padding: 0 27px 57px 57px; transition: transform .5s ease; transform: translateY(68px); }
 .about-values__card.is-active .about-values__copy,
 .about-values__card:hover .about-values__copy,
@@ -499,13 +506,21 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-history__nav { top: 75px; width: 42px; height: 42px; }
   .about-history__nav--previous { left: -8px; }
   .about-history__nav--next { right: -8px; }
-  .about-values__stage { min-height: 1600px; }
-  .about-values__columns { grid-template-columns: 1fr; }
-  .about-values__card { min-height: 400px; border-right: 0; border-bottom: 1px solid rgb(255 255 255 / 24%); }
-  .about-values__copy { padding: 0 20px 30px; text-align: center; transform: none; }
-  .about-values__copy .number { color: #caa05c; opacity: 1; }
-  .about-values__copy h3 { width: 100%; min-height: 0; padding-bottom: 12px; }
-  .about-values__copy p { width: 100%; min-height: 0; opacity: 1; visibility: visible; }
+  .about-values__stage { min-height: 0; }
+  .about-values__image-list,
+  .about-values__shade { display: none; }
+  .about-values__columns { position: relative; inset: auto; display: block; }
+  .about-values__card { display: flex; min-height: max(320px, calc(100svh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); align-items: center; justify-content: center; padding: 40px 20px; border: 0; cursor: default; }
+  .about-values__card .about-values__mobile-image { position: absolute; inset: 0; z-index: 0; display: block; width: 100%; height: 100%; }
+  .about-values__card::after { position: absolute; inset: 0; z-index: 1; background: rgb(0 0 0 / 40%); content: ''; pointer-events: none; }
+  .about-values__copy { position: relative; inset: auto; z-index: 2; width: 100%; padding: 0; text-align: center; transform: none; transition: none; }
+  .about-values__copy .number,
+  .about-values__copy p.is-empty,
+  .about-values__card:not(:first-child) .about-values__eyebrow,
+  .about-values__card:first-child .banner-process-content { display: none; }
+  .about-values__eyebrow { margin-bottom: 12px; color: #fff; font-family: var(--font-cjk-serif); font-size: 20px; font-style: italic; line-height: 30px; letter-spacing: normal; text-transform: none; }
+  .about-values__copy h3 { width: 100%; min-height: 0; padding: 0; font-size: clamp(24px, 7.7vw, 30px); font-weight: 600; line-height: 1.5; letter-spacing: .15em; white-space: normal; text-wrap: balance; }
+  .about-values__copy p { width: 100%; min-height: 0; margin-top: 24px; font-size: 15px; line-height: 1.5; opacity: 1; visibility: visible; }
   .about-identity { padding: 65px 15px 70px; }
   .about-identity__grid { gap: 14px; margin-right: -15px; padding-right: 15px; }
   .about-identity__card { flex-basis: min(76vw, 285px); }
