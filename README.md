@@ -1,3 +1,9 @@
+## 2026-10-31 手機最新加盟資訊小標籤置中
+
+- 依凌晨1.46.21截圖核對正式站：FRANCHISE INFORMATION到Explore Our已24px，但標籤仍為inline-flex靠左（手機四尺寸left皆15px、中心117px），未完成置中。僅max-width:767px將最新加盟資訊直屬標籤改flex與margin-inline:auto，沿用共用24px間距；不改其他加盟標籤、標題／列表、768px以上版面或CMS／資料庫。
+- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px標籤中心與視窗中心誤差小於0.055px（offsetWidth整數取整），到Explore Our均24px，標籤尺寸、標題／列表／區塊高度保留，無水平溢位；768／1024／1280／1920px完整量測與修前一致。正式修前同頁CELEBRITY STORIES參考亦中心195px、間距24px；本機390px目視置中通過、console error 0。
+- 修前基準/tmp/sakura-franchise-news-label-before.json、本機畫面/tmp/sakura-franchise-news-label-local.png、完整量測/tmp/sakura-franchise-news-label-qa.json；正式發布複驗待續記。未提交業務表單或播放影片。
+
 ## 2026-10-31 手機加盟優勢與Join區塊留白縮短
 
 - 依凌晨1.46.16截圖實測正式站：最後一組優勢圖示至Join SAKURA KITCHEN卡片間距為155px，由加盟優勢padding-bottom:80px及Join margin-top:75px疊加，最後場景本身底距已0px。
