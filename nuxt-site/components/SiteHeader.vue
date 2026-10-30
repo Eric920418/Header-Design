@@ -354,7 +354,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <NuxtLink v-else :to="item.to || '#'" class="block px-6 py-4">{{ item.label }}</NuxtLink>
         <div v-if="expanded === index" class="bg-white/5 px-8 py-2">
           <template v-if="item.children">
-            <NuxtLink v-if="item.to" :to="item.to" class="block py-3 text-sm text-[#CAA05C]">{{ item.label }}{{ cmsCopy.copy.text15 }}</NuxtLink>
+            <NuxtLink v-if="item.to && !['/franchising/intro', '/builders'].includes(item.to)" :to="item.to" class="block py-3 text-sm text-[#CAA05C]">{{ item.label }}{{ cmsCopy.copy.text15 }}</NuxtLink>
             <template v-if="item.seriesMega">
               <button type="button" :aria-expanded="mobileSeriesOpen" aria-controls="mobile-brand-series" class="flex w-full items-center justify-between py-3 text-sm text-[#CAA05C]" @click="mobileSeriesOpen = !mobileSeriesOpen">
                 {{ cmsCopy.copy.text16 }}<ChevronDown aria-hidden="true" class="h-4 w-4 transition-transform motion-reduce:transition-none" :class="{ 'rotate-180': mobileSeriesOpen }" />
