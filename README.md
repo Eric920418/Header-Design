@@ -4,6 +4,8 @@
 - 僅修改KitchenSeriesPage.vue的max-width:767px共用規則，不改首頁Hero或768px以上桌面；保留文案、圖片、輪播、型錄及案例入口。AI Kitchen三張圖文另逐張檢查長標與說明是否需例外，建置、十系列手機／桌面與正式驗收待續記。不寫CMS／資料庫。
 - pnpm build含typecheck通過；既有check-kitchen-series安全檢查通過十系列SSR、404、215圖片來源、AI三組圖文配對及輪播／鍵盤回歸。本機十系列×320／390／430／767px共40組均50px／60px、水平置中、標題框top170px且無水平溢位；Clever在320px自然兩行，其餘一行。AI三張×四尺寸共12組保留三層文字，文字至控制區最小淨空164px、Hero內部未被捲動，不需另外縮字。
 - 修前正式版與本機768px以上共16組比較（十系列1280px，Harmony／AI另768／1024／1920px），標題、文字、字級、尺寸與位置差異0。本機390px原生進場顯示階段目視符合截圖方向，證據/tmp/sakura-mobile-harmony-title-local.png；動畫過渡中的偏移／透明未誤算成穩定排版。待發布後續記正式結果。
+- a8cafcc6已發布；Vercel dpl_35XfzWyzYqkYarenEcBqfXKU2GLs為READY／Production，GitHub成功且兩個既有正式網域均接上。主網域十系列×四手機尺寸40組通過50px／60px、置中、top170px及無水平溢位；AI三張×四尺寸12組逐張白字、圖文與淨空通過，最小164px。正式768px以上16組與修前差異0；另一正式網域390px Harmony同為50px／60px、top170px、中心195。
+- 正式安全回歸通過十系列SSR、404、215圖片來源及既有動畫／鍵盤檢查；原生進場顯示階段正式390px目視證據/tmp/sakura-mobile-harmony-title-production.png，數據/tmp/sakura-mobile-series-title-qa.json；本機320px AI FAUCET完整三層文字目視證據/tmp/sakura-mobile-ai-title-local.png。未改動畫、文案、圖片與資料，沒有CMS／資料庫／業務表單寫入；自開server已停、viewport已還原。未驗實體手機及Safari／Firefox，正式紀錄只提交README，不為文件再部署。
 
 ## 2026-10-30 手機首頁尋找門市小標籤留白
 
