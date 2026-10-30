@@ -1,8 +1,9 @@
 ## 2026-10-30 品牌系列推薦案例手機小標籤間距
 
 - 依下午6.28.59截圖，十系列RECOMMENDED CASES至Explore Our也需同加盟品牌信賴28px。正式四種手機寬度原實測35.5px、眉標中心偏左4px，與上方Collections同為舊br參與flex排版造成。
-- 移除手機重新顯示舊br的規則，讓兩個雙語標題沿用既有display:none；上輪Collections專用隱藏規則因此刪除，保持同樣結果。僅在max-width:767px將推薦案例h2上padding24→28px；下padding、字級、文案、案例輪播及空狀態保留，768px以上不動。不寫CMS／資料庫；已保存十系列八尺寸80組正式修前基準，建置、實測及正式驗收待續記。
-- pnpm build含typecheck通過；本機十系列×320／390／430／767px共40組實際間距28px，標籤與眉標置中、無整頁水平溢位，字級／行高／顏色／對齊與文案保留。十系列×768／1024／1280／1920px共40組的標題、標籤位置／尺寸／樣式對修前差異0；上方Collections用自身原生錨點於穩定進場狀態比對八尺寸差異0，沒有把跨區捲動中的動畫座標當成排版變化。390px Clever完整推薦案例空狀態目視證據/tmp/sakura-mobile-cases-gap-local.png；待續記正式驗收。
+- 移除手機重新顯示舊br的規則，讓兩個雙語標題沿用既有display:none；上輪Collections專用隱藏規則因此刪除，保持同樣結果。僅在max-width:767px將推薦案例h2上padding24→28px；下padding、字級、文案、案例輪播及空狀態保留，768px以上不動。不寫CMS／資料庫；已保存十系列八尺寸80組正式修前基準。
+- pnpm build含typecheck通過；本機十系列×320／390／430／767px共40組實際間距28px，標籤與眉標置中、無整頁水平溢位，字級／行高／顏色／對齊與文案保留。十系列×768／1024／1280／1920px共40組的標題、標籤位置／尺寸／樣式對修前差異0；上方Collections用自身原生錨點於穩定進場狀態比對八尺寸差異0，沒有把跨區捲動中的動畫座標當成排版變化。390px Clever完整推薦案例空狀態目視證據/tmp/sakura-mobile-cases-gap-local.png。
+- 7a860079已發布；Vercel dpl_DgUydMZvv1TuakfVdtfFxTG21anF為READY／Production，兩個既有正式網域均接上。主網域十系列40組手機間距28px、中心與無溢位通過，40組平板／桌面及上方Collections八尺寸對修前差異0；另一正式網域390px同為28px、標籤與眉標中心195。正式原生捲動目視證據/tmp/sakura-mobile-cases-gap-production.png，數據/tmp/sakura-mobile-cases-gap-qa.json。自開server已停止、viewport還原；未驗實體手機及Safari／Firefox，正式紀錄只提交README、不為文件再部署。
 
 ## 2026-10-30 品牌系列內頁手機小標籤間距
 
