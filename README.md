@@ -4,6 +4,8 @@
 - 只在max-width:767px讓標題區以直向flex共同置中、h2保持滿欄；標籤margin-bottom20→24px，對齊右圖/products/sakura標籤至中文主標的實測24px。這區手機標籤／標題與影片改用既有fadeIn，進場維持中心，文字／副標／段落字級與CTA連結、桌面動畫不變。建置、實際字行／進場與正式驗收待續記。
 - pnpm build含typecheck通過。本機320／390／430／767px標籤到中文主標均24px；標籤、標題、副標、段落與整個CTA框中心分別160／195／215／383.5，標題／副標／段落逐行Range中心最大誤差0.00390625px，沒有水平溢位；不將圓點造成的標籤文字偏移或CTA文字與箭頭分工誤當框體不置中。768／1024／1280／1920px字級、尺寸、位置、留白、文字對齊對修前差異0。
 - 390px從無hash首頁以原生PageDown正常捲入，標籤／標題與影片computed animation-name皆fadeIn、transform皆none、中心195；原生錨點會依既有機制直接顯示而animation:none，這部分不冒充動畫驗收。完整本機目視證據/tmp/sakura-mobile-promise-center-local.png；不修改全站reveal或其他區塊動畫。
+- d30a64ba已發布，Vercel dpl_CEY4BNuHHbo5g9QBYBN5g7ecJyp4為READY／Production／GitHub成功，兩個既有正式網域均接上。正式主網域四手機尺寸逐行中心最大誤差0.00390625px、整組框中心正確、間距24px且無橫向溢位；四桌面尺寸對修前差異0。正式另從無hash首頁原生捲入確認標籤／主標與影片fadeIn、無transform、中心195，沒有用錨點直接顯示替代正常進場驗收。
+- 兩正式網域390px再次逐行核對與目視，證據/tmp/sakura-mobile-promise-center-production.png。來源文案、字級、影片與連結不改；只改這區手機限域CSS，無CMS／資料庫／業務表單寫入。自開本機server停止、viewport還原；未驗實體手機與Safari／Firefox。正式紀錄只提交README，不為文件再部署。
 
 ## 2026-10-30 手機首頁設計案例高度與整組位置
 
