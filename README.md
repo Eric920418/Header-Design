@@ -2,7 +2,9 @@
 
 - 依凌晨1.45.48截圖重新核對正式站：Our Partners到中文標題已24px，但手機標籤仍由共用TemplateHeadingRail置中，390px時左緣127.78px、標題左緣15px，確實未完整符合指定位置。
 - 僅max-width:767px覆寫franchise-about__grid直屬標籤列為justify-content:flex-start，並清除該列小標籤繼承的margin-inline:auto；兩者必須一起處理，才能與中文／英文標題及影片左緣對齊。保留全站24px間距，不改其他加盟區塊與768px以上排版，也不改文案、影片或CMS／資料庫。
-- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）；進場完成後比對正式修前320／390／430／767／768／1024／1280／1920px八尺寸，四組手機標籤與標題left皆15px、間距皆24px、無水平溢位，影片、標題及列高位置保留。四組768px以上的標籤列、標題、影片幾何及justify樣式與修前完全一致；本機390px目視對齊通過，沒有把進場平移中的負x座標當作完成值。正式發布及複驗待續記。
+- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）；進場完成後比對正式修前320／390／430／767／768／1024／1280／1920px八尺寸，四組手機標籤與標題left皆15px、間距皆24px、無水平溢位，影片、標題及列高位置保留。四組768px以上的標籤列、標題、影片幾何及justify樣式與修前完全一致；本機390px目視對齊通過，沒有把進場平移中的負x座標當作完成值。
+- a52ff8f6已正式發布至dpl_APK7RnjAcCdMoMbDC6fhSeXWBzGS，Vercel READY／Production、GitHub成功，兩個既有正式網域皆接上該版本。主網域八尺寸與本機量測一致：四組手機labelX與titleX皆15px、gap24px且無水平溢位，四組768px以上幾何與修前完全一致。另一網域390px實測亦labelX15px／titleX15px／gap24px，瀏覽器console error 0。
+- 正式390px截圖/tmp/sakura-franchise-partners-alignment-production.png；修前後及正式量測/tmp/sakura-franchise-partners-alignment-qa.json。未播放影片或送出業務表單，無CMS／資料庫寫入；自開server已停、viewport已還原。未驗實體手機或Safari／Firefox；完成紀錄只提交README，不為文件再部署。
 
 ## 2026-10-31 關於我們手機品牌理念依原官網獨立滿版展示
 
