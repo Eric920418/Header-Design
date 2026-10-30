@@ -3,6 +3,8 @@
 - 依下午5.11.34截圖，首頁品牌系列與廚房產品的小標籤至Explore Our留白需同加盟品牌信賴。正式參考區塊320／390／430／767px實際間距皆28px；首頁品牌系列原20px、廚房產品原0px。
 - 僅max-width:767px指定.home-project-heading與.home-services-heading的row-gap:28px，保留原標籤／眉標／中英文的字級、內容、動畫及桌面規則；品牌信賴參考區塊不改，不寫CMS或資料庫。建置、手機及桌面實際比對與正式結果待續記。
 - pnpm build含typecheck通過；本機320／390／430／767px兩區塊實際標籤底邊至Explore Our行框頂邊均28px，無整頁水平溢位。768／1024／1280／1920px兩區塊外框座標、尺寸、字級、行高、色彩、留白與文字比對修前正式站相同，僅1024px一個文字框有0.000061px浮點差；不將嚴格JSON不等誤當成版面變更。390px實際鍵盤捲至廚房產品目視28px留白，證據/tmp/sakura-mobile-products-gap-local.png；無注入捲動或動畫樣式。
+- 6b82553a已發布，Vercel dpl_D4dGA976CDiyrCfhgCc97M1SjpXR為READY／Production／GitHub成功，兩個既有正式網域均接上。主網域四手機尺寸兩區塊均28px，四桌面尺寸比對仍只有最大0.000061px浮點差、樣式無異；另一網域390px兩區塊皆28px。正式390px用原生PageDown／ArrowUp逐區捲動目視，標籤完整在固定導覽下方時保存/tmp/sakura-mobile-series-gap-production.png與/tmp/sakura-mobile-products-gap-production.png，不使用被導覽遮住的小標籤畫面作交付證據。
+- 本輪只新增手機CSS兩個選擇器的row-gap；CMS／資料庫、字級／文案、Footer圖示與金色服務列不改。自開本機server已停止、viewport已還原；未驗實體手機或Safari／Firefox。正式紀錄只提交README，不為文件再部署。
 
 ## 2026-10-30 手機Footer圖示對齊基準修正
 
