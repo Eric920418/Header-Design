@@ -51,7 +51,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <template v-for="(item, index) in serviceItems" :key="item.label">
         <div v-if="index" aria-hidden="true" class="h-px w-full bg-white/50" />
         <a :href="item.href" :aria-label="item.label" :target="item.newTab ? '_blank' : undefined" :rel="item.newTab ? 'noopener noreferrer' : undefined" class="block p-2">
-          <img :src="item.icon" :alt="cmsCopy.copy.field2" class="block w-14 sm:w-[58px]" />
+          <picture>
+            <source v-if="item.icon === '/floating-icons/official-quick-link-2.svg'" media="(max-width: 767px)" srcset="/floating-icons/official-quick-link-2-mobile.svg" />
+            <img :src="item.icon" :alt="cmsCopy.copy.field2" class="block w-14 sm:w-[58px]" />
+          </picture>
         </a>
       </template>
       <a href="https://sakura-ai-one.vercel.app/consumer?entry=official" target="_blank" rel="noopener noreferrer" aria-label="拍立配（另開分頁）" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 sm:h-[74px] sm:w-[74px]"><img :src="cmsCopy.copy.field4" :alt="cmsCopy.copy.field5" class="block h-[70px] w-[70px]" /></a>
@@ -69,11 +72,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     /* Desktop scroll-following must not move the mobile service bar. */
     transform: none !important;
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: #737373;
+    background: #B79258;
     box-shadow: 0 -2px 12px rgb(0 0 0 / 12%);
   }
   .floating-primary { display: none; }
-  .floating-services { display: flex; }
+  .floating-services { display: flex; background: #B79258; color: white; }
   .floating-services > div { width: 1px; height: auto; }
   .floating-services > a {
     display: flex;
