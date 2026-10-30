@@ -3,7 +3,9 @@
 - 依凌晨3.26.12截圖，手機Logo與文案、90px預約圓鈕及品牌承諾卡片有各自偏移，未對齊同一中線；320px卡片原僅200×84px，文字超出固定比例而被裁切。本次僅max-width:767px將首屏改成自然單欄flex，Logo／中文Logo／文案置中，上方品牌區由距首屏頂38px改為120px；下方預約圓鈕與品牌承諾卡片置中，兩者間距24px、卡片底距20px，保留720px最小高度並允許內容撐高。
 - 品牌卡保留原圖文與連結，手機寬度改為首屏減40px、最大330px，取消固定長寬比讓文字自然撐高；原圖片背景、遮罩、字級與預約動畫保留，768px以上不改。無CMS／資料庫寫入。
 - pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px品牌區、英文Logo、中文Logo、文案、預約及品牌卡共六個中心皆精確對齊視窗中線；六區文字無裁切、預約至卡片24px、卡片底距20px、無水平溢位，文案／來源／字級／行高／目的地均保留。768／1024／1280／1920px完整首屏量測與正式修前一致；320×500、667×375短視窗仍完整且無水平溢位，console error 0。首屏維持720px最小高度，短視窗可自然垂直捲動。
-- 右圖Premium正式頁目前已是不同的首屏控制配置，未直接複製其當前位置；此次依使用者附圖將品牌與操作群組對齊中線、品牌區下移並保留原品牌卡。修前基準/tmp/sakura-builders-sakura-hero-before.json、本機圖/tmp/sakura-builders-sakura-hero-local.png、完整量測/tmp/sakura-builders-sakura-hero-qa.json；正式發布複驗待續記，未提交表單。
+- 右圖Premium正式頁目前已是不同的首屏控制配置，未直接複製其當前位置；此次依使用者附圖將品牌與操作群組對齊中線、品牌區下移並保留原品牌卡。
+- dc14f680已發布至dpl_3En4CyhKPGPyDH8mcpfGSDhNTWuG，Vercel READY／Production、GitHub成功，兩個既有正式網域均接上該版本。主網域八寬度及兩種短視窗量測與本機完全一致，四組手機六個中心皆等於視窗中心、圖文完整、無水平溢位；768px以上完整首屏量測與修前一致。正式390×844從頂端實際捲下約68px，Logo、文案、圓鈕及品牌卡都可完整閱讀，console error 0；另一網域390px六中心亦皆195px、完整無溢位。
+- 修前基準/tmp/sakura-builders-sakura-hero-before.json、本機圖/tmp/sakura-builders-sakura-hero-local.png、正式頂端圖/tmp/sakura-builders-sakura-hero-production-top.png、正式稍捲後完整群組圖/tmp/sakura-builders-sakura-hero-production.png、完整量測/tmp/sakura-builders-sakura-hero-qa.json。未提交表單、無CMS／資料庫寫入；自開server已停、viewport已還原。未驗實體手機或Safari／Firefox；完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-10-31 手機iCare圖片至品牌館小標留白縮短
 
