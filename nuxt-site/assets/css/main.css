@@ -45,6 +45,15 @@
     padding-bottom: 48px;
   }
   .gallery-heading-column .site-content-cta { margin-top: 112px; }
+  .what-we-do-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .what-we-do-heading > .section-pill { margin-bottom: 24px; }
+  .what-we-do-title { width: 100%; }
+  .what-we-do-heading > .ev.is-visible,
+  .what-we-do-video.ev.is-visible { animation-name: fadeIn; }
   h2:has(> .bilingual-heading-lead) {
     display: flex;
     flex-wrap: wrap;
