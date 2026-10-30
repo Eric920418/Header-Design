@@ -2,6 +2,8 @@
 
 - 依凌晨3.26.24截圖，正式320／390／430／767px的內容圖片底至EXPLORE OUR COLLECTIONS小標為158px，來自品牌優勢底部80px加系列頂部78px。本次僅max-width:767px將兩者各改24px，總距離48px；保留圖片2.2:1、CTA位置、系列標籤至標題間距、圖文、動畫、768px以上版面及CMS／資料庫資料。修前八寬度基準/tmp/sakura-series-gap-before.json。
 - pnpm build含typecheck通過。本機320／390／430／767px間距均48px、無水平溢位，768／1024／1280／1920px完整交界及系列標題量測與正式修前一致；320×500、667×375短視窗亦48px且無溢位。390×844實際捲動目視橫幅及系列標籤連續且無重疊，console error 0。保留既有JSON import attributes與Tailwind sourcemap建置警告。本機截圖/tmp/sakura-series-gap-local.png、完整量測/tmp/sakura-series-gap-qa.json；正式驗證待續記。
+- 61072bd2已發布至dpl_8eXLfG3MrMRJTHkfFVcQQbAMUymg，Vercel READY／Production且兩個正式網域皆接上新版。主網域八寬度及兩種短視窗量測與本機完全一致：手機48px、768px以上與修前一致、全數無水平溢位；另一網域390px量測亦與本機一致。正式390×844實際捲動目視橫幅與系列標籤間距縮短且無重疊，console error 0。正式截圖/tmp/sakura-series-gap-production.png、完整量測/tmp/sakura-series-gap-qa.json。
+- 未提交業務表單、無CMS／資料庫寫入；自開server已停、viewport已還原。未驗實體手機或Safari／Firefox；完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-10-31 手機SAKURA KITCHEN內容區圖片改為橫幅
 
