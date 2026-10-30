@@ -3,6 +3,9 @@
 - 依截圖下午3.21.20，只在lg:hidden漢堡選單排除父路徑/franchising/intro及/builders自動生成的總覽連結，移除「我要加盟總覽」與「建商專區總覽」。保留原加盟介紹／優勢／流程／Q&A、額外申請與下載箭頭，以及建商專區首頁／SAKURA KITCHEN／型錄；優惠消息總覽不變。
 - 桌面模板、CSS、CMS與資料庫不改；建置、範圍比對及正式畫面結果待續記。
 - pnpm build含typecheck通過；執行實際v-if條件確認只排除兩個指定父路徑，/news總覽仍保留。相對修前桌面nav、整段script與CSS逐字一致。本機正式建置320／390／430／767／1023px，實際展開加盟與建商選單、額外申請／下載箭頭，兩列總覽不存在、其餘子入口完整、Header及整頁scrollWidth皆等於viewport。390px另實際確認優惠消息總覽保留、品牌系列第二層完整十項；應用內瀏覽器以新暫時分頁恢復連線，補上上一輪未完成的窄手機操作檢查。
+- 修前正式站與修後本機1024／1280／1920px，各71個主導覽節點實際比對位置、尺寸、字級、行高與色彩差異0。本機check-site-header.mjs原觸控／鍵盤／頁尾回歸及唯讀目的頁檢查通過。8389cc5f已發布，Vercel dpl_CYNa8D6AUhEAjp42PgZ7e7XjonE8為READY／Production，兩個既有正式網域均查得指向此部署。
+- 正式主網域五種相同RWD寬度逐一實際開啟兩組選單及額外加盟入口，兩列總覽均不存在、其餘入口完整、無Header或整頁橫向溢位；390px目視與截圖/tmp/sakura-mobile-franchise-no-overview-production.png及/tmp/sakura-mobile-builders-no-overview-production.png。另一正式網域390px正常預覽登入後複驗兩列刪除與優惠消息總覽保留通過。首次正式頁互動尚未載入完成的點擊未計通過，待畫面互動可用後重驗，不修改原載入機制。
+- 本輪未寫CMS／資料庫或送出業務表單，只有既有預覽登入。暫時viewport已還原、自開本機server停止；本輪未重驗實體手機／Safari，五寬度為Chromium操作驗收。正式紀錄只提交本README，不為文件再次部署。
 
 ## 2026-10-30 手機漢堡品牌系列第二層
 
