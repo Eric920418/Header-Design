@@ -157,7 +157,7 @@ onBeforeUnmount(() => {
   .case-carousel__controls { align-items: center; flex-wrap: wrap; }
   .case-carousel__thumbnails { order: 2; width: 100%; flex-basis: 100%; gap: 12px; }
   .case-carousel__thumbnails button { height: 92px; flex-basis: calc((100% - 12px) / 1.4); border-radius: 12px; }
-  .case-carousel__arrows { margin-left: auto; padding-bottom: 0; }
+  .case-carousel__arrows { margin-left: auto; margin-right: 0; padding-bottom: 0; }
   .case-carousel__arrows button { width: 44px; height: 44px; }
 }
 
