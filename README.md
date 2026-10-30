@@ -1,3 +1,10 @@
+## 2026-10-31 手機SAKURA KITCHEN首屏圖文與預約區置中
+
+- 依凌晨3.26.12截圖，手機Logo與文案、90px預約圓鈕及品牌承諾卡片有各自偏移，未對齊同一中線；320px卡片原僅200×84px，文字超出固定比例而被裁切。本次僅max-width:767px將首屏改成自然單欄flex，Logo／中文Logo／文案置中，上方品牌區由距首屏頂38px改為120px；下方預約圓鈕與品牌承諾卡片置中，兩者間距24px、卡片底距20px，保留720px最小高度並允許內容撐高。
+- 品牌卡保留原圖文與連結，手機寬度改為首屏減40px、最大330px，取消固定長寬比讓文字自然撐高；原圖片背景、遮罩、字級與預約動畫保留，768px以上不改。無CMS／資料庫寫入。
+- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px品牌區、英文Logo、中文Logo、文案、預約及品牌卡共六個中心皆精確對齊視窗中線；六區文字無裁切、預約至卡片24px、卡片底距20px、無水平溢位，文案／來源／字級／行高／目的地均保留。768／1024／1280／1920px完整首屏量測與正式修前一致；320×500、667×375短視窗仍完整且無水平溢位，console error 0。首屏維持720px最小高度，短視窗可自然垂直捲動。
+- 右圖Premium正式頁目前已是不同的首屏控制配置，未直接複製其當前位置；此次依使用者附圖將品牌與操作群組對齊中線、品牌區下移並保留原品牌卡。修前基準/tmp/sakura-builders-sakura-hero-before.json、本機圖/tmp/sakura-builders-sakura-hero-local.png、完整量測/tmp/sakura-builders-sakura-hero-qa.json；正式發布複驗待續記，未提交表單。
+
 ## 2026-10-31 手機iCare圖片至品牌館小標留白縮短
 
 - 依凌晨3.25.57截圖，正式320／390／430／767px的iCare圖片底至GET IN TOUCH標籤為112px，由builders-capability底距40px與builders-contact上距72px相加。僅max-width:767px將前區塊底距歸零、品牌館上距改48px，總留白縮短64px；保留圖片來源／尺寸、標籤置中與下方24px間距、標題、表單、區塊底距、768px以上排版，不改CMS／資料庫。

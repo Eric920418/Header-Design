@@ -269,15 +269,15 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
 @media (max-width: 767px) {
   .sakura-kitchen-hero-shell { padding: 80px 15px 0; }
-  .sakura-kitchen-hero { min-height: 720px; aspect-ratio: auto; border-radius: 18px; }
+  .sakura-kitchen-hero { display: flex; min-height: 720px; flex-direction: column; align-items: center; gap: 24px; aspect-ratio: auto; padding: 120px 0 20px; border-radius: 18px; }
   .sakura-kitchen-hero__image :deep(img) { object-position: 57% center; }
   .sakura-kitchen-hero__shade { background: linear-gradient(180deg, rgb(16 8 1 / 70%) 0%, rgb(16 8 1 / 24%) 46%, rgb(16 8 1 / 70%) 100%); }
-  .sakura-kitchen-hero__brand { top: 38px; right: 22px; bottom: auto; left: 22px; width: auto; }
-  .sakura-kitchen-hero__logo { width: 260px; }
-  .sakura-kitchen-hero__logo-zh { width: 205px; margin-top: 8px; }
-  .sakura-kitchen-hero__description { max-width: 318px; margin-top: 18px; font-size: 14px; line-height: 23px; }
-  .sakura-kitchen-hero__booking { bottom: 158px; left: 20px; width: 90px; height: 90px; }
-  .sakura-kitchen-hero__project-card { right: 70px; bottom: 20px; left: 20px; width: auto; max-width: 330px; gap: 9px; border-radius: 18px; padding: 7px 10px 7px 7px; }
+  .sakura-kitchen-hero__brand { position: relative; top: auto; right: auto; bottom: auto; left: auto; width: calc(100% - 44px); text-align: center; }
+  .sakura-kitchen-hero__logo { width: 260px; margin-inline: auto; }
+  .sakura-kitchen-hero__logo-zh { width: 205px; margin: 8px auto 0; }
+  .sakura-kitchen-hero__description { max-width: 318px; margin: 18px auto 0; font-size: 14px; line-height: 23px; }
+  .sakura-kitchen-hero__booking { position: relative; bottom: auto; left: auto; width: 90px; height: 90px; flex: none; margin-top: auto; }
+  .sakura-kitchen-hero__project-card { position: relative; right: auto; bottom: auto; left: auto; width: calc(100% - 40px); max-width: 330px; flex: none; aspect-ratio: auto; gap: 9px; border-radius: 18px; padding: 7px 10px 7px 7px; }
   .sakura-kitchen-hero__project-card-thumb { border-radius: 12px; }
   .sakura-kitchen-hero__project-card-copy strong { font-size: 15px; }
   .sakura-kitchen-hero__project-card-copy > span:not(.sakura-kitchen-hero__project-card-link) { margin-top: 5px; font-size: 10.5px; line-height: 13.5px; }
