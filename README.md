@@ -2,6 +2,9 @@
 
 - 依截圖2026-10-30下午3.21.08及後續僅調整RWD要求，只改lg:hidden漢堡內容：原12px品牌系列小字及常駐十系列改為14px（text-sm，與設計靈感一致）的第二層展開按鈕，保留原金色。點擊才顯示完整十系列中英文，箭頭與aria-expanded同步，aria-controls對應獨立內容區。
 - 切換第一層或關閉漢堡時重設品牌系列為收起；既有設計靈感／廚房裝修指南／型錄等同層入口維持可見。桌面mega-menu、CSS、字級、照片及內容資料不改。pnpm build含typecheck及check-site-header.mjs通過；相對前一版桌面nav模板與CSS逐字一致。Safari本機HTTP無法保留正式建置的Secure登入Cookie，不改驗證設定，待HTTPS正式部署再做原生操作驗收。
+- be53fa3cf91f9d3b090981b28aba73580f09735e已發布；Vercel dpl_BkYxRoZAdpCjjigcyQMWmhYxagYP為READY／Production／GitHub成功，sakura-demo-vanlantech.com與header-design-two.vercel.app皆已接上。兩網域check-site-header.mjs正常預覽登入、Header／Footer及目的頁唯讀回歸通過。另直接執行實際Vue watcher，確認主分類切換與漢堡關閉重設第二層，原主分類記憶保留。
+- 正式主網域iPad Safari模擬器直向實際輕點：設計案例開啟後品牌系列初始收起、字級同設計靈感；展開完整十系列中英文，再點收起，其他同層入口維持可見。關閉漢堡再開及切換廚房產品後回設計案例均恢復第二層收起。正式圖/tmp/sakura-mobile-series-production-collapsed.png與/tmp/sakura-mobile-series-production-expanded.png。橫向再輕點主導覽，放開後保持展開並可再點收起，證據/tmp/sakura-ipad-safari-final-production.png。
+- 本輪沒有修改CMS／資料庫、套件或桌面樣式；自開本機server已停止、暫時viewport已reset、只關閉Sakura iPad Nav QA視窗，既有ReviewTest模擬器保留。QA裝置使用既有官方iOS26.5 runtime且保留可重開。應用內瀏覽器分頁連線無法恢復，因此新第二層未補做390px Chromium實際畫面；原生操作證據來自iPad模擬器直向RWD及橫向，未宣稱實體iPad／iPhone或全瀏覽器通過。正式驗收紀錄只提交本README，不為文件重部署。
 
 ## 2026-10-30 iPad 主導覽輕點展開
 
