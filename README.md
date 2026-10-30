@@ -2,7 +2,9 @@
 
 - 依凌晨1.46.28截圖，僅max-width:767px將三則加盟消息連結標題由20/30px縮為18/27px，縮小10%並保留易讀行距；不改上方主標、小標置中／24px間距、文章文案、連結、箭頭或整列至少76px的點擊範圍。768px以上仍20/30px；無CMS／資料庫修改。
 - pnpm build含typecheck通過（既有JSON import attributes與Tailwind sourcemap警告保留）。本機320／390／430／767px三則列表均18/27px，完整自然換行、與箭頭無重疊，連結文案／目的地及字重保留、列高至少76px、無水平溢位；上方主標尺寸與小標置中／24px間距保留。768／1024／1280／1920px完整量測與正式修前一致，仍20/30px。
-- 本機預覽Cookie到期出現401，透過既有預覽頁正常登入後再驗收，未將錯誤畫面算作通過；390px實際捲入目視文字縮小、console error 0。修前基準/tmp/sakura-franchise-news-font-before.json、本機畫面/tmp/sakura-franchise-news-font-local.png、完整量測/tmp/sakura-franchise-news-font-qa.json；正式發布複驗待續記，未提交業務表單或播放影片。
+- 本機預覽Cookie到期出現401，透過既有預覽頁正常登入後再驗收，未將錯誤畫面算作通過；390px實際捲入目視文字縮小、console error 0。
+- 424b6713已發布至dpl_H6zT7S9eGRD7VH9EDv9KoKYVq1JP，Vercel READY／Production、GitHub成功，兩個既有正式網域均接上該版本。主網域八尺寸結果與本機一致：四組手機三列均18/27px、完整換行／不壓箭頭、列高至少76px、上方主標及小標24px間距保留、無水平溢位；四組768px以上完整量測與修前一致。正式390px原生目視三則縮小後文字、console error 0；另一正式網域390px亦三則18/27px、24px間距且無水平溢位。
+- 修前基準/tmp/sakura-franchise-news-font-before.json、本機畫面/tmp/sakura-franchise-news-font-local.png、正式畫面/tmp/sakura-franchise-news-font-production.png、完整量測/tmp/sakura-franchise-news-font-qa.json。未提交業務表單或播放影片，無CMS／資料庫寫入；自開server已停、viewport已還原。未驗實體手機或Safari／Firefox；完成紀錄只提交README、不為文件再次部署。
 
 ## 2026-10-31 手機最新加盟資訊小標籤置中
 
