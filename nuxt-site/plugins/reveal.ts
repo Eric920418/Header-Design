@@ -149,7 +149,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       // 元件 attrs 更新可能清掉進場 class；手機已顯示的標籤直接保留，不重播。
       if (
         window.matchMedia('(max-width: 767px)').matches
-        && element.classList.contains('section-pill')
+        && (element.classList.contains('section-pill') || element.classList.contains('template-heading-rail'))
         && !observers.has(element)
         && !element.classList.contains('is-visible')
       ) {

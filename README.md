@@ -13,6 +13,8 @@
 - 手機標籤顯示一併收尾：reveal指令updated僅在max-width:767px、SectionPill已完成進場（無待觸發observer）卻被attrs更新清掉is-visible時，恢復顯示並重用data-reveal-direct避免動畫重播；尚未進場、非標籤及桌面皆不處理。此為前輪加盟資料下載標籤消失問題的限定修正，分支自查、重建及正式驗收待續記。
 - 第二次pnpm build含typecheck通過；可用pnpm exec node scripts/check-reveal-label-update.mjs重跑限定顯示修正的斷言，自查手機已進場還原、未進場observer保護、首次進場不跳動畫、重複更新、桌面及非標籤排除。已在本機下載頁等待PDF資料載入完成，實際觀察data-reveal-direct及is-visible保留、visibility:visible且間距24px。
 - 本機390px實際目視服務流程、首頁品牌系列、型錄FAQ及加盟下載：證據/tmp/sakura-mobile-site-label-gap-service-local.png、/tmp/sakura-mobile-site-label-gap-home-local.png、/tmp/sakura-mobile-site-label-gap-faq-local.png、/tmp/sakura-mobile-site-label-gap-download-local.png。手機建商聯絡區原標籤偏左，統一標籤列後改為與其置中標題對齊；其他手機水平位置保留。待正式發布與驗收。
+- 0cf9811f第一版正式間距驗證45路由360組通過，280手機標籤配對皆24px；後續真實點服務流程FAQ發現TemplateHeadingRail也會隨Vue重繪丟失is-visible並隱藏。據此將同一手機顯示保護涵蓋SectionPill及TemplateHeadingRail，分支自查亦逐一涵蓋兩種標籤，保留桌面及非標籤排除；最後版本重建、實際FAQ操作與正式複驗待續記。
+- 最後版本pnpm build含typecheck及check-reveal-label-update斷言通過。本機以原生FAQ錨點捲動並切換「什麼是五大永久免費服務」，實際aria-expanded false→true，標籤列保留is-visible與data-reveal-direct、visibility:visible，兩組服務頁標籤間距24px且無console error；中途本機預覽Cookie到期，正常登入後重回錨點，未將登入畫面或未進入FAQ的捲動位置算入驗收。待最後正式發布及複驗。
 
 ## 2026-10-30 全站手機麵包屑橫幅標題一致化
 
