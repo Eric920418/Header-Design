@@ -2,7 +2,9 @@
 
 - 依門市案例截圖，手機版（小於768px）清除CaseCarousel繼承自平板的76px右外距，上一張／下一張按鈕整組對齊主圖右緣；按鈕尺寸、縮圖列、圖片與輪播行為保留。共用於門市案例與設計靈感詳頁，平板／桌面不改，不涉及CMS／資料庫。
 - pnpm build（含typecheck）通過；沿用既有JSON import attributes警告，未新增套件。兩種詳頁各以320／390／430／767／768／1024／1280／1920px八尺寸量測：手機右外距皆0、無水平溢位，768px以上輪播主圖／按鈕／縮圖列的offset尺寸與位置和正式修前完全一致。門市案例實際點下一張、上一張及第三張縮圖，aria-selected與即時張數皆正常。
-- 本機SQL未啟動，預覽程序改用既有Azure runtime設定讀取目前正式內容；僅正常預覽登入與公開頁面讀取，不執行資料更新、匯入或遷移。正式發布與複驗待續記。
+- 本機SQL未啟動，預覽程序改用既有Azure runtime設定讀取目前正式內容；僅正常預覽登入與公開頁面讀取，不執行資料更新、匯入或遷移。
+- b9a6b37e已正式發布至dpl_A6g3RvMWMsYGfoRzSus3intK2RNm，Vercel READY／Production、GitHub成功；sakura-demo-vanlantech.com與header-design-two.vercel.app均指向該版本。主網域兩種詳頁共16尺寸組合均與本機一致，八組手機箭頭與主圖右緣差0px，八組平板／桌面幾何不變，均無水平溢位。正式門市案例下一張狀態為第2張、返回第1張正常；另一網域390px亦右緣差0px、右margin0，瀏覽器console error為0。
+- 正式手機390px畫面：/tmp/sakura-mobile-case-arrows-production.png；量測資料：/tmp/sakura-mobile-case-arrow-qa.json。已停止自開預覽server並還原viewport，未驗實體手機或Safari／Firefox；完成紀錄只提交README，不為文件再部署。
 
 ## 2026-10-30 設計案例管理依官網分類排序
 
