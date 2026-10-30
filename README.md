@@ -3,7 +3,8 @@
 - 依凌晨1.46.16截圖實測正式站：最後一組優勢圖示至Join SAKURA KITCHEN卡片間距為155px，由加盟優勢padding-bottom:80px及Join margin-top:75px疊加，最後場景本身底距已0px。
 - 僅max-width:767px將前區塊底距歸零、後卡上距設48px，總留白縮短107px；不改優勢內容／圖示、卡片尺寸／內距／文字、動畫、768px以上版面或CMS／資料庫。
 - pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px皆48px、卡片上移107px、前區塊高度減少80px，卡片本身560px高度與內距／字級不變、無水平溢位；768／1024／1280／1920px的前區塊高度、交界間距、圖示與卡片尺寸／內距／字級與正式修前完全一致。本機390×844實際捲入交界目視通過，完整內容與CTA可見，console error 0。
-- 修前基準/tmp/sakura-franchise-join-space-before.json；本機畫面/tmp/sakura-franchise-join-space-local.png及完整量測/tmp/sakura-franchise-join-space-qa.json；正式發布複驗待續記。未播放影片或送出業務表單。
+- 4de2cf4e已發布至dpl_CffSiWARZJ9BgcBHtJza3Mqv9jDy，Vercel READY／Production、GitHub成功；兩個既有正式網域分別inspect皆指向此版本。主網域八尺寸量測與本機完全一致，四組手機間距48px且無水平溢位，四組768px以上量測與修前一致；正式390×844實際捲入交界，圖示底部240.875px、卡片頂部288.875px，實際相距48px，卡片文案及CTA完整可見、console error 0。另一網域390px亦48px、卡片360×560px、無水平溢位。
+- 修前基準/tmp/sakura-franchise-join-space-before.json；本機畫面/tmp/sakura-franchise-join-space-local.png、正式畫面/tmp/sakura-franchise-join-space-production.png及完整量測/tmp/sakura-franchise-join-space-qa.json。未播放影片或送出業務表單，無CMS／資料庫寫入；自開server已停、viewport已還原。未驗實體手機或Safari／Firefox；完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-10-31 手機加盟夥伴小標籤與標題左緣對齊
 
