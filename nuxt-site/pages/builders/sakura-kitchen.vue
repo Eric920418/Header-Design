@@ -282,8 +282,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .sakura-kitchen-hero__project-card-copy strong { font-size: 15px; }
   .sakura-kitchen-hero__project-card-copy > span:not(.sakura-kitchen-hero__project-card-link) { margin-top: 5px; font-size: 10.5px; line-height: 13.5px; }
   .sakura-kitchen-hero__project-card-link { margin-top: 5px; font-size: 10.5px; }
-  .sakura-kitchen-advantage { padding: 70px 15px 80px; }
-  .sakura-kitchen-series { padding: 78px 15px 80px; }
+  .sakura-kitchen-advantage { padding: 70px 15px 24px; }
+  .sakura-kitchen-series { padding: 24px 15px 80px; }
   .sakura-kitchen-series .internal-rail-safe { padding-right: 0; }
   .sakura-kitchen-heading h2 { font-size: 34px; line-height: 43px; }
   #sakura-kitchen-series-title { font-size: 30px; line-height: 35px; }

@@ -1,3 +1,8 @@
+## 2026-10-31 手機SAKURA KITCHEN圖片至探索系列間距縮短
+
+- 依凌晨3.26.24截圖，正式320／390／430／767px的內容圖片底至EXPLORE OUR COLLECTIONS小標為158px，來自品牌優勢底部80px加系列頂部78px。本次僅max-width:767px將兩者各改24px，總距離48px；保留圖片2.2:1、CTA位置、系列標籤至標題間距、圖文、動畫、768px以上版面及CMS／資料庫資料。修前八寬度基準/tmp/sakura-series-gap-before.json。
+- pnpm build含typecheck通過。本機320／390／430／767px間距均48px、無水平溢位，768／1024／1280／1920px完整交界及系列標題量測與正式修前一致；320×500、667×375短視窗亦48px且無溢位。390×844實際捲動目視橫幅及系列標籤連續且無重疊，console error 0。保留既有JSON import attributes與Tailwind sourcemap建置警告。本機截圖/tmp/sakura-series-gap-local.png、完整量測/tmp/sakura-series-gap-qa.json；正式驗證待續記。
+
 ## 2026-10-31 手機SAKURA KITCHEN內容區圖片改為橫幅
 
 - 依凌晨3.26.18截圖，僅max-width:767px將品牌優勢內容圖由固定330px高改為約2.2:1橫幅。使用原容器兩行grid，立即預約置中於第一行、原圖片與遮罩疊於第二行，兩者距24px；保留正文到操作區42px間距、圖片來源／裁切焦點／圓角與原預約連結，避免縮小後按鈕仍遮住橫幅。移到淺底的按鈕沿用既有淺底CTA黑字／灰框、金色圖示與Hover／Focus金底白字，不新增連結副本。
