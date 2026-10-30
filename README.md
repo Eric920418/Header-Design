@@ -4,7 +4,10 @@
 - 在main.css集中加入max-width:767px規則，僅選main內含nav[aria-label="麵包屑"]的hero-includes-header之可見h1及三種消息詳頁橫幅p標題，統一clamp(34px,10.7vw,42px)／48px；允許長標自然換行。保留每頁字重／字型／顏色、文案、麵包屑與版型間距，768px以上不改。不套用文章主標、產品正文主標、首頁、品牌系列與建商／加盟大型首屏。
 - 已保存26個代表頁（產品品牌及列表、服務、門市、新聞列表與三種詳頁、指南、型錄、About Us、Privacy及加盟資料）×八尺寸208組正式修前基準；另10個排除頁（含文章／產品正文）×八尺寸80組選擇器命中均0。不寫CMS／資料庫。
 - pnpm build含typecheck通過；本機26頁×320／390／430／767px共104組均與同寬Kitchen Appliances採相同34.24／41.73／42／42px、48px行高；文字／字型／字重／顏色／對齊與麵包屑保留，實際字行無水平溢位、版面無裁字或壓到麵包屑。26頁×768／1024／1280／1920px共104組最大幾何差異0.000030517578125px，屬字行浮點誤差；以相對版面座標消除進場動畫形成包含塊的offsetParent差異，未把該差異當CSS回歸。排除頁80組字級／行高／顏色差異0。
-- 本機390px服務流程與320px Franchise Information長標原生完整目視通過，證據/tmp/sakura-mobile-banner-service-local.png及/tmp/sakura-mobile-banner-long-local.png。長標自然兩行且麵包屑完整；保留每頁既有對齊與留白，未為字級統一改寫首屏高度或動畫。待正式發布及驗收。
+- 本機390px服務流程與320px Franchise Information長標原生目視通過，證據/tmp/sakura-mobile-banner-service-local.png及/tmp/sakura-mobile-banner-long-local.png。長標自然兩行且麵包屑完整；保留每頁既有對齊與留白，未為字級統一改寫首屏高度或動畫。
+- 6c6ef1a1已發布；Vercel dpl_FqyykDyKm3k4W6LV52MxHzQXzQJm為READY／Production，兩個既有正式網域均接上。主網域26頁104手機組字級／行高、文字字樣式與麵包屑、無溢位／無裁字／無重疊均通過；104平板／桌面組最大差異0.000030517578125px，10個排除頁80組字級等差異0。另一網域390px服務流程與Privacy均41.73px／48px，包含原important樣式覆寫檢查。
+- 正式390px服務流程目視證據/tmp/sakura-mobile-banner-service-production.png，320px加盟下載長標與麵包屑證據/tmp/sakura-mobile-banner-long-production.png，完整數據/tmp/sakura-mobile-banner-title-qa.json。另發現加盟下載頁的小標籤載入後class由ev is-visible變為ev、visibility:hidden；新字級選擇器未命中該span，顯示狀態丟失的觸發原因未進一步驗證，本次未修改其動畫。長標截圖及字級通過不代表這項獨立動畫問題通過。
+- 無CMS／資料庫／業務表單寫入，自開server已停、viewport已還原；未驗實體手機及Safari／Firefox。正式紀錄只提交README，不為文件再部署。
 
 ## 2026-10-30 商品列表型錄區塊手機標籤間距
 
