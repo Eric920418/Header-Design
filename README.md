@@ -1,8 +1,10 @@
 ## 2026-10-30 商品列表型錄區塊手機標籤間距
 
 - 依下午6.31.44截圖，商品列表SAKURA PRODUCT CATALOGUE至「廚房商品型錄」要同/products/sakura產品區塊。正式四種手機寬度參考間距24px，列表型錄區塊22px；768px以上27px。此需求與前幾輪Explore Our的28px不同，以本張參考區塊實測24px為準。
-- 僅將ProductListPage.vue的max-width:767px型錄h2 margin-top22→24px，保留下margin30px、靠左、字級／配色／文案及下載與預覽連結。共用元件涵蓋三品牌全部產品、分類列表與既有除油煙機／近吸系列路由，已保存六代表路由×八尺寸48組正式修前基準；建置、本機與正式驗收待續記。不改產品詳情模板或CMS／資料庫。
-- pnpm build含typecheck通過；本機六代表路由×320／390／430／767px共24組間距24px，h2與中文只下移2px、區塊高度增2px，標籤、字級、行高、配色、靠左與型錄文字／圖片來源／三個入口連結均保留，無整頁水平溢位。六路由×768／1024／1280／1920px共24組標籤、標題、尺寸及連結資料對修前差異0。390px原生捲動完整目視證據/tmp/sakura-mobile-product-catalogue-gap-local.png；實際點下載入口正常進/catalogues/catalog，看到型錄清單及PDF預覽／下載連結，未觸發PDF下載。待正式驗收。
+- 僅將ProductListPage.vue的max-width:767px型錄h2 margin-top22→24px，保留下margin30px、靠左、字級／配色／文案及下載與預覽連結。共用元件涵蓋三品牌全部產品、分類列表與既有除油煙機／近吸系列路由，已保存六代表路由×八尺寸48組正式修前基準。不改產品詳情模板或CMS／資料庫。
+- pnpm build含typecheck通過；本機六代表路由×320／390／430／767px共24組間距24px，h2與中文只下移2px、區塊高度增2px，標籤、字級、行高、配色、靠左與型錄文字／圖片來源／三個入口連結均保留，無整頁水平溢位。六路由×768／1024／1280／1920px共24組標籤、標題、尺寸及連結資料對修前差異0。390px原生捲動完整目視證據/tmp/sakura-mobile-product-catalogue-gap-local.png；實際點下載入口正常進/catalogues/catalog，看到型錄清單及PDF預覽／下載連結，未觸發PDF下載。
+- 8baded81已發布；Vercel dpl_6J7nH4bkxb2LHFd6KRZ8HoTcaJ16為READY／Production、GitHub成功。初次READY回傳尚未列兩自訂網域，另分別inspect兩網域已確認皆指向同一新版且aliases包含兩者；主網域六路由24手機組間距24px／無溢位／樣式文字連結保留通過，24平板／桌面組對修前差異0。正式實際點入口也正常進型錄清單，看到PDF預覽與下載連結，未實際下載。
+- 另一正式網域預覽Cookie到期時先正常登入，未把登入頁計入驗收；登入後390px間距24px、三個入口保留。正式目視證據/tmp/sakura-mobile-product-catalogue-gap-production.png，數據/tmp/sakura-mobile-product-catalogue-gap-qa.json。自開server已停、viewport還原；未驗實體手機及Safari／Firefox，無CMS／業務資料寫入，正式紀錄只提交README、不為文件再部署。
 
 ## 2026-10-30 廚房裝修指南手機小標籤間距
 
