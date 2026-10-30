@@ -38,7 +38,8 @@
 .bilingual-heading-english { display: contents; }
 @media (max-width: 767px) {
   .home-project-heading,
-  .home-services-heading { row-gap: 28px; }
+  .home-services-heading,
+  .store-location-heading { row-gap: 28px; }
   .gallery-section {
     --gallery-content-top: 64px;
     min-height: 0;
