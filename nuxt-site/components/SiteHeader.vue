@@ -19,6 +19,8 @@ const searchOpen = ref(false)
 const expanded = ref<number | null>(null)
 const keyboardNavigation = ref(false)
 const activeDesktopMenu = ref<string | null>(null)
+const headerElement = ref<HTMLElement | null>(null)
+let headerPointerType = 'mouse'
 const franchiseExtrasOpen = ref(false)
 watch([activeDesktopMenu, expanded, mobileOpen], () => franchiseExtrasOpen.value = false)
 
@@ -42,12 +44,23 @@ function clearDesktopMenuCloseTimer() {
   desktopMenuCloseTimer = null
 }
 
-function openDesktopMenu(label: string) {
+function openDesktopMenu(label: string, event?: PointerEvent) {
+  if (event && event.pointerType !== 'mouse') return
+  if (event) headerPointerType = event.pointerType
   clearDesktopMenuCloseTimer()
   activeDesktopMenu.value = label
 }
 
-function scheduleDesktopMenuClose() {
+function activateDesktopMenu(label: string) {
+  if (headerPointerType !== 'mouse' && !keyboardNavigation.value && activeDesktopMenu.value === label) {
+    closeDesktopMenu()
+    return
+  }
+  openDesktopMenu(label)
+}
+
+function scheduleDesktopMenuClose(event?: PointerEvent) {
+  if (event && event.pointerType !== 'mouse') return
   clearDesktopMenuCloseTimer()
   desktopMenuCloseTimer = setTimeout(() => {
     activeDesktopMenu.value = null
@@ -55,12 +68,25 @@ function scheduleDesktopMenuClose() {
   }, 160)
 }
 
-function closeDesktopMenuOnScroll() {
+function closeDesktopMenu() {
   clearDesktopMenuCloseTimer()
   activeDesktopMenu.value = null
 }
 
-onMounted(() => window.addEventListener('scroll', closeDesktopMenuOnScroll, { passive: true }))
+function closeDesktopMenuOnScroll() {
+  if (headerPointerType !== 'mouse' && !keyboardNavigation.value) return
+  closeDesktopMenu()
+}
+
+function handleOutsidePointerDown(event: PointerEvent) {
+  if (event.target instanceof Node && !headerElement.value?.contains(event.target)) closeDesktopMenu()
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', closeDesktopMenuOnScroll, { passive: true })
+  document.addEventListener('pointerdown', handleOutsidePointerDown)
+  document.addEventListener('keydown', handleHeaderKeydown)
+})
 
 function closeAllMenus() {
   clearDesktopMenuCloseTimer()
@@ -72,6 +98,7 @@ function closeAllMenus() {
 }
 
 function handleDesktopItemFocusOut(event: FocusEvent) {
+  if (!keyboardNavigation.value) return
   const currentTarget = event.currentTarget
   const nextTarget = event.relatedTarget
   if (currentTarget instanceof HTMLElement && nextTarget instanceof Node && currentTarget.contains(nextTarget)) return
@@ -81,6 +108,8 @@ function handleDesktopItemFocusOut(event: FocusEvent) {
 onBeforeUnmount(() => {
   clearDesktopMenuCloseTimer()
   window.removeEventListener('scroll', closeDesktopMenuOnScroll)
+  document.removeEventListener('pointerdown', handleOutsidePointerDown)
+  document.removeEventListener('keydown', handleHeaderKeydown)
 })
 
 function handleHeaderKeydown(event: KeyboardEvent) {
@@ -91,7 +120,8 @@ function handleHeaderKeydown(event: KeyboardEvent) {
   if (event.key === 'Tab' || event.key.startsWith('Arrow')) keyboardNavigation.value = true
 }
 
-function handleHeaderPointerDown() {
+function handleHeaderPointerDown(event: PointerEvent) {
+  headerPointerType = event.pointerType
   keyboardNavigation.value = false
 }
 
@@ -105,10 +135,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <header
+    ref="headerElement"
     data-breadcrumb-root
     class="fixed inset-x-0 top-0 z-[100] h-[var(--site-header-height)] font-cjk-sans"
     :class="{ 'header-keyboard-navigation': keyboardNavigation }"
-    @keydown.capture="handleHeaderKeydown"
     @pointerdown.capture="handleHeaderPointerDown"
     @click.capture="handleHeaderClick"
   >
@@ -120,18 +150,18 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               v-for="item in leftNav"
               :key="item.label"
               class="desktop-nav-item relative flex h-[var(--site-header-height)] items-center"
-              @pointerenter="openDesktopMenu(item.label)"
+              @pointerenter="openDesktopMenu(item.label, $event)"
               @pointerleave="scheduleDesktopMenuClose"
-              @focusin="openDesktopMenu(item.label)"
+              @focusin="keyboardNavigation && openDesktopMenu(item.label)"
               @focusout="handleDesktopItemFocusOut"
             >
               <div v-if="item.children && item.to" class="flex h-[var(--site-header-height)] items-center whitespace-nowrap text-[15px] leading-[15px] text-white">
                 <NuxtLink :to="item.to" class="flex h-full items-center">{{ item.label }}</NuxtLink>
-                <button type="button" :aria-label="`展開${item.label}選單`" :aria-expanded="activeDesktopMenu === item.label" class="flex h-full items-center pl-1" @click="openDesktopMenu(item.label)">
+                <button type="button" :aria-label="`展開${item.label}選單`" :aria-expanded="activeDesktopMenu === item.label" class="flex h-full items-center pl-1" @click="activateDesktopMenu(item.label)">
                   <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" />
                 </button>
               </div>
-              <button v-else-if="item.children || item.mega" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap text-[15px] leading-[15px] text-white" @click="openDesktopMenu(item.label)">
+              <button v-else-if="item.children || item.mega" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap text-[15px] leading-[15px] text-white" @click="activateDesktopMenu(item.label)">
                 {{ item.label }}
                 <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" />
               </button>
@@ -260,18 +290,18 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               v-for="item in rightNav"
               :key="item.label"
               class="desktop-nav-item relative flex h-[var(--site-header-height)] items-center"
-              @pointerenter="openDesktopMenu(item.label)"
+              @pointerenter="openDesktopMenu(item.label, $event)"
               @pointerleave="scheduleDesktopMenuClose"
-              @focusin="openDesktopMenu(item.label)"
+              @focusin="keyboardNavigation && openDesktopMenu(item.label)"
               @focusout="handleDesktopItemFocusOut"
             >
               <div v-if="item.children && item.to" class="flex h-[var(--site-header-height)] items-center whitespace-nowrap text-[15px] leading-[15px] text-white">
                 <NuxtLink :to="item.to" :data-footer-align-anchor="item.label === '建商專區' ? 'builders' : undefined" class="flex h-full items-center">{{ item.label }}</NuxtLink>
-                <button type="button" :aria-label="`展開${item.label}選單`" :aria-expanded="activeDesktopMenu === item.label" class="flex h-full items-center pl-1" @click="openDesktopMenu(item.label)">
+                <button type="button" :aria-label="`展開${item.label}選單`" :aria-expanded="activeDesktopMenu === item.label" class="flex h-full items-center pl-1" @click="activateDesktopMenu(item.label)">
                   <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" />
                 </button>
               </div>
-              <button v-else-if="item.children" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap text-[15px] text-white" @click="openDesktopMenu(item.label)">{{ item.label }} <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" /></button>
+              <button v-else-if="item.children" type="button" :aria-expanded="activeDesktopMenu === item.label" class="flex h-[var(--site-header-height)] items-center gap-1 whitespace-nowrap text-[15px] text-white" @click="activateDesktopMenu(item.label)">{{ item.label }} <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="activeDesktopMenu === item.label ? 'rotate-180' : ''" /></button>
               <a
                 v-else-if="item.to?.startsWith('http')"
                 :href="item.to"

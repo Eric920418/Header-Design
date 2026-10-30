@@ -1,8 +1,47 @@
 // Read-only acceptance against the requested origin, never the local CMS as a proxy for production.
 import assert from 'node:assert/strict'
 import {readFileSync} from 'node:fs'
-import {transpileModule,ScriptTarget,ModuleKind} from 'typescript'
+import {transpileModule,ScriptTarget,ModuleKind,createSourceFile,isFunctionDeclaration,isVariableStatement,isExpressionStatement,isCallExpression} from 'typescript'
 import {normalizeClass,normalizeStyle} from 'vue'
+
+const headerSource=readFileSync(new URL('../components/SiteHeader.vue',import.meta.url),'utf8')
+const headerScript=headerSource.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)?.[1]
+assert(headerScript,'Header script不存在')
+const headerAst=createSourceFile('SiteHeader.ts',headerScript,ScriptTarget.Latest,true)
+const headerStates=['mobileOpen','searchOpen','expanded','keyboardNavigation','activeDesktopMenu','headerElement','headerPointerType','desktopMenuCloseTimer']
+const headerFunctions=headerAst.statements.filter(isFunctionDeclaration).map(node=>node.name.text)
+const headerRuntime=headerAst.statements.filter(node=>isFunctionDeclaration(node)||isVariableStatement(node)&&node.declarationList.declarations.every(item=>headerStates.includes(item.name.getText(headerAst)))||isExpressionStatement(node)&&isCallExpression(node.expression)&&['onMounted','onBeforeUnmount'].includes(node.expression.expression.getText(headerAst))).map(node=>node.getText(headerAst)).join('\n')
+const headerJs=transpileModule(headerRuntime,{compilerOptions:{target:ScriptTarget.ES2022}}).outputText
+const menuTimers=new Map(),mounted=[],unmounted=[],windowEvents=new Map(),documentEvents=new Map();let nextMenuTimer=0
+const eventTarget=events=>({addEventListener:(name,fn)=>events.set(name,fn),removeEventListener:(name,fn)=>{assert.equal(events.get(name),fn);events.delete(name)}})
+class HeaderNode{constructor(parent=null){this.parent=parent}contains(node){for(let item=node;item;item=item.parent)if(item===this)return true;return false}}
+const menu=new Function('ref','Node','HTMLElement','setTimeout','clearTimeout','onMounted','onBeforeUnmount','window','document',headerJs+`;return{${[...headerStates.filter(name=>!['headerPointerType','desktopMenuCloseTimer'].includes(name)),...headerFunctions].join(',')}}`)(value=>({value}),HeaderNode,HeaderNode,fn=>{menuTimers.set(++nextMenuTimer,fn);return nextMenuTimer},id=>menuTimers.delete(id),fn=>mounted.push(fn),fn=>unmounted.push(fn),eventTarget(windowEvents),eventTarget(documentEvents))
+menu.headerElement.value=new HeaderNode();mounted.forEach(fn=>fn())
+const flushMenuTimers=()=>{for(const[id,fn]of[...menuTimers]){menuTimers.delete(id);fn()}}
+for(const pointerType of ['touch','pen']){
+  menu.closeAllMenus();menu.openDesktopMenu('設計案例',{pointerType});assert.equal(menu.activeDesktopMenu.value,null,'觸控合成hover不能預先開啟')
+  menu.handleHeaderPointerDown({pointerType});menu.activateDesktopMenu('設計案例')
+  menu.scheduleDesktopMenuClose({pointerType});menu.handleDesktopItemFocusOut({currentTarget:menu.headerElement.value,relatedTarget:null});flushMenuTimers()
+  assert.equal(menu.activeDesktopMenu.value,'設計案例','放開手指或筆尖後必須持續顯示')
+  windowEvents.get('scroll')();assert.equal(menu.activeDesktopMenu.value,'設計案例','觸控展開不因頁面微捲動跳掉')
+  menu.activateDesktopMenu('設計案例');assert.equal(menu.activeDesktopMenu.value,null,'再次輕點同一箭頭需收合')
+  menu.activateDesktopMenu('廚房產品');menu.activateDesktopMenu('品牌承諾');assert.equal(menu.activeDesktopMenu.value,'品牌承諾','左右主選單切換只保留一組')
+  documentEvents.get('pointerdown')({target:new HeaderNode(menu.headerElement.value)});assert.equal(menu.activeDesktopMenu.value,'品牌承諾','選單內部操作不可被外部關閉處理器吃掉')
+  documentEvents.get('pointerdown')({target:new HeaderNode()});assert.equal(menu.activeDesktopMenu.value,null,'輕點選單外部需收合')
+}
+menu.openDesktopMenu('設計案例',{pointerType:'mouse'});menu.activateDesktopMenu('設計案例');assert.equal(menu.activeDesktopMenu.value,'設計案例','滑鼠hover後點擊仍維持原展開方式')
+menu.scheduleDesktopMenuClose({pointerType:'mouse'});menu.clearDesktopMenuCloseTimer();flushMenuTimers();assert.equal(menu.activeDesktopMenu.value,'設計案例','移入mega內容需取消原關閉計時')
+menu.scheduleDesktopMenuClose({pointerType:'mouse'});flushMenuTimers();assert.equal(menu.activeDesktopMenu.value,null,'滑鼠移出仍關閉')
+menu.openDesktopMenu('廚房產品',{pointerType:'mouse'});windowEvents.get('scroll')();assert.equal(menu.activeDesktopMenu.value,null,'滑鼠模式保留捲動關閉')
+documentEvents.get('keydown')({key:'Tab'});assert.equal(menu.keyboardNavigation.value,true,'從Header外首次Tab進入也需先進入鍵盤模式');menu.openDesktopMenu('品牌承諾')
+menu.handleDesktopItemFocusOut({currentTarget:menu.headerElement.value,relatedTarget:new HeaderNode(menu.headerElement.value)});flushMenuTimers();assert.equal(menu.activeDesktopMenu.value,'品牌承諾','鍵盤移入子選項不能收合')
+menu.handleDesktopItemFocusOut({currentTarget:menu.headerElement.value,relatedTarget:new HeaderNode()});flushMenuTimers();assert.equal(menu.activeDesktopMenu.value,null,'鍵盤焦點離開需收合')
+menu.openDesktopMenu('我要加盟');menu.mobileOpen.value=true;menu.searchOpen.value=true;menu.expanded.value=1;menu.handleHeaderKeydown({key:'Escape'});assert.equal(menu.activeDesktopMenu.value,null);assert.equal(menu.mobileOpen.value,false);assert.equal(menu.searchOpen.value,false);assert.equal(menu.expanded.value,null)
+menu.openDesktopMenu('建商專區',{pointerType:'mouse'});menu.scheduleDesktopMenuClose({pointerType:'mouse'});assert.equal(menuTimers.size,1);unmounted.forEach(fn=>fn());assert.equal(menuTimers.size,0);assert.equal(windowEvents.size,0);assert.equal(documentEvents.size,0)
+assert.equal((headerSource.match(/@pointerenter="openDesktopMenu\(item.label, \$event\)"/g)||[]).length,2,'左右主導覽都需區分pointerType')
+assert.equal((headerSource.match(/@focusin="keyboardNavigation && openDesktopMenu\(item.label\)"/g)||[]).length,2,'左右主導覽都不可由觸控focus提前開啟')
+assert.equal((headerSource.match(/@click="activateDesktopMenu\(item.label\)"/g)||[]).length,4,'四種主導覽箭頭共用觸控開關')
+console.log('PASS Header touch/pen tap-release persistence, retap/switch/outside, mouse hover/scroll, keyboard focus/Escape, timer/listener cleanup')
 
 const footerSource=readFileSync(new URL('../components/SiteFooter.vue',import.meta.url),'utf8')
 assert(footerSource.includes('class="footer-logo-mask absolute bottom-[30px] left-1/2 z-10 w-[calc(100%-30px)] max-w-[1410px] -translate-x-1/2 overflow-hidden"'),'Footer Logo保留原尺寸與位置，另設向上顯示遮罩')
