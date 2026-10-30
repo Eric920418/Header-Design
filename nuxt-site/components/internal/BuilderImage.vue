@@ -12,6 +12,10 @@ const props = withDefaults(defineProps<{
 })
 
 const failed = ref(false)
+const image = ref<HTMLImageElement | null>(null)
+onMounted(() => {
+  if (image.value?.complete && image.value.naturalWidth === 0) failed.value = true
+})
 watch(() => props.src, () => { failed.value = false })
 </script>
 
@@ -19,6 +23,7 @@ watch(() => props.src, () => { failed.value = false })
   <div v-bind="$attrs" class="builder-image" :class="`builder-image--${fit}`">
     <img
       v-if="!failed"
+      ref="image"
       :src="src"
       :alt="alt"
       :loading="eager ? 'eager' : 'lazy'"

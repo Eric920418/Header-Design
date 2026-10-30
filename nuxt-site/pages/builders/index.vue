@@ -528,16 +528,18 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (max-width: 767px) {
+  .builders-page { --builders-mobile-image-height: calc((100vw - 30px) / 2.2); }
   .builders-page .internal-rail-safe { padding-right: 0; }
   .builders-rail-wide { width: calc(100% - 30px); }
   .builders-rail { width: 100%; }
-  .builders-hero { min-height: 0; padding-bottom: 183px; }
+  .builders-hero { min-height: 0; padding-bottom: calc(48px + var(--builders-mobile-image-height) / 3); }
   .builders-hero__inner { padding: 80px 0 0; text-align: center; }
   .builders-hero__eyebrow { font-size: 20px; }
   .builders-hero h1 { margin-top: 18px; font-size: clamp(24px, 7.3vw, 32px); line-height: 1.5; }
   .builders-hero__aside { display: flex; justify-content: center; margin: 35px 0 0; }
   .builders-hero__aside .builders-round-link { margin-top: 27px; }
-  .builders-hero-media { width: calc(100% - 30px); height: 310px; margin-top: -135px; border-radius: 18px; }
+  .builders-hero-media { width: calc(100% - 30px); height: var(--builders-mobile-image-height); margin-top: calc(var(--builders-mobile-image-height) / -3); border-radius: 18px; }
+  .builders-hero-media:has([role="alert"]) { height: auto; }
   .builders-team,
   .builders-contact { padding: 72px 15px; }
   .builders-capability { padding-bottom: 40px; }
