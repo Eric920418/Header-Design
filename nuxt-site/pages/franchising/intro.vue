@@ -684,8 +684,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-about__lead { margin-bottom: 28px; font-size: 16px; line-height: 24px; }
   .franchise-testimonials { grid-template-columns: 1fr; gap: 28px; }
   .franchise-testimonial blockquote { font-size: 14px; line-height: 23px; }
-  .franchise-marquees { gap: 9px; padding-bottom: 0; background: none; }
-  .franchise-marquee__track > :deep(.franchise-image) { height: 112px; }
+  /* 手機雙排直接顯示，不讓整組圖片依賴一次性的 Reveal 顯示狀態。 */
+  .franchise-marquees.ev { visibility: visible; animation: none; }
+  .franchise-marquees { gap: 24px; padding-bottom: 0; background: none; }
+  .franchise-marquee__track > :deep(.franchise-image) { height: 200px; }
+  .franchise-marquee--reverse .franchise-marquee__track > :deep(.franchise-image) { height: 180px; }
 
   .franchise-advantages__layout { grid-template-columns: 1fr; }
   .franchise-advantages__intro { position: static; padding: 0 0 38px; }

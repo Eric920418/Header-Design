@@ -3984,3 +3984,11 @@ final result: passed
 - 唯讀回歸：啟動本機 3100 後，在 `nuxt-site` 執行 `node scripts/check-frontend-regressions.mjs`；驗證 25 個來源案例加 3 門市案例（9／9／9／1）、交集篩選、錯誤參數、返回列表、背景與 PDF 預覽／下載一致。可指定上述 `FRONTEND_ASSET_DIR` 另比對 PDF SHA-256。原匯入驗證指令的來源資料庫筆數仍為 25，列表驗收更新為 28。
 - 已驗證：`pnpm typecheck`、`pnpm build`、`node scripts/check-frontend-regressions.mjs`、`node scripts/check-kitchen-series.mjs` 通過；內容更新重跑四筆皆 `UNCHANGED`。瀏覽器確認 1218px／390px 卡片置中、無水平溢出、CTA 上框線為 0px、四張北部門市卡片輪替、君璽導覽圖載入、背景恢復、門市篩選文字 16px／rgb(89,88,93)，以及「工業風 → 安康案例 → 設計靈感」保留篩選、麵包屑固定、scrollY=0。
 - 另以 3121 啟動正式建置產物並重跑上述唯讀回歸通過；測試程序已關閉，3100 開發預覽保留。沒有部署或修改雲端 CMS。
+
+## 2026-10-31 手機加盟雙排影像循環
+
+- 依凌晨1.46.01截圖，實際核對原官網加盟介紹：手機上排200px、下排180px、排距24px；目前正式版雖已有兩排38秒／34秒反向無限循環，但每排只有112px。本次僅max-width:767px恢復原官網手機比例，保留既有兩張完整長圖及各自相同副本，不改768px以上尺寸、速度、動畫或CMS／資料庫。
+- 手機整組輪播直接可見，取消外層opalScaleUp進場，避免圖片區顯示依賴一次性Reveal class；內層連續循環仍保留，鍵盤聚焦暫停及減少動態效果時可手動橫向捲動的規則不變。修前正式站已觀察超過一輪並捲出再返回，尚未重現使用者的空白，不能宣稱已證實空白根因；後續以實際完整循環、重載及返回畫面驗證。
+- pnpm build含typecheck通過（既有JSON import attributes及Tailwind sourcemap警告保留）。對照正式修前320／390／430／767／768／1024／1280／1920px八尺寸，本機四組手機上排200px、下排180px、排距24px，無水平溢位；四組768px以上的輪播及圖片尺寸、速度、循環設定與修前完全一致。
+- 本機390×844實際觀察79秒，超過38秒及34秒兩個完整循環，兩排均持續移動、四張圖載入，影像盒連續覆蓋可見寬度，外層visibility:visible／opacity:1／animation:none。實際聚焦暫停、移開繼續均正常，捲出三屏再捲回與重新載入後仍顯示，瀏覽器console error 0。未播放影片或提交業務表單；降低動態效果的既有規則未改，但本輪未切換系統偏好實測。
+- 修前基準/tmp/sakura-franchise-marquee-before.json；本機畫面/tmp/sakura-franchise-marquee-local.png及完整量測/tmp/sakura-franchise-marquee-qa.json；正式發布複驗待續記。
