@@ -1,8 +1,9 @@
 ## 2026-10-30 品牌系列內頁手機小標籤間距
 
 - 依下午6.28.51截圖，十系列KITCHEN COLLECTIONS至Explore Our要對齊加盟品牌信賴。正式320／390／430／767px參考皆28px，系列內頁實際35.5px；原gap24px外，舊br被手機display:initial規則重新顯示，在flex標題產生額外行框，眉標也偏左4px。
-- 僅修改KitchenSeriesPage.vue的max-width:767px：ai-section-heading間距28px，並只在這個標題隱藏舊換行元素。保留中文／英文分組、字級、文案、圖片與其他標題區塊；768px以上不動。已保存十系列×八尺寸80組正式修前基準，建置、本機與正式實際間距及桌面回歸待續記。不寫CMS／資料庫。
-- pnpm build含typecheck通過；本機十系列×320／390／430／767px共40組實際間距皆28px，小標籤與Explore Our均在畫面中心、無整頁水平溢位，字級／行高／顏色／對齊及文字保留。十系列×768／1024／1280／1920px共40組的標題與標籤尺寸、位置及樣式對修前差異0；390px Clever完整目視證據/tmp/sakura-mobile-collections-gap-local.png。待發布後確認兩正式網域。
+- 僅修改KitchenSeriesPage.vue的max-width:767px：ai-section-heading間距28px，並只在這個標題隱藏舊換行元素。保留中文／英文分組、字級、文案、圖片與其他標題區塊；768px以上不動。已保存十系列×八尺寸80組正式修前基準。不寫CMS／資料庫。
+- pnpm build含typecheck通過；本機十系列×320／390／430／767px共40組實際間距皆28px，小標籤與Explore Our均在畫面中心、無整頁水平溢位，字級／行高／顏色／對齊及文字保留。十系列×768／1024／1280／1920px共40組的標題與標籤尺寸、位置及樣式對修前差異0；390px Clever完整目視證據/tmp/sakura-mobile-collections-gap-local.png。
+- 8ba2c749已發布；Vercel dpl_AwFwKqVxjMnrXDnEg7hTZGYrRKMW為READY／Production、GitHub成功，兩個既有正式網域均接上。主網域十系列40組手機間距／中心／無溢位及字樣式保留通過，40組平板／桌面對修前差異0；另一正式網域390px間距28px、標籤與眉標中心均195。正式目視證據/tmp/sakura-mobile-collections-gap-production.png，數據/tmp/sakura-mobile-collections-gap-qa.json。自開server已停止、viewport已還原；未驗實體手機及Safari／Firefox，正式驗收紀錄只提交README、不為文件再部署。
 
 ## 2026-10-30 十品牌系列手機首屏標題放大與位置
 
