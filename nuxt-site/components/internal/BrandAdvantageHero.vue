@@ -101,8 +101,7 @@
   .brand-h8-aside { padding-right: 0; }
   .brand-h8-aside__image { height: 250px; }
   .brand-h8-aside p { font-size: 15px; line-height: 24px; }
-  .brand-h8-stage { width: calc(100% - 30px); margin-top: 30px; }
-  .brand-h8-stage__image { min-height: 260px; aspect-ratio: auto; }
+  .brand-h8-stage { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
