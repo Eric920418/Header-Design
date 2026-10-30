@@ -8,13 +8,16 @@
 
 - 依「每個頁面都一樣，要一致」的新要求，本輪將手機小標籤底部至第一行標題（含Explore Our）的距離統一為24px，以產品參考區為準；先前逐頁對齊成28px的設定亦納入統一，舊紀錄不再作本輪標準。桌面與平板768px以上保留原排版。
 - 盤點45個公開代表路由與所有SectionPill／TemplateHeadingRail使用結構，已保存八尺寸360組正式修前基準；手機共280組標籤配對原有0／11／16／20／22／23／24／25／26／28／38／44px差異。等待內容掛載後量測，並扣除進場平移，沒有把未掛載或動畫中座標當成留白。
-- main.css的max-width:767px集中定義--mobile-heading-label-gap:24px，覆蓋直接相鄰、首頁包裹標籤及裝飾標籤列三種結構；標籤列由單欄grid持有唯一row-gap，清除相鄰標題／包裹層的上margin或padding，直接標籤則只由標題上margin持有間距。保留字級、顏色、內部中英行距、文案、連結及桌面樣式；建置、本機及正式驗收待續記，不寫CMS／資料庫。
+- main.css的max-width:767px集中定義--mobile-heading-label-gap:24px，覆蓋直接相鄰、首頁包裹標籤及裝飾標籤列三種結構；標籤列由單欄grid持有唯一row-gap，清除相鄰標題／包裹層的上margin或padding，直接標籤則只由標題上margin持有間距。保留字級、顏色、內部中英行距、文案、連結及桌面樣式，不寫CMS／資料庫。
 - 第一輪pnpm build含typecheck通過，本機45路由八尺寸360組已量測：280手機標籤配對皆24px、無水平溢位，文字／字級／顏色／標籤尺寸及扣除上padding後的標題內容行框不變；280平板／桌面配對最大幾何差異0.0001220703125px，屬浮點誤差。推薦案例與門市案例標題框縮小是把舊上padding移至父列間距，非刪除文字行高。
-- 手機標籤顯示一併收尾：reveal指令updated僅在max-width:767px、SectionPill已完成進場（無待觸發observer）卻被attrs更新清掉is-visible時，恢復顯示並重用data-reveal-direct避免動畫重播；尚未進場、非標籤及桌面皆不處理。此為前輪加盟資料下載標籤消失問題的限定修正，分支自查、重建及正式驗收待續記。
+- 手機標籤顯示一併收尾：reveal指令updated僅在max-width:767px、SectionPill／TemplateHeadingRail已完成進場（無待觸發observer）卻被attrs更新清掉is-visible時，恢復顯示並重用data-reveal-direct避免動畫重播；尚未進場、非標籤及桌面皆不處理。此為前輪加盟資料下載標籤消失及本輪FAQ互動後標籤列隱藏問題的限定修正。
 - 第二次pnpm build含typecheck通過；可用pnpm exec node scripts/check-reveal-label-update.mjs重跑限定顯示修正的斷言，自查手機已進場還原、未進場observer保護、首次進場不跳動畫、重複更新、桌面及非標籤排除。已在本機下載頁等待PDF資料載入完成，實際觀察data-reveal-direct及is-visible保留、visibility:visible且間距24px。
-- 本機390px實際目視服務流程、首頁品牌系列、型錄FAQ及加盟下載：證據/tmp/sakura-mobile-site-label-gap-service-local.png、/tmp/sakura-mobile-site-label-gap-home-local.png、/tmp/sakura-mobile-site-label-gap-faq-local.png、/tmp/sakura-mobile-site-label-gap-download-local.png。手機建商聯絡區原標籤偏左，統一標籤列後改為與其置中標題對齊；其他手機水平位置保留。待正式發布與驗收。
+- 本機390px實際目視服務流程、首頁品牌系列、型錄FAQ及加盟下載：證據/tmp/sakura-mobile-site-label-gap-service-local.png、/tmp/sakura-mobile-site-label-gap-home-local.png、/tmp/sakura-mobile-site-label-gap-faq-local.png、/tmp/sakura-mobile-site-label-gap-download-local.png。手機建商聯絡區原標籤偏左，統一標籤列後改為與其置中標題對齊；其他手機水平位置保留。
 - 0cf9811f第一版正式間距驗證45路由360組通過，280手機標籤配對皆24px；後續真實點服務流程FAQ發現TemplateHeadingRail也會隨Vue重繪丟失is-visible並隱藏。據此將同一手機顯示保護涵蓋SectionPill及TemplateHeadingRail，分支自查亦逐一涵蓋兩種標籤，保留桌面及非標籤排除；最後版本重建、實際FAQ操作與正式複驗待續記。
-- 最後版本pnpm build含typecheck及check-reveal-label-update斷言通過。本機以原生FAQ錨點捲動並切換「什麼是五大永久免費服務」，實際aria-expanded false→true，標籤列保留is-visible與data-reveal-direct、visibility:visible，兩組服務頁標籤間距24px且無console error；中途本機預覽Cookie到期，正常登入後重回錨點，未將登入畫面或未進入FAQ的捲動位置算入驗收。待最後正式發布及複驗。
+- 最後版本pnpm build含typecheck及check-reveal-label-update斷言通過。本機以原生FAQ錨點捲動並切換「什麼是五大永久免費服務」，實際aria-expanded false→true，標籤列保留is-visible與data-reveal-direct、visibility:visible，兩組服務頁標籤間距24px且無console error；中途本機預覽Cookie到期，正常登入後重回錨點，未將登入畫面或未進入FAQ的捲動位置算入驗收。
+- 最後c7dd9932已發布；Vercel dpl_Txn1V1An1AnzprYoZULGbkRQXjpQ為READY／Production、GitHub成功，分別inspect兩既有正式網域皆確認指向此版本。最後主網域45路由八尺寸360組複驗，280手機標籤配對全為24px、無水平溢位，文字、字樣式與標題內容行框保留；280平板／桌面配對最大差異0.00007480468747189661px（浮點誤差，小於0.001px），無實際版面變動。
+- 正式FAQ在進場停止後實際點擊false→true→false，標籤列全程visibility:visible、data-reveal-direct保留，服務頁兩組間距皆24px；PDF資料完成後小標籤亦visible且不重播。另一網域390px重查服務兩組、首頁五組、Clever兩組均24px。正式原生畫面證據/tmp/sakura-mobile-site-label-gap-service-production.png、/tmp/sakura-mobile-site-label-gap-home-production.png、/tmp/sakura-mobile-site-label-gap-download-production.png；完整數據/tmp/sakura-mobile-site-label-gap-qa.json。
+- 正常預覽登入外未提交業務表單，無CMS／資料庫內容或結構修改；自開server已停、viewport已還原。未驗實體手機及Safari／Firefox，正式驗收紀錄只提交README、不為文件再部署。
 
 ## 2026-10-30 全站手機麵包屑橫幅標題一致化
 
