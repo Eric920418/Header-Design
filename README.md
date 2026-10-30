@@ -2,7 +2,9 @@
 
 - 依凌晨3.25.57截圖，正式320／390／430／767px的iCare圖片底至GET IN TOUCH標籤為112px，由builders-capability底距40px與builders-contact上距72px相加。僅max-width:767px將前區塊底距歸零、品牌館上距改48px，總留白縮短64px；保留圖片來源／尺寸、標籤置中與下方24px間距、標題、表單、區塊底距、768px以上排版，不改CMS／資料庫。
 - pnpm build含typecheck通過（既有JSON import attributes與Tailwind sourcemap警告保留）。本機320／390／430／767px的iCare圖片底到GET IN TOUCH均48px，圖片尺寸／來源及品牌館標題／內容格高度保留，小標到Explore Our仍24px、置中保留、無水平溢位；前區塊高度減40px、品牌館上距減24px，標題整組上移64px。768／1024／1280／1920px完整量測與正式修前一致。
-- 本機390×844實際捲入交界目視縮短通過，console error 0；修前基準/tmp/sakura-builders-contact-gap-before.json、修前圖/tmp/sakura-builders-contact-gap-before.png、本機圖/tmp/sakura-builders-contact-gap-local.png、完整量測/tmp/sakura-builders-contact-gap-qa.json。正式發布複驗待續記，未提交預約表單。
+- 本機390×844實際捲入交界目視縮短通過，console error 0。
+- aa54993c已發布至dpl_52TMSaa7zAneduiDoWrEvgJHNW9n，Vercel READY／Production、GitHub成功；兩個既有正式網域分別inspect均指向該版本。主網域八尺寸完整量測與本機一致，四組手機圖片到標籤48px、標籤到Explore Our24px、圖片／標題／內容格尺寸保留且無水平溢位，四組768px以上與修前一致。正式390×844實際捲入交界目視通過、console error 0；另一網域390px亦48px／24px、iCare圖360×203px且無溢位。
+- 修前基準/tmp/sakura-builders-contact-gap-before.json、修前圖/tmp/sakura-builders-contact-gap-before.png、本機圖/tmp/sakura-builders-contact-gap-local.png、正式圖/tmp/sakura-builders-contact-gap-production.png、完整量測/tmp/sakura-builders-contact-gap-qa.json。未提交預約表單、無CMS／資料庫寫入；自開server已停、viewport已還原。未驗實體手機或Safari／Firefox；完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-10-31 手機建商首屏圖片改為參考橫幅比例
 
