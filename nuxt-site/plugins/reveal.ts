@@ -145,6 +145,18 @@ export default defineNuxtPlugin((nuxtApp) => {
         if (rect.top <= window.innerHeight * (viewportEdge ? 1 : 0.9)) show()
       })
     },
+    updated(element: HTMLElement) {
+      // 元件 attrs 更新可能清掉進場 class；手機已顯示的標籤直接保留，不重播。
+      if (
+        window.matchMedia('(max-width: 767px)').matches
+        && element.classList.contains('section-pill')
+        && !observers.has(element)
+        && !element.classList.contains('is-visible')
+      ) {
+        element.dataset.revealDirect = ''
+        element.classList.add('is-visible')
+      }
+    },
     beforeUnmount(element: HTMLElement) {
       observers.get(element)?.disconnect()
       observers.delete(element)

@@ -4,6 +4,16 @@
 - 使用既有入口識別碼及官網位置對照排序，不依可改名的標題猜分類；同分類維持原相對順序，新入口未對應時保留在最後。排序在搜尋、分類及分頁前執行，僅套用設計案例列表，其他分類、API回傳與內容資料不改。
 - 既有check-admin-names補10入口順序、子文章集中、自訂名稱、未知入口保留、空清單、冪等、分類搜尋及不變動原陣列檢查，連同48入口名稱／舊網址／返回條件回歸通過；型別檢查、正式建置與diff檢查通過；正式發布與操作驗證待續記。
 
+## 2026-10-30 全站手機小標籤至第一行標題統一24px
+
+- 依「每個頁面都一樣，要一致」的新要求，本輪將手機小標籤底部至第一行標題（含Explore Our）的距離統一為24px，以產品參考區為準；先前逐頁對齊成28px的設定亦納入統一，舊紀錄不再作本輪標準。桌面與平板768px以上保留原排版。
+- 盤點45個公開代表路由與所有SectionPill／TemplateHeadingRail使用結構，已保存八尺寸360組正式修前基準；手機共280組標籤配對原有0／11／16／20／22／23／24／25／26／28／38／44px差異。等待內容掛載後量測，並扣除進場平移，沒有把未掛載或動畫中座標當成留白。
+- main.css的max-width:767px集中定義--mobile-heading-label-gap:24px，覆蓋直接相鄰、首頁包裹標籤及裝飾標籤列三種結構；標籤列由單欄grid持有唯一row-gap，清除相鄰標題／包裹層的上margin或padding，直接標籤則只由標題上margin持有間距。保留字級、顏色、內部中英行距、文案、連結及桌面樣式；建置、本機及正式驗收待續記，不寫CMS／資料庫。
+- 第一輪pnpm build含typecheck通過，本機45路由八尺寸360組已量測：280手機標籤配對皆24px、無水平溢位，文字／字級／顏色／標籤尺寸及扣除上padding後的標題內容行框不變；280平板／桌面配對最大幾何差異0.0001220703125px，屬浮點誤差。推薦案例與門市案例標題框縮小是把舊上padding移至父列間距，非刪除文字行高。
+- 手機標籤顯示一併收尾：reveal指令updated僅在max-width:767px、SectionPill已完成進場（無待觸發observer）卻被attrs更新清掉is-visible時，恢復顯示並重用data-reveal-direct避免動畫重播；尚未進場、非標籤及桌面皆不處理。此為前輪加盟資料下載標籤消失問題的限定修正，分支自查、重建及正式驗收待續記。
+- 第二次pnpm build含typecheck通過；可用pnpm exec node scripts/check-reveal-label-update.mjs重跑限定顯示修正的斷言，自查手機已進場還原、未進場observer保護、首次進場不跳動畫、重複更新、桌面及非標籤排除。已在本機下載頁等待PDF資料載入完成，實際觀察data-reveal-direct及is-visible保留、visibility:visible且間距24px。
+- 本機390px實際目視服務流程、首頁品牌系列、型錄FAQ及加盟下載：證據/tmp/sakura-mobile-site-label-gap-service-local.png、/tmp/sakura-mobile-site-label-gap-home-local.png、/tmp/sakura-mobile-site-label-gap-faq-local.png、/tmp/sakura-mobile-site-label-gap-download-local.png。手機建商聯絡區原標籤偏左，統一標籤列後改為與其置中標題對齊；其他手機水平位置保留。待正式發布與驗收。
+
 ## 2026-10-30 全站手機麵包屑橫幅標題一致化
 
 - 依下午6.32.10截圖及「每個頁面都一樣」，此次統一的是帶麵包屑的英文橫幅標題，不只服務流程。正式390px Our Process為30px／35px，參考Kitchen Appliances為41.73px／48px；另有指南48px、型錄46px、關於我們44px、Privacy38px等差異。
