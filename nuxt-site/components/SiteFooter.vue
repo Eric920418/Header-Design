@@ -117,6 +117,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 </template>
 
 <style scoped>
+@media (max-width: 767px) {
+  .footer-social-links img { scale: .9; }
+  /* PNG透明下緣不同，依可見圖形補位，保留原連結寬高。 */
+  .footer-social-links a:last-child img { translate: 0 8.62px; }
+}
 @media (min-width: 1024px) {
   #footer-sitemap {
     grid-template-columns: repeat(6, var(--footer-sitemap-column-width, minmax(0, 1fr)));
