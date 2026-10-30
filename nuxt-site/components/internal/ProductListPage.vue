@@ -322,7 +322,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
   .near-suction-series-name span { font-size: 11px; line-height: 16px; }
   .near-suction-catalogue { padding: 74px 15px 82px; }
   .near-suction-catalogue__grid { grid-template-columns: 1fr; }
-  .near-suction-catalogue__copy h2 { margin-block: 22px 30px; }
+  .near-suction-catalogue__copy h2 { margin-block: 24px 30px; }
   .near-suction-catalogue__copy h2 span { font-size: 30px; }
   .near-suction-catalogue__copy h2 .near-suction-catalogue__chinese { font-size: 28px; }
   .near-suction-catalogue__cards { gap: 16px; }
