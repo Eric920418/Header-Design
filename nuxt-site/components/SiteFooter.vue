@@ -119,8 +119,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <style scoped>
 @media (max-width: 767px) {
   .footer-social-links img { scale: .9; }
-  /* PNG透明下緣不同，依可見圖形補位，保留原連結寬高。 */
-  .footer-social-links a:last-child img { translate: 0 8.62px; }
+  /* 對齊展板外框底邊，手指延伸不列入對齊線，保留原連結寬高。 */
+  .footer-social-links a:last-child img { translate: 0 3.02px; }
 }
 @media (min-width: 1024px) {
   #footer-sitemap {
