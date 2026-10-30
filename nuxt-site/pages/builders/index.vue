@@ -542,7 +542,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-hero-media:has([role="alert"]) { height: auto; }
   .builders-team,
   .builders-contact { padding: 72px 15px; }
-  .builders-capability { padding-bottom: 40px; }
+  .builders-contact { padding-top: 48px; }
+  .builders-capability { padding-bottom: 0; }
   .builders-capability > .builders-rail { width: calc(100% - 30px); }
   .builders-strengths-section { padding: 60px 15px; }
   .builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }

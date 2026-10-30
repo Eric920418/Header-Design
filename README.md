@@ -1,3 +1,9 @@
+## 2026-10-31 手機iCare圖片至品牌館小標留白縮短
+
+- 依凌晨3.25.57截圖，正式320／390／430／767px的iCare圖片底至GET IN TOUCH標籤為112px，由builders-capability底距40px與builders-contact上距72px相加。僅max-width:767px將前區塊底距歸零、品牌館上距改48px，總留白縮短64px；保留圖片來源／尺寸、標籤置中與下方24px間距、標題、表單、區塊底距、768px以上排版，不改CMS／資料庫。
+- pnpm build含typecheck通過（既有JSON import attributes與Tailwind sourcemap警告保留）。本機320／390／430／767px的iCare圖片底到GET IN TOUCH均48px，圖片尺寸／來源及品牌館標題／內容格高度保留，小標到Explore Our仍24px、置中保留、無水平溢位；前區塊高度減40px、品牌館上距減24px，標題整組上移64px。768／1024／1280／1920px完整量測與正式修前一致。
+- 本機390×844實際捲入交界目視縮短通過，console error 0；修前基準/tmp/sakura-builders-contact-gap-before.json、修前圖/tmp/sakura-builders-contact-gap-before.png、本機圖/tmp/sakura-builders-contact-gap-local.png、完整量測/tmp/sakura-builders-contact-gap-qa.json。正式發布複驗待續記，未提交預約表單。
+
 ## 2026-10-31 手機建商首屏圖片改為參考橫幅比例
 
 - 依凌晨3.25.46截圖，右圖橫幅約337×152px（約2.2:1），目前手機圖片仍固定310px高。本次僅max-width:767px依既有寬度100vw減30px計算2.2:1圖片高度，以頁面CSS變數共用該高度；黑底重疊量約為圖片高度1/3，對齊參考截圖的跨底效果，同步保留CTA到圖片48px，避免縮圖後仍重疊135px而讓小手機整張圖片陷入黑底。
