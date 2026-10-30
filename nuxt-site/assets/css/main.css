@@ -39,6 +39,12 @@
 @media (max-width: 767px) {
   .home-project-heading,
   .home-services-heading { row-gap: 28px; }
+  .gallery-section {
+    --gallery-content-top: 64px;
+    min-height: 0;
+    padding-bottom: 48px;
+  }
+  .gallery-heading-column .site-content-cta { margin-top: 112px; }
   h2:has(> .bilingual-heading-lead) {
     display: flex;
     flex-wrap: wrap;
