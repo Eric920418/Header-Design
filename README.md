@@ -1,5 +1,11 @@
+## 2026-10-30 手機漢堡品牌系列第二層
+
+- 依截圖2026-10-30下午3.21.08及後續僅調整RWD要求，只改lg:hidden漢堡內容：原12px品牌系列小字及常駐十系列改為14px（text-sm，與設計靈感一致）的第二層展開按鈕，保留原金色。點擊才顯示完整十系列中英文，箭頭與aria-expanded同步，aria-controls對應獨立內容區。
+- 切換第一層或關閉漢堡時重設品牌系列為收起；既有設計靈感／廚房裝修指南／型錄等同層入口維持可見。桌面mega-menu、CSS、字級、照片及內容資料不改。pnpm build含typecheck及check-site-header.mjs通過；相對前一版桌面nav模板與CSS逐字一致。Safari本機HTTP無法保留正式建置的Secure登入Cookie，不改驗證設定，待HTTPS正式部署再做原生操作驗收。
+
 ## 2026-10-30 iPad 主導覽輕點展開
 
+- e5d33523658c7e0ac923a86e24fe5f52f7055c95已發布；Vercel dpl_5dVkuYTcwdQQmcWYeuR6L15nuSYR為READY／Production，兩個既有正式網域均接上。後續以既有Xcode iOS26.5 runtime建立Sakura iPad Nav QA模擬器（11吋iPad Pro），Safari正式站實際60ms輕點設計案例箭頭，放開後保持展開，再點可收起；品牌承諾、廚房產品及外部點擊收合亦確認。這補上先前無Safari觸控證據的限制，仍不是實體iPad驗收。證據/tmp/sakura-ipad-safari-design-production.png及/tmp/sakura-ipad-safari-brand-production.png。
 - 依截圖2026-10-30下午3.21.00，iPad寬版主導覽輕點後下拉跳開、長按才持續出現。直接執行原SiteHeader事件函式重現：touch pointerleave也排入160ms關閉計時，手指放開後即收起；原scroll監聽也會無條件關閉。
 - 共用Header按實際pointerType區分操作：只有滑鼠pointerenter／leave使用hover開關；觸控／筆尖箭頭以輕點開啟、再點收起，切換其他主選單會替換，外部pointerdown與Escape／路由切換仍關閉。觸控展開不因放開或意外頁面捲動消失，鍵盤focus只在鍵盤模式開啟；保留滑鼠hover／160ms移出延遲、原連結、選單版型與手機手風琴。
 - 新增外部事件監聽與既有scroll一起在卸載時移除，不改CMS／資料庫。事件序列回歸、建置及實際瀏覽器／正式驗收待續記；不以Chromium滑鼠點擊宣稱已驗實體iPad觸控。

@@ -17,6 +17,8 @@ const rightNav: NavItem[] = cmsCopy.rightNav
 const mobileOpen = ref(false)
 const searchOpen = ref(false)
 const expanded = ref<number | null>(null)
+const mobileSeriesOpen = ref(false)
+watch([expanded, mobileOpen], () => mobileSeriesOpen.value = false)
 const keyboardNavigation = ref(false)
 const activeDesktopMenu = ref<string | null>(null)
 const headerElement = ref<HTMLElement | null>(null)
@@ -93,6 +95,7 @@ function closeAllMenus() {
   activeDesktopMenu.value = null
   mobileOpen.value = false
   expanded.value = null
+  mobileSeriesOpen.value = false
   searchOpen.value = false
   keyboardNavigation.value = false
 }
@@ -353,15 +356,19 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <template v-if="item.children">
             <NuxtLink v-if="item.to" :to="item.to" class="block py-3 text-sm text-[#CAA05C]">{{ item.label }}{{ cmsCopy.copy.text15 }}</NuxtLink>
             <template v-if="item.seriesMega">
-              <p class="pb-2 pt-3 text-xs uppercase tracking-[.16em] text-[#CAA05C]">{{ cmsCopy.copy.text16 }}</p>
-              <template v-for="style in KITCHEN_STYLES" :key="style.slug">
-                <NuxtLink v-if="style.available && style.route" :to="style.route" class="flex items-center justify-between py-3 text-sm text-white">
-                  <span>{{ style.zh }}</span><span class="text-xs text-white/55">{{ style.en }}</span>
-                </NuxtLink>
-                <span v-else aria-disabled="true" class="flex cursor-not-allowed items-center justify-between py-3 text-sm text-white/35">
-                  <span>{{ style.zh }}</span><span class="text-xs">{{ cmsCopy.copy.text17 }}</span>
-                </span>
-              </template>
+              <button type="button" :aria-expanded="mobileSeriesOpen" aria-controls="mobile-brand-series" class="flex w-full items-center justify-between py-3 text-sm text-[#CAA05C]" @click="mobileSeriesOpen = !mobileSeriesOpen">
+                {{ cmsCopy.copy.text16 }}<ChevronDown aria-hidden="true" class="h-4 w-4 transition-transform motion-reduce:transition-none" :class="{ 'rotate-180': mobileSeriesOpen }" />
+              </button>
+              <div id="mobile-brand-series" v-show="mobileSeriesOpen">
+                <template v-for="style in KITCHEN_STYLES" :key="style.slug">
+                  <NuxtLink v-if="style.available && style.route" :to="style.route" class="flex items-center justify-between py-3 text-sm text-white">
+                    <span>{{ style.zh }}</span><span class="text-xs text-white/55">{{ style.en }}</span>
+                  </NuxtLink>
+                  <span v-else aria-disabled="true" class="flex cursor-not-allowed items-center justify-between py-3 text-sm text-white/35">
+                    <span>{{ style.zh }}</span><span class="text-xs">{{ cmsCopy.copy.text17 }}</span>
+                  </span>
+                </template>
+              </div>
             </template>
             <template v-for="child in item.seriesMega ? item.children.slice(1) : navChildren(item)" :key="child.label">
               <span v-if="child.disabled" aria-disabled="true" class="block py-3 text-sm text-white/40">{{ child.label }}</span>

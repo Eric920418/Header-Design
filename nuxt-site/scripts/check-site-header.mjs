@@ -8,7 +8,7 @@ const headerSource=readFileSync(new URL('../components/SiteHeader.vue',import.me
 const headerScript=headerSource.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)?.[1]
 assert(headerScript,'Header script不存在')
 const headerAst=createSourceFile('SiteHeader.ts',headerScript,ScriptTarget.Latest,true)
-const headerStates=['mobileOpen','searchOpen','expanded','keyboardNavigation','activeDesktopMenu','headerElement','headerPointerType','desktopMenuCloseTimer']
+const headerStates=['mobileOpen','searchOpen','expanded','mobileSeriesOpen','keyboardNavigation','activeDesktopMenu','headerElement','headerPointerType','desktopMenuCloseTimer']
 const headerFunctions=headerAst.statements.filter(isFunctionDeclaration).map(node=>node.name.text)
 const headerRuntime=headerAst.statements.filter(node=>isFunctionDeclaration(node)||isVariableStatement(node)&&node.declarationList.declarations.every(item=>headerStates.includes(item.name.getText(headerAst)))||isExpressionStatement(node)&&isCallExpression(node.expression)&&['onMounted','onBeforeUnmount'].includes(node.expression.expression.getText(headerAst))).map(node=>node.getText(headerAst)).join('\n')
 const headerJs=transpileModule(headerRuntime,{compilerOptions:{target:ScriptTarget.ES2022}}).outputText
@@ -36,11 +36,12 @@ menu.openDesktopMenu('廚房產品',{pointerType:'mouse'});windowEvents.get('scr
 documentEvents.get('keydown')({key:'Tab'});assert.equal(menu.keyboardNavigation.value,true,'從Header外首次Tab進入也需先進入鍵盤模式');menu.openDesktopMenu('品牌承諾')
 menu.handleDesktopItemFocusOut({currentTarget:menu.headerElement.value,relatedTarget:new HeaderNode(menu.headerElement.value)});flushMenuTimers();assert.equal(menu.activeDesktopMenu.value,'品牌承諾','鍵盤移入子選項不能收合')
 menu.handleDesktopItemFocusOut({currentTarget:menu.headerElement.value,relatedTarget:new HeaderNode()});flushMenuTimers();assert.equal(menu.activeDesktopMenu.value,null,'鍵盤焦點離開需收合')
-menu.openDesktopMenu('我要加盟');menu.mobileOpen.value=true;menu.searchOpen.value=true;menu.expanded.value=1;menu.handleHeaderKeydown({key:'Escape'});assert.equal(menu.activeDesktopMenu.value,null);assert.equal(menu.mobileOpen.value,false);assert.equal(menu.searchOpen.value,false);assert.equal(menu.expanded.value,null)
+menu.openDesktopMenu('我要加盟');menu.mobileOpen.value=true;menu.searchOpen.value=true;menu.expanded.value=1;menu.mobileSeriesOpen.value=true;menu.handleHeaderKeydown({key:'Escape'});assert.equal(menu.activeDesktopMenu.value,null);assert.equal(menu.mobileOpen.value,false);assert.equal(menu.searchOpen.value,false);assert.equal(menu.expanded.value,null);assert.equal(menu.mobileSeriesOpen.value,false)
 menu.openDesktopMenu('建商專區',{pointerType:'mouse'});menu.scheduleDesktopMenuClose({pointerType:'mouse'});assert.equal(menuTimers.size,1);unmounted.forEach(fn=>fn());assert.equal(menuTimers.size,0);assert.equal(windowEvents.size,0);assert.equal(documentEvents.size,0)
 assert.equal((headerSource.match(/@pointerenter="openDesktopMenu\(item.label, \$event\)"/g)||[]).length,2,'左右主導覽都需區分pointerType')
 assert.equal((headerSource.match(/@focusin="keyboardNavigation && openDesktopMenu\(item.label\)"/g)||[]).length,2,'左右主導覽都不可由觸控focus提前開啟')
 assert.equal((headerSource.match(/@click="activateDesktopMenu\(item.label\)"/g)||[]).length,4,'四種主導覽箭頭共用觸控開關')
+assert(headerSource.includes('aria-controls="mobile-brand-series"')&&headerSource.includes('id="mobile-brand-series" v-show="mobileSeriesOpen"'),'手機品牌系列需有獨立展開狀態與可存取的控制對應')
 console.log('PASS Header touch/pen tap-release persistence, retap/switch/outside, mouse hover/scroll, keyboard focus/Escape, timer/listener cleanup')
 
 const footerSource=readFileSync(new URL('../components/SiteFooter.vue',import.meta.url),'utf8')
