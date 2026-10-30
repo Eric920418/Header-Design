@@ -735,7 +735,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
   .franchise-news__list { margin-top: 40px; }
   .franchise-news-row { min-height: 76px; grid-template-columns: 10px 1fr 40px; gap: 12px; }
-  .franchise-news-row h3 { font-size: 20px; line-height: 30px; }
+  .franchise-news-row h3 { font-size: 18px; line-height: 27px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
