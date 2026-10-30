@@ -3,6 +3,8 @@
 - 依下午6.28.36截圖，尋找門市STORE LOCATOR標籤至Explore Our間距需同加盟品牌信賴。正式320／390／430／767px原實測20px，標籤與h2均已在畫面中心；參考品牌信賴為28px。
 - 僅將.store-location-heading納入現有max-width:767px的28px row-gap規則；保留字級、中英分組、置中、篩選、門市資料及地圖，768px以上原間距與排版不變。不寫CMS或資料庫；建置、手機／桌面及正式驗收待續記。
 - pnpm build含typecheck通過；本機320／390／430／767px標籤至Explore Our均28px，標籤／h2中心為160／195／215／383.5，字級與行高保留且無整頁水平溢位。768／1024／1280／1920px有效行框座標、尺寸及樣式與修前差異0；display:contents英文包裹沒有行框，排除其虛構零矩形座標。中途本機預覽Cookie到期時正常重新登入後再驗，登入頁未計入結果。
+- f6527f6a已發布；Vercel dpl_8u69HW1UchQKuBP6N7U9REz7trhV為READY／Production／GitHub成功，兩個既有正式網域都已接上。主網域四種手機寬度間距28px及置中皆通過，四桌面尺寸對修前差異0；另一網域390px同為28px、中心195。正式390px原生門市錨點完整目視，地圖與標題正常顯示，證據/tmp/sakura-mobile-store-gap-production.png。
+- 本機runtime未設定公開Maps金鑰，其前端完整顯示設定錯誤，未將本機地圖當成通過；正式圖已確認實際地圖呈現且沒有缺金鑰訊息。本輪只改手機間距選擇器，未改金鑰、地圖元件、門市資料或篩選邏輯；無CMS／資料庫／業務表單寫入，只有正常預覽登入。自開server已停止、viewport還原；未驗實體手機或Safari／Firefox，正式紀錄只提交README、不為文件再部署。
 
 ## 2026-10-30 手機首頁品牌承諾置中與標籤留白
 
