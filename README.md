@@ -1,3 +1,9 @@
+## 2026-10-31 手機SAKURA KITCHEN內容區圖片改為橫幅
+
+- 依凌晨3.26.18截圖，僅max-width:767px將品牌優勢內容圖由固定330px高改為約2.2:1橫幅。使用原容器兩行grid，立即預約置中於第一行、原圖片與遮罩疊於第二行，兩者距24px；保留正文到操作區42px間距、圖片來源／裁切焦點／圓角與原預約連結，避免縮小後按鈕仍遮住橫幅。移到淺底的按鈕沿用既有淺底CTA黑字／灰框、金色圖示與Hover／Focus金底白字，不新增連結副本。
+- 正常圖片行高依可用寬度除2.2計算；發生既有role=alert錯誤時改自然行高，以保留完整錯誤提示。768px以上及前一輪已置中的首屏不改，無CMS／資料庫寫入。修前八尺寸基準/tmp/sakura-builders-panorama-before.json。
+- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px圖片約290×132／360×164／400×182／737×335px，CTA在圖上方24px、正文到CTA42px，原圖片／文案／目的地保留、無水平溢位；768／1024／1280／1920px完整內容區量測與正式修前一致。320×500及667×375短視窗亦24px且無溢位；390×844實際捲動目視圖片及按鈕完整、圖像未變形，console error 0。本機截圖/tmp/sakura-builders-panorama-local.png、量測/tmp/sakura-builders-panorama-qa.json；正式驗證待續記。
+
 ## 2026-10-31 手機SAKURA KITCHEN首屏圖文與預約區置中
 
 - 依凌晨3.26.12截圖，手機Logo與文案、90px預約圓鈕及品牌承諾卡片有各自偏移，未對齊同一中線；320px卡片原僅200×84px，文字超出固定比例而被裁切。本次僅max-width:767px將首屏改成自然單欄flex，Logo／中文Logo／文案置中，上方品牌區由距首屏頂38px改為120px；下方預約圓鈕與品牌承諾卡片置中，兩者間距24px、卡片底距20px，保留720px最小高度並允許內容撐高。
