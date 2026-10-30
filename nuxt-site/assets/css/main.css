@@ -37,6 +37,8 @@
 .bilingual-heading-lead { display: contents; }
 .bilingual-heading-english { display: contents; }
 @media (max-width: 767px) {
+  .home-project-heading,
+  .home-services-heading { row-gap: 28px; }
   h2:has(> .bilingual-heading-lead) {
     display: flex;
     flex-wrap: wrap;
