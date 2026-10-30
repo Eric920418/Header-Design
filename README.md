@@ -2,7 +2,8 @@
 
 - 依凌晨1.46.21截圖核對正式站：FRANCHISE INFORMATION到Explore Our已24px，但標籤仍為inline-flex靠左（手機四尺寸left皆15px、中心117px），未完成置中。僅max-width:767px將最新加盟資訊直屬標籤改flex與margin-inline:auto，沿用共用24px間距；不改其他加盟標籤、標題／列表、768px以上版面或CMS／資料庫。
 - pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。本機320／390／430／767px標籤中心與視窗中心誤差小於0.055px（offsetWidth整數取整），到Explore Our均24px，標籤尺寸、標題／列表／區塊高度保留，無水平溢位；768／1024／1280／1920px完整量測與修前一致。正式修前同頁CELEBRITY STORIES參考亦中心195px、間距24px；本機390px目視置中通過、console error 0。
-- 修前基準/tmp/sakura-franchise-news-label-before.json、本機畫面/tmp/sakura-franchise-news-label-local.png、完整量測/tmp/sakura-franchise-news-label-qa.json；正式發布複驗待續記。未提交業務表單或播放影片。
+- fefe4e11已發布至dpl_CqkBMZEJRpHrYGfmeQVRVJ8ts6qe，Vercel READY／Production、GitHub成功；兩個既有正式網域分別inspect均指向該版本。主網域八尺寸量測與本機完全一致，四組手機中心誤差小於0.055px、間距24px且無水平溢位，四組768px以上完整量測與修前一致。正式390px原生截圖目視標籤與Explore Our同軸置中、console error 0；另一網域390px亦labelX92.945px、中心194.945px（offsetWidth整數取整）、間距24px、display:flex且可見。
+- 修前基準/tmp/sakura-franchise-news-label-before.json、本機畫面/tmp/sakura-franchise-news-label-local.png、正式畫面/tmp/sakura-franchise-news-label-production.png、完整量測/tmp/sakura-franchise-news-label-qa.json。未提交業務表單或播放影片，無CMS／資料庫寫入；自開server已停、viewport已還原。未驗實體手機或Safari／Firefox；完成紀錄只提交README、不為文件再次部署。
 
 ## 2026-10-31 手機加盟優勢與Join區塊留白縮短
 
