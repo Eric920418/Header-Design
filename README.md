@@ -1,8 +1,9 @@
 ## 2026-10-30 廚房裝修指南手機小標籤間距
 
 - 依下午6.29.05截圖，/knowledge的STRAIGHT FROM THE NEWSROOM至Explore Our需同加盟品牌信賴28px。正式320／390／430／767px實際36.5px，眉標中心偏左4px；標籤／h2兩套margin及舊br的flex行框共同影響留白。
-- 僅修改knowledge/index.vue的max-width:767px：標題外層改直向flex、間距28px，標籤以flex置中且清除下margin，h2清除上margin，移除重新顯示舊br的規則。保留字級、中英分組、配色、文章、連結、其他區塊與768px以上版面；已保存八尺寸的穩定正式修前基準及文章資料。建置、本機及正式驗收待續記，不寫CMS／資料庫。
-- pnpm build含typecheck通過；本機320／390／430／767px實際間距均28px，標籤及Explore Our中心分別160／195／215／383.5，無整頁水平溢位。標題字級／行高／配色及三篇文章的標題、圖片來源、連結保留；768／1024／1280／1920px標籤與標題座標、尺寸、樣式及文章資料對修前差異0。390px原生捲動完整目視證據/tmp/sakura-mobile-guide-gap-local.png；待正式驗收。
+- 僅修改knowledge/index.vue的max-width:767px：標題外層改直向flex、間距28px，標籤以flex置中且清除下margin，h2清除上margin，移除重新顯示舊br的規則。保留字級、中英分組、配色、文章、連結、其他區塊與768px以上版面；已保存八尺寸的穩定正式修前基準及文章資料。不寫CMS／資料庫。
+- pnpm build含typecheck通過；本機320／390／430／767px實際間距均28px，標籤及Explore Our中心分別160／195／215／383.5，無整頁水平溢位。標題字級／行高／配色及三篇文章的標題、圖片來源、連結保留；768／1024／1280／1920px標籤與標題座標、尺寸、樣式及文章資料對修前差異0。390px原生捲動完整目視證據/tmp/sakura-mobile-guide-gap-local.png。
+- 4bf00eff已發布；Vercel dpl_2vXUcuS37YXBQ2YZo6fdAN5nL68E為READY／Production、GitHub成功，兩個既有正式網域均接上。主網域四手機尺寸間距28px、雙中心及無溢位通過，四平板／桌面尺寸對修前差異0，三篇文章標題／圖片／連結不變；另一正式網域390px同為28px、雙中心195、三篇文章。正式原生捲動完整目視證據/tmp/sakura-mobile-guide-gap-production.png，數據/tmp/sakura-mobile-guide-gap-qa.json。自開server已停止、viewport還原；未驗實體手機及Safari／Firefox，正式紀錄只提交README、不為文件再部署。
 
 ## 2026-10-30 品牌系列推薦案例手機小標籤間距
 
