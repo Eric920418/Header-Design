@@ -3,7 +3,10 @@
 - 依凌晨1.24.59截圖，實際開啟原官網https://www.sakura-kitchenlife.com.tw/about/introduce核對：四個理念為各自圖片的獨立滿版區塊，首屏是廚房背景、白色斜體Our Brand與中文標題，非目前四個400px短列共用作用中背景。原官網390×844每屏804px（扣40px頁首）、遮罩40%黑色、英文20/30px及中文30/45px。
 - 僅max-width:767px加入每卡既有CMS對應圖片，改為自然捲動的獨立屏，最小高度為可視高度扣現有頁首與底部服務列（短視窗至少320px且內容可撐高）；首卡只顯示Our Brand與中文標題，隱藏序號及首卡說明，其他三卡保留原標題與說明，空說明不占位。每卡獨立40%遮罩、文字置中；不改文案或素材資料，不寫CMS／資料庫。桌面原共用背景與Hover／Focus切換保留，新增手機圖片於768px以上display:none。
 - pnpm build含typecheck通過；本機八尺寸及390×500、667×375兩種短視窗量測，手機四卡各自有圖且無水平溢位，768px以上四組既有卡片、共用圖片及文字幾何與修前完全一致。390×844實際捲過四屏，圖片皆載入、各屏文字在容器內，上下緣對齊頁首60px與底部服務列772px；桌面實際選第一卡切到廚房背景、回第三卡恢復原安心健檢背景正常。第二屏長標原有孤立單字換行，手機h3改white-space:normal搭配text-wrap:balance，讓既有桌面硬換行在手機自然折行；不改桌面字級與文案。進場／定位包含塊會改變offset參照，文字防裁切改採同座標系的getBoundingClientRect檢查，未把offsetParent差異當成實際溢位。
-- 最後版重建含typecheck通過（既有JSON import attributes與Tailwind sourcemap警告保留）；十尺寸重測，六組手機共24卡的文字區皆在卡片內且垂直置中誤差小於0.51px，四組平板／桌面與正式修前完全一致。第二屏長標自然兩行、不再有單字獨立一行，第四屏空說明不占位；保留既有圖片錯誤fallback，不新增套件。正式發布及複驗待續記。
+- 最後版重建含typecheck通過（既有JSON import attributes與Tailwind sourcemap警告保留）；十尺寸重測，六組手機共24卡的文字區皆在卡片內且垂直置中誤差小於0.51px，四組平板／桌面與正式修前完全一致。第二屏長標自然兩行、不再有單字獨立一行，第四屏空說明不占位；保留既有圖片錯誤fallback，不新增套件。
+- 646405bf已發布至dpl_E2JLTGfcz5KGESXRWEZLctnCyjyf，Vercel READY／Production、GitHub成功，兩個既有正式網域均指向此版本。主網域十尺寸排版皆與本機一致（不把未捲入時的lazy圖片loaded狀態當作幾何差異），六組手機24卡均在界內並垂直置中誤差小於0.51px；四組768px以上版面與修前完全一致。
+- 正式390×844逐屏實際捲動四卡，各自圖片均已載入，頂緣約60px、底緣約772px，沒有被固定頁首或底部服務列遮住；瀏覽器console error 0。正式1280×800實際選第一卡，原共用背景切至廚房，再選第三卡恢復安心健檢背景正常。另一正式網域390×844也為四個712px獨立屏、共享背景隱藏、文字在界內且無水平溢位。
+- 正式四屏截圖/tmp/sakura-about-values-production-0.png至/tmp/sakura-about-values-production-3.png，完整量測/tmp/sakura-about-values-qa.json。未更新CMS或資料庫，未提交業務表單；自開預覽server已停、viewport已還原。未驗實體手機及Safari／Firefox；完成紀錄只提交README，不為文件再部署。
 
 ## 2026-10-31 手機品牌優勢首屏只顯示一張廚房圖
 
