@@ -1,7 +1,9 @@
 ## 2026-10-31 手機品牌優勢首屏只顯示一張廚房圖
 
 - 依凌晨1.24.03截圖，只在max-width:767px隱藏BrandAdvantageHero下方重複的stage圖片與整個容器，保留上方圖片及原說明文字；不保留重複容器的30px上距與260px高度。768px以上仍保留既有雙圖與動畫，前輪三列導覽對齊不改，無CMS／資料庫修改。
-- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。對照正式修前320／390／430／767／768／1024／1280／1920px八尺寸，本機四組手機均只剩一張首屏廚房圖、重複容器display:none且高度0，首屏與下一區剛好減少／上移290px（260px重複圖＋30px上距），沒有留下容器空白；保留圖、說明及三列導覽幾何不變，無水平溢位。768px以上四組整體量測完全不變，雙圖仍保留；本機390px目視確認說明後直接接下一區。預覽沿用既有Azure runtime只讀內容，正式發布及複驗待續記。
+- pnpm build含typecheck通過（保留既有JSON import attributes與Tailwind sourcemap警告）。對照正式修前320／390／430／767／768／1024／1280／1920px八尺寸，本機四組手機均只剩一張首屏廚房圖、重複容器display:none且高度0，首屏與下一區剛好減少／上移290px（260px重複圖＋30px上距），沒有留下容器空白；保留圖、說明及三列導覽幾何不變，無水平溢位。768px以上四組整體量測完全不變，雙圖仍保留；本機390px目視確認說明後直接接下一區。預覽沿用既有Azure runtime只讀內容。
+- 394937d7已正式發布至dpl_6x7TFf8CmoBb8ymM5ja6ztvPjVyS，Vercel READY／Production、GitHub成功，兩個既有正式網域均指向此版本。主網域於進場完成後重測八尺寸，結果全部與本機一致；四組手機單圖、無殘留空間／無水平溢位，四組平板桌面量測與修前完全一致。首次進場途中offsetParent包含塊改變造成圖文offset座標不一致，待進場完成重測已排除，未為動畫中座標差異更改CSS。
+- 另一網域390px亦僅一張首屏廚房圖、stage display:none且高度0，無水平溢位。正式390px畫面：/tmp/sakura-brand-single-image-production.png；完整量測：/tmp/sakura-brand-single-image-qa.json。自開預覽server已停、viewport已還原；未驗實體手機或Safari／Firefox，無CMS／資料庫內容修改；完成紀錄只提交README，不為文件再部署。
 
 ## 2026-10-31 手機品牌優勢導覽左緣對齊
 
