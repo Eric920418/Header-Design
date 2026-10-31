@@ -4,7 +4,10 @@
 - 將原本獨立在型錄區塊外的「返回商品列表」移到產品資料／縮圖末端，取消型錄下方突出的灰色橫帶；仍沿用原listPath及q／page返回參數。型錄封面、目的地、載入錯誤與動畫保留，無資料庫寫入。
 - pnpm build含typecheck通過，保留既有JSON import attributes及Tailwind sourcemap警告。本機正式建置產物在320／390／430／767／768／1024／1280／1440／1920px與320×500／667×375共11組尺寸無水平溢位；手機小標到標題24px。1440px中文字級40px／48px行高、英文50px／55px行高及CTA尺寸／底色／字色／邊框與原列表參考區塊一致，封面載入正常。
 - 實際返回分類83205時q=R7600及page=1保留，列表載入後正確一項；返回按鈕只保留一份且位於產品資料區。另測SVAGO 82164桌面及TEKA 81868手機同元件排版正常、無溢位，型錄CTA前往/catalogues/catalog。證據存於.gstack/qa-reports/product-catalogue-20261031/。
-- 本機原dev因既有kitchen-series-hero共用模組external路徑無法載入，原preview預設本機SQL亦未啟動；未修改該設定，改以正式建置產物及既有正式runtime環境做唯讀前台驗證，不執行DB初始化、遷移或資料更新。型錄下載服務的既有502問題未納入本次版面修正。正式部署及回查待補記。
+- 本機原dev因既有kitchen-series-hero共用模組external路徑無法載入，原preview預設本機SQL亦未啟動；未修改該設定，改以正式建置產物及既有正式runtime環境做唯讀前台驗證，不執行DB初始化、遷移或資料更新。型錄下載服務的既有502問題未納入本次版面修正。正式部署及回查如下。
+
+- 217babd8已發布至dpl_GLbduvDaA1tAeFmr9y512hFhQR1d，READY／Production；兩個正式網域分別inspect均指向同版本。主網域11組尺寸標題字級／行高／字色與本機一致、封面正常、無水平溢位；另一網域1440／390px亦一致。
+- 正式390px實際返回/products/sakura/category/83205?q=R7600&page=1，列表完成後正確1項；已確認返回按鈕位於產品資料區、型錄末端不再有獨立返回灰帶。瀏覽器本次操作console error 0。正式桌面截圖：[修後型錄區塊](.gstack/qa-reports/product-catalogue-20261031/production-desktop.png)；[11尺寸量測](.gstack/qa-reports/product-catalogue-20261031/production-checks.json)、[返回連結實測](.gstack/qa-reports/product-catalogue-20261031/production-return-navigation.json)。實體裝置與Safari本輪未驗；無CMS／資料庫寫入。 自開正式產物驗證server已停、viewport已還原；完成紀錄僅提交README，不為文件再次部署。
 
 ## 2026-10-31 全站前台一致性唯讀檢查（最終彙整）
 
