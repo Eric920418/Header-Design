@@ -1,3 +1,215 @@
+## 2026-10-31 產品介紹頁型錄標題與CTA對齊參考
+
+- 依下午6.28.51截圖，產品詳情型錄沿用既有產品列表的兩層標題：金色「廚房商品型錄」、英文「Kitchen Product / Catalogues」，桌面英文50px／中文40px；CTA改灰框黑字、金色圓形箭頭，hover／focus仍為金底白字。平板與手機採相同列表區塊既有字級，不改其他區塊。
+- 將原本獨立在型錄區塊外的「返回商品列表」移到產品資料／縮圖末端，取消型錄下方突出的灰色橫帶；仍沿用原listPath及q／page返回參數。型錄封面、目的地、載入錯誤與動畫保留，無資料庫寫入。
+- pnpm build含typecheck通過，保留既有JSON import attributes及Tailwind sourcemap警告。本機正式建置產物在320／390／430／767／768／1024／1280／1440／1920px與320×500／667×375共11組尺寸無水平溢位；手機小標到標題24px。1440px中文字級40px／48px行高、英文50px／55px行高及CTA尺寸／底色／字色／邊框與原列表參考區塊一致，封面載入正常。
+- 實際返回分類83205時q=R7600及page=1保留，列表載入後正確一項；返回按鈕只保留一份且位於產品資料區。另測SVAGO 82164桌面及TEKA 81868手機同元件排版正常、無溢位，型錄CTA前往/catalogues/catalog。證據存於.gstack/qa-reports/product-catalogue-20261031/。
+- 本機原dev因既有kitchen-series-hero共用模組external路徑無法載入，原preview預設本機SQL亦未啟動；未修改該設定，改以正式建置產物及既有正式runtime環境做唯讀前台驗證，不執行DB初始化、遷移或資料更新。型錄下載服務的既有502問題未納入本次版面修正。正式部署及回查待補記。
+
+## 2026-10-31 全站前台一致性唯讀檢查（最終彙整）
+
+本輪確認 **10類缺陷（P1三類、P2五類、P3兩類）**，不能寫成「全站通過」。優先處理型錄下載502、全站搜尋沒有結果、iPhone橫向安全區遮擋。桌面差異僅記錄，未修網站程式、樣式、文案、API、資料庫，亦未建置或部署。
+
+主站為 `sakura-demo-vanlantech.com`，另一正式域為 `header-design-two.vercel.app`。兩域只讀部署查詢皆指向 `dpl_8eXLfG3MrMRJTHkfFVcQQbAMUymg`，READY／Production，commit `61072bd285b6be3df6ce3ae19bc7994ed4d8f80b`。實際前台為Nuxt 3；以下以目前頁面與公開DOM為準。舊章節的單次「通過」不能代替本次整站狀態。
+
+### 覆蓋範圍與證據入口
+
+- **2,896個實際網址狀態／1,122個不同路徑**，每個均有390×844與1440×844正常捲到底的紀錄，共5,792組核心覆蓋；全主站保存6,321筆量測及截圖。查詢參數、分頁、分類來源與詳情返回狀態分開列出，沒有以模板數代替逐頁數。
+- **36個前台模板，其中12個動態路由**；52個代表／問題頁各補十組尺寸：320、430、767、768、820、1024、1280、1920px寬（高844），以及320×500、667×375。所有模板及十品牌系列均有代表，但素材故障延伸的115個網址狀態沒有每個再重跑十組尺寸，明列於限制。
+- 6,321筆整頁量測無大於1px水平溢位；**6,815組手機小標與第一行標題／Explore Our配對**，扣除各自正常進場位移後皆24px。222個內部文字溢位候選均為刻意的sr-only，沒有可見候選。這不代表沒有瀏海遮擋、垂直捲動或圖示光學對齊問題。
+- 兩域9個關鍵頁×兩尺寸共18組均捲底完成，配對標題字級、行高、字色及對齊無差異；另一域未遍歷所有2,896個狀態。
+- 原生Safari模擬器、桌面Safari200%及Chromium viewport分別記錄。未用注入CSS關閉動畫，未讀Vue內部狀態。所有截圖均保存，但沒有把自動量測寫成每張截圖都已人工目視驗收。
+
+逐頁：[逐頁覆蓋表CSV](.gstack/qa-reports/consistency-20261031/coverage.csv)／[完整逐頁JSON](.gstack/qa-reports/consistency-20261031/coverage.json)；模板：[模板覆蓋CSV](.gstack/qa-reports/consistency-20261031/template-coverage.csv)；缺陷：[可重現問題JSON](.gstack/qa-reports/consistency-20261031/findings.json)；互動：[互動狀態與限制](.gstack/qa-reports/consistency-20261031/interaction-coverage.json)；總索引：[證據索引](.gstack/qa-reports/consistency-20261031/manifest.json)。圖片與JSON保存在本機忽略目錄，未上傳或部署；本輪文字紀錄只維護此README。
+
+### 已確認缺陷（按優先順序）
+
+#### P1 I10：型錄下載12／13入口失敗
+
+- 網址／尺寸：[/catalogues/catalog](https://sakura-demo-vanlantech.com/catalogues/catalog)、[/catalogues/kitchenware-catalog](https://sakura-demo-vanlantech.com/catalogues/kitchenware-catalog)；Chrome實際視窗1512×829、IAB390×844。全部受影響網址見該缺陷JSON。
+- 實際：13個正式型錄下載入口中，12個在Chrome與IAB均重現網站502錯誤頁並有追蹤編號；kitchenware-2026以Chrome原生下載清單確認14.8MB完成。
+- 預期：公開型錄下載連結可取得對應PDF檔案。
+- 重現：開啟商品／品牌系列型錄頁，點對應下載。 → Chrome原生下載清單顯示無法存取網站。 → 直接開啟相同公開下載連結及另一瀏覽器複驗，皆顯示網站502頁。。
+- 影響範圍：8個品牌系列與4個商品型錄，共12個下載端點；精確前台入口含兩個型錄頁及十個series查詢狀態。建商型錄若連到同一入口則間接受影響，不視為另一個已點擊失敗端點。
+- 判定限制：未查看伺服器日誌，無法由錯誤頁判定上游／資料庫根因；Chrome對成功PDF直接導覽曾報ERR_BLOCKED_BY_CLIENT，未誤列為網站錯誤。
+- 證據：[issue-010-catalogue-download-chrome.png](.gstack/qa-reports/consistency-20261031/issue-010-catalogue-download-chrome.png)、[download-sakura-kitchen-2026.pdf.png](.gstack/qa-reports/consistency-20261031/download-sakura-kitchen-2026.pdf.png)、[download-repeat-SAKURA-MUJI-Basic-Plus.pdf.png](.gstack/qa-reports/consistency-20261031/download-repeat-SAKURA-MUJI-Basic-Plus.pdf.png)、[catalogue-download-response-checks.json](.gstack/qa-reports/consistency-20261031/catalogue-download-response-checks.json)、[catalogue-download-repeats.json](.gstack/qa-reports/consistency-20261031/catalogue-download-repeats.json)、[catalogue-kitchenware-download-success.json](.gstack/qa-reports/consistency-20261031/catalogue-kitchenware-download-success.json)。
+
+#### P1 I08：頁首全站搜尋只關閉浮層
+
+- 網址／尺寸：[/builders](https://sakura-demo-vanlantech.com/builders)、[/products/sakura/item/81961?category=83280&page=1](https://sakura-demo-vanlantech.com/products/sakura/item/81961?category=83280&page=1)、[/products/sakura/item/80794](https://sakura-demo-vanlantech.com/products/sakura/item/80794)；390×844、1440×844。
+- 實際：手機輸入R7600、桌面輸入SAKURA送出後只關閉搜尋浮層，網址與頁面未改變，沒有結果或提示。
+- 預期：全站搜尋送出關鍵字後顯示結果或清楚的無結果提示。
+- 重現：開啟頁首搜尋 → 輸入關鍵字 → 點擊送出搜尋 → 確認浮層消失但原頁未變且無結果。
+- 影響範圍：共用頁首搜尋，手機與桌面多頁重現。產品列表內搜尋為不同控制項，R7600與無匹配詞實測正常。
+- 證據：[issue-008-search-desktop-after.png](.gstack/qa-reports/consistency-20261031/issue-008-search-desktop-after.png)、[issue-008-search-mobile-before.png](.gstack/qa-reports/consistency-20261031/issue-008-search-mobile-before.png)、[issue-008-search-mobile-after.png](.gstack/qa-reports/consistency-20261031/issue-008-search-mobile-after.png)、[issue-008-search-desktop.json](.gstack/qa-reports/consistency-20261031/issue-008-search-desktop.json)、[issue-008-search-mobile-after.json](.gstack/qa-reports/consistency-20261031/issue-008-search-mobile-after.json)。
+
+#### P1 I03：iPhone橫向瀏海及固定頁首遮住操作
+
+- 網址／尺寸：[/](https://sakura-demo-vanlantech.com/)；iPhone 16 Pro / iOS 26.5 Safari landscape。
+- 實際：品牌系列英文與右側到府丈量／線上客服被右側Dynamic Island遮住，設計案例按鈕上半亦在固定頁首後方；旋轉回直向再轉橫向仍重現
+- 預期：橫向手機選單文字及服務按鈕避開Dynamic Island，所有按鈕完整可見
+- 重現：iPhone16Pro／iOS26.5模擬器Safari開啟首頁 → 轉橫向，展開品牌系列選單並檢查右側服務鈕 → 轉回直向再轉橫向複驗。
+- 影響範圍：首頁實際重現；共用頁首及浮動服務列可能影響其他頁，此部分為共用範圍推論，未逐頁Safari橫向實測。
+- 判定限制：模擬器而非實體裝置；未量測該次Safari實際CSS viewport，不能以裝置像素代替。
+- 證據：[issue-003-iphone-landscape-notch-menu.png](.gstack/qa-reports/consistency-20261031/issue-003-iphone-landscape-notch-menu.png)、[issue-003-iphone-landscape-notch-services.png](.gstack/qa-reports/consistency-20261031/issue-003-iphone-landscape-notch-services.png)、[issue-003-iphone-landscape-repeat.png](.gstack/qa-reports/consistency-20261031/issue-003-iphone-landscape-repeat.png)。
+
+#### P2 I01：正式產品圖片來源失效
+
+- 網址／尺寸：[/products/sakura/all?page=13](https://sakura-demo-vanlantech.com/products/sakura/all?page=13)、[/products/sakura/all?page=21](https://sakura-demo-vanlantech.com/products/sakura/all?page=21)；390×844、1440×844。全部受影響網址見該缺陷JSON。
+- 實際：30個圖片來源在115個實際網址狀態顯示明確圖片載入失敗提示，涉及分類、產品詳情／縮圖及相關產品；重新載入或跨尺寸複驗可重現。
+- 預期：分類、詳情、縮圖及相關產品使用的公開圖片正常顯示；失敗時保留完整錯誤提示。
+- 重現：開啟asset-failures.json任一受影響網址 → 正常捲至產品圖片或選擇其圖庫項目 → 等待失敗提示出現，再重新載入或以另一尺寸複驗。
+- 影響範圍：共同圖片來源失效；各來源的精確網址、量測紀錄與尺寸見asset-failures.json。分類與詳情錯誤文案另列I05，不重複計為新來源。
+- 判定限制：只依瀏覽器公開錯誤訊息確認；未測來源HTTP狀態、伺服器日誌或資料庫根因。
+- 證據：[issue-001-svago-category-image.png](.gstack/qa-reports/consistency-20261031/issue-001-svago-category-image.png)、[issue-001-faucet-detail-mobile.png](.gstack/qa-reports/consistency-20261031/issue-001-faucet-detail-mobile.png)、[asset-failures.json](.gstack/qa-reports/consistency-20261031/asset-failures.json)、[product-gallery-checks.json](.gstack/qa-reports/consistency-20261031/product-gallery-checks.json)。
+
+#### P2 I09：建商短視窗左欄未貼底固定
+
+- 網址／尺寸：[/builders](https://sakura-demo-vanlantech.com/builders)；820×600、1024×500。
+- 實際：短視窗左欄data-strengths-overflow=true，computed position=static；1024×500從scrollY1778.5捲至2378.5，左欄底由538.125變成-61.875，右欄仍延伸到465.383，左欄已整組離開畫面。820×600亦重現右欄有圖但左欄空白。
+- 預期：左欄完整讀到底後應貼底固定，右欄繼續捲動；不得裁字，手機保持單欄。
+- 重現：1024×500開啟/builders → 捲至OUR STRENGTHS區塊 → 繼續向下捲約600px → 比較左欄已離開畫面、右欄仍顯示第三項內容。
+- 影響範圍：建商智能整合區，768px以上且左欄高度超出可用視窗時；正常高度及手機單欄另驗，非全部尺寸皆故障。
+- 證據：[issue-009-builders-1024x500-repeat-0.png](.gstack/qa-reports/consistency-20261031/issue-009-builders-1024x500-repeat-0.png)、[issue-009-builders-1024x500-repeat-6.png](.gstack/qa-reports/consistency-20261031/issue-009-builders-1024x500-repeat-6.png)、[builders-sticky-820x600-2.png](.gstack/qa-reports/consistency-20261031/builders-sticky-820x600-2.png)、[issue-009-builders-1024x500-repeat.json](.gstack/qa-reports/consistency-20261031/issue-009-builders-1024x500-repeat.json)、[builders-sticky-820x600.json](.gstack/qa-reports/consistency-20261031/builders-sticky-820x600.json)、[builders-sticky-820x844-normal.json](.gstack/qa-reports/consistency-20261031/builders-sticky-820x844-normal.json)。
+
+#### P2 I06：共用選單鍵盤焦點逃逸／關閉未還原
+
+- 網址／尺寸：[/](https://sakura-demo-vanlantech.com/)、[/design-inspiration/d60e24e3-9568-4613-89b8-931007f21e47?style=%E8%BC%95%E5%A5%A2%E9%A2%A8&page=2](https://sakura-demo-vanlantech.com/design-inspiration/d60e24e3-9568-4613-89b8-931007f21e47?style=%E8%BC%95%E5%A5%A2%E9%A2%A8&page=2)、[/products/sakura/item/80794](https://sakura-demo-vanlantech.com/products/sakura/item/80794)；390×844、1440×844。
+- 實際：手機全螢幕選單開啟後，第9次Tab可進入被遮住的背景連結，Escape關閉後焦點未回觸發鈕。桌面七個群組以Enter展開、Escape關閉，轉場完成後焦點落到BODY，首頁及產品頁重現。
+- 預期：手機開啟覆蓋式選單時焦點留在可見選單內；手機／桌面關閉下拉後回到原觸發按鈕。
+- 重現：手機390px：Enter開啟選單，各群組保持收合，Tab九次，檢查焦點；Escape後再檢查 → 桌面1440px：Enter開啟任一主導覽群組，Tab進首個子連結，Escape關閉 → 等轉場完成，檢查焦點未回觸發鈕而落至BODY。
+- 影響範圍：共用導覽焦點管理；手機為焦點逃逸及還原問題，桌面為關閉後未還原；不代表桌面永久聚焦隱藏連結。
+- 證據：[mobile-menu-keyboard-focus.png](.gstack/qa-reports/consistency-20261031/mobile-menu-keyboard-focus.png)、[issue-006-menu-focus-home-repeat.png](.gstack/qa-reports/consistency-20261031/issue-006-menu-focus-home-repeat.png)、[desktop-menu-focus-repeat.png](.gstack/qa-reports/consistency-20261031/desktop-menu-focus-repeat.png)、[mobile-menu-keyboard-focus.json](.gstack/qa-reports/consistency-20261031/mobile-menu-keyboard-focus.json)、[issue-006-menu-focus-home-repeat.json](.gstack/qa-reports/consistency-20261031/issue-006-menu-focus-home-repeat.json)、[desktop-menu-keyboard.json](.gstack/qa-reports/consistency-20261031/desktop-menu-keyboard.json)、[desktop-menu-focus-settled.json](.gstack/qa-reports/consistency-20261031/desktop-menu-focus-settled.json)、[desktop-menu-focus-product-repeat.json](.gstack/qa-reports/consistency-20261031/desktop-menu-focus-product-repeat.json)。
+
+#### P2 I02：兩個手機內頁橫幅未置中
+
+- 網址／尺寸：[/privacy](https://sakura-demo-vanlantech.com/privacy)、[/franchising/download](https://sakura-demo-vanlantech.com/franchising/download)；390×844。
+- 實際：隱私權及加盟下載頁的手機橫幅標題／麵包屑仍靠左；同類服務流程及廚房產品頁置中。長英文自然換行本身不是缺陷。
+- 預期：同類內頁橫幅標題與麵包屑置中，對照service-process及products/sakura
+- 重現：390px開啟隱私權或加盟下載頁 → 觀察橫幅標題與麵包屑 → 對照service-process及products/sakura的同類橫幅。
+- 影響範圍：兩個內頁橫幅；均另有十種尺寸紀錄，缺陷確認以手機390px為準。
+- 證據：[issue-002-download-hero-align.png](.gstack/qa-reports/consistency-20261031/issue-002-download-hero-align.png)、[issue-002-privacy-hero-align.png](.gstack/qa-reports/consistency-20261031/issue-002-privacy-hero-align.png)。
+
+#### P2 I07：Footer社群圖示可見下緣未對齊
+
+- 網址／尺寸：[/franchising/intro](https://sakura-demo-vanlantech.com/franchising/intro)、[/privacy](https://sakura-demo-vanlantech.com/privacy)；390×844。
+- 實際：數位展板可見下緣約比YouTube低6 CSS px。容器已縮為31.5px／36px，但兩個PNG的透明留白不同，仍未對齊圖形下緣。
+- 預期：兩個社群圖示以可見圖形的下緣對齊，保留既定縮小10%的尺寸。
+- 重現：390px開啟任一受影響頁面 → 正常捲到Footer → 比較數位展板手形最下緣與YouTube白底最下緣。
+- 影響範圍：共用SiteFooter手機版；390px兩頁實測確認，其他尺寸未做可見圖形像素對齊量測。
+- 證據：[issue-007-footer-social-franchise.png](.gstack/qa-reports/consistency-20261031/issue-007-footer-social-franchise.png)、[issue-007-footer-social-privacy.png](.gstack/qa-reports/consistency-20261031/issue-007-footer-social-privacy.png)、[footer-social-source-alpha.json](.gstack/qa-reports/consistency-20261031/footer-social-source-alpha.json)、[footer-social-live-pixels.json](.gstack/qa-reports/consistency-20261031/footer-social-live-pixels.json)、[issue-007-footer-social-privacy.json](.gstack/qa-reports/consistency-20261031/issue-007-footer-social-privacy.json)。
+
+#### P3 I04：品牌系列選單仍有過時提示
+
+- 網址／尺寸：[/](https://sakura-demo-vanlantech.com/)、[/home-style/basic-plus](https://sakura-demo-vanlantech.com/home-style/basic-plus)；1440×844。
+- 實際：選單仍寫「目前開放 AI Kitchen」，但十個系列都有入口且非AI Premium實際可進入；Safari橫向及Chromium 1440皆重現
+- 預期：導覽說明與實際十個已開放系列一致
+- 重現：1440px或iPad橫向開啟設計案例下拉 → 閱讀品牌系列提示文字 → 點Premium等非AI系列並確認正常進入。
+- 影響範圍：共用桌面／iPad橫向選單提示；十系列均有已發布頁面。
+- 證據：[issue-004-series-open-copy.png](.gstack/qa-reports/consistency-20261031/issue-004-series-open-copy.png)、[safari-ipad-menu-landscape.png](.gstack/qa-reports/consistency-20261031/safari-ipad-menu-landscape.png)、[safari-ipad-premium-navigation.png](.gstack/qa-reports/consistency-20261031/safari-ipad-premium-navigation.png)。
+
+#### P3 I05：詳情圖片失敗沿用分類文案
+
+- 網址／尺寸：[/products/sakura/item/80906](https://sakura-demo-vanlantech.com/products/sakura/item/80906)、[/products/svago/item/82482](https://sakura-demo-vanlantech.com/products/svago/item/82482)；390×844。
+- 實際：商品詳情主圖與縮圖沿用「商品分類圖片載入失敗」文案。
+- 預期：詳情圖庫使用「商品圖片載入失敗」等符合當前情境的訊息，保留完整錯誤來源。
+- 重現：開啟受影響的產品詳情 → 等待來源圖片載入失敗 → 檢查主圖錯誤標題，並與分類頁訊息比對。
+- 影響範圍：共用圖片錯誤元件，已在SAKURA與SVAGO詳情觀察；不是新的圖片來源故障。
+- 證據：[issue-001-faucet-detail-mobile.png](.gstack/qa-reports/consistency-20261031/issue-001-faucet-detail-mobile.png)、[asset-failures.json](.gstack/qa-reports/consistency-20261031/asset-failures.json)。
+
+### 已驗操作與刻意例外
+
+| 項目 | 實測結果與範圍 |
+| --- | --- |
+| 商品列表分頁 | SAKURA63頁／749筆；SVAGO5頁／60筆；TEKA4頁／38筆，全分頁收齊；首末頁及Back/Forward/Reload互動；[證據](.gstack/qa-reports/consistency-20261031/sakura-list-pagination.json) |
+| 分類→系列→產品 | 除油煙機八個系列逐一進入正確列表並返回分類；[證據](.gstack/qa-reports/consistency-20261031/category-series-navigation.json) |
+| 商品價格 | 459個有可比價格的商品，卡片起價與詳情最低價無差異；[證據](.gstack/qa-reports/consistency-20261031/price-consistency-checks.json) |
+| 商品圖庫／案例圖庫 | 336個多圖商品／878張，28個案例／159張，首尾循環確認；[證據](.gstack/qa-reports/consistency-20261031/product-gallery-checks.json) |
+| 十品牌系列內容 | 十系列37個內容頁籤及79張套系圖片循環，Country於進場穩定後重驗正常；[證據](.gstack/qa-reports/consistency-20261031/series-control-checks.json) |
+| 首頁輪播 | Hero十項正常自動輪播回首；十系列卡片循環與鍵盤左右；三組設計案例箭頭及自動循環；[證據](.gstack/qa-reports/consistency-20261031/home-hero-observation.json) |
+| AI首屏 | CABINET／FAUCET／LIGHT三項正常自動輪播，圖文對應，三層白字；[證據](.gstack/qa-reports/consistency-20261031/ai-hero-auto-observation.json) |
+| 導覽觸控與鍵盤 | 手機品牌系列展開、十入口、overview移除正常；iPad單擊展開正常；手機／桌面焦點管理I06失敗；[證據](.gstack/qa-reports/consistency-20261031/mobile-menu-series-metrics.json) |
+| 搜尋 | 頁首全站搜尋I08失敗；商品列表R7600正確1項、無匹配詞正確0項提示；[證據](.gstack/qa-reports/consistency-20261031/issue-008-search-mobile-after.json) |
+| 篩選與空狀態 | 設計靈感6形式＋7風格＋零結果組合＋重設；門市五區＋22城市＋重設；案例六區＋22城市；消息三分類；[證據](.gstack/qa-reports/consistency-20261031/case-filter-checks.json) |
+| FAQ與保養 | 服務15、品牌優勢12、加盟4題全部展開收合；保養3類14題選擇正確；[證據](.gstack/qa-reports/consistency-20261031/faq-service-process.json) |
+| 燈箱／影片 | 產品規格dialog390×844內完整，Escape焦點返回；首頁品牌影片inline YouTube載入、未超出視窗；[證據](.gstack/qa-reports/consistency-20261031/product-spec-dialog-mobile.json) |
+| 表單 | 加盟、建商空欄位驗證及焦點，未送出任何業務資料；[證據](.gstack/qa-reports/consistency-20261031/franchise-empty-validation.json) |
+| Footer與捲動 | 桌面及手機Logo真實由下往上顯示；sitemap20連結展開收合／返回頂端；加盟雙排38s/34s循環及焦點暫停恢復正常；[證據](.gstack/qa-reports/consistency-20261031/footer-desktop-reveal.json) |
+| 型錄下載 | 13個同源下載端點：12個跨Chrome/IAB重現502；kitchenware-2026原生下載14.8MB完成；[證據](.gstack/qa-reports/consistency-20261031/download-link-index-normalized.json) |
+| Safari與200% | iPhone／iPad模擬器觸控、旋轉；Mac Safari原生200%首頁及建商逐段捲動，已還原100%；[證據](.gstack/qa-reports/consistency-20261031/safari-desktop-200-percent-ui.json) |
+
+加盟夥伴小標靠左、AI首屏三層白字、手機金底白字三按鈕服務列均為已指定差異，不列缺陷。長英文允許自然換行，不強迫縮小為一行；保養FAQ是選擇式內容，不把點選後不收合誤判故障。建商正常高度到父區塊末端解除sticky屬正常邊界，I09只記錄短視窗失去固定的可重現情況。
+
+### 逐模板覆蓋表
+
+下表數量包含不同query狀態。每個實際網址的兩尺寸紀錄、截圖與局部／共用問題ID見逐頁CSV；「已量測」不是所有操作通過。全站共用I06／I07／I08另計，表中列單頁已確認問題。
+
+| 模板 | 動態 | 網址狀態 | 390px | 1440px | 額外十尺寸代表數 | 局部缺陷 |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| `/` | 否 | 1 | 1 | 1 | 1 | I03, I04, I06 |
+| `/about/advantage` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/about/exhibition` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/about/introduce` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/builders` | 否 | 1 | 1 | 1 | 1 | I08, I09 |
+| `/builders/catalogues` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/builders/sakura-kitchen` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/catalogues/catalog` | 否 | 1 | 1 | 1 | 1 | I10 |
+| `/catalogues/kitchenware-catalog` | 否 | 11 | 11 | 11 | 1 | I10 |
+| `/design-inspiration` | 否 | 11 | 11 | 11 | 1 | 未另確認 |
+| `/franchising/download` | 否 | 1 | 1 | 1 | 1 | I02 |
+| `/franchising/form` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/franchising/intro` | 否 | 1 | 1 | 1 | 1 | I07 |
+| `/gallery` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/knowledge` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/knowledge/design/systemcabinet` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/news` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/news/activities` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/news/latest` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/news/video` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/privacy` | 否 | 1 | 1 | 1 | 1 | I02, I07 |
+| `/products/sakura/range-hood` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/products/sakura/range-hood/near-suction` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/service-process` | 否 | 1 | 1 | 1 | 1 | 未另確認 |
+| `/design-inspiration/[id]` | 是 | 49 | 49 | 49 | 1 | I06 |
+| `/gallery/[slug]` | 是 | 15 | 15 | 15 | 1 | 未另確認 |
+| `/home-style/[slug]` | 是 | 10 | 10 | 10 | 10 | I04 |
+| `/knowledge/design/[slug]` | 是 | 2 | 2 | 2 | 1 | 未另確認 |
+| `/news/activities/[slug]` | 是 | 3 | 3 | 3 | 1 | 未另確認 |
+| `/news/latest/[slug]` | 是 | 3 | 3 | 3 | 1 | 未另確認 |
+| `/news/video/[slug]` | 是 | 3 | 3 | 3 | 1 | 未另確認 |
+| `/products/[brand]` | 是 | 3 | 3 | 3 | 3 | 未另確認 |
+| `/products/[brand]/all` | 是 | 75 | 75 | 75 | 1 | I01 |
+| `/products/[brand]/category/[category]` | 是 | 357 | 357 | 357 | 4 | I01 |
+| `/products/[brand]/item/[id]` | 是 | 2325 | 2325 | 2325 | 3 | I01, I05, I06, I08 |
+| `/products/sakura/range-hood/near-suction/[product]` | 是 | 7 | 7 | 7 | 1 | 未另確認 |
+
+舊除油煙機路徑已獨立列入清單，瀏覽器最終網址保持所請求路徑；未觀察到跨路徑導向，不據此斷言HTTP301／302狀態。全部核心紀錄的實際URL均與要求的path＋query吻合，引用截圖檔無缺漏。
+
+### 待確認內容、短暫錯誤及排除紀錄
+
+- C01：型錄名稱「櫻花整廚廚房配備型錄」疑似重字 [candidate-catalogue-copy.png](.gstack/qa-reports/consistency-20261031/candidate-catalogue-copy.png)。
+- C02：847個商品中唯一無圖片；名稱鋁方管活動推車+B59，但特色描述中島吊掛架／LED，且無附件／詳細規格。需內容負責人核對原始資料。 [candidate-product-82470.json](.gstack/qa-reports/consistency-20261031/candidate-product-82470.json)、[candidate-product-82470.png](.gstack/qa-reports/consistency-20261031/candidate-product-82470.png)。
+- C03：唯一成功配備型錄原生下載顯示UUID檔名；未有檔名規範，僅供內容／服務負責人確認。 [catalogue-kitchenware-download-success.json](.gstack/qa-reports/consistency-20261031/catalogue-kitchenware-download-success.json)、[catalogue-kitchenware-download-success.png](.gstack/qa-reports/consistency-20261031/catalogue-kitchenware-download-success.png)。
+
+兩個列表曾短暫顯示一般服務錯誤（SVAGO83005、SAKURA83405），重驗正常，保留原始錯誤與重驗證據，不宣稱已修復或推定資料庫問題。圖片失敗只依公開role=alert訊息納入I01；lazy圖片尚未載入不算故障。分類／篩選URL先變但資料仍在loading的瞬間、正常進場位移中的快速點擊、Chrome對成功PDF直接導覽的ERR_BLOCKED_BY_CLIENT均未誤列缺陷。排除原因與替代證據見[excluded-attempts.json](.gstack/qa-reports/consistency-20261031/excluded-attempts.json)。
+
+### 尚未驗證與交付限制
+
+- **實體iPhone／iPad、Firefox未驗**；Safari模擬器不能等同實體裝置。iPhone橫向那次沒有取得CSS viewport，報告只標設備與方向。
+- Mac Safari真正200%只驗首頁與建商頁；其餘模板200%尚未逐一驗。專用窗約1510邏輯寬，200%內容CSS寬約755，未誤標為1440px測試。已還原100%並關閉專用視窗。
+- 素材失效的115個網址狀態都有390／1440核心覆蓋；額外十尺寸涵蓋模板、十系列及代表問題頁，並非所有素材故障query都各跑十組。
+- 外部網站只核對公開入口／目的地；790個外部PDF未逐檔下載或讀內容。13個本網站型錄端點則全部實測並跨瀏覽器複驗。
+- 表單只驗排版、標籤、空欄位驗證與焦點，沒有送出詢問、留言、預約；成功提交、寄信、CRM與資料庫寫入未驗。門市「我的位置」未觸發，未索取位置權限。
+- 外部YouTube內嵌控制受自動化座標限制，未完整驗播放器所有按鍵；已確認inline載入及離頁停止。
+- 已驗已操作連結、公開DOM錯誤及實際最終URL；未完整攔截全站每頁console／network，不能宣稱全站console error0或所有外部連結有效。下載502、圖片失敗均未取得伺服器日誌，未推論後端／上游／資料庫根因。
+- 本輪沒有完整效能／所有外部連結測試，因此不產生容易誤導的全站健康總分。
+
+檢查完成的是上述逐頁量測與有範圍的互動驗證，仍有10類確認缺陷及明列未驗項目。建議後續以問題ID逐項修復與重驗，優先P1；不要再用單頁建置成功或只有DOM邊界通過作為整站驗收。
+
+最後核對：36模板、52組額外尺寸代表、73個README證據連結皆有對應檔案；JSON可解析，截圖引用無缺漏，文字證據未含預覽密碼。`git diff --check`通過，追蹤檔只變更README。
+
+專用IAB與Chrome驗收分頁已關閉、viewport已還原；使用者原有分頁保留，未重開已關閉的模擬器。正式站與資料庫均未寫入。完整檔案索引見[manifest.json](.gstack/qa-reports/consistency-20261031/manifest.json)。
+
 ## 2026-10-31 手機SAKURA KITCHEN圖片至探索系列間距縮短
 
 - 依凌晨3.26.24截圖，正式320／390／430／767px的內容圖片底至EXPLORE OUR COLLECTIONS小標為158px，來自品牌優勢底部80px加系列頂部78px。本次僅max-width:767px將兩者各改24px，總距離48px；保留圖片2.2:1、CTA位置、系列標籤至標題間距、圖文、動畫、768px以上版面及CMS／資料庫資料。修前八寬度基準/tmp/sakura-series-gap-before.json。

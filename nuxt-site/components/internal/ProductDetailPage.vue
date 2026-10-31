@@ -171,6 +171,10 @@ useSeoMeta({
               <InternalProductCategoryImage :src="image" :alt="`${product.model} 縮圖 ${index + 1}`" />
             </button>
           </div>
+          <NuxtLink :to="{ path: listPath, query: returnQuery }" class="mt-8 inline-flex items-center gap-2 rounded-full border border-[#caa05c] px-6 py-3">
+            <ArrowLeft class="h-4 w-4" aria-hidden="true" />
+            <span>返回商品列表</span>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -217,7 +221,8 @@ useSeoMeta({
         <div v-reveal="{ anim: 'opalMoveRight' }" class="product-catalogue__copy">
           <InternalSectionPill>{{ info.name }} Product Catalogue</InternalSectionPill>
           <h2 id="product-catalogue-title">
-            <span>Kitchen <em>Product</em> Catalogue</span>
+            <span class="product-catalogue__chinese">廚房商品型錄</span>
+            <span>Kitchen <em>Product<br>Catalogues</em></span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta product-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -245,7 +250,6 @@ useSeoMeta({
       </div>
     </section>
 
-    <div class="px-6 pb-12 text-center"><NuxtLink :to="{ path: listPath, query: returnQuery }" class="inline-block rounded-full border border-[#caa05c] px-8 py-3">返回商品列表</NuxtLink></div>
     <dialog
       ref="specificationsDialog"
       class="product-specifications-dialog"
@@ -390,10 +394,11 @@ useSeoMeta({
 .product-catalogue__grid { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); align-items: center; gap: 70px; }
 .product-catalogue__copy h2 em { color: #caa05c; font-style: normal; }
 .product-catalogue__copy h2 { display: flex; margin: 27px 0 38px; color: #1c1c1d; flex-direction: column; font-weight: 500; }
-.product-catalogue__copy h2 span { font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 64px; }
-.product-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid #1c1c1d; border-radius: 999px; padding: 9px 9px 9px 30px; color: #fff; background: #1c1c1d; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
+.product-catalogue__copy h2 span { font-family: var(--font-display); font-size: 50px; font-weight: 400; line-height: 1.1; }
+.product-catalogue__copy h2 .product-catalogue__chinese { margin-bottom: 8px; color: #caa05c; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.2; }
+.product-catalogue__cta { display: inline-flex; height: 60px; align-items: center; gap: 8px; border: 1px solid rgb(159 159 164 / 64%); border-radius: 999px; padding: 9px 9px 9px 30px; color: #1c1c1d; background: transparent; transition: color .3s ease, border-color .3s ease, background-color .3s ease, transform .3s ease; }
 .product-catalogue__cta:hover,
-.product-catalogue__cta:focus-visible { border-color: #caa05c; background: #caa05c; transform: translateY(-2px); }
+.product-catalogue__cta:focus-visible { border-color: #caa05c; color: #fff; background: #caa05c; transform: translateY(-2px); }
 .product-catalogue__cta:focus-visible { outline: 2px solid #caa05c; outline-offset: 4px; }
 .product-catalogue__cta > span:first-child { white-space: nowrap; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 22px; }
 .product-catalogue__cta .site-cta-icon { position: relative; isolation: isolate; display: flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
@@ -443,7 +448,8 @@ useSeoMeta({
   .related-products,
   .product-catalogue { padding-block: 96px; }
   .related-products__heading h2 strong { font-size: 38px; line-height: 45px; }
-  .product-catalogue__copy h2 span { font-size: clamp(43px, 5.5vw, 50px); line-height: 55px; }
+  .product-catalogue__copy h2 span { font-size: 42px; }
+  .product-catalogue__copy h2 .product-catalogue__chinese { font-size: 32px; }
   .related-products__grid > li { flex-basis: 50%; }
   .product-catalogue__grid { gap: 42px; }
 }
@@ -469,8 +475,9 @@ useSeoMeta({
   .related-product-card__copy strong { min-height: 0; }
   .product-catalogue { padding: 74px 15px 82px; }
   .product-catalogue__grid { grid-template-columns: 1fr; }
-  .product-catalogue__copy h2 { margin-block: 22px 30px; }
-  .product-catalogue__copy h2 span { font-size: 43px; line-height: 48px; }
+  .product-catalogue__copy h2 { margin-block: 24px 30px; }
+  .product-catalogue__copy h2 span { font-size: 30px; }
+  .product-catalogue__copy h2 .product-catalogue__chinese { font-size: 28px; }
   .product-catalogue__cards { gap: 16px; }
   .product-catalogue-card__cover { border-radius: 18px; }
   .product-catalogue-card h3 { font-size: 18px; line-height: 23px; }
