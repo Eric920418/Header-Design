@@ -16,6 +16,33 @@ const reducedMotion = useReducedMotion()
 let historyTimer: ReturnType<typeof setInterval> | undefined
 let historyResetIndex = 0
 const activeValueId = ref<(typeof brandValues)[number]['id']>('service')
+const valuesSection = ref<HTMLElement | null>(null)
+const valuesStage = ref<HTMLElement | null>(null)
+const mobileValues = ref(false)
+const valuesProgress = ref(0)
+let valuesFrame = 0
+
+function updateValuesProgress() {
+  valuesFrame = 0
+  mobileValues.value = window.matchMedia('(max-width: 767px)').matches
+  const section = valuesSection.value
+  const stage = valuesStage.value
+  if (!mobileValues.value || !section || !stage || !brandValues.length) return
+  const top = parseFloat(getComputedStyle(stage).top) || 0
+  const range = Math.max(1, section.offsetHeight - stage.offsetHeight)
+  const progress = Math.max(0, Math.min(1, (top - section.getBoundingClientRect().top) / range))
+  valuesProgress.value = progress
+  activeValueId.value = brandValues[Math.min(brandValues.length - 1, Math.floor(progress * brandValues.length))]!.id
+}
+
+function scheduleValuesProgress() {
+  if (!valuesFrame) valuesFrame = requestAnimationFrame(updateValuesProgress)
+}
+
+const valuesStyle = computed(() => ({
+  '--value-count': brandValues.length,
+  '--value-image-shift': `${reducedMotion.value ? 0 : (valuesProgress.value - .5) * 24}px`,
+}))
 const identityTrack = ref<HTMLElement | null>(null)
 const identityViewportRatio = ref(1)
 const identityScrollRatio = ref(0)
@@ -107,12 +134,18 @@ watch([historyEmblaApi, reducedMotion], ([api, isReduced]) => {
 
 onMounted(() => {
   nextTick(updateIdentityProgress)
+  nextTick(updateValuesProgress)
+  window.addEventListener('scroll', scheduleValuesProgress, { passive: true })
+  window.addEventListener('resize', scheduleValuesProgress, { passive: true })
   window.addEventListener('resize', updateIdentityProgress)
   window.addEventListener('keydown', handleIdentityKeyboard)
 })
 
 onBeforeUnmount(() => {
   if (historyTimer) clearInterval(historyTimer)
+  cancelAnimationFrame(valuesFrame)
+  window.removeEventListener('scroll', scheduleValuesProgress)
+  window.removeEventListener('resize', scheduleValuesProgress)
   window.removeEventListener('resize', updateIdentityProgress)
   window.removeEventListener('keydown', handleIdentityKeyboard)
 })
@@ -211,10 +244,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
     </section>
 
-    <section class="about-values elementor-widget-antra-banner-process" aria-labelledby="about-values-title">
+    <section ref="valuesSection" class="about-values elementor-widget-antra-banner-process" :style="valuesStyle" aria-labelledby="about-values-title">
       <h2 id="about-values-title" class="sr-only">{{ cmsCopy.copy.text5 }}</h2>
       <div data-ev="opalScaleUp">
-        <div class="about-values__stage">
+        <div ref="valuesStage" class="about-values__stage">
           <div class="about-values__image-list" aria-hidden="true">
             <InternalBrandImage
               v-for="value in brandValues"
@@ -232,17 +265,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               :key="value.id"
               class="about-values__card elementor-banner-process-item"
               :class="{ 'is-active': activeValueId === value.id }"
-              tabindex="0"
-              @mouseenter="activeValueId = value.id"
-              @focus="activeValueId = value.id"
-              @click="activeValueId = value.id"
+              :tabindex="mobileValues ? -1 : 0"
+              :aria-hidden="mobileValues && activeValueId !== value.id ? true : undefined"
+              @mouseenter="!mobileValues && (activeValueId = value.id)"
+              @focus="!mobileValues && (activeValueId = value.id)"
+              @click="!mobileValues && (activeValueId = value.id)"
             >
-              <InternalBrandImage
-                :src="value.image"
-                :alt="value.title.replace('\n', ' ')"
-                class="about-values__mobile-image"
-                aria-hidden="true"
-              />
               <div class="about-values__copy banner-process-caption">
                 <span class="number">{{ String(index + 1).padStart(2, '0') }}</span>
                 <span class="about-values__eyebrow">{{ value.eyebrow }}</span>
@@ -365,7 +393,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .about-values__shade { z-index: 1; background: linear-gradient(180deg, rgb(185 183 174 / 0%) 0%, rgb(134 132 126 / 54%) 19.25%, rgb(0 0 0 / 64%) 64%); pointer-events: none; }
 .about-values__columns { z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .about-values__card { position: relative; min-width: 0; overflow: hidden; border-right: 1px solid rgb(255 255 255 / 24%); color: #fff; cursor: pointer; outline-offset: -3px; }
-.about-values__mobile-image { display: none; }
 .about-values__copy { position: absolute; inset-inline: 0; bottom: 0; padding: 0 27px 57px 57px; transition: transform .5s ease; transform: translateY(68px); }
 .about-values__card.is-active .about-values__copy,
 .about-values__card:hover .about-values__copy,
@@ -478,6 +505,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (max-width: 767px) {
+  /* hidden creates a scroll container and prevents the values stage from sticking. */
+  .about-us-page { overflow: clip; }
   .about-services { padding: 60px 15px 65px; }
   .about-services__heading,
   .about-identity__heading { display: block; margin-bottom: 30px; text-align: center; }
@@ -506,21 +535,20 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-history__nav { top: 75px; width: 42px; height: 42px; }
   .about-history__nav--previous { left: -8px; }
   .about-history__nav--next { right: -8px; }
-  .about-values__stage { min-height: 0; }
-  .about-values__image-list,
-  .about-values__shade { display: none; }
-  .about-values__columns { position: relative; inset: auto; display: block; }
-  .about-values__card { display: flex; min-height: max(320px, calc(100svh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); align-items: center; justify-content: center; padding: 40px 20px; border: 0; cursor: default; }
-  .about-values__card .about-values__mobile-image { position: absolute; inset: 0; z-index: 0; display: block; width: 100%; height: 100%; }
-  .about-values__card::after { position: absolute; inset: 0; z-index: 1; background: rgb(0 0 0 / 40%); content: ''; pointer-events: none; }
-  .about-values__copy { position: relative; inset: auto; z-index: 2; width: 100%; padding: 0; text-align: center; transform: none; transition: none; }
-  .about-values__copy .number,
-  .about-values__copy p.is-empty,
-  .about-values__card:not(:first-child) .about-values__eyebrow,
-  .about-values__card:first-child .banner-process-content { display: none; }
-  .about-values__eyebrow { margin-bottom: 12px; color: #fff; font-family: var(--font-cjk-serif); font-size: 20px; font-style: italic; line-height: 30px; letter-spacing: normal; text-transform: none; }
-  .about-values__copy h3 { width: 100%; min-height: 0; padding: 0; font-size: clamp(24px, 7.7vw, 30px); font-weight: 600; line-height: 1.5; letter-spacing: .15em; white-space: normal; text-wrap: balance; }
-  .about-values__copy p { width: 100%; min-height: 0; margin-top: 24px; font-size: 15px; line-height: 1.5; opacity: 1; visibility: visible; }
+  .about-values { --value-frame-height: max(180px, calc(100svh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); height: calc(var(--value-frame-height) * var(--value-count)); }
+  .about-values > div[data-ev] { height: 100%; }
+  .about-values__stage { position: sticky; top: var(--site-header-height); height: var(--value-frame-height); min-height: 0; }
+  .about-values__image { transform: translateY(clamp(calc(var(--value-frame-height) * -.025), var(--value-image-shift), calc(var(--value-frame-height) * .025))) scale(1.06); transition: opacity .45s ease; }
+  .about-values__image.is-active { transform: translateY(clamp(calc(var(--value-frame-height) * -.025), var(--value-image-shift), calc(var(--value-frame-height) * .025))) scale(1.06); }
+  .about-values__shade { background: rgb(0 0 0 / 40%); }
+  .about-values__columns { display: block; }
+  .about-values__card { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: clamp(12px, 4svh, 40px) 20px; border: 0; cursor: default; opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(20px); transition: opacity .35s ease, transform .45s ease, visibility 0s .45s; }
+  .about-values__card.is-active { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
+  .about-values__copy { position: relative; inset: auto; width: 100%; padding: 0; text-align: center; transform: none; }
+  .about-values__copy .number { font-size: clamp(20px, 3.8svh, 30px); line-height: 1.15; color: #caa05c; opacity: 1; }
+  .about-values__copy h3 { width: 100%; min-height: 0; padding: 8px 0 12px; font-size: clamp(20px, 4svh, 30px); line-height: 1.35; white-space: normal; text-wrap: balance; }
+  .about-values__copy p { width: 100%; min-height: 0; font-size: clamp(12px, 2svh, 15px); line-height: 1.5; opacity: 1; visibility: visible; }
+  .about-values__copy p.is-empty { display: none; }
   .about-identity { padding: 65px 15px 70px; }
   .about-identity__grid { gap: 14px; margin-right: -15px; padding-right: 15px; }
   .about-identity__card { flex-basis: min(76vw, 285px); }
@@ -536,6 +564,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-services__visual-image :deep(img),
   .about-history__nav,
   .about-history__viewport,
+  .about-values__card,
   .about-values__image,
   .about-values__copy,
   .about-values__copy p,
