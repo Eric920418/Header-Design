@@ -74,7 +74,7 @@ const idle={props:{id:'home'},docs:ref([{id:'home',revision:1}]),bodies:ref({hom
 let idleRequests=0
 idle.api=async()=>{idleRequests++;return{previewToken:'page-token',documents:[]}}
 idle.payload=action=>({action,documents:[{id:'home',revision:1,body:idle.bodies.value.home}]})
-runInNewContext(pageCode+'\nthis.open=showPreview;this.close=closePreview;this.check=checkPreview;this.savePage=save;',idle)
+runInNewContext(pageCode+'\nthis.open=showPreview;this.close=closePreview;this.check=checkPreview;this.savePage=save;this.fail=failPreview;this.receiveMessage=receive;',idle)
 idle.bodies.value.home.title='關閉時修改';await nextTick();assert.equal(idleRequests,0,'Closed preview must make no validation requests')
 idle.open();await nextTick();await new Promise(resolve=>setImmediate(resolve));assert.equal(idleRequests,1);assert.equal(idle.mobile.value,true);assert.equal(idle.initialToken.value,'page-token',idle.previewError.value)
 idle.close();assert.equal(idle.previewResult.value,null);assert.equal(idle.initialToken.value,'');assert.equal(idle.controller.signal.aborted,true)
@@ -83,6 +83,18 @@ await idle.check(false);assert.equal(idleRequests,2);assert.equal(idle.previewOp
 idle.api=async()=>({ok:true});await idle.savePage();assert.match(idle.error.value,/未回傳完整儲存結果/);assert.equal(idle.bodies.value.home.title,'關閉後繼續修改');assert.equal(idle.baseline.value.home.title,'原始內容')
 assert.match(pageSource,/<aside v-if="previewOpen"/)
 console.log('PASS: actual page editor is idle until preview is opened, defaults to phone on narrow screens, cancels on close, keeps confirmation separate, and retains input on malformed save responses')
+const lateMessages=[],lateFrame={postMessage:m=>lateMessages.push(m)}
+idle.previewFrame.value={contentWindow:lateFrame};idle.api=async()=>({previewToken:'late-ready',documents:[{id:'home',body:JSON.parse(JSON.stringify(idle.bodies.value.home))}]})
+idle.open();await nextTick();await new Promise(resolve=>setImmediate(resolve));idle.fail('官網畫面載入超過 20 秒')
+idle.receiveMessage({origin:idle.location.origin,source:idle.previewFrame.value.contentWindow,data:{type:'sakura:ready'}})
+assert.equal(lateMessages.length,1,'A late ready signal must recover the current validated snapshot')
+idle.receiveMessage({origin:idle.location.origin,source:idle.previewFrame.value.contentWindow,data:{type:'sakura:applied',previewToken:'late-ready'}})
+assert.equal(idle.previewError.value,'');assert.equal(idle.previewState.value,'目前輸入的效果・尚未更新官網')
+idle.fail('官網畫面載入超過 20 秒');idle.bodies.value.home.title='較新的尚未檢查輸入'
+idle.receiveMessage({origin:idle.location.origin,source:idle.previewFrame.value.contentWindow,data:{type:'sakura:ready'}})
+assert.equal(lateMessages.length,1,'A late frame must not claim an older snapshot represents newer input')
+idle.close();assert.match(pageSource,/v-if="previewResult&&initialToken" :href="previewUrl" target="_blank" rel="noopener noreferrer"/)
+console.log('PASS: late ready recovers only matching input; stalled embedded previews offer the protected standalone view')
 const adminSource=await readFile(new URL('../composables/useCmsAdmin.ts',import.meta.url),'utf8'),adminContext={useState:()=>ref(null),useRequestFetch:()=>async()=>({})}
 runInNewContext(ts.transpileModule(adminSource.replace('export function','function')+'\nthis.admin=useCmsAdmin();',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,adminContext)
 assert.match(adminContext.admin.message({message:'[POST] timeout',cause:{name:'TimeoutError'}}),/超過時間/)

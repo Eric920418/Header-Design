@@ -4324,3 +4324,4 @@ final result: passed
 - 正式首版742e3a71已發布至dpl_UAaHe4oQCv3LzU29TeHQXo2wPNLs，兩個正式網址均為READY／Production且同SHA；登入頁與首頁HTTP200，新編輯樣式已送達，官網未掛上後台layout。另統一網路中斷及逾時的中文提示，保留伺服器衝突原因與追蹤碼；此補強完成後一併發布。
 - 最終程式b9d18f55已發布至dpl_5RZG3PqvisA7EwAMPmDFDTMPMBX7，sakura-demo-vanlantech.com及header-design-two.vercel.app均確認READY／Production與相同SHA；兩站經正常提案驗證後登入頁、首頁皆HTTP200，新頁面編輯樣式存在，官網無後台layout。補強後typecheck、build及實際錯誤訊息／預覽狀態測試皆通過；[發布回查](.gstack/qa-reports/cms-page-editors-20261101/release.json)。正式後台尚待既有管理員登入，未宣稱完成正式登入後操作驗收。
 - 驗收清理完成：僅刪除本輪兩位本機測試帳號及其工作階段、預覽快照與測試操作紀錄，原Documents／Versions指紋仍一致；本輪3113服務及暫存測試密碼檔已移除。未刪除上傳素材，未修改正式帳號或內容；[清理檢查](.gstack/qa-reports/cms-page-editors-20261101/cleanup.json)。本段為完成紀錄，僅提交README，不為文件再次部署。
+- 管理員登入後複驗：正式四個設計案例入口、欄位搜尋直達與返回條件、首頁兩區塊輸入保留及修改數正確。效果框重現逾時：Chrome網路時間顯示文件請求停在連線「停滯」、尚未取得回應；同份受保護預覽另開頁面能呈現兩筆未儲存文字。不能據此認定是伺服器或某個擴充功能的根因。補強延遲ready只在快照與目前輸入相符時恢復確認，以及失敗時的「另開效果畫面」；不延長逾時、不關閉保護或修改瀏覽器代理設定。測試文字已還原，未儲存或更新正式內容；補強驗證與發布結果續記。
