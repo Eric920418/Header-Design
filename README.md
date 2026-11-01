@@ -5,7 +5,9 @@
 - pnpm build含typecheck及check-about-values-scroll.mjs通過；邊界測試執行實際頁面更新函式，涵蓋四階段、反向、短窗、桌面隔離與空資料。
 - 本機320／390／430／767×844、320×500、667×375及320×375共7種手機／短窗、28階段實際捲動：舞台固定於頁首下60px至服務列上緣、作用中文字及圖片索引一致、圖片載入且完整覆蓋舞台、文字不裁切、無水平溢位。390px另實際下捲0→1→2→3再回捲2→1→0，離開區塊後正常解除固定；背景位移依舞台高度限幅，避免極短窗露出黑邊。
 - 768／1024／1280／1920×844比對正式修前與本機的舞台、卡片、文案寬高／字級／行高及相對位置均無差異，點選切回第一張廚房圖正常。證據：.gstack/qa-reports/about-values-scroll-20261101/。
-- Safari模擬器本機HTTP登入後會因正式產物Secure Cookie無法持續登入；未降低登入安全性，Safari改於HTTPS正式版本回查。正式部署驗證待補記。歷史「獨立滿版展示」紀錄保留追溯，但已由本節需求取代。
+- 09adeaba已發布至dpl_24YyoXxfRPB5CRp9KBC69mYxsSeD，READY／Production；兩個正式網域分別inspect均指向同一commit。主網域7組手機／短窗共28階段正常，390px正反向0→1→2→3→2→1→0，背景與文字同步；768／1024／1280／1920px正式量測與修前基準一致。另一網域390px四階段複驗及重新整理回頂部狀態正常。
+- Safari模擬器ReviewTest／iOS26.5在HTTPS正式站，以原生鍵盤Space、Up／Down及Shift+Space實際捲動，四組圖文均可顯示、舞台固定，反向由04回到03正常；截圖保留於下列證據目錄。模擬器drag／wheel未能驅動網頁，故不宣稱觸控手勢驗收通過；未量測Safari實際CSS viewport，未驗證實體手機及本輪Safari橫向。先前本機HTTP的Secure Cookie登入限制未透過降低安全性繞過。
+- 正式證據：[四階段手機量測](.gstack/qa-reports/about-values-scroll-20261101/production-matrix.json)、[正反向捲動](.gstack/qa-reports/about-values-scroll-20261101/production-scroll.json)、[桌面回歸](.gstack/qa-reports/about-values-scroll-20261101/production-desktop.json)、[Safari範圍與限制](.gstack/qa-reports/about-values-scroll-20261101/safari-check.json)、[第一組畫面](.gstack/qa-reports/about-values-scroll-20261101/production-scroll-1.png)、[第二組畫面](.gstack/qa-reports/about-values-scroll-20261101/production-scroll-2.png)。本輪只驗收此區塊，不代表全站通過。歷史「獨立滿版展示」紀錄保留追溯，但已由本節需求取代。
 
 ## 2026-10-31 產品介紹頁型錄標題與CTA對齊參考
 
