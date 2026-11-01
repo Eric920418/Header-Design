@@ -2,7 +2,9 @@
 
 - 依IMG_2832.JPG修正/builders/sakura-kitchen品牌優勢圖片：手機原本以獨立Grid列將「立即預約」放在圖上方，現改為與圖片同格、水平及垂直置中，沿用桌面的白字深底按鈕；只有一個連結，目的地仍為/builders#appointment。767px以下修改，桌面維持原樣；圖片失敗時按鈕移至錯誤訊息下方，不遮住完整錯誤。
 - 全站來源同步盤點圖片CTA、預約入口及影片播放元件，找到此一手機Grid分離規則。25個實際頁面含首頁、兩個建商頁、十品牌系列、加盟、品牌館、服務流程、三案例詳情、三媒體影片及三指南入口，正常動畫捲至各圖片操作量測；圖內入口均保留在圖片範圍，播放鈕置中。案例卡「預約門市」維持與桌面相同左上角標籤；材料選擇、門市資訊與表單的獨立預約連結保留原用途。不是所有按鈕都適合搬上圖片，亦不以此輪代表全站每個網址與操作皆已驗收。
-- pnpm build含typecheck通過；本機320／390／430／767／768／1024／1280／1920×844與320×500／667×375共10組尺寸無水平溢位。6組手機／短窗按鈕水平、垂直中心與圖片差距小於0.1px，僅一個連結且白字深底；4組768px以上圖片、按鈕尺寸／顏色／定位／相對位置與修前一致。實際點擊中央按鈕抵達/builders#appointment且表單存在，未送出表單；正式部署及Safari回查待補記。證據：.gstack/qa-reports/photo-cta-20261101/。無CMS或資料庫寫入。
+- pnpm build含typecheck通過；本機320／390／430／767／768／1024／1280／1920×844與320×500／667×375共10組尺寸無水平溢位。6組手機／短窗按鈕水平、垂直中心與圖片差距小於0.1px，僅一個連結且白字深底；4組768px以上圖片、按鈕尺寸／顏色／定位／相對位置與修前一致。實際點擊中央按鈕抵達/builders#appointment且表單存在，未送出表單。證據：.gstack/qa-reports/photo-cta-20261101/。無CMS或資料庫寫入。
+- 1afe9d5e已發布至dpl_2ZqVNSvLYrvWWpLyyMAa8LKnr1T9；兩個正式網域分別inspect均READY／Production及同一commit。主網域10組尺寸與本機一致，另一網域390px亦圖片置中、單一入口及無溢位。25頁42處同類入口量測複核，原本圖外的手機預約按鈕已回圖內；此數量不包含全站所有列表分頁及產品網址。
+- iOS26.5 ReviewTest Safari模擬器實際觀察圖片內按鈕水平／垂直置中、上方無重複按鈕；原生單次點擊後抵達建商品牌館預約區塊。未送出表單；未驗證實體手機、本輪Safari橫向及圖片載入失敗的實際畫面（錯誤分支僅來源檢查）。[Safari修後](.gstack/qa-reports/photo-cta-20261101/safari-centered.png)、[Safari點擊目的地](.gstack/qa-reports/photo-cta-20261101/safari-appointment.png)、[正式十尺寸](.gstack/qa-reports/photo-cta-20261101/production.json)、[25頁相關入口](.gstack/qa-reports/photo-cta-20261101/related-photo-controls.json)、[部署](.gstack/qa-reports/photo-cta-20261101/deployment.json)。
 
 ## 2026-11-01 手機加盟雙排輪播 Safari 空白回查
 
