@@ -25,6 +25,13 @@ const [marketingViewport, marketingApi] = emblaCarouselVue({ align: 'start', loo
 const marketingSlides = computed(() => franchiseMarketingStories.length % 2 ? [...franchiseMarketingStories, ...franchiseMarketingStories] : franchiseMarketingStories)
 const marketingPaused = ref(false)
 const reducedMotion = useReducedMotion()
+const marqueeRoot = ref<HTMLElement | null>(null)
+const marqueeRatios = ref([0, 0])
+const updateMarqueeRatio = (image: EventTarget | null, index: number) => {
+  if (image instanceof HTMLImageElement && image.naturalWidth && image.naturalHeight) {
+    marqueeRatios.value[index] = image.naturalWidth / image.naturalHeight
+  }
+}
 let marketingTimer: ReturnType<typeof setInterval> | undefined
 const activeAdvantageGroup = ref(0)
 const advantageGroups = computed(() => Array.from(
@@ -75,6 +82,7 @@ const updateActiveAdvantage = () => {
 }
 
 onMounted(() => {
+  marqueeRoot.value?.querySelectorAll<HTMLImageElement>('.franchise-marquee__track > .franchise-image:first-child img').forEach(updateMarqueeRatio)
   updateActiveAdvantage()
   window.addEventListener('scroll', updateActiveAdvantage, { passive: true })
   window.addEventListener('resize', updateActiveAdvantage, { passive: true })
@@ -143,16 +151,16 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
         </div>
 
-        <div v-reveal="{ anim: 'opalScaleUp' }" class="franchise-marquees" tabindex="0" aria-label="SAKURA KITCHEN 加盟夥伴與品牌成果影像，聚焦時暫停移動">
-          <div class="franchise-marquee">
+        <div ref="marqueeRoot" v-reveal="{ anim: 'opalScaleUp' }" class="franchise-marquees" tabindex="0" aria-label="SAKURA KITCHEN 加盟夥伴與品牌成果影像，聚焦時暫停移動">
+          <div class="franchise-marquee" :style="{ '--marquee-image': marqueeRatios[0] ? `url(${JSON.stringify(cmsCopy.copy.field18)})` : 'none', '--marquee-ratio': marqueeRatios[0] }">
             <div class="franchise-marquee__track">
-              <InternalFranchiseImage :src="cmsCopy.copy.field18" :alt="cmsCopy.copy.field19" fit="contain" eager />
+              <InternalFranchiseImage :src="cmsCopy.copy.field18" :alt="cmsCopy.copy.field19" fit="contain" eager @load.capture="updateMarqueeRatio($event.target, 0)" />
               <InternalFranchiseImage :src="cmsCopy.copy.field20" :alt="cmsCopy.copy.field21" fit="contain" eager aria-hidden="true" />
             </div>
           </div>
-          <div class="franchise-marquee franchise-marquee--reverse">
+          <div class="franchise-marquee franchise-marquee--reverse" :style="{ '--marquee-image': marqueeRatios[1] ? `url(${JSON.stringify(cmsCopy.copy.field22)})` : 'none', '--marquee-ratio': marqueeRatios[1] }">
             <div class="franchise-marquee__track">
-              <InternalFranchiseImage :src="cmsCopy.copy.field22" :alt="cmsCopy.copy.field23" fit="contain" eager />
+              <InternalFranchiseImage :src="cmsCopy.copy.field22" :alt="cmsCopy.copy.field23" fit="contain" eager @load.capture="updateMarqueeRatio($event.target, 1)" />
               <InternalFranchiseImage :src="cmsCopy.copy.field24" :alt="cmsCopy.copy.field25" fit="contain" eager aria-hidden="true" />
             </div>
           </div>
@@ -569,6 +577,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 @keyframes franchise-marquee {
   to { transform: translateX(-50%); }
 }
+@keyframes franchise-marquee-background {
+  to { background-position: calc(-1 * var(--marquee-ratio) * var(--marquee-height)) 0; }
+}
 
 
 @media (max-width: 1200px) {
@@ -688,10 +699,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   /* 手機雙排直接顯示，不讓整組圖片依賴一次性的 Reveal 顯示狀態。 */
   .franchise-marquees.ev { visibility: visible; animation: none; }
   .franchise-marquees { gap: 24px; padding-bottom: 0; background: none; }
-  .franchise-marquee__track > :deep(.franchise-image) { height: 200px; }
-  .franchise-marquee--reverse .franchise-marquee__track > :deep(.franchise-image) { height: 180px; }
-  /* 百分比圖片寬度與max-content軌道互相依賴，Safari會留下循環空白。 */
-  .franchise-marquee__track :deep(img) { width: auto; max-width: none; height: 100%; }
+  /* 固定可視範圍重複背景，避免Safari搬動超寬圖片時漏繪；原img保留替代文字與錯誤。 */
+  .franchise-marquee { --marquee-height: 200px; height: var(--marquee-height); background-image: var(--marquee-image); background-size: auto 100%; background-repeat: repeat-x; animation: franchise-marquee-background 38s linear infinite; }
+  .franchise-marquee--reverse { --marquee-height: 180px; animation-direction: reverse; animation-duration: 34s; }
+  .franchise-marquee__track { width: 100%; height: 100%; animation: none; }
+  .franchise-marquee__track > :deep(.franchise-image) { width: 100%; height: 100%; }
+  .franchise-marquee__track :deep(img) { opacity: 0; }
+  .franchise-marquees:focus-within .franchise-marquee { animation-play-state: paused; }
 
   .franchise-advantages__layout { grid-template-columns: 1fr; }
   .franchise-advantages { padding-bottom: 0; }
@@ -744,7 +758,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-hero-media.is-visible :deep(img) { animation: none; transform: none; }
   .franchise-marquee__track,
   .franchise-support-panel__cta { animation: none; }
-  .franchise-marquee { overflow-x: auto; scrollbar-width: none; }
+  .franchise-marquee { overflow-x: auto; scrollbar-width: none; animation: none; background-image: none; }
   .franchise-marquee__track > :deep(.franchise-image:nth-child(2)) { display: none; }
   .source-round-link,
   .source-round-link svg,
@@ -758,5 +772,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .source-round-link:hover,
   .source-round-link:hover svg,
   .franchise-news-row:hover > svg { transform: none; }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .franchise-marquee__track { width: max-content; }
+  .franchise-marquee__track > :deep(.franchise-image) { width: auto; }
+  .franchise-marquee__track :deep(img) { width: auto; max-width: none; height: 100%; opacity: 1; }
 }
 </style>
