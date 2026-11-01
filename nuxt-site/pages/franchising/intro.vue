@@ -146,14 +146,14 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div v-reveal="{ anim: 'opalScaleUp' }" class="franchise-marquees" tabindex="0" aria-label="SAKURA KITCHEN 加盟夥伴與品牌成果影像，聚焦時暫停移動">
           <div class="franchise-marquee">
             <div class="franchise-marquee__track">
-              <InternalFranchiseImage :src="cmsCopy.copy.field18" :alt="cmsCopy.copy.field19" fit="contain" />
-              <InternalFranchiseImage :src="cmsCopy.copy.field20" :alt="cmsCopy.copy.field21" fit="contain" aria-hidden="true" />
+              <InternalFranchiseImage :src="cmsCopy.copy.field18" :alt="cmsCopy.copy.field19" fit="contain" eager />
+              <InternalFranchiseImage :src="cmsCopy.copy.field20" :alt="cmsCopy.copy.field21" fit="contain" eager aria-hidden="true" />
             </div>
           </div>
           <div class="franchise-marquee franchise-marquee--reverse">
             <div class="franchise-marquee__track">
-              <InternalFranchiseImage :src="cmsCopy.copy.field22" :alt="cmsCopy.copy.field23" fit="contain" />
-              <InternalFranchiseImage :src="cmsCopy.copy.field24" :alt="cmsCopy.copy.field25" fit="contain" aria-hidden="true" />
+              <InternalFranchiseImage :src="cmsCopy.copy.field22" :alt="cmsCopy.copy.field23" fit="contain" eager />
+              <InternalFranchiseImage :src="cmsCopy.copy.field24" :alt="cmsCopy.copy.field25" fit="contain" eager aria-hidden="true" />
             </div>
           </div>
         </div>
@@ -690,6 +690,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .franchise-marquees { gap: 24px; padding-bottom: 0; background: none; }
   .franchise-marquee__track > :deep(.franchise-image) { height: 200px; }
   .franchise-marquee--reverse .franchise-marquee__track > :deep(.franchise-image) { height: 180px; }
+  /* 百分比圖片寬度與max-content軌道互相依賴，Safari會留下循環空白。 */
+  .franchise-marquee__track :deep(img) { width: auto; max-width: none; height: 100%; }
 
   .franchise-advantages__layout { grid-template-columns: 1fr; }
   .franchise-advantages { padding-bottom: 0; }
