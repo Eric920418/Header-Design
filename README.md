@@ -4321,3 +4321,4 @@ final result: passed
 - 正式資料唯讀核對：28頁全部當前文件、欄位對照及內容格式通過，48個舊入口皆有對應；前後文件指紋相同。未在正式站建立測試帳號、修改業務內容或發布測試文案。正式程式發布與回查結果另補於下方。
 - 證據：[使用者提供的改前畫面](.gstack/qa-reports/cms-page-editors-20261101/before-user-provided.png)、[四個頁面入口](.gstack/qa-reports/cms-page-editors-20261101/after-pages.png)、[區塊與單筆編輯](.gstack/qa-reports/cms-page-editors-20261101/after-editor.png)、[112組畫面檢查](.gstack/qa-reports/cms-page-editors-20261101/layout-matrix.json)、[正式資料唯讀檢查](.gstack/qa-reports/cms-page-editors-20261101/production-readonly.json)。改前為使用者截圖，並非本輪重新拍攝。
 - 未驗實體手機、Safari及觸控手勢；既有媒體／帳號／收件規則沿用，沒有擴大宣稱為全站所有業務功能重新驗收。正式登入後操作驗收須使用既有管理員登入，不能以本機測試帳號取代。
+- 正式首版742e3a71已發布至dpl_UAaHe4oQCv3LzU29TeHQXo2wPNLs，兩個正式網址均為READY／Production且同SHA；登入頁與首頁HTTP200，新編輯樣式已送達，官網未掛上後台layout。另統一網路中斷及逾時的中文提示，保留伺服器衝突原因與追蹤碼；此補強完成後一併發布。

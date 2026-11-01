@@ -83,6 +83,12 @@ await idle.check(false);assert.equal(idleRequests,2);assert.equal(idle.previewOp
 idle.api=async()=>({ok:true});await idle.savePage();assert.match(idle.error.value,/未回傳完整儲存結果/);assert.equal(idle.bodies.value.home.title,'關閉後繼續修改');assert.equal(idle.baseline.value.home.title,'原始內容')
 assert.match(pageSource,/<aside v-if="previewOpen"/)
 console.log('PASS: actual page editor is idle until preview is opened, defaults to phone on narrow screens, cancels on close, keeps confirmation separate, and retains input on malformed save responses')
+const adminSource=await readFile(new URL('../composables/useCmsAdmin.ts',import.meta.url),'utf8'),adminContext={useState:()=>ref(null),useRequestFetch:()=>async()=>({})}
+runInNewContext(ts.transpileModule(adminSource.replace('export function','function')+'\nthis.admin=useCmsAdmin();',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,adminContext)
+assert.match(adminContext.admin.message({message:'[POST] timeout',cause:{name:'TimeoutError'}}),/超過時間/)
+assert.match(adminContext.admin.message({message:'Failed to fetch'}),/無法連線/)
+assert.equal(adminContext.admin.message({message:'transport',data:{message:'有人已修改內容',data:{traceId:'trace-test'}}}),'有人已修改內容\n追蹤編號：trace-test')
+console.log('PASS: network and timeout errors use Chinese; server conflict details and trace IDs remain intact')
 
 const resourceSource=await readFile(new URL('../composables/useCmsResource.ts',import.meta.url),'utf8')
 function resources(preview=true,client=true){
