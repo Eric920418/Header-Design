@@ -1,9 +1,12 @@
 ## 2026-11-01 手機加盟雙排輪播 Safari 空白回查
 
 - 依IMG_2830.JPG回查/franchising/intro；Chromium正式站可見200px／180px上下兩排，但iOS26.5 Safari模擬器實際重現輪播大段空白，並非缺少第二排DOM。修前截圖與八尺寸基準存於.gstack/qa-reports/franchise-double-row-20261101/。
-- 保留原兩張長圖、38秒／34秒反向循環及24px排距；四張正本／副本提前載入，手機圖片改以高度推導自然寬度，解除圖片100%寬度與max-content軌道的尺寸循環依賴。768px以上樣式不改，無CMS或資料庫寫入。
-- pnpm build含typecheck通過；本機320／390／430／767／768／1024／1280／1920×844八尺寸兩排均載入且無水平溢位；手機200px／180px及24px排距保留。正式發布後Safari空白複驗與循環接縫檢查待補記，不以Chromium通過代替Safari驗收。
-- f84b3496第一版雖於Safari觀察109秒兩排均顯示，重新整理後上排再次空白，故未判定通過。改為手機固定寬度的repeat-x背景移動，循環距離由載入圖片的自然比例推導；避免整條超寬軌道平移。保留原img替代文字、載入錯誤及減少動態效果時的手動橫捲，桌面維持原軌道動畫；check-franchise-marquee.mjs執行實際比例更新函式，檢查兩排距離、未載入與CMS換圖。重新建置及複驗待補記。
+- 保留原兩張長圖、38秒／34秒反向循環及24px排距；四張正本／副本提前載入。最終手機以原圖比例推導背景循環距離；768px以上樣式不改，無CMS或資料庫寫入。
+- pnpm build含typecheck通過；本機320／390／430／767／768／1024／1280／1920×844八尺寸兩排均載入且無水平溢位；手機200px／180px及24px排距保留。Safari最終複驗見下，不以Chromium通過代替Safari驗收。
+- f84b3496第一版雖於Safari觀察109秒兩排均顯示，重新整理後上排再次空白，故未判定通過。改為手機固定寬度的repeat-x背景移動，循環距離由載入圖片的自然比例推導；避免整條超寬軌道平移。保留原img替代文字、載入錯誤及減少動態效果時的手動橫捲，桌面維持原軌道動畫；check-franchise-marquee.mjs執行實際比例更新函式，檢查兩排距離、未載入與CMS換圖。最終建置及正式複驗結果如下。
+- 最終1742aa33已發布至dpl_G7aKN9SW1Muu5bW36Vb5RodF9Wdx，兩個正式網域分別inspect均為READY／Production及相同commit。pnpm build含typecheck與比例自我檢查通過。正式八尺寸兩排高度及間距不變、無水平溢位；768px以上軌道及圖片尺寸與修前一致。390px正式聚焦暫停／移開繼續正常，另一網域背景比例及兩排動畫正常。
+- iOS26.5 ReviewTest Safari模擬器最終版：重新載入後兩排同時可見；停留79.274秒，超過38秒／34秒兩個循環，未再出現修前空白；原生Space／Shift+Space捲出返回及第二次重新整理後再捲入均正常。使用鍵盤捲動驗證繪製，不宣稱觸控手勢或實體手機已驗收；未量測Safari CSS viewport、未切換系統減少動態偏好或驗證Safari橫向。未改資料庫、未提交業務表單。
+- 證據：[Safari修前空白](.gstack/qa-reports/franchise-double-row-20261101/safari-before-blank.png)、[超過兩輪後](.gstack/qa-reports/franchise-double-row-20261101/safari-final-mid.png)、[第二次重載後雙排](.gstack/qa-reports/franchise-double-row-20261101/safari-final-reload.png)、[正式八尺寸量測](.gstack/qa-reports/franchise-double-row-20261101/production-final.json)、[正式焦點暫停](.gstack/qa-reports/franchise-double-row-20261101/production-final-focus.json)、[兩網域部署](.gstack/qa-reports/franchise-double-row-20261101/deployment-final.json)。本輪驗收只限此加盟雙排區塊，不代表全站或實體裝置通過。
 
 ## 2026-11-01 手機品牌理念改為捲動同步換字換圖
 
