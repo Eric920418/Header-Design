@@ -1069,16 +1069,16 @@
   },
   "view-pages-privacy": {
     "copy.field1": {
-      "label": "影片說明"
+      "label": "頁面英文標題"
     },
     "copy.text2": {
-      "label": "介紹文字（第 1 段）"
+      "label": "條款介紹文字"
     },
     "copy.text3": {
-      "label": "介紹文字（第 2 段）"
+      "label": "修訂日期文字"
     },
     "copy.text4": {
-      "label": "介紹文字（第 3 段）"
+      "label": "公司名稱"
     }
   },
   "view-pages-service-process": {

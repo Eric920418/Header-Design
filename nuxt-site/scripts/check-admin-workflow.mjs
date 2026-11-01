@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
 import {workspaces,workspaceFor,changedItems,firstImage} from '../shared/cms/workflow.mjs'
-import {editingSchema} from '../shared/cms/presentation.mjs'
+import {editingSchema,fieldPresentation} from '../shared/cms/presentation.mjs'
 import {publicContent,contentAliases} from '../shared/cms/public-content.mjs'
 import {createDraftPreview,readDraftPreview} from '../server/cms/previews.mjs'
 import {workspaceInput} from '../server/cms/workspaces.mjs'
 import {pageEditors,pageEditor,pageBlocks,legacyPage,pageEditorLink,searchPages,pageSummary,valueAt,withValue} from '../shared/cms/page-editors.mjs'
 import {checkPageBody,pageEditorInput,editorSchema,changePageEditor} from '../server/cms/page-editors.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
+assert.deepEqual(['copy.field1','copy.text2','copy.text3','copy.text4'].map(path=>fieldPresentation('view-pages-privacy',path).label),['頁面英文標題','條款介紹文字','修訂日期文字','公司名稱'])
 const pageDocuments=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 for(const w of workspaces)assert(legacyPage(w.id),'Missing page: '+w.id)
 assert.equal(legacyPage('site-visuals').id,'visuals');assert.equal(legacyPage('data-brandPavilions').id,'pavilions');assert.equal(legacyPage('data-kitchenStyles').id,'home')
