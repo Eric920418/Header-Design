@@ -8,7 +8,7 @@ const {data:workspaces,error:navigationError,refresh:refreshNavigation}=await us
 const sections=computed(()=>navigationSections(workspaces.value))
 const sectionIcons={design:BookImage,products:CookingPot,service:MapPin,news:Newspaper,brand:Building2,franchise:HeartHandshake,builders:Handshake,shared:Settings2}
 const sidebarChoice=ref<boolean|null>(null)
-const editing=computed(()=>(route.path==='/admin/home'||route.path==='/admin/content')&&typeof route.query.edit==='string')
+const editing=computed(()=>route.path==='/admin/home'||route.path==='/admin/content'&&(typeof route.query.edit==='string'||typeof route.query.sitePage==='string'))
 const sidebarCollapsed=computed(()=>sidebarChoice.value??editing.value)
 const cmsRoot=ref<HTMLElement>()
 useCmsSidebarMotion(sidebarCollapsed,cmsRoot)

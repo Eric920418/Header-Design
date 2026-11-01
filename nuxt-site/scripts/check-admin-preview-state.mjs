@@ -67,6 +67,23 @@ for(const [id,timer]of initial.timers){initial.timers.delete(id);timer.fn()}
 assert.equal(initialChecks,1,'Initial document loading must not start a second preview that interrupts the first iframe')
 console.log('PASS: one initial preview check instead of two')
 
+const pageSource=await readFile(new URL('../components/admin/AdminPageEditor.vue',import.meta.url),'utf8'),pageParsed=ts.createSourceFile('page-editor.ts',pageSource.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1],ts.ScriptTarget.Latest,true)
+const pageHandlers=new Set(['failPreview','sendPreview','receive','checkPreview','reloadPreview','showPreview','closePreview','save'])
+const pageCode=ts.transpileModule(pageParsed.statements.filter(s=>ts.isFunctionDeclaration(s)&&pageHandlers.has(s.name?.text)||ts.isExpressionStatement(s)&&s.getText(pageParsed).startsWith('watch(bodies,')).map(s=>s.getText(pageParsed)).join('\n'),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
+const idle={props:{id:'home'},docs:ref([{id:'home',revision:1}]),bodies:ref({home:{title:'仍保留的輸入'}}),baseline:ref({home:{title:'原始內容'}}),previewOpen:ref(false),previewReady:ref(false),previewResult:ref(null),initialToken:ref(''),previewError:ref(''),previewState:ref(''),fieldErrors:ref([]),previewFrame:ref(null),mobile:ref(false),busy:ref(false),error:ref(''),notice:ref(''),confirming:ref(false),controller:undefined,sequence:0,needsReload:false,recovery:0,timer:undefined,previewTimer:undefined,observer:undefined,JSON,AbortController,watch,nextTick,document:{querySelector:()=>null},window:{innerWidth:390},location:{origin:'https://cms.example'},setTimeout,clearTimeout,message:e=>e.message,focusError:async()=>{},refreshNuxtData:async()=>{}}
+let idleRequests=0
+idle.api=async()=>{idleRequests++;return{previewToken:'page-token',documents:[]}}
+idle.payload=action=>({action,documents:[{id:'home',revision:1,body:idle.bodies.value.home}]})
+runInNewContext(pageCode+'\nthis.open=showPreview;this.close=closePreview;this.check=checkPreview;this.savePage=save;',idle)
+idle.bodies.value.home.title='關閉時修改';await nextTick();assert.equal(idleRequests,0,'Closed preview must make no validation requests')
+idle.open();await nextTick();await new Promise(resolve=>setImmediate(resolve));assert.equal(idleRequests,1);assert.equal(idle.mobile.value,true);assert.equal(idle.initialToken.value,'page-token',idle.previewError.value)
+idle.close();assert.equal(idle.previewResult.value,null);assert.equal(idle.initialToken.value,'');assert.equal(idle.controller.signal.aborted,true)
+idle.bodies.value.home.title='關閉後繼續修改';await nextTick();assert.equal(idleRequests,1,'Closing preview cancels background updates')
+await idle.check(false);assert.equal(idleRequests,2);assert.equal(idle.previewOpen.value,false);assert.equal(idle.previewResult.value,null,'Publish validation must not open a preview')
+idle.api=async()=>({ok:true});await idle.savePage();assert.match(idle.error.value,/未回傳完整儲存結果/);assert.equal(idle.bodies.value.home.title,'關閉後繼續修改');assert.equal(idle.baseline.value.home.title,'原始內容')
+assert.match(pageSource,/<aside v-if="previewOpen"/)
+console.log('PASS: actual page editor is idle until preview is opened, defaults to phone on narrow screens, cancels on close, keeps confirmation separate, and retains input on malformed save responses')
+
 const resourceSource=await readFile(new URL('../composables/useCmsResource.ts',import.meta.url),'utf8')
 function resources(preview=true,client=true){
  const states=new Map(),route={query:preview?{cmsPreview:'home',cmsDraft:'first'}:{}},requests=[]

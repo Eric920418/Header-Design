@@ -36,19 +36,23 @@ export async function workspaceSummaries(){
 
 export async function changeWorkspace(key,input,user,connection){
  const w=workspaceInput(key,input)
+ return changeDocumentGroup(w,input,user,connection)
+}
+export async function changeDocumentGroup(w,input,user,connection,checkScope){
  if(['publish','unpublish'].includes(input.action)&&user.role!=='admin')fail(403,'只有管理員可以更新官網或暫停顯示')
  const run=async tx=>{
   const result=[]
   // Stable lock order avoids deadlocks between overlapping page workspaces.
   for(const item of [...input.documents].sort((a,b)=>a.id.localeCompare(b.id))){
-   const d=input.action==='preview'?await getDocument(item.id):((await query('SELECT * FROM cms.Documents WITH(UPDLOCK,HOLDLOCK) WHERE id=@id',{id:item.id},tx)).recordset[0])
+   const d=input.action==='preview'?await getDocument(item.id,tx):((await query('SELECT * FROM cms.Documents WITH(UPDLOCK,HOLDLOCK) WHERE id=@id',{id:item.id},tx)).recordset[0])
    if(!d)fail(404,'此內容已不存在')
    if(d.revision!==item.revision)fail(409,'有人已修改這個區塊。你的輸入已保留，請先查看最新內容再決定如何調整。')
    const validationSchema=kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson))))),schema=editingSchema(validationSchema,d.id)
    try{
-    const body=normalizeVideos(structuredClone(item.body),validationSchema);validate(body,validationSchema)
     const versions=(await query('SELECT id,body FROM cms.Versions WHERE id=@draft OR id=@published',{draft:d.draftId,published:d.publishedId},tx)).recordset
     const previous=versions.find(v=>v.id===d.draftId),published=versions.find(v=>v.id===d.publishedId)
+    if(checkScope)await checkScope(d,previous?JSON.parse(previous.body):{},item.body,validationSchema,tx)
+    const body=normalizeVideos(structuredClone(item.body),validationSchema);validate(body,validationSchema)
     let state={revision:d.revision,draftId:d.draftId,publishedId:d.publishedId}
     if(input.action!=='preview'){
      if(input.action!=='unpublish'&&JSON.stringify(body)!==previous?.body)state=await changeDocument(d.id,{action:'save',revision:state.revision,body},user,tx)

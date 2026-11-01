@@ -4309,3 +4309,15 @@ final result: passed
 - 本機390×844實際觀察79秒，超過38秒及34秒兩個完整循環，兩排均持續移動、四張圖載入，影像盒連續覆蓋可見寬度，外層visibility:visible／opacity:1／animation:none。實際聚焦暫停、移開繼續均正常，捲出三屏再捲回與重新載入後仍顯示，瀏覽器console error 0。未播放影片或提交業務表單；降低動態效果的既有規則未改，但本輪未切換系統偏好實測。
 - 34b5f738已發布至dpl_FeqpoRHHzyP1kxRmjyZQ6kWQkji3，Vercel READY／Production、GitHub成功；分別inspect兩個既有正式網域皆確認同一版本。主網域八尺寸與本機一致，四組768px以上輪播／圖片幾何及循環設定與修前一致，無水平溢位。正式390×844在兩排完整入畫後觀察102秒，0／58.509／102.196秒抽樣皆visibility:visible、opacity:1、播放running，四張圖皆載入，兩副本接縫誤差小於0.1px且覆蓋可視寬度；超過兩輪後兩排仍可見。實際捲出三屏再返回正常，console error 0；另一正式網域390px亦200／180px、持續反向循環、外層animation:none且無溢位。
 - 修前基準/tmp/sakura-franchise-marquee-before.json；本機畫面/tmp/sakura-franchise-marquee-local.png、正式畫面/tmp/sakura-franchise-marquee-production.png、超過兩輪後/tmp/sakura-franchise-marquee-production-after-loops.png，完整量測/tmp/sakura-franchise-marquee-qa.json。沒有重現修前空白，這次是依參考修正比例並移除手機外層隱藏進場依賴，未宣稱已證實Safari空白根因；未驗實體手機或Safari／Firefox。自開server已停、viewport已還原；無CMS／資料庫寫入，完成紀錄只提交README、不為文件再次部署。
+## 2026-11-01 後台每頁一個入口與區塊編輯
+
+- 原48個入口集中成28個官網頁面；設計案例固定為品牌系列、設計靈感、廚房裝修指南、品牌系列型錄。首頁直接按官網順序選區塊；桌機為縮圖區塊清單＋目前表單，窄螢幕改位置選擇器。取消資料來源頁籤，單筆清單先選名稱／縮圖再編輯，短欄位並排，長文與內層清單完整保留。
+- 新網址沿用/admin/home及/admin/content，以sitePage、block定位；原area、edit、part入口仍可用。搜尋包含頁面、區塊、欄位及舊名稱，直接開對應位置；返回保留分類、搜尋及頁碼。區塊名稱使用已發布內容，草稿不改名；共用資料的舊連結仍回原管理位置。資料庫回傳順序不影響名稱或位置。
+- 新增GET /api/admin/page-editors、GET及POST /api/admin/page-editors/:id，保留原workspaces及document API。所有頁面由固定文件／欄位白名單組成；伺服器檢查角色、CSRF、版本、文章分類、品牌與不可編輯資料。整頁修改全部驗證通過才以同一交易儲存，只有變更文件增版；409或失敗保留輸入。更新前列出同份文件內其他待發布修改及共用影響。
+- 預覽僅按「看效果」時載入，關閉即取消請求與iframe；手機預設手機畫面。使用原官網元件、登入及短期快照，不建立內容版本、不改官網、不公開快取或索引。讀取／儲存／預覽有20秒界限及回應完整性檢查；失敗顯示可安全揭露的中文原因、欄位問題與追蹤編號。
+- 影片、型錄及建商品牌館資料集中於實際區塊；共用文件只開放當頁使用的欄位。系統櫃專題有專用內文入口，不顯示不會被該專題採用的一般文章內文字段。未新增套件、未修改hrmncue、未重建或重匯內容。僅在本機既有SQL補上正式站已存在的PreviewSessions空表，原內容／版本未變。
+- 自動檢查：pnpm --dir nuxt-site typecheck、pnpm --dir nuxt-site build、check-admin-workflow.mjs、check-admin-names.mjs、check-admin-sidebar-motion.mjs及check-admin-preview-state.mjs通過；互動腳本check-admin.cjs已更新且語法通過。流程的CMS_WORKFLOW_DB=1模式限定本機SakuraWebsiteDev，實際驗證整頁兩區塊儲存、未變更不增版、預覽不增版、管理員發布、編輯者403、409及後段衝突完全回滾，文件與版本指紋不變。CMS_PAGE_HTTP模式經正常登入驗證28頁讀取／預覽、CSRF、私有預覽作者隔離與中文欄位錯誤，未寫入網站內容。
+- 實際瀏覽器驗收：最終建置28頁×1440／1024／768／390px共112組，沒有水平溢出、頁面錯誤或預設官網iframe，操作列在視窗內；另測搜尋定位與返回、跨兩區塊輸入保留、即時預覽文字、關閉效果、手機選位置與選圖焦點返回、未儲存提醒。停止本機服務後儲存仍保留輸入，複驗顯示中文重試原因。單筆表單桌機並排及首頁八個名稱已實際核對。此輪由CUA操作，未宣稱整份Playwright互動腳本已自動執行。
+- 正式資料唯讀核對：28頁全部當前文件、欄位對照及內容格式通過，48個舊入口皆有對應；前後文件指紋相同。未在正式站建立測試帳號、修改業務內容或發布測試文案。正式程式發布與回查結果另補於下方。
+- 證據：[使用者提供的改前畫面](.gstack/qa-reports/cms-page-editors-20261101/before-user-provided.png)、[四個頁面入口](.gstack/qa-reports/cms-page-editors-20261101/after-pages.png)、[區塊與單筆編輯](.gstack/qa-reports/cms-page-editors-20261101/after-editor.png)、[112組畫面檢查](.gstack/qa-reports/cms-page-editors-20261101/layout-matrix.json)、[正式資料唯讀檢查](.gstack/qa-reports/cms-page-editors-20261101/production-readonly.json)。改前為使用者截圖，並非本輪重新拍攝。
+- 未驗實體手機、Safari及觸控手勢；既有媒體／帳號／收件規則沿用，沒有擴大宣稱為全站所有業務功能重新驗收。正式登入後操作驗收須使用既有管理員登入，不能以本機測試帳號取代。

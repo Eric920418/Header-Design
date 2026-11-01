@@ -1,7 +1,8 @@
 <script setup lang="ts">
 const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
+const {data:sitePages}=useNuxtData<any[]>('cms-pages')
 const props=defineProps<{modelValue:string;label:string;invalid?:boolean}>(),emit=defineEmits<{'update:modelValue':[value:string]}>()
-const pages=computed(()=>[...new Map([{href:'/',title:'首頁'},...(workspaces.value||[]).flatMap(w=>w.pageLinks||[])].map(p=>[p.href,p])).values()])
+const pages=computed(()=>[...new Map([{href:'/',title:'首頁'},...(sitePages.value||[]).filter(p=>p.section!=='shared'||p.id==='privacy').map(p=>({href:p.href,title:p.title})),...(workspaces.value||[]).find(w=>w.id==='data-kitchenSeries')?.pageLinks||[]].map(p=>[p.href,p])).values()])
 const custom=ref(false)
 const selected=computed(()=>pages.value.some(p=>p.href===props.modelValue)?props.modelValue:'custom')
 function choose(event:Event){const v=(event.target as HTMLSelectElement).value;custom.value=v==='custom';if(v!=='custom')emit('update:modelValue',v)}

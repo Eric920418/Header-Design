@@ -7,6 +7,7 @@ import { kitchenSeriesHeroSchema } from '../../../shared/cms/kitchen-series-hero
 import { caseLibrary } from '../../cms/case-library.mjs'
 import { cmsHandler, cmsUser, cmsWrite, sameOrigin, cmsSession } from '../../utils/cms'
 import {workspaceSummaries,changeWorkspace} from '../../cms/workspaces.mjs'
+import {pageEditorSummaries,readPageEditor,changePageEditor} from '../../cms/page-editors.mjs'
 
 export default defineEventHandler(event=>cmsHandler(event,async()=>{
  const path=(getRouterParam(event,'path')||'').split('/'),method=event.method
@@ -27,6 +28,10 @@ export default defineEventHandler(event=>cmsHandler(event,async()=>{
   const hash=passwordHash(b.password);await transaction(async(tx:any)=>{await query('UPDATE cms.Users SET password=@hash,mustChange=0,revision=revision+1 WHERE id=@id; DELETE cms.Sessions WHERE userId=@id',{id:user.id,hash},tx);await audit(user.id,'password-change',user.email,tx)});await cmsSession(event,user.id);return{ok:true}
  }
  if(path[0]==='case-library'&&method==='GET')return caseLibrary()
+ if(path[0]==='page-editors'){
+  if(method==='GET')return path[1]?readPageEditor(path[1]):pageEditorSummaries()
+  if(path[1]&&method==='POST')return changePageEditor(path[1],await readBody(event),user)
+ }
  if(path[0]==='workspaces'){
   if(!path[1]&&method==='GET')return workspaceSummaries()
   if(path[1]&&method==='POST')return changeWorkspace(path[1],await readBody(event),user)
