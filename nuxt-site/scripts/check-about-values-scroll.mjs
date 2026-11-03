@@ -40,3 +40,38 @@ mobile = true
 state.brandValues = []
 assert.doesNotThrow(run, '空資料不得產生索引錯誤')
 console.log('PASS 手機理念捲動邊界、反向、短窗、桌面隔離與空資料')
+
+const layer = source.match(/function valuesLayerStyle\(index: number\) \{[\s\S]*?\n\}/)?.[0]
+assert.ok(layer, '圖文必須直接使用捲動進度')
+state.brandValues = ['brand', 'integration', 'service', 'family'].map(id => ({ id }))
+state.mobileValues.value = true
+state.reducedMotion = { value: false }
+const style = vm.runInNewContext(`${ts.transpile(layer)}; valuesLayerStyle`, state)
+for (let index = 0; index < 4; index++) {
+  state.valuesProgress.value = (index + .5) / 4
+  state.activeValueId.value = state.brandValues[index].id
+  assert.equal(style(index)['--value-copy-opacity'], 1, '每段保留完整可讀的停留區')
+  assert.equal(style(index)['--value-image-opacity'], 1)
+  assert.equal(style(index)['--value-copy-y'], '0px')
+}
+for (let index = 1; index < 4; index++) {
+  const samples = [.84, .92, 1, 1.08, 1.16].map(offset => {
+    state.valuesProgress.value = (index - 1 + offset) / 4
+    return style(index)['--value-image-opacity']
+  })
+  assert.ok(samples.every((value, i) => i === 0 || value > samples[i - 1]), '門檻附近必須連續漸變，不能整段靜止後跳換')
+  state.valuesProgress.value = index / 4
+  const forward = style(index)
+  state.valuesProgress.value += .02
+  style(index)
+  state.valuesProgress.value -= .02
+  assert.deepEqual(style(index), forward, '反向與停手必須得到相同進度，沒有時間追趕')
+}
+state.reducedMotion.value = true
+state.activeValueId.value = 'integration'
+assert.equal(style(1)['--value-image-opacity'], 1)
+assert.equal(style(0)['--value-image-opacity'], 0)
+assert.equal(style(1)['--value-copy-y'], '0px')
+state.mobileValues.value = false
+assert.equal(style(1), undefined, '桌面不得套用手機圖文透明度')
+console.log('PASS 連續圖文混合、停留、反向、減少動態及桌面隔離')

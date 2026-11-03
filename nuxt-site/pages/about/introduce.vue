@@ -43,6 +43,22 @@ const valuesStyle = computed(() => ({
   '--value-count': brandValues.length,
   '--value-image-shift': `${reducedMotion.value ? 0 : (valuesProgress.value - .5) * 24}px`,
 }))
+function valuesLayerStyle(index: number) {
+  if (!mobileValues.value) return undefined
+  const phase = valuesProgress.value * brandValues.length
+  const clamp = (value: number) => Math.max(0, Math.min(1, value))
+  const incoming = index === 0 ? 1 : clamp((phase - index + .18) / .36)
+  const enterCopy = index === 0 ? 1 : clamp((phase - index + .02) / .16)
+  const leaveCopy = index === brandValues.length - 1 ? 1 : clamp((index + .98 - phase) / .16)
+  const active = activeValueId.value === brandValues[index]?.id
+  return {
+    '--value-image-opacity': reducedMotion.value ? Number(active) : incoming,
+    '--value-copy-opacity': reducedMotion.value ? Number(active) : enterCopy * leaveCopy,
+    '--value-copy-y': `${reducedMotion.value ? 0 : (1 - enterCopy - (1 - leaveCopy)) * 18}px`,
+    '--value-copy-visibility': enterCopy * leaveCopy > 0 || active ? 'visible' : 'hidden',
+  }
+}
+
 const identityTrack = ref<HTMLElement | null>(null)
 const identityViewportRatio = ref(1)
 const identityScrollRatio = ref(0)
@@ -250,12 +266,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div ref="valuesStage" class="about-values__stage">
           <div class="about-values__image-list" aria-hidden="true">
             <InternalBrandImage
-              v-for="value in brandValues"
+              v-for="(value, index) in brandValues"
               :key="value.id"
               :src="value.image"
               :alt="value.title.replace('\n', ' ')"
               class="about-values__image"
               :class="{ 'is-active': activeValueId === value.id }"
+              :style="valuesLayerStyle(index)"
             />
           </div>
           <div class="about-values__shade" aria-hidden="true" />
@@ -265,6 +282,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               :key="value.id"
               class="about-values__card elementor-banner-process-item"
               :class="{ 'is-active': activeValueId === value.id }"
+              :style="valuesLayerStyle(index)"
               :tabindex="mobileValues ? -1 : 0"
               :aria-hidden="mobileValues && activeValueId !== value.id ? true : undefined"
               @mouseenter="!mobileValues && (activeValueId = value.id)"
@@ -538,13 +556,15 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-values { --value-frame-height: max(180px, calc(100svh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); height: calc(var(--value-frame-height) * var(--value-count)); }
   .about-values > div[data-ev] { height: 100%; }
   .about-values__stage { position: sticky; top: var(--site-header-height); height: var(--value-frame-height); min-height: 0; }
-  .about-values__image { transform: translateY(clamp(calc(var(--value-frame-height) * -.025), var(--value-image-shift), calc(var(--value-frame-height) * .025))) scale(1.06); transition: opacity .45s ease; }
-  .about-values__image.is-active { transform: translateY(clamp(calc(var(--value-frame-height) * -.025), var(--value-image-shift), calc(var(--value-frame-height) * .025))) scale(1.06); }
+  /* Scroll progress owns the blend; timed transitions would lag behind a reversing finger. */
+  .about-values__image,
+  .about-values__image.is-active { opacity: var(--value-image-opacity, 0); transform: translateY(clamp(calc(var(--value-frame-height) * -.025), var(--value-image-shift), calc(var(--value-frame-height) * .025))) scale(1.06); transition: none; }
   .about-values__shade { background: rgb(0 0 0 / 40%); }
   .about-values__columns { display: block; }
-  .about-values__card { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: clamp(12px, 4svh, 40px) 20px; border: 0; cursor: default; opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(20px); transition: opacity .35s ease, transform .45s ease, visibility 0s .45s; }
-  .about-values__card.is-active { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
-  .about-values__copy { position: relative; inset: auto; width: 100%; padding: 0; text-align: center; transform: none; }
+  .about-values__card { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: clamp(12px, 4svh, 40px) 20px; border: 0; cursor: default; opacity: var(--value-copy-opacity, 0); visibility: var(--value-copy-visibility, hidden); pointer-events: none; transform: translateY(var(--value-copy-y, 0px)); transition: none; }
+  .about-values__card.is-active { opacity: var(--value-copy-opacity, 1); visibility: var(--value-copy-visibility, visible); pointer-events: auto; transform: translateY(var(--value-copy-y, 0px)); transition: none; }
+  .about-values__copy { position: relative; inset: auto; width: 100%; padding: 0; text-align: center; transform: none; transition: none; }
+  .about-values__copy p { transition: none; }
   .about-values__copy .number { font-size: clamp(20px, 3.8svh, 30px); line-height: 1.15; color: #caa05c; opacity: 1; }
   .about-values__copy h3 { width: 100%; min-height: 0; padding: 8px 0 12px; font-size: clamp(20px, 4svh, 30px); line-height: 1.35; white-space: normal; text-wrap: balance; }
   .about-values__copy p { width: 100%; min-height: 0; font-size: clamp(12px, 2svh, 15px); line-height: 1.5; opacity: 1; visibility: visible; }
