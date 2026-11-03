@@ -1,7 +1,9 @@
 ## 2026-11-03 手機品牌理念捲動節奏
 
 - 依IMG_2848.PNG及「不是效能、是滑動不流暢」回查/about/introduce。原實作每四分之一捲動距離才換active，再播放350～450ms固定時間淡入；停手及反向後仍自行補動畫。改為手機圖文透明度與文字位移直接由捲動進度決定，轉場前後保留可讀停留區，底層圖片不淡出以避免混合時露黑；保留單舞台sticky、四組CMS圖文、微幅視差、原捲動總長及減少動態偏好。768px以上不套用手機樣式，無新增套件及CMS／資料庫寫入。
-- 更新既有check-about-values-scroll.mjs，涵蓋三個轉場的連續取樣、原位置反向一致、可讀停留、減少動態及桌面隔離；pnpm build含typecheck及自我檢查通過。本機六種手機／短窗（320／390／430／767×844、320×500、667×375）共42次四階段正反向捲動，作用圖文正確、舞台固定且無水平溢位；三個轉場各九點取樣透明度隨捲動連續增減，停手兩次取樣完全相同。768／1024／1280／1920px逐一在同一張作用卡、原動畫結束後比較文字尺寸、行高、顏色與位置均不變。證據：.gstack/qa-reports/about-values-flow-20261103/。正式及Safari驗證待補，不以靜態截圖或Chromium代表實體手機手感。
+- 更新既有check-about-values-scroll.mjs，涵蓋三個轉場的連續取樣、原位置反向一致、可讀停留、減少動態及桌面隔離；pnpm build含typecheck及自我檢查通過。本機六種手機／短窗（320／390／430／767×844、320×500、667×375）共42次四階段正反向捲動，作用圖文正確、舞台固定且無水平溢位；三個轉場各九點取樣透明度隨捲動連續增減，停手兩次取樣完全相同。768／1024／1280／1920px逐一在同一張作用卡、原動畫結束後比較文字尺寸、行高、顏色與位置均不變。證據：.gstack/qa-reports/about-values-flow-20261103/。正式複驗同六組尺寸共42狀態與三轉場27點正反向均通過；停手700ms後圖文狀態完全相同，正式四組桌面尺寸與修前相同。另一正式域390px四階段往返及第一轉場亦正常，本次瀏覽器console error為0。
+- 546b62f5已發布至dpl_DzGHTPFmuDURBWTX6NY2khxNvEo5，兩個正式網域分別inspect均為READY／Production及同一commit。Safari ReviewTest iOS26.5模擬器以Space／Down／Up／Shift+Space正常捲動，觀察01至04、04倒回03，以及02小幅回捲保留在圖片混合中途。原生drag未驅動頁面，不算觸控驗收；實體手機手感、FPS、Safari橫向及系統減少動態設定尚未驗證，不能據此宣稱全部手機不卡。這次修正的是分段觸發造成的跟手感，不將效能不足當成已證實根因。
+- 證據：[正式轉場27點](.gstack/qa-reports/about-values-flow-20261103/production-flow.json)、[正式手機矩陣](.gstack/qa-reports/about-values-flow-20261103/production-matrix.json)、[桌面修前基準](.gstack/qa-reports/about-values-flow-20261103/desktop-before-stable.json)、[正式桌面複驗](.gstack/qa-reports/about-values-flow-20261103/production-desktop.json)、[Safari小幅反向混合](.gstack/qa-reports/about-values-flow-20261103/safari-reverse-partial.png)、[Safari驗證限制](.gstack/qa-reports/about-values-flow-20261103/safari-check.json)、[兩網域部署](.gstack/qa-reports/about-values-flow-20261103/deployment.json)。完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-11-01 手機圖片預約按鈕置中與同類入口盤點
 
