@@ -45,11 +45,19 @@ refresh()
 top = -122.25
 run()
 assert.equal(state.activeValueId.value, 'integration', '短窗須刷新舞台高度')
+section.offsetHeight = 2848
+stage.offsetHeight = 792
+refresh()
+top = 60 - (2848 - 792) * .625
+run()
+assert.equal(state.valuesRange, 2056, '工具列收合時只更新舞台高度，捲動軌道不變')
+assert.equal(state.activeValueId.value, 'service', '可視高度變更後仍須正確換字換圖')
+
 mobile = false
 refresh()
 top = -3000
 run()
-assert.equal(state.activeValueId.value, 'integration', '桌面捲動不得覆寫Hover／Focus')
+assert.equal(state.activeValueId.value, 'service', '桌面捲動不得覆寫Hover／Focus')
 assert.equal(style(1), undefined, '桌面不得套用手機樣式')
 mobile = true
 refresh()

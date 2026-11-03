@@ -590,7 +590,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-history__nav { top: 75px; width: 42px; height: 42px; }
   .about-history__nav--previous { left: -8px; }
   .about-history__nav--next { right: -8px; }
-  .about-values { --value-frame-height: max(180px, calc(100svh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); height: calc(var(--value-frame-height) * var(--value-count)); }
+  /* Keep the scroll track stable while the stage fills Safari's changing visible viewport. */
+  .about-values { --value-scroll-height: max(180px, calc(100svh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); --value-frame-height: max(1px, calc(100dvh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); height: calc(var(--value-scroll-height) * var(--value-count)); }
   .about-values > div[data-ev] { height: 100%; }
   .about-values__stage { position: sticky; top: var(--site-header-height); height: var(--value-frame-height); min-height: 0; }
   /* Scroll progress owns the blend; timed transitions would lag behind a reversing finger. */
@@ -598,9 +599,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-values__image.is-active { opacity: var(--value-image-opacity, 0); transform: translateY(clamp(calc(var(--value-frame-height) * -.025), var(--value-image-shift), calc(var(--value-frame-height) * .025))) scale(1.06); transition: none; }
   .about-values__shade { background: rgb(0 0 0 / 40%); }
   .about-values__columns { display: block; }
-  .about-values__card { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: clamp(12px, 4svh, 40px) 20px; border: 0; cursor: default; opacity: var(--value-copy-opacity, 0); visibility: var(--value-copy-visibility, hidden); pointer-events: none; transform: translateY(var(--value-copy-y, 0px)); transition: none; }
+  .about-values__card { position: absolute; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding: clamp(12px, 4svh, 40px) 20px; border: 0; overflow-y: auto; cursor: default; opacity: var(--value-copy-opacity, 0); visibility: var(--value-copy-visibility, hidden); pointer-events: none; transform: translateY(var(--value-copy-y, 0px)); transition: none; }
+  .about-values__card:nth-child(-n+2) { border-bottom: 0; }
   .about-values__card.is-active { opacity: var(--value-copy-opacity, 1); visibility: var(--value-copy-visibility, visible); pointer-events: auto; transform: translateY(var(--value-copy-y, 0px)); transition: none; }
-  .about-values__copy { position: relative; inset: auto; width: 100%; padding: 0; text-align: center; transform: none; transition: none; }
+  .about-values__copy { position: relative; inset: auto; width: 100%; min-width: 0; margin-block: auto; padding: 0; overflow-wrap: anywhere; text-align: center; transform: none; transition: none; }
   .about-values__copy p { transition: none; }
   .has-native-values-timeline { view-timeline-name: --about-values; view-timeline-axis: block; view-timeline-inset: var(--site-header-height) calc(100% - var(--site-header-height) - var(--value-frame-height)); }
   .has-native-values-timeline .about-values__image,
