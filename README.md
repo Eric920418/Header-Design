@@ -1,7 +1,9 @@
 ## 2026-11-03 Safari 品牌理念原生捲動動畫與舊版相容
 
 - 使用者回報上一輪仍在Safari不順；前輪只確認進度對應正確，不能代表跟手感合格。回查原程式仍逐幀以Vue重跑圖文樣式，且每幀讀取computed style及高度。支援view timeline的手機瀏覽器改由原生CSS動畫負責圖文混合與視差；JS只維護作用項目的可及性狀態。舊版不支援時只直接更新八個圖文圖層，快取布局資料、尺寸改變才刷新，不再讓捲動進度觸發Vue逐幀render。保留四組CMS資料、原sticky範圍、轉場／停留節奏及768px以上版面。無新增套件、無CMS／DB寫入。
-- 更新既有check-about-values-scroll.mjs涵蓋實際原生／fallback分支、尺寸快取、同進度不重寫DOM、正反向與減少動態；pnpm build含typecheck與自我檢查通過；本機六手機／短窗共42次正反向狀態正常、無水平溢位。原生三轉場27點的圖片opacity連續變化而inline style固定，確認不是JS逐幀寫入；四組768／1024／1280／1920px在排除Hover干擾、同聚焦卡片狀態下與修前的尺寸／字級／行高／顏色／相對位置相同。Safari正式驗證待補。參考WebKit官方原生scroll-driven animation及26.4合成執行緒說明，不將版本差異當成使用者責任。未證實所有Safari卡頓皆為單一根因。
+- 更新既有check-about-values-scroll.mjs涵蓋實際原生／fallback分支、尺寸快取、同進度不重寫DOM、正反向與減少動態；pnpm build含typecheck與自我檢查通過；本機六手機／短窗共42次正反向狀態正常、無水平溢位。原生三轉場27點的圖片opacity連續變化而inline style固定，確認不是JS逐幀寫入；四組768／1024／1280／1920px在排除Hover干擾、同聚焦卡片狀態下與修前的尺寸／字級／行高／顏色／相對位置相同。正式站同六尺寸42狀態、三轉場27點及停手700ms狀態比對通過；四組桌面尺寸同基準，另一域390px原生模式四階段往返及第一轉場正常。參考WebKit官方原生scroll-driven animation及26.4合成執行緒說明，不將版本差異當成使用者責任。未證實所有Safari卡頓皆為單一根因。
+- 原Git推送未建立部署，已透過Vercel既有Git連結指定e999c33669e92f78f0f8d32a45585a7a4e55f44c建立Production部署dpl_EAQXovoRtZ1h4673uzvjo5qdwBRY；兩正式網域分別inspect均READY及此commit。Safari ReviewTest iOS26.5模擬器重新載入後，以原生Space／Down／Up操作觀察四組圖文、轉場中段停留、03回02及04回03，無缺圖／缺字；未測實體觸控或FPS，舊Safari相容分支目前是執行實際函式的自我檢查，不冒稱所有Safari版本均經瀏覽器／實機驗收。沒有開啟／關閉Safari實驗功能或降低預覽登入安全性。
+- 證據目錄.gstack/qa-reports/about-values-safari-20261103/：[正式手機矩陣](.gstack/qa-reports/about-values-safari-20261103/production-matrix.json)、[原生轉場／固定inline style](.gstack/qa-reports/about-values-safari-20261103/production-flow.json)、[正式桌面](.gstack/qa-reports/about-values-safari-20261103/production-desktop.json)、[Safari中段](.gstack/qa-reports/about-values-safari-20261103/safari-partial.png)、[Safari往回](.gstack/qa-reports/about-values-safari-20261103/safari-reverse-third.png)、[兩域部署](.gstack/qa-reports/about-values-safari-20261103/deployment.json)。只追加完成紀錄，不為文件再次部署。
 
 ## 2026-11-03 手機品牌理念捲動節奏
 
