@@ -2,7 +2,9 @@
 
 - 依12.20.27截圖重查/about/introduce：Safari原生「隱藏工具列」操作可重現圖片下方黑帶，原因為舞台只用100svh，在工具列收合後未填滿較高的可視範圍。改用100dvh計算舞台，扣除頁首與底部服務列／安全區；捲動軌道仍沿用穩定svh長度，原生view timeline及舊版尺寸監測沿用，不改桌面或CMS資料。
 - 320×280正式修前實測：舞台底部240px、服務列上緣208px，內容被遮32px；第三組文字上緣58px進入60px頁首，底部242px亦被遮。移除舞台180px硬下限；手機卡片在內容放不下時允許原生縱向捲讀，auto margin讓放得下的文字置中、放不下的從頂部開始，保留原字級。
-- 更新既有捲動自我檢查，涵蓋工具列收合後只改舞台高度的進度計算。pnpm build含typecheck、自我檢查及diff檢查通過。本機280×568、320×480／568、360×640、375×667、393×852、430×932、767×844、320×320／280、667×280共11尺寸×4階段44狀態，圖片底部與服務列上緣相差0px、無水平溢位；320×280第三組文字可原生捲讀到底，接續捲動可切下一組，不被困住。768／1024／1280／1920×844之尺寸、字級、行高、顏色、相對位置與修前相同。正式與Safari修後驗證待補；本輪檢查圖片、文字、服務列之間的垂直邊界，不只document.scrollWidth。
+- 更新既有捲動自我檢查，涵蓋工具列收合後只改舞台高度的進度計算。pnpm build含typecheck、自我檢查及diff檢查通過。本機280×568、320×480／568、360×640、375×667、393×852、430×932、767×844、320×320／280、667×280共11尺寸×4階段44狀態，圖片底部與服務列上緣相差0px、無水平溢位；320×280第三組文字可原生捲讀到底，接續捲動可切下一組，不被困住。768／1024／1280／1920×844之尺寸、字級、行高、顏色、相對位置與修前相同。正式同11尺寸44階段及四組768px以上基準比對通過；另一網域320×480四組往返亦無黑邊／溢位。正式320×280第三組原地捲讀後copy底部196px、服務列208px，繼續捲動可換到第四組。Safari iOS26.5 ReviewTest模擬器實際重新載入新版，工具列展開及「隱藏工具列」後圖片均接齊金底服務列，四組圖文及反向轉場已觀察，不再出現修前黑帶；採原生鍵盤捲動，未驗證實體手機觸控、所有Safari版本或本輪橫向。
+
+- 0811392c已部署Production dpl_Cr5nLKBAwgyAbJpwy2zohWEVQ8TW，兩正式網域分別inspect均READY及此commit。證據：.gstack/qa-reports/about-values-small-20261103/（production-matrix.json、production-desktop.json、production-short-read.json、production-short-exit.json、alternate.json、deployment.json）；[Safari修前收合](.gstack/qa-reports/about-values-small-20261103/safari-before-hidden.png)、[Safari修後收合](.gstack/qa-reports/about-values-small-20261103/safari-after-hidden.png)、[最窄280px](.gstack/qa-reports/about-values-small-20261103/local-narrow.png)。本輪只修關於我們的理念動畫可視邊界，不代表全站重新驗收；完成紀錄只提交README，不為文件再部署。
 
 ## 2026-11-03 Safari 品牌理念原生捲動動畫與舊版相容
 
