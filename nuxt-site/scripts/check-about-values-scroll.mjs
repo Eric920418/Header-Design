@@ -14,14 +14,26 @@ let mobile = true
 let top = 60
 let styleReads = 0
 let writes = 0
-const layerNode = () => ({ style: { setProperty: () => { writes++ } } })
-const section = { offsetHeight: 2848, getBoundingClientRect: () => ({ top }) }
+const layerNode = () => {
+  const properties = new Map()
+  return { style: { getPropertyValue: key => properties.get(key) ?? '', setProperty: (key, value) => { writes++; properties.set(key, value) } } }
+}
+const section = { ...layerNode(), offsetHeight: 2848, getBoundingClientRect: () => ({ top }) }
 const stage = { ...layerNode(), offsetHeight: 712 }
+let railTop = 772
+let railReads = 0
+const serviceRail = { getBoundingClientRect: () => { railReads++; return { top: railTop } } }
+const heightProperty = section.style.setProperty
+section.style.setProperty = (key, value) => {
+  heightProperty(key, value)
+  if (key === '--value-visible-height') stage.offsetHeight = parseFloat(value)
+}
 const state = {
   valuesFrame: 1, valuesProgress: -1, valuesTop: 0, valuesRange: 1,
   mobileValues: { value: false }, nativeValuesTimeline: { value: false }, reducedMotion: { value: false },
   valuesSection: { value: section }, valuesStage: { value: stage },
   valuesImages: Array.from({ length: 4 }, layerNode), valuesCards: Array.from({ length: 4 }, layerNode),
+  valuesServiceRail: serviceRail,
   activeValueId: { value: 'service' },
   brandValues: ['brand', 'integration', 'service', 'family'].map(id => ({ id })),
   window: { matchMedia: () => ({ matches: mobile }) },
@@ -36,10 +48,12 @@ for (const [position, expected] of [[800, 'brand'], [60, 'brand'], [-473.9, 'bra
   assert.equal(state.activeValueId.value, expected, `位置${position}必須同步正確理念`)
 }
 assert.equal(styleReads, 1, '捲動期間不得重複讀取computed style／尺寸')
+assert.equal(railReads, 1, '捲動期間不得逐幀量測固定服務列')
 const stoppedWrites = writes
 run()
 assert.equal(writes, stoppedWrites, '停手或離開區塊後相同進度不得重寫DOM')
 stage.offsetHeight = 243
+railTop = 303
 section.offsetHeight = 972
 refresh()
 top = -122.25
@@ -47,11 +61,19 @@ run()
 assert.equal(state.activeValueId.value, 'integration', '短窗須刷新舞台高度')
 section.offsetHeight = 2848
 stage.offsetHeight = 792
+railTop = 852
 refresh()
 top = 60 - (2848 - 792) * .625
 run()
 assert.equal(state.valuesRange, 2056, '工具列收合時只更新舞台高度，捲動軌道不變')
 assert.equal(state.activeValueId.value, 'service', '可視高度變更後仍須正確換字換圖')
+railTop = 892
+refresh()
+assert.equal(stage.offsetHeight, 832, 'Safari viewport單位少算黑邊時須以服務列實際上緣填滿')
+assert.equal(state.valuesRange, 2016, '原生timeline與舊版進度須共用實際舞台高度')
+const resizedWrites = writes
+refresh()
+assert.equal(writes, resizedWrites, '同一服務列邊界不得重寫高度')
 
 mobile = false
 refresh()

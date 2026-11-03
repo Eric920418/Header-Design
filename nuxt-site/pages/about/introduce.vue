@@ -25,6 +25,7 @@ let valuesTop = 0
 let valuesRange = 1
 let valuesImages: HTMLElement[] = []
 let valuesCards: HTMLElement[] = []
+let valuesServiceRail: HTMLElement | null = null
 let valuesObserver: ResizeObserver | undefined
 let valuesFrame = 0
 
@@ -34,6 +35,11 @@ function refreshValuesLayout() {
   const stage = valuesStage.value
   if (mobileValues.value && section && stage) {
     valuesTop = parseFloat(getComputedStyle(stage).top) || 0
+    // Use the fixed rail's real edge rather than estimating Safari toolbar/safe-area offsets.
+    if (valuesServiceRail) {
+      const height = `${Math.max(1, valuesServiceRail.getBoundingClientRect().top - valuesTop)}px`
+      if (section.style.getPropertyValue('--value-visible-height') !== height) section.style.setProperty('--value-visible-height', height)
+    }
     valuesRange = Math.max(1, section.offsetHeight - stage.offsetHeight)
   }
   valuesProgress = -1
@@ -185,10 +191,14 @@ onMounted(() => {
   nativeValuesTimeline.value = CSS.supports('animation-timeline: view()') && CSS.supports('animation-range: contain 0% contain 100%')
   valuesImages = Array.from(valuesStage.value?.querySelectorAll<HTMLElement>('.about-values__image') ?? [])
   valuesCards = Array.from(valuesStage.value?.querySelectorAll<HTMLElement>('.about-values__card') ?? [])
+  valuesServiceRail = document.querySelector<HTMLElement>('.floating-buttons')
   valuesObserver = new ResizeObserver(refreshValuesLayout)
   if (valuesSection.value) valuesObserver.observe(valuesSection.value)
   if (valuesStage.value) valuesObserver.observe(valuesStage.value)
+  if (valuesServiceRail) valuesObserver.observe(valuesServiceRail)
   nextTick(refreshValuesLayout)
+  window.addEventListener('resize', refreshValuesLayout)
+  window.visualViewport?.addEventListener('resize', refreshValuesLayout)
   window.addEventListener('scroll', scheduleValuesProgress, { passive: true })
   window.addEventListener('resize', updateIdentityProgress)
   window.addEventListener('keydown', handleIdentityKeyboard)
@@ -199,6 +209,8 @@ onBeforeUnmount(() => {
   cancelAnimationFrame(valuesFrame)
   window.removeEventListener('scroll', scheduleValuesProgress)
   valuesObserver?.disconnect()
+  window.removeEventListener('resize', refreshValuesLayout)
+  window.visualViewport?.removeEventListener('resize', refreshValuesLayout)
   window.removeEventListener('resize', updateIdentityProgress)
   window.removeEventListener('keydown', handleIdentityKeyboard)
 })
@@ -591,7 +603,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-history__nav--previous { left: -8px; }
   .about-history__nav--next { right: -8px; }
   /* Keep the scroll track stable while the stage fills Safari's changing visible viewport. */
-  .about-values { --value-scroll-height: max(180px, calc(100svh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); --value-frame-height: max(1px, calc(100dvh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); height: calc(var(--value-scroll-height) * var(--value-count)); }
+  .about-values { --value-scroll-height: max(180px, calc(100svh - var(--site-header-height) - var(--mobile-service-clearance, 0px))); --value-frame-height: var(--value-visible-height, max(1px, calc(100dvh - var(--site-header-height) - var(--mobile-service-clearance, 0px)))); height: calc(var(--value-scroll-height) * var(--value-count)); }
   .about-values > div[data-ev] { height: 100%; }
   .about-values__stage { position: sticky; top: var(--site-header-height); height: var(--value-frame-height); min-height: 0; }
   /* Scroll progress owns the blend; timed transitions would lag behind a reversing finger. */
