@@ -4,74 +4,89 @@ import vm from 'node:vm'
 import ts from 'typescript'
 
 const source = await readFile(new URL('../pages/about/introduce.vue', import.meta.url), 'utf8')
-const update = source.match(/function updateValuesProgress\(\) \{[\s\S]*?\n\}/)?.[0]
-assert.ok(update, '品牌理念必須有捲動進度更新')
+const names = ['refreshValuesLayout', 'updateValuesProgress', 'valuesLayerStyle']
+const functions = names.map(name => {
+  const code = source.match(new RegExp(`function ${name}\\([^]*?\\n\\}`))?.[0]
+  assert.ok(code, `缺少${name}`)
+  return code
+}).join('\n')
 let mobile = true
 let top = 60
+let styleReads = 0
+let writes = 0
+const layerNode = () => ({ style: { setProperty: () => { writes++ } } })
 const section = { offsetHeight: 2848, getBoundingClientRect: () => ({ top }) }
-const stage = { offsetHeight: 712 }
+const stage = { ...layerNode(), offsetHeight: 712 }
 const state = {
-  valuesFrame: 1,
-  mobileValues: { value: false },
-  valuesSection: { value: section },
-  valuesStage: { value: stage },
-  valuesProgress: { value: 0 },
+  valuesFrame: 1, valuesProgress: -1, valuesTop: 0, valuesRange: 1,
+  mobileValues: { value: false }, nativeValuesTimeline: { value: false }, reducedMotion: { value: false },
+  valuesSection: { value: section }, valuesStage: { value: stage },
+  valuesImages: Array.from({ length: 4 }, layerNode), valuesCards: Array.from({ length: 4 }, layerNode),
   activeValueId: { value: 'service' },
   brandValues: ['brand', 'integration', 'service', 'family'].map(id => ({ id })),
   window: { matchMedia: () => ({ matches: mobile }) },
-  getComputedStyle: () => ({ top: '60px' }),
+  getComputedStyle: () => { styleReads++; return { top: '60px' } },
+  scheduleValuesProgress: () => {},
 }
-const run = vm.runInNewContext(`${ts.transpile(update)}; updateValuesProgress`, state)
+const { refresh, run, style } = vm.runInNewContext(`${ts.transpile(functions)}; ({refresh:refreshValuesLayout,run:updateValuesProgress,style:valuesLayerStyle})`, state)
+refresh()
 for (const [position, expected] of [[800, 'brand'], [60, 'brand'], [-473.9, 'brand'], [-474, 'integration'], [-1008, 'service'], [-1542, 'family'], [-3000, 'family'], [-1008, 'service'], [60, 'brand']]) {
   top = position
   run()
-  assert.equal(state.activeValueId.value, expected, `捲動位置${position}必須同步正確理念`)
+  assert.equal(state.activeValueId.value, expected, `位置${position}必須同步正確理念`)
 }
+assert.equal(styleReads, 1, '捲動期間不得重複讀取computed style／尺寸')
+const stoppedWrites = writes
+run()
+assert.equal(writes, stoppedWrites, '停手或離開區塊後相同進度不得重寫DOM')
 stage.offsetHeight = 243
 section.offsetHeight = 972
+refresh()
 top = -122.25
 run()
-assert.equal(state.activeValueId.value, 'integration', '橫向短窗須使用新的舞台高度與安全留白')
+assert.equal(state.activeValueId.value, 'integration', '短窗須刷新舞台高度')
 mobile = false
+refresh()
 top = -3000
 run()
-assert.equal(state.activeValueId.value, 'integration', '桌面捲動不得覆寫原Hover／Focus狀態')
+assert.equal(state.activeValueId.value, 'integration', '桌面捲動不得覆寫Hover／Focus')
+assert.equal(style(1), undefined, '桌面不得套用手機樣式')
 mobile = true
-state.brandValues = []
-assert.doesNotThrow(run, '空資料不得產生索引錯誤')
-console.log('PASS 手機理念捲動邊界、反向、短窗、桌面隔離與空資料')
-
-const layer = source.match(/function valuesLayerStyle\(index: number\) \{[\s\S]*?\n\}/)?.[0]
-assert.ok(layer, '圖文必須直接使用捲動進度')
-state.brandValues = ['brand', 'integration', 'service', 'family'].map(id => ({ id }))
-state.mobileValues.value = true
-state.reducedMotion = { value: false }
-const style = vm.runInNewContext(`${ts.transpile(layer)}; valuesLayerStyle`, state)
+refresh()
 for (let index = 0; index < 4; index++) {
-  state.valuesProgress.value = (index + .5) / 4
+  state.valuesProgress = (index + .5) / 4
   state.activeValueId.value = state.brandValues[index].id
-  assert.equal(style(index)['--value-copy-opacity'], 1, '每段保留完整可讀的停留區')
+  assert.equal(style(index)['--value-copy-opacity'], 1, '保留完整可讀停留段')
   assert.equal(style(index)['--value-image-opacity'], 1)
   assert.equal(style(index)['--value-copy-y'], '0px')
 }
 for (let index = 1; index < 4; index++) {
   const samples = [.84, .92, 1, 1.08, 1.16].map(offset => {
-    state.valuesProgress.value = (index - 1 + offset) / 4
+    state.valuesProgress = (index - 1 + offset) / 4
     return style(index)['--value-image-opacity']
   })
-  assert.ok(samples.every((value, i) => i === 0 || value > samples[i - 1]), '門檻附近必須連續漸變，不能整段靜止後跳換')
-  state.valuesProgress.value = index / 4
+  assert.ok(samples.every((value, i) => i === 0 || value > samples[i - 1]), '舊瀏覽器仍須連續混合')
+  state.valuesProgress = index / 4
   const forward = style(index)
-  state.valuesProgress.value += .02
+  state.valuesProgress += .02
   style(index)
-  state.valuesProgress.value -= .02
-  assert.deepEqual(style(index), forward, '反向與停手必須得到相同進度，沒有時間追趕')
+  state.valuesProgress -= .02
+  assert.deepEqual(style(index), forward, '反向不得有時間追趕')
 }
 state.reducedMotion.value = true
 state.activeValueId.value = 'integration'
 assert.equal(style(1)['--value-image-opacity'], 1)
 assert.equal(style(0)['--value-image-opacity'], 0)
-assert.equal(style(1)['--value-copy-y'], '0px')
-state.mobileValues.value = false
-assert.equal(style(1), undefined, '桌面不得套用手機圖文透明度')
-console.log('PASS 連續圖文混合、停留、反向、減少動態及桌面隔離')
+state.nativeValuesTimeline.value = true
+state.reducedMotion.value = false
+refresh()
+const nativeWrites = writes
+for (top of [-400, -450, -500]) run()
+assert.equal(writes, nativeWrites, '原生timeline模式不得逐幀以JS更新視覺屬性')
+assert.equal(style(1)['--value-image-start'], '20.5%')
+assert.equal(style(1)['--value-image-end'], '29.5%')
+assert.equal(style(0)['--value-copy-start'], '0%')
+assert.equal(style(3)['--value-copy-end'], '78.5%')
+state.brandValues = []
+assert.doesNotThrow(run, '空資料不得產生索引錯誤')
+console.log('PASS 四階段／反向／短窗／桌面／空資料、原生timeline無逐幀DOM寫入及舊版快取布局與混合')

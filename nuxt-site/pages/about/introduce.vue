@@ -19,20 +19,45 @@ const activeValueId = ref<(typeof brandValues)[number]['id']>('service')
 const valuesSection = ref<HTMLElement | null>(null)
 const valuesStage = ref<HTMLElement | null>(null)
 const mobileValues = ref(false)
-const valuesProgress = ref(0)
+const nativeValuesTimeline = ref(false)
+let valuesProgress = -1
+let valuesTop = 0
+let valuesRange = 1
+let valuesImages: HTMLElement[] = []
+let valuesCards: HTMLElement[] = []
+let valuesObserver: ResizeObserver | undefined
 let valuesFrame = 0
 
-function updateValuesProgress() {
-  valuesFrame = 0
+function refreshValuesLayout() {
   mobileValues.value = window.matchMedia('(max-width: 767px)').matches
   const section = valuesSection.value
   const stage = valuesStage.value
+  if (mobileValues.value && section && stage) {
+    valuesTop = parseFloat(getComputedStyle(stage).top) || 0
+    valuesRange = Math.max(1, section.offsetHeight - stage.offsetHeight)
+  }
+  valuesProgress = -1
+  scheduleValuesProgress()
+}
+
+function updateValuesProgress() {
+  valuesFrame = 0
+  const section = valuesSection.value
+  const stage = valuesStage.value
   if (!mobileValues.value || !section || !stage || !brandValues.length) return
-  const top = parseFloat(getComputedStyle(stage).top) || 0
-  const range = Math.max(1, section.offsetHeight - stage.offsetHeight)
-  const progress = Math.max(0, Math.min(1, (top - section.getBoundingClientRect().top) / range))
-  valuesProgress.value = progress
+  const progress = Math.max(0, Math.min(1, (valuesTop - section.getBoundingClientRect().top) / valuesRange))
+  if (progress === valuesProgress) return
+  valuesProgress = progress
   activeValueId.value = brandValues[Math.min(brandValues.length - 1, Math.floor(progress * brandValues.length))]!.id
+  if (nativeValuesTimeline.value) return
+  // Older browsers update only these layers, without rerendering Vue on every scroll frame.
+  stage.style.setProperty('--value-image-shift', `${reducedMotion.value ? 0 : (progress - .5) * 24}px`)
+  brandValues.forEach((_, index) => {
+    for (const [key, value] of Object.entries(valuesLayerStyle(index) ?? {})) {
+      valuesImages[index]?.style.setProperty(key, String(value))
+      valuesCards[index]?.style.setProperty(key, String(value))
+    }
+  })
 }
 
 function scheduleValuesProgress() {
@@ -41,11 +66,16 @@ function scheduleValuesProgress() {
 
 const valuesStyle = computed(() => ({
   '--value-count': brandValues.length,
-  '--value-image-shift': `${reducedMotion.value ? 0 : (valuesProgress.value - .5) * 24}px`,
 }))
 function valuesLayerStyle(index: number) {
   if (!mobileValues.value) return undefined
-  const phase = valuesProgress.value * brandValues.length
+  if (nativeValuesTimeline.value) return {
+    '--value-image-start': `${(index - .18) / brandValues.length * 100}%`,
+    '--value-image-end': `${(index + .18) / brandValues.length * 100}%`,
+    '--value-copy-start': `${(index === 0 ? 0 : index - .02) / brandValues.length * 100}%`,
+    '--value-copy-end': `${(index + (index === brandValues.length - 1 ? .14 : .98)) / brandValues.length * 100}%`,
+  }
+  const phase = Math.max(0, valuesProgress) * brandValues.length
   const clamp = (value: number) => Math.max(0, Math.min(1, value))
   const incoming = index === 0 ? 1 : clamp((phase - index + .18) / .36)
   const enterCopy = index === 0 ? 1 : clamp((phase - index + .02) / .16)
@@ -140,6 +170,8 @@ const identityProgressStyle = computed(() => ({
   transform: `translateX(${identityScrollRatio.value * ((1 / identityViewportRatio.value) - 1) * 100}%)`,
 }))
 
+watch(reducedMotion, refreshValuesLayout)
+
 watch([historyEmblaApi, reducedMotion], ([api, isReduced]) => {
   if (historyTimer) clearInterval(historyTimer)
   historyResetPhase.value = 'idle'
@@ -150,9 +182,14 @@ watch([historyEmblaApi, reducedMotion], ([api, isReduced]) => {
 
 onMounted(() => {
   nextTick(updateIdentityProgress)
-  nextTick(updateValuesProgress)
+  nativeValuesTimeline.value = CSS.supports('animation-timeline: view()') && CSS.supports('animation-range: contain 0% contain 100%')
+  valuesImages = Array.from(valuesStage.value?.querySelectorAll<HTMLElement>('.about-values__image') ?? [])
+  valuesCards = Array.from(valuesStage.value?.querySelectorAll<HTMLElement>('.about-values__card') ?? [])
+  valuesObserver = new ResizeObserver(refreshValuesLayout)
+  if (valuesSection.value) valuesObserver.observe(valuesSection.value)
+  if (valuesStage.value) valuesObserver.observe(valuesStage.value)
+  nextTick(refreshValuesLayout)
   window.addEventListener('scroll', scheduleValuesProgress, { passive: true })
-  window.addEventListener('resize', scheduleValuesProgress, { passive: true })
   window.addEventListener('resize', updateIdentityProgress)
   window.addEventListener('keydown', handleIdentityKeyboard)
 })
@@ -161,7 +198,7 @@ onBeforeUnmount(() => {
   if (historyTimer) clearInterval(historyTimer)
   cancelAnimationFrame(valuesFrame)
   window.removeEventListener('scroll', scheduleValuesProgress)
-  window.removeEventListener('resize', scheduleValuesProgress)
+  valuesObserver?.disconnect()
   window.removeEventListener('resize', updateIdentityProgress)
   window.removeEventListener('keydown', handleIdentityKeyboard)
 })
@@ -260,7 +297,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
     </section>
 
-    <section ref="valuesSection" class="about-values elementor-widget-antra-banner-process" :style="valuesStyle" aria-labelledby="about-values-title">
+    <section ref="valuesSection" class="about-values elementor-widget-antra-banner-process" :class="{ 'has-native-values-timeline': nativeValuesTimeline }" :style="valuesStyle" aria-labelledby="about-values-title">
       <h2 id="about-values-title" class="sr-only">{{ cmsCopy.copy.text5 }}</h2>
       <div data-ev="opalScaleUp">
         <div ref="valuesStage" class="about-values__stage">
@@ -565,6 +602,33 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-values__card.is-active { opacity: var(--value-copy-opacity, 1); visibility: var(--value-copy-visibility, visible); pointer-events: auto; transform: translateY(var(--value-copy-y, 0px)); transition: none; }
   .about-values__copy { position: relative; inset: auto; width: 100%; padding: 0; text-align: center; transform: none; transition: none; }
   .about-values__copy p { transition: none; }
+  .has-native-values-timeline { view-timeline-name: --about-values; view-timeline-axis: block; view-timeline-inset: var(--site-header-height) calc(100% - var(--site-header-height) - var(--value-frame-height)); }
+  .has-native-values-timeline .about-values__image,
+  .has-native-values-timeline .about-values__image.is-active { animation: values-image-in linear both, values-image-pan linear both; animation-timeline: --about-values, --about-values; animation-range: contain var(--value-image-start) contain var(--value-image-end), contain 0% contain 100%; }
+  .has-native-values-timeline .about-values__image:first-child { opacity: 1; animation-name: none, values-image-pan; }
+  .has-native-values-timeline .about-values__card,
+  .has-native-values-timeline .about-values__card.is-active { visibility: visible; animation: values-copy linear both; animation-timeline: --about-values; animation-range: contain var(--value-copy-start) contain var(--value-copy-end); }
+  .has-native-values-timeline .about-values__card:first-child { animation-name: values-copy-first; }
+  .has-native-values-timeline .about-values__card:last-child { animation-name: values-copy-last; }
+  .has-native-values-timeline .about-values__card:only-child { animation: none; opacity: 1; transform: none; }
+  @keyframes values-image-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes values-image-pan {
+    from { transform: translate3d(0, max(-12px, calc(var(--value-frame-height) * -.025)), 0) scale(1.06); }
+    to { transform: translate3d(0, min(12px, calc(var(--value-frame-height) * .025)), 0) scale(1.06); }
+  }
+  @keyframes values-copy {
+    0% { opacity: 0; transform: translate3d(0, 18px, 0); }
+    16%, 84% { opacity: 1; transform: translate3d(0, 0, 0); }
+    100% { opacity: 0; transform: translate3d(0, -18px, 0); }
+  }
+  @keyframes values-copy-first {
+    0%, 83.673469% { opacity: 1; transform: translate3d(0, 0, 0); }
+    100% { opacity: 0; transform: translate3d(0, -18px, 0); }
+  }
+  @keyframes values-copy-last {
+    from { opacity: 0; transform: translate3d(0, 18px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
   .about-values__copy .number { font-size: clamp(20px, 3.8svh, 30px); line-height: 1.15; color: #caa05c; opacity: 1; }
   .about-values__copy h3 { width: 100%; min-height: 0; padding: 8px 0 12px; font-size: clamp(20px, 4svh, 30px); line-height: 1.35; white-space: normal; text-wrap: balance; }
   .about-values__copy p { width: 100%; min-height: 0; font-size: clamp(12px, 2svh, 15px); line-height: 1.5; opacity: 1; visibility: visible; }
@@ -577,6 +641,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .about-identity__progress { margin-top: 20px; }
   .identity-lightbox { grid-template-columns: 42px minmax(0, 1fr) 42px; gap: 8px; padding: 70px 12px 24px; }
   .identity-lightbox__nav { width: 42px; height: 42px; }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .about-values.has-native-values-timeline .about-values__image,
+  .about-values.has-native-values-timeline .about-values__card { animation: none; opacity: 0; transform: none; }
+  .about-values.has-native-values-timeline .about-values__image.is-active,
+  .about-values.has-native-values-timeline .about-values__card.is-active { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
