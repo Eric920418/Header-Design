@@ -57,7 +57,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </picture>
         </a>
       </template>
-      <a href="https://sakura-ai-one.vercel.app/consumer?entry=official" target="_blank" rel="noopener noreferrer" aria-label="拍立配（另開分頁）" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 sm:h-[74px] sm:w-[74px]"><img :src="cmsCopy.copy.field4" :alt="cmsCopy.copy.field5" class="block h-[70px] w-[70px]" /></a>
+      <a href="https://sakura-ai-one.vercel.app/consumer?entry=official" target="_blank" rel="noopener noreferrer" aria-label="拍立配（另開分頁）" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 sm:h-[74px] sm:w-[74px]">
+        <picture>
+          <source v-if="cmsCopy.copy.field4 === '/floating-icons/pailipei.svg'" media="(max-width: 767px)" srcset="/floating-icons/pailipei-mobile.svg" />
+          <img :src="cmsCopy.copy.field4" :alt="cmsCopy.copy.field5" class="block h-[70px] w-[70px]" />
+        </picture>
+      </a>
     </div>
   </aside>
 </template>
