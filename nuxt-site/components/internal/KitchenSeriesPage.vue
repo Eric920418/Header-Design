@@ -12,6 +12,7 @@ const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_
 const { data } = defineProps<{ data: KitchenSeriesPageData }>()
 const homeHero = await useCmsResource('view-components-home-HomeHero', { slides: [] as { route?: string; title: string }[], cmsSettings: { visible: true, seoTitle: '', seoDescription: '' } })
 const heroTitle = homeHero.slides.find(slide => slide.route?.split(/[?#]/)[0] === `/home-style/${data.slug}`)?.title.trim() || data.name
+const heroSeriesSubtitle = ['aikitchen', 'basic-plus'].includes(data.slug) ? '' : KITCHEN_STYLES.find(style => style.slug === data.slug)?.zh
 const reducedMotion = useReducedMotion()
 const currentHero = ref(0)
 const activeHeroStory = computed(() => kitchenHeroStory(data, data.heroSlides[currentHero.value]))
@@ -217,8 +218,8 @@ useSeoMeta({
         <div :key="`title-${heroTransition}`" class="hero-slide-copy">
           <div aria-hidden="true" class="mb-[20px] h-[30px]" />
           <h1 id="ai-kitchen-hero-title" class="hero-template-title m-0 font-display font-normal tracking-[-1px] text-white">{{ activeHeroStory?.title || heroTitle }}</h1>
+          <h2 v-if="activeHeroStory?.subtitle || heroSeriesSubtitle" class="ai-hero__subtitle">{{ activeHeroStory?.subtitle || heroSeriesSubtitle }}</h2>
           <template v-if="activeHeroStory">
-            <h2 class="ai-hero__subtitle">{{ activeHeroStory.subtitle }}</h2>
             <div class="ai-hero__description hero-template-description"><p v-for="paragraph in activeHeroStory.paragraphs" :key="paragraph">{{ paragraph }}</p></div>
           </template>
         </div>
