@@ -1,7 +1,9 @@
 ## 2026-11-12 八個品牌系列首屏補中文名稱
 
 - 依00.43.05截圖，在Clever／Loft Chic／Joyful／Premium／Elegant／Chef／Country／Harmony英文首屏大標下方，顯示既有已發布KITCHEN_STYLES的中文系列名稱：巧域廚房、潮派廚房、童樂廚房、君璽廚房、臻美廚房、大廚廚房、鄉村廚房、閤樂廚房。沿用24px／手機20px白字中標與既有間距，不更動英文大標、輪播圖片或連結。
-- 共用KitchenSeriesPage直接讀取既有CMS名稱，不新增或覆寫資料庫。AI仍依當張圖片顯示原有中文中標與內文，Basic+保留原樣；pnpm build含typecheck及diff檢查通過。本機八頁各320／390／1440×900共24狀態，正常進場動畫後中文名稱正確、白字、手機20px／桌面24px，與英文的間距分別24／30px且無水平溢位。AI CABINET／FAUCET／LIGHT的原中標與內文均存在，Basic+沒有增加中標。首次即時量測含進場translateX(-48px)造成負座標，已另等候正常進場後重測，保留原動畫；正式複驗待補。
+- 共用KitchenSeriesPage直接讀取既有CMS名稱，不新增或覆寫資料庫。AI仍依當張圖片顯示原有中文中標與內文，Basic+保留原樣；pnpm build含typecheck及diff檢查通過。本機八頁各320／390／1440×900共24狀態，正常進場動畫後中文名稱正確、白字、手機20px／桌面24px，與英文的間距分別24／30px且無水平溢位。AI CABINET／FAUCET／LIGHT的原中標與內文均存在，Basic+沒有增加中標。首次即時量測含進場translateX(-48px)造成負座標，已另等候正常進場後重測，保留原動畫；正式八頁相同24狀態複驗亦通過。另本機Loft Chic於767／768／1024／1920px無溢位；正式AI三個中標與Basic+保留原樣，另一正式域Clever390px亦顯示巧域廚房。未做實體手機與本輪Safari驗證。
+
+- 27767266已發布Production dpl_A7LRH1xBTGK4zUqWUShLWmHy1GDP；兩正式網域各自inspect均READY及相同commit，沒有CMS／DB寫入。證據目錄.gstack/qa-reports/series-hero-names-20261112/：[正式24狀態](.gstack/qa-reports/series-hero-names-20261112/production.json)、[桌面中文名稱](.gstack/qa-reports/series-hero-names-20261112/production-clever-desktop.png)、[手機中文名稱](.gstack/qa-reports/series-hero-names-20261112/production-clever-mobile.png)、[AI／Basic+](.gstack/qa-reports/series-hero-names-20261112/production-exceptions.json)。完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-11-12 手機拍立配圖示與文字大小一致
 
