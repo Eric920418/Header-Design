@@ -1,7 +1,9 @@
 ## 2026-11-12 手機拍立配圖示與文字大小一致
 
 - 依00.42.36截圖修正全站共用FloatingButtons：原三張img皆64×64px，但拍立配原稿50×50畫布內文字7px，比到府丈量70×70稿的13px小。新增手機專用pailipei-mobile.svg，以70×70畫布、13px文字／y64基線及相近圖示高度對齊左側；沿用原向量路徑與白色，不改連結或72px按鈕點擊範圍。
-- 767px以下以picture選手機圖；768px以上仍用原CMS圖檔，不覆寫CMS自訂圖片或資料庫。正式修前390px已重現差異，768／1024／1440×900服務列基準存於.gstack/qa-reports/mobile-service-size-20261112/desktop-before.json；pnpm build含typecheck及SVG XML檢查通過；本機320／390／430／767px均使用手機圖、三項64px圖框及72px點擊範圍保留、無水平溢位。768／1024／1440×900的來源、圖框、連結與服務列位置皆與修前相同。正式複驗待補；不以修改共用元件代表全站每頁操作皆重新驗收。
+- 767px以下以picture選手機圖；768px以上仍用原CMS圖檔，不覆寫CMS自訂圖片或資料庫。正式修前390px已重現差異，768／1024／1440×900服務列基準存於.gstack/qa-reports/mobile-service-size-20261112/desktop-before.json；pnpm build含typecheck及SVG XML檢查通過；本機320／390／430／767px均使用手機圖、三項64px圖框及72px點擊範圍保留、無水平溢位。768／1024／1440×900的來源、圖框、連結與服務列位置皆與修前相同。正式相同七尺寸複驗通過，768px首次切來源的載入瞬間另重載確認原圖載入及基準一致；首頁、Clever品牌系列、關於我們390px與另一正式網域皆使用新手機圖、無水平溢位。未做實體手機或本輪Safari驗證，不以共用元件更新代表全站每頁操作皆重新驗收。
+
+- d9337ba2已部署Production dpl_GZn6xCDYc2Db7jCyUmpyGpFS88EZ；Vercel連接器回403／404後使用既有CLI憑證與明確team／project唯讀確認，兩正式網域各自GET均READY及相同commit。證據目錄.gstack/qa-reports/mobile-service-size-20261112/：[修前](.gstack/qa-reports/mobile-service-size-20261112/before.png)、[修後服務列](.gstack/qa-reports/mobile-service-size-20261112/production-services.png)、[正式七尺寸](.gstack/qa-reports/mobile-service-size-20261112/production.json)、[共用頁面](.gstack/qa-reports/mobile-service-size-20261112/shared-pages.json)。完成紀錄只提交README，不為文件再部署。
 
 ## 2026-11-03 實機仍有黑帶：以固定服務列實際邊界校準
 
