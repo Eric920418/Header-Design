@@ -721,7 +721,7 @@ assert(!buildersSource.includes('@media (max-height: 759px)')&&buildersSource.in
 assert(/\.builders-strengths-section \{[^}]*padding: 75px 30px 105px;[^}]*background: #241c18;/.test(buildersSource),'Home7原版棕黑底與上下節奏')
 const strengthsMobileCss=buildersSource.slice(buildersSource.indexOf('@media (max-width: 767px)'))
 assert(strengthsMobileCss.includes('.builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }')&&strengthsMobileCss.includes('.builders-strengths-copy { position: static; height: auto; }')&&strengthsMobileCss.includes('.builders-strengths-content { display: block; min-height: auto; padding: 0; transform: none; }')&&strengthsMobileCss.includes('.builders-solution__copy { margin-top: 30px; }'),'手機自然單欄／30px間距，取消底列拉伸與sticky，避免遮擋圖文')
-assert(buildersSource.includes('duration: \'slow\'')&&buildersSource.includes('aria-hidden="true">{{ moduleCount }}+')&&buildersSource.includes('font-variant-numeric: tabular-nums'),'保留Home7向上進場、最終值ARIA與等寬計數')
+assert(buildersSource.includes('duration: \'slow\'')&&buildersSource.includes("moduleCount + '+' + activeStrength.value[1]")&&buildersSource.includes('font-variant-numeric: tabular-nums'),'保留Home7向上進場、最終值ARIA與等寬計數')
 const moduleCounterSource=buildersSource.slice(buildersSource.indexOf('const moduleCounter ='),buildersSource.indexOf('const activePavilionId =')).replace('ref<HTMLElement>()','ref()').replace(/: (?:IntersectionObserver|number) \| undefined/g,'').replace('(time: number)','(time)')
 function counterHarness(value='45',{reduced=false,observer=true}={}){
  const originals=[{value:[value,'萬']}],before=JSON.stringify(originals),motion={value:reduced},mounted=[],unmounted=[],watches=[],frames=new Map();let frameId=0,io

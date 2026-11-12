@@ -122,6 +122,22 @@ onBeforeUnmount(finishModuleCount)
 const activePavilionId = ref<(typeof brandPavilions)[number]['id']>('taipei')
 const activePavilion = computed(() => brandPavilions.find(item => item.id === activePavilionId.value) ?? brandPavilions[0]!)
 
+const strengthsList = ref<HTMLElement>()
+const activeStrengthIndex = ref(0)
+const activeStrength = computed(() => strengths[activeStrengthIndex.value])
+let strengthObserver: IntersectionObserver | undefined
+onMounted(() => {
+  if (!strengthsList.value || !('IntersectionObserver' in window)) return
+  strengthObserver = new IntersectionObserver(entries => {
+    const visible = entries.filter(entry => entry.isIntersecting)
+      .sort((a, b) => Math.abs(a.boundingClientRect.top + a.boundingClientRect.height / 2 - window.innerHeight / 2) - Math.abs(b.boundingClientRect.top + b.boundingClientRect.height / 2 - window.innerHeight / 2))
+    if (visible[0]) activeStrengthIndex.value = Number((visible[0].target as HTMLElement).dataset.strengthIndex)
+  }, { rootMargin: '-35% 0px -35% 0px' })
+  strengthsList.value.querySelectorAll('[data-strength-index]').forEach(item => strengthObserver!.observe(item))
+})
+onBeforeUnmount(() => strengthObserver?.disconnect())
+
+
 const selectPavilion = (id: (typeof brandPavilions)[number]['id']) => {
   activePavilionId.value = id
 }
@@ -226,19 +242,20 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-strengths-heading">
                 <InternalSectionPill tone="dark">OUR STRENGTHS</InternalSectionPill>
                 <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>For</span><br /><span>Better Living</span></h2>
-                <p>以多元設計模組、AI 智能製造與數位案件管理，<br />為建商提供從設計規劃到交付的整合服務。</p>
+                <p>SAKURA深耕台灣居家生活<br />透過「HOME IN O.N.E」全方位整合<br />將AI智能串聯「產品、生產與售後服務」<br />提供更精準、高效的空間解決方案</p>
               </div>
-              <div v-if="strengths[0]" v-reveal="{ anim: 'opalMoveUp' }" class="builders-solution__copy">
-                <p class="builders-solution__lead">{{ strengths[0].lines[1].replaceAll('\n', '') }}</p>
-                <p ref="moduleCounter" class="builders-solution__number" :aria-label="`${strengths[0].value[0]}+${strengths[0].value[1]}`"><span aria-hidden="true">{{ moduleCount }}+{{ strengths[0].value[1] }}</span></p>
-                <h3>{{ strengths[0].lines[0] }} {{ strengths[0].lines[2] }}</h3>
+              <div v-if="activeStrength" v-reveal="{ anim: 'opalMoveUp' }" class="builders-solution__copy" :data-active-strength="activeStrengthIndex">
+                <p class="builders-solution__lead">{{ activeStrength.lines[1].replaceAll('\n', '') }}</p>
+                <p ref="moduleCounter" class="builders-solution__number" :aria-label="activeStrength.value.join(activeStrengthIndex === 0 ? '+' : '')"><span aria-hidden="true">{{ activeStrengthIndex === 0 ? moduleCount + '+' + activeStrength.value[1] : activeStrength.value.join('') }}</span></p>
+                <h3><span>{{ activeStrength.lines[0] }}</span><span>{{ activeStrength.lines[2] }}</span></h3>
               </div>
             </div>
           </header>
-          <div class="builders-strengths-list">
+          <div ref="strengthsList" class="builders-strengths-list">
             <article
               v-for="(item, index) in strengths"
               :key="item.lines[0]"
+              :data-strength-index="index"
               v-reveal="{ anim: 'opalMoveUp', duration: 'slow' }"
               class="builders-solution"
             >
@@ -249,11 +266,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 class="builders-solution__visual"
                 :class="index === 0 ? 'builders-solution__visual--modules' : index === 1 ? 'builders-solution__visual--factory' : 'builders-solution__visual--platform'"
               />
-              <h3 v-if="index > 0" class="builders-solution__caption">
-                <span>{{ item.lines[1].replaceAll('\n', '') }}<template v-if="index === 2"> {{ item.lines[0] }}</template></span>
-                <strong>{{ item.value.join('') }}</strong>
-                <span><template v-if="index === 1">{{ item.lines[0] }} </template>{{ item.lines[2] }}</span>
-              </h3>
+              <div class="builders-solution__caption">
+                <p>{{ item.lines[1].replaceAll('\n', '') }}</p>
+                <strong>{{ item.value.join(index === 0 ? '+' : '') }}</strong>
+                <h3><span>{{ item.lines[0] }}</span><span>{{ item.lines[2] }}</span></h3>
+              </div>
             </article>
           </div>
         </div>
@@ -428,12 +445,15 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-capability__showcase :deep(.builder-image) { height: auto; background: transparent; }
 .builders-solution { margin: 0; overflow: hidden; border-radius: 24px; }
 .builders-solution__copy { margin-top: 0; }
+.builders-solution__copy h3 span,
+.builders-solution__caption h3 span { display: block; }
 .builders-solution__copy h3,
 .builders-solution__copy p { margin: 0; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 400; line-height: 1.4; }
 .builders-solution__copy .builders-solution__lead { margin-bottom: 8px; }
 .builders-solution__copy .builders-solution__number { min-height: 96px; color: #c4a574; font-size: 80px; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
-.builders-solution__caption { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3em; margin: 0; padding: 20px 0 6px; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 400; line-height: 1.4; }
-.builders-solution__caption strong { color: #c4a574; font-size: 28px; font-weight: 700; }
+.builders-solution__caption { display: none; padding: 20px 0 6px; font-family: var(--font-cjk-sans); font-size: 20px; line-height: 1.4; }
+.builders-solution__caption p, .builders-solution__caption h3 { margin: 0; font: inherit; }
+.builders-solution__caption strong { color: #c4a574; font-size: 40px; font-weight: 700; }
 .builders-solution__visual--modules { aspect-ratio: 4933 / 3946; }
 .builders-solution__visual--factory { aspect-ratio: 1280 / 460; }
 .builders-solution__visual--factory :deep(img) { object-position: bottom; }
@@ -548,6 +568,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-strengths-section { padding: 60px 15px; }
   .builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
   .builders-strengths-copy { position: static; height: auto; }
+  .builders-strengths-content > .builders-solution__copy { display: none; }
+  .builders-solution__caption { display: block; }
   .builders-strengths-content { display: block; min-height: auto; padding: 0; transform: none; }
   .builders-strengths-heading h2 { margin-bottom: 20px; font-size: 30px; }
   .builders-strengths-heading h2 b { font-size: 28px; }
