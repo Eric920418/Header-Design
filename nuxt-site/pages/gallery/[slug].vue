@@ -191,39 +191,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 </template>
 </template>
 
+<style scoped src="~/assets/css/case-detail-layout.css"></style>
+
 <style scoped>
-.case-detail-page { color: #59585d; background: #fafafa; }
-.case-detail-content { padding: 100px 30px 108px; overflow: clip; }
-.case-detail-rail { box-sizing: border-box; width: min(1496px, 100%); margin-inline: auto; }
-.case-detail-rail.internal-rail-safe { padding-inline: 43px; }
-
-.case-detail-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 2.273fr) minmax(300px, 1fr);
-  grid-template-areas:
-    "header sidebar"
-    "carousel sidebar"
-    "story sidebar"
-    "navigation sidebar"
-    "reviews sidebar";
-  column-gap: clamp(30px, 4.7vw, 71px);
-  align-items: start;
-}
-
-.case-detail-header { grid-area: header; padding-bottom: 40px; }
-.case-detail-header h1 { max-width: 900px; color: #1c1c1d; font-family: var(--font-display); font-size: 30px; font-weight: 600; line-height: 40px; }
-.case-detail-carousel { grid-area: carousel; min-width: 0; }
-
-.case-detail-sidebar { grid-area: sidebar; min-width: 0; align-self: stretch; }
-.case-detail-sidebar__sticky { position: sticky; top: 96px; }
-.case-detail-booking { display: flex; width: 100%; height: 60px; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 9px 9px 30px; border: 1px solid rgba(159,159,164,.64); border-radius: 999px; color: #1c1c1d; background: transparent; font-family: var(--font-ui); font-size: 18px; line-height: 24px; transition: color .3s ease, border-color .3s ease, background-color .3s ease; }
-.case-detail-booking:hover { border-color: #caa05c; color: #fff; background: #caa05c; }
-.case-detail-booking .site-cta-icon { display: flex; width: 40px; height: 40px; flex: 0 0 auto; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #caa05c; transform: rotate(-45deg); transition: transform .5s ease; }
-.case-detail-booking:hover .site-cta-icon { transform: rotate(0); }
-.case-detail-booking :deep(svg) { width: 20px; height: 20px; }
-
-.case-detail-widget { margin-top: 49px; }
-.case-detail-widget h2 { margin-bottom: 25px; color: #1c1c1d; font-family: var(--font-display); font-size: 25px; font-weight: 400; line-height: 31px; }
 .case-detail-store-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-bottom: 25px; }
 .case-detail-store-heading h2 { margin-bottom: 0; }
 .case-detail-store-booking { display: inline-flex; flex: 0 0 auto; height: 50px; align-items: center; justify-content: center; gap: 16px; padding: 0 22px; border-radius: 999px; color: #fff; background: #caa05c; font-family: var(--font-cjk-sans); font-size: 18px; line-height: 24px; white-space: nowrap; cursor: pointer; transition: background-color .3s ease; }
@@ -232,10 +202,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .case-detail-store-booking:hover :deep(svg),
 .case-detail-store-booking:focus-visible :deep(svg) { transform: rotate(45deg); }
 .case-detail-widget h3 { color: #1c1c1d; font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 26px; }
-.case-detail-specs { border-top: 1px solid #e3e3e8; }
-.case-detail-specs > div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 55px; padding: 12px 0; border-bottom: 1px solid #e3e3e8; }
-.case-detail-specs dt { color: #9f9fa4; font-size: 15px; line-height: 22px; }
-.case-detail-specs dd { color: #1c1c1d; font-family: var(--font-display); font-size: 16px; font-weight: 600; line-height: 24px; }
 .case-detail-contact-list { display: grid; gap: 14px; margin-top: 20px; }
 .case-detail-contact-list li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 11px; align-items: start; font-size: 15px; line-height: 23px; }
 .case-detail-contact-list :deep(svg) { width: 19px; height: 19px; margin-top: 2px; color: #caa05c; }
@@ -288,25 +254,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .case-detail-related__slide { min-width: 0; flex: 0 0 calc((100% - 60px) / 3); }
 
 @media (max-width: 1200px) and (min-width: 1025px) {
-  .case-detail-content { padding-top: 80px; padding-bottom: 88px; }
-  .case-detail-layout { column-gap: 30px; }
-  .case-detail-sidebar { padding-right: 0; }
-  .case-detail-header h1 { font-size: 30px; line-height: 40px; }
   .case-detail-story-block h2 { font-size: 25px; line-height: 31px; }
 }
 
 @media (max-width: 1024px) {
-  .case-detail-content { padding: 80px 30px 88px; }
-  .case-detail-layout { display: flex; flex-direction: column; }
-  .case-detail-header { order: 1; width: 100%; }
-  .case-detail-carousel { order: 2; width: 100%; }
-  .case-detail-sidebar { order: 3; width: 100%; padding-right: 0; align-self: auto; }
   .case-detail-story { order: 4; width: 100%; }
   .case-detail-navigation { order: 5; width: 100%; }
   .case-detail-reviews { order: 6; width: 100%; }
-  .case-detail-sidebar__sticky { position: static; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 30px; margin-top: 60px; }
-  .case-detail-booking { grid-column: 1 / -1; }
-  .case-detail-widget { margin-top: 0; }
   .case-detail-related { margin-top: 0; padding-top: 80px; }
   .case-detail-related__heading > h2 { padding: 50px 0 30px; }
   .case-detail-related__slide { flex-basis: calc((100% - 30px) / 2); }
@@ -318,12 +272,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 }
 
 @media (max-width: 767px) {
-  .case-detail-content { padding: 60px 15px 68px; }
-  .case-detail-rail.internal-rail-safe { padding-inline: 0; }
-  .case-detail-header { padding-bottom: 30px; }
-  .case-detail-header h1 { font-size: 25px; line-height: 34px; }
-  .case-detail-sidebar__sticky { grid-template-columns: 1fr; gap: 42px; margin-top: 46px; }
-  .case-detail-booking { grid-column: auto; }
   .case-detail-story { margin-top: 50px; }
   .case-detail-story-block + .case-detail-story-block { margin-top: 44px; }
   .case-detail-story-block h2 { margin-bottom: 17px; font-size: 25px; line-height: 31px; }
@@ -349,15 +297,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .case-detail-related__slide { flex-basis: 100%; }
 }
 
-@media (min-width: 1600px) {
-  .case-detail-sidebar { padding-right: 0; }
-}
+
 
 @media (prefers-reduced-motion: reduce) {
   .case-detail-store-booking,
   .case-detail-store-booking :deep(svg),
-  .case-detail-booking,
-  .case-detail-booking .site-cta-icon,
   .case-detail-contact-list a,
   .case-detail-contact-links a,
   .case-detail-story-links a,
