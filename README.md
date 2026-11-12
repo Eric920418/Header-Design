@@ -1,7 +1,7 @@
 ## 2026-11-12 建商三張二修素材
 
 - 已找到/Users/eric/Downloads/二修261030/6.2建商專區：6.2aifactory-1.jpg.jpg（設計模組）、6.2aifactory-2.png（AI工廠）、6.2aifactory-3.jpg.jpg（案件管理）。以既有sharp等比例轉WebP至revision-20261030版本路徑，保留原檔與原素材；圖片改用原比例完整顯示，避免圖內文字被原橫幅比例裁切，同步更新替代文字。
-- 將以既有CMS版本發布機制僅更新view-pages-builders-index.strengths三個background，先檢查無未發布草稿與原來源符合預期；保留其他內容及舊版本，禁止整庫覆寫。圖片連結更新自我檢查（精準欄位、原物件不變、可重跑及自訂來源拒絕）與正式dry-run通過，目標文件revision 3且無未發布草稿；公開圖檔依Nuxt設定放於根目錄public。pnpm build含typecheck與diff檢查通過，三張圖皆存在於.output/public部署產物，45+萬／AI智能／管理平台切換自我檢查通過。正式圖片連結更新與捲動複驗待完成。
+- 將以既有CMS版本發布機制僅更新view-pages-builders-index.strengths三個background，先檢查無未發布草稿與原來源符合預期；保留其他內容及舊版本，禁止整庫覆寫。圖片連結更新自我檢查（精準欄位、原物件不變、可重跑及自訂來源拒絕）與正式dry-run通過，目標文件revision 3且無未發布草稿；公開圖檔依Nuxt設定放於根目錄public。pnpm build含typecheck與diff檢查通過，三張圖皆存在於.output/public部署產物，45+萬／AI智能／管理平台切換自我檢查通過。26c8eb80已發布Production dpl_FSzipwQTq7g9AG4T7DwnCx3zpaUK，兩正式網域分別查詢均READY且同commit。正式CMS以既有版本機制由revision 3更新至5，僅三個background改動，原版本787946b6-0def-412a-99e1-5c9e97c50923保留，新發布3d92f0f4-2ff1-4301-913e-6943bdd6b58d；其他文件及所有原版本逐項比較不變。正式七尺寸三圖皆載入、圖片與框高度一致、比例誤差小於.002且無水平溢位；1440×900五段0→1→2→1→0對應正確，另一正式域390px確認新三來源。未做本輪實體Safari驗證。證據.gstack/qa-reports/builders-images-20261112/：matrix.json、scroll.json、cms-update.txt、production-first.png及production-second.png。完成紀錄只提交README，不為文件再次部署。
 
 ## 2026-11-12 建商整合實力文案與隨圖重點
 
