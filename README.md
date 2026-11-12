@@ -1,7 +1,9 @@
 ## 2026-11-12 案例詳情版型對齊
 
 - 依01.05.12截圖，設計靈感案例詳情與門市案例詳情共用case-detail-layout.css，統一欄寬、圖片區寬度、標題／規格字級與色彩及手機單欄順序；沿用CaseCarousel。補上與參考頁相同的到店預約入口，讀取既有已發布gallery頁CMS連結與文案，保留個別案例內容、圖片、錯誤提示及返回列表篩選條件，無資料庫寫入。
-- 檢查範圍為兩種詳情模板；正式修前參考頁320／390／768／1024／1440／1920px基準與目標截圖存於.gstack/qa-reports/case-detail-alignment-20261112/。pnpm build含typecheck與diff檢查通過。本機兩頁320／390／768／1024／1440／1920×900共12狀態無水平溢位；目標與參考頁欄寬／字級／行高／色彩相同，參考頁六尺寸完整量測與修前完全一致。五張輪播切換及返回連結保留style／page已確認。正式驗收待完成；未做本輪Safari／實體手機驗證，不代表全站重新驗收。
+- 檢查範圍為兩種詳情模板；正式修前參考頁320／390／768／1024／1440／1920px基準與目標截圖存於.gstack/qa-reports/case-detail-alignment-20261112/。pnpm build含typecheck與diff檢查通過。本機兩頁320／390／768／1024／1440／1920×900共12狀態無水平溢位；目標與參考頁欄寬／字級／行高／色彩相同，參考頁六尺寸完整量測與修前完全一致。五張輪播切換及返回連結保留style／page已確認。正式兩頁相同12狀態複驗無水平溢位，標題／欄寬／字級／行高／配色一致；參考頁與修前的幾何及計算樣式一致（僅正常進場動畫可視class不同，已排除比對）。另一正式網域390px亦確認預約入口與無溢位；未做本輪Safari／實體手機驗證，不代表全站重新驗收。
+
+- 91652946已發布Production dpl_C1G4wCRSFMZ1bWkcUf8VpooH4tVV；兩正式網域各自查詢均READY及相同commit。證據：[正式量測](.gstack/qa-reports/case-detail-alignment-20261112/production.json)、[正式桌面](.gstack/qa-reports/case-detail-alignment-20261112/production-desktop.png)、[手機](.gstack/qa-reports/case-detail-alignment-20261112/production-mobile.png)、[五張圖片切換](.gstack/qa-reports/case-detail-alignment-20261112/carousel.json)。完成紀錄僅提交README，不為文件再次部署。
 
 ## 2026-11-12 八個品牌系列首屏補中文名稱
 
