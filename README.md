@@ -1,7 +1,7 @@
 ## 2026-11-12 主導覽免費丈量文案
 
 - 依15.24.20截圖，僅更新SiteHeader「門市與服務」下的丈量項目為「免費丈量」，桌面／手機共用正式CMS資料；目的地及外連行為保留。iCare標誌判斷改依既有目的網址，避免改名稱後標誌消失。其他服務列／內文不在本次指定範圍。
-- 使用.gstack/qa-reports/free-measuring-20261112/update.mjs精準版本發布：限定既有Azure正式目標、唯一主選單項目與原名稱、無未發布草稿，僅改label，保留其餘欄位及舊版本。pnpm build含typecheck與diff檢查通過；精準文案替換／保留其他欄位／可重跑／拒絕自訂名稱的自我檢查及正式dry-run通過。正式資料發布及畫面驗證待完成。
+- 使用.gstack/qa-reports/free-measuring-20261112/update.mjs精準版本發布：限定既有Azure正式目標、唯一主選單項目與原名稱、無未發布草稿，僅改label，保留其餘欄位及舊版本。pnpm build含typecheck與diff檢查通過；精準文案替換／保留其他欄位／可重跑／拒絕自訂名稱的自我檢查及正式dry-run通過。5d465a48已部署Production dpl_CpkzWsSc77Kyn3kzGunMXTggvkxD並確認READY。正式CMS主導覽由revision 5發布至7，新版ef9de90c-b65f-4b2c-bcd9-587768a976af、原版cbe20b43-6f2d-4004-9836-9702dc392348保留；僅指定label修改，其他文件與舊版本逐項比對不變。正式桌面1440px及手機390px選單均顯示免費丈量；桌面丈量／客服兩個iCare圖示與_blank連結保留，另一正式域手機亦確認。證據.gstack/qa-reports/free-measuring-20261112/desktop.png、mobile.png、desktop.json、cms-update.txt。未做本輪實機Safari驗證，未送出外部丈量表單。完成紀錄僅提交README。
 
 ## 2026-11-12 建商三張二修素材
 
