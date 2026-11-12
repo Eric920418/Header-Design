@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-builders-index', {"strengths":[{"value":["45","萬"],"lines":["設計模組","累積\n超過","多元選擇"],"background":"/section-6/builders/proposal-20261002/design-modules.webp"},{"value":["AI","智能"],"lines":["廚衛工廠","全台\n最大","供貨穩定"],"background":"/section-6/builders/proposal-20261002/ai-factory.webp"},{"value":["管理","平台"],"lines":["案件進度","獨家\n智能","精準掌握"],"background":"/section-6/builders/proposal-20261002/project-platform.webp"}],"services":[{"eyebrow":"ONE-STOP","label":"一站式服務","title":"專業銷講","copy":["舉辦住戶裝修講座","加速建案銷售"]},{"eyebrow":"NUMEROUS","label":"多樣產品選擇","title":"專屬監工","copy":["透過專屬的即時監控系統","完善管理工期"]},{"eyebrow":"EFFICIENT","label":"輕鬆擁有","title":"專人驗收","copy":["協助建案偕同驗收","住戶安心放心"]}],"copy":{"text1":"Property Developers","text2":"提供一站式整體解決方案","text3":"為建案提升價值與銷售力","text4":"一站式整體廚房解決方案，為建案提升價值與銷售力。","text5":"立即預約","field6":"/section-6/builders/builder-hero.jpg","field7":"SAKURA KITCHEN 深色現代整體廚房與中島空間","text8":"OUR BRAND","text9":"嚴選國內外優質品牌","text10":"Experts Our","text11":"打造不同定位與多元風格的理想家居空間","field12":"SAKURA KITCHEN 建商整體廚房展示空間","field13":"SAKURA KITCHEN","field14":"即將推出的廚房品牌空間","text15":"Coming","text16":"Soon","text17":"Have A Project In ","text18":"Mind?","text19":"Let’s","text20":" Make It Happen","text21":"櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。","text22":"美好居家生活的創造者","text23":"HOME in O.N.E","text24":"Lifetime Service","text25":"One-Click Registration ","text26":"Lifetime Service","text27":"購買 SAKURA iCare 系列產品，掃描保證書專屬 QR Code，即可啟動智能化服務，銜接產品登錄、保固與後續服務。","field28":"/section-6/builders/proposal-20261002/icare.webp","field29":"SAKURA iCare 時刻在乎・永恆守護：以智能平台整合永久免費服務，掃描產品 QR Code，享受櫻花的安心守護。","text30":"OUR CLIENTS","field31":"","field32":"","text33":"Get In Touch","text34":"Have A Project In ","text35":"Mind?","text36":"Let’s","text37":" Make It Happen","text38":"櫻花集團 品牌館","text39":"全預約制","text40":"留下您的資訊，將由專人與您聯繫，提供最適合您建案的整體廚房規劃建議。","text41":"地址","text42":"營業時間"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-builders-index', {"strengths":[{"value":["45","萬"],"lines":["設計模組","累積\n超過","多元選擇"],"background":"/section-6/builders/revision-20261030/design-modules.webp"},{"value":["AI","智能"],"lines":["廚衛工廠","全台\n最大","供貨穩定"],"background":"/section-6/builders/revision-20261030/ai-factory.webp"},{"value":["管理","平台"],"lines":["案件進度","獨家\n智能","精準掌握"],"background":"/section-6/builders/revision-20261030/project-platform.webp"}],"services":[{"eyebrow":"ONE-STOP","label":"一站式服務","title":"專業銷講","copy":["舉辦住戶裝修講座","加速建案銷售"]},{"eyebrow":"NUMEROUS","label":"多樣產品選擇","title":"專屬監工","copy":["透過專屬的即時監控系統","完善管理工期"]},{"eyebrow":"EFFICIENT","label":"輕鬆擁有","title":"專人驗收","copy":["協助建案偕同驗收","住戶安心放心"]}],"copy":{"text1":"Property Developers","text2":"提供一站式整體解決方案","text3":"為建案提升價值與銷售力","text4":"一站式整體廚房解決方案，為建案提升價值與銷售力。","text5":"立即預約","field6":"/section-6/builders/builder-hero.jpg","field7":"SAKURA KITCHEN 深色現代整體廚房與中島空間","text8":"OUR BRAND","text9":"嚴選國內外優質品牌","text10":"Experts Our","text11":"打造不同定位與多元風格的理想家居空間","field12":"SAKURA KITCHEN 建商整體廚房展示空間","field13":"SAKURA KITCHEN","field14":"即將推出的廚房品牌空間","text15":"Coming","text16":"Soon","text17":"Have A Project In ","text18":"Mind?","text19":"Let’s","text20":" Make It Happen","text21":"櫻花與建商攜手打造高品質住宅，從設計模組、工廠供貨到案件管理，讓每個廚房交付節點更清楚。","text22":"美好居家生活的創造者","text23":"HOME in O.N.E","text24":"Lifetime Service","text25":"One-Click Registration ","text26":"Lifetime Service","text27":"購買 SAKURA iCare 系列產品，掃描保證書專屬 QR Code，即可啟動智能化服務，銜接產品登錄、保固與後續服務。","field28":"/section-6/builders/proposal-20261002/icare.webp","field29":"SAKURA iCare 時刻在乎・永恆守護：以智能平台整合永久免費服務，掃描產品 QR Code，享受櫻花的安心守護。","text30":"OUR CLIENTS","field31":"","field32":"","text33":"Get In Touch","text34":"Have A Project In ","text35":"Mind?","text36":"Let’s","text37":" Make It Happen","text38":"櫻花集團 品牌館","text39":"全預約制","text40":"留下您的資訊，將由專人與您聯繫，提供最適合您建案的整體廚房規劃建議。","text41":"地址","text42":"營業時間"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ArrowRight, Check, Clock3, MapPin } from 'lucide-vue-next'
 import { BUILDER_APPOINTMENT_HASH as cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards as cmsSeed_builderProjectCards } from '~/data/builders'
@@ -263,10 +263,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             >
               <InternalBuilderImage
                 :src="item.background"
-                :alt="index === 0 ? '整體家居設計模組及建案廚房規劃軟體' : index === 1 ? 'AI 智能廚衛工廠：自動化產線、生產管理看板與機械手臂' : '智能案件管理平台串接簽約、設計、工廠供貨與驗收進度'"
-                :fit="index === 1 ? 'cover' : 'contain'"
+                :alt="index === 0 ? '建案搭配現代風、輕奢風及簡約風廚房設計模組' : index === 1 ? 'AI 智能廚衛工廠：人員監控產線生產率與即時數據' : '智能案件管理平台串接需求確認、合作洽談、簽約、下單、製作、安裝、驗收及售後服務'"
+                fit="contain"
                 class="builders-solution__visual"
-                :class="index === 0 ? 'builders-solution__visual--modules' : index === 1 ? 'builders-solution__visual--factory' : 'builders-solution__visual--platform'"
               />
               <div class="builders-solution__caption">
                 <p>{{ item.lines[1].replaceAll('\n', '') }}</p>
@@ -456,10 +455,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-solution__caption { display: none; padding: 20px 0 6px; font-family: var(--font-cjk-sans); font-size: 20px; line-height: 1.4; }
 .builders-solution__caption p, .builders-solution__caption h3 { margin: 0; font: inherit; }
 .builders-solution__caption strong { color: #c4a574; font-size: 40px; font-weight: 700; }
-.builders-solution__visual--modules { aspect-ratio: 4933 / 3946; }
-.builders-solution__visual--factory { aspect-ratio: 1280 / 460; }
-.builders-solution__visual--factory :deep(img) { object-position: bottom; }
-.builders-solution__visual--platform { aspect-ratio: 16 / 9; }
+.builders-strengths-list :deep(.builder-image img) { height: auto; }
 .builders-solution__visual { overflow: hidden; border-radius: 24px; }
 .builders-home-one__visual { aspect-ratio: 2.7 / 1; }
 .builders-home-one:not([data-image-ready]) { animation-play-state: paused; }

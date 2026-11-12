@@ -1,3 +1,8 @@
+## 2026-11-12 建商三張二修素材
+
+- 已找到/Users/eric/Downloads/二修261030/6.2建商專區：6.2aifactory-1.jpg.jpg（設計模組）、6.2aifactory-2.png（AI工廠）、6.2aifactory-3.jpg.jpg（案件管理）。以既有sharp等比例轉WebP至revision-20261030版本路徑，保留原檔與原素材；圖片改用原比例完整顯示，避免圖內文字被原橫幅比例裁切，同步更新替代文字。
+- 將以既有CMS版本發布機制僅更新view-pages-builders-index.strengths三個background，先檢查無未發布草稿與原來源符合預期；保留其他內容及舊版本，禁止整庫覆寫。圖片連結更新自我檢查（精準欄位、原物件不變、可重跑及自訂來源拒絕）與正式dry-run通過，目標文件revision 3且無未發布草稿；公開圖檔依Nuxt設定放於根目錄public。pnpm build含typecheck與diff檢查通過，三張圖皆存在於.output/public部署產物，45+萬／AI智能／管理平台切換自我檢查通過。正式圖片連結更新與捲動複驗待完成。
+
 ## 2026-11-12 建商整合實力文案與隨圖重點
 
 - 依12.17.57截圖更新/builders整合實力說明為SAKURA深耕台灣居家生活／HOME IN O.N.E全方位整合／AI串聯產品、生產與售後服務。左側沿用既有固定與短窗可讀處理，以IntersectionObserver在右圖進入視窗中央時切換45+萬、AI智能、管理平台及對應上下文；往回捲動亦切回。手機自然單欄每張圖呈現對應重點，不重複顯示固定統計。
