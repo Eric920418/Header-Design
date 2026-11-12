@@ -128,10 +128,12 @@ const activeStrength = computed(() => strengths[activeStrengthIndex.value])
 let strengthObserver: IntersectionObserver | undefined
 onMounted(() => {
   if (!strengthsList.value || !('IntersectionObserver' in window)) return
-  strengthObserver = new IntersectionObserver(entries => {
-    const visible = entries.filter(entry => entry.isIntersecting)
-      .sort((a, b) => Math.abs(a.boundingClientRect.top + a.boundingClientRect.height / 2 - window.innerHeight / 2) - Math.abs(b.boundingClientRect.top + b.boundingClientRect.height / 2 - window.innerHeight / 2))
-    if (visible[0]) activeStrengthIndex.value = Number((visible[0].target as HTMLElement).dataset.strengthIndex)
+  strengthObserver = new IntersectionObserver(() => {
+    const visible = Array.from(strengthsList.value?.querySelectorAll<HTMLElement>('[data-strength-index]') ?? [])
+      .map(target => ({ target, rect: target.getBoundingClientRect() }))
+      .filter(item => item.rect.bottom > window.innerHeight * .35 && item.rect.top < window.innerHeight * .65)
+      .sort((a, b) => Math.abs(a.rect.top + a.rect.height / 2 - window.innerHeight / 2) - Math.abs(b.rect.top + b.rect.height / 2 - window.innerHeight / 2))
+    if (visible[0]) activeStrengthIndex.value = Number(visible[0].target.dataset.strengthIndex)
   }, { rootMargin: '-35% 0px -35% 0px' })
   strengthsList.value.querySelectorAll('[data-strength-index]').forEach(item => strengthObserver!.observe(item))
 })
