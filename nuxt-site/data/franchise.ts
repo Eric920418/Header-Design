@@ -37,7 +37,7 @@ export interface FranchiseFaqItem {
 
 export const FRANCHISE_FORM_URL = '/franchising/form'
 export const FRANCHISE_OFFICIAL_FORM_URL = 'https://www.sakura-kitchenlife.com.tw/franchising/form'
-export const FRANCHISE_BROCHURE_URL = '/section-6/franchise/franchising_info.pdf'
+export const FRANCHISE_BROCHURE_URL = '/section-6/franchise/franchising-info-20261030.pdf'
 
 export const franchiseAdvantages: FranchiseAdvantage[] = [
   {

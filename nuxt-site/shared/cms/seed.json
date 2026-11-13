@@ -5893,7 +5893,7 @@
     "data": {
       "FRANCHISE_FORM_URL": "/franchising/form",
       "FRANCHISE_OFFICIAL_FORM_URL": "https://www.sakura-kitchenlife.com.tw/franchising/form",
-      "FRANCHISE_BROCHURE_URL": "/section-6/franchise/franchising_info.pdf",
+      "FRANCHISE_BROCHURE_URL": "/section-6/franchise/franchising-info-20261030.pdf",
       "franchiseAdvantages": [
         {
           "id": "factory",
@@ -9926,13 +9926,13 @@
         {
           "number": "01",
           "label": "封面與外頁",
-          "image": "/section-6/franchise/franchising-info-outside.webp",
+          "image": "/section-6/franchise/franchising-info-outside-20261030.webp",
           "alt": "櫻花整體廚房加盟簡介封面、封底與外頁"
         },
         {
           "number": "02",
           "label": "品牌優勢與加盟辦法",
-          "image": "/section-6/franchise/franchising-info-inside.webp",
+          "image": "/section-6/franchise/franchising-info-inside-20261030.webp",
           "alt": "櫻花整體廚房加盟簡介內頁，包含總部優勢、加盟辦法與流程"
         }
       ],
@@ -9951,7 +9951,7 @@
         "text12": "頁數",
         "text13": "2 頁",
         "text14": "檔案大小",
-        "text15": "8.0 MB",
+        "text15": "19.8 MB",
         "text16": "線上預覽",
         "text17": "下載 PDF ",
         "text18": "正在確認 PDF 檔案…",
@@ -10000,7 +10000,7 @@
           "template": {
             "number": "01",
             "label": "封面與外頁",
-            "image": "/section-6/franchise/franchising-info-outside.webp",
+            "image": "/section-6/franchise/franchising-info-outside-20261030.webp",
             "alt": "櫻花整體廚房加盟簡介封面、封底與外頁"
           }
         },
@@ -10067,7 +10067,7 @@
             },
             "text15": {
               "type": "string",
-              "label": "8.0 MB"
+              "label": "PDF 檔案大小"
             },
             "text16": {
               "type": "string",
@@ -10296,7 +10296,7 @@
         "text50": "",
         "text51": "",
         "field52": "/franchising/download",
-        "field53": "/section-6/franchise/franchise-download-cover.png",
+        "field53": "/section-6/franchise/franchise-download-cover-20261030.webp",
         "field54": "櫻花整體廚房加盟資料封面",
         "field55": "/franchising/download",
         "text56": "加盟資料下載",

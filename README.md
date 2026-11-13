@@ -4495,3 +4495,10 @@ final result: passed
 - 程式 `8614046e` 已推送；兩正式網址實際回查皆顯示新選項與「居住地 *」／required。主網域實測空字串及純空格離焦均顯示「居住地須為 1–500 個字元。」且 aria-invalid=true，填入有效範例後錯誤解除；51~55、56歲以上均可實際選取。第二正式網址手機版的必填錯誤／解除及新選項亦正常。
 - 正式 320／390／768／1440px 四組量測無水平溢位，居住地欄與年齡選項無裁切，兩站瀏覽器錯誤紀錄皆空；本輪未改 CSS。證據在 `.gstack/qa-reports/franchise-form-20261114/`：`before.json`、`local-interactions.json`、`local-layouts.json`、`production-interactions.json`、`second-domain.json`、`production-layouts.json`、`browser-errors.json`；畫面 `production-desktop.png`、`production-mobile.png`。
 - 僅操作欄位離焦與選項，不送出正式／測試申請，未寫入 CMS 或申請資料表；未實測實體 Safari 或正式有效申請的完整建單流程。舊頁面尚未重新整理時，後端會以更新後的必填及年齡規則驗證。Vercel 部署 metadata 查詢不可用，不宣稱已取得部署 ID／同 SHA 證明；正式生效以兩站實際畫面確認。本機服務停止，臨時分頁關閉及視窗尺寸還原；完成紀錄僅提交 README，不為文件再次部署。
+
+## 2026-11-14 加盟簡介 PDF 更新
+
+- 來源「二修261030／6.1加盟專區／2026franchising-DM-WEB.pdf」共兩頁，原檔 557,270,119 bytes，原檔保留不覆寫。僅降低過大點陣圖片解析度，保留向量文字、透明圖、兩頁尺寸與完整文字；製作 20,797,476 bytes（19.8 MiB，頁面沿用 MB 標示）網頁版，減少約 96.3%。
+- 新 PDF SHA-256 為 `55976990f9cf59636493c527e8b1f7543629e2e55aa1e7201cef1ad9142b342d`，原檔 SHA-256 `e7d49b04cf516f11417a4568f26602a89b94633d7301e02fff6121f150de5b96`。兩頁已重新渲染逐頁目視核對，文字抽取及頁框與原檔一致。
+- `/franchising/download` 的 PDF、兩頁預覽、檔案大小及 OG 圖片，以及 `/franchising/intro` 的簡介封面同步使用新版日期網址；其餘文案、加盟說明會按鈕、樣式及申請規則維持。保留舊 PDF／圖片，不執行整庫 seed。正式資料採限定三份文件與欄位的精準發布，有草稿或自訂內容即停止。建置、下載與正式驗收續記。
+- 精準更新腳本自檢、後台工作流程／欄位名稱檢查、`pnpm build`（含型別檢查）及 `git diff --check` 通過。正式 dry-run 三份文件均無未發布草稿；僅 PDF 連結、兩頁預覽、大小與封面及對應預設欄位更新，舊資料與其他文案保留。先發布新資產，確認可用後才發布 CMS。

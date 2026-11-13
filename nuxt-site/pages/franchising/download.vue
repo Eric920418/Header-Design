@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-franchising-download', {"brochurePages":[{"number":"01","label":"封面與外頁","image":"/section-6/franchise/franchising-info-outside.webp","alt":"櫻花整體廚房加盟簡介封面、封底與外頁"},{"number":"02","label":"品牌優勢與加盟辦法","image":"/section-6/franchise/franchising-info-inside.webp","alt":"櫻花整體廚房加盟簡介內頁，包含總部優勢、加盟辦法與流程"}],"copy":{"field1":"/section-6/franchise/hero-store.jpg","field2":"SAKURA KITCHEN 櫻花整體廚房加盟門市","text3":"Franchise Information","text4":"Franchise Information","text5":"櫻花整體廚房","text6":"加盟簡介","field7":"/section-6/franchise/sakura-kitchen-logo-gold.png","field8":"SAKURA KITCHEN 櫻花整體廚房","text9":"完整收錄櫻花品牌實力、總部支援、加盟準備金、資格條件與七階段加盟流程。","text10":"格式","text11":"PDF","text12":"頁數","text13":"2 頁","text14":"檔案大小","text15":"8.0 MB","text16":"線上預覽","text17":"下載 PDF ","text18":"正在確認 PDF 檔案…","text19":"加盟資料 PDF 載入失敗","text20":"重新檢查檔案","text21":"PAGE ","field22":"/franchising/intro","text23":"返回我要加盟"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-franchising-download', {"brochurePages":[{"number":"01","label":"封面與外頁","image":"/section-6/franchise/franchising-info-outside-20261030.webp","alt":"櫻花整體廚房加盟簡介封面、封底與外頁"},{"number":"02","label":"品牌優勢與加盟辦法","image":"/section-6/franchise/franchising-info-inside-20261030.webp","alt":"櫻花整體廚房加盟簡介內頁，包含總部優勢、加盟辦法與流程"}],"copy":{"field1":"/section-6/franchise/hero-store.jpg","field2":"SAKURA KITCHEN 櫻花整體廚房加盟門市","text3":"Franchise Information","text4":"Franchise Information","text5":"櫻花整體廚房","text6":"加盟簡介","field7":"/section-6/franchise/sakura-kitchen-logo-gold.png","field8":"SAKURA KITCHEN 櫻花整體廚房","text9":"完整收錄櫻花品牌實力、總部支援、加盟準備金、資格條件與七階段加盟流程。","text10":"格式","text11":"PDF","text12":"頁數","text13":"2 頁","text14":"檔案大小","text15":"19.8 MB","text16":"線上預覽","text17":"下載 PDF ","text18":"正在確認 PDF 檔案…","text19":"加盟資料 PDF 載入失敗","text20":"重新檢查檔案","text21":"PAGE ","field22":"/franchising/intro","text23":"返回我要加盟"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ArrowRight, Download, ExternalLink, FileText } from 'lucide-vue-next'
 import { FRANCHISE_BROCHURE_URL as cmsSeed_FRANCHISE_BROCHURE_URL } from '~/data/franchise'
@@ -11,7 +11,7 @@ useSeoMeta({
   description: '預覽並下載 SAKURA KITCHEN 櫻花整體廚房官方加盟簡介，了解品牌優勢、加盟辦法與申請流程。',
   ogTitle: '加盟資料下載｜SAKURA 整體廚房',
   ogDescription: 'SAKURA KITCHEN 官方加盟簡介 PDF，完整收錄品牌優勢、加盟條件與申請流程。',
-  ogImage: '/section-6/franchise/franchising-info-outside.webp',
+  ogImage: cmsCopy.brochurePages[0].image,
 })
 
 const brochureStatus = ref<'checking' | 'ready' | 'error'>('checking')
