@@ -4409,3 +4409,6 @@ final result: passed
 - 驗證：中英文分段測試涵蓋混合中文、品牌縮寫、Unicode 拉丁字母、數字、空值與空白／換行完整保留；48 個 Vue 檔的 script、原 CSS 與文字／動態表達式比對不變。`pnpm typecheck` 及 `pnpm build` 通過。
 - 實際瀏覽器以正常動畫核對 49 個代表網址 × 390／1440px 共 98 組，涵蓋十系列、三品牌、分類／系列／商品詳情、案例、指南、消息三類列表與詳情、品牌、加盟、建商及三種型錄。2034 個標題文字片段符合黑／金規則，小標籤及 Explore Our 色彩／字型不變，無水平溢位；一般內容標題的寬高與字型維持。品牌館 Hero 在進場途中曾量到縮放差，複驗動畫結束後桌面 layout 尺寸及白字一致，該首屏原始碼未更動。
 - 證據位於 `.gstack/qa-reports/heading-colors-20261113/` 的 `before.json`、`local.json`、`comparison.json`、`source-check.json` 及 `unchanged-hero.json`；這是配色檢查，未宣稱所有實際產品／文章網址及全部互動重新驗收，也未驗實體手機 Safari。正式發布與三種型錄卡名的最終回查續記。
+- 正式程式 `7920eba8` 已發布至 `dpl_9pSZQP6RcU8N5mbvnVNaDwr413iW`，兩個正式網域回查皆為相同 SHA 與 READY。主網域 49 個代表網址 × 390／1440px 共 98 組正式量測，1986 個文字片段分色符合要求，一般內容標題尺寸／字型、小標籤及 Explore Our 均與改前一致，無水平溢位。三種型錄卡名另完成兩尺寸六組量測，包含 MUJI Basic+、Clever巧域廚房及 SAKURA 全產品型錄等中英混合名稱。
+- 另一網域五頁 × 390／1440px 共十組，以及五頁 × 320／820px 共十組邊界檢查，分色正確且無水平溢位；未使用關動畫或修改 Vue 內部狀態的方式驗收。最終回查未見瀏覽器錯誤。
+- 正式證據：`.gstack/qa-reports/heading-colors-20261113/production-result.json`、`production.json`、`catalogue-names.json`、`second-domain.json`、`boundary.json`、`alias-main.json`、`alias-second.json`；畫面為 `production-desktop.png` 與 `production-mobile.png`。本輪服務已停止，臨時分頁關閉、視窗尺寸還原；無 CMS／資料庫寫入。未驗實體手機 Safari，未逐筆重新開啟全部動態產品／文章或重跑舊版全流程 HTTP 腳本。完成紀錄僅本機提交 README，不為文件再部署。
