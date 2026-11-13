@@ -4420,3 +4420,5 @@ final result: passed
 - 建置、實際桌面／手機切圖、首末循環、縮圖同步及正式發布結果於本節續記。
 - 驗證：`pnpm build`（含型別檢查）通過；直接編譯實際輪播元件做 SSR，確認 0／1 張圖片不出現箭頭、3 張圖片保留兩組切換鈕與三張縮圖。實際瀏覽器驗證主圖下一張／上一張、首末循環、縮圖選取後再按主圖箭頭及 Enter 鍵操作，選取狀態與提示同步。
 - 設計靈感「大廚廚房」與門市案例 `/gallery/case10` 在 320／390／768／1440px 共八組，主圖箭頭均位於圖內左右中央，無水平溢位；390／1440px 主圖與縮圖尺寸對照改前維持。證據位於 `.gstack/qa-reports/case-main-arrows-20261113/`；尚未驗實體 Safari／觸控拖曳，未修改資料庫。正式發布及回查結果續記。
+- 正式程式 `be346529` 發布至 `dpl_6G8SV52aDUMEN61co9pNKtXK8pnw`，兩個正式網址確認相同 SHA／READY。主網域兩種詳情 × 四種尺寸共八組均完成主圖下一張／上一張，縮圖由 1→2→1 同步，左右箭頭在主圖中央、圖內且無水平溢位；390／1440px 主圖與縮圖尺寸和改前一致。另以圖框與各張照片的實際交集確認按下一張後第二張佔據主圖，而非只有選取提示改變。
+- 第二正式網址的 390px 案例詳情實際切圖通過，未見瀏覽器錯誤；實體 Safari／觸控拖曳未測。證據為 `.gstack/qa-reports/case-main-arrows-20261113/production-layouts.json`、`visible-image.json`、`second-domain.json`、`ssr-result.json`、兩份 `alias-*.json`；截圖 `production-desktop.png`、`production-mobile.png`。本機服務已停止，臨時分頁關閉、視窗尺寸還原；無資料庫寫入。完成紀錄只提交 README，不為文件再次部署。
