@@ -1,7 +1,7 @@
 ## 2026-11-13 懸浮服務列免費丈量與拍立配正式連結
 
 - 全站FloatingButtons桌面／手機共用服務列，丈量名稱改免費丈量，新增同尺寸free-measuring.svg及手機版，保留原稿／字級／金灰底差異；拍立配改讀CMS copy.field3，舊空白／非https占位內容使用指定正式網址https://ai.sakura.com.tw/lens/kitchen。另開分頁與安全rel保留。
-- 正式資料更新限view-components-FloatingButtons丈量label／icon與copy.field3，其餘資料與舊版本保留；.gstack/qa-reports/floating-services-20261113/update.mjs含目標、草稿、唯一入口與原值保護。指定欄位／保留其他內容／原物件不變／可重跑／自訂值拒絕自我檢查、正式dry-run（revision 1）、兩SVG XML與原70px畫布檢查、pnpm build含typecheck及diff均通過。資料發布與正式驗收待完成。
+- 正式資料更新限view-components-FloatingButtons丈量label／icon與copy.field3，其餘資料與舊版本保留；.gstack/qa-reports/floating-services-20261113/update.mjs含目標、草稿、唯一入口與原值保護。指定欄位／保留其他內容／原物件不變／可重跑／自訂值拒絕自我檢查、正式dry-run（revision 1）、兩SVG XML與原70px畫布檢查、pnpm build含typecheck及diff均通過。a12187a3已部署Production dpl_BciEM5k2cCtkCqKqEQLW5aKFsH1c，雙正式網域各自查詢READY及相同commit。正式FloatingButtons由revision 1發布至3，新版3b4b038f-7174-4554-bfb9-b43130a5d1ec、原版616e5101-1484-4271-8455-836bf1b4b531保留，其他文件及舊版本逐項比較不變。320／390／768／1440×900複驗：圖檔均載入、可見SVG文案與aria名稱免費丈量、拍立配為指定https新網址及_blank／noopener noreferrer，四項按鈕與圖框尺寸與修前一致且無水平溢位。首次resize來源仍在載入，等載入後重測已通過。另一正式域390px相同；新目的頁實際開啟為櫻花AI廚房升級／空間設計拍照嚮導，未上傳或送出。證據.gstack/qa-reports/floating-services-20261113/：after.json、mobile-service.png、desktop.png、other-domain.json、cms-update.txt。未做本輪實機Safari驗證；完整全站回歸腳本未執行。完成紀錄只提交README。
 
 ## 2026-11-12 主導覽免費丈量文案
 
