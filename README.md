@@ -4476,3 +4476,10 @@ final result: passed
 - 主網域桌面及第二正式網址手機版，實際播放新片均持續前進、duration=115.041、媒體錯誤 0；Escape 可關閉彈窗。本機影片彈窗 320／390／768／1440px 皆為完整 16:9，無水平溢位；正式展示圖同四種寬度皆載入成功、無水平溢位或錯誤提示，兩站瀏覽器錯誤紀錄皆空。
 - 正式圖片於 1440px 各 630×434 雙欄、390px 各 360×248 單欄，與原框比例相同；視覺核對兩張來源配對及無拉伸。證據在 `.gstack/qa-reports/pavilion-media-20261114/`：`assets.json`、`production-assets.json`、`local-video.json`、`local-layouts.json`、`production-video.json`、`production-desktop.json`、`second-domain.json`、`production-layouts.json`、`browser-errors.json`、`cms-update.txt`；畫面 `production-video.png`、`production-images-desktop.png`、`production-images-mobile.png`。
 - 未實測實體 Safari、YouTube 全螢幕／音量操作或新片完整播放到結尾；不列為通過。本機服務停止，臨時分頁關閉、視窗尺寸還原；完成紀錄僅提交 README，不為文件再次部署。
+
+## 2026-11-14 加盟首屏右側按鈕調整
+
+- `/franchising/intro` 首屏右側「加盟資料下載」改為「加盟說明會」，目的地使用已存在且可開啟的站內文章 `/news/latest/2026-franchise-seminar`，保留原新分頁行為、外觀與左側申請按鈕；其他加盟資料下載入口維持。
+- 使用者提供的 `https://sakura-kitchenlife/news/latest/2026-franchise-seminar` 主機名稱不完整，瀏覽器實測 ERR_NAME_NOT_RESOLVED；站內同路徑已確認為「2026櫻花整體廚房加盟說明會，全面招商中！」，使用相對路徑以兼容兩正式網域及未來網域切換。
+- 同步頁面預設資料、seed 及正式 CMS 的 `copy.field12`／`copy.text13`，後台欄位名稱改為對應的新連結／按鈕文字。精準發布保留其他文案、按鈕、文件與所有歷史版本；遇未發布草稿或自訂內容即停止。建置、自檢與正式回查結果續記。
+- 精準更新腳本自檢、後台工作流程／名稱檢查及 `pnpm build`（含型別檢查）通過；正式 `view-pages-franchising-intro` revision 3→5，新發布 `8841cfa4-7bdb-4c4f-a136-bae43c114e5e`，保留舊版 `d4fee8b1-d82b-4d3a-b675-73b027386cad`。交易核對其他內容、全部其他文件及所有舊版本不變，不執行整庫 seed。

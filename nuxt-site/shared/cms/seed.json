@@ -10255,8 +10255,8 @@
         "text9": "立即申請加盟 ",
         "field10": "/section-6/franchise/hero-store.jpg",
         "field11": "SAKURA KITCHEN 櫻花整體廚房加盟門市",
-        "field12": "/franchising/download",
-        "text13": " 加盟資料下載",
+        "field12": "/news/latest/2026-franchise-seminar",
+        "text13": "加盟說明會",
         "text14": "加盟夥伴真實分享",
         "text15": "Hear from Our Partners",
         "text16": "",
@@ -10368,12 +10368,12 @@
             },
             "field12": {
               "type": "string",
-              "label": "/franchising/download",
+              "label": "加盟說明會連結",
               "format": "url"
             },
             "text13": {
               "type": "string",
-              "label": "加盟資料下載"
+              "label": "加盟說明會按鈕文字"
             },
             "text14": {
               "type": "string",
