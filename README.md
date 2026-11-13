@@ -4485,3 +4485,10 @@ final result: passed
 - 精準更新腳本自檢、後台工作流程／名稱檢查及 `pnpm build`（含型別檢查）通過；正式 `view-pages-franchising-intro` revision 3→5，新發布 `8841cfa4-7bdb-4c4f-a136-bae43c114e5e`，保留舊版 `d4fee8b1-d82b-4d3a-b675-73b027386cad`。交易核對其他內容、全部其他文件及所有舊版本不變，不執行整庫 seed。
 - 預設資料程式 `fc2d0aee` 已推送；主網域 1440px 與第二正式網址 390px 均實際顯示新按鈕，點擊後各自另開同網域的指定文章，文章標題核對相符。左側申請按鈕連結／文字／15px 字級與 60px 高度保持，右側僅因少一個中文字自然縮短；兩尺寸按鈕均在視窗內，無水平溢位，頁面及目的地瀏覽器錯誤紀錄皆空。
 - 證據在 `.gstack/qa-reports/franchise-seminar-cta-20261114/`：`cms-before.json`、`cms-update.txt`、`before.json`、`production-desktop.json`、`second-domain.json`、`clicked-article.json`、`second-clicked-article.json`、`browser-errors.json`；畫面 `production-desktop.png`、`production-mobile.png`。本輪不改 CSS、加盟申請與資料下載功能，未送出表單或實測實體 Safari。視窗尺寸已還原，完成紀錄僅提交 README，不為文件再次部署。
+
+## 2026-11-14 加盟申請年齡級距與居住地必填
+
+- `/franchising/form` 居住地標註「居住地 *」，加上原生 required，前台及 API 共用驗證須至少 1 個非空白字元、最多 500 字；欄位離焦顯示完整錯誤並保留輸入。
+- 年齡最後兩個選項由重疊的「50~55／55歲以上」改為「51~55／56歲以上」，沿用原排列、樣式與其他選項；前後端共用同一份選項值，非法或舊級距的新送出會顯示有效選項錯誤。
+- 此處規則在共用程式，非 CMS 文案欄位；需部署前台與 API 才會生效，不改資料庫結構、不重寫既有申請及歷史年齡資料。同步修正舊回歸測試中「居住地選填」的假設；驗證不建立測試申請。建置、自檢與正式回查結果續記。
+- `check-franchise-form.mjs` 通過：七個合法年齡級距、舊／非法值拒收，居住地空值／空白／型別／500 字邊界，其他選填、店面條件與同意欄維持；以實際服務端 submit 函式注入禁止交易的邊界，核對無效居住地／年齡於寫入前回報 400，無資料庫連線。`pnpm build`（含型別檢查）通過；未執行整份跨頁前台回歸腳本。

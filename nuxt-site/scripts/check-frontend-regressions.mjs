@@ -956,11 +956,14 @@ moveMarketing(1);moveMarketing(-1);marketingMotion.value=true;moveMarketing(1);m
 assert.deepEqual(marketingCalls,[['next',false],['prev',false],['next',true]])
 console.log('PASS 五筆原案例／圖片、兩輪SSR／編號／輔助閱讀、雙接縫交錯、空／奇／偶數資料、自動循環、暫停、方向與減少動態效果')
 const application=franchiseInitialValues()
-Object.assign(application,{name:'測試姓名',email:'test@example.test',phone:'0912345678',experience:'否',budget:'200萬以下',area:'台北市',timeline:'半年內',consent:true})
+Object.assign(application,{name:'測試姓名',email:'test@example.test',phone:'0912345678',experience:'否',budget:'200萬以下',area:'台北市',residence:'台北市',timeline:'半年內',consent:true})
 for(const group of franchiseChoiceGroups)application[group.key]=group.multiple?(group.optional?[]:[group.options[0]]):group.options[0]
 Object.assign(application,{storeAddress:'台北市測試路 1 號',storeWidth:'4.5',storeArea:'30'})
 assert.deepEqual(franchiseErrors(application),{})
-assert.deepEqual(franchiseErrors({...application,residence:undefined,lineId:undefined,motivation:undefined,sources:undefined}),{})
+assert.deepEqual(franchiseErrors({...application,lineId:undefined,motivation:undefined,sources:undefined}),{})
+for(const residence of [undefined,'','  '])assert(franchiseErrors({...application,residence}).residence)
+for(const age of ['51~55','56歲以上'])assert.deepEqual(franchiseErrors({...application,age}),{})
+for(const age of ['50~55','55歲以上'])assert(franchiseErrors({...application,age}).age)
 for(const group of franchiseChoiceGroups){
  assert(franchiseErrors({...application,[group.key]:group.multiple?['非法選項']:'非法選項'})[group.key],group.key)
  if(group.multiple){
