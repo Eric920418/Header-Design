@@ -4459,3 +4459,8 @@ final result: passed
 - `site-visuals` 新增獨立的 `serviceVideoSrc` 及網址欄位，服務流程後台「品牌影片」改對應此欄位；既有兩組 YouTube ID、其他圖片及內容保持。播放錯誤顯示來源與可取得的瀏覽器原因，提供重試及另開影片；先部署影片與程式再精準發布正式資料，保留歷史版本。建置、播放與正式驗收續記。
 - 網頁版共 4,486 格，格數／幀率與來源相同，時長差小於 0.05 秒，檔案減少約 82%；faststart 位於影像資料之前，整支解碼錯誤 0。`check-brand-video.mjs`、精準更新腳本自檢、後台工作流程／名稱檢查及 `pnpm build`（含型別檢查）通過。
 - 本機已實際播放及暫停，偵測到 1920×1080／149.696 秒，無媒體錯誤；點擊前 readyState=0、buffered=0、不自動播放。320／390／768／1440px 四組完整 16:9，無水平溢位。原生時間軸操作尚未完成驗收，不列為通過；正式播放及資料庫發布結果續記。
+- 程式 `d881f501` 已推送，兩正式網址的實際頁面均顯示新版 MP4 播放器且取消 Coming Soon。本輪 Vercel 部署查詢受限（CLI 無登入、查詢工具 403），因此以正式畫面及實際資產驗證，不宣稱已取得部署 ID 或兩別名的同 SHA／READY 證明。
+- 正式 `site-visuals` 由 revision 1→3，新發布版本 `95091e89-0006-4e33-b242-e369af1b81ee`，保留原版本 `23dc81bf-c681-40b3-a393-14e92ece24c0`；交易核對只增加服務流程影片網址及對應欄位，既有 YouTube ID、全部其他文件及所有舊版本不變。
+- 主網域實際從頭播放至 149.696 秒結尾，ended=true、媒體錯誤 0；第二正式網址 390px 實際播放及暫停正常。正式 320／390／768／1440px 四組完整 16:9，無水平溢位；兩站瀏覽器錯誤紀錄皆為空。
+- 從正式播放器下載取得 52,164,137 bytes，SHA-256 `d2e9af6351decb2cf3e7ba36b8f86874cb93237caffe6b734bab9b2502b0f789` 與已完整解碼的網頁版完全相同。證據在 `.gstack/qa-reports/service-video-20261114/`：`production-complete.json`、`production-file.json`、`production-layouts.json`、`second-domain.json`、`browser-errors.json`、`cms-update.txt`；畫面 `production-desktop.png`、`production-mobile.png`。
+- 未實測實體 Safari、原生時間軸拖曳、音量／全螢幕操作，未逐句校對或實際聽驗整支影片；這些不列為通過。來源既有黑色字幕帶完整保留，未裁掉字幕。本機服務已停止；完成紀錄僅提交 README，不為文件再次部署。
