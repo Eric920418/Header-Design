@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Play, X } from 'lucide-vue-next'
 
+const cmsVisuals = await useCmsResource('site-visuals', { pavilionVideoId: 'ovXezqQdFYo' })
 const videoOpen = ref(false)
 
 function closeVideo() {
@@ -38,10 +39,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape))
     </div>
 
     <Teleport to="body">
-      <div v-if="videoOpen" class="pavilion-video-modal" role="dialog" aria-modal="true" aria-label="SAKURA 品牌承諾影片" @click.self="closeVideo">
+      <div v-if="videoOpen" class="pavilion-video-modal" role="dialog" aria-modal="true" aria-label="SAKURA 集團品牌館影片" @click.self="closeVideo">
         <button type="button" aria-label="關閉影片" class="pavilion-video-modal__close" @click="closeVideo"><X aria-hidden="true" /></button>
         <div class="pavilion-video-modal__content">
-          <InternalBrandVideo autoplay flat />
+          <InternalBrandVideo :youtube-id="cmsVisuals.pavilionVideoId || 'ovXezqQdFYo'" title="SAKURA 集團品牌館影片" autoplay flat />
         </div>
       </div>
     </Teleport>

@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<{
   autoplay?: boolean
   comingSoon?: boolean
   src?: string
+  youtubeId?: string
   title?: string
 }>(), {
   cover: '',
@@ -20,10 +21,11 @@ const props = withDefaults(defineProps<{
   autoplay: false,
   comingSoon: false,
   src: '',
+  youtubeId: '',
   title: 'SAKURA 品牌承諾影片',
 })
 
-const videoId = cmsVisuals.brandVideoId
+const videoId = computed(() => props.youtubeId || cmsVisuals.brandVideoId)
 const state = ref<'idle' | 'loading' | 'playing' | 'error'>(props.autoplay ? 'loading' : 'idle')
 const nativeVideo = ref<HTMLVideoElement | null>(null)
 const playbackError = ref('')

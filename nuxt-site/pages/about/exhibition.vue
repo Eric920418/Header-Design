@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-pages-about-exhibition', {"copy":{"text1":" 以人為主的體驗融入整體空間設計中，完整打造家庭生活場域，創造空間通透感，營造宛如現代美術館般之空間氛圍。 ","text2":"Enjoy · Connect · Experience","text3":"享受、交流、體驗","text4":"透過鏡面延伸感打破空間框架限制、以天花格柵創造無邊際之視覺效果，家人間的生活交流互動體現於居家空間內，空間氛圍以「六感體驗」為主軸，體驗生活就是一門藝術的感官饗宴。","field5":"/section-5/brand-pavilion/interior-main.jpg","field6":"集團品牌館客廳與廚房展示空間","field7":"/section-5/brand-pavilion/interior-gallery.png","field8":"集團品牌館多元空間展示","text9":"Memories are made ","text10":"when we’re together","text11":"","text12":"地址","text13":"營業時間","text14":"Important Information & Guidelines","text15":"注意事項"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-pages-about-exhibition', {"copy":{"text1":" 以人為主的體驗融入整體空間設計中，完整打造家庭生活場域，創造空間通透感，營造宛如現代美術館般之空間氛圍。 ","text2":"Enjoy · Connect · Experience","text3":"享受、交流、體驗","text4":"透過鏡面延伸感打破空間框架限制、以天花格柵創造無邊際之視覺效果，家人間的生活交流互動體現於居家空間內，空間氛圍以「六感體驗」為主軸，體驗生活就是一門藝術的感官饗宴。","field5":"/section-5/brand-pavilion/exhibition-1-20261030.webp","field6":"集團品牌館白色中島與展示櫥櫃","field7":"/section-5/brand-pavilion/exhibition-2-20261030.webp","field8":"集團品牌館紅色廚房與客餐廳展示空間","text9":"Memories are made ","text10":"when we’re together","text11":"","text12":"地址","text13":"營業時間","text14":"Important Information & Guidelines","text15":"注意事項"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ArrowRight, Clock3, MapPin } from 'lucide-vue-next'
 import { brandPavilions as cmsSeed_brandPavilions, pavilionNotice as cmsSeed_pavilionNotice } from '~/data/brandPavilions'
@@ -40,7 +40,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <InternalBrandImage :src="cmsCopy.copy.field5" :alt="cmsCopy.copy.field6" />
             </div>
             <div v-reveal="{ anim: 'opalScaleUp', delay: 100 }" data-ev="opalScaleUp" class="column-item ev" style="animation-delay:100ms">
-              <InternalBrandImage :src="cmsCopy.copy.field7" :alt="cmsCopy.copy.field8" fit="contain" />
+              <InternalBrandImage :src="cmsCopy.copy.field7" :alt="cmsCopy.copy.field8" />
             </div>
           </div>
 

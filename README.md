@@ -4464,3 +4464,10 @@ final result: passed
 - 主網域實際從頭播放至 149.696 秒結尾，ended=true、媒體錯誤 0；第二正式網址 390px 實際播放及暫停正常。正式 320／390／768／1440px 四組完整 16:9，無水平溢位；兩站瀏覽器錯誤紀錄皆為空。
 - 從正式播放器下載取得 52,164,137 bytes，SHA-256 `d2e9af6351decb2cf3e7ba36b8f86874cb93237caffe6b734bab9b2502b0f789` 與已完整解碼的網頁版完全相同。證據在 `.gstack/qa-reports/service-video-20261114/`：`production-complete.json`、`production-file.json`、`production-layouts.json`、`second-domain.json`、`browser-errors.json`、`cms-update.txt`；畫面 `production-desktop.png`、`production-mobile.png`。
 - 未實測實體 Safari、原生時間軸拖曳、音量／全螢幕操作，未逐句校對或實際聽驗整支影片；這些不列為通過。來源既有黑色字幕帶完整保留，未裁掉字幕。本機服務已停止；完成紀錄僅提交 README，不為文件再次部署。
+
+## 2026-11-14 集團品牌館影片與展示圖片更新
+
+- `/about/exhibition` 首屏影片改為指定的 YouTube `ovXezqQdFYo`（活動紀錄：SAKURA 櫻花廚具高雄品牌館開幕）。品牌館新增獨立 `pavilionVideoId`，避免更換與首頁共用的品牌承諾影片；沿用原播放卡、彈窗、關閉與錯誤顯示。
+- 展示區兩張圖片依「二修261030／5.2集團品牌館」的 `5.2-1exhibition.jpg`、`5.2-2exhibition.jpg` 更新；保留來源原檔，以 1800px WebP 發布帶日期新網址，維持雙欄／手機單欄及原圖片框比例。第二張由拼圖換為單張照片，與第一張同用 cover 避免黑色留邊，不拉伸影像。
+- 預設資料及後台欄位同步，正式資料以限定欄位精準更新，保留未涉及的首頁／服務流程影片、文案、圖片與全部歷史版本；有未發布草稿或非預期內容即停止。建置、自檢與正式驗收結果續記。
+- 兩張 WebP 為 1800×1125／1800×1064，118,026／153,378 bytes，來源原檔保持。影片來源頁確認標題與指定 ID 相符；`check-brand-video.mjs`（含品牌館指定 ID／首頁預設 ID 分離）、精準更新腳本自檢、後台工作流程／名稱檢查及 `pnpm build`（含型別檢查）通過。正式 dry-run 兩文件均 revision 3、無未發布草稿；不執行整庫 seed。

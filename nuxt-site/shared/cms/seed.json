@@ -8423,10 +8423,10 @@
         "text2": "Enjoy · Connect · Experience",
         "text3": "享受、交流、體驗",
         "text4": "透過鏡面延伸感打破空間框架限制、以天花格柵創造無邊際之視覺效果，家人間的生活交流互動體現於居家空間內，空間氛圍以「六感體驗」為主軸，體驗生活就是一門藝術的感官饗宴。",
-        "field5": "/section-5/brand-pavilion/interior-main.jpg",
-        "field6": "集團品牌館客廳與廚房展示空間",
-        "field7": "/section-5/brand-pavilion/interior-gallery.png",
-        "field8": "集團品牌館多元空間展示",
+        "field5": "/section-5/brand-pavilion/exhibition-1-20261030.webp",
+        "field6": "集團品牌館白色中島與展示櫥櫃",
+        "field7": "/section-5/brand-pavilion/exhibition-2-20261030.webp",
+        "field8": "集團品牌館紅色廚房與客餐廳展示空間",
         "text9": "Memories are made ",
         "text10": "when we’re together",
         "text11": "",
@@ -22369,7 +22369,8 @@
       },
       "brandVideoId": "wH374AF9wLI",
       "franchiseVideoId": "sAuAjtpvZYk",
-      "serviceVideoSrc": "/section-3/service-process/video/service-guide-2027-20261027.mp4"
+      "serviceVideoSrc": "/section-3/service-process/video/service-guide-2027-20261027.mp4",
+      "pavilionVideoId": "ovXezqQdFYo"
     },
     "schema": {
       "type": "object",
@@ -22497,6 +22498,11 @@
           "type": "string",
           "format": "url",
           "label": "服務流程影片網址（MP4）"
+        },
+        "pavilionVideoId": {
+          "type": "string",
+          "format": "youtube",
+          "label": "集團品牌館 YouTube 影片 ID"
         }
       },
       "required": [

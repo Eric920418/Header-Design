@@ -17,7 +17,7 @@ export const pageEditors=[
  ...['latest','activities','video'].map((category,i)=>page('news-'+category,'news',['最新消息','優惠活動','媒體影音'][i],[view('news-'+category+'-index'),view('news-'+category+'-slug-')],{href:'/news/'+category,extra:['news-articles'],category})),
  page('about','brand','關於我們',[view('about-introduce')],{href:'/about/introduce'}),
  page('advantage','brand','品牌優勢',[view('about-advantage')],{href:'/about/advantage'}),
- page('pavilions','brand','櫻花集團品牌館',[view('about-exhibition')],{href:'/about/exhibition',extra:['site-visuals'],scopes:{'site-visuals':['brandVideoId']}}),
+ page('pavilions','brand','櫻花集團品牌館',[view('about-exhibition')],{href:'/about/exhibition',extra:['site-visuals'],scopes:{'site-visuals':['pavilionVideoId']}}),
  page('franchise','franchise','加盟介紹',[view('franchising-intro')],{href:'/franchising/intro',extra:['site-visuals'],scopes:{'site-visuals':['franchiseVideoId']}}),
  page('franchise-form','franchise','加盟申請表單',[view('franchising-form')],{href:'/franchising/form'}),
  page('franchise-download','franchise','加盟資料下載',[view('franchising-download')],{href:'/franchising/download',extra:['data-franchise'],scopes:{'data-franchise':['FRANCHISE_BROCHURE_URL']}}),
