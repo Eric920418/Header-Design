@@ -1,9 +1,10 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-components-FloatingButtons', {"primaryItem":{"href":"/design-inspiration","icon":"/floating-icons/case.png","label":"設計案例"},"serviceItems":[{"href":"https://www.sakura-kitchenlife.com.tw/measuring","icon":"/floating-icons/official-quick-link-2.svg","label":"到府丈量","newTab":true},{"href":"https://icare.sakura.com.tw","icon":"/floating-icons/official-quick-link-3.svg","label":"線上客服","newTab":true}],"copy":{"field1":"","field2":"","field3":"拍立配連結待提供","field4":"/floating-icons/pailipei.svg","field5":""},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-components-FloatingButtons', {"primaryItem":{"href":"/design-inspiration","icon":"/floating-icons/case.png","label":"設計案例"},"serviceItems":[{"href":"https://www.sakura-kitchenlife.com.tw/measuring","icon":"/floating-icons/free-measuring.svg","label":"免費丈量","newTab":true},{"href":"https://icare.sakura.com.tw","icon":"/floating-icons/official-quick-link-3.svg","label":"線上客服","newTab":true}],"copy":{"field1":"","field2":"","field3":"https://ai.sakura.com.tw/lens/kitchen","field4":"/floating-icons/pailipei.svg","field5":""},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 const primaryItem = cmsCopy.primaryItem
 
 const serviceItems = cmsCopy.serviceItems
+const pailipeiHref = cmsCopy.copy.field3.startsWith('https://') ? cmsCopy.copy.field3 : 'https://ai.sakura.com.tw/lens/kitchen'
 
 const rail = ref<HTMLElement | null>(null)
 const offset = ref(0)
@@ -52,12 +53,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div v-if="index" aria-hidden="true" class="h-px w-full bg-white/50" />
         <a :href="item.href" :aria-label="item.label" :target="item.newTab ? '_blank' : undefined" :rel="item.newTab ? 'noopener noreferrer' : undefined" class="block p-2">
           <picture>
-            <source v-if="item.icon === '/floating-icons/official-quick-link-2.svg'" media="(max-width: 767px)" srcset="/floating-icons/official-quick-link-2-mobile.svg" />
+            <source v-if="['/floating-icons/official-quick-link-2.svg', '/floating-icons/free-measuring.svg'].includes(item.icon)" media="(max-width: 767px)" :srcset="item.icon === '/floating-icons/free-measuring.svg' ? '/floating-icons/free-measuring-mobile.svg' : '/floating-icons/official-quick-link-2-mobile.svg'" />
             <img :src="item.icon" :alt="cmsCopy.copy.field2" class="block w-14 sm:w-[58px]" />
           </picture>
         </a>
       </template>
-      <a href="https://sakura-ai-one.vercel.app/consumer?entry=official" target="_blank" rel="noopener noreferrer" aria-label="拍立配（另開分頁）" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 sm:h-[74px] sm:w-[74px]">
+      <a :href="pailipeiHref" target="_blank" rel="noopener noreferrer" aria-label="拍立配（另開分頁）" class="flex h-[72px] w-[72px] items-center justify-center border-t border-white/50 sm:h-[74px] sm:w-[74px]">
         <picture>
           <source v-if="cmsCopy.copy.field4 === '/floating-icons/pailipei.svg'" media="(max-width: 767px)" srcset="/floating-icons/pailipei-mobile.svg" />
           <img :src="cmsCopy.copy.field4" :alt="cmsCopy.copy.field5" class="block h-[70px] w-[70px]" />

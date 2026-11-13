@@ -1,3 +1,8 @@
+## 2026-11-13 懸浮服務列免費丈量與拍立配正式連結
+
+- 全站FloatingButtons桌面／手機共用服務列，丈量名稱改免費丈量，新增同尺寸free-measuring.svg及手機版，保留原稿／字級／金灰底差異；拍立配改讀CMS copy.field3，舊空白／非https占位內容使用指定正式網址https://ai.sakura.com.tw/lens/kitchen。另開分頁與安全rel保留。
+- 正式資料更新限view-components-FloatingButtons丈量label／icon與copy.field3，其餘資料與舊版本保留；.gstack/qa-reports/floating-services-20261113/update.mjs含目標、草稿、唯一入口與原值保護。指定欄位／保留其他內容／原物件不變／可重跑／自訂值拒絕自我檢查、正式dry-run（revision 1）、兩SVG XML與原70px畫布檢查、pnpm build含typecheck及diff均通過。資料發布與正式驗收待完成。
+
 ## 2026-11-12 主導覽免費丈量文案
 
 - 依15.24.20截圖，僅更新SiteHeader「門市與服務」下的丈量項目為「免費丈量」，桌面／手機共用正式CMS資料；目的地及外連行為保留。iCare標誌判斷改依既有目的網址，避免改名稱後標誌消失。其他服務列／內文不在本次指定範圍。
