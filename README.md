@@ -4429,3 +4429,5 @@ final result: passed
 - 正式 CMS 使用限定八個既有 ID、只允許舊／新描述值的精準更新；遇未發布草稿或自訂描述即停止，保留所有歷史版本及其他文件。實際更新與畫面回查結果於本節續記。
 - 正式 `data-catalogues` 由 revision 1→3，發布版本 `0cc1e4ac-0828-4269-93d5-5fe3da0e4e24`；保留原版本 `fa143db2-2eca-4e87-851e-8074c9588902`。交易內確認只有八個 description 變更，其他文件及所有舊版本保持不變。
 - 更新腳本自檢通過：限定 ID、只改指定描述、其餘欄位保留、輸入不變、重跑無變更及自訂內容衝突保護；`pnpm build`（含型別檢查）通過。正式1440／390px均顯示八筆新文案，無水平溢位，名稱／封面／預覽及下載連結與改前一致；證據在 `.gstack/qa-reports/catalogue-copy-20261113/`。預設資料發布與第二網域回查續記。
+- 預設資料程式 `77a99396` 已發布至 `dpl_EWymnZKpwSe5fgcwaCD8rRGKp5DX`；兩正式網域皆為同 SHA／READY。發布後重新載入主網域1440px及第二網域390px，兩站各八筆皆顯示「品牌系列型錄」，無水平溢位，型錄名稱、圖片、PDF及下載連結仍與更新前一致。
+- 證據為 `.gstack/qa-reports/catalogue-copy-20261113/cms-update.txt`、`before.json`、`main-domain.json`、`second-domain.json`、`after-deploy.json`、兩份 `alias-*.json`；畫面 `production-desktop.png`、`production-mobile.png`。此輪未重新驗收 PDF 檔案內容，未改檔案或連結；臨時分頁關閉、視窗尺寸還原。完成紀錄只提交 README，不為文件再次部署。
