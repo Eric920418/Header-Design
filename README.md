@@ -4442,3 +4442,9 @@ final result: passed
 - 兩站 390／1440px 四組量測，五張年份皆為 2026／2026／2024／2026／2026，無水平溢位；其餘四張預覽網址及封面與改前一致。新封面正常載入，產品分類頁及產品詳情頁的共用封面同步，實際按入口均前往型錄頁。瀏覽器錯誤紀錄為空。
 - 正式實際點選下載取得 18,607,082 bytes，SHA-256 `7cdbc0583112092d3832a0324a4d93206b9a1401bc5506a18e6568cad701cfab`，與提供的 61 頁原 PDF 完全相同。預覽連結亦指向新版；內建瀏覽器未呈現原生 PDF 檢視器，故未宣稱完成該檢視器或實體 Safari 的畫面驗收，PDF 本身以 Poppler 核對資訊及第一頁，不逐頁校對內文。
 - 證據在 `.gstack/qa-reports/product-catalogue-20261113/`：`verification-result.json`、`download.json`、`production-desktop.json`、`production-mobile.json`、`second-domain.json`、`product-entry.json`、`cms-update.txt`、`alias-0.json`、`alias-1.json`；畫面 `production-desktop.png`、`production-mobile.png`。暫存分頁已關閉、視窗覆寫還原；完成紀錄只提交 README，不為文件再次部署。
+
+## 2026-11-13 產品詳情主圖箭頭改至左右中央
+
+- 共用 `InternalProductDetailPage` 的主圖切換鈕由右下成組改為圖片左右兩側中央；桌面各內縮 25px，手機各內縮 14px。沿用原按鈕尺寸、外觀、圖片比例、切換邏輯及張數提示，推薦產品輪播不改。
+- 控制鈕外層不攔截圖片滑鼠事件，僅按鈕可點選；單張／無圖片沿用原條件不顯示箭頭。一般產品網址及近吸系列舊網址均使用同一元件，無 API／資料庫更動。建置、桌面／手機切圖及正式發布驗收續記。
+- `pnpm build`（含型別檢查）通過。本機 320／390／768／1440px 四組實際點選下一張及上一張，主圖來源與計數 1→2→1 同步，左右按鈕垂直置中且內縮符合設定；主圖尺寸對照正式改前維持，無水平溢位。Enter 鍵首末循環 1→3→1、縮圖選第 3 張及單張 TEKA 產品不顯示箭頭均通過。
