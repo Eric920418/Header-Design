@@ -4448,3 +4448,6 @@ final result: passed
 - 共用 `InternalProductDetailPage` 的主圖切換鈕由右下成組改為圖片左右兩側中央；桌面各內縮 25px，手機各內縮 14px。沿用原按鈕尺寸、外觀、圖片比例、切換邏輯及張數提示，推薦產品輪播不改。
 - 控制鈕外層不攔截圖片滑鼠事件，僅按鈕可點選；單張／無圖片沿用原條件不顯示箭頭。一般產品網址及近吸系列舊網址均使用同一元件，無 API／資料庫更動。建置、桌面／手機切圖及正式發布驗收續記。
 - `pnpm build`（含型別檢查）通過。本機 320／390／768／1440px 四組實際點選下一張及上一張，主圖來源與計數 1→2→1 同步，左右按鈕垂直置中且內縮符合設定；主圖尺寸對照正式改前維持，無水平溢位。Enter 鍵首末循環 1→3→1、縮圖選第 3 張及單張 TEKA 產品不顯示箭頭均通過。
+- 正式程式 `19254a71` 發布至 `dpl_8cExtRpVKhqx9xkpbYccLXZzCD1o`，兩正式網域皆確認同 SHA／READY。指定 R7600 產品頁於 320／390／768／1440px 實際切圖 1→2→1，圖片來源、縮圖選取及計數同步，兩側箭頭垂直置中，主圖尺寸對照改前維持，無水平溢位。
+- 第二正式網址 390px 實際切圖與位置正常，單張 TEKA 圖片無切換鈕，瀏覽器錯誤 0。證據在 `.gstack/qa-reports/product-arrows-20261113/`：`before-sizes.json`、`local-sizes.json`、`local-interactions.json`、`production-sizes.json`、`second-domain.json`、`production-single.json`、`verification-result.json`、兩份 `alias-*.json`；畫面 `production-desktop.png`、`production-mobile.png`。
+- 本輪未實測實體 Safari／觸控手勢，無資料庫寫入；本機服務停止，臨時分頁已關閉、視窗尺寸還原。完成紀錄僅提交 README，不為文件再次部署。
