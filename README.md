@@ -4438,3 +4438,7 @@ final result: passed
 - 五張產品型錄卡片描述僅顯示各自年份：四張 2026，櫻花石英石保留 2024。名稱及其他四份 PDF／封面維持，產品列表／詳情共用型錄入口沿用同一份資料。
 - 下載 API 增加本站型錄 files 資料夾的限定 PDF 轉址，既有媒體庫與官方來源行為維持。先部署新檔，確認可用後才發布正式 CMS；有未發布草稿或自訂內容即停止，不重跑 seed、不刪除歷史資料。建置、自檢及正式預覽／下載驗收結果續記。
 - `pnpm build`（含型別檢查）、精準更新腳本 `--self-check` 及下載路徑測試通過。確認新 PDF SHA-256 與來源相同；正式 dry-run 為 revision 3、五筆資料，無草稿衝突。CMS 另一份配備型錄的既有媒體庫封面／PDF 保留，不以預設資料覆蓋。
+- 正式程式 `24ff1741` 已發布至 `dpl_AtfMi7iu9sZei5XdM6egjKpgiKvN`；兩正式網址皆同 SHA／READY。新版檔案部署後發布 `data-productCatalogues`，revision 3→5，新版本 `9e023676-77a3-4a92-932e-3fbd08996952`；保留舊版 `6a67c675-a9e6-4e50-a7ed-b0cde22092f7`，交易內核對其他文件與全部歷史版本不變。
+- 兩站 390／1440px 四組量測，五張年份皆為 2026／2026／2024／2026／2026，無水平溢位；其餘四張預覽網址及封面與改前一致。新封面正常載入，產品分類頁及產品詳情頁的共用封面同步，實際按入口均前往型錄頁。瀏覽器錯誤紀錄為空。
+- 正式實際點選下載取得 18,607,082 bytes，SHA-256 `7cdbc0583112092d3832a0324a4d93206b9a1401bc5506a18e6568cad701cfab`，與提供的 61 頁原 PDF 完全相同。預覽連結亦指向新版；內建瀏覽器未呈現原生 PDF 檢視器，故未宣稱完成該檢視器或實體 Safari 的畫面驗收，PDF 本身以 Poppler 核對資訊及第一頁，不逐頁校對內文。
+- 證據在 `.gstack/qa-reports/product-catalogue-20261113/`：`verification-result.json`、`download.json`、`production-desktop.json`、`production-mobile.json`、`second-domain.json`、`product-entry.json`、`cms-update.txt`、`alias-0.json`、`alias-1.json`；畫面 `production-desktop.png`、`production-mobile.png`。暫存分頁已關閉、視窗覆寫還原；完成紀錄只提交 README，不為文件再次部署。
