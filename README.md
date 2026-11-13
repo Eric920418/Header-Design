@@ -4412,3 +4412,11 @@ final result: passed
 - 正式程式 `7920eba8` 已發布至 `dpl_9pSZQP6RcU8N5mbvnVNaDwr413iW`，兩個正式網域回查皆為相同 SHA 與 READY。主網域 49 個代表網址 × 390／1440px 共 98 組正式量測，1986 個文字片段分色符合要求，一般內容標題尺寸／字型、小標籤及 Explore Our 均與改前一致，無水平溢位。三種型錄卡名另完成兩尺寸六組量測，包含 MUJI Basic+、Clever巧域廚房及 SAKURA 全產品型錄等中英混合名稱。
 - 另一網域五頁 × 390／1440px 共十組，以及五頁 × 320／820px 共十組邊界檢查，分色正確且無水平溢位；未使用關動畫或修改 Vue 內部狀態的方式驗收。最終回查未見瀏覽器錯誤。
 - 正式證據：`.gstack/qa-reports/heading-colors-20261113/production-result.json`、`production.json`、`catalogue-names.json`、`second-domain.json`、`boundary.json`、`alias-main.json`、`alias-second.json`；畫面為 `production-desktop.png` 與 `production-mobile.png`。本輪服務已停止，臨時分頁關閉、視窗尺寸還原；無 CMS／資料庫寫入。未驗實體手機 Safari，未逐筆重新開啟全部動態產品／文章或重跑舊版全流程 HTTP 腳本。完成紀錄僅本機提交 README，不為文件再部署。
+
+## 2026-11-13 案例詳情主圖左右箭頭
+
+- 設計靈感詳情與門市案例詳情共用 `InternalCaseCarousel`；在主圖左右中央增加切換箭頭，沿用現有 Embla 輪播與縮圖選取狀態，保留原縮圖列及下方操作。箭頭放在滑動容器外，避免影響圖片拖曳。
+- 桌面為 48px、手機為 44px 按鈕，白色半透明底搭配陰影；可用鍵盤聚焦並顯示外框。只有一張或沒有圖片時不顯示切換箭頭，沿用原本圖片內容與資料來源。
+- 建置、實際桌面／手機切圖、首末循環、縮圖同步及正式發布結果於本節續記。
+- 驗證：`pnpm build`（含型別檢查）通過；直接編譯實際輪播元件做 SSR，確認 0／1 張圖片不出現箭頭、3 張圖片保留兩組切換鈕與三張縮圖。實際瀏覽器驗證主圖下一張／上一張、首末循環、縮圖選取後再按主圖箭頭及 Enter 鍵操作，選取狀態與提示同步。
+- 設計靈感「大廚廚房」與門市案例 `/gallery/case10` 在 320／390／768／1440px 共八組，主圖箭頭均位於圖內左右中央，無水平溢位；390／1440px 主圖與縮圖尺寸對照改前維持。證據位於 `.gstack/qa-reports/case-main-arrows-20261113/`；尚未驗實體 Safari／觸控拖曳，未修改資料庫。正式發布及回查結果續記。

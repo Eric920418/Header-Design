@@ -44,11 +44,18 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="case-carousel" aria-roledescription="carousel" aria-label="案例圖片輪播">
-    <div ref="viewport" class="case-carousel__viewport">
-      <div class="case-carousel__track">
-        <figure v-for="(image, index) in images" :key="image" class="case-carousel__slide" role="group" :aria-label="`${index + 1} / ${images.length}`">
-          <InternalCaseImage :src="image" :alt="`${title} 案例照片 ${index + 1}`" :eager="index === 0" class="case-carousel__main-image" />
-        </figure>
+    <div class="case-carousel__stage">
+      <div ref="viewport" class="case-carousel__viewport">
+        <div class="case-carousel__track">
+          <figure v-for="(image, index) in images" :key="image" class="case-carousel__slide" role="group" :aria-label="`${index + 1} / ${images.length}`">
+            <InternalCaseImage :src="image" :alt="`${title} 案例照片 ${index + 1}`" :eager="index === 0" class="case-carousel__main-image" />
+          </figure>
+        </div>
+      </div>
+
+      <div v-if="images.length > 1" class="case-carousel__main-arrows" role="group" aria-label="主圖切換">
+        <button type="button" aria-label="上一張案例照片" @click="api?.scrollPrev()"><ArrowLeft aria-hidden="true" /></button>
+        <button type="button" aria-label="下一張案例照片" @click="api?.scrollNext()"><ArrowRight aria-hidden="true" /></button>
       </div>
     </div>
 
@@ -68,7 +75,7 @@ onBeforeUnmount(() => {
           <InternalCaseImage :src="image" alt="" class="case-carousel__thumbnail-image" />
         </button>
       </div>
-      <div class="case-carousel__arrows">
+      <div v-if="images.length > 1" class="case-carousel__arrows">
         <button type="button" aria-label="上一張案例照片" @click="api?.scrollPrev()"><ArrowLeft aria-hidden="true" /></button>
         <button type="button" aria-label="下一張案例照片" @click="api?.scrollNext()"><ArrowRight aria-hidden="true" /></button>
       </div>
@@ -78,6 +85,8 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.case-carousel__stage { position: relative; }
+
 .case-carousel__viewport {
   overflow: hidden;
   border-radius: 24px;
@@ -130,6 +139,7 @@ onBeforeUnmount(() => {
 .case-carousel__thumbnail-image { width: 100%; height: 100%; }
 .case-carousel__arrows { display: flex; flex: 0 0 auto; gap: 10px; padding-bottom: 7px; }
 
+.case-carousel__main-arrows button,
 .case-carousel__arrows button {
   display: flex;
   width: 48px;
@@ -143,7 +153,13 @@ onBeforeUnmount(() => {
   transition: color .3s ease, border-color .3s ease, background-color .3s ease;
 }
 
+.case-carousel__main-arrows { position: absolute; top: 50%; inset-inline: 16px; display: flex; justify-content: space-between; transform: translateY(-50%); pointer-events: none; }
+.case-carousel__main-arrows button { background: rgb(255 255 255 / 92%); box-shadow: 0 2px 12px rgb(0 0 0 / 16%); pointer-events: auto; cursor: pointer; }
+.case-carousel__main-arrows button:hover,
 .case-carousel__arrows button:hover { border-color: #caa05c; color: #fff; background: #caa05c; }
+.case-carousel__main-arrows button:focus-visible,
+.case-carousel__arrows button:focus-visible { outline: 2px solid #caa05c; outline-offset: 3px; }
+.case-carousel__main-arrows :deep(svg),
 .case-carousel__arrows :deep(svg) { width: 20px; height: 20px; }
 
 @media (max-width: 1024px) {
@@ -158,11 +174,14 @@ onBeforeUnmount(() => {
   .case-carousel__thumbnails { order: 2; width: 100%; flex-basis: 100%; gap: 12px; }
   .case-carousel__thumbnails button { height: 92px; flex-basis: calc((100% - 12px) / 1.4); border-radius: 12px; }
   .case-carousel__arrows { margin-left: auto; margin-right: 0; padding-bottom: 0; }
+  .case-carousel__main-arrows { inset-inline: 12px; }
+  .case-carousel__main-arrows button,
   .case-carousel__arrows button { width: 44px; height: 44px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .case-carousel__thumbnails button,
+  .case-carousel__main-arrows button,
   .case-carousel__arrows button { transition: none; }
 }
 </style>
