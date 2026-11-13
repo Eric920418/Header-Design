@@ -10,6 +10,8 @@ const props = withDefaults(defineProps<{
   alt?: string
   autoplay?: boolean
   comingSoon?: boolean
+  src?: string
+  title?: string
 }>(), {
   cover: '',
   aspect: '16 / 9',
@@ -17,10 +19,14 @@ const props = withDefaults(defineProps<{
   alt: 'SAKURA 品牌承諾影片縮圖',
   autoplay: false,
   comingSoon: false,
+  src: '',
+  title: 'SAKURA 品牌承諾影片',
 })
 
 const videoId = cmsVisuals.brandVideoId
 const state = ref<'idle' | 'loading' | 'playing' | 'error'>(props.autoplay ? 'loading' : 'idle')
+const nativeVideo = ref<HTMLVideoElement | null>(null)
+const playbackError = ref('')
 let timeout: ReturnType<typeof setTimeout> | undefined
 
 const startTimeout = () => {
@@ -32,8 +38,16 @@ const startTimeout = () => {
 }
 
 const play = () => {
+  playbackError.value = ''
   state.value = 'loading'
   startTimeout()
+  if (props.src && nativeVideo.value) {
+    if (nativeVideo.value.error) nativeVideo.value.load()
+    nativeVideo.value.play().catch(error => {
+      playbackError.value = error instanceof Error ? error.message : String(error)
+      failed()
+    })
+  }
 }
 
 const loaded = () => {
@@ -43,10 +57,17 @@ const loaded = () => {
 
 const failed = () => {
   if (timeout) clearTimeout(timeout)
+  nativeVideo.value?.pause()
   state.value = 'error'
 }
 
-onMounted(() => props.autoplay && startTimeout())
+const nativeFailed = () => {
+  const error = nativeVideo.value?.error
+  playbackError.value = error ? `播放錯誤 ${error.code}：${error.message || '影片連線、格式或解碼失敗。'}` : '無法載入影片。'
+  failed()
+}
+
+onMounted(() => props.autoplay && (props.src ? play() : startTimeout()))
 onBeforeUnmount(() => timeout && clearTimeout(timeout))
 </script>
 
@@ -56,22 +77,38 @@ onBeforeUnmount(() => timeout && clearTimeout(timeout))
     :class="{ 'shadow-[0_28px_80px_-30px_rgba(0,0,0,.55)]': !flat }"
     :style="{ aspectRatio: aspect }"
   >
+    <video
+      v-if="src"
+      v-show="state !== 'idle' && state !== 'error'"
+      ref="nativeVideo"
+      :src="src"
+      :poster="cover"
+      :aria-label="title"
+      controls
+      playsinline
+      preload="none"
+      class="absolute inset-0 h-full w-full object-contain"
+      @playing="loaded"
+      @error="nativeFailed"
+    />
     <template v-if="state === 'idle'">
       <img :src="cover || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`" :alt="alt" class="h-full w-full object-cover" @error="failed" />
-      <button type="button" :disabled="comingSoon" :aria-label="comingSoon ? '影片即將推出' : '播放 SAKURA 品牌承諾影片'" class="antra-source-video-popup" @click="play">
+      <button type="button" :disabled="comingSoon" :aria-label="comingSoon ? '影片即將推出' : `播放 ${title}`" class="antra-source-video-popup" @click="play">
         <span class="antra-source-video-popup__radar" aria-hidden="true" />
         <Play class="relative ml-1 h-7 w-7 fill-current sm:h-8 sm:w-8" />
       </button>
       <p v-if="comingSoon" class="absolute top-[calc(50%+34px)] sm:top-[calc(50%+66px)] left-0 w-full text-center font-display text-[clamp(24px,4vw,60px)] leading-none font-semibold text-white drop-shadow-lg">Coming Soon</p>
     </template>
     <template v-else-if="state === 'loading' || state === 'playing'">
-      <iframe :src="`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`" title="SAKURA 品牌承諾影片" class="absolute inset-0 h-full w-full" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen @load="loaded" @error="failed" />
+      <iframe v-if="!src" :src="`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`" :title="title" class="absolute inset-0 h-full w-full" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen @load="loaded" @error="failed" />
       <div v-if="state === 'loading'" class="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#1C1C1D] text-white"><span class="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-[#CAA05C]" /><span class="sr-only">影片載入中</span></div>
     </template>
     <div v-else role="alert" class="absolute inset-0 flex flex-col items-center justify-center bg-[#1C1C1D] px-6 text-center text-white">
       <p class="text-lg font-medium">影片載入失敗</p>
-      <p class="mt-2 max-w-md text-sm leading-6 text-white/70">無法載入 YouTube 影片（ID：{{ videoId }}）。可能是網路或瀏覽器隱私設定阻擋。</p>
-      <a :href="`https://www.youtube.com/watch?v=${videoId}`" target="_blank" rel="noopener noreferrer" class="mt-5 rounded-full border border-[#CAA05C] px-5 py-2.5 text-sm text-[#CAA05C]">前往 YouTube 觀看</a>
+      <p v-if="src" class="mt-2 max-w-md break-all text-sm leading-6 text-white/70">來源：{{ src }}。{{ playbackError || '影片載入逾時，請檢查網路後重試。' }}</p>
+      <p v-else class="mt-2 max-w-md text-sm leading-6 text-white/70">無法載入 YouTube 影片（ID：{{ videoId }}）。可能是網路或瀏覽器隱私設定阻擋。</p>
+      <button v-if="src" type="button" class="mt-4 rounded-full border border-[#CAA05C] px-5 py-2.5 text-sm text-[#CAA05C]" @click="play">重新播放</button>
+      <a :href="src || `https://www.youtube.com/watch?v=${videoId}`" target="_blank" rel="noopener noreferrer" class="mt-5 rounded-full border border-[#CAA05C] px-5 py-2.5 text-sm text-[#CAA05C]">{{ src ? '另開影片' : '前往 YouTube 觀看' }}</a>
     </div>
   </div>
 </template>

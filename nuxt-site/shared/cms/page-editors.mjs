@@ -12,7 +12,7 @@ export const pageEditors=[
  ...['sakura','svago','teka'].map((brand,i)=>page('products-'+brand,'products',['SAKURA 廚電','SVAGO','TEKA'][i],['catalog-'+brand],{href:'/products/'+brand,extra:['data-productBrands'],brand})),
  page('product-catalogue','products','廚房商品型錄',[view('catalogues-catalog')],{href:'/catalogues/catalog'}),
  page('stores','service','案例門市',['data-storeCases',view('gallery-index'),view('gallery-slug-')],{href:'/gallery'}),
- page('service','service','服務流程',[view('service-process')],{href:'/service-process',extra:['site-visuals'],scopes:{'site-visuals':['brandVideoId']}}),
+ page('service','service','服務流程',[view('service-process')],{href:'/service-process',extra:['site-visuals'],scopes:{'site-visuals':['serviceVideoSrc']}}),
  page('news','news','優惠消息',[view('news-index')],{href:'/news'}),
  ...['latest','activities','video'].map((category,i)=>page('news-'+category,'news',['最新消息','優惠活動','媒體影音'][i],[view('news-'+category+'-index'),view('news-'+category+'-slug-')],{href:'/news/'+category,extra:['news-articles'],category})),
  page('about','brand','關於我們',[view('about-introduce')],{href:'/about/introduce'}),

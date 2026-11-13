@@ -22368,7 +22368,8 @@
         "asset_10b5a86c": "/home-2026/brand-commitment-opening-frame.webp"
       },
       "brandVideoId": "wH374AF9wLI",
-      "franchiseVideoId": "sAuAjtpvZYk"
+      "franchiseVideoId": "sAuAjtpvZYk",
+      "serviceVideoSrc": "/section-3/service-process/video/service-guide-2027-20261027.mp4"
     },
     "schema": {
       "type": "object",
@@ -22491,6 +22492,11 @@
           "type": "string",
           "format": "youtube",
           "label": "加盟介紹 YouTube 影片 ID"
+        },
+        "serviceVideoSrc": {
+          "type": "string",
+          "format": "url",
+          "label": "服務流程影片網址（MP4）"
         }
       },
       "required": [

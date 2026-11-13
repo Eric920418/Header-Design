@@ -4451,3 +4451,11 @@ final result: passed
 - 正式程式 `19254a71` 發布至 `dpl_8cExtRpVKhqx9xkpbYccLXZzCD1o`，兩正式網域皆確認同 SHA／READY。指定 R7600 產品頁於 320／390／768／1440px 實際切圖 1→2→1，圖片來源、縮圖選取及計數同步，兩側箭頭垂直置中，主圖尺寸對照改前維持，無水平溢位。
 - 第二正式網址 390px 實際切圖與位置正常，單張 TEKA 圖片無切換鈕，瀏覽器錯誤 0。證據在 `.gstack/qa-reports/product-arrows-20261113/`：`before-sizes.json`、`local-sizes.json`、`local-interactions.json`、`production-sizes.json`、`second-domain.json`、`production-single.json`、`verification-result.json`、兩份 `alias-*.json`；畫面 `production-desktop.png`、`production-mobile.png`。
 - 本輪未實測實體 Safari／觸控手勢，無資料庫寫入；本機服務停止，臨時分頁已關閉、視窗尺寸還原。完成紀錄僅提交 README，不為文件再次部署。
+
+## 2026-11-14 服務流程導購影片更新
+
+- 來源為「二修261030／2027_櫻花整體廚房_導購影片_字幕版_FA 1027.mp4」，原片 1920×1080、約 149.7 秒、296,685,840 bytes。保留 Downloads 原檔，以 H.264／AAC、1080p、faststart 製作 52,164,137 bytes 網頁版，完整保留影像、燒錄字幕與聲音，不裁切、不改速。
+- `/service-process` 取消 Coming Soon，沿用品牌影片封面及播放按鈕；點擊才載入 MP4，原生控制支援暫停、捲動時間、音量與全螢幕，手機使用 playsinline。播放器依 16:9 完整呈現字幕；首頁及品牌館維持原 YouTube 來源。
+- `site-visuals` 新增獨立的 `serviceVideoSrc` 及網址欄位，服務流程後台「品牌影片」改對應此欄位；既有兩組 YouTube ID、其他圖片及內容保持。播放錯誤顯示來源與可取得的瀏覽器原因，提供重試及另開影片；先部署影片與程式再精準發布正式資料，保留歷史版本。建置、播放與正式驗收續記。
+- 網頁版共 4,486 格，格數／幀率與來源相同，時長差小於 0.05 秒，檔案減少約 82%；faststart 位於影像資料之前，整支解碼錯誤 0。`check-brand-video.mjs`、精準更新腳本自檢、後台工作流程／名稱檢查及 `pnpm build`（含型別檢查）通過。
+- 本機已實際播放及暫停，偵測到 1920×1080／149.696 秒，無媒體錯誤；點擊前 readyState=0、buffered=0、不自動播放。320／390／768／1440px 四組完整 16:9，無水平溢位。原生時間軸操作尚未完成驗收，不列為通過；正式播放及資料庫發布結果續記。
