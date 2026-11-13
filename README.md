@@ -4422,3 +4422,10 @@ final result: passed
 - 設計靈感「大廚廚房」與門市案例 `/gallery/case10` 在 320／390／768／1440px 共八組，主圖箭頭均位於圖內左右中央，無水平溢位；390／1440px 主圖與縮圖尺寸對照改前維持。證據位於 `.gstack/qa-reports/case-main-arrows-20261113/`；尚未驗實體 Safari／觸控拖曳，未修改資料庫。正式發布及回查結果續記。
 - 正式程式 `be346529` 發布至 `dpl_6G8SV52aDUMEN61co9pNKtXK8pnw`，兩個正式網址確認相同 SHA／READY。主網域兩種詳情 × 四種尺寸共八組均完成主圖下一張／上一張，縮圖由 1→2→1 同步，左右箭頭在主圖中央、圖內且無水平溢位；390／1440px 主圖與縮圖尺寸和改前一致。另以圖框與各張照片的實際交集確認按下一張後第二張佔據主圖，而非只有選取提示改變。
 - 第二正式網址的 390px 案例詳情實際切圖通過，未見瀏覽器錯誤；實體 Safari／觸控拖曳未測。證據為 `.gstack/qa-reports/case-main-arrows-20261113/production-layouts.json`、`visible-image.json`、`second-domain.json`、`ssr-result.json`、兩份 `alias-*.json`；截圖 `production-desktop.png`、`production-mobile.png`。本機服務已停止，臨時分頁關閉、視窗尺寸還原；無資料庫寫入。完成紀錄只提交 README，不為文件再次部署。
+
+## 2026-11-13 品牌系列型錄卡片描述
+
+- `/catalogues/kitchenware-catalog` 八張卡片的描述由「系列產品型錄」改為「品牌系列型錄」，同步更新資料預設與初始資料；頁面名稱、英文首屏、各系列名稱、圖片及 PDF／下載連結維持。
+- 正式 CMS 使用限定八個既有 ID、只允許舊／新描述值的精準更新；遇未發布草稿或自訂描述即停止，保留所有歷史版本及其他文件。實際更新與畫面回查結果於本節續記。
+- 正式 `data-catalogues` 由 revision 1→3，發布版本 `0cc1e4ac-0828-4269-93d5-5fe3da0e4e24`；保留原版本 `fa143db2-2eca-4e87-851e-8074c9588902`。交易內確認只有八個 description 變更，其他文件及所有舊版本保持不變。
+- 更新腳本自檢通過：限定 ID、只改指定描述、其餘欄位保留、輸入不變、重跑無變更及自訂內容衝突保護；`pnpm build`（含型別檢查）通過。正式1440／390px均顯示八筆新文案，無水平溢位，名稱／封面／預覽及下載連結與改前一致；證據在 `.gstack/qa-reports/catalogue-copy-20261113/`。預設資料發布與第二網域回查續記。
