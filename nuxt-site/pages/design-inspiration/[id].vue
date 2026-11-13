@@ -31,7 +31,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="case-detail-rail internal-rail-safe">
         <InternalDesignLoadState :pending="status === 'pending'" :error="error" @retry="refresh()" />
         <div v-if="item && !error && status !== 'pending'" class="case-detail-layout">
-          <header class="case-detail-header"><h1>{{ item.title }}</h1></header>
+          <header class="case-detail-header"><h1><InternalHeadingText :text="item.title" /></h1></header>
           <div class="case-detail-carousel">
             <InternalCaseCarousel v-if="item.images.length" :images="item.images" :title="item.title" />
             <p v-else role="status">{{ cmsCopy.copy.text1 }}</p>
@@ -42,7 +42,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 <span>{{ galleryCopy.text2 }}</span><span class="site-cta-icon"><ArrowRight aria-hidden="true" /></span>
               </a>
               <section v-if="item.specs.length" class="case-detail-widget" aria-labelledby="design-case-specs-title">
-                <h2 id="design-case-specs-title">{{ cmsCopy.copy.text2 }}</h2>
+                <h2 id="design-case-specs-title"><InternalHeadingText :text="cmsCopy.copy.text2" /></h2>
                 <dl class="case-detail-specs"><div v-for="spec in item.specs" :key="spec.name"><dt>{{ spec.name }}</dt><dd>{{ spec.value }}</dd></div></dl>
               </section>
             </div>

@@ -41,7 +41,7 @@ const detailRoute = computed(() => props.source === 'inspiration'
         <span>{{ item.storeName }}</span>
         <span>設計師 {{ item.designer }}</span>
       </div>
-      <h3><NuxtLink :to="detailRoute">{{ item.title }}</NuxtLink></h3>
+      <h3><NuxtLink :to="detailRoute"><InternalHeadingText :text="item.title" /></NuxtLink></h3>
       <p class="case-recommendation-card__location"><MapPin aria-hidden="true" />{{ item.city }}</p>
       <p v-if="excerpt" class="case-recommendation-card__excerpt">{{ excerpt }}</p>
     </div>

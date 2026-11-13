@@ -134,7 +134,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Partners" source="home5" class="source-heading-rail" />
 
           <div class="franchise-about__content">
-            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }"><b class="franchise-partners-chinese">加盟夥伴真實分享</b>Here <span>From Our</span><br />Franchise <span>Partners</span></h2>
+            <h2 id="franchise-story-title" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }"><b class="franchise-partners-chinese"><InternalHeadingText text="加盟夥伴真實分享" /></b><InternalHeadingText text="Here " /><span><InternalHeadingText text="From Our" /></span><br /><InternalHeadingText text="Franchise " /><span><InternalHeadingText text="Partners" /></span></h2>
             <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="franchise-about__video ev">
               <InternalFranchiseVideo :video-id="cmsVisuals.franchiseVideoId" :title="cmsCopy.copy.field17" />
             </div>
@@ -174,7 +174,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div class="franchise-advantages__layout">
           <header v-reveal="{ anim: 'opalMoveRight' }" class="franchise-advantages__intro">
             <InternalSectionPill>{{ cmsCopy.copy.text26 }}</InternalSectionPill>
-            <h2 id="franchise-advantage-title"><b class="franchise-strength-chinese">專業品牌實力</b>Success<br /><span>Starts</span> Here</h2>
+            <h2 id="franchise-advantage-title"><b class="franchise-strength-chinese"><InternalHeadingText text="專業品牌實力" /></b><InternalHeadingText text="Success" /><br /><span><InternalHeadingText text="Starts" /></span><InternalHeadingText text=" Here" /></h2>
             <p>{{ cmsCopy.copy.text30 }}</p>
             <strong aria-hidden="true">{{ String(activeAdvantageGroup + 1).padStart(2, '0') }}</strong>
           </header>
@@ -189,7 +189,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                   </div>
                   <div class="franchise-post__content">
                     <span v-reveal="{ anim: 'opalMoveUp' }">{{ advantage.number }}{{ cmsCopy.copy.text31 }}</span>
-                    <h3 v-reveal="{ anim: 'opalMoveUp', delay: 60 }">{{ advantage.title }}</h3>
+                    <h3 v-reveal="{ anim: 'opalMoveUp', delay: 60 }"><InternalHeadingText :text="advantage.title" /></h3>
                     <p v-reveal="{ anim: 'opalMoveUp', delay: 100 }">{{ advantage.summary }}</p>
                     <ul v-reveal="{ anim: 'opalMoveUp', delay: 140 }" class="franchise-post__features" :aria-label="`${advantage.title}重點`">
                       <li v-for="feature in advantage.features" :key="feature.label">
@@ -222,7 +222,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header class="source-split-heading">
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="CELEBRITY STORIES" density="compact" source="home1" class="source-heading-rail source-heading-rail--compact" />
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
-            <h2 id="franchise-marketing-title"><span class="bilingual-heading-lead"><span class="franchise-celebrity-eyebrow">Explore Our</span><b class="franchise-celebrity-chinese">品牌信賴</b></span><span class="bilingual-heading-english" style="color: inherit">Celebrity <span>Stories</span><br /> Of Inspired <span>Living</span></span></h2>
+            <h2 id="franchise-marketing-title"><span class="bilingual-heading-lead"><span class="franchise-celebrity-eyebrow">Explore Our</span><b class="franchise-celebrity-chinese"><InternalHeadingText text="品牌信賴" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Celebrity " /><span><InternalHeadingText text="Stories" /></span><br /><InternalHeadingText text=" Of Inspired " /><span><InternalHeadingText text="Living" /></span></span></h2>
             <p>{{ cmsCopy.copy.text42 }}</p>
           </div>
         </header>
@@ -257,7 +257,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section id="franchise-process" class="franchise-process elementor-ef444c3" aria-labelledby="franchise-process-title">
       <div class="source-rail internal-rail-safe">
         <header class="franchise-process__heading">
-          <h2 id="franchise-process-title" v-reveal="{ anim: 'opalMoveUp' }">{{ cmsCopy.copy.text43 }}</h2>
+          <h2 id="franchise-process-title" v-reveal="{ anim: 'opalMoveUp' }"><InternalHeadingText :text="cmsCopy.copy.text43" /></h2>
         </header>
         <div v-reveal="{ anim: 'opalScaleUp', delay: 70 }" class="franchise-process__rail-scroll" tabindex="0" aria-label="七步加盟流程，可橫向捲動查看">
           <InternalFranchiseImage :src="cmsCopy.copy.field44" :alt="cmsCopy.copy.field45" fit="contain" class="franchise-process__rail" />
@@ -269,8 +269,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <div class="franchise-support-panel__content">
               <div v-for="(item, index) in franchiseSupportHighlights" :key="item.title" v-reveal="{ anim: 'opalMoveUp', delay: index * 65 }" class="franchise-support-item">
                 <h3>
-                  <template v-if="index === 0">{{ item.detail.split('！')[0] }}！</template>
-                  <template v-else>{{ item.title }} <span>{{ item.detail.split('！')[0] }}！</span></template>
+                  <template v-if="index === 0"><InternalHeadingText :text="item.detail.split('！')[0]" /><InternalHeadingText text="！" /></template>
+                  <template v-else><InternalHeadingText :text="item.title" /> <span><InternalHeadingText :text="item.detail.split('！')[0]" /><InternalHeadingText text="！" /></span></template>
                 </h3>
                 <p>{{ item.detail.split('！').slice(1).join('！') }}</p>
               </div>
@@ -279,11 +279,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </article>
 
           <article v-reveal="{ anim: 'opalMoveLeft', delay: 90 }" class="franchise-qualification-panel">
-            <h3>{{ cmsCopy.copy.text47 }}</h3>
+            <h3><InternalHeadingText :text="cmsCopy.copy.text47" /></h3>
             <div class="franchise-qualification-list">
               <div v-for="(item, index) in franchiseQualifications" :key="item.title" v-reveal="{ anim: 'opalMoveUp', delay: index * 65 }" class="franchise-qualification-item">
                 <InternalFranchiseImage :src="item.icon" :alt="`${item.title}圖示`" fit="contain" />
-                <div><h4>{{ item.title }}</h4><p>{{ item.detail }}</p></div>
+                <div><h4><InternalHeadingText :text="item.title" /></h4><p>{{ item.detail }}</p></div>
               </div>
             </div>
           </article>
@@ -301,7 +301,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             data-ev="opalMoveRight"
             class="franchise-faq__heading-rail ev"
           />
-          <h2 id="franchise-faq-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><b class="franchise-faq-chinese">了解加盟資訊</b>Clear <span>Answers</span> To<br /> Your <span>Main</span> Questions</h2>
+          <h2 id="franchise-faq-title" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev"><b class="franchise-faq-chinese"><InternalHeadingText text="了解加盟資訊" /></b><InternalHeadingText text="Clear " /><span><InternalHeadingText text="Answers" /></span><InternalHeadingText text=" To" /><br /><InternalHeadingText text=" Your " /><span><InternalHeadingText text="Main" /></span><InternalHeadingText text=" Questions" /></h2>
         </header>
 
         <div class="franchise-faq__body">
@@ -309,7 +309,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <article v-for="(item, index) in franchiseFaqItems.slice(0, 4)" :key="item.question" class="franchise-faq__item">
               <h3>
                 <button type="button" :aria-expanded="openFaq === index" :aria-controls="`franchise-faq-panel-${index}`" @click="toggleFaq(index)">
-                  <span class="franchise-faq__question"><span class="franchise-faq__number">{{ String(index + 1).padStart(2, '0') }}</span>{{ item.question }}</span>
+                  <span class="franchise-faq__question"><span class="franchise-faq__number">{{ String(index + 1).padStart(2, '0') }}</span><InternalHeadingText :text="item.question" /></span>
                   <span class="franchise-faq__symbol" aria-hidden="true">{{ openFaq === index ? '−' : '+' }}</span>
                 </button>
               </h3>
@@ -322,7 +322,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <InternalFranchiseImage :src="cmsCopy.copy.field53" :alt="cmsCopy.copy.field54" fit="contain" />
               <span class="franchise-faq__promo-arrow site-cta-icon" aria-hidden="true"><ChevronRight /></span>
             </NuxtLink>
-            <h3><NuxtLink :to="cmsCopy.copy.field55" target="_blank" rel="noopener">{{ cmsCopy.copy.text56 }}</NuxtLink></h3>
+            <h3><NuxtLink :to="cmsCopy.copy.field55" target="_blank" rel="noopener"><InternalHeadingText :text="cmsCopy.copy.text56" /></NuxtLink></h3>
             <p>{{ cmsCopy.copy.text57 }}</p>
           </aside>
         </div>
@@ -333,10 +333,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section id="franchise-news" class="franchise-news elementor-836324d" aria-labelledby="franchise-news-title">
       <div class="source-rail internal-rail-safe">
         <InternalSectionPill>{{ cmsCopy.copy.text58 }}</InternalSectionPill>
-        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }"><span class="bilingual-heading-lead"><span class="franchise-news-eyebrow">Explore Our</span><b class="franchise-news-chinese">最新加盟資訊</b></span><span class="bilingual-heading-english" style="color: inherit">Latest Franchise News<br /> With <span>SAKURA KITCHEN</span></span></h2>
+        <h2 id="franchise-news-title" v-reveal="{ anim: 'opalMoveUp' }"><span class="bilingual-heading-lead"><span class="franchise-news-eyebrow">Explore Our</span><b class="franchise-news-chinese"><InternalHeadingText text="最新加盟資訊" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Latest Franchise News" /><br /><InternalHeadingText text=" With " /><span><InternalHeadingText text="SAKURA KITCHEN" /></span></span></h2>
         <div class="franchise-news__list">
           <NuxtLink v-for="article in franchiseNews" :key="article.id" :to="article.legacyPath" class="franchise-news-row">
-            <i aria-hidden="true" /><h3>{{ article.title }}</h3><ArrowRight aria-hidden="true" />
+            <i aria-hidden="true" /><h3><InternalHeadingText :text="article.title" /></h3><ArrowRight aria-hidden="true" />
           </NuxtLink>
         </div>
         <div v-reveal="{ anim: 'opalScaleUp', delay: 120 }" class="franchise-news__more"><NuxtLink :to="cmsCopy.copy.field62" class="source-round-link source-round-link--news">{{ cmsCopy.copy.text63 }}<span class="site-cta-icon source-round-link__icon"><ArrowRight aria-hidden="true" /></span></NuxtLink></div>

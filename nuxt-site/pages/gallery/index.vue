@@ -112,7 +112,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         >
           <MapPin aria-hidden="true" />
           <div>
-            <h2>{{ cmsCopy.copy.text7 }}</h2>
+            <h2><InternalHeadingText :text="cmsCopy.copy.text7" /></h2>
             <p>{{ cmsCopy.copy.text8 }}</p>
           </div>
           <button type="button" @click="updateFilters()">{{ cmsCopy.copy.text9 }}</button>

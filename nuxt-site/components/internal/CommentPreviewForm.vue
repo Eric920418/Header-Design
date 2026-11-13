@@ -34,7 +34,7 @@ const submit = async () => {
 <template>
   <section aria-labelledby="comment-form-title" class="comment-preview-form">
     <article v-for="item in comments" :key="item.id"><strong>{{ item.name }}</strong><p>{{ item.comment }}</p><time>{{ new Date(item.createdAt).toLocaleDateString('zh-TW') }}</time></article>
-    <h3 id="comment-form-title">留下評論</h3>
+    <h3 id="comment-form-title"><InternalHeadingText text="留下評論" /></h3>
     <p class="comment-preview-form__lead">你的電子郵件地址不會被公開。必填欄位已標示。</p>
     <form novalidate @submit.prevent="submit">
       <label>

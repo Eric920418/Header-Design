@@ -21,7 +21,7 @@ const imageFailed = ref(false)
 
     <div class="antra-store-card__content">
       <NuxtLink :to="`/gallery/${item.slug}`" class="antra-store-card__title-link">
-        <h2>{{ item.storeName }}</h2>
+        <h2><InternalHeadingText :text="item.storeName" /></h2>
       </NuxtLink>
       <address><MapPin aria-hidden="true" /><span>{{ item.address }}</span></address>
       <NuxtLink :to="`/gallery/${item.slug}`" class="antra-store-card__reservation">查看門市</NuxtLink>

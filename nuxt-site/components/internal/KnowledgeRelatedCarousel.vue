@@ -25,7 +25,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
   <section v-if="variant === 'home07'" class="knowledge-related knowledge-related--home07" aria-label="延伸文章">
     <header class="knowledge-related-home07__intro" v-reveal="{ anim: 'opalMoveRight' }">
       <InternalSectionPill>Straight From The Newsroom</InternalSectionPill>
-      <h2><span class="knowledge-related-home07__chinese">廚房知識與靈感</span>Take A Look<br><em>At Our Latest</em><br>Articles</h2>
+      <h2><span class="knowledge-related-home07__chinese"><InternalHeadingText text="廚房知識與靈感" /></span><InternalHeadingText text="Take A Look" /><br><em><InternalHeadingText text="At Our Latest" /></em><br><InternalHeadingText text="Articles" /></h2>
       <NuxtLink to="/knowledge" class="knowledge-related-home07__cta site-content-cta">
         <span>更多廚房知識</span>
         <i class="site-cta-icon"><ArrowUpRight aria-hidden="true" /></i>
@@ -44,7 +44,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
           <InternalNewsImage v-else :src="article.cover" :alt="`${article.title}文章封面`" />
           <span>{{ article.categoryLabel }}</span>
         </div>
-        <h3>{{ article.title }}</h3>
+        <h3><InternalHeadingText :text="article.title" /></h3>
         <p class="knowledge-related-home07__excerpt">{{ article.excerpt }}</p>
       </NuxtLink>
     </article>
@@ -63,7 +63,7 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
               <span class="knowledge-related__category">{{ article.categoryLabel }}</span>
             </div>
             <div class="knowledge-related__text-box">
-              <h3>{{ article.title }}</h3>
+              <h3><InternalHeadingText :text="article.title" /></h3>
               <span>{{ article.categoryLabel }}</span>
               <time :datetime="article.publishedAt">{{ article.publishedAt.slice(0, 4) }}</time>
             </div>

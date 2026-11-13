@@ -89,7 +89,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section id="brand-advantage" class="sakura-kitchen-advantage" aria-labelledby="sakura-kitchen-advantage-title">
       <div class="sakura-kitchen-rail">
         <header class="sakura-kitchen-heading">
-          <h2 id="sakura-kitchen-advantage-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text18 }}<br /><em>{{ cmsCopy.copy.text19 }}</em></h2>
+          <h2 id="sakura-kitchen-advantage-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev"><InternalHeadingText :text="cmsCopy.copy.text18" /><br /><em><InternalHeadingText :text="cmsCopy.copy.text19" /></em></h2>
           <div v-reveal="{ anim: 'opalMoveUp', delay: 100 }" data-ev="opalMoveUp" class="sakura-kitchen-heading__copy ev" style="animation-delay:100ms">
             <p>{{ cmsCopy.copy.text20 }}</p>
             <p>{{ cmsCopy.copy.text21 }}</p>
@@ -117,7 +117,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="sakura-kitchen-rail internal-rail-safe">
         <header class="sakura-kitchen-heading sakura-kitchen-heading--series">
           <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="sakura-kitchen-heading__kicker ev">{{ cmsCopy.copy.text26 }}</InternalSectionPill>
-          <h2 id="sakura-kitchen-series-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev" style="animation-delay:70ms"><b class="sakura-kitchen-series-chinese">探索品牌系列</b>Creating the <em>Ideal Kitchen</em><br /> <em>For Every</em> Family</h2>
+          <h2 id="sakura-kitchen-series-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev" style="animation-delay:70ms"><b class="sakura-kitchen-series-chinese"><InternalHeadingText text="探索品牌系列" /></b><InternalHeadingText text="Creating the " /><em><InternalHeadingText text="Ideal Kitchen" /></em><br /> <em><InternalHeadingText text="For Every" /></em><InternalHeadingText text=" Family" /></h2>
           <div v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" class="sakura-kitchen-heading__copy ev" style="animation-delay:140ms">
             <p>{{ cmsCopy.copy.text29 }}</p>
           </div>

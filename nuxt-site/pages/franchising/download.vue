@@ -74,7 +74,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="download-rail">
         <header class="download-document__header">
           <div class="download-document__heading">
-            <h2 id="franchise-document-title" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev"><span>{{ cmsCopy.copy.text5 }}</span><br />{{ cmsCopy.copy.text6 }}</h2>
+            <h2 id="franchise-document-title" v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="ev"><span><InternalHeadingText :text="cmsCopy.copy.text5" /></span><br /><InternalHeadingText :text="cmsCopy.copy.text6" /></h2>
             <InternalFranchiseImage class="download-document__logo" :src="cmsCopy.copy.field7" :alt="cmsCopy.copy.field8" fit="contain" />
           </div>
 

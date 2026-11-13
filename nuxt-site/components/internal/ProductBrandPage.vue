@@ -36,8 +36,7 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
         <div v-reveal="{ anim: 'opalMoveUp' }" class="sakura-product-story__copy">
           <InternalSectionPill class="sakura-product-story__eyebrow">Kitchen Appliances</InternalSectionPill>
           <h2 id="sakura-product-story-title">
-            <span class="sakura-product-story__chinese-title">廚房產品</span>
-            Enjoy <span>Kitchen<br>Living</span> With<br>{{ info.name }}
+            <span class="sakura-product-story__chinese-title"><InternalHeadingText text="廚房產品" /></span><InternalHeadingText text=" Enjoy " /><span><InternalHeadingText text="Kitchen" /><br><InternalHeadingText text="Living" /></span><InternalHeadingText text=" With" /><br><InternalHeadingText :text="info.name" />
           </h2>
           <p>{{ info.description }}</p>
         </div>
@@ -71,7 +70,7 @@ useSeoMeta({ title: `${info.name} 廚房產品｜櫻花整體廚房`, descriptio
                 </div>
                 <div class="sakura-product-card__text">
                   <span>{{ info.name }} · {{ category.count }} 項產品</span>
-                  <h3>{{ category.title }}</h3>
+                  <h3><InternalHeadingText :text="category.title" /></h3>
                 </div>
               </article>
             </NuxtLink>

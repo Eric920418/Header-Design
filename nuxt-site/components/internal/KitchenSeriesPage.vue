@@ -268,12 +268,12 @@ useSeoMeta({
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Kitchen Collections" />
           <h2 id="ai-collections-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <span class="bilingual-heading-lead"><span class="ai-collections-eyebrow">Explore Our</span>
-            <span class="ai-collections-chinese">探索廚房美學</span></span><br class="ai-collections-mobile-break">
-            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">Creative <span class="ai-collections-accent">Projects That</span> Define Our Style</span>
+            <span class="ai-collections-chinese"><InternalHeadingText text="探索廚房美學" /></span></span><br class="ai-collections-mobile-break">
+            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Creative " /><span class="ai-collections-accent"><InternalHeadingText text="Projects That" /></span><InternalHeadingText text=" Define Our Style" /></span>
           </h2>
         </div>
         <div class="ai-intro__content">
-          <h3 id="ai-intro-title" v-reveal="{ anim: 'opalMoveRight' }">{{ data.intro.title }}</h3>
+          <h3 id="ai-intro-title" v-reveal="{ anim: 'opalMoveRight' }"><InternalHeadingText :text="data.intro.title" /></h3>
           <div v-reveal="{ anim: 'opalMoveLeft', delay: 120 }" class="ai-intro__paragraphs">
             <p v-for="paragraph in data.intro.paragraphs" :key="paragraph">{{ paragraph }}</p>
           </div>
@@ -325,7 +325,7 @@ useSeoMeta({
           <div>
             <span class="ai-suite-details__number">0{{ activeSuiteIndex + 1 }}</span>
             <p class="ai-suite-details__name">{{ activeSuite.name }}</p>
-            <h3 v-for="headline in activeSuite.headlines" :key="headline">{{ headline }}</h3>
+            <h3 v-for="headline in activeSuite.headlines" :key="headline"><InternalHeadingText :text="headline" /></h3>
           </div>
           <div>
             <p v-for="description in suiteDescriptions" :key="description" class="ai-suite-details__description">{{ description }}</p>
@@ -345,7 +345,7 @@ useSeoMeta({
       <div class="page-container">
         <div class="ai-centered-heading ai-finish-heading">
           <p v-reveal="{ anim: 'opalMoveUp' }">Material Selection</p>
-          <h2 id="finish-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }"><span class="ai-finish-heading__chinese">板材顏色選擇</span>Explore Our <span>Color Collection</span></h2>
+          <h2 id="finish-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }"><span class="ai-finish-heading__chinese"><InternalHeadingText text="板材顏色選擇" /></span><InternalHeadingText text="Explore Our " /><span><InternalHeadingText text="Color Collection" /></span></h2>
         </div>
         <div class="ai-finishes__grid">
           <article v-for="(finish, index) in data.finishes" :key="finish.code" v-reveal="{ anim: 'opalMoveUp', delay: index * 70 }">
@@ -360,7 +360,7 @@ useSeoMeta({
             />
             <div class="ai-finishes__caption">
               <p>{{ finish.code }}</p>
-              <h3>{{ finish.name }}</h3>
+              <h3><InternalHeadingText :text="finish.name" /></h3>
             </div>
           </article>
         </div>
@@ -377,7 +377,7 @@ useSeoMeta({
       <div class="page-container">
         <div class="ai-centered-heading ai-appliance-heading">
           <p v-reveal="{ anim: 'opalMoveUp' }">Explore Our</p>
-          <h2 id="equipment-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }"><span class="ai-appliance-heading__chinese">廚房電器推薦</span><span>Kitchen Appliance</span></h2>
+          <h2 id="equipment-heading" v-reveal="{ anim: 'opalMoveUp', delay: 90 }"><span class="ai-appliance-heading__chinese"><InternalHeadingText text="廚房電器推薦" /></span><span><InternalHeadingText text="Kitchen Appliance" /></span></h2>
         </div>
         <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="ai-equipment__carousel" role="region" aria-roledescription="carousel" :aria-label="`${data.name} 推薦廚電`" tabindex="0" @keydown.left.prevent="equipmentApi?.scrollPrev()" @keydown.right.prevent="equipmentApi?.scrollNext()">
           <div id="equipment-carousel" ref="equipmentViewport" class="ai-equipment__viewport">
@@ -388,7 +388,7 @@ useSeoMeta({
                     <InternalBrandImage :src="KITCHEN_EQUIPMENT_CUTOUTS[equipment.image] || equipment.image" :alt="`${equipment.model} ${equipment.name}`" fit="contain" class="ai-equipment__image" />
                     <span v-if="equipment.route" class="ai-equipment__action" aria-hidden="true"><ArrowRight /></span>
                   </div>
-                  <h3><span>{{ equipment.model }}</span>{{ equipment.name }}</h3>
+                  <h3><span><InternalHeadingText :text="equipment.model" /></span><InternalHeadingText :text="equipment.name" /></h3>
                 </component>
               </article>
             </div>
@@ -407,8 +407,8 @@ useSeoMeta({
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Recommended Cases" class="ai-cases__heading-label" />
           <h2 id="cases-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 90 }">
             <span class="bilingual-heading-lead"><span class="ai-collections-eyebrow">Explore Our</span>
-            <span class="ai-collections-chinese">風格廚房實例</span></span><br class="ai-collections-mobile-break">
-            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">Take A <span class="ai-collections-accent">Look At Our</span> Latest Articles</span>
+            <span class="ai-collections-chinese"><InternalHeadingText text="風格廚房實例" /></span></span><br class="ai-collections-mobile-break">
+            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Take A " /><span class="ai-collections-accent"><InternalHeadingText text="Look At Our" /></span><InternalHeadingText text=" Latest Articles" /></span>
           </h2>
         </div>
         <div
@@ -427,7 +427,7 @@ useSeoMeta({
               <a :href="item.url" target="_blank" rel="noopener noreferrer" class="ai-case-card" :class="{ 'ai-case-card--initial-center': index === 1 }">
                 <div class="ai-case-card__image"><InternalBrandImage :src="item.image" :alt="item.title" class="h-full w-full" /></div>
                 <div class="ai-case-card__body ai-case-card__body--side">
-                  <h3>{{ item.title }}</h3>
+                  <h3><InternalHeadingText :text="item.title" /></h3>
                   <p>{{ item.excerpt }}</p>
                 </div>
                 <div class="ai-case-card__body ai-case-card__body--featured" aria-hidden="true">

@@ -74,7 +74,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </a>
               <div class="builder-catalogue-card__text">
                 <div class="builder-catalogue-card__title-row">
-                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong>{{ catalogue.title }}</strong></a>
+                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong><InternalHeadingText :text="catalogue.title" /></strong></a>
                   <a :href="catalogue.pdfUrl" download="SAKURA-建商專區型錄-2026.pdf" class="builder-catalogue-card__download" aria-label="下載建商專區型錄 PDF"><Download aria-hidden="true" /><span>{{ cmsCopy.copy.text3 }}</span></a>
                 </div>
                 <span>{{ catalogue.description }}</span>

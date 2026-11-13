@@ -42,8 +42,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Straight From The Newsroom" class="kitchen-guide-heading__label" />
           <h2 id="kitchen-guide-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }">
             <span class="bilingual-heading-lead"><span class="kitchen-guide-heading__eyebrow">Explore Our</span>
-            <span class="kitchen-guide-heading__chinese">廚房裝修指南</span></span><br class="kitchen-guide-heading__mobile-break">
-            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">Take A <span class="kitchen-guide-heading__accent">Look At Our</span> Latest Articles</span>
+            <span class="kitchen-guide-heading__chinese"><InternalHeadingText text="廚房裝修指南" /></span></span><br class="kitchen-guide-heading__mobile-break">
+            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Take A " /><span class="kitchen-guide-heading__accent"><InternalHeadingText text="Look At Our" /></span><InternalHeadingText text=" Latest Articles" /></span>
           </h2>
         </header>
 
@@ -57,7 +57,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 <span>{{ featuredArticle.categoryLabel }}</span>
                 <time :datetime="featuredArticle.publishedAt">{{ featuredArticle.displayDate }}</time>
               </div>
-              <h3><NuxtLink :to="featuredArticle.detailRoute ?? featuredArticle.legacyUrl">{{ featuredArticle.title }}</NuxtLink></h3>
+              <h3><NuxtLink :to="featuredArticle.detailRoute ?? featuredArticle.legacyUrl"><InternalHeadingText :text="featuredArticle.title" /></NuxtLink></h3>
               <p>{{ featuredArticle.excerpt }}</p>
             </div>
           </article>
@@ -72,7 +72,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                   <span>{{ article.categoryLabel }}</span>
                   <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
                 </div>
-                <h3><NuxtLink :to="article.detailRoute ?? article.legacyUrl">{{ article.title }}</NuxtLink></h3>
+                <h3><NuxtLink :to="article.detailRoute ?? article.legacyUrl"><InternalHeadingText :text="article.title" /></NuxtLink></h3>
                 <p>{{ article.excerpt }}</p>
               </div>
             </article>

@@ -63,7 +63,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 <div class="antra-video-post__meta">
                   <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
                 </div>
-                <h2>{{ article.title }}</h2>
+                <h2><InternalHeadingText :text="article.title" /></h2>
                 <p>{{ article.excerpt }}</p>
               </div>
             </NuxtLink>

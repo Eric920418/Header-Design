@@ -49,8 +49,8 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
     <section class="near-suction-products" aria-labelledby="near-suction-products-title">
       <div class="near-suction-rail internal-rail-safe">
         <h2 id="near-suction-products-title" v-reveal="{ anim: 'opalMoveUp' }">
-          <em>Smart Kitchen Living</em>
-          <span>{{ heading }}{{ brand === 'sakura' && category === 6 && !heading.endsWith('系列') ? '系列' : '' }}</span>
+          <em><InternalHeadingText text="Smart Kitchen Living" /></em>
+          <span><InternalHeadingText :text="heading" /><InternalHeadingText :text="brand === 'sakura' && category === 6 && !heading.endsWith('系列') ? '系列' : ''" /></span>
         </h2>
         <form v-if="!category" class="product-search" role="search" @submit.prevent="submitSearch">
           <label for="product-search">搜尋產品名稱／型號</label>
@@ -71,7 +71,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
                 <span class="near-suction-product-card__action" aria-hidden="true"><ArrowRight /></span>
               </div>
               <div class="near-suction-product-card__text">
-                <h3>{{ series.title }}</h3>
+                <h3><InternalHeadingText :text="series.title" /></h3>
                 <p>{{ series.count }} 項產品</p>
               </div>
             </NuxtLink>
@@ -98,7 +98,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
                 <span class="near-suction-product-card__action" aria-hidden="true"><ArrowRight /></span>
               </div>
               <div class="near-suction-product-card__text">
-                <h3>{{ product.title }}</h3>
+                <h3><InternalHeadingText :text="product.title" /></h3>
                 <p>{{ product.model }}</p>
                 <span v-if="product.price !== null">參考售價 <strong>NT$ {{ product.price.toLocaleString('en-US') }} 起</strong></span><span v-else>售價請洽門市</span>
               </div>
@@ -112,8 +112,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
     <section v-if="!error && !showSeries && productCategories.length" class="near-suction-series" aria-labelledby="near-suction-series-title">
       <div class="near-suction-rail internal-rail-safe">
         <h2 id="near-suction-series-title" v-reveal="{ anim: 'opalMoveUp' }">
-          <strong>{{ info.name }}</strong> 廚電產品
-        </h2>
+          <strong><InternalHeadingText :text="info.name" /></strong><InternalHeadingText text=" 廚電產品 " /></h2>
         <div v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="near-suction-series__viewport" role="region" :aria-label="`${info.name} 產品分類`">
           <div class="near-suction-series__track">
             <ul
@@ -142,8 +141,8 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
         <div v-reveal="{ anim: 'opalMoveRight' }" class="near-suction-catalogue__copy">
           <InternalSectionPill>{{ info.name }} Product Catalogue</InternalSectionPill>
           <h2 id="near-suction-catalogue-title">
-            <span class="near-suction-catalogue__chinese">廚房商品型錄</span>
-            <span>Kitchen <em>Product<br>Catalogues</em></span>
+            <span class="near-suction-catalogue__chinese"><InternalHeadingText text="廚房商品型錄" /></span>
+            <span><InternalHeadingText text="Kitchen " /><em><InternalHeadingText text="Product" /><br><InternalHeadingText text="Catalogues" /></em></span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta near-suction-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -165,7 +164,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
               <InternalProductCategoryImage :src="catalogue.cover" :alt="`${catalogue.title}封面預覽`" />
             </div>
             <span>Catalogue Preview</span>
-            <h3>{{ catalogue.title }}</h3>
+            <h3><InternalHeadingText :text="catalogue.title" /></h3>
           </NuxtLink>
         </div>
       </div>

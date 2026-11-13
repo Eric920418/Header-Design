@@ -28,7 +28,7 @@ const [viewport] = emblaCarouselVue({ loop: true, align: 'start', duration: 24 }
             </div>
             <div class="media-related__text-box">
               <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
-              <h3>{{ article.title }}</h3>
+              <h3><InternalHeadingText :text="article.title" /></h3>
             </div>
           </NuxtLink>
         </article>

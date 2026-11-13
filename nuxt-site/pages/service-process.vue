@@ -37,7 +37,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Service Process" />
           <div v-reveal="{ anim: 'opalMoveLeft' }">
             <h2 id="service-intro-title">
-              <b class="service-intro-chinese-title">{{ cmsCopy.copy.text2 }}</b>{{ cmsCopy.copy.text3 }}<span>{{ cmsCopy.copy.text4 }}</span>{{ cmsCopy.copy.text5 }}</h2>
+              <b class="service-intro-chinese-title"><InternalHeadingText :text="cmsCopy.copy.text2" /></b><InternalHeadingText :text="cmsCopy.copy.text3" /><span><InternalHeadingText :text="cmsCopy.copy.text4" /></span><InternalHeadingText :text="cmsCopy.copy.text5" /></h2>
             <p>{{ cmsCopy.copy.text6 }}</p>
           </div>
         </header>
@@ -59,7 +59,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
     <InternalFaqAccordion safe-rail class="service-guide-faq">
       <template #title>
-        <span class="bilingual-heading-lead"><span class="service-faq-eyebrow">Explore Our</span><b class="service-faq-chinese-title">服務指南</b></span><span class="bilingual-heading-english" style="color: inherit">Clear <span class="service-faq-accent">Answers</span> To Your <span class="service-faq-accent">Main</span> Questions</span>
+        <span class="bilingual-heading-lead"><span class="service-faq-eyebrow">Explore Our</span><b class="service-faq-chinese-title"><InternalHeadingText text="服務指南" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Clear " /><span class="service-faq-accent"><InternalHeadingText text="Answers" /></span><InternalHeadingText text=" To Your " /><span class="service-faq-accent"><InternalHeadingText text="Main" /></span><InternalHeadingText text=" Questions" /></span>
       </template>
     </InternalFaqAccordion>
   </main>

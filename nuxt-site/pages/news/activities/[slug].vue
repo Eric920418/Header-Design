@@ -66,7 +66,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
             </span>
           </div>
-          <h1 :id="`activity-title-${article.id}`" class="entry-title">{{ article.title }}</h1>
+          <h1 :id="`activity-title-${article.id}`" class="entry-title"><InternalHeadingText :text="article.title" /></h1>
         </header>
 
         <div class="activity-detail-cover post-thumbnail" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
@@ -78,7 +78,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             v-for="(section, sectionIndex) in detail.sections"
             :key="section.heading ?? `section-${sectionIndex}`"
           >
-            <h4 v-if="section.heading">{{ section.heading }}</h4>
+            <h4 v-if="section.heading"><InternalHeadingText :text="section.heading" /></h4>
             <p v-for="paragraph in section.paragraphs" :key="paragraph">{{ paragraph }}</p>
             <ul v-if="section.bullets?.length">
               <li v-for="bullet in section.bullets" :key="bullet">{{ bullet }}</li>

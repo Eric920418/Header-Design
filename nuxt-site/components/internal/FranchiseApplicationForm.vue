@@ -103,7 +103,7 @@ const submit = async () => {
   <section class="application-form" aria-labelledby="application-form-heading">
     <header class="application-form__header">
       <span>Application Form</span>
-      <h2 id="application-form-heading">加盟申請資料</h2>
+      <h2 id="application-form-heading"><InternalHeadingText text="加盟申請資料" /></h2>
       <p>標示 * 為必填；複選題可選擇多項。送出前請再次確認聯絡方式與加盟規劃。</p>
     </header>
 

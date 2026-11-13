@@ -23,8 +23,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section class="brand-family-section" aria-labelledby="brand-family-title">
       <div class="brand-family-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-family-heading ev">
-          <h2 id="brand-family-title">{{ cmsCopy.copy.text1 }}</h2>
-          <h3>{{ cmsCopy.copy.text2 }}</h3>
+          <h2 id="brand-family-title"><InternalHeadingText :text="cmsCopy.copy.text1" /></h2>
+          <h3><InternalHeadingText :text="cmsCopy.copy.text2" /></h3>
           <p>{{ cmsCopy.copy.text3 }}</p>
         </header>
         <InternalBrandFamilyGallery />
@@ -35,7 +35,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <InternalBrandStoreSection />
     <InternalFaqAccordion class="brand-advantage-faq" :groups="brandAdvantageFaqGroups" section-id="brand-advantage-faq-title" safe-rail>
       <template #title>
-        <span class="bilingual-heading-lead"><span class="brand-faq-eyebrow">Explore Our</span><b class="brand-faq-chinese">一站式專業服務</b></span><span class="bilingual-heading-english" style="color: inherit">Clear <span class="brand-faq-accent">Answers</span> To</span><br /><b class="brand-faq-chinese bilingual-heading-chinese-part">實現理想廚房</b><span class="bilingual-heading-english" style="color: inherit">Your <span class="brand-faq-accent">Main</span> Questions</span>
+        <span class="bilingual-heading-lead"><span class="brand-faq-eyebrow">Explore Our</span><b class="brand-faq-chinese"><InternalHeadingText text="一站式專業服務" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Clear " /><span class="brand-faq-accent"><InternalHeadingText text="Answers" /></span><InternalHeadingText text=" To" /></span><br /><b class="brand-faq-chinese bilingual-heading-chinese-part"><InternalHeadingText text="實現理想廚房" /></b><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Your " /><span class="brand-faq-accent"><InternalHeadingText text="Main" /></span><InternalHeadingText text=" Questions" /></span>
       </template>
     </InternalFaqAccordion>
   </main>

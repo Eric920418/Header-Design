@@ -57,7 +57,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="case-detail-rail internal-rail-safe">
         <div class="case-detail-layout">
           <header class="case-detail-header" v-reveal="{ anim: 'opalMoveUp' }">
-            <h1 :id="`case-title-${item.slug}`">{{ item.title }}</h1>
+            <h1 :id="`case-title-${item.slug}`"><InternalHeadingText :text="item.title" /></h1>
           </header>
 
           <div class="case-detail-carousel" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
@@ -78,7 +78,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </a>
 
               <section v-if="metaEntries.length" class="case-detail-widget" aria-labelledby="case-spec-title" v-reveal="{ anim: 'opalMoveLeft', delay: 80 }">
-                <h2 id="case-spec-title">{{ cmsCopy.copy.text3 }}</h2>
+                <h2 id="case-spec-title"><InternalHeadingText :text="cmsCopy.copy.text3" /></h2>
                 <dl class="case-detail-specs">
                   <div v-for="([key, value]) in metaEntries" :key="key">
                     <dt>{{ metaLabels[key] ?? key }}</dt>
@@ -89,12 +89,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
               <section v-if="item.contact" class="case-detail-widget" aria-labelledby="case-store-title" v-reveal="{ anim: 'opalMoveLeft', delay: 160 }">
                 <div class="case-detail-store-heading">
-                  <h2 id="case-store-title">{{ cmsCopy.copy.text4 }}</h2>
+                  <h2 id="case-store-title"><InternalHeadingText :text="cmsCopy.copy.text4" /></h2>
                   <a href="https://www.sakura-kitchenlife.com.tw/measuring" target="_blank" rel="noopener noreferrer" class="case-detail-store-booking">
                     <span>{{ cmsCopy.copy.text2 }}</span><ArrowUpRight aria-hidden="true" />
                   </a>
                 </div>
-                <h3>{{ item.contact.name }}</h3>
+                <h3><InternalHeadingText :text="item.contact.name" /></h3>
                 <ul class="case-detail-contact-list">
                   <li v-if="item.contact.hours"><CalendarClock aria-hidden="true" /><span>{{ item.contact.hours }}</span></li>
                   <li v-if="item.contact.phone"><Phone aria-hidden="true" /><a :href="`tel:${item.contact.phone.replace(/[^\d+]/g, '')}`">{{ item.contact.phone }}</a></li>
@@ -123,7 +123,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               class="case-detail-story-block"
               v-reveal="{ anim: 'opalMoveUp' }"
             >
-              <h2 v-if="block.title">{{ block.title }}</h2>
+              <h2 v-if="block.title"><InternalHeadingText :text="block.title" /></h2>
               <p v-for="paragraph in block.paragraphs" :key="paragraph">{{ paragraph }}</p>
               <div
                 v-if="block.images?.length"
@@ -157,7 +157,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </nav>
 
           <section v-if="item.reviews?.length" class="case-detail-reviews" aria-labelledby="case-reviews-title" v-reveal="{ anim: 'opalMoveUp' }">
-            <h2 id="case-reviews-title">{{ cmsCopy.copy.text9 }}</h2>
+            <h2 id="case-reviews-title"><InternalHeadingText :text="cmsCopy.copy.text9" /></h2>
             <ol class="case-detail-review-list">
               <li v-for="(review, reviewIndex) in item.reviews" :key="reviewIndex">
                 <span class="case-detail-review-avatar" aria-hidden="true"><UserRound /></span>
@@ -170,7 +170,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <section class="case-detail-related" aria-labelledby="related-cases-title">
           <div class="case-detail-related__heading">
             <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="FEATURED PROJECTS" class="case-detail-related__label-wrap" />
-            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }"><span class="bilingual-heading-lead"><span class="case-related-eyebrow">Explore Our</span><b class="case-related-chinese">精選廚房案例</b></span><span class="bilingual-heading-english" style="color: inherit">Real <span>Spaces</span><br /> <span>That</span> Inspire Living</span></h2>
+            <h2 id="related-cases-title" v-reveal="{ anim: 'opalMoveLeft' }"><span class="bilingual-heading-lead"><span class="case-related-eyebrow">Explore Our</span><b class="case-related-chinese"><InternalHeadingText text="精選廚房案例" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Real " /><span><InternalHeadingText text="Spaces" /></span><br /> <span><InternalHeadingText text="That" /></span><InternalHeadingText text=" Inspire Living" /></span></h2>
           </div>
           <div ref="relatedViewport" class="case-detail-related__viewport" aria-label="相關案例輪播">
             <div class="case-detail-related__track">

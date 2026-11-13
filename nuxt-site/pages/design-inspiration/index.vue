@@ -126,7 +126,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 </NuxtLink>
               </div>
               <div class="design-project-card__text">
-                <h2><NuxtLink :to="detailRoute(item)">{{ item.title }}</NuxtLink></h2>
+                <h2><NuxtLink :to="detailRoute(item)"><InternalHeadingText :text="item.title" /></NuxtLink></h2>
                 <p>{{ item.description }}</p>
               </div>
             </article>
@@ -141,7 +141,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           role="status"
         >
           <SlidersHorizontal aria-hidden="true" />
-          <h2>{{ cmsCopy.copy.text9 }}</h2>
+          <h2><InternalHeadingText :text="cmsCopy.copy.text9" /></h2>
           <p>{{ cmsCopy.copy.text10 }}</p>
           <button type="button" @click="draftForm = ''; draftStyle = ''; applyFilters()">{{ cmsCopy.copy.text11 }}</button>
         </div>

@@ -54,7 +54,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <NuxtLink :to="cmsCopy.copy.field1">{{ cmsCopy.copy.text2 }}</NuxtLink>
           <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
         </div>
-        <h1 id="system-cabinet-title">{{ article.title }}</h1>
+        <h1 id="system-cabinet-title"><InternalHeadingText :text="article.title" /></h1>
       </header>
 
       <figure class="knowledge-article__cover" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
@@ -63,17 +63,17 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
       <div class="knowledge-article__content">
         <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
-          <h2>{{ cmsCopy.copy.text3 }}</h2>
+          <h2><InternalHeadingText :text="cmsCopy.copy.text3" /></h2>
           <p>{{ article.excerpt }}</p>
 
           <div v-for="point in systemCabinetImportance" :key="point.title" class="knowledge-copy-block__point">
-            <h3>{{ point.title }}</h3>
+            <h3><InternalHeadingText :text="point.title" /></h3>
             <p v-for="paragraph in point.paragraphs" :key="paragraph">{{ paragraph }}</p>
           </div>
         </section>
 
         <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
-          <h2>{{ cmsCopy.copy.text4 }}</h2>
+          <h2><InternalHeadingText :text="cmsCopy.copy.text4" /></h2>
           <div class="knowledge-material-table" tabindex="0" role="region" aria-label="常見五大廚房系統櫃板材比較表">
             <table>
               <caption>{{ cmsCopy.copy.text5 }}</caption>
@@ -95,11 +95,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         </section>
 
         <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
-          <h2>{{ cmsCopy.copy.text8 }}</h2>
+          <h2><InternalHeadingText :text="cmsCopy.copy.text8" /></h2>
           <p>{{ cmsCopy.copy.text9 }}</p>
 
           <div v-for="step in systemCabinetSelectionSteps" :key="step.title" class="knowledge-copy-block__point">
-            <h3>{{ step.title }}</h3>
+            <h3><InternalHeadingText :text="step.title" /></h3>
             <ul>
               <template v-if="step.title.startsWith('STEP6')">
                 <li>{{ cmsCopy.copy.text10 }}<template v-for="(style, styleIndex) in designStyleLinks" :key="style.label"><NuxtLink :to="style.to"><strong>{{ style.label }}</strong></NuxtLink><span v-if="styleIndex < designStyleLinks.length - 1">、</span></template>{{ cmsCopy.copy.text11 }}</li>
@@ -115,11 +115,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         </section>
 
         <section class="knowledge-copy-block knowledge-case-section" aria-labelledby="system-cabinet-cases" v-reveal="{ anim: 'opalMoveUp' }">
-          <h2 id="system-cabinet-cases">{{ cmsCopy.copy.text15 }}</h2>
+          <h2 id="system-cabinet-cases"><InternalHeadingText :text="cmsCopy.copy.text15" /></h2>
 
           <article v-for="(caseStudy, caseIndex) in systemCabinetCaseStudies" :key="caseStudy.title" class="knowledge-case">
             <h3>
-              <a :href="caseStudy.url" target="_blank" rel="noopener noreferrer">{{ caseStudy.title }}</a>
+              <a :href="caseStudy.url" target="_blank" rel="noopener noreferrer"><InternalHeadingText :text="caseStudy.title" /></a>
             </h3>
             <div class="knowledge-case__grid">
               <figure v-reveal="{ anim: 'opalScaleUp', delay: 100 }">

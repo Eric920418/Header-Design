@@ -25,7 +25,7 @@ onBeforeUnmount(() => storyObserver?.disconnect())
   <section class="brand-benefits" aria-labelledby="brand-benefits-title">
     <div class="brand-benefits-rail internal-rail-safe">
       <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="brand-benefits-heading ev">
-        <h2 id="brand-benefits-title"><b class="brand-benefits-chinese">櫻花品牌優勢</b>Discover What Makes <span>SAKURA<br /> KITCHEN</span> Different</h2>
+        <h2 id="brand-benefits-title"><b class="brand-benefits-chinese"><InternalHeadingText text="櫻花品牌優勢" /></b><InternalHeadingText text="Discover What Makes " /><span><InternalHeadingText text="SAKURA" /><br /><InternalHeadingText text=" KITCHEN" /></span><InternalHeadingText text=" Different" /></h2>
         <p>櫻花整體廚房擁有近百家門市，第一線接觸消費者的設計師皆受過專業的產品力及設計力之培訓、及廚藝大學之認證，提供給消費者最符合其需求的廚房規劃。</p>
       </header>
 
@@ -40,7 +40,7 @@ onBeforeUnmount(() => storyObserver?.disconnect())
               <InternalBrandImage :src="benefit.image" :alt="`${benefit.number} ${benefit.title}`" class="brand-benefit-image" />
               <div class="brand-benefit-copy">
                 <div class="brand-benefit-eyebrow"><strong>{{ benefit.number }}</strong><span>{{ benefit.englishTitle }}</span></div>
-                <h3>{{ benefit.title }}</h3>
+                <h3><InternalHeadingText :text="benefit.title" /></h3>
                 <p>{{ benefit.description }}</p>
                 <span class="brand-benefit-number" aria-hidden="true">{{ benefit.number }}</span>
               </div>

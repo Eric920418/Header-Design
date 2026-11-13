@@ -129,10 +129,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" :label="cmsCopy.copy.text1" source="home4" class="store-location-heading-rail" />
           <h2 id="store-location-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="store-location-title">
             <span class="bilingual-heading-lead"><span class="store-location-title__eyebrow">Explore Our</span>
-            <span class="store-location-title__chinese">{{ cmsCopy.copy.text2 }}</span></span>
-            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">Find Us <span class="text-[#CAA05C]">Stores At</span></span><br />
-            <span class="store-location-title__chinese bilingual-heading-chinese-part">{{ cmsCopy.copy.text3 }}</span>
-            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit">SAKURA KITCHEN</span>
+            <span class="store-location-title__chinese"><InternalHeadingText :text="cmsCopy.copy.text2" /></span></span>
+            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Find Us " /><span class="text-[#CAA05C]"><InternalHeadingText text="Stores At" /></span></span><br />
+            <span class="store-location-title__chinese bilingual-heading-chinese-part"><InternalHeadingText :text="cmsCopy.copy.text3" /></span>
+            {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="SAKURA KITCHEN" /></span>
           </h2>
         </div>
       </div>

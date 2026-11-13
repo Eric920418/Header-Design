@@ -119,11 +119,11 @@ useSeoMeta({
 
         <div v-reveal="{ anim: 'opalMoveUp', delay: 100 }" class="product-overview__content">
           <InternalSectionPill>{{ info.name }} Product</InternalSectionPill>
-          <h1 id="product-overview-title">{{ product.title }}</h1>
+          <h1 id="product-overview-title"><InternalHeadingText :text="product.title" /></h1>
           <p class="product-model">{{ product.model }}</p>
 
           <div class="product-features">
-            <h3>產品特色</h3>
+            <h3><InternalHeadingText text="產品特色" /></h3>
             <p v-if="!product.features.length">此產品尚未提供特色說明。</p>
             <ul>
               <li v-for="feature in product.features" :key="feature">{{ feature }}</li>
@@ -139,7 +139,7 @@ useSeoMeta({
           </div>
 
           <div class="product-actions" aria-labelledby="product-attachments-title">
-            <h3 id="product-attachments-title">產品資料</h3>
+            <h3 id="product-attachments-title"><InternalHeadingText text="產品資料" /></h3>
             <p v-if="!product.attachments.length" class="mb-4">此產品尚未提供附件。</p>
             <button type="button" class="product-action-button product-action-button--primary" @click="openSpecifications">
               <span>詳細規格</span>
@@ -185,7 +185,7 @@ useSeoMeta({
           <div>
             <InternalSectionPill>KITCHEN PRODUCT</InternalSectionPill>
             <h2 id="related-products-title">
-              <strong><span class="related-products__brand">{{ info.name }}</span> 廚電</strong>
+              <strong><span class="related-products__brand"><InternalHeadingText :text="info.name" /></span><InternalHeadingText text=" 廚電" /></strong>
             </h2>
           </div>
           <div class="related-products__controls" aria-label="切換相關產品">
@@ -221,8 +221,8 @@ useSeoMeta({
         <div v-reveal="{ anim: 'opalMoveRight' }" class="product-catalogue__copy">
           <InternalSectionPill>{{ info.name }} Product Catalogue</InternalSectionPill>
           <h2 id="product-catalogue-title">
-            <span class="product-catalogue__chinese">廚房商品型錄</span>
-            <span>Kitchen <em>Product<br>Catalogues</em></span>
+            <span class="product-catalogue__chinese"><InternalHeadingText text="廚房商品型錄" /></span>
+            <span><InternalHeadingText text="Kitchen " /><em><InternalHeadingText text="Product" /><br><InternalHeadingText text="Catalogues" /></em></span>
           </h2>
           <NuxtLink to="/catalogues/catalog" class="site-content-cta product-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
@@ -244,7 +244,7 @@ useSeoMeta({
               <InternalProductCategoryImage :src="catalogue.cover" :alt="`${catalogue.title}封面預覽`" />
             </div>
             <span>Catalogue Preview</span>
-            <h3>{{ catalogue.title }}</h3>
+            <h3><InternalHeadingText :text="catalogue.title" /></h3>
           </NuxtLink>
         </div>
       </div>
@@ -261,7 +261,7 @@ useSeoMeta({
         <div class="product-specifications-dialog__heading">
           <div>
             <span>{{ product.model }}</span>
-            <h2 id="product-specifications-title">詳細規格</h2>
+            <h2 id="product-specifications-title"><InternalHeadingText text="詳細規格" /></h2>
           </div>
           <button type="button" aria-label="關閉詳細規格" autofocus @click="closeSpecifications">
             <X aria-hidden="true" />

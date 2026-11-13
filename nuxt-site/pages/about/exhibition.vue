@@ -30,8 +30,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <p v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-lead ev">{{ cmsCopy.copy.text1 }}</p>
 
           <section v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-copy-block ev" aria-labelledby="pavilion-fundamentals-title">
-            <h2 id="pavilion-fundamentals-title">{{ cmsCopy.copy.text2 }}</h2>
-            <h3>{{ cmsCopy.copy.text3 }}</h3>
+            <h2 id="pavilion-fundamentals-title"><InternalHeadingText :text="cmsCopy.copy.text2" /></h2>
+            <h3><InternalHeadingText :text="cmsCopy.copy.text3" /></h3>
             <p>{{ cmsCopy.copy.text4 }}</p>
           </section>
 
@@ -47,7 +47,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <section class="pavilion-gallery" aria-labelledby="pavilion-gallery-title">
             <header v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-gallery-heading ev">
               <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="Our Gallery" />
-              <h2 id="pavilion-gallery-title"><span class="bilingual-heading-lead"><span class="pavilion-gallery-eyebrow">Explore Our</span><b class="pavilion-gallery-chinese">櫻花集團品牌館</b></span><span class="bilingual-heading-english" style="color: inherit">Inspiring <span>Kitchen</span><br /> Designs In Our <span>Gallery</span></span></h2>
+              <h2 id="pavilion-gallery-title"><span class="bilingual-heading-lead"><span class="pavilion-gallery-eyebrow">Explore Our</span><b class="pavilion-gallery-chinese"><InternalHeadingText text="櫻花集團品牌館" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Inspiring " /><span><InternalHeadingText text="Kitchen" /></span><br /><InternalHeadingText text=" Designs In Our " /><span><InternalHeadingText text="Gallery" /></span></span></h2>
             </header>
 
             <div v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="pavilion-filter ev" role="tablist" aria-label="選擇集團品牌館">
@@ -78,7 +78,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                 </div>
               </div>
               <div class="project-text-box">
-                <h3>{{ activePavilion.name }}</h3>
+                <h3><InternalHeadingText :text="activePavilion.name" /></h3>
                 <dl>
                   <div><dt><MapPin aria-hidden="true" />{{ cmsCopy.copy.text12 }}</dt><dd>{{ activePavilion.address }}</dd></div>
                   <div><dt><Clock3 aria-hidden="true" />{{ cmsCopy.copy.text13 }}</dt><dd>{{ activePavilion.hours }}</dd></div>
@@ -95,8 +95,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </section>
 
           <section v-reveal="{ anim: 'opalMoveUp' }" class="pavilion-copy-block pavilion-copy-block--last" aria-labelledby="pavilion-styles-title">
-            <h2 id="pavilion-styles-title">{{ cmsCopy.copy.text14 }}</h2>
-            <h3 class="pavilion-notes-title">{{ cmsCopy.copy.text15 }}</h3>
+            <h2 id="pavilion-styles-title"><InternalHeadingText :text="cmsCopy.copy.text14" /></h2>
+            <h3 class="pavilion-notes-title"><InternalHeadingText :text="cmsCopy.copy.text15" /></h3>
             <ol class="pavilion-notes">
               <li v-for="(notice, index) in pavilionNotice" :key="notice">
                 <span>{{ String(index + 1).padStart(2, '0') }}</span>

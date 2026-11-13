@@ -16,7 +16,7 @@ defineProps<{ item: StoreCaseSummary }>()
       </div>
       <div class="p-6 sm:p-7">
         <div class="flex items-center justify-between gap-4 text-sm text-[#59585D]"><span>{{ item.city }}</span><span>設計師 {{ item.designer }}</span></div>
-        <h2 class="mt-4 line-clamp-3 min-h-[84px] font-display text-[25px] leading-7 text-[#1C1C1D] sm:text-[28px] sm:leading-8">{{ item.title }}</h2>
+        <h2 class="mt-4 line-clamp-3 min-h-[84px] font-display text-[25px] leading-7 text-[#1C1C1D] sm:text-[28px] sm:leading-8"><InternalHeadingText :text="item.title" /></h2>
         <p class="mt-5 flex items-start gap-2 border-t border-[#E3E3E8] pt-5 text-sm leading-6 text-[#59585D]"><MapPin class="mt-0.5 h-4 w-4 shrink-0 text-[#CAA05C]" />{{ item.storeName }}<br class="sr-only" /></p>
       </div>
     </NuxtLink>

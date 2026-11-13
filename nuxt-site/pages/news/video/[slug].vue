@@ -66,7 +66,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
             </span>
           </div>
-          <h1 :id="`media-title-${article.id}`" class="entry-title">{{ article.title }}</h1>
+          <h1 :id="`media-title-${article.id}`" class="entry-title"><InternalHeadingText :text="article.title" /></h1>
         </header>
 
         <div class="media-detail-video" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">

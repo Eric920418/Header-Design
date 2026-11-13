@@ -23,7 +23,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="franchise-application__rail">
         <header class="franchise-application__header">
           <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text1 }}</InternalSectionPill>
-          <h1 id="franchise-application-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text2 }}</h1>
+          <h1 id="franchise-application-title" v-reveal="{ anim: 'opalMoveUp', delay: 70 }" data-ev="opalMoveUp" class="ev"><InternalHeadingText :text="cmsCopy.copy.text2" /></h1>
           <p v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text3 }}</p>
           <div v-reveal="{ anim: 'opalScaleUp', delay: 210 }" data-ev="opalScaleUp" class="franchise-application__download-reveal ev">
             <NuxtLink :to="cmsCopy.copy.field4" target="_blank" rel="noopener" class="franchise-application__download">{{ cmsCopy.copy.text5 }}<Download aria-hidden="true" />

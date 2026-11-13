@@ -68,7 +68,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                     <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
                   </div>
                   <h2 class="antra-news-post__title">
-                    <NuxtLink :to="article.legacyPath">{{ article.title }}</NuxtLink>
+                    <NuxtLink :to="article.legacyPath"><InternalHeadingText :text="article.title" /></NuxtLink>
                   </h2>
                   <p class="antra-news-post__excerpt">{{ article.excerpt }}</p>
                 </div>
@@ -78,7 +78,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
           <aside class="antra-news-sidebar" aria-label="優惠消息側欄">
             <section class="antra-news-widget antra-news-widget--tags" aria-labelledby="news-tags-title" v-reveal="{ anim: 'opalMoveLeft' }">
-              <h2 id="news-tags-title">{{ cmsCopy.copy.text3 }}</h2>
+              <h2 id="news-tags-title"><InternalHeadingText :text="cmsCopy.copy.text3" /></h2>
               <div class="antra-news-widget__tags" aria-label="文章分類標籤">
                 <NuxtLink
                   v-for="category in newsCategories"
@@ -92,7 +92,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </section>
 
             <section class="antra-news-widget antra-news-widget--recent" aria-labelledby="sidebar-recent-title" v-reveal="{ anim: 'opalMoveLeft', delay: 80 }">
-              <h2 id="sidebar-recent-title">{{ cmsCopy.copy.text4 }}</h2>
+              <h2 id="sidebar-recent-title"><InternalHeadingText :text="cmsCopy.copy.text4" /></h2>
               <ol>
                 <li v-for="article in recentNewsArticles" :key="article.id">
                   <NuxtLink
@@ -104,7 +104,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                   </NuxtLink>
                   <div class="antra-news-widget__recent-content">
                     <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
-                    <h3><NuxtLink :to="article.legacyPath">{{ article.title }}</NuxtLink></h3>
+                    <h3><NuxtLink :to="article.legacyPath"><InternalHeadingText :text="article.title" /></NuxtLink></h3>
                   </div>
                 </li>
               </ol>

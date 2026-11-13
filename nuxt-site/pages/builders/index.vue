@@ -190,7 +190,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="builders-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--team">
           <InternalSectionPill>EXPLORE OUR COLLECTIONS</InternalSectionPill>
-          <h2 id="builders-team-title"><b class="builders-brand-chinese">{{ cmsCopy.copy.text9 }}</b>Creating the <span>Ideal Kitchen</span><br /> <span>For Every</span> Family</h2>
+          <h2 id="builders-team-title"><b class="builders-brand-chinese"><InternalHeadingText :text="cmsCopy.copy.text9" /></b><InternalHeadingText text="Creating the " /><span><InternalHeadingText text="Ideal Kitchen" /></span><br /> <span><InternalHeadingText text="For Every" /></span><InternalHeadingText text=" Family" /></h2>
           <p>{{ cmsCopy.copy.text9 }}，{{ cmsCopy.copy.text11 }}</p>
         </header>
         <div class="builders-team__grid">
@@ -296,7 +296,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             />
             <div class="builders-services">
               <article v-for="service in services" :key="service.title" class="builders-service">
-                <h3><Check aria-hidden="true" />{{ service.title }}</h3>
+                <h3><Check aria-hidden="true" /><InternalHeadingText :text="service.title" /></h3>
                 <p><span v-for="line in service.copy" :key="line">{{ line }}</span></p>
               </article>
             </div>
@@ -315,14 +315,14 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
           <InternalTemplateHeadingRail :label="cmsCopy.copy.text33" />
           <div>
-            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese">櫻花集團品牌館</b></span><span class="bilingual-heading-english" style="color: inherit">The Art <span>Of</span><br /> <span>Kitchen</span> Showrooms</span></h2>
+            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese"><InternalHeadingText text="櫻花集團品牌館" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="The Art " /><span><InternalHeadingText text="Of" /></span><br /> <span><InternalHeadingText text="Kitchen" /></span><InternalHeadingText text=" Showrooms" /></span></h2>
           </div>
         </header>
 
         <div class="builders-contact__grid">
           <aside v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="builders-contact__aside ev">
             <div class="builders-contact__copy">
-              <h3>{{ cmsCopy.copy.text38 }}<br /><span>{{ cmsCopy.copy.text39 }}</span></h3>
+              <h3><InternalHeadingText :text="cmsCopy.copy.text38" /><br /><span><InternalHeadingText :text="cmsCopy.copy.text39" /></span></h3>
               <p>{{ cmsCopy.copy.text40 }}</p>
               <dl>
                 <div><dt><MapPin aria-hidden="true" />{{ cmsCopy.copy.text41 }}</dt><dd>{{ activePavilion.address }}</dd></div>

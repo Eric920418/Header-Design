@@ -29,13 +29,13 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
           class="antra-faq-heading__aside ev"
         />
         <h2 :id="sectionId" v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="antra-faq-title ev">
-          <slot name="title">Quick And Clear <span>Answers<br /> To Your Key</span> Questions</slot>
+          <slot name="title"><InternalHeadingText text="Quick And Clear " /><span><InternalHeadingText text="Answers" /><br /><InternalHeadingText text=" To Your Key" /></span><InternalHeadingText text=" Questions" /></slot>
         </h2>
       </header>
 
       <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="antra-faq-list ev">
         <section v-for="group in groups" :key="group.id" :aria-labelledby="`${sectionId}-${group.id}`" class="antra-faq-group">
-          <h3 :id="`${sectionId}-${group.id}`" class="antra-faq-group__title">{{ group.title }}</h3>
+          <h3 :id="`${sectionId}-${group.id}`" class="antra-faq-group__title"><InternalHeadingText :text="group.title" /></h3>
           <div>
             <article v-for="(item, index) in group.items" :key="item.question" class="antra-faq-item">
               <h4>
@@ -48,7 +48,7 @@ const toggle = (id: string) => openId.value = openId.value === id ? null : id
                   @keydown.enter.prevent="toggle(`${group.id}-${index}`)"
                   @keydown.space.prevent="toggle(`${group.id}-${index}`)"
                 >
-                  <span class="antra-faq-question"><span class="antra-faq-number">{{ String(index + 1).padStart(2, '0') }}</span>{{ item.question }}</span>
+                  <span class="antra-faq-question"><span class="antra-faq-number">{{ String(index + 1).padStart(2, '0') }}</span><InternalHeadingText :text="item.question" /></span>
                   <span class="antra-faq-symbol" aria-hidden="true">{{ openId === `${group.id}-${index}` ? '−' : '+' }}</span>
                 </button>
               </h4>

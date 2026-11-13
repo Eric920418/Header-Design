@@ -68,7 +68,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <NuxtLink :to="cmsCopy.copy.field1">{{ cmsCopy.copy.text2 }}</NuxtLink>
           <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
         </div>
-        <h1 :id="`knowledge-detail-title-${article.id}`">{{ article.title }}</h1>
+        <h1 :id="`knowledge-detail-title-${article.id}`"><InternalHeadingText :text="article.title" /></h1>
       </header>
 
       <figure class="knowledge-detail__cover" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
@@ -85,7 +85,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           }"
           v-reveal="{ anim: 'opalMoveUp' }"
         >
-          <h2 v-if="section.heading">{{ section.heading }}</h2>
+          <h2 v-if="section.heading"><InternalHeadingText :text="section.heading" /></h2>
           <p v-for="paragraph in section.paragraphs" :key="paragraph">{{ paragraph }}</p>
 
           <figure v-if="section.image" class="knowledge-detail-section__media" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
@@ -94,8 +94,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
           <div v-for="point in section.points" :key="point.title" class="knowledge-detail-point">
             <h3>
-              <a v-if="point.url" :href="point.url" target="_blank" rel="noopener noreferrer">{{ point.title }}</a>
-              <template v-else>{{ point.title }}</template>
+              <a v-if="point.url" :href="point.url" target="_blank" rel="noopener noreferrer"><InternalHeadingText :text="point.title" /></a>
+              <template v-else><InternalHeadingText :text="point.title" /></template>
             </h3>
             <div class="knowledge-detail-point__body">
               <figure v-if="point.image" class="knowledge-detail-point__media" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">

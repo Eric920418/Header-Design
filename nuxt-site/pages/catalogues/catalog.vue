@@ -90,7 +90,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </a>
               <div class="product-catalogue-card__text">
                 <div class="product-catalogue-card__title-row">
-                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong>{{ catalogue.title }}</strong></a>
+                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong><InternalHeadingText :text="catalogue.title" /></strong></a>
                   <a :href="`/api/catalogues/${catalogue.id}`" :download="`${catalogue.id}.pdf`" class="product-catalogue-card__download" :aria-label="`下載 PDF：${catalogue.title}`"><Download aria-hidden="true" /><span>{{ cmsCopy.copy.text4 }}</span></a>
                 </div>
                 <span>{{ catalogue.description }}</span>
@@ -105,7 +105,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="product-catalogue-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="product-care__header">
           <InternalTemplateHeadingRail label="Popular Queries" class="product-care__eyebrow" />
-          <h2 id="product-care-title"><span class="product-care__chinese">廚房選購指南</span> Clear <span>Answers</span> To Your <span>Questions</span></h2>
+          <h2 id="product-care-title"><span class="product-care__chinese"><InternalHeadingText text="廚房選購指南" /></span><InternalHeadingText text=" Clear " /><span><InternalHeadingText text="Answers" /></span><InternalHeadingText text=" To Your " /><span><InternalHeadingText text="Questions" /></span></h2>
         </header>
 
         <div class="product-care__layout">
@@ -186,7 +186,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               />
               <span class="product-care__media-arrow site-cta-icon" aria-hidden="true"><ChevronRight /></span>
             </a>
-            <h3>{{ activeQuestion.question }}</h3>
+            <h3><InternalHeadingText :text="activeQuestion.question" /></h3>
             <p>{{ activeFeatureDescription }}</p>
           </aside>
         </div>

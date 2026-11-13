@@ -15,10 +15,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="what-we-do-copy min-w-0">
         <div class="what-we-do-heading">
           <InternalSectionPill v-reveal="{ anim: 'opalMoveRight' }" class="mb-[20px]">{{ cmsCopy.copy.text3 }}</InternalSectionPill>
-          <h2 id="what-we-do-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="what-we-do-title mx-auto max-w-[560px] font-display text-[#1C1C1D]"><span class="what-we-do-title__chinese">品牌承諾</span>{{ cmsCopy.copy.text4 }}<span class="text-[#CAA05C]">{{ cmsCopy.copy.text5 }}</span></h2>
+          <h2 id="what-we-do-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="what-we-do-title mx-auto max-w-[560px] font-display text-[#1C1C1D]"><span class="what-we-do-title__chinese"><InternalHeadingText text="品牌承諾" /></span><InternalHeadingText :text="cmsCopy.copy.text4" /><span class="text-[#CAA05C]"><InternalHeadingText :text="cmsCopy.copy.text5" /></span></h2>
         </div>
         <div v-reveal="{ anim: 'opalMoveUp', delay: 180 }" class="what-we-do-description mx-auto max-w-[645px]">
-          <h3 class="font-cjk-serif text-[30px] font-semibold leading-[42px] text-[#1C1C1D]">{{ cmsCopy.copy.text6 }}</h3>
+          <h3 class="font-cjk-serif text-[30px] font-semibold leading-[42px] text-[#1C1C1D]"><InternalHeadingText :text="cmsCopy.copy.text6" /></h3>
           <p class="mt-[12px] font-cjk-sans text-[15px] leading-[28px] text-[#59585D]">{{ cmsCopy.copy.text7 }}</p>
         </div>
         <div v-reveal="{ anim: 'opalScaleUp', delay: 320 }" class="what-we-do-cta-row flex"><NuxtLink :to="cmsCopy.copy.field8" class="site-content-cta group/cta inline-flex h-[60px] items-center gap-[8px] rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white"><span class="font-cjk-sans text-[15px]">{{ cmsCopy.copy.text9 }}</span><span class="site-cta-icon flex h-[40px] w-[40px] -rotate-45 items-center justify-center rounded-full bg-[#CAA05C] text-white transition-transform group-hover/cta:rotate-0"><ArrowRight class="h-5 w-5" /></span></NuxtLink></div>

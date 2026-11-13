@@ -14,7 +14,7 @@ const toggle = (step: (typeof serviceSteps)[number]) => {
 <template>
   <div class="service-flow-block">
     <header class="service-flow-block__heading" v-reveal="{ anim: 'opalMoveUp' }">
-      <h2>服務流程</h2>
+      <h2><InternalHeadingText text="服務流程" /></h2>
       <span aria-hidden="true" />
     </header>
 

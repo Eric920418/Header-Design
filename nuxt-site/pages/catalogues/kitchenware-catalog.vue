@@ -72,7 +72,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <div class="catalogue-card__text">
                 <div class="catalogue-card__title-row">
                   <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer" class="catalogue-card__title-link">
-                    <strong>{{ catalogue.title }}</strong>
+                    <strong><InternalHeadingText :text="catalogue.title" /></strong>
                   </a>
                   <a
                     :href="`/api/catalogues/${catalogue.id}`"
