@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
   }
 
   if(/^\/media\/[a-f0-9-]{36}$/i.test(catalogue.pdfUrl))return sendRedirect(event,catalogue.pdfUrl,302)
+  if(/^\/section-2\/catalogues\/catalog\/files\/[a-z0-9-]+\.pdf$/.test(catalogue.pdfUrl))return sendRedirect(event,catalogue.pdfUrl,302)
   const source=new URL(catalogue.pdfUrl)
   if(source.protocol!=='https:'||source.hostname!=='www.sakura-kitchenlife.com.tw'||source.username||source.password)throw createError({statusCode:400,message:'型錄僅支援媒體庫 PDF 或櫻花官方型錄來源'})
   let upstream: Response

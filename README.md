@@ -4431,3 +4431,10 @@ final result: passed
 - 更新腳本自檢通過：限定 ID、只改指定描述、其餘欄位保留、輸入不變、重跑無變更及自訂內容衝突保護；`pnpm build`（含型別檢查）通過。正式1440／390px均顯示八筆新文案，無水平溢位，名稱／封面／預覽及下載連結與改前一致；證據在 `.gstack/qa-reports/catalogue-copy-20261113/`。預設資料發布與第二網域回查續記。
 - 預設資料程式 `77a99396` 已發布至 `dpl_EWymnZKpwSe5fgcwaCD8rRGKp5DX`；兩正式網域皆為同 SHA／READY。發布後重新載入主網域1440px及第二網域390px，兩站各八筆皆顯示「品牌系列型錄」，無水平溢位，型錄名稱、圖片、PDF及下載連結仍與更新前一致。
 - 證據為 `.gstack/qa-reports/catalogue-copy-20261113/cms-update.txt`、`before.json`、`main-domain.json`、`second-domain.json`、`after-deploy.json`、兩份 `alias-*.json`；畫面 `production-desktop.png`、`production-mobile.png`。此輪未重新驗收 PDF 檔案內容，未改檔案或連結；臨時分頁關閉、視窗尺寸還原。完成紀錄只提交 README，不為文件再次部署。
+
+## 2026-11-13 廚房產品型錄更新與年份簡化
+
+- 使用「二修261030／2.2廚房產品型錄／2026_SAKURA KITCHEN_DM_20261102.pdf」更新櫻花整體廚房型錄；原始 PDF 61 頁、18,607,082 bytes，完整複製不重製內容，封面由新版第一頁產生。新 PDF／封面採帶日期網址，保留舊檔及 CMS 歷史版本。
+- 五張產品型錄卡片描述僅顯示各自年份：四張 2026，櫻花石英石保留 2024。名稱及其他四份 PDF／封面維持，產品列表／詳情共用型錄入口沿用同一份資料。
+- 下載 API 增加本站型錄 files 資料夾的限定 PDF 轉址，既有媒體庫與官方來源行為維持。先部署新檔，確認可用後才發布正式 CMS；有未發布草稿或自訂內容即停止，不重跑 seed、不刪除歷史資料。建置、自檢及正式預覽／下載驗收結果續記。
+- `pnpm build`（含型別檢查）、精準更新腳本 `--self-check` 及下載路徑測試通過。確認新 PDF SHA-256 與來源相同；正式 dry-run 為 revision 3、五筆資料，無草稿衝突。CMS 另一份配備型錄的既有媒體庫封面／PDF 保留，不以預設資料覆蓋。
