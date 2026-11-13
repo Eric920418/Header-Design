@@ -4471,3 +4471,8 @@ final result: passed
 - 展示區兩張圖片依「二修261030／5.2集團品牌館」的 `5.2-1exhibition.jpg`、`5.2-2exhibition.jpg` 更新；保留來源原檔，以 1800px WebP 發布帶日期新網址，維持雙欄／手機單欄及原圖片框比例。第二張由拼圖換為單張照片，與第一張同用 cover 避免黑色留邊，不拉伸影像。
 - 預設資料及後台欄位同步，正式資料以限定欄位精準更新，保留未涉及的首頁／服務流程影片、文案、圖片與全部歷史版本；有未發布草稿或非預期內容即停止。建置、自檢與正式驗收結果續記。
 - 兩張 WebP 為 1800×1125／1800×1064，118,026／153,378 bytes，來源原檔保持。影片來源頁確認標題與指定 ID 相符；`check-brand-video.mjs`（含品牌館指定 ID／首頁預設 ID 分離）、精準更新腳本自檢、後台工作流程／名稱檢查及 `pnpm build`（含型別檢查）通過。正式 dry-run 兩文件均 revision 3、無未發布草稿；不執行整庫 seed。
+- 程式 `76125950` 已推送，主網域實際影片入口確認指向 `https://www.youtube-nocookie.com/embed/ovXezqQdFYo?autoplay=1&rel=0`，兩張新網址亦已正常載入，才發布正式 CMS。Vercel 部署查詢目前不可用，未宣稱取得部署 ID 或同 SHA／READY 證明；兩站以實際頁面回查。
+- 正式 `site-visuals` revision 3→5，新發布 `0bbf5671-97fe-4a4a-a187-eb95b16c4637`，保留舊版 `95091e89-0006-4e33-b242-e369af1b81ee`；`view-pages-about-exhibition` revision 3→5，新發布 `efc3dc78-4f3e-40d8-b536-e125d15bbbce`，保留舊版 `4c9cd136-c2dc-455c-9506-da95d375354f`。同一交易核對僅新增品牌館影片欄位及更換兩張圖／替代文字，其他文件與所有舊版本不變。
+- 主網域桌面及第二正式網址手機版，實際播放新片均持續前進、duration=115.041、媒體錯誤 0；Escape 可關閉彈窗。本機影片彈窗 320／390／768／1440px 皆為完整 16:9，無水平溢位；正式展示圖同四種寬度皆載入成功、無水平溢位或錯誤提示，兩站瀏覽器錯誤紀錄皆空。
+- 正式圖片於 1440px 各 630×434 雙欄、390px 各 360×248 單欄，與原框比例相同；視覺核對兩張來源配對及無拉伸。證據在 `.gstack/qa-reports/pavilion-media-20261114/`：`assets.json`、`production-assets.json`、`local-video.json`、`local-layouts.json`、`production-video.json`、`production-desktop.json`、`second-domain.json`、`production-layouts.json`、`browser-errors.json`、`cms-update.txt`；畫面 `production-video.png`、`production-images-desktop.png`、`production-images-mobile.png`。
+- 未實測實體 Safari、YouTube 全螢幕／音量操作或新片完整播放到結尾；不列為通過。本機服務停止，臨時分頁關閉、視窗尺寸還原；完成紀錄僅提交 README，不為文件再次部署。
