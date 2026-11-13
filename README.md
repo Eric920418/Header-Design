@@ -4483,3 +4483,5 @@ final result: passed
 - 使用者提供的 `https://sakura-kitchenlife/news/latest/2026-franchise-seminar` 主機名稱不完整，瀏覽器實測 ERR_NAME_NOT_RESOLVED；站內同路徑已確認為「2026櫻花整體廚房加盟說明會，全面招商中！」，使用相對路徑以兼容兩正式網域及未來網域切換。
 - 同步頁面預設資料、seed 及正式 CMS 的 `copy.field12`／`copy.text13`，後台欄位名稱改為對應的新連結／按鈕文字。精準發布保留其他文案、按鈕、文件與所有歷史版本；遇未發布草稿或自訂內容即停止。建置、自檢與正式回查結果續記。
 - 精準更新腳本自檢、後台工作流程／名稱檢查及 `pnpm build`（含型別檢查）通過；正式 `view-pages-franchising-intro` revision 3→5，新發布 `8841cfa4-7bdb-4c4f-a136-bae43c114e5e`，保留舊版 `d4fee8b1-d82b-4d3a-b675-73b027386cad`。交易核對其他內容、全部其他文件及所有舊版本不變，不執行整庫 seed。
+- 預設資料程式 `fc2d0aee` 已推送；主網域 1440px 與第二正式網址 390px 均實際顯示新按鈕，點擊後各自另開同網域的指定文章，文章標題核對相符。左側申請按鈕連結／文字／15px 字級與 60px 高度保持，右側僅因少一個中文字自然縮短；兩尺寸按鈕均在視窗內，無水平溢位，頁面及目的地瀏覽器錯誤紀錄皆空。
+- 證據在 `.gstack/qa-reports/franchise-seminar-cta-20261114/`：`cms-before.json`、`cms-update.txt`、`before.json`、`production-desktop.json`、`second-domain.json`、`clicked-article.json`、`second-clicked-article.json`、`browser-errors.json`；畫面 `production-desktop.png`、`production-mobile.png`。本輪不改 CSS、加盟申請與資料下載功能，未送出表單或實測實體 Safari。視窗尺寸已還原，完成紀錄僅提交 README，不為文件再次部署。
