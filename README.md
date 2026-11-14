@@ -4592,3 +4592,7 @@ final result: passed
 - 圖片辨識排除PDF／型錄下載欄位，避免沒有副檔名的私人PDF網址被誤當照片；既有正式151個版本的取圖比對沒有原有圖片遺漏，並保留真實圖片失敗時的中文訊息。
 - 本機已逐頁檢查28頁、100個一般區塊：所有內容列有圖片或示意圖、未見圖片錯誤或水平溢位；首頁四種尺寸通過。既有互動檢查增加「每列都有縮圖」及「關閉的預覽不可佔空間」斷言，另補取圖陣列、私人圖片、PDF排除及封面優先的可重跑檢查。
 - 透明圖片統一保留對比底色；品牌標誌依所在清單判斷完整顯示，避免之後換成隨機網址的上傳PNG時，又因檔名沒有logo字樣而看似空白。
+- `pnpm --dir nuxt-site typecheck`與正式建置通過，取圖／上傳標誌／工作流程／名稱／預覽狀態檢查及互動腳本語法通過；互動腳本本輪以CUA實際操作驗證，未另行執行Playwright腳本。程式最終`a7a40e5d`、部署`dpl_DY41oL7JPixWcEiXgWocxPRJ9b9T`已READY，兩正式網域均指向該版。
+- 正式逐頁回查28頁、105個一般區塊，內容列均有縮圖／示意圖，沒有圖片載入錯誤；28張頁面入口卡片分三頁實測12＋12＋4張均有圖。首頁門市列表在1440／1024／768／390px皆無水平溢位，6筆都有位置圖；四個白色品牌標誌實際載入、完整顯示且有對比底色。正式預覽可正常開啟與套用，關閉後display為none、高度0、iframe為0，不再留下空白標題列。
+- 正式65份內容、151個版本與驗收前完整指紋相同；未儲存或發布測試內容。僅清除本機臨時編輯帳號與它的登入／預覽紀錄，資料及來源商品保持，本機服務停止、暫存憑證移除、視窗覆寫還原。正式瀏覽器無error；未實測實體Safari，未新增真正的內容照片。
+- 證據在`.gstack/qa-reports/cms-thumbnails-20261114/`：`source-regression.json`、`local-blocks.json`、`formal-blocks.json`、`local-page-cards.json`、`formal-page-cards.json`、`formal-sizes.json`、`local-data-protection.json`、`production-before.json`／`production-after.json`及兩站首頁／登入HTTP回歸`production-http.json`；實拍`formal-logos.png`、`formal-stores.png`、`formal-page-cards.png`。完成紀錄僅提交README，不為文件重複部署。
