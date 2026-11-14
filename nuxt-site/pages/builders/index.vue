@@ -435,7 +435,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
 .builders-strengths-copy { position: sticky; top: var(--strengths-sticky-top, calc(var(--site-header-height, 60px) + 15px)); align-self: start; min-width: 0; height: var(--strengths-copy-height, auto); container-type: inline-size; }
 .builders-strengths-copy[data-strengths-overflow="true"] { position: static; }
-.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: calc(100svh - var(--site-header-height, 60px) - 37px); padding: 35px 0 6px; }
+.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: calc(100svh - var(--site-header-height, 60px) - 53px); padding: 35px 0 6px; }
 .builders-strengths-heading h2 { color: #caa05c; max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
 .builders-strengths-heading h2 b { color: #fff; display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
@@ -445,7 +445,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-capability__showcase { width: min(1280px, 100%); margin: 70px auto 0; container-type: inline-size; font-family: var(--font-cjk-sans); }
 .builders-capability__showcase :deep(.builder-image) { height: auto; background: transparent; }
 .builders-solution { margin: 0; overflow: hidden; border-radius: 24px; }
-.builders-solution__copy { margin-top: 0; padding-top: 28px; }
+.builders-solution__copy { margin-top: 0; padding-top: 12px; }
 .builders-solution__copy h3 span,
 .builders-solution__caption h3 span { display: block; }
 .builders-solution__copy h3,
