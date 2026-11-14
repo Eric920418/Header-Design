@@ -18,6 +18,15 @@ export async function pageEditorSummaries(){
  return pageEditors.map(p=>{const summary=pageSummary(p,rows,documents);return{...summary,blocks:summary.blocks.map(b=>({...b,fields:b.fields.map(({documentId,path,label,searchTerms})=>({documentId,path,label,searchTerms}))}))}})
 }
 function parameters(p){return Object.fromEntries(p.ids.map((id,i)=>['id'+i,id]))}
+async function rowPresentation(p){
+ const result={}
+ for(const id of p.ids.filter(id=>id.startsWith('catalog-'))){
+  const brand={'catalog-sakura':'櫻花','catalog-svago':'SVAGO','catalog-teka':'TEKA'}[id]
+  const rows=id==='catalog-cases'?(await query("SELECT c.id,(SELECT TOP(1) url FROM sync.DesignCloudFiles WHERE caseId=c.id AND type='Image' ORDER BY mainImage DESC,CASE WHEN sort IS NULL THEN 1 ELSE 0 END,sort,url) AS image FROM sync.DesignCloudCases c WHERE c.isWebsite=1")).recordset:brand?(await query("SELECT CONVERT(nvarchar(80),p.id) AS id,(SELECT TOP(1) url FROM sync.BuyKitchenPublicFiles WHERE product_id=p.id AND type IN ('main','product_images') ORDER BY CASE WHEN type='main' THEN 0 ELSE 1 END,COALESCE(sort,2147483647),id) AS image FROM sync.BuyKitchenProducts p WHERE p.channel=N'展板' AND p.Brand=@brand",{brand})).recordset:[]
+  result[id]=Object.fromEntries(rows.map(r=>[r.id,{image:r.image||'',href:id==='catalog-cases'?'/design-inspiration/'+r.id:'/products/'+id.slice(8)+'/item/'+r.id}]))
+ }
+ return result
+}
 async function pageRows(p,connection){return(await query(`SELECT d.*,v.body,p.body AS publishedBody FROM cms.Documents d LEFT JOIN cms.Versions v ON v.id=d.draftId LEFT JOIN cms.Versions p ON p.id=d.publishedId WHERE d.id IN (${p.ids.map((_,i)=>'@id'+i).join(',')})`,parameters(p),connection)).recordset}
 export async function readPageEditor(id){
  const p=pageEditor(id);if(!p)fail(404,'找不到要修改的頁面')
@@ -27,7 +36,7 @@ export async function readPageEditor(id){
   const body=d.body?JSON.parse(d.body):{}
   return{id,revision:d.revision,draftId:d.draftId,publishedId:d.publishedId,updatedAt:d.updatedAt,schema:editorSchema(d),body:id.startsWith('catalog-')?await alignSource(id,body):body,versions:history.recordset.filter(v=>v.documentId===id)}
  }))
- return{...pageSummary(p,summaries,documents),documents}
+ return{...pageSummary(p,summaries,documents),documents,rowPresentation:await rowPresentation(p)}
 }
 const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b)
 function editable(previous,next,schema,newItem=false){
@@ -75,7 +84,7 @@ export async function changePageEditor(id,input,user,connection){
    const d=rows.find(d=>d.id===item.id);if(!d)fail(404,'此內容已不存在')
    if(d.revision!==item.revision)fail(409,'有人已修改本頁內容。你的輸入仍保留，請查看最新內容後再調整。')
    const schema=editorSchema(d),previous=d.body?JSON.parse(d.body):{}
-   try{checkPageBody(p,d.id,d.id.startsWith('catalog-')?await alignSource(d.id,previous,connection):previous,item.body,schema);const body=normalizeVideos(structuredClone(item.body),schema);validate(body,schema);return{id:d.id,revision:d.revision,body,title:resourceGuide(d.id).tabTitle||resourceGuide(d.id).location[0],changes:changedItems(d.publishedBody?JSON.parse(d.publishedBody):null,body,editingSchema(schema,d.id))}}catch(e){throw readableError(e,d.id,editingSchema(schema,d.id))}
+   try{checkPageBody(p,d.id,d.id.startsWith('catalog-')?await alignSource(d.id,previous,connection):previous,item.body,schema);const body=normalizeVideos(structuredClone(item.body),schema);validate(body,schema);return{id:d.id,revision:d.revision,body,title:resourceGuide(d.id).tabTitle||resourceGuide(d.id).location[0],changes:changedItems(d.publishedBody?JSON.parse(d.publishedBody):null,body,editingSchema(schema,d.id))}}catch(e){throw readableError(e,d.id,editingSchema(schema,d.id),item.body)}
   }))
   return{documents,previewToken:await createDraftPreview(user.id,documents,connection),impacts:[...new Map(p.ids.flatMap(id=>resourceGuide(id).impacts).map(i=>[i.href+'|'+i.label,i])).values()]}
  }

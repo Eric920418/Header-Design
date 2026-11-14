@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { galleryCaseRoute, galleryCaseLabel, galleryCaseEntry } from '~/shared/cms/gallery-cases.mjs'
-const props=defineProps<{modelValue:any[];label:string}>()
+const props=defineProps<{modelValue:any[];label:string;schema?:any;documentId?:string;path?:string}>()
+const selections=inject<any>('cms-item-selections',ref({})),workbench=inject<any>('cms-workbench',null)
+const listSchema=computed(()=>({...props.schema,label:props.label,min:1,rowLabel:'store',rowImage:'image',item:props.schema?.item||{type:'object',fields:{}}}))
 const emit=defineEmits<{'update:modelValue':[value:any[]]}>()
 const {api,message}=useCmsAdmin()
 const hintId=useId()
@@ -10,29 +12,26 @@ const selected=computed(()=>new Set(props.modelValue.filter((_,index)=>index!==p
 watch(query,()=>page.value=1)
 async function load(){loading.value=true;error.value='';try{library.value=await api('case-library')}catch(e){error.value=message(e)}finally{loading.value=false}}
 function open(index:number,event:Event){(event.currentTarget as HTMLButtonElement).focus();query.value='';page.value=1;picking.value=index;void load()}
-function choose(option:any){if(selected.value.has(option.slug)||!option.image)return;const entry=galleryCaseEntry(option),next=[...props.modelValue];if(picking.value===-1)next.push(entry);else if(picking.value!==null)next[picking.value]=entry;else return;emit('update:modelValue',next);openSlug.value=entry.slug;picking.value=null}
+function choose(option:any){if(selected.value.has(option.slug)||!option.image)return;const entry=galleryCaseEntry(option),next=[...props.modelValue];if(picking.value===-1)next.push(entry);else if(picking.value!==null)next[picking.value]=entry;else return;emit('update:modelValue',next);openSlug.value=entry.slug;const scope=props.documentId+':'+props.path;selections.value[scope]=entry.slug;if(workbench){workbench.focused.value=scope;workbench.editing.value=scope}picking.value=null}
 function set(index:number,key:string,value:string){emit('update:modelValue',props.modelValue.map((item,i)=>i===index?{...item,[key]:value}:item))}
 function move(index:number,step:number){const next=[...props.modelValue],other=index+step;if(other<0||other>=next.length)return;[next[index],next[other]]=[next[other],next[index]];emit('update:modelValue',next)}
 function remove(index:number){if(props.modelValue.length>1&&window.confirm('移除這個首頁案例？儲存並更新官網後才會生效。'))emit('update:modelValue',props.modelValue.filter((_,i)=>i!==index))}
 </script>
 
 <template>
-  <section class="cms-array cms-home-cases" :aria-label="'首頁'+label">
-    <div class="cms-section-heading"><strong>{{ label }} <span class="cms-count">{{ modelValue.length }}</span></strong><button type="button" class="cms-button" @click="open(-1,$event)">新增案例</button></div>
-    <details v-for="(item,index) in modelValue" :key="item.slug" class="cms-array-row" name="home-cases" :open="openSlug===item.slug">
-      <summary><span class="cms-array-summary-content"><AdminImage :src="item.image" :alt="galleryCaseLabel(item)" class="cms-array-thumbnail" /><span>{{ galleryCaseLabel(item) }}</span></span></summary>
-      <div class="cms-actions">
-        <button type="button" class="cms-button" :disabled="index===0" @click="move(index,-1)">上移</button><button type="button" class="cms-button" :disabled="index===modelValue.length-1" @click="move(index,1)">下移</button><button type="button" class="cms-button" :disabled="modelValue.length<=1" @click="remove(index)">移除此項</button>
-        <button type="button" class="cms-button" @click="open(index,$event)">更換案例</button><a :href="galleryCaseRoute(item)" target="_blank" rel="noopener noreferrer" class="cms-button">查看案例 ↗</a>
-      </div>
-      <div class="cms-fields cms-home-case-fields">
-
-        <label v-if="item.title" class="cms-field">案例標題<input :value="item.title" readonly /></label>
-        <div class="cms-field"><label>門市名稱<input :value="item.store" :aria-describedby="item.store?undefined:`${hintId}-${index}`" @input="set(index,'store',($event.target as HTMLInputElement).value)" /></label><p v-if="!item.store" :id="`${hintId}-${index}`" class="cms-field-help">案例庫未提供門市名稱，可在此補填。</p></div>
-        <AdminFields :model-value="item.image" :schema="{type:'string',format:'media',label:'案例圖片'}" label="image" @update:model-value="set(index,'image',$event)" />
-        <label class="cms-field">案例連結<input :value="galleryCaseRoute(item)" readonly /></label>
-      </div>
-    </details>
+  <section class="cms-home-cases" :aria-label="'首頁'+label">
+    <AdminItems :model-value="modelValue" :schema="listSchema" :document-id="documentId" :path="path" @update:model-value="emit('update:modelValue',$event)">
+      <template #add><button type="button" class="cms-button" @click="open(-1,$event)">新增案例</button></template>
+      <template #editor="{row}">
+        <div class="cms-actions"><button type="button" class="cms-button" @click="open(row.index,$event)">更換案例</button><a :href="galleryCaseRoute(row.value)" target="_blank" rel="noopener noreferrer" class="cms-button">查看案例 ↗</a></div>
+        <div class="cms-fields cms-home-case-fields">
+          <label v-if="row.value.title" class="cms-field">案例標題<input :value="row.value.title" readonly /></label>
+          <label class="cms-field">門市名稱<input :value="row.value.store" @input="set(row.index,'store',($event.target as HTMLInputElement).value)" /></label>
+          <AdminFields :model-value="row.value.image" :schema="{type:'string',format:'media',label:'案例圖片'}" :document-id="documentId" :path="`${path}.${row.index}.image`" label="image" @update:model-value="set(row.index,'image',$event)" />
+          <label class="cms-field">案例連結<input :value="galleryCaseRoute(row.value)" readonly /></label>
+        </div>
+      </template>
+    </AdminItems>
     <AdminDialog :open="picking!==null" :title="picking===-1?'新增案例':'更換案例'" wide @close="picking=null">
       <div class="cms-content-tools"><label class="cms-search"><input v-model="query" aria-label="搜尋案例庫" placeholder="搜尋門市或案例名稱" /></label><button class="cms-button" :disabled="loading" @click="load">重新整理</button></div>
       <p v-if="error" class="cms-error" role="alert">{{ error }}</p>

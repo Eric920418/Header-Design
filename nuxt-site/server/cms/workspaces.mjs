@@ -6,7 +6,7 @@ import {homeGallerySchema} from '../../shared/cms/gallery-cases.mjs'
 import {builderSeriesSchema} from '../../shared/cms/builder-series.mjs'
 import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
 import {editingSchema,resourceGuide} from '../../shared/cms/presentation.mjs'
-import {workspaceFor,workspaces,firstImage,changedItems} from '../../shared/cms/workflow.mjs'
+import {workspaceFor,workspaces,firstImage,changedItems,rowName} from '../../shared/cms/workflow.mjs'
 import {createDraftPreview} from './previews.mjs'
 
 export function workspaceInput(key,input){
@@ -15,12 +15,12 @@ export function workspaceInput(key,input){
  if(!input||!['preview','save','publish','unpublish'].includes(input.action)||!Array.isArray(input.documents)||input.documents.length!==w.ids.length||new Set(input.documents.map(d=>d?.id)).size!==w.ids.length||input.documents.some(d=>!d||!w.ids.includes(d.id)||!Number.isSafeInteger(d.revision)))fail(400,'修改範圍不完整，請重新開啟此區塊；輸入仍保留在畫面上')
  return w
 }
-export function readableError(error,id,schema){
+export function readableError(error,id,schema,body){
  if(!error.statusCode||error.statusCode>=500)return error
  const match=error.message.match(/^內容((?:\.[\w-]+|\[\d+\])*)/)
  if(match?.[1]){
-  const path=match[1].replace(/\[(\d+)\]/g,(_,i)=>'.'+(Number(i)-1)).slice(1),parts=path.split('.');let s=schema
-  const labels=parts.map(p=>{if(/^\d+$/.test(p)){s=s?.item;return`第 ${Number(p)+1} 項`}s=s?.fields?.[p];return s?.label||'內容'})
+  const path=match[1].replace(/\[(\d+)\]/g,(_,i)=>'.'+(Number(i)-1)).slice(1),parts=path.split('.');let s=schema,value=body
+  const labels=parts.map(p=>{value=value?.[p];if(/^\d+$/.test(p)){s=s?.item;return value&&typeof value==='object'?rowName(value,Number(p)):`第 ${Number(p)+1} 項`}s=s?.fields?.[p];return s?.label||'內容'})
   error.message=error.message.replace(match[0],labels.join(' › '));error.fieldErrors=[{documentId:id,path,message:error.message}]
  }
  return error
@@ -61,7 +61,7 @@ export async function changeDocumentGroup(w,input,user,connection,checkScope){
     }
     const history=input.action==='preview'?{}:{updatedAt:(await query('SELECT updatedAt FROM cms.Documents WHERE id=@id',{id:d.id},tx)).recordset[0].updatedAt,versions:(await query('SELECT v.id,v.createdAt,u.name AS actor FROM cms.Versions v LEFT JOIN cms.Users u ON u.id=v.actor WHERE documentId=@id ORDER BY createdAt DESC',{id:d.id},tx)).recordset}
     result.push({id:d.id,...state,...history,body,changes:changedItems(published?JSON.parse(published.body):null,body,schema),title:resourceGuide(d.id).tabTitle||resourceGuide(d.id).title})
-   }catch(e){throw readableError(e,d.id,schema)}
+   }catch(e){throw readableError(e,d.id,schema,item.body)}
   }return{documents:result,...(input.action==='preview'?{previewToken:await createDraftPreview(user.id,result,tx)}:{}),impacts:[...new Map(w.ids.flatMap(id=>resourceGuide(id).impacts).map(i=>[i.href+'|'+i.label,i])).values()]}
  }
  // Preview validates and creates only a short-lived snapshot; no versions, refs or audit records.

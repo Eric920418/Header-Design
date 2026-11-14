@@ -16,12 +16,12 @@ export function safeLink(value) {
  if(value.startsWith('#'))return true
  try{const u=new URL(value);return ['https:','http:','mailto:','tel:'].includes(u.protocol)&&!u.username&&!u.password}catch{return false}
 }
-export function normalizeVideos(value,schema){
+export function normalizeVideos(value,schema,path='內容'){
  if(value===undefined||value===null)return value
- if(schema.type==='object'){for(const[k,s]of Object.entries(schema.fields))if(Object.hasOwn(value,k))value[k]=normalizeVideos(value[k],s)}
- else if(schema.type==='array'&&Array.isArray(value))return value.map(v=>normalizeVideos(v,schema.item))
+ if(schema.type==='object'){for(const[k,s]of Object.entries(schema.fields))if(Object.hasOwn(value,k))value[k]=normalizeVideos(value[k],s,path+'.'+k)}
+ else if(schema.type==='array'&&Array.isArray(value))return value.map((v,i)=>normalizeVideos(v,schema.item,`${path}[${i+1}]`))
  else if(schema.format==='youtube'&&typeof value==='string'&&!/^[A-Za-z0-9_-]{11}$/.test(value)){
-  try{const u=new URL(value);if(u.protocol!=='https:'||u.username||u.password)throw Error();let id;if(['youtu.be','www.youtu.be'].includes(u.hostname))id=u.pathname.slice(1);else if(['youtube.com','www.youtube.com','m.youtube.com','www.youtube-nocookie.com'].includes(u.hostname)){if(u.pathname==='/watch')id=u.searchParams.get('v');else if(/^\/(embed|shorts)\//.test(u.pathname))id=u.pathname.split('/')[2]}if(!/^[A-Za-z0-9_-]{11}$/.test(id||''))throw Error();return id}catch{fail(400,'請輸入有效的 HTTPS YouTube 連結或 11 字元影片 ID')}
+  try{const u=new URL(value);if(u.protocol!=='https:'||u.username||u.password)throw Error();let id;if(['youtu.be','www.youtu.be'].includes(u.hostname))id=u.pathname.slice(1);else if(['youtube.com','www.youtube.com','m.youtube.com','www.youtube-nocookie.com'].includes(u.hostname)){if(u.pathname==='/watch')id=u.searchParams.get('v');else if(/^\/(embed|shorts)\//.test(u.pathname))id=u.pathname.split('/')[2]}if(!/^[A-Za-z0-9_-]{11}$/.test(id||''))throw Error();return id}catch{fail(400,`${path}：請貼上有效的 YouTube 影片網址`)}
  }return value
 }
 export function validate(value,schema,path='內容') {
