@@ -704,6 +704,7 @@
 .cms .cms-item-row .cms-item-open:hover{background:#faf5e980;}
 .cms .cms-item-row .cms-item-open img,.cms .cms-item-no-image{width:64px;height:42px;flex:0 0 64px;object-fit:cover;border-radius:4px;}
 .cms .cms-item-no-image{display:grid;place-items:center;background:#f3f1ed;font-size:11px;color:#8d8579;}
+.cms .cms-thumbnail{background:repeating-conic-gradient(#756d62 0% 25%,#80786d 0% 50%) 0 0/12px 12px;}
 .cms :is(.cms-workbench,.cms-section-photo,.cms-block-picker) .cms-thumbnail.is-mark{object-fit:contain;padding:6px;background:repeating-conic-gradient(#756d62 0% 25%,#80786d 0% 50%) 0 0/12px 12px;}
 .cms .cms-thumbnail.is-schematic{object-fit:contain;background:#f4f0e7;}
 .cms .cms-thumbnail.cms-image-error{height:auto;min-height:42px;font-size:11px;overflow-wrap:anywhere;}

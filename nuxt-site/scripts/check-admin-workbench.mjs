@@ -40,6 +40,11 @@ assert.equal(blockThumbnail({fields:[{documentId:'test',path:'decor',label:'裝�
 for(const label of ['文字段落','全台門市據點','型錄 PDF'])assert.match(decodeURIComponent(thumbnailPlaceholder(label)),/^data:image\/svg\+xml,<svg[\s\S]+<\/svg>$/)
 assert.notEqual(thumbnailPlaceholder('文字段落'),thumbnailPlaceholder('全台門市據點'))
 assert(!thumbnailPlaceholder('<script>不可信標題</script>').includes('script'))
+const thumbnailSource=await readFile(new URL('../components/admin/AdminThumbnail.vue',import.meta.url),'utf8'),thumbnailProps=reactive({src:privateImage,alt:'SAKURA縮圖',contain:true}),thumbnailContext={computed,defineProps:()=>thumbnailProps,thumbnailPlaceholder}
+runInNewContext(ts.transpileModule(thumbnailSource.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(/^import .*$/gm,'')+'\nthis.mark=mark;',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,thumbnailContext)
+assert.equal(thumbnailContext.mark.value,true,'Uploaded logos retain full image display even without a recognizable filename')
+thumbnailProps.contain=false;thumbnailProps.alt='品牌標誌縮圖';assert.equal(thumbnailContext.mark.value,true)
+thumbnailProps.alt='一般照片';assert.equal(thumbnailContext.mark.value,false)
 const source=await readFile(new URL('../components/admin/AdminItems.vue',import.meta.url),'utf8')
 const script=source.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(/^import .*$/gm,'')
 const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
