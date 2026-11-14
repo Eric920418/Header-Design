@@ -4540,3 +4540,11 @@ final result: passed
 - 瀏覽器無 error 紀錄；部分經過首頁的分頁仍有既有 Google Maps Marker 棄用警告，保留完整紀錄且本輪不改地圖。驗收證據與程式化核對在 `.gstack/qa-reports/site-adjustments-20261114/`：`verification-result.json`、`cms-before.json`、`cms-update.txt`、首頁／表單／加盟照片／建商 DOM 量測、第二網域手機資料、播放資料及錯誤紀錄；實際畫面含 `production-home-products-desktop.png`、`production-home-products-mobile.png`、`production-franchise-320.png`、`production-franchise-desktop.png`、`production-form-mobile.png` 及 `second-service-mobile.png`。
 - 本輪為上述指定區塊回歸，未宣稱全站重新驗收；未實測實體 iPhone Safari，未在本輪再次播放完整 149.7 秒影片，亦未送出表單。前台及 CMS 其餘內容保持，視窗覆寫還原、11 個臨時分頁關閉，本機服務停止；完成紀錄僅提交 README，不為文件再次部署。
 - 停止本機服務時另讀到一筆累積的 CMS 連線 `Connection lost - read ECONNRESET`／`ESOCKET` 訊息，該行未帶發生時間，不能判定為停止動作造成；正式發布後三文件唯讀回查已成功，正式瀏覽器亦無 error。本輪未修改資料庫連線機制，不能將本機訊息寫成正式站已重現的故障。
+
+
+## 2026-11-14 建商統計與上方文案再拉開
+
+- 使用者確認上一輪 12px 下移仍不夠，這次再增加 16px，統計組的頂部內距由 12→28px。固定欄位的最小高度一併增加 16px，避免 grid 底列抵銷實際位移；字級、金色英文、管理平台的獨立縮字及右側圖片保持。
+- 僅調整建商頁兩個 CSS 值，不改 CMS、資料庫或捲動事件。手機仍使用原單欄圖片說明；短視窗沿用既有內容高度量測與自然捲動退回，保留底部至少 20px。建置、前後間距及正式回查續記。
+- `pnpm build`（含型別檢查）、既有建商固定邊界的 315 組純單元驗證、計數回歸及 diff 檢查通過。本機 1440×900、1280×720、768×1024、1280×500、390×844 實測無水平溢位；前三組仍固定，極短視窗仍自然捲動，手機內容高度與 24／24／21.6px 字級不變。
+- 前後實測統計首行相對左欄頂部依序 593→609、413→429、741→757px；極短視窗 388.03125→404.03125px，均實際增加 16px。1440px 上方段落與統計間距 175.96875→191.96875px；1280×720 52.96875→68.96875px。固定時完整內容仍在可用高度內，不使用 transform 假移動或裁切。
