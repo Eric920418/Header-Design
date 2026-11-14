@@ -31,10 +31,10 @@ export function editorLink(id,query={}){
 }
 export function rowName(value,index=0){return value?.summary?.title||value?.title||value?.name||value?.zh||value?.en||value?.store||value?.question||value?.label||value?.heading||`第 ${index+1} 項`}
 export function firstImage(value){
+ if(typeof value==='string')return /^(?:\/(?!\/)|https?:\/\/)/.test(value)&&(/\.(?:webp|png|jpe?g|svg|avif|gif)(?:$|[?#])/i.test(value)||/^\/media\/[a-f\d-]{36}(?:$|[?#])/i.test(value))?value:''
  if(!value||typeof value!=='object')return ''
- for(const key of ['image','cover','img','src','desktopImage','images','heroSlides','slides']){const v=value[key];if(typeof v==='string'&&v.startsWith('/')&&!/\.pdf(?:$|\?)/i.test(v))return v;if(v&&typeof v==='object'){const found=Array.isArray(v)?v.find(i=>typeof i==='string'&&i.startsWith('/'))||firstImage(v[0]):firstImage(v);if(found)return found}}
- for(const v of Object.values(value))if(typeof v==='string'&&/^(?:\/|https?:\/\/)/.test(v)&&/\.(?:webp|png|jpe?g|svg)(?:$|[?#])/i.test(v))return v
- for(const v of Object.values(value))if(v&&typeof v==='object'){const found=firstImage(v);if(found)return found}return ''
+ for(const key of ['image','cover','img','src','desktopImage','images','heroSlides','slides']){const found=firstImage(value[key]);if(found)return found}
+ for(const [key,v] of Object.entries(value)){if(/^(?:pdf|pdfUrl|brochureUrl|FRANCHISE_BROCHURE_URL|downloadUrl)$/i.test(key))continue;const found=firstImage(v);if(found)return found}return ''
 }
 export function changedItems(previous,next,schema){
  const result=[]

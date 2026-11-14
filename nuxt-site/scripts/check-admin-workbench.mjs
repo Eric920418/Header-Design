@@ -6,7 +6,9 @@ import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
 import {pageEditors,pageBlocks} from '../shared/cms/page-editors.mjs'
 import {editorSchema} from '../server/cms/page-editors.mjs'
-import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue} from '../shared/cms/workbench.mjs'
+import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder} from '../shared/cms/workbench.mjs'
+import {firstImage} from '../shared/cms/workflow.mjs'
+import {blockThumbnail} from '../shared/cms/page-editors.mjs'
 import {valueAt} from '../shared/cms/page-editors.mjs'
 import {normalizeVideos} from '../server/cms/content.mjs'
 import {readableError} from '../server/cms/workspaces.mjs'
@@ -27,6 +29,17 @@ assert.deepEqual(home.filter(b=>!b.secondary).map(b=>b.name),['首頁輪播圖�
 const image='/home-2026/hero/10bn/aikitchen.webp',selected={caption:'AI Kitchen',image,value:{image,description:'介紹'}}
 const before=JSON.stringify(selected);assert.equal(positionContent(home[0],{},selected).image,image);assert.equal(JSON.stringify(selected),before)
 assert.equal(itemThumbnail({name:'來源商品'},{},{image:'/source.webp'}),'/source.webp')
+const privateImage='/media/12345678-1234-1234-1234-123456789abc'
+assert.equal(firstImage(['',privateImage]),privateImage)
+assert.equal(firstImage([{image:''},{image:'https://images.example.test/kitchen.avif?size=small'}]),'https://images.example.test/kitchen.avif?size=small')
+assert.equal(firstImage({images:['/download.pdf?token=x',privateImage]}),privateImage)
+assert.equal(firstImage({href:'/products/sakura',video:'/video.mp4'}),'')
+assert.equal(firstImage({pdfUrl:privateImage,brochureUrl:privateImage}),'','Private PDF files must not be treated as photos')
+assert.equal(itemThumbnail(['',privateImage]),privateImage)
+assert.equal(blockThumbnail({fields:[{documentId:'test',path:'decor',label:'裝飾線稿',schema:{type:'string',format:'media'}},{documentId:'test',path:'poster',label:'影片封面',schema:{type:'string',format:'media'}}]},{test:{decor:'/decor/drawing.png',poster:'/actual-poster.webp'}}),'/actual-poster.webp')
+for(const label of ['文字段落','全台門市據點','型錄 PDF'])assert.match(decodeURIComponent(thumbnailPlaceholder(label)),/^data:image\/svg\+xml,<svg[\s\S]+<\/svg>$/)
+assert.notEqual(thumbnailPlaceholder('文字段落'),thumbnailPlaceholder('全台門市據點'))
+assert(!thumbnailPlaceholder('<script>不可信標題</script>').includes('script'))
 const source=await readFile(new URL('../components/admin/AdminItems.vue',import.meta.url),'utf8')
 const script=source.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(/^import .*$/gm,'')
 const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText

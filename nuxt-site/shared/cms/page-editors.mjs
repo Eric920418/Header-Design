@@ -141,7 +141,8 @@ export function pageSummary(p,rows,documents=[]){
  return{...p,title,sectionTitle:primary?.sectionTitle||p.name,thumbnail:thumbnail||summaries.map(w=>w.thumbnail).find(Boolean)||'',pending:summaries.some(w=>w.pending),updatedAt:summaries.map(w=>w.updatedAt).filter(Boolean).sort((a,b)=>new Date(b)-new Date(a))[0],blocks,searchTerms:[p.name,title,...summaries.map(w=>w.searchTerms),...blocks.flatMap(b=>[b.name,...b.fields.map(f=>f.label)])].join(' ')}
 }
 export function blockThumbnail(block,bodies){
- for(const f of block.fields){const value=valueAt(bodies[f.documentId],f.path);const image=typeof value==='string'&&f.schema.format==='media'?value:firstImage(value);if(image&&!/\.pdf(?:$|[?#])/.test(image))return image}return ''
+ const images=block.fields.filter(f=>!/(?:pdf|brochure)Url$|FRANCHISE_BROCHURE_URL$/i.test(f.path)&&!/(?:PDF|型錄|下載)檔案/.test(f.label)).map(f=>{const value=valueAt(bodies[f.documentId],f.path),image=firstImage(value);return{image,priority:/封面|主視覺/.test(f.label)?0:/裝飾|線稿|標誌|logo|\/decor\//i.test(f.label+' '+image)?2:1}}).filter(i=>i.image)
+ return images.sort((a,b)=>a.priority-b.priority)[0]?.image||''
 }
 export function searchPages(pages,search){
  const words=String(search).trim().toLocaleLowerCase().split(/\s+/).filter(Boolean)
