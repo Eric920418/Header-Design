@@ -4578,3 +4578,8 @@ final result: passed
 - 程式`ec4b8653`已發布，Vercel部署`dpl_GDUYAvyWPtSixV2vaPFKYCBaXfC5`為READY，兩正式網域均指向同一版本；每站26個公開頁面與登入頁讀取成功，未登入的頁面編輯API均回401，新工作台CSS已上線。主站首頁1440／1024／768／390px無水平溢位、無後台版面污染或瀏覽器error。正式後台登入已到期，已保留登入頁等候使用者自行登入；本輪沒有宣稱正式登入後28頁的操作已完成複驗。
 - 本機65份內容、147個版本的指紋與驗收前完全一致；僅刪除本輪兩個隨機測試帳號及其工作階段、預覽快照、測試操作紀錄，未建立媒體或修改來源商品。本機服務停止、測試密碼暫存清除、視窗覆寫還原；正式資料唯讀前後核對為65份內容、151個版本不變。保留SQL連線IP的Node棄用提示及預覽中既有Google Maps Marker棄用警告，不將其誤寫為全程零警告。
 - 其餘證據：`production-http.json`、`production-home-layout.json`、`local-data-protection.json`、`production-before.json`、`production-data-protection.json`與`browser-log.json`；後者保留修正前警告，最後首頁重新載入已無初始化警告。完成紀錄僅提交README，不因文件再觸發一次部署。
+- 使用者重新登入後完成正式補驗：28頁×1440／1024／768／390px，共112組清單與可用第一筆表單檢查，無水平溢位、頁首載入錯誤或固定操作列遮擋；一般選取不載入完整預覽。設計案例四個入口順序正確，搜尋可直達型錄區塊，返回保留「型錄」搜尋條件；輪播6筆分頁、鍵盤開啟編輯及返回原筆焦點通過。
+- 正式未儲存輪播標題可在完整官網預覽看到；關閉後iframe歸零、輸入保留。跨輪播與系列卡片修改顯示2處，切換後兩份輸入仍保留，測完還原為原值。手動展開側欄後點主內容可自動收合；商品名稱唯讀、來源商品清單有真實縮圖，型錄PDF選擇器可開啟且返回列表不丟搜尋。
+- 建商、加盟、品牌系列、廚房裝修指南的完整預覽均收到正式套用完成訊息，本次約3182／3301／1618／3162ms，沒有錯誤；首頁輪播會自動換張，未將等待特定輪播標題的觀察時間當作載入時間。本次成功不能保證所有冷啟動或網路條件下均無延遲，保留原重試及逾時退回。
+- 新增影片表單確認沒有帶入舊文章文字、封面或段落；以無效YouTube網址測預覽驗證，完整中文錯誤含測試文章名稱、欄位及追蹤編號，欄位標記aria-invalid，輸入保留；未儲存離開提醒可見，已捨棄該測試文章。未點正式儲存或更新官網；前後65份內容、151個版本及完整指紋一致，預覽未增加內容版本。
+- 正式證據追加`formal-layout-matrix.json`、`formal-interactions.json`、`formal-preview-results.json`、`formal-interaction-before.json`、`formal-interaction-after.json`及`formal-browser-log.json`；畫面`formal-desktop.png`、`formal-desktop-edit.png`、`formal-mobile-edit.png`、`formal-preview.png`、`formal-preview-builders.png`等皆為正式站實拍。瀏覽器只有既有Google Maps Marker棄用警告，無error或hydration錯誤。螢幕覆寫已還原，正式後台留在首頁；未實測實體Safari，正式寫入／發布不在此次補驗中執行。
