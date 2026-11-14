@@ -28,7 +28,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <h2 id="services-heading" class="home-services-title">
             <span class="bilingual-heading-lead"><span class="home-services-title__eyebrow">Explore Our</span>
             <span class="home-services-title__chinese">{{ cmsCopy.copy.text1 }}{{ cmsCopy.copy.text2 }}</span></span>
-            <span class="bilingual-heading-english" style="color: inherit"><span class="home-services-title__english">Smart Appliances</span><br />
+            <span class="bilingual-heading-english" style="color: #CAA05C"><span class="home-services-title__english">Smart Appliances</span><br />
             Designed For <span class="text-[#CAA05C]">Better Living</span></span>
           </h2>
         </div>
@@ -72,7 +72,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .home-services-title__chinese {
   display: inline-block;
   margin-right: 12px;
-  color: #CAA05C;
+  color: #fff;
   font-family: var(--font-cjk-serif);
   font-size: 28px;
   font-weight: 600;

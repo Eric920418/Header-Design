@@ -4,7 +4,7 @@ import {editingSchema,resourceGuide,homeResources} from './presentation.mjs'
 const view=id=>'view-pages-'+id
 const page=(id,section,name,ids,extra={})=>({id,section,name,ids:[...new Set(ids.flatMap(id=>workspaceFor(id)?.ids||[id]))],...extra})
 export const pageEditors=[
- page('home','home','首頁',homeResources,{href:'/',extra:['site-visuals'],scopes:{'site-visuals':['brandVideoId','images.asset_10b5a86c']}}),
+ page('home','home','首頁',homeResources,{href:'/',extra:['site-visuals'],scopes:{'site-visuals':['brandVideoSrc','images.asset_10b5a86c']}}),
  page('series','design','品牌系列',['data-kitchenSeries'],{href:'/home-style/aikitchen',extra:['data-kitchenStyles']}),
  page('inspiration','design','設計靈感',['custom-cases','catalog-cases',view('design-inspiration-index'),view('design-inspiration-id-')],{href:'/design-inspiration'}),
  page('knowledge','design','廚房裝修指南',['knowledge-articles',view('knowledge-design-systemcabinet'),view('knowledge-index'),view('knowledge-design-slug-')],{href:'/knowledge'}),
@@ -12,7 +12,7 @@ export const pageEditors=[
  ...['sakura','svago','teka'].map((brand,i)=>page('products-'+brand,'products',['SAKURA 廚電','SVAGO','TEKA'][i],['catalog-'+brand],{href:'/products/'+brand,extra:['data-productBrands'],brand})),
  page('product-catalogue','products','廚房商品型錄',[view('catalogues-catalog')],{href:'/catalogues/catalog'}),
  page('stores','service','案例門市',['data-storeCases',view('gallery-index'),view('gallery-slug-')],{href:'/gallery'}),
- page('service','service','服務流程',[view('service-process')],{href:'/service-process',extra:['site-visuals'],scopes:{'site-visuals':['serviceVideoSrc']}}),
+ page('service','service','服務流程',[view('service-process')],{href:'/service-process',extra:['site-visuals'],scopes:{'site-visuals':['serviceVideoSrc','serviceVideoCover']}}),
  page('news','news','優惠消息',[view('news-index')],{href:'/news'}),
  ...['latest','activities','video'].map((category,i)=>page('news-'+category,'news',['最新消息','優惠活動','媒體影音'][i],[view('news-'+category+'-index'),view('news-'+category+'-slug-')],{href:'/news/'+category,extra:['news-articles'],category})),
  page('about','brand','關於我們',[view('about-introduce')],{href:'/about/introduce'}),

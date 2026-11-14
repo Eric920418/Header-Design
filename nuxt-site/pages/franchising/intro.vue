@@ -378,8 +378,12 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 50px; }
 
 .franchise-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -400px; overflow: hidden; border-radius: 24px; }
-.franchise-hero-media :deep(img) { object-position: center 55%; }
-.franchise-hero-media.is-visible :deep(img) { transform-origin: center center; animation: hero-kenburns 5s ease-out 1.51s both; }
+.franchise-hero-media :deep(img) { object-position: right top; }
+.franchise-hero-media.is-visible :deep(img) { transform-origin: right top; animation: franchise-hero-kenburns 5s ease-out 1.51s both; }
+@keyframes franchise-hero-kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.025); }
+}
 
 .franchise-about { padding: 124px 30px 0; background: #fff var(--cms-image-asset_38bb39f2, url('/section-6/franchise/antra-original/h6-bg-3.png')) top right / auto no-repeat; }
 .franchise-about::after { position: absolute; pointer-events: none; content: ""; }

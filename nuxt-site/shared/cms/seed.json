@@ -12208,7 +12208,7 @@
         "text4": "Dream Kitchen",
         "text5": " to Life ",
         "text6": "堅持用專業的服務，依照您的需求提供設計，希望以更完整、更貼心的服務，讓您最滿意。",
-        "field7": "SAKURA 整體廚房品牌影片封面"
+        "field7": "SAKURA 整體廚房導購影片：服務人員協助顧客挑選理想廚房"
       },
       "cmsSettings": {
         "visible": true,
@@ -14292,7 +14292,7 @@
         "text7": "源自於全台數百萬戶家庭生活研究與觀察，櫻花進一步將消費者依不同的家庭型態去探究，用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間及設計風格，與消費者一起打造符合每個家庭的理想廚房。",
         "field8": "/about/advantage",
         "text9": "櫻花優勢",
-        "field10": "SAKURA 品牌承諾影片開場畫面：兩位女性手持食材紙袋"
+        "field10": "SAKURA 整體廚房導購影片：服務人員協助顧客挑選理想廚房"
       },
       "cmsSettings": {
         "visible": true,
@@ -22365,12 +22365,14 @@
         "asset_73c853de": "/services/h6-bg-2.jpg",
         "asset_809f4bbe": "/section-3/store-chengde.jpg",
         "asset_daa09d8d": "/section-5/brand-pavilion/banner.jpg",
-        "asset_10b5a86c": "/home-2026/brand-commitment-opening-frame.webp"
+        "asset_10b5a86c": "/section-3/service-process/video/service-guide-2027-20261027-poster.webp"
       },
       "brandVideoId": "wH374AF9wLI",
       "franchiseVideoId": "sAuAjtpvZYk",
       "serviceVideoSrc": "/section-3/service-process/video/service-guide-2027-20261027.mp4",
-      "pavilionVideoId": "ovXezqQdFYo"
+      "pavilionVideoId": "ovXezqQdFYo",
+      "brandVideoSrc": "/section-3/service-process/video/service-guide-2027-20261027.mp4",
+      "serviceVideoCover": "/section-3/service-process/video/service-guide-2027-20261027-poster.webp"
     },
     "schema": {
       "type": "object",
@@ -22503,6 +22505,16 @@
           "type": "string",
           "format": "youtube",
           "label": "集團品牌館 YouTube 影片 ID"
+        },
+        "brandVideoSrc": {
+          "type": "string",
+          "format": "url",
+          "label": "首頁品牌承諾影片網址（MP4）"
+        },
+        "serviceVideoCover": {
+          "type": "string",
+          "format": "media",
+          "label": "服務流程影片封面"
         }
       },
       "required": [

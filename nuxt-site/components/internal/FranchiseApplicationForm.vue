@@ -131,7 +131,7 @@ const submit = async () => {
         <legend>個人資料</legend>
         <template v-for="group in profileGroups" :key="group.key">
           <label v-if="group.key === 'education'" class="application-field">
-            <span>居住地 *</span>
+            <span>居住地（必填）*</span>
             <input v-model="form.residence" name="residence" autocomplete="street-address" required maxlength="500" :aria-invalid="Boolean(errors.residence)" aria-describedby="application-residence-error" @blur="validateField('residence')" />
             <small v-if="errors.residence" id="application-residence-error">{{ errors.residence }}</small>
           </label>

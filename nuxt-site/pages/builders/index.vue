@@ -269,7 +269,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               />
               <div class="builders-solution__caption">
                 <p>{{ item.lines[1].replaceAll('\n', '') }}</p>
-                <strong>{{ item.value.join(index === 0 ? '+' : '') }}</strong>
+                <strong><span>{{ item.value.join(index === 0 ? '+' : '') }}</span></strong>
                 <h3><span>{{ item.lines[0] }}</span><span>{{ item.lines[2] }}</span></h3>
               </div>
             </article>
@@ -435,9 +435,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
 .builders-strengths-copy { position: sticky; top: var(--strengths-sticky-top, calc(var(--site-header-height, 60px) + 15px)); align-self: start; min-width: 0; height: var(--strengths-copy-height, auto); container-type: inline-size; }
 .builders-strengths-copy[data-strengths-overflow="true"] { position: static; }
-.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: calc(100svh - var(--site-header-height, 60px) - 65px); padding: 35px 0 6px; }
-.builders-strengths-heading h2 { max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
-.builders-strengths-heading h2 b { display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
+.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: calc(100svh - var(--site-header-height, 60px) - 53px); padding: 35px 0 6px; }
+.builders-strengths-heading h2 { color: #caa05c; max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
+.builders-strengths-heading h2 b { color: #fff; display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
 .builders-strengths-heading > p { max-width: 444px; margin: 0; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
 .builders-strengths-list { display: grid; gap: 30px; min-width: 0; }
@@ -445,13 +445,15 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-capability__showcase { width: min(1280px, 100%); margin: 70px auto 0; container-type: inline-size; font-family: var(--font-cjk-sans); }
 .builders-capability__showcase :deep(.builder-image) { height: auto; background: transparent; }
 .builders-solution { margin: 0; overflow: hidden; border-radius: 24px; }
-.builders-solution__copy { margin-top: 0; }
+.builders-solution__copy { margin-top: 0; padding-top: 12px; }
 .builders-solution__copy h3 span,
 .builders-solution__caption h3 span { display: block; }
 .builders-solution__copy h3,
 .builders-solution__copy p { margin: 0; font-family: var(--font-cjk-sans); font-size: 20px; font-weight: 400; line-height: 1.4; }
 .builders-solution__copy .builders-solution__lead { margin-bottom: 8px; }
 .builders-solution__copy .builders-solution__number { min-height: 96px; color: #c4a574; font-size: 80px; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.builders-solution__copy[data-active-strength="2"] .builders-solution__number > span,
+.builders-solution[data-strength-index="2"] .builders-solution__caption strong > span { font-size: .9em; }
 .builders-solution__caption { display: none; padding: 20px 0 6px; font-family: var(--font-cjk-sans); font-size: 20px; line-height: 1.4; }
 .builders-solution__caption p, .builders-solution__caption h3 { margin: 0; font: inherit; }
 .builders-solution__caption strong { color: #c4a574; font-size: 40px; font-weight: 700; }
