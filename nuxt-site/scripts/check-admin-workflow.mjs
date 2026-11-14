@@ -75,7 +75,12 @@ if(process.env.CMS_PAGE_HTTP){
  assert.equal((await call('/api/admin/page-editors','guest')).status,401)
  const before=(await call('/api/admin/documents')).body,home=(await call('/api/admin/page-editors/home')).body
  const allPages=(await call('/api/admin/page-editors')).body;assert.equal(allPages.length,28)
- for(const p of allPages){const r=await call('/api/admin/page-editors/'+p.id);assert.equal(r.status,200,p.id);assert(r.body.blocks.length);const snapshot=await call('/api/admin/page-editors/'+p.id,'admin',{action:'preview',documents:r.body.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(snapshot.status,200,p.id+':'+JSON.stringify(snapshot.body));assert(snapshot.body.previewToken)}
+ for(const p of allPages){
+  const r=await call('/api/admin/page-editors/'+p.id);assert.equal(r.status,200,p.id);assert(r.body.blocks.length)
+  assert(r.body.positionPresentation&&Array.isArray(r.body.positionPresentation.sections),p.id+' must include read-only position information')
+  assert(r.body.documents.every(d=>!Object.hasOwn(d.body,'positionPresentation')&&!Object.hasOwn(d.body,'rowPresentation')),'Preview photographs cannot be added to stored bodies')
+  const snapshot=await call('/api/admin/page-editors/'+p.id,'admin',{action:'preview',documents:r.body.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(snapshot.status,200,p.id+':'+JSON.stringify(snapshot.body));assert(snapshot.body.previewToken)
+ }
  const input={action:'preview',documents:home.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))}
  input.documents.find(d=>d.id==='view-components-home-HomeProject').body.copy.text1='HTTP未儲存驗收'
  assert.equal((await call('/api/admin/page-editors/home','admin',input,false)).status,403)

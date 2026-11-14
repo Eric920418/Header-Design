@@ -106,6 +106,8 @@ const inspirationCopy={
 
 export function fieldPresentation(resourceId,path,schema={}){
  const normalized=path.replace(/^\./,'').replace(/\.\d+(?=\.|$)/g,'.*'),key=normalized.split('.').at(-1)
+ if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁聯繫與參觀預約區','建商首頁的預約區']}
+ if(resourceId==='view-pages-about-introduce'&&normalized==='copy.field10')return{label:'圖片放大視窗',enum:['body'],optionLabels:['全螢幕顯示（固定）'],readOnly:true,advanced:true}
  if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
  if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}
  if(resourceId==='custom-cases'&&normalized==='items')return{label:'自行新增的案例',newItemLabel:'案例'}
@@ -162,6 +164,8 @@ export function editingSchema(schema,resourceId,path=''){
  if(['id','articleId','slug','code'].includes(path.split('.').at(-1))&&schema.format!=='youtube')result.hidden=true
  if(['alt','imageAlt'].includes(path.split('.').at(-1)))result.label='圖片說明'
  if(schema.format==='youtube')result.label='YouTube 影片連結'
+ if(resourceId==='site-visuals'&&path==='brandVideoId')Object.assign(result,{label:'首頁舊版 YouTube 影片（保留）',advanced:true,help:'目前首頁使用影片檔案；此欄保留舊設定，不會取代目前播放的影片。'})
+ if(result.type==='string'&&!result.format&&/名稱|標題|按鈕|日期/.test(result.label))result.singleLine=true
  if(path==='copy')result.hidden=Object.values(result.fields||{}).every(f=>f.hidden)
  return result
 }

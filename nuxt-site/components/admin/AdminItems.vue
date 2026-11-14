@@ -60,7 +60,7 @@ watch(()=>errors.value,()=>{const prefix=(props.path?props.path+'.':''),issue=er
   </template>
   <Teleport v-if="editing&&active" to="#cms-item-editor" :disabled="!workbench">
    <fieldset class="cms-item-form" :disabled="workbench?.busy.value">
-    <div class="cms-item-editor-heading" tabindex="-1"><div><small>正在修改</small><strong>{{ caption(active) }}</strong></div><button type="button" class="cms-button" @click="back">返回清單</button></div>
+    <div class="cms-item-editor-heading" tabindex="-1"><AdminThumbnail :src="thumbnail(active)" :alt="caption(active)+'正在修改的圖片'" :contain="/標誌|標識|圖示/.test(label)" /><div><small>正在修改</small><strong>{{ caption(active) }}</strong></div><button type="button" class="cms-button" @click="back">返回清單</button></div>
     <button v-if="documentId==='knowledge-articles'&&active.value.slug==='systemcabinet'&&selectBlock" type="button" class="cms-button" @click="selectBlock('系統櫃介紹')">修改文章內文 →</button>
     <div class="cms-actions cms-item-tools"><button type="button" class="cms-button" :disabled="rows[0]?.index===active.index" @click="move(active.index,-1)">往前移</button><button type="button" class="cms-button" :disabled="rows.at(-1)?.index===active.index" @click="move(active.index,1)">往後移</button><button v-if="!schema.source" type="button" class="cms-button" :disabled="modelValue.length<=(schema.min||0)" @click="remove(active.index)">移除此項</button></div>
     <slot name="editor" :row="active"><AdminFields :model-value="active.value" :schema="itemSchema" :document-id="documentId" :path="`${path?path+'.':''}${active.index}`" @update:model-value="item(active.index,$event)" /></slot>

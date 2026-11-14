@@ -6,7 +6,8 @@ import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
 import {pageEditors,pageBlocks} from '../shared/cms/page-editors.mjs'
 import {editorSchema} from '../server/cms/page-editors.mjs'
-import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition} from '../shared/cms/workbench.mjs'
+import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent} from '../shared/cms/workbench.mjs'
+import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
 import {blockThumbnail} from '../shared/cms/page-editors.mjs'
 import {valueAt} from '../shared/cms/page-editors.mjs'
@@ -23,6 +24,16 @@ for(const p of pageEditors){
  assert.deepEqual(paths(next),paths(old),p.id+' must preserve every field exactly once')
  assert.equal(JSON.stringify(old),before,'Display grouping cannot mutate server field definitions')
  for(const b of old)assert(next.some(n=>n.aliases.includes(b.id)),'Old block link missing: '+b.id)
+ assert(pagePositions[p.id],p.id+' requires an explicit page position')
+ for(const b of next.filter(b=>!b.secondary)){
+  assert(b.hint&&b.kind,p.id+' '+b.name+' needs a clear purpose and image layout')
+  assert(b.positionIndex||p.id==='inspiration',p.id+' '+b.name+' needs an explicit website location')
+  assert(!/^(標題與說明|整頁共用文字|列表標題與按鈕|圖片集)$/.test(b.name))
+  const values=Object.fromEntries(docs.map(d=>[d.id,d.body])),snapshot=JSON.stringify(values),scene=pagePositionContent(b,values)
+  assert.equal(scene.kind,b.kind);assert.equal(JSON.stringify(values),snapshot,'Position views must never change content')
+  if(scene.image)assert.match(scene.image,/^(?:\/|https?:|data:image)/)
+  assert(!b.fields.some(f=>/版面文字|顯示文字（第|內容欄位/.test(f.label)),p.id+' '+b.name+' contains an unclear field name')
+ }
 }
 const home=workbenchBlocks('home',pageBlocks(pageEditors[0],docs))
 assert.deepEqual(home.filter(b=>!b.secondary).map(b=>b.name),['首頁輪播圖片','品牌系列','設計風格圖片','廚房產品','集團品牌標誌','設計案例','品牌承諾','全台門市據點'])
@@ -38,6 +49,19 @@ previewBodies['view-pages-design-inspiration-index'].copy.text5='套用篩選';p
 const samplePosition=inspirationPosition(previewBodies,presentation)
 assert.equal(samplePosition.copy.text5,'套用篩選');assert.equal(samplePosition.copy.text9,'沒有符合的案例');assert.equal(samplePosition.cases[0].title,'真實案例')
 assert.equal(inspirationPosition(previewBodies,presentation,{caption:'正在編輯',image:'/selected.jpg'}).cases[0].image,'/selected.jpg');assert.equal(JSON.stringify(presentation),serialized,'The schematic cannot mutate published case samples')
+const builders=workbenchBlocks('builders',pageBlocks(pageEditors.find(p=>p.id==='builders'),docs)),builderHero=builders.find(b=>b.name==='頁面最上方')
+assert(builderHero.fields.some(f=>f.path==='copy.field6'),'Builder hero image must be beside its heading, not in brand information')
+previewBodies['view-pages-builders-index'].copy.text2='目前輸入的建商標題';previewBodies['view-pages-builders-index'].copy.field6='/changed-builder.webp'
+const builderScene=pagePositionContent(builderHero,previewBodies,{heroImage:'/published-builder.webp'})
+assert(builderScene.text.some(t=>t.value==='目前輸入的建商標題'));assert.equal(builderScene.image,'/changed-builder.webp');assert.equal(builderScene.heroImage,'/changed-builder.webp')
+const franchise=workbenchBlocks('franchise',pageBlocks(pageEditors.find(p=>p.id==='franchise'),docs))
+assert(franchise.find(b=>b.name==='加盟資料下載').fields.some(f=>f.path==='copy.field53'),'Franchise PDF cover belongs to downloads, not FAQ')
+const faqScene=pagePositionContent(franchise.find(b=>b.name==='加盟常見問題'),previewBodies,{}, {caption:'申請條件',image:'',value:{question:'如何申請？',answer:'先填表'}})
+assert.equal(faqScene.image,'','Text-only selections must not borrow a neighboring photo');assert.equal(faqScene.items[0].value.answer,'先填表')
+const pavilion=workbenchBlocks('pavilions',pageBlocks(pageEditors.find(p=>p.id==='pavilions'),docs)).find(b=>b.name==='品牌館空間介紹')
+previewBodies['view-pages-about-exhibition'].copy.field7='/right-pavilion-photo.webp'
+assert.equal(pagePositionContent(pavilion,previewBodies,{},null,'copy.field7').image,'/right-pavilion-photo.webp','Focusing the second photo must show that photo, not the first one')
+assert.notEqual(thumbnailPlaceholder('申請表單'),thumbnailPlaceholder('品牌優勢問答'));assert.notEqual(thumbnailPlaceholder('網站選單'),thumbnailPlaceholder('板材比較'))
 const image='/home-2026/hero/10bn/aikitchen.webp',selected={caption:'AI Kitchen',image,value:{image,description:'介紹'}}
 const before=JSON.stringify(selected);assert.equal(positionContent(home[0],{},selected).image,image);assert.equal(JSON.stringify(selected),before)
 assert.equal(itemThumbnail({name:'來源商品'},{},{image:'/source.webp'}),'/source.webp')

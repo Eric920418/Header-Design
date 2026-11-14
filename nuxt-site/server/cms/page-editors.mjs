@@ -11,6 +11,8 @@ import {homeGallerySchema} from '../../shared/cms/gallery-cases.mjs'
 import {builderSeriesSchema} from '../../shared/cms/builder-series.mjs'
 import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
 import {caseLibrary} from './case-library.mjs'
+import {pagePositions,positionImage} from '../../shared/cms/positions.mjs'
+import {firstImage} from '../../shared/cms/workflow.mjs'
 
 export const editorSchema=d=>kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson)))))
 export async function pageEditorSummaries(){
@@ -29,10 +31,18 @@ async function rowPresentation(p){
  return result
 }
 async function positionPresentation(p){
- if(p.id!=='inspiration')return
- const [visuals,cases]=await Promise.all([query("SELECT v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.publishedId WHERE d.id=N'site-visuals'"),caseLibrary()])
- const body=visuals.recordset[0]?.body
- return{heroImage:body&&JSON.parse(body).images?.asset_7692def0||'/section-3/store-songzhu.jpg',cases:cases.slice(0,3),detailCase:cases.find(c=>c.route.startsWith('/design-inspiration/'))}
+ const definition=pagePositions[p.id],ids=[...new Set(['site-visuals',...p.ids,...(p.id==='news'||p.id==='franchise'?['news-articles']:[]),...(definition?.sections||[]).flatMap(s=>Array.isArray(s.image)?[s.image[0]]:[])])]
+ const rows=(await query(`SELECT d.id,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.publishedId WHERE d.id IN (${ids.map((_,i)=>'@context'+i).join(',')})`,Object.fromEntries(ids.map((id,i)=>['context'+i,id])))).recordset
+ const bodies=Object.fromEntries(rows.map(d=>[d.id,JSON.parse(d.body)])),heroImage=firstImage(positionImage(definition?.hero,bodies))
+ const result={heroImage,blockImages:Object.fromEntries((definition?.sections||[]).map(s=>[p.id+':'+s.name,firstImage(positionImage(s.image,bodies))])),sections:definition?.sections||[]}
+ if(p.id==='inspiration'){const cases=await caseLibrary();return{...result,heroImage:bodies['site-visuals']?.images?.asset_7692def0||'/section-3/store-songzhu.jpg',cases:cases.slice(0,3),detailCase:cases.find(c=>c.route.startsWith('/design-inspiration/'))}}
+ const articles=bodies['news-articles']?.items?.filter(i=>!p.category||i.summary.category===p.category)||[]
+ if(p.id==='news')result.samples=articles.slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
+ if(p.id==='franchise')result.samples=articles.filter(i=>/franchise/.test(i.slug)).slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
+ if(p.id.startsWith('news-')&&articles[0])result.detailPath=`/news/${p.category}/${articles[0].slug}`
+ if(p.id==='knowledge'){const first=bodies['knowledge-articles']?.items?.find(i=>i.slug!=='systemcabinet');if(first)result.detailPath='/knowledge/design/'+first.slug;result.specialImage=bodies['knowledge-articles']?.items?.find(i=>i.slug==='systemcabinet')?.summary.cover}
+ if(p.id==='stores'&&bodies['data-storeCases']?.storeCases?.[0]){const first=bodies['data-storeCases'].storeCases[0];result.detailPath='/gallery/'+first.slug;result.specialImage=first.cover||first.images?.[0]}
+ return result
 }
 async function pageRows(p,connection){return(await query(`SELECT d.*,v.body,p.body AS publishedBody FROM cms.Documents d LEFT JOIN cms.Versions v ON v.id=d.draftId LEFT JOIN cms.Versions p ON p.id=d.publishedId WHERE d.id IN (${p.ids.map((_,i)=>'@id'+i).join(',')})`,parameters(p),connection)).recordset}
 export async function readPageEditor(id){
@@ -45,6 +55,7 @@ export async function readPageEditor(id){
  }))
  const [rowsForDisplay,position]=await Promise.all([rowPresentation(p),positionPresentation(p)]),summary=pageSummary(p,summaries,documents)
  if(position?.detailCase)summary.blocks=summary.blocks.map(b=>b.preview==='inspiration-detail'?{...b,href:position.detailCase.route}:b)
+ summary.blocks=summary.blocks.map(b=>p.id==='knowledge'&&b.name.startsWith('系統櫃')?{...b,href:'/knowledge/design/systemcabinet'}:position?.detailPath&&b.fields.some(f=>/-slug-$/.test(f.documentId))?{...b,href:position.detailPath}:b)
  return{...summary,documents,rowPresentation:rowsForDisplay,positionPresentation:position}
 }
 const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b)

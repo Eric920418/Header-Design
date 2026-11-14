@@ -1,5 +1,6 @@
 import {workspaceFor,firstImage} from './workflow.mjs'
 import {editingSchema,resourceGuide,homeResources} from './presentation.mjs'
+import {positionGroup,positionField,pagePositions,decoratePosition} from './positions.mjs'
 
 const view=id=>'view-pages-'+id
 const page=(id,section,name,ids,extra={})=>({id,section,name,ids:[...new Set(ids.flatMap(id=>workspaceFor(id)?.ids||[id]))],...extra})
@@ -128,22 +129,25 @@ export function pageBlocks(p,documents){
   const add=(path,s)=>{
    if(s.hidden||Object.hasOwn(s,'fixed'))return
    if(d.id==='data-productBrands'&&!path.startsWith('PRODUCT_BRANDS.'+p.brand))return
-   const name=fieldGroup(p,d.id,path,s),id=p.id+':'+name
+   const previous=fieldGroup(p,d.id,path,s),name=positionGroup(p.id,d.id,path)||previous,id=p.id+':'+name,location=positionField(d.id,path)
    let block=blocks.find(b=>b.id===id)
    if(!block){block={id,name,secondary:name==='顯示與搜尋設定',href:p.id==='home'?resourceGuide(workspaceFor(d.id).id).href:p.href,...(p.id==='inspiration'?inspirationSections[name]:{}),fields:[]};blocks.push(block)}
-   const cleanLabel=name==='顯示與搜尋設定'?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,'').replace('圖片替代文字','圖片說明').replace('按鈕連結','前往頁面')
+   if(previous!==name)block.aliases=[...new Set([...(block.aliases||[]),p.id+':'+previous])]
+   if(p.id==='visuals'&&path.startsWith('images.'))block.aliases=[...new Set([...(block.aliases||[]),'visuals:圖片集'])]
+   const cleanLabel=location?.label||(name==='顯示與搜尋設定'?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,'').replace('圖片替代文字','圖片說明').replace('按鈕連結','前往頁面'))
    const labels=s=>[s.label||'',...Object.values(s.fields||{}).flatMap(labels),...(s.item?labels(s.item):[])]
-   block.fields.push({documentId:d.id,path,label:cleanLabel,searchTerms:labels(s).join(' '),schema:{...s,label:cleanLabel,...(d.id==='news-articles'?{rowFilter:{path:'summary.category',value:p.category},newCategory:p.category}:{})}})
+   block.fields.push({documentId:d.id,path,label:cleanLabel,searchTerms:labels(s).join(' '),schema:{...s,label:cleanLabel,...(location?{singleLine:location.singleLine}:{}),...(/供語音朗讀/.test(cleanLabel)?{advanced:true,help:'供語音朗讀辨識此位置，不顯示於一般官網畫面。'}:{}),...(d.id==='news-articles'?{rowFilter:{path:'summary.category',value:p.category},newCategory:p.category}:{})}})
   }
   if(p.scopes?.[d.id]){for(const path of p.scopes[d.id]){const s=path.split('.').reduce((s,key)=>s?.fields?.[key],schema);if(s)add(path,s)}continue}
   for(const[key,s]of Object.entries(schema.fields||{})){
    if(key==='copy')for(const[k,v]of Object.entries(s.fields||{}))add('copy.'+k,v)
+   else if(p.id==='visuals'&&key==='images')for(const[k,v]of Object.entries(s.fields||{}))add('images.'+k,v)
    else if(d.id==='data-productBrands')for(const[k,v]of Object.entries(s.fields||{}))add(key+'.'+k,v)
    else add(key,s)
   }
  }
- const sorted=order[p.id]||(/^(news-(latest|activities|video))$/.test(p.id)?['文章內容','列表標題與按鈕','整頁共用文字']:[])
- return blocks.sort((a,b)=>Number(a.secondary)-Number(b.secondary)||(sorted.includes(a.name)?sorted.indexOf(a.name):99)-(sorted.includes(b.name)?sorted.indexOf(b.name):99))
+ const sorted=pagePositions[p.id]?.sections.length?pagePositions[p.id].sections.map(s=>s.name):order[p.id]||[]
+ return blocks.map(b=>{const positioned=decoratePosition(p.id,b);return positioned.anchor?{...positioned,href:p.href.split('#')[0]+'#'+positioned.anchor}:positioned}).sort((a,b)=>Number(a.secondary)-Number(b.secondary)||(sorted.includes(a.name)?sorted.indexOf(a.name):99)-(sorted.includes(b.name)?sorted.indexOf(b.name):99))
 }
 export function pageSummary(p,rows,documents=[]){
  const summaries=rows.filter(w=>w.ids.some(id=>p.ids.includes(id)))
