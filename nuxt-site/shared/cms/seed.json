@@ -8874,7 +8874,7 @@
         "text8": "OUR BRAND",
         "text9": "嚴選國內外優質品牌",
         "text10": "Experts Our",
-        "text11": "打造不同定位與多元風格的理想家居空間",
+        "text11": "一站式供應，多樣產品選擇，打造不同定位與多元風格的理想家居空間",
         "field12": "SAKURA KITCHEN 建商整體廚房展示空間",
         "field13": "SAKURA KITCHEN",
         "field14": "即將推出的廚房品牌空間",
@@ -9049,7 +9049,7 @@
             },
             "text11": {
               "type": "string",
-              "label": "Kitchen Designers"
+              "label": "品牌選品說明"
             },
             "field12": {
               "type": "string",

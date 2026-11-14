@@ -4506,3 +4506,9 @@ final result: passed
 - 正式下載取得 20,797,476 bytes，SHA-256 與核對後網頁版完全相符；兩站預覽／下載按鈕均指向新 PDF，雙頁預覽正常載入。主站 320／390／768／1440px 四組無水平溢位，圖片均完整 contain 呈現；第二站 390px 正常。加盟頁三個下載入口均維持 `/franchising/download`，封面更新；已改的「加盟說明會」文字與目的地保留。兩站瀏覽器錯誤紀錄皆空。
 - 證據在 `.gstack/qa-reports/franchise-brochure-20261114/`：`pdf-check.json`、`render-comparison.json`、`cms-before.json`、`cms-update.txt`、`download-hash.json`、`production-layouts.json`、`second-domain.json`、`intro-entries.json`、`browser-errors.json`；畫面 `production-desktop.png`、`production-mobile.png`。PDF 內文未重新撰寫；檔案內數字與條款依提供原稿保留。
 - 未實測實體 Safari 的原生 PDF 檢視／列印，不列為通過；內建瀏覽器原生 PDF 畫布未呈現，以正式下載雜湊、Poppler 雙頁渲染及頁面預覽核對。Vercel 部署 metadata 查詢不可用，不宣稱部署 ID 或同 SHA／READY 證明。臨時分頁關閉、視窗覆寫還原；完成紀錄僅提交 README，不為文件再次部署。
+
+## 2026-11-14 建商專區品牌選品說明文案
+
+- `/builders`「嚴選國內外優質品牌」下方段落更新為「一站式供應，多樣產品選擇，打造不同定位與多元風格的理想家居空間」。原段落重用主標題再串接說明，改為只讀取完整說明欄位，避免前方仍多出舊句；主標題、英文標題、小標籤、圖片及 CSS 保持。
+- 同步頁面預設、seed 與正式 `view-pages-builders-index.copy.text11`，後台欄位命名為「品牌選品說明」。先部署單一欄位呈現再發布正式資料，保留歷史及其他欄位；遇未發布草稿或自訂值即停止。建置與正式回查續記。
+- 精準更新腳本自檢、後台欄位名稱檢查、`pnpm build`（含型別檢查）及 diff 空白檢查通過；正式 dry-run 確認 revision 5、無草稿衝突。段落改前字級 16px、行高 25px、置中與灰色字體作為桌面基準。
