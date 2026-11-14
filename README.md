@@ -4515,3 +4515,9 @@ final result: passed
 - 程式 `4059ab22` 已推送，先確認正式段落不再串接主標題後發布 CMS：revision 5→7，新版本 `cc6bbc4c-3fcc-46ee-bb98-31b5cf957d29`，保留 `3d92f0f4-2ff1-4301-913e-6943bdd6b58d`。交易內核對僅指定說明與欄位名稱更新，其他文件及全部舊版本不變。
 - 兩正式網域均顯示完整指定句子，無重複舊前綴，主標題與英文維持。主站 320／390／768／1440px 四組無水平溢位或段落內溢位，段落保持 16px／25px、灰色置中；手機自然兩行。兩站瀏覽器警告／錯誤紀錄皆空。
 - 證據在 `.gstack/qa-reports/builders-brand-copy-20261114/`：`cms-before.json`、`cms-update.txt`、`before.json`、`production-layouts.json`、`second-domain.json`、`browser-errors.json`；畫面 `production-desktop.png`、`production-mobile.png`。未實測實體 Safari；本輪未改 CSS、圖片、API 或其他頁面文案。臨時分頁關閉、視窗覆寫還原；完成紀錄僅提交 README，不為文件再次部署。
+
+## 2026-11-14 手機底部拍立配圖示放大
+
+- 共用 `FloatingButtons` 在 ≤767px 使用新版拍立配 SVG，僅將圖案本體由 1.375 倍調為 1.6 倍（增加約 16.4%）並重新置中。文字保持 13px 與相同基準線，圖片框 64px、服務列 72px 及底部安全區維持；免費丈量與客服圖示不變。
+- 新手機資產採日期檔名，保留舊圖；≥768px 仍讀原桌面 SVG。不改正式 CMS 的桌面圖示或連結，部署共用元件即可套用全站。建置、尺寸與正式畫面驗收續記。
+- SVG 範圍核對：圖案由 39.7×36.2 調至 46.3×42.1（70px 畫布座標），全部仍在畫布內，底緣及文字區域無重疊；除圖案 transform 外，其餘 SVG 與原版相同。`pnpm build`（含型別檢查）及 diff 檢查通過。
