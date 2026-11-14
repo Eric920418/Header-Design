@@ -4575,3 +4575,6 @@ final result: passed
 - 補查發現首頁初次SSR標題為「修改頁面」、前端取得名稱後為「首頁」的初始化差異，改用固定首頁名稱作為載入前標題；開發模式及最後正式建置均回查無該警告。28頁真實HTTP預覽／權限／CSRF／409檢查及SQL回滾測試再次通過。
 - `pnpm --dir nuxt-site typecheck`、`pnpm --dir nuxt-site build`、工作台／名稱／側欄動效／預覽狀態檢查、`check-admin.cjs`語法及diff檢查通過；完整舊瀏覽器腳本未重跑，本輪以實際Chrome操作及112組尺寸檢查補足。實體Safari、正式登入後流程尚未驗證；完整官網預覽仍受正式站連線速度影響，本機成功不代表歷來正式停滯已根治。
 - 前後畫面與證據位於`.gstack/qa-reports/cms-workbench-20261114/`：`before-editor-20261101.png`為上一版11月1日的實際驗收畫面，`client-reference.png`為甲方本次示意；`local-desktop.png`、`local-desktop-edit.png`、`local-mobile-edit.png`為本次實拍，非相同資料或視窗的一對一比圖。尺寸結果`local-layout-matrix.json`涵蓋28頁×4尺寸。正式發布結果及測試帳號清理續記。
+- 程式`ec4b8653`已發布，Vercel部署`dpl_GDUYAvyWPtSixV2vaPFKYCBaXfC5`為READY，兩正式網域均指向同一版本；每站26個公開頁面與登入頁讀取成功，未登入的頁面編輯API均回401，新工作台CSS已上線。主站首頁1440／1024／768／390px無水平溢位、無後台版面污染或瀏覽器error。正式後台登入已到期，已保留登入頁等候使用者自行登入；本輪沒有宣稱正式登入後28頁的操作已完成複驗。
+- 本機65份內容、147個版本的指紋與驗收前完全一致；僅刪除本輪兩個隨機測試帳號及其工作階段、預覽快照、測試操作紀錄，未建立媒體或修改來源商品。本機服務停止、測試密碼暫存清除、視窗覆寫還原；正式資料唯讀前後核對為65份內容、151個版本不變。保留SQL連線IP的Node棄用提示及預覽中既有Google Maps Marker棄用警告，不將其誤寫為全程零警告。
+- 其餘證據：`production-http.json`、`production-home-layout.json`、`local-data-protection.json`、`production-before.json`、`production-data-protection.json`與`browser-log.json`；後者保留修正前警告，最後首頁重新載入已無初始化警告。完成紀錄僅提交README，不因文件再觸發一次部署。
