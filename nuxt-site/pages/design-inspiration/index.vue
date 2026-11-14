@@ -98,13 +98,14 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </button>
         </form>
 
-        <p v-if="!loading && !error" class="sr-only" aria-live="polite">{{ cmsCopy.copy.text6 }}{{ result?.total ?? 0 }}{{ cmsCopy.copy.text7 }}</p>
+        <p v-if="!loading && !error" id="design-projects-result" class="sr-only" aria-live="polite">{{ cmsCopy.copy.text6 }}{{ result?.total ?? 0 }}{{ cmsCopy.copy.text7 }}</p>
 
         <InternalDesignLoadState :pending="loading" :error="error" @retry="retry" />
         <ul
           v-if="!loading && !error && paginatedCases.length"
           :key="`projects-${selectedForm}-${selectedStyle}-${currentPage}`"
           class="design-projects-grid"
+          id="design-projects-grid"
           aria-label="設計案例"
         >
           <li

@@ -10,6 +10,7 @@ import {homeHeroSchema} from '../../shared/cms/hero-media.mjs'
 import {homeGallerySchema} from '../../shared/cms/gallery-cases.mjs'
 import {builderSeriesSchema} from '../../shared/cms/builder-series.mjs'
 import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
+import {caseLibrary} from './case-library.mjs'
 
 export const editorSchema=d=>kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson)))))
 export async function pageEditorSummaries(){
@@ -27,6 +28,12 @@ async function rowPresentation(p){
  }
  return result
 }
+async function positionPresentation(p){
+ if(p.id!=='inspiration')return
+ const [visuals,cases]=await Promise.all([query("SELECT v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.publishedId WHERE d.id=N'site-visuals'"),caseLibrary()])
+ const body=visuals.recordset[0]?.body
+ return{heroImage:body&&JSON.parse(body).images?.asset_7692def0||'/section-3/store-songzhu.jpg',cases:cases.slice(0,3),detailCase:cases.find(c=>c.route.startsWith('/design-inspiration/'))}
+}
 async function pageRows(p,connection){return(await query(`SELECT d.*,v.body,p.body AS publishedBody FROM cms.Documents d LEFT JOIN cms.Versions v ON v.id=d.draftId LEFT JOIN cms.Versions p ON p.id=d.publishedId WHERE d.id IN (${p.ids.map((_,i)=>'@id'+i).join(',')})`,parameters(p),connection)).recordset}
 export async function readPageEditor(id){
  const p=pageEditor(id);if(!p)fail(404,'找不到要修改的頁面')
@@ -36,7 +43,9 @@ export async function readPageEditor(id){
   const body=d.body?JSON.parse(d.body):{}
   return{id,revision:d.revision,draftId:d.draftId,publishedId:d.publishedId,updatedAt:d.updatedAt,schema:editorSchema(d),body:id.startsWith('catalog-')?await alignSource(id,body):body,versions:history.recordset.filter(v=>v.documentId===id)}
  }))
- return{...pageSummary(p,summaries,documents),documents,rowPresentation:await rowPresentation(p)}
+ const [rowsForDisplay,position]=await Promise.all([rowPresentation(p),positionPresentation(p)]),summary=pageSummary(p,summaries,documents)
+ if(position?.detailCase)summary.blocks=summary.blocks.map(b=>b.preview==='inspiration-detail'?{...b,href:position.detailCase.route}:b)
+ return{...summary,documents,rowPresentation:rowsForDisplay,positionPresentation:position}
 }
 const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b)
 function editable(previous,next,schema,newItem=false){

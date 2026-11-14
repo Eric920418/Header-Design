@@ -97,9 +97,19 @@ const labels={
  北部:'北部縣市',中部:'中部縣市',南部:'南部縣市',東部:'東部縣市',離島:'離島縣市',
 }
 const assetLabels={asset_7692def0:'多頁共用・松竹門市主視覺背景',asset_7a7fece6:'加盟／建商・建築裝飾背景',asset_39582b0b:'加盟／建商・圖文區裝飾背景',asset_18ed1982:'建商・實力區裝飾背景',asset_52e702e4:'加盟／建商・服務區裝飾背景',asset_d0922f9d:'加盟／建商・聯繫區裝飾背景',asset_82b9dd3e:'加盟・介紹與申請區背景',asset_38bb39f2:'品牌承諾・設計線稿背景',asset_b3dcb152:'加盟・轉換區廚房背景',asset_1795db00:'加盟・總部支援區背景',asset_98d304fd:'知識文章・麵包屑背景',asset_44761f00:'服務流程・品牌館主視覺背景',asset_9b0c0f62:'全站・廚房裝飾背景',asset_73c853de:'廚電品牌・區塊背景',asset_809f4bbe:'品牌優勢・情境背景',asset_daa09d8d:'品牌館・影片封面背景',asset_10b5a86c:'首頁品牌承諾・影片封面'}
+const inspirationCopy={
+ text1:{label:'主視覺標題'},text2:{label:'篩選區塊說明',advanced:true,help:'供語音朗讀辨識篩選區塊，不顯示於一般畫面。'},
+ text3:{label:'型式選單名稱',help:'供語音朗讀使用；選單預設仍顯示「全部型式」。'},text4:{label:'風格選單名稱',help:'供語音朗讀使用；選單預設仍顯示「全部風格」。'},text5:{label:'篩選按鈕文字'},
+ text6:{label:'筆數前的文字'},text7:{label:'筆數後的文字'},text8:{label:'案例圖片上的按鈕文字',help:'滑鼠移到案例圖片時顯示。'},
+ text9:{label:'提示標題'},text10:{label:'提示說明',singleLine:false},text11:{label:'查看全部案例按鈕文字'},
+}
 
 export function fieldPresentation(resourceId,path,schema={}){
  const normalized=path.replace(/^\./,'').replace(/\.\d+(?=\.|$)/g,'.*'),key=normalized.split('.').at(-1)
+ if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
+ if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}
+ if(resourceId==='custom-cases'&&normalized==='items')return{label:'自行新增的案例',newItemLabel:'案例'}
+ if(resourceId==='catalog-cases'&&normalized==='items')return{label:'既有案例',help:'可調整顯示與順序；案例名稱與圖片由原系統提供。'}
  if(resourceId==='view-components-home-HomeStyleMarquee'&&normalized==='styles')return{label:'設計風格',rowLabel:'zh',rowImage:'images'}
  if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='regions')return{label:'地區與縣市設定',editor:'store-regions'}
  if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='stores')return{label:'門市',idGenerator:'store',newItemLabel:'新增門市',template:{id:0,region:'北部',city:'',name:'',address:'',phone:''}}
@@ -145,7 +155,7 @@ export function editingSchema(schema,resourceId,path=''){
   result.editor='hero-images'
   for(const key of ['image','mobileImage','desktopFocusX','desktopFocusY','mobileFocusX','mobileFocusY'])result.fields[key]={...result.fields[key],hidden:true}
  }
- if(path==='items'&&['news-articles','knowledge-articles','custom-cases'].includes(resourceId)){result.label=resourceId==='news-articles'?'消息、活動與影片':resourceId==='knowledge-articles'?'廚房知識文章':'設計案例';result.newItemLabel=resourceId==='news-articles'?'消息或活動':resourceId==='knowledge-articles'?'文章':'案例'}
+ if(path==='items'&&['news-articles','knowledge-articles','custom-cases'].includes(resourceId)){result.label=resourceId==='news-articles'?'消息、活動與影片':resourceId==='knowledge-articles'?'廚房知識文章':'自行新增的案例';result.newItemLabel=resourceId==='news-articles'?'消息或活動':resourceId==='knowledge-articles'?'文章':'案例'}
  if(resourceId==='data-builders'&&path==='builderProjectCards'||resourceId==='data-franchise'&&path==='franchiseProcessSteps')result.hidden=true
  if(path==='sitemapGroups.*.links.*')result.itemLabels=['連結文字','連結網址']
  if(path.split('.').at(-1)==='imageLayout'||path.split('.').at(-1)==='logoClass'&&!(resourceId==='view-components-home-HomeServices'&&path==='services.*.logoClass'))result.hidden=true

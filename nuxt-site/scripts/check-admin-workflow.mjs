@@ -124,6 +124,17 @@ if(process.env.CMS_WORKFLOW_DB==='1'){
   await assert.rejects(()=>changePageEditor('home',publishHome,{...user,role:'editor'},tx),e=>e.statusCode===403)
   const homePublished=await changePageEditor('home',publishHome,user,tx);assert(homePublished.documents.every(d=>d.draftId===d.publishedId))
   await assert.rejects(()=>changePageEditor('home',{...homeInput,action:'save'},user,tx),e=>e.statusCode===409)
+  const inspirationDocs=[]
+  for(const id of pageEditor('inspiration').ids){const d=(await query('SELECT d.*,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.draftId WHERE d.id=@id',{id},tx)).recordset[0];inspirationDocs.push({id,revision:d.revision,body:JSON.parse(d.body)})}
+  inspirationDocs.find(d=>d.id==='view-pages-design-inspiration-index').body.copy.text5='交易內篩選文字'
+  inspirationDocs.find(d=>d.id==='view-pages-design-inspiration-id-').body.copy.text3='交易內返回文字'
+  const inspirationVersions=(await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n
+  const inspirationPreview=await changePageEditor('inspiration',{action:'preview',documents:inspirationDocs},user,tx);assert(inspirationPreview.previewToken)
+  assert.equal((await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n,inspirationVersions)
+  const inspirationSaved=await changePageEditor('inspiration',{action:'save',documents:inspirationDocs},user,tx)
+  assert.equal((await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n,inspirationVersions+2)
+  assert(inspirationSaved.documents.filter(d=>['view-pages-design-inspiration-index','view-pages-design-inspiration-id-'].includes(d.id)).every(d=>d.draftId!==d.publishedId))
+  console.log('PASS: inspiration filter and detail text save together as two drafts; their preview creates no content versions; this transaction is rolled back')
   console.log('PASS: whole-page preview creates no versions, two modified blocks save atomically, unchanged documents create no versions, editor publish denied and stale page returns 409')
   console.log('PASS: read-only preview, draft save, admin-only publish, unpublish and stale-edit conflict against real SQL inside a rollback-only transaction.')
  }finally{await tx.rollback()}

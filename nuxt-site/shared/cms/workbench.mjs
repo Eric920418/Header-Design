@@ -13,7 +13,7 @@ const home=[
 ]
 // Display groups only; original document paths and server write scopes stay intact.
 export function workbenchBlocks(page,blocks){
- const combined=page==='inspiration'?['案例內容','案例顯示與順序','列表標題與按鈕']:page==='knowledge'||page.startsWith('news-')?['文章內容','列表標題與按鈕']:page==='stores'?['門市與案例','列表標題與按鈕']:[]
+ const combined=page==='knowledge'||page.startsWith('news-')?['文章內容','列表標題與按鈕']:page==='stores'?['門市與案例','列表標題與按鈕']:[]
  const title=page==='inspiration'?'案例列表':page==='stores'?'門市與案例':page==='knowledge'?'文章列表':'消息列表'
  const result=[]
  for(const b of blocks){
@@ -21,7 +21,7 @@ export function workbenchBlocks(page,blocks){
   if(existing){existing.fields.push(...b.fields);existing.aliases.push(b.id);continue}
   const h=page==='home'&&home.find(i=>b.id==='home:'+i[0])
   const fields=b.fields.map(f=>f.documentId==='news-articles'?{...f,schema:{...f.schema,label:({'news-latest':'最新消息','news-activities':'優惠活動','news-video':'媒體影音'})[page]||f.label,newItemLabel:({'news-latest':'消息','news-activities':'活動','news-video':'影片'})[page]||'文章'}}:f)
-  result.push({...b,name:h?.[1]||(merge?title:b.name),hint:h?.[2]||(b.fields.some(f=>f.schema.type==='array')?'圖片、文字與順序':'標題、介紹與按鈕'),kind:h?.[3]||(/門市|品牌館/.test(b.name)?'stores':/型錄/.test(b.name)?'catalogue':'content'),fields,aliases:[b.id]})
+  result.push({...b,name:h?.[1]||(merge?title:b.name),hint:b.hint||h?.[2]||(b.fields.some(f=>f.schema.type==='array')?'圖片、文字與順序':'標題、介紹與按鈕'),kind:h?.[3]||(/門市|品牌館/.test(b.name)?'stores':/型錄/.test(b.name)?'catalogue':'content'),fields,aliases:[b.id,...b.aliases||[]]})
  }
  if(page==='home')result.sort((a,b)=>(home.findIndex(i=>a.id==='home:'+i[0])+1||99)-(home.findIndex(i=>b.id==='home:'+i[0])+1||99))
  return result
@@ -50,4 +50,10 @@ export function positionContent(block,bodies,selected){
  const values=block?.fields.map(f=>({f,value:valueAt(bodies[f.documentId],f.path)}))||[]
  const text=values.filter(({f,value})=>typeof value==='string'&&f.schema.type==='string'&&!f.schema.format)
  return{title:selected?.caption||text.find(({f})=>/標題/.test(f.label))?.value||block?.name||'',image:selected?.image||blockThumbnail(block||{fields:[]},bodies),description:selected?.value?.description||selected?.value?.summary?.excerpt||text.find(({f})=>/介紹/.test(f.label))?.value||'',value:selected?.value,kind:block?.kind||'content'}
+}
+export function inspirationPosition(bodies,presentation={},selected){
+ const copy=bodies['view-pages-design-inspiration-index']?.copy||{},detail=bodies['view-pages-design-inspiration-id-']?.copy||{}
+ const cases=(presentation.cases||[]).slice(0,3)
+ if(selected)cases.splice(0,1,{title:selected.caption,image:selected.image})
+ return{copy,detail,cases,detailCase:presentation.detailCase||cases[0],heroImage:presentation.heroImage}
 }

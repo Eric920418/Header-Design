@@ -72,13 +72,26 @@ const order={
  builders:['主視覺','品牌介紹','建商實力','三大服務','售後服務','合作夥伴','聯繫預約'],
  franchise:['主視覺','加盟夥伴分享','品牌介紹','品牌優勢','加盟邀請','品牌行銷','流程說明','加盟資格','總部支援','常見問題','加盟資料下載','最新消息'],
  about:['品牌沿革','品牌理念','品牌識別'],
- inspiration:['案例內容','案例顯示與順序','列表標題與按鈕','整頁共用文字'],
+ inspiration:['主視覺標題','案例管理與顯示排序','案例篩選列','搜尋結果提示','無符合案例提示','案例內頁文字'],
  series:['系列內容','系列卡片'],
  'builder-series':['主視覺','品牌優勢','品牌系列'],
  knowledge:['文章內容','系統櫃介紹','系統櫃材質','系統櫃挑選步驟','系統櫃推薦案例','文章結語','列表標題與按鈕','整頁共用文字'],
 }
+const inspirationSections={
+ '主視覺標題':{hint:'頁面最上方的大標題',icon:'hero',preview:'inspiration-hero',aliases:['inspiration:列表標題與按鈕'],href:'/design-inspiration#design-projects-title'},
+ '案例管理與顯示排序':{hint:'新增案例、顯示與順序',icon:'list',preview:'inspiration-cases',aliases:['inspiration:案例內容','inspiration:案例顯示與順序','inspiration:案例列表'],href:'/design-inspiration#design-projects-grid'},
+ '案例篩選列':{hint:'選單名稱與篩選按鈕',icon:'filter',preview:'inspiration-filters',help:'選單選項依案例的型式與風格產生；此處修改名稱與按鈕文字。',href:'/design-inspiration#design-projects-filter-title'},
+ '搜尋結果提示':{hint:'符合條件的筆數說明',icon:'search',preview:'inspiration-results',help:'這段文字供語音朗讀使用，筆數依實際篩選結果產生。',href:'/design-inspiration#design-projects-result'},
+ '無符合案例提示':{hint:'沒有搜尋結果時的說明',icon:'empty',preview:'inspiration-empty',help:'沒有符合篩選條件的案例時，才會顯示這些文字。',href:'/design-inspiration#design-projects-filter-title'},
+ '案例內頁文字':{hint:'規格標題與返回按鈕',icon:'article',preview:'inspiration-detail',aliases:['inspiration:整頁共用文字'],help:'這些文字會套用到設計靈感的案例內頁；門市案例請至「案例門市」修改。'},
+}
 function fieldGroup(p,id,path,schema){
  if(path==='cmsSettings'||path==='seo')return '顯示與搜尋設定'
+ if(p.id==='inspiration'){
+  if(['custom-cases','catalog-cases'].includes(id))return '案例管理與顯示排序'
+  if(id===view('design-inspiration-id-'))return '案例內頁文字'
+  if(id===view('design-inspiration-index'))return path==='copy.text1'?'主視覺標題':/^copy\.text[2-5]$/.test(path)?'案例篩選列':/^copy\.text[67]$/.test(path)?'搜尋結果提示':path==='copy.text8'?'案例管理與顯示排序':'無符合案例提示'
+ }
  if(id==='site-visuals'&&p.id!=='visuals')return p.id==='home'?'品牌承諾':p.id==='franchise'?'加盟夥伴分享':'品牌影片'
  if(id==='data-brandPavilions'&&p.id==='builders')return '聯繫預約'
  if(id===view('knowledge-design-systemcabinet')){
@@ -117,7 +130,7 @@ export function pageBlocks(p,documents){
    if(d.id==='data-productBrands'&&!path.startsWith('PRODUCT_BRANDS.'+p.brand))return
    const name=fieldGroup(p,d.id,path,s),id=p.id+':'+name
    let block=blocks.find(b=>b.id===id)
-   if(!block){block={id,name,secondary:name==='顯示與搜尋設定',href:p.id==='home'?resourceGuide(workspaceFor(d.id).id).href:p.href,fields:[]};blocks.push(block)}
+   if(!block){block={id,name,secondary:name==='顯示與搜尋設定',href:p.id==='home'?resourceGuide(workspaceFor(d.id).id).href:p.href,...(p.id==='inspiration'?inspirationSections[name]:{}),fields:[]};blocks.push(block)}
    const cleanLabel=name==='顯示與搜尋設定'?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,'').replace('圖片替代文字','圖片說明').replace('按鈕連結','前往頁面')
    const labels=s=>[s.label||'',...Object.values(s.fields||{}).flatMap(labels),...(s.item?labels(s.item):[])]
    block.fields.push({documentId:d.id,path,label:cleanLabel,searchTerms:labels(s).join(' '),schema:{...s,label:cleanLabel,...(d.id==='news-articles'?{rowFilter:{path:'summary.category',value:p.category},newCategory:p.category}:{})}})
@@ -149,7 +162,7 @@ export function searchPages(pages,search){
  return pages.flatMap(p=>{
   if(!words.length)return[{page:p}]
   const match=text=>words.every(w=>text.toLocaleLowerCase().includes(w))
-  const found=p.blocks.filter(b=>match(p.title+' '+b.name+' '+b.fields.map(f=>f.label+' '+(f.searchTerms||'')).join(' ')))
+  const found=p.blocks.filter(b=>match(p.title+' '+b.name+' '+(b.aliases||[]).map(a=>a.split(':').at(-1)).join(' ')+' '+b.fields.map(f=>f.label+' '+(f.searchTerms||'')).join(' ')))
   return found.length?found.map(block=>({page:p,block})):match(p.searchTerms||p.title)?[{page:p}]:[]
  })
 }

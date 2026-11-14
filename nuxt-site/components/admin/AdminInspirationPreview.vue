@@ -1,0 +1,31 @@
+<script setup lang="ts">
+import {ArrowRight,ChevronDown,SlidersHorizontal} from 'lucide-vue-next'
+import {inspirationPosition} from '~/shared/cms/workbench.mjs'
+const props=defineProps<{kind:string;bodies:Record<string,any>;presentation?:any;selected?:any;focusedField?:string;pageTitle:string}>()
+const view=computed(()=>inspirationPosition(props.bodies,props.presentation,props.selected))
+const target=(part:string)=>props.kind==='inspiration-'+part
+</script>
+<template>
+ <div class="cms-inspiration-position">
+  <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
+  <div class="cms-inspiration-hero" :class="{'is-target':target('hero')}">
+   <AdminThumbnail :src="view.heroImage" alt="設計靈感頁面主視覺背景" /><div class="cms-inspiration-hero-copy"><h3>{{ view.copy.text1 }}</h3><span>首頁 / {{ pageTitle }}</span></div>
+  </div>
+  <div class="cms-inspiration-screen">
+   <template v-if="!target('detail')">
+    <div class="cms-inspiration-filters" :class="{'is-target':target('filters')}">
+     <span :class="{'is-focused':focusedField==='copy.text3'}" :aria-label="view.copy.text3">全部型式 <ChevronDown :size="11" /></span>
+     <span :class="{'is-focused':focusedField==='copy.text4'}" :aria-label="view.copy.text4">全部風格 <ChevronDown :size="11" /></span>
+     <span class="cms-inspiration-filter-button" :class="{'is-focused':focusedField==='copy.text5'}">{{ view.copy.text5 }} <ArrowRight :size="15" /></span>
+    </div>
+    <div v-if="target('results')" class="cms-inspiration-reading is-target"><small>語音朗讀提示的位置示意</small><p>{{ view.copy.text6 }}<b>筆數</b>{{ view.copy.text7 }}</p></div>
+    <div v-if="target('empty')" class="cms-inspiration-empty is-target"><SlidersHorizontal :size="28" /><h4>{{ view.copy.text9 }}</h4><p>{{ view.copy.text10 }}</p><span>{{ view.copy.text11 }}</span></div>
+    <div v-else class="cms-inspiration-cards" :class="{'is-target':target('cases')}">
+     <article v-for="(c,index) in view.cases" :key="c.slug||index"><div><AdminThumbnail :src="c.image" :alt="c.title+'案例圖片'" /><span v-if="target('cases')||focusedField==='copy.text8'" class="cms-inspiration-view">{{ view.copy.text8 }}</span></div><h4>{{ c.title }}</h4><i aria-hidden="true" /><i aria-hidden="true" /></article>
+     <div v-if="!view.cases.length" class="cms-inspiration-no-cases"><AdminThumbnail alt="案例清單位置" /><span>案例圖片與標題顯示於此</span></div>
+    </div>
+   </template>
+   <div v-else class="cms-inspiration-detail is-target"><h4>{{ view.detailCase?.title }}</h4><AdminThumbnail v-if="view.detailCase?.image" :src="view.detailCase.image" :alt="view.detailCase.title+'案例內頁圖片'" /><p v-else>{{ view.detail.text1 }}</p><section><strong>{{ view.detail.text2 }}</strong><span>型式／風格等案例資料</span></section><span class="cms-inspiration-return">← {{ view.detail.text3 }}</span></div>
+  </div>
+ </div>
+</template>
