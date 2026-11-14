@@ -4512,3 +4512,6 @@ final result: passed
 - `/builders`「嚴選國內外優質品牌」下方段落更新為「一站式供應，多樣產品選擇，打造不同定位與多元風格的理想家居空間」。原段落重用主標題再串接說明，改為只讀取完整說明欄位，避免前方仍多出舊句；主標題、英文標題、小標籤、圖片及 CSS 保持。
 - 同步頁面預設、seed 與正式 `view-pages-builders-index.copy.text11`，後台欄位命名為「品牌選品說明」。先部署單一欄位呈現再發布正式資料，保留歷史及其他欄位；遇未發布草稿或自訂值即停止。建置與正式回查續記。
 - 精準更新腳本自檢、後台欄位名稱檢查、`pnpm build`（含型別檢查）及 diff 空白檢查通過；正式 dry-run 確認 revision 5、無草稿衝突。段落改前字級 16px、行高 25px、置中與灰色字體作為桌面基準。
+- 程式 `4059ab22` 已推送，先確認正式段落不再串接主標題後發布 CMS：revision 5→7，新版本 `cc6bbc4c-3fcc-46ee-bb98-31b5cf957d29`，保留 `3d92f0f4-2ff1-4301-913e-6943bdd6b58d`。交易內核對僅指定說明與欄位名稱更新，其他文件及全部舊版本不變。
+- 兩正式網域均顯示完整指定句子，無重複舊前綴，主標題與英文維持。主站 320／390／768／1440px 四組無水平溢位或段落內溢位，段落保持 16px／25px、灰色置中；手機自然兩行。兩站瀏覽器警告／錯誤紀錄皆空。
+- 證據在 `.gstack/qa-reports/builders-brand-copy-20261114/`：`cms-before.json`、`cms-update.txt`、`before.json`、`production-layouts.json`、`second-domain.json`、`browser-errors.json`；畫面 `production-desktop.png`、`production-mobile.png`。未實測實體 Safari；本輪未改 CSS、圖片、API 或其他頁面文案。臨時分頁關閉、視窗覆寫還原；完成紀錄僅提交 README，不為文件再次部署。
