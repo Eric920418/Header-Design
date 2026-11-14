@@ -4539,3 +4539,4 @@ final result: passed
 - 兩網域均回查首頁新片／新封面、白色中文／金色英文、加盟必填標示、建商金色英文與獨立管理平台縮字；第二網域另以確定為 390×844 的新視窗核對。正式首頁及服務流程 MP4 都實際點擊播放、時間前進、讀到 149.696 秒長度並正常暫停，服務流程封面確為新片擷取的選材場景。居住地空白離焦顯示既有完整錯誤；未送出任何申請。
 - 瀏覽器無 error 紀錄；部分經過首頁的分頁仍有既有 Google Maps Marker 棄用警告，保留完整紀錄且本輪不改地圖。驗收證據與程式化核對在 `.gstack/qa-reports/site-adjustments-20261114/`：`verification-result.json`、`cms-before.json`、`cms-update.txt`、首頁／表單／加盟照片／建商 DOM 量測、第二網域手機資料、播放資料及錯誤紀錄；實際畫面含 `production-home-products-desktop.png`、`production-home-products-mobile.png`、`production-franchise-320.png`、`production-franchise-desktop.png`、`production-form-mobile.png` 及 `second-service-mobile.png`。
 - 本輪為上述指定區塊回歸，未宣稱全站重新驗收；未實測實體 iPhone Safari，未在本輪再次播放完整 149.7 秒影片，亦未送出表單。前台及 CMS 其餘內容保持，視窗覆寫還原、11 個臨時分頁關閉，本機服務停止；完成紀錄僅提交 README，不為文件再次部署。
+- 停止本機服務時另讀到一筆累積的 CMS 連線 `Connection lost - read ECONNRESET`／`ESOCKET` 訊息，該行未帶發生時間，不能判定為停止動作造成；正式發布後三文件唯讀回查已成功，正式瀏覽器亦無 error。本輪未修改資料庫連線機制，不能將本機訊息寫成正式站已重現的故障。
