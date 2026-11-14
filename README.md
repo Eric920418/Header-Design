@@ -4622,3 +4622,4 @@ final result: passed
 - 最終`pnpm --dir nuxt-site typecheck`與正式建置通過；28頁正常登入HTTP讀取／預覽、權限／CSRF／409、工作台／名稱及真實SQL回滾檢查通過。額外回查最終門市篩選的10區×四尺寸共40組；28頁在1440與390px的第一個可用單筆編輯／返回共56組通過，26頁有清單編輯、2頁為直接表單。每筆編輯保留圖片或示意，返回原筆焦點，沒有水平溢出。
 - 建商兩個區塊的未儲存輸入、切換保留與完整官網效果通過，測後全部還原；品牌館第二張圖片的鍵盤焦點切換通過。消息共用文字的完整預覽確實開到文章內頁並呈現未儲存文字，關閉後iframe為0。瀏覽器本輪無error、warning或hydration問題，未實測實體Safari。
 - 證據位於`.gstack/qa-reports/cms-all-pages-20261114/`：`position-coverage.json`、`local-layouts.json`、`local-stores-latest.json`、`local-forms.json`、`local-interactions.json`、`local-browser-log.json`及實拍`local-desktop.png`／`local-mobile.png`。本機65份內容、147個版本及完整指紋不變；本輪兩個隨機測試帳號、登入／預覽／操作紀錄已清除，沒有建立媒體或改來源資料；本機服務停止，暫存憑證與資料快照移除，視窗覆寫還原。正式發布結果續記。
+- 最後同步驗證與錯誤訊息使用的欄位名稱，避免輸入失敗時仍出現舊「第幾段」名稱；原名稱只保留在舊連結對照中，沒有改動儲存路徑或驗證限制。

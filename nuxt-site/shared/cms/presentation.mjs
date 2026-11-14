@@ -1,6 +1,7 @@
 import copyFields from './presentation-copy.json' with {type:'json'}
 import { homeHeroSchema, HOME_HERO_ID } from './hero-media.mjs'
 import { homeGallerySchema, HOME_GALLERY_ID } from './gallery-cases.mjs'
+import {positionField} from './positions.mjs'
 
 // Presentation only: resource IDs, stored schemas and website content stay intact.
 const target=(label,href)=>({label,href})
@@ -140,7 +141,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.cover')return{label:'案例門市列表封面',help:'用於案例門市列表；設計靈感列表使用下方圖片集中的第一張圖片。'}
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.images')return{label:'案例內頁圖片集',help:'第一張圖片也用於設計靈感列表的門市案例卡片。'}
  const copy=copyFields[resourceId]?.[normalized]
- if(copy)return copy
+ if(copy){const position=positionField(resourceId,normalized);return position?{...copy,label:position.label,singleLine:position.singleLine,positionLegacyLabel:copy.label}:copy}
  if(assetLabels[key])return{label:assetLabels[key]}
  if(labels[key])return{label:labels[key]}
  if(key==='*')return{label:schema.type==='object'?'項目內容':schema.format==='media'?'圖片檔案':'文字內容'}

@@ -11,7 +11,7 @@ import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
 import {blockThumbnail} from '../shared/cms/page-editors.mjs'
 import {valueAt} from '../shared/cms/page-editors.mjs'
-import {normalizeVideos} from '../server/cms/content.mjs'
+import {normalizeVideos,validate} from '../server/cms/content.mjs'
 import {readableError} from '../server/cms/workspaces.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
@@ -54,6 +54,9 @@ assert(builderHero.fields.some(f=>f.path==='copy.field6'),'Builder hero image mu
 previewBodies['view-pages-builders-index'].copy.text2='目前輸入的建商標題';previewBodies['view-pages-builders-index'].copy.field6='/changed-builder.webp'
 const builderScene=pagePositionContent(builderHero,previewBodies,{heroImage:'/published-builder.webp'})
 assert(builderScene.text.some(t=>t.value==='目前輸入的建商標題'));assert.equal(builderScene.image,'/changed-builder.webp');assert.equal(builderScene.heroImage,'/changed-builder.webp')
+const badBuilder=structuredClone(previewBodies['view-pages-builders-index']);badBuilder.copy.text2=42
+const builderSchema=docs.find(d=>d.id==='view-pages-builders-index').schema
+assert.throws(()=>validate(badBuilder,builderSchema),e=>{const issue=readableError(e,'view-pages-builders-index',editingSchema(builderSchema,'view-pages-builders-index'),badBuilder);assert.equal(issue.fieldErrors[0].path,'copy.text2');assert.match(issue.message,/主標題第一行/);return true})
 const franchise=workbenchBlocks('franchise',pageBlocks(pageEditors.find(p=>p.id==='franchise'),docs))
 assert(franchise.find(b=>b.name==='加盟資料下載').fields.some(f=>f.path==='copy.field53'),'Franchise PDF cover belongs to downloads, not FAQ')
 const faqScene=pagePositionContent(franchise.find(b=>b.name==='加盟常見問題'),previewBodies,{}, {caption:'申請條件',image:'',value:{question:'如何申請？',answer:'先填表'}})

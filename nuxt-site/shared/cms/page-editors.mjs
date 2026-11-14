@@ -106,7 +106,7 @@ function fieldGroup(p,id,path,schema){
  if(id===view('design-inspiration-index')||id===view('knowledge-index')||id===view('gallery-index')||/^view-pages-news-(latest|activities|video)-index$/.test(id))return '列表標題與按鈕'
  if(groups[id]?.[path])return groups[id][path]
  if(path.startsWith('copy.')){
-  const context=schema.label?.split('・')
+  const context=(schema.positionLegacyLabel||schema.label)?.split('・')
   if(context?.length>1){
    if(context[0]==='案例介紹'&&/catalogue/.test(p.id))return '型錄封面與下載'
    if(context[0]==='流程說明'&&p.id==='about')return '品牌理念'
