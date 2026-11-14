@@ -4521,3 +4521,6 @@ final result: passed
 - 共用 `FloatingButtons` 在 ≤767px 使用新版拍立配 SVG，僅將圖案本體由 1.375 倍調為 1.6 倍（增加約 16.4%）並重新置中。文字保持 13px 與相同基準線，圖片框 64px、服務列 72px 及底部安全區維持；免費丈量與客服圖示不變。
 - 新手機資產採日期檔名，保留舊圖；≥768px 仍讀原桌面 SVG。不改正式 CMS 的桌面圖示或連結，部署共用元件即可套用全站。建置、尺寸與正式畫面驗收續記。
 - SVG 範圍核對：圖案由 39.7×36.2 調至 46.3×42.1（70px 畫布座標），全部仍在畫布內，底緣及文字區域無重疊；除圖案 transform 外，其餘 SVG 與原版相同。`pnpm build`（含型別檢查）及 diff 檢查通過。
+- 程式 `27702d69` 已推送，主站建商頁與第二正式網址加盟下載頁均實際載入新手機 SVG，無圖片載入失敗或瀏覽器警告／錯誤。全站共用同一元件，不需修改 CMS 或重寫資料庫；不是逐頁 RWD 全站重驗。
+- 本機與正式 320／390／430／767／768／1440px 檢查通過：手機服務列維持 72px，三顆圖片框仍為 64px 且按鈕區、文字與目的地不變，無水平溢位；≤767px 使用新手機圖案，≥768px 使用原桌面圖。1440px 三顆圖的原來源、尺寸及按鈕尺寸與改前完全相同。
+- 證據在 `.gstack/qa-reports/mobile-pailipei-20261114/`：`svg-check.json`、`before-mobile.json`、`before-desktop.json`、`production-desktop.json`、`production-mobile.json`、`local-layouts.json`、`production-layouts.json`、`second-domain.json`、`browser-errors.json`、`verification-result.json`；畫面 `before-mobile.png`、`local-mobile.png`、`production-mobile.png`、`production-service-bar.png`。未實測實體 Safari 或重新操作三個外部服務；連結值核對保持。本機服務停止、臨時分頁關閉及視窗覆寫還原，完成紀錄僅提交 README。
