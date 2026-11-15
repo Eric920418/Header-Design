@@ -2,7 +2,7 @@ import {workspaceNames} from '../../shared/cms/navigation.mjs'
 import {query,transaction,fail} from './database.mjs'
 import {getDocument,changeDocument,validate,normalizeVideos} from './content.mjs'
 import {homeHeroSchema} from '../../shared/cms/hero-media.mjs'
-import {homeGallerySchema} from '../../shared/cms/gallery-cases.mjs'
+import {homeGallerySchema,customCasesSchema} from '../../shared/cms/gallery-cases.mjs'
 import {builderSeriesSchema} from '../../shared/cms/builder-series.mjs'
 import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
 import {editingSchema,resourceGuide} from '../../shared/cms/presentation.mjs'
@@ -47,7 +47,7 @@ export async function changeDocumentGroup(w,input,user,connection,checkScope){
    const d=input.action==='preview'?await getDocument(item.id,tx):((await query('SELECT * FROM cms.Documents WITH(UPDLOCK,HOLDLOCK) WHERE id=@id',{id:item.id},tx)).recordset[0])
    if(!d)fail(404,'此內容已不存在')
    if(d.revision!==item.revision)fail(409,'有人已修改這個區塊。你的輸入已保留，請先查看最新內容再決定如何調整。')
-   const validationSchema=kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson))))),schema=editingSchema(validationSchema,d.id)
+   const validationSchema=customCasesSchema(d.id,kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson)))))),schema=editingSchema(validationSchema,d.id)
    try{
     const versions=(await query('SELECT id,body FROM cms.Versions WHERE id=@draft OR id=@published',{draft:d.draftId,published:d.publishedId},tx)).recordset
     const previous=versions.find(v=>v.id===d.draftId),published=versions.find(v=>v.id===d.publishedId)

@@ -100,7 +100,11 @@ try{
    if(id==='custom-cases'){await call('/api/design-inspiration/cases/'+item.id,'GET',null,'guest',404);await call('/api/design-inspiration/cases/'+item.id+'?cmsPreview=custom-cases');await call('/api/design-inspiration/cases/'+item.id+'?cmsPreview=custom-cases','GET',null,'guest',401)}
    else{const alias=id==='news-articles'?'data-news':'data-kitchenGuides',key=id==='news-articles'?'newsArticles':'KITCHEN_GUIDE_ARTICLES';assert(!(await call('/api/content/'+alias,'GET',null,'guest'))[key].some(i=>i.id===item.id));assert((await call('/api/content/'+alias+'?preview='+id))[key].some(i=>i.id===item.id))}
    await publishReal(id);const html=await call(route,'GET',null,'guest');assert(html.includes(id==='custom-cases'?item.title:item.summary.title))
-   if(id==='custom-cases'){assert((await call('/api/design-inspiration/filters')).forms.includes('驗收型式'));assert((await call('/api/design-inspiration/cases?form='+encodeURIComponent('驗收型式'))).items.some(i=>i.id===item.id))}
+   if(id==='custom-cases'){
+    assert((await call('/api/design-inspiration/filters')).forms.includes('驗收型式'));assert((await call('/api/design-inspiration/cases?form='+encodeURIComponent('驗收型式'))).items.some(i=>i.id===item.id))
+    await saveReal(id,{...d.body,items:[{...item,enabled:false},...d.body.items]});await call('/api/design-inspiration/cases/'+item.id,'GET',null,'guest');await publishReal(id)
+    assert(!(await call('/api/content/custom-cases','GET',null,'guest')).items.some(i=>i.id===item.id));assert(!(await call('/api/design-inspiration/cases','GET',null,'guest')).items.some(i=>i.id===item.id));assert(!(await call('/api/design-inspiration/filters','GET',null,'guest')).forms.includes('驗收型式'));assert(!(await call('/api/admin/case-library')).some(i=>i.slug===item.id));await call('/api/design-inspiration/cases/'+item.id,'GET',null,'guest',404)
+   }
    await restoreReal(id)
   }
   const d=await call('/api/admin/documents/catalog-sakura'),body=structuredClone(d.body),product=body.items.find(i=>i.enabled);product.enabled=false

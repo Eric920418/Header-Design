@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
+import {randomUUID} from 'node:crypto'
 import {workspaces,workspaceFor,changedItems,firstImage} from '../shared/cms/workflow.mjs'
 import {editingSchema,fieldPresentation} from '../shared/cms/presentation.mjs'
 import {publicContent,contentAliases} from '../shared/cms/public-content.mjs'
@@ -90,8 +91,18 @@ if(process.env.CMS_PAGE_HTTP){
  assert.equal((await call('/api/admin/page-editors/home','editor',{...input,action:'publish'})).status,403)
  const stale=structuredClone(input);stale.documents[0].revision--;assert.equal((await call('/api/admin/page-editors/home','admin',stale)).status,409)
  const invalid=structuredClone(input);invalid.documents.find(d=>d.id==='view-components-home-HomeProject').body.copy.text1=42;const issue=await call('/api/admin/page-editors/home','admin',invalid);assert.equal(issue.status,400);assert(issue.body.data.fieldErrors?.length)
+ const inspiration=(await call('/api/admin/page-editors/inspiration')).body,custom=inspiration.documents.find(d=>d.id==='custom-cases'),caseId=randomUUID(),hiddenId=randomUUID(),caseForm='驗收型式-'+caseId
+ assert.equal(custom.schema.fields.items.item.fields.enabled.type,'boolean')
+ const sample={...custom.schema.fields.items.template,id:caseId,title:'未儲存的自建案例',description:'只供預覽',cover:'/home-2026/hero/10bn/aikitchen.webp',images:['/home-2026/hero/10bn/aikitchen.webp'],form:caseForm,style:'現代風',specs:[]}
+ custom.body.items.push({...sample,enabled:true},{...sample,id:hiddenId,enabled:false,style:'隱藏風格-'+hiddenId})
+ const casesPreview=await call('/api/admin/page-editors/inspiration','admin',{action:'preview',documents:inspiration.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(casesPreview.status,200)
+ const draft='cmsPreview=page:inspiration&cmsDraft='+casesPreview.body.previewToken
+ const visibleCases=await call('/api/design-inspiration/cases?'+draft+'&form='+encodeURIComponent(caseForm));assert.equal(visibleCases.status,200);assert.deepEqual(visibleCases.body.items.map(i=>i.id),[caseId])
+ assert.equal((await call('/api/design-inspiration/cases/'+caseId+'?'+draft)).status,200);assert.equal((await call('/api/design-inspiration/cases/'+hiddenId+'?'+draft)).status,404)
+ const caseFilters=await call('/api/design-inspiration/filters?'+draft);assert(caseFilters.body.forms.includes(caseForm));assert(!caseFilters.body.styles.includes('隱藏風格-'+hiddenId))
+ const projected=await call('/api/content/custom-cases?preview=page:inspiration&cmsDraft='+casesPreview.body.previewToken);assert(projected.body.items.some(i=>i.id===caseId));assert(!projected.body.items.some(i=>i.id===hiddenId));assert.equal((await call('/api/design-inspiration/cases?'+draft,'guest')).status,401)
  assert.deepEqual((await call('/api/admin/documents')).body,before)
- console.log('PASS: all 28 page reads/previews, real HTTP login, private page APIs, CSRF, unsaved snapshot, preview ownership, editor publish denied, 409 and readable field errors; website documents unchanged')
+ console.log('PASS: all 28 page reads/previews, login/permissions/CSRF/409, custom case display across list/detail/filters/content API, authenticated snapshots and unchanged website documents')
 }
 if(process.env.CMS_WORKFLOW_DB==='1'){
  assert.equal(process.env.NUXT_DESIGN_DB_SERVER||'127.0.0.1','127.0.0.1','Write checks require the local database')

@@ -20,8 +20,8 @@ const target=(part:string)=>props.kind==='inspiration-'+part
     </div>
     <div v-if="target('results')" class="cms-inspiration-reading is-target"><small>語音朗讀提示的位置示意</small><p>{{ view.copy.text6 }}<b>筆數</b>{{ view.copy.text7 }}</p></div>
     <div v-if="target('empty')" class="cms-inspiration-empty is-target"><SlidersHorizontal :size="28" /><h4>{{ view.copy.text9 }}</h4><p>{{ view.copy.text10 }}</p><span>{{ view.copy.text11 }}</span></div>
-    <div v-else class="cms-inspiration-cards" :class="{'is-target':target('cases')}">
-     <article v-for="(c,index) in view.cases" :key="c.slug||index"><div><AdminThumbnail :src="c.image" :alt="c.title+'案例圖片'" /><span v-if="target('cases')||focusedField==='copy.text8'" class="cms-inspiration-view">{{ view.copy.text8 }}</span></div><h4>{{ c.title }}</h4><i aria-hidden="true" /><i aria-hidden="true" /></article>
+    <div v-else class="cms-inspiration-cards" :class="{'is-target':target('cases')||target('card-button')}">
+     <article v-for="(c,index) in view.cases" :key="c.slug||index" :class="{'is-selected':c.selected}"><div><AdminThumbnail :src="c.image" :alt="c.title+'案例圖片'" /><span v-if="target('cases')||target('card-button')||focusedField==='copy.text8'" class="cms-inspiration-view">{{ view.copy.text8 }}</span></div><h4>{{ c.title }}</h4><small v-if="c.enabled===false" class="cms-case-hidden-note">下架後不顯示</small><i aria-hidden="true" /><i aria-hidden="true" /></article>
      <div v-if="!view.cases.length" class="cms-inspiration-no-cases"><AdminThumbnail alt="案例清單位置" /><span>案例圖片與標題顯示於此</span></div>
     </div>
    </template>

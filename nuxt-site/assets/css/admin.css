@@ -761,6 +761,8 @@
 .cms .cms-inspiration-filters .is-focused{box-shadow:0 0 0 2px var(--cms-gold);}
 .cms .cms-inspiration-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding:7px 5px;}
 .cms .cms-inspiration-cards article{min-width:0;}
+.cms .cms-inspiration-cards article.is-selected{outline:2px solid var(--cms-gold);outline-offset:4px;border-radius:7px;}
+.cms .cms-case-hidden-note{display:block;color:#805d20;font-size:10px;}
 .cms .cms-inspiration-cards article>div{position:relative;}
 .cms .cms-inspiration-cards img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:9px;}
 .cms .cms-inspiration-cards h4{font-size:10px;line-height:1.6;margin:7px 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-weight:600;}
@@ -783,6 +785,35 @@
 .cms .cms-inspiration-return{justify-self:start;}
 .cms .cms-inspiration-no-cases{grid-column:1/-1;display:grid;justify-items:center;gap:10px;font-size:12px;color:#777;}
 .cms .cms-inspiration-no-cases img{width:160px;aspect-ratio:3/2;}
+.cms .cms-case-scope{display:flex;align-items:flex-start;gap:7px;margin:0 0 13px;padding:9px 10px;border-radius:5px;background:#fbf0d8;font-size:12px;line-height:1.7;}
+.cms .cms-case-scope svg{flex-shrink:0;margin-top:2px;}
+.cms .cms-case-scope a{text-decoration:underline;text-underline-offset:3px;}
+.cms .cms-case-manager .cms-items-tools{gap:8px;margin-bottom:10px;}
+.cms .cms-case-manager .cms-items-tools input{min-width:0;flex:1;width:0;min-height:44px;border:1px solid var(--cms-line);border-radius:5px;padding:8px 10px;background:#fff;}
+.cms .cms-case-manager .cms-items-tools>.cms-button{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;min-height:44px;}
+.cms .cms-case-table{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;font-size:12px;}
+.cms .cms-case-table th{padding:9px 4px;background:#f1f0ed;text-align:left;font-weight:600;}
+.cms .cms-case-table th:first-child{width:44px;border-radius:5px 0 0 0;}
+.cms .cms-case-table th:nth-child(3){width:58px;text-align:center;}
+.cms .cms-case-table th:last-child{width:54px;border-radius:0 5px 0 0;text-align:center;}
+.cms .cms-case-table td{padding:6px 2px;border-bottom:1px solid var(--cms-line);vertical-align:middle;}
+.cms .cms-case-table tr.is-selected td{background:#fff7e8;}
+.cms .cms-case-table tr.is-dragging{opacity:.5;}
+.cms .cms-case-table tr.is-drop-target td{box-shadow:inset 0 3px var(--cms-gold);}
+.cms .cms-case-table .cms-item-open{display:flex;align-items:center;gap:8px;min-width:0;min-height:64px;width:100%;padding:0 3px;border:0;border-radius:4px;background:transparent;text-align:left;}
+.cms .cms-case-table .cms-item-open>img,.cms .cms-case-table .cms-item-open>.cms-thumbnail{width:54px;height:52px;flex:0 0 54px;object-fit:cover;border-radius:5px;}
+.cms .cms-case-table .cms-item-open>span{min-width:0;overflow-wrap:anywhere;font-size:13px;line-height:1.5;}
+.cms .cms-case-table .cms-item-edit{min-width:48px;min-height:44px;padding:5px 7px;font-size:12px;}
+.cms .cms-case-order{display:flex;align-items:center;justify-content:center;gap:2px;width:44px;min-height:48px;padding:0;border:0;border-radius:4px;background:transparent;cursor:grab;font-size:13px;}
+.cms .cms-case-order:active{cursor:grabbing;}
+.cms .cms-case-order:disabled{cursor:not-allowed;opacity:.4;}
+.cms .cms-case-status{display:block;min-width:48px;min-height:44px;margin:auto;padding:5px 4px;border:1px solid #b9d79a;border-radius:5px;background:#edf7e3;color:#335b20;font-size:12px;}
+.cms .cms-case-status.is-hidden{border-color:#d9d5cd;background:#eeece7;color:#655f53;}
+.cms .cms-case-sort-help{margin:8px 0;padding:8px 9px;border-radius:4px;background:#faf3e4;font-size:11px;line-height:1.8;color:#5f523b;}
+.cms .cms-case-order-scope{margin-top:10px;}
+.cms .cms-imported-cases{margin-top:8px;border:1px solid var(--cms-line);border-radius:6px;padding:9px;min-width:0;}
+.cms .cms-imported-cases>summary{cursor:pointer;min-height:28px;font-size:13px;font-weight:600;}
+.cms .cms-imported-cases[open]>.cms-field-help{margin:7px 0 10px;}
 @media(min-width:1280px){.cms .cms-inspiration-workbench .cms-page-edit-layout{grid-template-columns:210px minmax(250px,.8fr) minmax(450px,1.5fr);}}
 .cms .cms-position-workbench .cms-page-form .cms-field input{min-height:42px;}
 .cms .cms-page-position-scene{border:1px solid var(--cms-line);border-radius:5px;overflow:hidden;background:#faf9f6;}

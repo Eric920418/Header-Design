@@ -53,7 +53,7 @@ export function positionContent(block,bodies,selected){
 export function inspirationPosition(bodies,presentation={},selected){
  const copy=bodies['view-pages-design-inspiration-index']?.copy||{},detail=bodies['view-pages-design-inspiration-id-']?.copy||{}
  const cases=(presentation.cases||[]).slice(0,3)
- if(selected)cases.splice(0,1,{title:selected.caption,image:selected.image})
+ if(selected)cases.splice(0,1,{title:selected.caption,image:selected.image,selected:true,enabled:selected.value?.enabled!==false})
  return{copy,detail,cases,detailCase:presentation.detailCase||cases[0],heroImage:presentation.heroImage}
 }
 export function pagePositionContent(block,bodies,presentation={},selected,focusedPath=''){

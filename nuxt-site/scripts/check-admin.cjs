@@ -45,8 +45,19 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
    page.once('dialog',d=>d.accept());await go('/admin/content?section=design&edit=view-pages-design-inspiration-id-&q=案例&page=2');assert.match(page.url(),/sitePage=inspiration/);await page.locator('.cms-block-title').waitFor()
    await go('/admin/content?section=franchise&sitePage=franchise');await page.locator('.cms-block-title').waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth))
   }
-  assert.deepEqual((await api('documents')).body,before,'UI preview checks must not modify website documents')
+  await page.setViewportSize({width:1440,height:960});await go('/admin/content?section=design&sitePage=inspiration&block='+encodeURIComponent('inspiration:案例管理與顯示排序'))
+  for(const name of ['操作驗收 A','操作驗收 B','操作驗收 C']){
+   await page.getByRole('button',{name:'新增案例',exact:true}).click();await page.getByRole('textbox',{name:'案例標題',exact:true}).fill(name)
+   await page.locator('[data-cms-document="custom-cases"][data-cms-path$=".cover"]').getByRole('button').click();await page.getByRole('textbox',{name:'搜尋圖片或檔案',exact:true}).fill('aikitchen');await page.getByRole('button',{name:'選擇 aikitchen.webp',exact:true}).click();await page.getByRole('button',{name:'返回清單',exact:true}).click()
+  }
+  await page.locator('.cms-case-order').first().dragTo(page.locator('.cms-case-table tbody tr').nth(2));assert.deepEqual(await page.locator('.cms-case-table .cms-item-open').allTextContents(),['操作驗收 B','操作驗收 C','操作驗收 A'])
+  await page.locator('.cms-case-order').first().press('ArrowDown');assert.deepEqual(await page.locator('.cms-case-table .cms-item-open').allTextContents(),['操作驗收 C','操作驗收 B','操作驗收 A'])
+  await page.locator('.cms-case-status').last().click();await page.getByText('下架後不顯示',{exact:true}).waitFor();await page.getByRole('searchbox',{name:'搜尋案例標題',exact:true}).fill('操作驗收 B');assert.equal(await page.locator('.cms-case-table tbody tr').count(),1);assert.equal(await page.locator('.cms-case-order').isEnabled(),false);await page.getByRole('searchbox',{name:'搜尋案例標題',exact:true}).fill('')
+  await select('案例卡片按鈕',1440);await page.getByRole('textbox',{name:'案例圖片上的按鈕文字',exact:true}).fill('查看驗收案例');assert((await page.locator('.cms-inspiration-view').allTextContents()).every(t=>t==='查看驗收案例'));await select('案例管理與顯示排序',1440);assert.deepEqual(await page.locator('.cms-case-table .cms-item-open').allTextContents(),['操作驗收 C','操作驗收 B','操作驗收 A'])
+  for(const width of [1440,1024,768,390]){await page.setViewportSize({width,height:960});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.equal(await page.locator('.cms-effect-viewport iframe').count(),0);await page.screenshot({path:join(shots,`${width}-case-table.png`),fullPage:true})}
+  await page.locator('.cms-case-table .cms-item-edit').first().click();await page.getByRole('textbox',{name:'案例標題',exact:true}).waitFor();await page.getByRole('button',{name:'往後移',exact:true}).click();await page.getByRole('button',{name:'返回清單',exact:true}).click();assert(await page.locator('.cms-case-table .cms-item-open[aria-pressed="true"]').evaluate(el=>el===document.activeElement))
+  assert.deepEqual((await api('documents')).body,before,'UI preview checks must not modify website documents');page.once('dialog',d=>d.accept())
   await go('/');assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[])
-  console.log('PASS: four design entries, search/back conditions, single-item editing, cross-block input retention, on-demand preview, old URLs, four widths and unchanged website documents. Screenshots: '+shots)
+  console.log('PASS: all-page positions, case table drag/keyboard sorting, display changes, filtering, card text, retained input/focus, four widths, on-demand previews and unchanged website documents. Screenshots: '+shots)
  }finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1})

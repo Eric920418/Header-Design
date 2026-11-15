@@ -111,7 +111,8 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='view-pages-about-introduce'&&normalized==='copy.field10')return{label:'圖片放大視窗',enum:['body'],optionLabels:['全螢幕顯示（固定）'],readOnly:true,advanced:true}
  if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
  if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}
- if(resourceId==='custom-cases'&&normalized==='items')return{label:'自行新增的案例',newItemLabel:'案例'}
+ if(resourceId==='custom-cases'&&normalized==='items')return{label:'自行建置案例',newItemLabel:'案例',editor:'case-table',rowLabel:'title',rowImage:'cover'}
+ if(resourceId==='custom-cases'&&normalized.startsWith('items.*.')){const label={title:'案例標題',description:'案例介紹',form:'廚房型式',style:'設計風格',enabled:'在官網顯示'}[key];if(label)return{label,...(['title','form','style'].includes(key)?{singleLine:true}:{})}}
  if(resourceId==='catalog-cases'&&normalized==='items')return{label:'既有案例',help:'可調整顯示與順序；案例名稱與圖片由原系統提供。'}
  if(resourceId==='view-components-home-HomeStyleMarquee'&&normalized==='styles')return{label:'設計風格',rowLabel:'zh',rowImage:'images'}
  if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='regions')return{label:'地區與縣市設定',editor:'store-regions'}
@@ -158,7 +159,7 @@ export function editingSchema(schema,resourceId,path=''){
   result.editor='hero-images'
   for(const key of ['image','mobileImage','desktopFocusX','desktopFocusY','mobileFocusX','mobileFocusY'])result.fields[key]={...result.fields[key],hidden:true}
  }
- if(path==='items'&&['news-articles','knowledge-articles','custom-cases'].includes(resourceId)){result.label=resourceId==='news-articles'?'消息、活動與影片':resourceId==='knowledge-articles'?'廚房知識文章':'自行新增的案例';result.newItemLabel=resourceId==='news-articles'?'消息或活動':resourceId==='knowledge-articles'?'文章':'案例'}
+ if(path==='items'&&['news-articles','knowledge-articles','custom-cases'].includes(resourceId)){result.label=resourceId==='news-articles'?'消息、活動與影片':resourceId==='knowledge-articles'?'廚房知識文章':'自行建置案例';result.newItemLabel=resourceId==='news-articles'?'消息或活動':resourceId==='knowledge-articles'?'文章':'案例'}
  if(resourceId==='data-builders'&&path==='builderProjectCards'||resourceId==='data-franchise'&&path==='franchiseProcessSteps')result.hidden=true
  if(path==='sitemapGroups.*.links.*')result.itemLabels=['連結文字','連結網址']
  if(path.split('.').at(-1)==='imageLayout'||path.split('.').at(-1)==='logoClass'&&!(resourceId==='view-components-home-HomeServices'&&path==='services.*.logoClass'))result.hidden=true

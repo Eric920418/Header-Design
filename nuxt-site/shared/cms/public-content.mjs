@@ -2,6 +2,7 @@ export const contentAliases={'data-kitchenGuides':'knowledge-articles','data-kit
 // Keep saved, published and unsaved previews on the same data projection.
 export function publicContent(id,input){
  const body=JSON.parse(JSON.stringify(input))
+ if(id==='custom-cases')body.items=body.items.filter(i=>i.enabled!==false)
  if(contentAliases[id]){
   const all=body.items.filter(i=>i.enabled)
   if(id==='data-kitchenGuides')return{KITCHEN_GUIDE_ARTICLES:all.map(i=>({...i.summary,id:i.id,detailRoute:`/knowledge/design/${i.slug}`,legacyUrl:`https://www.sakura-kitchenlife.com.tw/knowledge/design/${i.slug}`}))}

@@ -38,7 +38,9 @@ for(const p of pageEditors){
 const home=workbenchBlocks('home',pageBlocks(pageEditors[0],docs))
 assert.deepEqual(home.filter(b=>!b.secondary).map(b=>b.name),['首頁輪播圖片','品牌系列','設計風格圖片','廚房產品','集團品牌標誌','設計案例','品牌承諾','全台門市據點'])
 const inspiration=workbenchBlocks('inspiration',pageBlocks(pageEditors.find(p=>p.id==='inspiration'),docs))
-assert.deepEqual(inspiration.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','案例管理與顯示排序','案例篩選列','搜尋結果提示','無符合案例提示','案例內頁文字'])
+assert.deepEqual(inspiration.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','案例管理與顯示排序','案例篩選列','搜尋結果提示','案例卡片按鈕','無符合案例提示','案例內頁文字'])
+assert.deepEqual(inspiration.find(b=>b.preview==='inspiration-card-button').fields.map(f=>f.path),['copy.text8'])
+assert(!inspiration.find(b=>b.preview==='inspiration-cases').fields.some(f=>f.path==='copy.text8'))
 for(const old of ['案例內容','案例顯示與順序','案例列表','列表標題與按鈕','整頁共用文字'])assert(inspiration.some(b=>b.aliases.includes('inspiration:'+old)))
 for(const i of Array.from({length:11},(_,i)=>i+1))assert.equal(inspiration.flatMap(b=>b.fields).filter(f=>f.documentId==='view-pages-design-inspiration-index'&&f.path==='copy.text'+i).length,1)
 const filterFields=inspiration.find(b=>b.preview==='inspiration-filters').fields
@@ -86,7 +88,7 @@ thumbnailProps.contain=false;thumbnailProps.alt='品牌標誌縮圖';assert.equa
 thumbnailProps.alt='一般照片';assert.equal(thumbnailContext.mark.value,false)
 const source=await readFile(new URL('../components/admin/AdminItems.vue',import.meta.url),'utf8')
 const script=source.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(/^import .*$/gm,'')
-const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
+const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema,reorder,startDrag,drop,toggleVisibility,dragged};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
 const model=reactive({modelValue:Array.from({length:8},(_,i)=>({id:'row-'+i,title:'內容 '+i,image:'/image.webp'})),schema:{type:'array',label:'輪播內容',item:{type:'object',fields:{id:{type:'string'},title:{type:'string'}}},template:{id:'',title:''}},documentId:'home',path:'slides'})
 const state=ref({}),errors=ref([]),workbench={focused:ref(''),editing:ref(''),selection:ref(null),metadata:ref({}),busy:ref(false),select:()=>{}},emitted=[]
 const context={ref,computed,watch,nextTick,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
@@ -103,5 +105,17 @@ errors.value=[{documentId:'home',path:'slides.5.title',message:'請填寫'}];awa
 model.schema.source=true;assert.equal(ui.itemSchema.value.fields.id.readOnly,true)
 errors.value=[];model.documentId='news-articles';model.path='items';model.modelValue=[];model.schema={...docs.find(d=>d.id==='news-articles').schema.fields.items,newCategory:'activities',newItemLabel:'活動'};ui.add();await nextTick()
 assert.equal(ui.active.value.value.summary.category,'activities');assert.equal(ui.active.value.value.summary.categoryLabel,'優惠活動');assert.equal(ui.active.value.value.summary.excerpt,'');assert.equal(ui.active.value.value.summary.cover,'');assert.equal(ui.active.value.value.detail.sections.length,0,'New articles must not copy a real existing article')
+model.documentId='custom-cases';model.schema=editingSchema(docs.find(d=>d.id==='custom-cases').schema,'custom-cases').fields.items;model.modelValue=Array.from({length:8},(_,i)=>({...JSON.parse(JSON.stringify(model.schema.template)),id:'case-'+i,title:'案例 '+i}));state.value={};workbench.focused.value='';workbench.editing.value='';await nextTick()
+ui.choose(ui.rows.value[0]);workbench.focused.value='catalog-cases:items';workbench.editing.value='catalog-cases:items';const oldCases=JSON.stringify(model.modelValue);ui.reorder(0,2);await nextTick();assert.equal(workbench.focused.value,'custom-cases:items');assert.equal(workbench.editing.value,'','Moving a custom case must leave an unrelated source editor')
+assert.equal(model.modelValue.slice(0,3).map(i=>i.id).join(','),'case-1,case-2,case-0','Drag ordering inserts the selected case, not swaps two rows');assert.equal(ui.active.value.key,'case-0');assert.notEqual(JSON.stringify(model.modelValue),oldCases)
+ui.toggleVisibility(ui.active.value);await nextTick();assert.equal(ui.active.value.value.enabled,false);assert.equal(workbench.selection.value.value.enabled,false);ui.toggleVisibility(ui.active.value);await nextTick();assert.equal(ui.active.value.value.enabled,true)
+ui.reorder(2,6);await nextTick();assert.equal(ui.page.value,2);assert.equal(ui.active.value.key,'case-0');assert.equal(ui.visible.value[0].key,'case-0')
+ui.search.value='案例 0';await nextTick();const filteredSnapshot=JSON.stringify(model.modelValue);ui.reorder(6,0);assert.equal(JSON.stringify(model.modelValue),filteredSnapshot,'Filtering must not reorder hidden rows')
+ui.search.value='';await nextTick();workbench.busy.value=true;ui.reorder(0,1);ui.toggleVisibility(ui.rows.value[0]);assert.equal(JSON.stringify(model.modelValue),filteredSnapshot);workbench.busy.value=false
+const transfer={value:'',effectAllowed:'',setData(type,value){this.value=value},getData(){return this.value}},dragEvent={dataTransfer:transfer,preventDefault(){}}
+ui.startDrag(dragEvent,ui.rows.value[0]);ui.drop(dragEvent,ui.rows.value[2]);await nextTick();assert.equal(transfer.effectAllowed,'move');assert.equal(ui.active.value.index,2);assert.equal(ui.dragged.value,'')
+const protectedSnapshot=JSON.stringify(model.modelValue);ui.startDrag(dragEvent,ui.rows.value[0]);transfer.value='unrelated-table';ui.drop(dragEvent,ui.rows.value[2]);assert.equal(JSON.stringify(model.modelValue),protectedSnapshot,'Foreign drag data must not move cases')
+for(const [from,to]of [[-1,2],[0,99],[NaN,0],[0,1.5]])ui.reorder(from,to);assert.equal(JSON.stringify(model.modelValue),protectedSnapshot)
+ui.add();await nextTick();assert.equal(ui.active.value.value.title,'新增案例');assert.equal(ui.active.value.value.enabled,true);assert.equal(workbench.editing.value,'custom-cases:items')
 scope.stop()
-console.log('PASS: all 28 pages retain every field and old link; screenshot home order; actual list handlers cover six-row paging, selection without writes, right-pane edits, retained input, error location and source read-only fields')
+console.log('PASS: all 28 pages retain every field and old link; screenshot home order; list selection/edit/focus; custom case insertion sorting, drag scope, cross-page movement, search/busy guards and visibility toggles')

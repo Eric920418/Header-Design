@@ -7,14 +7,14 @@ import {createDraftPreview} from './previews.mjs'
 import {pageEditors,pageEditor,pageBlocks,pageSummary,valueAt,withValue} from '../../shared/cms/page-editors.mjs'
 import {editingSchema} from '../../shared/cms/presentation.mjs'
 import {homeHeroSchema} from '../../shared/cms/hero-media.mjs'
-import {homeGallerySchema} from '../../shared/cms/gallery-cases.mjs'
+import {homeGallerySchema,customCasesSchema} from '../../shared/cms/gallery-cases.mjs'
 import {builderSeriesSchema} from '../../shared/cms/builder-series.mjs'
 import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
 import {caseLibrary} from './case-library.mjs'
 import {pagePositions,positionImage} from '../../shared/cms/positions.mjs'
 import {firstImage} from '../../shared/cms/workflow.mjs'
 
-export const editorSchema=d=>kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson)))))
+export const editorSchema=d=>customCasesSchema(d.id,kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson))))))
 export async function pageEditorSummaries(){
  const [rows,schemas]=await Promise.all([workspaceSummaries(),query('SELECT d.id,d.schemaJson,COALESCE(p.body,v.body) AS body FROM cms.Documents d LEFT JOIN cms.Versions p ON p.id=d.publishedId LEFT JOIN cms.Versions v ON v.id=d.draftId')])
  const documents=schemas.recordset.map(d=>({id:d.id,schema:editorSchema(d),body:d.body?JSON.parse(d.body):{}}))
