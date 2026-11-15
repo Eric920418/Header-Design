@@ -30,8 +30,8 @@ function metadata(r:any){return workbench?.metadata.value?.[props.documentId||''
 function thumbnail(r:any){return itemThumbnail(r.value,props.schema,metadata(r))}
 function announce(){if(!workbench||workbench.focused.value!==scope.value)return;workbench.selection.value=active.value?{scope:scope.value,caption:caption(active.value),image:thumbnail(active.value),value:active.value.value,documentId:props.documentId,path:props.path,index:active.value.index,href:metadata(active.value).href}:null}
 function focusRow(){nextTick(()=>root.value?.querySelector<HTMLElement>(`[data-row-key="${CSS.escape(selected.value||'')}"] .cms-item-open`)?.focus())}
-function choose(row:any,edit=false){if(!row)return;selected.value=row.key;if(workbench){workbench.focused.value=scope.value;workbench.editing.value=edit?scope.value:'';workbench.returnFocus=focusRow;announce();workbench.select?.(edit)}nextTick(()=>{if(edit||!workbench)document.querySelector<HTMLElement>(workbench?'#cms-item-editor .cms-item-editor-heading':'.cms-item-editor-heading')?.focus()})}
-function back(){if(workbench){workbench.editing.value='';focusRow()}else{selected.value=undefined;nextTick(()=>root.value?.querySelector<HTMLElement>('.cms-item-open')?.focus())}}
+function choose(row:any,edit=false,openPosition=true){if(!row)return;selected.value=row.key;if(workbench){workbench.focused.value=scope.value;workbench.editing.value=edit?scope.value:'';workbench.returnFocus=focusRow;announce();if(edit||openPosition)workbench.select?.(edit)}nextTick(()=>{if(edit||!workbench)document.querySelector<HTMLElement>(workbench?'#cms-item-editor .cms-item-editor-heading':'.cms-item-editor-heading')?.focus()})}
+async function back(){if(workbench){const row=active.value;workbench.editing.value='';if(row&&!rows.value.some(r=>r.key===row.key)){search.value='';await nextTick();page.value=Math.floor(allRows.value.findIndex(r=>r.key===row.key)/pageSize)+1;selected.value=row.key;announce()}focusRow()}else{selected.value=undefined;nextTick(()=>root.value?.querySelector<HTMLElement>('.cms-item-open')?.focus())}}
 function item(index:number,value:any){const next=[...props.modelValue];next[index]=value;emit('update:modelValue',next)}
 function add(){
  const template=JSON.parse(JSON.stringify(props.schema.template??'')),t=['news-articles','knowledge-articles'].includes(props.documentId||'')?freshArticleValue(template,props.schema.item):template
@@ -39,7 +39,7 @@ function add(){
   if('id'in t)t.id=props.schema.idGenerator==='store'?newStoreId(props.modelValue):typeof t.id==='number'?Math.max(0,...props.modelValue.map(v=>Number(v.id)||0))+1:crypto.randomUUID()
   if('slug'in t)t.slug='new-'+crypto.randomUUID().slice(0,8)
   if(t.summary){t.summary.title='新增'+(props.schema.newItemLabel||'文章');if(props.schema.newCategory)t.summary.category=props.schema.newCategory;t.summary.categoryLabel=({latest:'最新消息',activities:'優惠活動',video:'媒體影音'} as any)[t.summary.category]||'廚房知識';t.summary.publishedAt=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());t.summary.displayDate=t.summary.publishedAt}
-  if('title'in t)t.title=props.documentId==='custom-cases'?'新增案例':'新增內容';if('name'in t)t.name='新增內容'
+  if('title'in t)t.title=props.documentId==='custom-cases'?'新增案例':props.documentId==='view-components-home-HomeHero'?'新增輪播':'新增內容';if('name'in t)t.name='新增內容'
  }
  emit('update:modelValue',[...props.modelValue,t]);search.value='';page.value=Math.ceil((allRows.value.length+1)/pageSize);choose({key:itemKey(t,props.modelValue.length)},true)
 }
@@ -58,14 +58,14 @@ function remove(index:number){if(!window.confirm('移除此項？儲存並更新
 watch(search,()=>page.value=1)
 watch(pages,n=>{if(page.value>n)page.value=n})
 watch([visible,active,()=>workbench?.focused.value],()=>{if(!workbench)return;if(!workbench.focused.value&&visible.value.length)workbench.focused.value=scope.value;if(!active.value&&visible.value[0])selected.value=visible.value[0].key;announce()},{immediate:true})
-watch([page,search],()=>{if(workbench&&visible.value[0]&&!visible.value.some(r=>r.key===selected.value))choose(visible.value[0])})
+watch([page,search],()=>{if(workbench&&visible.value[0]&&!visible.value.some(r=>r.key===selected.value))choose(visible.value[0],false,false)})
 watch(()=>errors.value,()=>{const prefix=(props.path?props.path+'.':''),issue=errors.value?.find((e:any)=>e.documentId===props.documentId&&e.path.startsWith(prefix));const index=Number(issue?.path.slice(prefix.length).split('.')[0]);if(issue&&Number.isInteger(index)&&props.modelValue[index]!==undefined){search.value='';page.value=Math.floor(allRows.value.findIndex(r=>r.index===index)/pageSize)+1;choose(allRows.value.find(r=>r.index===index),true)}},{deep:true,immediate:true})
 </script>
 <template>
  <section ref="root" class="cms-items" :class="{'cms-items-workbench':workbench,'cms-case-manager':caseTable}">
   <template v-if="workbench||!active">
    <div class="cms-items-tools"><input v-if="caseTable" v-model="search" type="search" aria-label="搜尋案例標題" placeholder="搜尋案例標題" /><strong v-else>{{ label }} <span class="cms-count">{{ rows.length }}</span></strong><slot name="add"><button v-if="!schema.source" type="button" class="cms-button" :class="{'cms-button-gold':caseTable}" @click="add"><Plus v-if="caseTable" :size="16" aria-hidden="true" />{{ schema.newItemLabel?.startsWith('新增')?schema.newItemLabel:'新增'+(schema.newItemLabel||'項目') }}</button></slot></div>
-   <input v-if="!caseTable&&(workbench||rows.length>8||search)" v-model="search" type="search" :aria-label="`搜尋${label}`" :placeholder="'搜尋'+label+'名稱'" />
+   <input v-if="!caseTable&&(workbench||rows.length>8||search)" v-model="search" type="search" :aria-label="schema.searchLabel||`搜尋${label}`" :placeholder="schema.searchLabel||'搜尋'+label+'名稱'" />
    <table v-if="caseTable" class="cms-case-table" aria-label="自行建置案例" aria-describedby="cms-custom-case-order-help"><thead><tr><th scope="col">排序</th><th scope="col">案例</th><th scope="col">顯示狀態</th><th scope="col">操作</th></tr></thead><tbody><tr v-for="r in visible" :key="r.key" :data-row-key="r.key" :class="{'is-selected':selected===r.key&&(!workbench||workbench.focused.value===scope),'is-dragging':dragged===r.key,'is-drop-target':dropTarget===r.key}" @dragover.prevent="dropTarget=dragged?r.key:''" @dragleave="dropTarget=''" @drop.prevent="drop($event,r)">
     <td><button type="button" class="cms-case-order" :draggable="!search&&!workbench?.busy.value" :disabled="!!search||workbench?.busy.value" :aria-label="caption(r)+'，第 '+(r.index+1)+' 位；按上下方向鍵調整順序'" @dragstart="startDrag($event,r)" @dragend="dragged='';dropTarget=''" @keydown.up.prevent="reorder(r.index,r.index-1,true)" @keydown.down.prevent="reorder(r.index,r.index+1,true)"><GripVertical :size="16" aria-hidden="true" /><span>{{ r.index+1 }}</span></button></td>
     <td><button type="button" class="cms-item-open" :aria-pressed="selected===r.key&&(!workbench||workbench.focused.value===scope)" @click="choose(r)"><AdminThumbnail :src="thumbnail(r)" :alt="caption(r)+'縮圖'" /><span>{{ caption(r) }}</span></button></td>

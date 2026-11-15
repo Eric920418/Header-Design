@@ -56,6 +56,12 @@ export function inspirationPosition(bodies,presentation={},selected){
  if(selected)cases.splice(0,1,{title:selected.caption,image:selected.image,selected:true,enabled:selected.value?.enabled!==false})
  return{copy,detail,cases,detailCase:presentation.detailCase||cases[0],heroImage:presentation.heroImage}
 }
+export function homeHeroPosition(bodies,selected){
+ const hero=bodies['view-components-home-HomeHero']||{},isSlide=selected?.documentId==='view-components-home-HomeHero'&&selected.path==='slides'
+ const index=isSlide?selected.index||0:0,slide=isSlide?selected.value:hero.slides?.[0]
+ const styles=bodies['view-components-home-HomeStyleMarquee']
+ return{slide,copy:hero.copy||{},styles:styles?.cmsSettings?.visible===false?[]:styles?.styles||[],index,pan:index%2===0?'-4%':'4%'}
+}
 export function pagePositionContent(block,bodies,presentation={},selected,focusedPath=''){
  const page=block?.id?.split(':')[0],definition=pagePositions[page],base=positionContent(block,bodies,selected)
  const fields=(block?.fields||[]).map(f=>({...f,value:valueAt(bodies[f.documentId],f.path)}))

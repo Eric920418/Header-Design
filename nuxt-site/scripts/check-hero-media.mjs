@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
-import {HOME_HERO_ID,homeHeroSchema,heroImageSource,heroPosition} from '../shared/cms/hero-media.mjs'
+import {HOME_HERO_ID,homeHeroSchema,heroImageSource,heroPosition,heroPreviewSlide} from '../shared/cms/hero-media.mjs'
 import {validate} from '../server/cms/content.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
 
@@ -14,6 +14,10 @@ assert.equal(homeHeroSchema('another-resource',original.schema),original.schema)
 assert.equal(heroImageSource(original.data.slides[0],'mobile'),original.data.slides[0].image)
 assert.equal(heroPosition(original.data.slides[0],'desktop'),'50% 50%')
 assert.equal(heroPosition(original.data.slides[0],'mobile'),'50% 50%')
+const previewQuery={cmsPreview:'page:home',cmsDraft:'protected-preview-token',cmsSlide:'1'}
+assert.equal(heroPreviewSlide(previewQuery,10),1);assert.equal(heroPreviewSlide({...previewQuery,cmsSlide:'0'},10),0)
+for(const q of [{}, {...previewQuery,cmsDraft:''},{...previewQuery,cmsPreview:'page:inspiration'},...['-1','1.5','10','Infinity','9007199254740992','javascript:alert(1)'].map(cmsSlide=>({...previewQuery,cmsSlide}))])assert.equal(heroPreviewSlide(q,10),null)
+assert.equal(heroPreviewSlide(previewQuery,0),null)
 const body=structuredClone(original.data),slide=body.slides[0]
 Object.assign(slide,{mobileImage:'/home-2026/hero/10bn/clever.webp',desktopFocusX:0,desktopFocusY:100,mobileFocusX:70,mobileFocusY:25})
 validate(body,schema)

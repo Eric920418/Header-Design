@@ -9,8 +9,8 @@ export function homeHeroSchema(id, schema) {
   mobileImage: {type:'string',format:'media',label:'手機圖片'},
  }
  for (const [device,label] of [['desktop','桌機'],['mobile','手機']]) {
-  for (const [axis,direction] of [['X','水平'],['Y','垂直']]) {
-   fields[`${device}Focus${axis}`] = {type:'number',min:0,max:100,label:`${label}${direction}焦點`}
+  for (const [axis,direction] of [['X','左右'],['Y','上下']]) {
+   fields[`${device}Focus${axis}`] = {type:'number',min:0,max:100,label:`${label}圖片${direction}位置`}
   }
  }
  return {...schema,fields:{...schema.fields,slides:{...slides,item:{...slides.item,fields}}}}
@@ -23,4 +23,11 @@ export function heroImageSource(slide, viewport) {
 export function heroPosition(slide, viewport) {
  const percent = value => typeof value === 'number' && Number.isFinite(value) ? Math.min(100,Math.max(0,value)) : 50
  return `${percent(slide[`${viewport}FocusX`])}% ${percent(slide[`${viewport}FocusY`])}%`
+}
+
+// Preview access is checked by the content API; this only selects the picture being reviewed.
+export function heroPreviewSlide(query, count) {
+ if(query?.cmsPreview!=='page:home'||typeof query.cmsDraft!=='string'||!query.cmsDraft||typeof query.cmsSlide!=='string'||!/^\d+$/.test(query.cmsSlide))return null
+ const index=Number(query.cmsSlide)
+ return Number.isSafeInteger(index)&&index<count?index:null
 }

@@ -6,7 +6,7 @@ import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
 import {pageEditors,pageBlocks} from '../shared/cms/page-editors.mjs'
 import {editorSchema} from '../server/cms/page-editors.mjs'
-import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent} from '../shared/cms/workbench.mjs'
+import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,homeHeroPosition} from '../shared/cms/workbench.mjs'
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
 import {blockThumbnail} from '../shared/cms/page-editors.mjs'
@@ -47,6 +47,16 @@ const filterFields=inspiration.find(b=>b.preview==='inspiration-filters').fields
 assert.deepEqual(filterFields.filter(f=>!f.schema.advanced).map(f=>f.label),['型式選單名稱','風格選單名稱','篩選按鈕文字'])
 assert(filterFields.find(f=>f.path==='copy.text2').schema.advanced);assert(filterFields.every(f=>f.schema.singleLine))
 const previewBodies=Object.fromEntries(docs.map(d=>[d.id,structuredClone(d.body)])),presentation={heroImage:'/hero.jpg',cases:[{title:'真實案例',image:'/case.jpg'}]},serialized=JSON.stringify(presentation)
+const heroSchema=home.find(b=>b.id==='home:主視覺輪播').fields.find(f=>f.path==='slides').schema
+assert.equal(heroSchema.label,'輪播內容');assert.equal(heroSchema.searchLabel,'搜尋輪播名稱')
+const heroBefore=JSON.stringify(previewBodies),heroSelected={documentId:'view-components-home-HomeHero',path:'slides',index:1,value:{image:'/selected-home.webp',title:'所選輪播',description:'目前的介紹',mobileImage:'/mobile-home.webp',desktopFocusX:20}}
+const heroScene=homeHeroPosition(previewBodies,heroSelected)
+assert.equal(heroScene.slide.title,'所選輪播');assert.equal(heroScene.slide.image,'/selected-home.webp');assert.equal(heroScene.slide.mobileImage,'/mobile-home.webp');assert.equal(heroScene.slide.desktopFocusX,20);assert.equal(heroScene.pan,'4%')
+assert.equal(homeHeroPosition(previewBodies).slide.title,previewBodies['view-components-home-HomeHero'].slides[0].title);assert.equal(homeHeroPosition(previewBodies).pan,'-4%');assert.equal(homeHeroPosition({}).slide,undefined)
+assert.equal(homeHeroPosition(previewBodies,{documentId:'other',value:{title:'無關內容'}}).slide.title,previewBodies['view-components-home-HomeHero'].slides[0].title);assert.equal(JSON.stringify(previewBodies),heroBefore,'Home position views cannot modify shared content')
+assert(homeHeroPosition(previewBodies).styles.length);assert.equal(homeHeroPosition({'view-components-home-HomeStyleMarquee':{styles:[{}],cmsSettings:{visible:false}}}).styles.length,0)
+const heroCommon=home.find(b=>b.id==='home:主視覺輪播').fields
+assert.equal(heroCommon.find(f=>f.path==='copy.text8').label,'滑過時按鈕文字（第一行）');assert(heroCommon.filter(f=>/^copy.field[1-4]$/.test(f.path)).every(f=>f.schema.advanced))
 previewBodies['view-pages-design-inspiration-index'].copy.text5='套用篩選';previewBodies['view-pages-design-inspiration-index'].copy.text9='沒有符合的案例'
 const samplePosition=inspirationPosition(previewBodies,presentation)
 assert.equal(samplePosition.copy.text5,'套用篩選');assert.equal(samplePosition.copy.text9,'沒有符合的案例');assert.equal(samplePosition.cases[0].title,'真實案例')
@@ -116,6 +126,8 @@ const transfer={value:'',effectAllowed:'',setData(type,value){this.value=value},
 ui.startDrag(dragEvent,ui.rows.value[0]);ui.drop(dragEvent,ui.rows.value[2]);await nextTick();assert.equal(transfer.effectAllowed,'move');assert.equal(ui.active.value.index,2);assert.equal(ui.dragged.value,'')
 const protectedSnapshot=JSON.stringify(model.modelValue);ui.startDrag(dragEvent,ui.rows.value[0]);transfer.value='unrelated-table';ui.drop(dragEvent,ui.rows.value[2]);assert.equal(JSON.stringify(model.modelValue),protectedSnapshot,'Foreign drag data must not move cases')
 for(const [from,to]of [[-1,2],[0,99],[NaN,0],[0,1.5]])ui.reorder(from,to);assert.equal(JSON.stringify(model.modelValue),protectedSnapshot)
+const renamedRow=ui.rows.value.find(r=>r.key==='case-0');ui.search.value=renamedRow.value.title;await nextTick();ui.choose(ui.active.value,true);let automaticOpens=0;workbench.select=()=>automaticOpens++
+ui.item(ui.active.value.index,{...ui.active.value.value,title:'改名後仍可找到'});await nextTick();assert.equal(ui.rows.value.length,0);await ui.back();await nextTick();assert.equal(ui.search.value,'');assert.equal(ui.active.value.key,'case-0');assert(ui.visible.value.some(r=>r.key==='case-0'));assert.equal(automaticOpens,0,'Returning from a renamed filtered item must not open the position dialog')
 ui.add();await nextTick();assert.equal(ui.active.value.value.title,'新增案例');assert.equal(ui.active.value.value.enabled,true);assert.equal(workbench.editing.value,'custom-cases:items')
 scope.stop()
 console.log('PASS: all 28 pages retain every field and old link; screenshot home order; list selection/edit/focus; custom case insertion sorting, drag scope, cross-page movement, search/busy guards and visibility toggles')

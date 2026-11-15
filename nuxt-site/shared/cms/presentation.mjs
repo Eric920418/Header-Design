@@ -113,6 +113,13 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}
  if(resourceId==='custom-cases'&&normalized==='items')return{label:'自行建置案例',newItemLabel:'案例',editor:'case-table',rowLabel:'title',rowImage:'cover'}
  if(resourceId==='custom-cases'&&normalized.startsWith('items.*.')){const label={title:'案例標題',description:'案例介紹',form:'廚房型式',style:'設計風格',enabled:'在官網顯示'}[key];if(label)return{label,...(['title','form','style'].includes(key)?{singleLine:true}:{})}}
+ if(resourceId==='view-components-home-HomeHero'&&normalized==='slides')return{label:'輪播內容',newItemLabel:'輪播',searchLabel:'搜尋輪播名稱',rowLabel:'title',rowImage:'image'}
+ if(resourceId==='view-components-home-HomeHero'&&normalized.startsWith('copy.')){
+  const images={field1:'下一張圖片說明',field2:'前一張圖片說明',field3:'切換時圖片說明',field4:'目前輪播圖片說明'}
+  if(images[key])return{label:images[key],advanced:true,help:'圖片載入與切換時的說明文字，通常不需調整。'}
+  const label={field5:'圓形按鈕前往頁面',text6:'圓形按鈕文字（第一行）',text7:'圓形按鈕文字（第二行）',text8:'滑過時按鈕文字（第一行）',text9:'滑過時按鈕文字（第二行）',text10:'背景大字',text11:'系列選單按鈕文字'}[key]
+  if(label)return{label,singleLine:true}
+ }
  if(resourceId==='catalog-cases'&&normalized==='items')return{label:'既有案例',help:'可調整顯示與順序；案例名稱與圖片由原系統提供。'}
  if(resourceId==='view-components-home-HomeStyleMarquee'&&normalized==='styles')return{label:'設計風格',rowLabel:'zh',rowImage:'images'}
  if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='regions')return{label:'地區與縣市設定',editor:'store-regions'}
