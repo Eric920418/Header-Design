@@ -39,7 +39,7 @@ async function positionPresentation(p){
  const articles=bodies['news-articles']?.items?.filter(i=>!p.category||i.summary.category===p.category)||[]
  if(p.id==='news')result.samples=articles.slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
  if(p.id==='franchise')result.samples=articles.filter(i=>/franchise/.test(i.slug)).slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
- if(p.id.startsWith('news-')&&articles[0])result.detailPath=`/news/${p.category}/${articles[0].slug}`
+ if(p.id.startsWith('news-')&&articles[0]){result.detailPath=`/news/${p.category}/${articles[0].slug}`;result.specialImage=articles[0].summary.cover}
  if(p.id==='knowledge'){const first=bodies['knowledge-articles']?.items?.find(i=>i.slug!=='systemcabinet');if(first)result.detailPath='/knowledge/design/'+first.slug;result.specialImage=bodies['knowledge-articles']?.items?.find(i=>i.slug==='systemcabinet')?.summary.cover}
  if(p.id==='stores'&&bodies['data-storeCases']?.storeCases?.[0]){const first=bodies['data-storeCases'].storeCases[0];result.detailPath='/gallery/'+first.slug;result.specialImage=first.cover||first.images?.[0]}
  return result

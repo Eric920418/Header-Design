@@ -33,6 +33,8 @@ export function freshArticleValue(value,schema){
 }
 export function itemCaption(value,index,schema={}){
  if(typeof value!=='object')return schema.item?.format==='media'?'圖片 '+(index+1):String(value||'文字 '+(index+1))
+ if(value?.year)return String(value.year)+' 年'
+ if(Array.isArray(value?.value)&&Array.isArray(value?.lines))return value.value.join(' ')+' · '+value.lines[0]
  return schema.rowLabel?value?.[schema.rowLabel]||rowName(value,index):rowName(value,index)
 }
 export function itemThumbnail(value,schema={},metadata={}){
@@ -66,12 +68,21 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const page=block?.id?.split(':')[0],definition=pagePositions[page],base=positionContent(block,bodies,selected)
  const fields=(block?.fields||[]).map(f=>({...f,value:valueAt(bodies[f.documentId],f.path)}))
  const texts=fields.filter(f=>typeof f.value==='string'&&!f.schema.format&&!f.schema.enum&&!f.schema.advanced&&!/圖片說明|替代文字/.test(f.label)).map(f=>({path:f.path,label:f.label,value:f.value}))
- const arrays=fields.filter(f=>f.schema.type==='array').flatMap(f=>(f.value||[]).filter(v=>!f.schema.rowFilter||valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value).slice(0,3).map((v,i)=>({title:itemCaption(v,i,f.schema),image:itemThumbnail(v,f.schema),value:v})))
+ const arrays=fields.filter(f=>f.schema.type==='array').flatMap(f=>(f.value||[]).filter(v=>!f.schema.rowFilter||valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value).slice(0,3).map((v,i)=>({title:itemCaption(v,i,f.schema),image:itemThumbnail(v,f.schema,presentation.rows?.[f.documentId]?.[v?.id]),value:v})))
  const sample=/全部消息列表|最近文章推薦|最新加盟資訊/.test(block?.name)?presentation.samples||[]:[]
  const items=selected?[{title:selected.caption,image:selected.image||'',value:selected.value}]:arrays.length?arrays:sample
  const video=fields.find(f=>f.schema.format==='youtube')?.value
  const videoImage=typeof video==='string'&&/^[\w-]{11}$/.test(video)?'https://i.ytimg.com/vi/'+video+'/hqdefault.jpg':''
  const focusedImage=firstImage(fields.find(f=>f.path===focusedPath&&f.schema.format==='media')?.value)
- const image=selected?selected.image||'':focusedImage||base.image||firstImage(positionImage(block?.image,bodies))||presentation.blockImages?.[block?.id]||videoImage||(/內頁|系統櫃|文章底部/.test(block?.name)?presentation.specialImage:'')||''
- return{...base,image,texts,items,heroImage:firstImage(positionImage(definition?.hero,bodies))||presentation.heroImage||'',sections:definition?.sections||[],buttons:texts.filter(f=>/按鈕|連結文字/.test(f.label)),text:texts.filter(f=>!/按鈕|連結文字/.test(f.label)),description:base.description||selected?.value?.intro?.paragraphs?.join(' ')||'',kind:block?.kind||'text'}
+ const blockImage=firstImage(positionImage(block?.image,bodies))||presentation.blockImages?.[block?.id]||''
+ const image=selected?selected.image||blockImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||blockImage||videoImage||(/內頁|系統櫃|文章底部/.test(block?.name)?presentation.specialImage:'')||''
+ const media=fields.filter(f=>f.schema.format==='media').map(f=>({path:f.path,label:f.label,image:firstImage(f.value)})).filter(f=>f.image)
+ const heading=texts.filter(f=>/標題|小標|品牌名稱/.test(f.label)),buttons=texts.filter(f=>/按鈕|連結文字/.test(f.label))
+ const detail=fields.some(f=>/-slug-$/.test(f.documentId))||/系統櫃/.test(block?.name)
+ const contextImage=(detail?presentation.specialImage:'')||firstImage(positionImage(definition?.hero,bodies))||presentation.heroImage||''
+ const item=selected?.value,paragraphs=item?.intro?.paragraphs||item?.paragraphs||item?.description||item?.summary?.excerpt||item?.detail||item?.quote||item?.summary||''
+ const paragraphsList=Array.isArray(paragraphs)?paragraphs.filter(p=>typeof p==='string'):typeof paragraphs==='string'?[paragraphs]:[]
+ const questions=items.flatMap(i=>i.value?.items||i.value?.questions||i.value?.question&&[i.value]||[]).slice(0,3)
+ const details=fields.filter(f=>f.schema.fields&&!['cmsSettings','seo'].includes(f.path)).flatMap(f=>Object.entries(f.schema.fields).filter(([,s])=>!s.hidden&&!s.format&&s.type==='string').map(([key,s])=>({label:s.label||f.label,value:f.value?.[key]}))).filter(f=>typeof f.value==='string'&&f.value)
+ return{...base,image,texts,items,media,heading,paragraphs:paragraphsList,questions,details,contextImage,thumbnail:image||contextImage,heroImage:contextImage,sections:definition?.sections||[],buttons,text:texts.filter(f=>!/按鈕|連結文字/.test(f.label)),bodyText:texts.filter(f=>!heading.includes(f)&&!buttons.includes(f)),description:base.description||paragraphsList.join(' '),kind:block?.kind||'text'}
 }

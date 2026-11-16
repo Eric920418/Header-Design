@@ -18,10 +18,13 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
    await page.setViewportSize({width,height:960})
    for(const p of pages){
     await go(p.id==='home'?'/admin/home':`/admin/content?section=${p.section}&sitePage=${p.id}`);await page.locator('.cms-block-title').waitFor()
+    assert.equal(await page.locator('nav[aria-label="官網區塊"]>button>img').count(),await page.locator('nav[aria-label="官網區塊"]>button').count(),p.id+' must show a picture for every section')
     for(const name of await page.locator('.cms-block-nav>button strong').allTextContents()){
      await select(name,width)
      if(width<1024)await page.getByRole('button',{name:'看位置',exact:true}).click()
      assert(await page.locator('.cms-position:visible .cms-scene-target img,.cms-position:visible .cms-inspiration-position img,.cms-position:visible .cms-home-hero-preview img').count(),`${p.id}/${name} needs a corresponding picture`)
+     for(const photo of await page.locator('.cms-position:visible img').all())await photo.evaluate(image=>image.decode())
+     assert(await page.locator('.cms-position:visible img').evaluateAll(images=>images.every(image=>image.alt&&image.complete&&image.naturalWidth>0)),`${p.id}/${name} pictures must load and identify their location`)
      if(p.id==='home'&&name==='首頁輪播圖片')assert(await page.locator('.cms-position:visible .cms-home-hero-frame').evaluate(el=>el.getBoundingClientRect().height>100),'The home photo frame must not collapse')
      assert.equal(await page.locator('.cms-page-editor .cms-image-error:visible').count(),0,`${p.id}/${name}: image failed`)
      assert.equal(await page.locator('.cms-effect-viewport iframe').count(),0,'Section selection must not load a full preview')
