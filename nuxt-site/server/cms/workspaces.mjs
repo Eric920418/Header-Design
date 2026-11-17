@@ -8,6 +8,7 @@ import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
 import {editingSchema,resourceGuide} from '../../shared/cms/presentation.mjs'
 import {workspaceFor,workspaces,firstImage,changedItems,rowName} from '../../shared/cms/workflow.mjs'
 import {createDraftPreview} from './previews.mjs'
+import {sameContent} from '../../shared/cms/changes.mjs'
 
 export function workspaceInput(key,input){
  const w=workspaceFor(key)
@@ -27,7 +28,7 @@ export function readableError(error,id,schema,body){
 }
 export function workspaceSummariesFromRows(rows){
  const published=Object.fromEntries(rows.filter(d=>d.publishedBody).map(d=>[d.id,JSON.parse(d.publishedBody)]))
- return workspaceNames(workspaces,published).map(w=>{const docs=w.ids.map(id=>rows.find(d=>d.id===id)).filter(Boolean);return{...w,thumbnail:docs.map(d=>d.body?firstImage(JSON.parse(d.body)):'').find(Boolean)||'',updatedAt:docs.map(d=>d.updatedAt).sort((a,b)=>new Date(b)-new Date(a))[0],pending:docs.some(d=>d.draftId!==d.publishedId),published:docs.some(d=>d.publishedId),missing:docs.length!==w.ids.length}})
+ return workspaceNames(workspaces,published).map(w=>{const docs=w.ids.map(id=>rows.find(d=>d.id===id)).filter(Boolean);return{...w,thumbnail:docs.map(d=>d.body?firstImage(JSON.parse(d.body)):'').find(Boolean)||'',updatedAt:docs.map(d=>d.updatedAt).sort((a,b)=>new Date(b)-new Date(a))[0],pending:docs.some(d=>!sameContent(d.body?JSON.parse(d.body):null,d.publishedBody?JSON.parse(d.publishedBody):null)),published:docs.some(d=>d.publishedId),missing:docs.length!==w.ids.length}})
 }
 export async function workspaceSummaries(){
  const rows=(await query('SELECT d.id,d.revision,d.draftId,d.publishedId,d.updatedAt,v.body,p.body AS publishedBody FROM cms.Documents d LEFT JOIN cms.Versions v ON v.id=d.draftId LEFT JOIN cms.Versions p ON p.id=d.publishedId')).recordset

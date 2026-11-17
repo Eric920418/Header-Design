@@ -6,14 +6,14 @@ import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
 import {pageEditors,pageBlocks} from '../shared/cms/page-editors.mjs'
 import {editorSchema} from '../server/cms/page-editors.mjs'
-import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,homeHeroPosition} from '../shared/cms/workbench.mjs'
+import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField} from '../shared/cms/workbench.mjs'
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
 import {blockThumbnail} from '../shared/cms/page-editors.mjs'
-import {valueAt,searchPages} from '../shared/cms/page-editors.mjs'
-import {sameContent,pageChanges,changeImpacts,publishReview,pageSearchItems,pageMedia} from '../shared/cms/changes.mjs'
+import {valueAt,searchPages,pageTaskLink} from '../shared/cms/page-editors.mjs'
+import {sameContent,pageChanges,changeImpacts,publishReview,pageSearchItems,pageMedia,hasPageChanges,itemPublication} from '../shared/cms/changes.mjs'
 import {normalizeVideos,validate} from '../server/cms/content.mjs'
-import {readableError} from '../server/cms/workspaces.mjs'
+import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
@@ -113,10 +113,10 @@ thumbnailProps.contain=false;thumbnailProps.alt='品牌標誌縮圖';assert.equa
 thumbnailProps.alt='一般照片';assert.equal(thumbnailContext.mark.value,false)
 const source=await readFile(new URL('../components/admin/AdminItems.vue',import.meta.url),'utf8')
 const script=source.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(/^import .*$/gm,'')
-const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema,reorder,startDrag,drop,toggleVisibility,dragged,cancelItem,changed};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
+const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema,reorder,startDrag,drop,toggleVisibility,dragged,cancelItem,changed,focusRow,root};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
 const model=reactive({modelValue:Array.from({length:8},(_,i)=>({id:'row-'+i,title:'內容 '+i,image:'/image.webp'})),schema:{type:'array',label:'輪播內容',item:{type:'object',fields:{id:{type:'string'},title:{type:'string'}}},template:{id:'',title:''}},documentId:'home',path:'slides'})
 const route=reactive({query:{}}),state=ref({}),errors=ref([]),workbench={rows:ref({}),baseline:ref({home:{slides:JSON.parse(JSON.stringify(model.modelValue))}}),focused:ref(''),editing:ref(''),selection:ref(null),metadata:ref({}),busy:ref(false),select:()=>{}},emitted=[]
-const context={ref,computed,watch,nextTick,useRoute:()=>route,useRouter:()=>({replace:async value=>{route.query=value.query}}),sameContent,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
+const context={ref,computed,watch,nextTick,useRoute:()=>route,useRouter:()=>({replace:async value=>{route.query=value.query}}),sameContent,itemPublication,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,articleDateLabel,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
 const scope=effectScope();scope.run(()=>runInNewContext(code,context))
 await nextTick();const ui=context.ui
 assert.equal(ui.visible.value.length,6);assert.equal(workbench.selection.value.caption,'內容 0');assert.equal(workbench.editing.value,'')
@@ -157,6 +157,8 @@ const count=model.modelValue.length;ui.add();await nextTick();assert.equal(model
 model.documentId='direct-test';model.modelValue=Array.from({length:9},(_,i)=>({id:'direct-'+i,title:'項目'+i}));workbench.rows.value={};state.value={};route.query={list:'direct-test:items',item:'direct-8'};await nextTick();await nextTick()
 assert.equal(ui.active.value.key,'direct-8');assert.equal(ui.page.value,2);assert.equal(workbench.editing.value,'direct-test:items')
 ui.item(8,{...model.modelValue[8],title:'仍在編輯'});await nextTick();assert.equal(ui.active.value.key,'direct-8');await ui.back();await nextTick();assert.equal(route.query.item,undefined);assert.equal(route.query.list,undefined);route.query={list:'direct-test:items',item:'direct-8'};await nextTick();await nextTick();assert.equal(workbench.editing.value,'direct-test:items','The same search result must be able to reopen after returning')
+const shortcutBefore=model.modelValue.length;model.schema.source=false;route.query={create:'direct-test:items'};await nextTick();await new Promise(resolve=>setImmediate(resolve));assert.equal(model.modelValue.length,shortcutBefore+1);assert.equal(route.query.create,undefined);await nextTick();assert.equal(model.modelValue.length,shortcutBefore+1,'An already-consumed create link must not add another item')
+let returnedToAdd=0;ui.root.value={querySelector:selector=>selector.includes('data-row-key')?null:{focus:()=>returnedToAdd++}};ui.focusRow();await nextTick();assert.equal(returnedToAdd,1,'Cancelling the last new item returns focus to add/search instead of the page body');ui.root.value=undefined
 scope.stop()
 const nestedModel=reactive({modelValue:['一','二'],schema:{type:'array',item:{type:'string'},template:''},documentId:'nested',path:'paragraphs'}),nestedState=ref({}),nested={...context,defineProps:()=>nestedModel,defineEmits:()=>((_,v)=>nestedModel.modelValue=v),inject:(key,fallback)=>key==='cms-array-depth'?1:key==='cms-item-selections'?nestedState:fallback}
 const nestedScope=effectScope();nestedScope.run(()=>runInNewContext(code,nested));nested.ui.add();await nextTick();assert.equal(nested.ui.active.value.index,2,'Nested text/image additions must open the new item');nested.ui.choose(nested.ui.rows.value[0]);nested.ui.move(0,1);await nextTick();assert.equal(nested.ui.active.value.value,'一','Moving a nested item must keep editing the same content');nestedScope.stop()
@@ -177,3 +179,39 @@ const media=pageMedia(docs.filter(d=>pageEditors[0].ids.includes(d.id)),Object.f
 console.log('PASS: actual-name item search, category scoping, exact before/after values and changed-document impacts, other saved changes, isolated item cancellation after reorder/reopen, new-item cancellation, deep-link pagination and page media descriptions')
 
 console.log('PASS: all 28 pages retain every field and old link; screenshot home order; list selection/edit/focus; custom case insertion sorting, drag scope, cross-page movement, search/busy guards and visibility toggles')
+
+// Public status and pending counts reflect content, never version numbers or a draft switch.
+const article=structuredClone(newsDoc.body.items[0]),publishedDoc={id:newsDoc.id,publishedBody:{items:[structuredClone(article)]}}
+assert.equal(itemPublication(publishedDoc,'items',article,0).label,'官網已刊登')
+assert.equal(itemPublication(publishedDoc,'items',{...article,id:'new-item'},0).label,'尚未刊登')
+const futureHidden={...article,enabled:false};assert.equal(itemPublication(publishedDoc,'items',futureHidden,0).label,'有待更新修改');assert(itemPublication(publishedDoc,'items',futureHidden,0).visible,'The current website remains visible until publication')
+assert(!itemPublication({...publishedDoc,publishedBody:{items:[{...article,enabled:false}]}},'items',article,0).visible)
+assert.equal(itemPublication({...publishedDoc,publishedBody:null},'items',article,0).label,'尚未刊登')
+assert.equal(itemWebsitePath(newsDoc.id,article),'/news/latest/'+article.slug)
+const newsPage=pageEditors.find(p=>p.id==='news-latest'),newsBlocks=workbenchBlocks(newsPage.id,pageBlocks(newsPage,[newsDoc])),pub={[newsDoc.id]:structuredClone(newsDoc.body)},draft=structuredClone(pub)
+assert(!hasPageChanges(newsBlocks,pub,draft))
+draft[newsDoc.id].items.find(i=>i.summary.category==='activities').summary.title+='其他分類的草稿'
+assert(!hasPageChanges(newsBlocks,pub,draft),'Another news category must not count toward this page')
+draft[newsDoc.id].items.find(i=>i.summary.category==='latest').summary.title+='本頁的草稿';assert(hasPageChanges(newsBlocks,pub,draft))
+const newsMedia=pageMedia([newsDoc],pub,newsBlocks)
+for(const i of newsDoc.body.items)assert.equal(newsMedia.some(m=>m.src===i.summary.cover),i.summary.category==='latest','Page images must respect the active category')
+assert(newsMedia.every(m=>m.caption&&m.purpose&&!m.label.includes(' › ')&&m.location));const punctuated=structuredClone(pub);punctuated[newsDoc.id].items[0].summary.title='新品｜品牌故事';assert(pageMedia([newsDoc],punctuated,newsBlocks).some(m=>m.caption==='新品｜品牌故事'&&m.purpose==='列表卡片圖片'))
+assert.equal(articleDateLabel('2026-11-17'),'NOV 17, 2026')
+const standard={...article,summary:{...article.summary,displayDate:'JUN 15, 2026'}},dated=updateArticleField(standard,'summary.publishedAt','2026-11-17');assert.equal(dated.summary.displayDate,'NOV 17, 2026');assert.equal(standard.summary.displayDate,'JUN 15, 2026')
+const custom=structuredClone(article);custom.summary.displayDate='活動期間依門市公告';assert.equal(updateArticleField(custom,'summary.publishedAt','2026-11-17').summary.displayDate,'活動期間依門市公告')
+const distinct=updateArticleField(article,'summary.cover','/changed.webp');assert.equal(distinct.detail.cover.src,article.detail.cover.src,'A separate article image must never be overwritten')
+const noCover=structuredClone(article);noCover.detail={};assert.equal(updateArticleField(noCover,'summary.cover','/changed.webp').detail.cover.src,'/changed.webp')
+const sameCover=structuredClone(article);sameCover.detail.cover.src=sameCover.summary.cover;assert.equal(updateArticleField(sameCover,'summary.cover','/changed.webp').detail.cover.src,'/changed.webp')
+const newsTask=pageTaskLink([{...newsPage,blocks:newsBlocks}],newsPage.id,'news-articles:items',true,{q:'原搜尋',page:'2'});assert.equal(newsTask.query.block,newsBlocks.find(b=>b.fields.some(f=>f.documentId==='news-articles')).id);assert.equal(newsTask.query.create,'news-articles:items');assert.equal(newsTask.query.q,'原搜尋');assert.equal(newsTask.query.page,'2')
+
+console.log('PASS: published-vs-draft status, category-scoped pending/media, preserved custom dates and images, direct task links and one-shot creation')
+
+const identical=workspaceSummariesFromRows([{id:'data-kitchenSeries',body:'{"title":"相同內容"}',publishedBody:'{"title":"相同內容"}',draftId:'new-version',publishedId:'old-version'}]);assert.equal(identical.find(w=>w.ids.includes('data-kitchenSeries')).pending,false,'Equal content in different versions must never create a pending task')
+const articleSource=await readFile(new URL('../components/admin/AdminArticleFields.vue',import.meta.url),'utf8'),articleProps=reactive({modelValue:structuredClone(article),schema:editingSchema(newsDoc.schema,newsDoc.id).fields.items.item,documentId:newsDoc.id,path:'items.0'}),articleContext={computed,valueAt,updateArticleField,defineProps:()=>articleProps,defineEmits:()=>((_,value)=>articleProps.modelValue=value)}
+runInNewContext(ts.transpileModule(articleSource.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(/^import .*$/gm,'')+'\nthis.ui={main,extra,field,update};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,articleContext)
+const articleUi=articleContext.ui;assert.equal(articleUi.main.value[0],'summary.title');assert.equal(articleUi.field('summary.publishedAt').inputType,'date');assert.equal(articleUi.field('detail.sections').newItemLabel,'段落')
+for(const group of ['summary','detail'])for(const key of Object.keys(articleProps.schema.fields[group].fields)){if(key==='category')continue;const path=group+'.'+key;assert([...articleUi.main.value,...articleUi.extra.value].includes(path),'Every original article setting must remain reachable: '+path)}
+assert(!articleUi.extra.value.includes('slug'));const oldDetail=JSON.stringify(articleProps.modelValue.detail);articleUi.update('summary.title','新標題');assert.equal(JSON.stringify(articleProps.modelValue.detail),oldDetail,'Editing title must preserve a custom image description and all existing body content')
+console.log('PASS: identical-version workspace counts and all original article settings remain reachable without changing custom content')
+
+assert(sameContent({title:'相同',image:'/a.jpg'},{image:'/a.jpg',title:'相同'}),'Object key order is not a content change');assert(!sameContent(['甲','乙'],['乙','甲']),'Visible list order remains a real change')

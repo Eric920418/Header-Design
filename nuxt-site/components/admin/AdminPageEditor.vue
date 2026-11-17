@@ -2,8 +2,8 @@
 import {valueAt,withValue} from '~/shared/cms/page-editors.mjs'
 import {cmsDate} from '~/shared/cms/workflow.mjs'
 import {resourceGuide} from '~/shared/cms/presentation.mjs'
-import {pageChanges,changeImpacts,pageMedia} from '~/shared/cms/changes.mjs'
-import {workbenchBlocks,pagePositionContent} from '~/shared/cms/workbench.mjs'
+import {pageChanges,changeImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
+import {workbenchBlocks,pagePositionContent,itemWebsitePath} from '~/shared/cms/workbench.mjs'
 import {Info} from 'lucide-vue-next'
 const props=defineProps<{id:string}>()
 const route=useRoute(),router=useRouter(),{api,session,message}=useCmsAdmin()
@@ -13,7 +13,7 @@ provide('cms-field-errors',fieldErrors);provide('cms-item-selections',selections
 const blocks=computed<any[]>(()=>{const named=namedPages.value?.find(p=>p.id===props.id);return workbenchBlocks(props.id,(pageData.value?.blocks||[]).map((b:any)=>({...b,name:named?.blocks.find((n:any)=>n.id===b.id)?.name||b.name})))})
 provide('cms-select-block',(name:string)=>{const block=blocks.value.find(b=>b.name===name||b.aliases.some((a:string)=>a.split(':').at(-1)===name));if(block)void selectBlock(block.id)})
 const active=computed(()=>blocks.value.find(b=>b.aliases.includes(route.query.block))||blocks.value[0])
-const workbench={focused:ref(''),editing:ref(''),selection:ref<any>(null),rows:ref<Record<string,any>>({}),baseline,metadata:computed(()=>pageData.value?.rowPresentation||{}),busy,returnFocus:()=>{},position:()=>{positionOpen.value=true},select:(edit:boolean)=>{positionOpen.value=!edit&&window.innerWidth<1024}}
+const workbench={focused:ref(''),editing:ref(''),selection:ref<any>(null),rows:ref<Record<string,any>>({}),baseline,documents:docs,metadata:computed(()=>pageData.value?.rowPresentation||{}),busy,returnFocus:()=>{},position:()=>{positionOpen.value=true},select:(edit:boolean)=>{positionOpen.value=!edit&&window.innerWidth<1024}}
 provide('cms-workbench',workbench)
 provide('cms-media-context',computed(()=>pageMedia(docs.value,bodies.value,blocks.value)))
 const collections=computed(()=>active.value?.fields.filter((f:any)=>f.schema.type==='array')||[])
@@ -29,12 +29,12 @@ function closeItem(){workbench.editing.value='';workbench.returnFocus()}
 function preparePreview(){previewPath.value=props.id==='home'||locationHref.value===active.value?.href?'':locationHref.value;showPreview()}
 const title=computed(()=>namedPages.value?.find(p=>p.id===props.id)?.title||pageData.value?.title||(props.id==='home'?'首頁':'修改頁面'))
 const modified=computed(()=>blocks.value.filter(b=>b.fields.some((f:any)=>JSON.stringify(valueAt(bodies.value[f.documentId],f.path))!==JSON.stringify(valueAt(baseline.value[f.documentId],f.path)))))
-const dirty=computed(()=>modified.value.length>0),pending=computed(()=>docs.value.some(d=>d.draftId!==d.publishedId))
+const dirty=computed(()=>modified.value.length>0),pending=computed(()=>hasPageChanges(blocks.value,Object.fromEntries(docs.value.map(d=>[d.id,d.publishedBody])),baseline.value))
 const changeDetails=computed(()=>pageChanges(blocks.value,docs.value,baseline.value,bodies.value)),changesOpen=ref(false)
 const status=computed(()=>dirty.value?`尚未儲存 · ${changeDetails.value.length} 處修改`:pending.value?'已儲存，官網尚未更新':'官網已更新')
 const impacts=computed<any[]>(()=>[...new Map(docs.value.flatMap(d=>resourceGuide(d.id)?.impacts||[]).map(i=>[i.href+'|'+i.label,i])).values()])
 const shared=computed(()=>changeImpacts(changeDetails.value).filter(i=>i.href.split('#')[0]!==pageData.value?.href.split('#')[0]))
-const returnLink=computed(()=>{const {sitePage,block,edit,part,legacy,field,item,list,returnPath,returnSection,...query}=route.query;if(typeof returnSection==='string')query.section=returnSection;return{path:returnPath==='/admin/content'?'/admin/content':props.id==='home'?'/admin':'/admin/content',query}})
+const returnLink=computed(()=>{const {sitePage,block,edit,part,legacy,field,item,list,create,returnPath,returnSection,...query}=route.query;if(typeof returnSection==='string')query.section=returnSection;return{path:returnPath==='/admin/content'?'/admin/content':props.id==='home'?'/admin':'/admin/content',query}})
 const activeDocs=computed(()=>docs.value.filter(d=>active.value?.fields.some((f:any)=>f.documentId===d.id)))
 const payload=(action:string)=>({action,documents:docs.value.map(d=>({id:d.id,revision:d.revision,body:bodies.value[d.id]}))})
 async function selectBlock(id:string){locationOpen.value=false;await router.replace({query:{...route.query,block:id,legacy:undefined,field:undefined,list:undefined,item:undefined}});await nextTick();formRoot.value?.querySelector<HTMLElement>('.cms-block-title')?.focus()}
@@ -50,9 +50,17 @@ const frameStyle=computed(()=>({width:(mobile.value?390:1440)+'px',height:previe
 const previewUrl=computed(()=>{const [path,anchor]=(previewPath.value||active.value?.href||pageData.value?.href||'/').split('#'),slide=props.id==='home'&&active.value?.id==='home:主視覺輪播'?`&cmsSlide=${workbench.selection.value?.index||0}`:'';return`${path}${path.includes('?')?'&':'?'}cmsPreview=page:${encodeURIComponent(props.id)}&cmsDraft=${encodeURIComponent(initialToken.value)}${slide}${anchor?'#'+anchor:''}`})
 const choices=computed(()=>docs.value.flatMap(d=>{
  const b=bodies.value[d.id],items=d.id==='data-kitchenSeries'?b?.KITCHEN_SERIES_PAGES:d.id==='data-storeCases'?b?.storeCases:['custom-cases','knowledge-articles','news-articles'].includes(d.id)?b?.items:[]
- return(items||[]).filter((i:any)=>(d.id!=='custom-cases'||i.enabled!==false)&&(!pageData.value?.category||i.summary?.category===pageData.value.category)).map((i:any)=>({label:i.summary?.title||i.title||i.name||i.slug,path:d.id==='news-articles'?`/news/${i.summary.category}/${i.slug}`:d.id==='knowledge-articles'?`/knowledge/design/${i.slug}`:d.id==='data-kitchenSeries'?`/home-style/${i.slug}`:d.id==='data-storeCases'?`/gallery/${i.slug}`:`/design-inspiration/${i.id}`}))
+ return(items||[]).filter((i:any)=>i.enabled!==false&&(!pageData.value?.category||i.summary?.category===pageData.value.category)).map((i:any)=>({label:i.summary?.title||i.title||i.name||i.slug,path:itemWebsitePath(d.id,i)}))
 }))
-const locationHref=computed(()=>{const item=workbench.selection.value?.value;return active.value?.previewPage||(active.value?.preview==='inspiration-detail'?pageData.value?.positionPresentation?.detailCase?.route:'')||(props.id==='home'?'':workbench.selection.value?.href||choices.value.find(p=>item?.slug&&p.path.endsWith('/'+item.slug)||item?.id&&p.path.endsWith('/'+item.id))?.path)||active.value?.href||pageData.value?.href||'/'})
+const locationHref=computed(()=>{const selected=workbench.selection.value,item=selected?.value;if(item?.enabled===false||item?.available===false)return pageData.value?.href||'/';return active.value?.previewPage||(active.value?.preview==='inspiration-detail'?pageData.value?.positionPresentation?.detailCase?.route:'')||(props.id==='home'?'':selected?.href||itemWebsitePath(selected?.documentId,item))||active.value?.href||pageData.value?.href||'/'})
+const publicLocation=computed(()=>{
+ const selected=workbench.selection.value
+ if(props.id!=='home'&&selected&&(itemWebsitePath(selected.documentId,selected.value)||selected.href)){
+  const published=itemPublication(docs.value.find(d=>d.id===selected.documentId),selected.path,selected.value,selected.index)
+  return published.visible?itemWebsitePath(selected.documentId,published.item)||selected.href:''
+ }
+ return activeDocs.value.length&&activeDocs.value.every(d=>d.publishedBody)?active.value?.previewPage||active.value?.href||pageData.value?.href||'/':''
+})
 watch(previewFrame,frame=>{observer?.disconnect();if(frame?.parentElement){observer=new ResizeObserver(([entry])=>{if(entry)previewSize.value={width:entry.contentRect.width,height:entry.contentRect.height}});observer.observe(frame.parentElement)}},{flush:'post'})
 function failPreview(reason:string){clearTimeout(previewTimer);previewReady.value=false;needsReload=true;previewError.value=reason;previewState.value='目前輸入尚未套用，可重試或返回修改'}
 function sendPreview(){if(!previewOpen.value||!previewReady.value||!previewResult.value||needsReload)return;previewState.value='正在更新效果…';previewFrame.value?.contentWindow?.postMessage(JSON.parse(JSON.stringify({type:'sakura:preview',documents:previewResult.value.documents,previewToken:previewResult.value.previewToken})),location.origin);clearTimeout(previewTimer);previewTimer=setTimeout(()=>failPreview('官網預覽沒有回應，請重新載入；目前輸入仍保留。'),20000)}
@@ -75,7 +83,7 @@ watch(previewPath,()=>{if(previewResult.value){needsReload=true;void checkPrevie
 const confirming=ref(false),confirmMode=ref('publish'),confirmation=ref<any>(),validating=ref(false)
 async function save(action='save'){
  if(busy.value)return;busy.value=true;error.value='';notice.value=''
- try{const r=await api('page-editors/'+props.id,{method:'POST',body:payload(action),timeout:20000,retry:0});if(!Array.isArray(r?.documents)||r.documents.length!==docs.value.length||new Set(r.documents.map((d:any)=>d.id)).size!==docs.value.length||r.documents.some((d:any)=>!docs.value.some(x=>x.id===d.id)||!Number.isSafeInteger(d.revision)||!d.body||typeof d.body!=='object'||Array.isArray(d.body)))throw Error('伺服器未回傳完整儲存結果，請確認連線後重試；目前輸入仍保留。');for(const d of r.documents){bodies.value[d.id]=d.body;Object.assign(docs.value.find(x=>x.id===d.id),d)}baseline.value=JSON.parse(JSON.stringify(bodies.value));for(const [scope,state]of Object.entries(workbench.rows.value)){const [id,...parts]=scope.split(':');const rows=valueAt(baseline.value[id],parts.join(':'))||[];state.saved=Object.fromEntries(state.order.map((key:string,i:number)=>[key,JSON.parse(JSON.stringify(rows[i]??null))]))}confirming.value=false;fieldErrors.value=[];notice.value=action==='publish'?'官網已更新。':action==='unpublish'?'已暫停本頁內容的官網顯示。':'本頁修改已儲存，官網尚未更新。';await refreshNuxtData(['cms-pages','cms-workspaces','cms-documents','cms-overview']);return true}catch(e:any){confirming.value=false;error.value=message(e);fieldErrors.value=e.data?.data?.fieldErrors||[];await focusError();return false}finally{busy.value=false}
+ try{const r=await api('page-editors/'+props.id,{method:'POST',body:payload(action),timeout:20000,retry:0});if(!Array.isArray(r?.documents)||r.documents.length!==docs.value.length||new Set(r.documents.map((d:any)=>d.id)).size!==docs.value.length||r.documents.some((d:any)=>!docs.value.some(x=>x.id===d.id)||!Number.isSafeInteger(d.revision)||!d.body||typeof d.body!=='object'||Array.isArray(d.body)))throw Error('伺服器未回傳完整儲存結果，請確認連線後重試；目前輸入仍保留。');for(const d of r.documents){bodies.value[d.id]=d.body;const saved=docs.value.find(x=>x.id===d.id);Object.assign(saved,d);if(action==='publish')saved.publishedBody=JSON.parse(JSON.stringify(d.body));if(action==='unpublish')saved.publishedBody=null}baseline.value=JSON.parse(JSON.stringify(bodies.value));for(const [scope,state]of Object.entries(workbench.rows.value)){const [id,...parts]=scope.split(':');const rows=valueAt(baseline.value[id],parts.join(':'))||[];state.saved=Object.fromEntries(state.order.map((key:string,i:number)=>[key,JSON.parse(JSON.stringify(rows[i]??null))]))}confirming.value=false;fieldErrors.value=[];notice.value=action==='publish'?'官網已更新。':action==='unpublish'?'已暫停本頁內容的官網顯示。':pending.value?'本頁修改已儲存，官網尚未更新。':'本頁內容已儲存，與官網相同。';await refreshNuxtData(['cms-pages','cms-workspaces','cms-documents','cms-overview']);return true}catch(e:any){confirming.value=false;error.value=message(e);fieldErrors.value=e.data?.data?.fieldErrors||[];await focusError();return false}finally{busy.value=false}
 }
 async function requestSave(){if(!shared.value.length)return save();confirmMode.value='save';confirmation.value={current:changeDetails.value,saved:[],impacts:shared.value};confirming.value=true}
 async function confirmPublish(){if(validating.value||busy.value)return;clearTimeout(timer);error.value='';validating.value=true;confirmMode.value='publish';try{const r=await checkPreview(false);if(r){confirmation.value=r.review;confirming.value=true}}finally{validating.value=false}}
@@ -89,7 +97,7 @@ onBeforeRouteLeave(()=>!dirty.value||window.confirm('本頁還有尚未儲存的
 onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.value||window.confirm('本頁還有尚未儲存的修改，確定離開？'))
 </script>
 <template><section ref="formRoot" class="cms-page-editor cms-work-editor cms-workbench cms-position-workbench" :class="{'cms-is-editing':!!workbench.editing.value,'cms-text-editing':!collections.length,'cms-inspiration-workbench':id==='inspiration','cms-home-workbench':id==='home'}" :aria-busy="busy" @focusin="trackField">
- <header class="cms-page-editor-heading"><div class="cms-title-group"><NuxtLink :to="returnLink" class="cms-editor-breadcrumb">← 返回</NuxtLink><h1>{{ title }}<span>｜{{ id==='inspiration'?active?.name:'內容管理' }}</span></h1></div><AdminContentSearch /><a :href="locationHref" target="_blank" rel="noopener noreferrer" class="cms-button">查看官網 ↗</a></header>
+ <header class="cms-page-editor-heading"><div class="cms-title-group"><NuxtLink :to="returnLink" class="cms-editor-breadcrumb">← 返回</NuxtLink><h1>{{ title }}<span>｜{{ id==='inspiration'?active?.name:'內容管理' }}</span></h1></div><AdminContentSearch /><a v-if="publicLocation" :href="publicLocation" target="_blank" rel="noopener noreferrer" class="cms-button">查看官網 ↗</a><button v-else type="button" class="cms-button" @click="preparePreview">預覽草稿</button></header>
  <p v-if="error" class="cms-error" role="alert">{{ error }} <button type="button" class="cms-button" @click="reload">查看最新內容</button></p><p v-if="notice" class="cms-notice" role="status">{{ notice }}</p><p v-if="!pageData&&!error" class="cms-empty" role="status">正在載入頁面內容…</p>
  <template v-if="pageData">
  <button type="button" class="cms-button cms-location-toggle" :aria-expanded="locationOpen" @click="locationOpen=true">選擇區塊：{{ active?.name }} ▾</button>

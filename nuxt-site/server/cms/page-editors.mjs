@@ -13,15 +13,16 @@ import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
 import {caseLibrary} from './case-library.mjs'
 import {pagePositions,positionImage} from '../../shared/cms/positions.mjs'
 import {firstImage} from '../../shared/cms/workflow.mjs'
-import {pageSearchItems,publishReview} from '../../shared/cms/changes.mjs'
+import {pageSearchItems,publishReview,hasPageChanges,sameContent} from '../../shared/cms/changes.mjs'
 import {workbenchBlocks} from '../../shared/cms/workbench.mjs'
 
 export const editorSchema=d=>customCasesSchema(d.id,kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson))))))
 export async function pageEditorSummaries(){
- const [rows,schemas]=await Promise.all([workspaceSummaries(),query('SELECT d.id,d.schemaJson,COALESCE(p.body,v.body) AS body,v.body AS draftBody FROM cms.Documents d LEFT JOIN cms.Versions p ON p.id=d.publishedId LEFT JOIN cms.Versions v ON v.id=d.draftId')])
+ const [rows,schemas]=await Promise.all([workspaceSummaries(),query('SELECT d.id,d.schemaJson,COALESCE(p.body,v.body) AS body,p.body AS publishedBody,v.body AS draftBody FROM cms.Documents d LEFT JOIN cms.Versions p ON p.id=d.publishedId LEFT JOIN cms.Versions v ON v.id=d.draftId')])
  const documents=schemas.recordset.map(d=>({id:d.id,schema:editorSchema(d),body:d.body?JSON.parse(d.body):{}}))
  const bodies=Object.fromEntries(await Promise.all(schemas.recordset.map(async d=>{const body=JSON.parse(d.draftBody||d.body||'{}');return[d.id,d.id.startsWith('catalog-')?await alignSource(d.id,body):body]})))
- return pageEditors.map(p=>{const summary=pageSummary(p,rows,documents);return{...summary,blocks:summary.blocks.map(b=>({...b,items:pageSearchItems(b,bodies),fields:b.fields.map(({documentId,path,label,searchTerms})=>({documentId,path,label,searchTerms}))}))}})
+ const published=Object.fromEntries(await Promise.all(schemas.recordset.map(async d=>{const body=d.publishedBody?JSON.parse(d.publishedBody):null;return[d.id,body&&d.id.startsWith('catalog-')?sameContent(body,JSON.parse(d.draftBody||'null'))?bodies[d.id]:await alignSource(d.id,body):body]})))
+ return pageEditors.map(p=>{const summary=pageSummary(p,rows,documents);return{...summary,pending:hasPageChanges(summary.blocks,published,bodies),blocks:summary.blocks.map(b=>({...b,items:pageSearchItems(b,bodies),fields:b.fields.map(({documentId,path,label,searchTerms})=>({documentId,path,label,searchTerms}))}))}})
 }
 function parameters(p){return Object.fromEntries(p.ids.map((id,i)=>['id'+i,id]))}
 async function rowPresentation(p){
@@ -54,9 +55,11 @@ export async function readPageEditor(id){
  const documents=await Promise.all(p.ids.map(async id=>{
   const d=rows.find(d=>d.id===id);if(!d)fail(404,'本頁內容尚未備齊，請聯絡維護人員；既有內容未變更。')
   const body=d.body?JSON.parse(d.body):{}
-  return{id,revision:d.revision,draftId:d.draftId,publishedId:d.publishedId,updatedAt:d.updatedAt,schema:editorSchema(d),body:id.startsWith('catalog-')?await alignSource(id,body):body,versions:history.recordset.filter(v=>v.documentId===id)}
+  const published=d.publishedBody?JSON.parse(d.publishedBody):null,aligned=id.startsWith('catalog-')?await alignSource(id,body):body
+  return{id,revision:d.revision,draftId:d.draftId,publishedId:d.publishedId,updatedAt:d.updatedAt,schema:editorSchema(d),body:aligned,publishedBody:published&&id.startsWith('catalog-')?sameContent(body,published)?aligned:await alignSource(id,published):published,versions:history.recordset.filter(v=>v.documentId===id)}
  }))
  const [rowsForDisplay,position]=await Promise.all([rowPresentation(p),positionPresentation(p)]),summary=pageSummary(p,summaries,documents)
+ summary.pending=hasPageChanges(summary.blocks,Object.fromEntries(documents.map(d=>[d.id,d.publishedBody])),Object.fromEntries(documents.map(d=>[d.id,d.body])))
  if(position?.detailCase)summary.blocks=summary.blocks.map(b=>b.preview==='inspiration-detail'?{...b,href:position.detailCase.route}:b)
  summary.blocks=summary.blocks.map(b=>p.id==='knowledge'&&b.name.startsWith('系統櫃')?{...b,href:'/knowledge/design/systemcabinet'}:position?.detailPath&&b.fields.some(f=>/-slug-$/.test(f.documentId))?{...b,href:position.detailPath}:b)
  return{...summary,documents,rowPresentation:rowsForDisplay,positionPresentation:position}

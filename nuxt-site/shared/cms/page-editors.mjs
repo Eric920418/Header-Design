@@ -38,9 +38,15 @@ export function legacyPage(id){
  return pageEditors.find(p=>p.ids.includes(w?.id||id)&&!p.extra?.includes(w?.id||id))||pageEditors.find(p=>p.ids.includes(w?.id||id))
 }
 export function pageEditorLink(id,query={},block){
- const p=pageEditor(id),{edit,part,area,sitePage,block:oldBlock,field,item,list,returnPath,...rest}=query
+ const p=pageEditor(id),{edit,part,area,sitePage,block:oldBlock,field,item,list,create,returnPath,...rest}=query
  const originalSection=rest.returnSection||rest.section
  return{path:p?.section==='home'?'/admin/home':'/admin/content',query:{...rest,...(p?.section!=='home'?{section:p?.section||'all',...(originalSection&&originalSection!==p?.section?{returnSection:originalSection}:{})}:rest.section?{returnPath:'/admin/content'}:{}),sitePage:id,...(block?{block}:{})}}
+}
+export function pageTaskLink(pages,id,scope,create=false,query={}){
+ const block=pages?.find(p=>p.id===id)?.blocks.find(b=>b.fields.some(f=>f.documentId+':'+f.path===scope))
+ const link=pageEditorLink(id,query,block?.id)
+ if(create&&block)link.query.create=scope
+ return link
 }
 export function legacyPageLink(id,query={}){
  const p=legacyPage(id),link=pageEditorLink(p?.id||id,query)

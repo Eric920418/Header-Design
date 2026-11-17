@@ -89,7 +89,7 @@ const labels={
  image:'圖片',images:'圖片集',img:'卡片圖片',src:'圖片檔案',cover:'封面圖片',alt:'圖片替代文字',imageAlt:'圖片替代文字',background:'背景圖片',logo:'品牌標誌圖片',portrait:'人物照片',heroSlides:'主視覺輪播圖片',slides:'輪播內容',gallery:'展示圖片',captionTop:'文字顯示於圖片上方',emphasized:'強調顯示',logoClass:'標誌顯示樣式',imageLayout:'圖片排版方式',
  label:'按鈕文字',actionLabel:'按鈕文字',href:'按鈕連結',to:'按鈕連結',url:'連結網址',route:'前往頁面連結',links:'相關連結',children:'子選單項目',external:'使用外部連結',newTab:'另開新分頁',leftNav:'左側主選單',rightNav:'右側主選單',mega:'品牌圖文選單',seriesMega:'顯示系列圖文選單',sitemapGroups:'頁尾網站地圖',primaryItem:'主要服務按鈕',serviceItems:'其他服務按鈕',
  id:'內容識別碼',slug:'固定網址識別碼',articleId:'對應文章識別碼',code:'項目代號',n:'顯示編號',number:'顯示編號',numbers:'條款編號',value:'顯示內容',values:'比較內容',year:'年份',date:'日期',publishedAt:'發布日期',displayDate:'日期顯示文字',category:'文章分類',categoryLabel:'分類顯示名稱',recentRank:'最新文章顯示順序',legacyUrl:'原官網文章網址',legacyPath:'原官網文章連結',detailRoute:'文章內頁連結',source:'資料來源',
- enabled:'上架此項目',available:'開放此系列連結',featured:'優先推薦',sort:'顯示順序',cmsSettings:'區塊顯示與搜尋設定',visible:'顯示此區塊',seo:'搜尋設定',seoTitle:'搜尋結果標題',seoDescription:'搜尋結果摘要',
+ enabled:'更新官網後顯示',available:'開放此系列連結',featured:'優先推薦',sort:'顯示順序',cmsSettings:'區塊顯示與搜尋設定',visible:'顯示此區塊',seo:'搜尋設定',seoTitle:'搜尋結果標題',seoDescription:'搜尋結果摘要',
  zh:'中文名稱',en:'英文名稱',style:'設計風格',styles:'風格項目',color:'設計顏色',size:'設計尺寸',form:'廚房型式',model:'商品型號',type:'內容類型',badge:'標籤文字',budget:'預算',countertop:'檯面材質',kitchenArea:'廚房坪數',household:'家庭成員',designer:'設計師',role:'職稱',tenure:'加盟年資',
  phone:'聯絡電話',email:'電子郵件',address:'地址',hours:'營業時間',city:'所在縣市',region:'所在地區',regionCities:'地區與縣市對照',regions:'門市地區與縣市',mapUrl:'地圖連結',lineUrl:'LINE 諮詢連結',reservationUrl:'預約連結',contact:'門市聯絡資訊',specs:'案例規格',meta:'案例規格',metaLabels:'規格欄位名稱',store:'門市名稱',storeName:'門市名稱',stores:'地圖門市資料',storeCases:'門市資料與案例文章',cases:'推薦案例',article:'案例文章內文',reviews:'顧客分享',
  services:'服務項目',strengths:'建商實力圖文',series:'系列卡片',suites:'系列組合',finishes:'板材與顏色',equipment:'推薦廚電',hero:'系列主視覺',logos:'品牌標誌清單',newsCategories:'消息分類導覽',designStyleLinks:'設計風格推薦連結',kitchenSeriesLinks:'廚房系列推薦文字',columns:'比較表欄位',rows:'比較表項目',catalogues:'型錄卡片',pdfUrl:'型錄 PDF 檔案',downloadFilename:'下載檔案名稱',brochurePages:'加盟型錄預覽頁',video:'影片設定',videoId:'YouTube 影片連結或識別碼',brandVideoId:'品牌承諾影片連結或識別碼',pavilionVideoId:'集團品牌館影片連結或識別碼',franchiseVideoId:'加盟介紹影片連結或識別碼',serviceVideoSrc:'服務流程影片網址（MP4）',brandVideoSrc:'首頁品牌承諾影片網址（MP4）',serviceVideoCover:'服務流程影片封面',caseLink:'相關案例連結',position:'顯示位置',icon:'圖示圖片',
@@ -112,7 +112,13 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
  if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}
  if(resourceId==='custom-cases'&&normalized==='items')return{label:'自行建置案例',newItemLabel:'案例',editor:'case-table',rowLabel:'title',rowImage:'cover'}
- if(resourceId==='custom-cases'&&normalized.startsWith('items.*.')){const label={title:'案例標題',description:'案例介紹',form:'廚房型式',style:'設計風格',enabled:'在官網顯示'}[key];if(label)return{label,...(['title','form','style'].includes(key)?{singleLine:true}:{})}}
+ if(resourceId==='custom-cases'&&normalized.startsWith('items.*.')){const label={title:'案例標題',description:'案例介紹',form:'廚房型式',style:'設計風格',enabled:'更新官網後顯示'}[key];if(label)return{label,...(['title','form','style'].includes(key)?{singleLine:true}:{})}}
+ if(['news-articles','knowledge-articles'].includes(resourceId)){
+  if(normalized==='items.*.summary.cover')return{label:'列表卡片圖片'}
+  if(normalized==='items.*.detail.cover')return{label:'文章頂部圖片'}
+  if(normalized==='items.*.summary.publishedAt')return{label:'文章日期',singleLine:true,inputType:'date'}
+  if(normalized==='items.*.summary.title')return{label:'文章標題',singleLine:true}
+ }
  if(resourceId==='view-components-home-HomeHero'&&normalized==='slides')return{label:'輪播內容',newItemLabel:'輪播',searchLabel:'搜尋輪播名稱',rowLabel:'title',rowImage:'image'}
  if(resourceId==='view-components-home-HomeHero'&&normalized.startsWith('copy.')){
   const images={field1:'下一張圖片說明',field2:'前一張圖片說明',field3:'切換時圖片說明',field4:'目前輪播圖片說明'}

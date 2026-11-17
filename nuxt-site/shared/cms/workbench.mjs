@@ -1,5 +1,5 @@
 import {firstImage,rowName} from './workflow.mjs'
-import {blockThumbnail,valueAt} from './page-editors.mjs'
+import {blockThumbnail,valueAt,withValue} from './page-editors.mjs'
 import {decoratePosition,pagePositions,positionImage} from './positions.mjs'
 
 const home=[
@@ -25,6 +25,27 @@ export function workbenchBlocks(page,blocks){
  return result
 }
 export const itemKey=(value,index)=>String(value&&typeof value==='object'?(value.id??value.slug??index):index)
+export function itemWebsitePath(documentId,item){
+ if(!item)return ''
+ if(documentId==='news-articles')return `/news/${item.summary.category}/${item.slug}`
+ if(documentId==='knowledge-articles')return `/knowledge/design/${item.slug}`
+ if(documentId==='data-kitchenSeries')return `/home-style/${item.slug}`
+ if(documentId==='data-storeCases')return `/gallery/${item.slug}`
+ if(documentId==='custom-cases')return `/design-inspiration/${item.id}`
+ return ''
+}
+export function articleDateLabel(value){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(value||''))return value||''
+ const date=new Date(value+'T12:00:00Z')
+ return Number.isNaN(date.getTime())?value:new Intl.DateTimeFormat('en-US',{timeZone:'UTC',month:'short',day:'numeric',year:'numeric'}).format(date).toUpperCase()
+}
+export function updateArticleField(article,path,value){
+ let next=withValue(article,path,value)
+ if(path==='summary.publishedAt'&&(!article.summary.displayDate||[article.summary.publishedAt,articleDateLabel(article.summary.publishedAt)].includes(article.summary.displayDate)))next=withValue(next,'summary.displayDate',articleDateLabel(value))
+ if(path==='summary.cover'&&(!article.detail?.cover?.src||article.detail.cover.src===article.summary.cover))next=withValue(next,'detail.cover',{...article.detail?.cover,src:value,alt:article.detail?.cover?.alt||article.summary.title})
+ if(path==='summary.title'&&article.detail?.cover?.alt===article.summary.title)next=withValue(next,'detail.cover.alt',value)
+ return next
+}
 export function freshArticleValue(value,schema){
  if(schema.hidden||schema.readOnly||Object.hasOwn(schema,'fixed'))return value
  if(schema.type==='array')return []

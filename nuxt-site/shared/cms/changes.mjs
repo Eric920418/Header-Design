@@ -2,7 +2,25 @@ import {valueAt,pageEditors,pageBlocks} from './page-editors.mjs'
 import {resourceGuide,editingSchema} from './presentation.mjs'
 import {itemCaption,itemKey,itemThumbnail} from './workbench.mjs'
 
-export const sameContent=(a,b)=>JSON.stringify(a)===JSON.stringify(b)
+export function sameContent(a,b){
+ if(a===b)return true
+ if(!a||!b||typeof a!=='object'||typeof b!=='object')return false
+ if(Array.isArray(a)||Array.isArray(b))return Array.isArray(a)&&Array.isArray(b)&&a.length===b.length&&a.every((v,i)=>sameContent(v,b[i]))
+ const keys=Object.keys(a).filter(k=>a[k]!==undefined)
+ return keys.length===Object.keys(b).filter(k=>b[k]!==undefined).length&&keys.every(k=>Object.hasOwn(b,k)&&sameContent(a[k],b[k]))
+}
+export function hasPageChanges(blocks,published,draft){
+ return blocks.some(b=>b.fields.some(f=>{
+  const values=body=>{const value=valueAt(body?.[f.documentId],f.path);return f.schema.rowFilter&&Array.isArray(value)?value.filter(i=>valueAt(i,f.schema.rowFilter.path)===f.schema.rowFilter.value):value}
+  return !sameContent(values(published),values(draft))
+ }))
+}
+export function itemPublication(document,path,value,index){
+ const rows=valueAt(document?.publishedBody,path),identity=value&&typeof value==='object'?(value.id??value.slug):undefined
+ const item=Array.isArray(rows)?identity===undefined?rows[index]:rows.find(i=>(i.id??i.slug)===identity):undefined
+ const visible=item!==undefined&&document.publishedBody?.cmsSettings?.visible!==false&&item?.enabled!==false&&item?.available!==false
+ return {item,visible,label:!visible?item===undefined?'尚未刊登':'官網未顯示':sameContent(item,value)?'官網已刊登':'有待更新修改'}
+}
 const overlaps=(a,b)=>a===b||a.startsWith(b+'.')||b.startsWith(a+'.')
 const display=value=>value==null||value===''?'尚未設定':typeof value==='boolean'?value?'是':'否':String(value)
 
@@ -77,10 +95,10 @@ export function pageSearchItems(block,bodies){
 
 export function pageMedia(documents,bodies,blocks){
  const result=[]
- function scan(value,schema,labels=[]){
-  if(typeof value==='string'&&(/\.(?:webp|png|jpe?g|svg|avif|gif|pdf)(?:$|[?#])/i.test(value)||/^\/media\/[a-f\d-]{36}$/i.test(value))){result.push({src:value,label:labels.join(' › '),pdf:/PDF|檔案/.test(schema?.label||'')||/\.pdf(?:$|[?#])/i.test(value)});return}
-  if(Array.isArray(value))value.forEach((v,i)=>scan(v,schema?.item,[...labels,itemCaption(v,i,schema)]))
-  else if(value&&typeof value==='object')for(const[k,v]of Object.entries(value))scan(v,schema?.fields?.[k],[...labels,schema?.fields?.[k]?.label||'圖片'])
+ function scan(value,schema,labels=[],itemName=''){
+  if(typeof value==='string'&&(/\.(?:webp|png|jpe?g|svg|avif|gif|pdf)(?:$|[?#])/i.test(value)||/^\/media\/[a-f\d-]{36}$/i.test(value))){const purpose=/^(圖片|圖片檔案|檔案路徑)$/.test(labels.at(-1)||'')?labels.at(-2):labels.at(-1);result.push({src:value,label:[itemName||labels[0],purpose].filter(Boolean).join('｜'),caption:itemName||labels[0]||'本頁圖片',purpose,location:labels.join(' › '),pdf:/PDF|檔案/.test(schema?.label||'')||/\.pdf(?:$|[?#])/i.test(value)});return}
+  if(Array.isArray(value))value.forEach((v,i)=>{if(!schema?.rowFilter||valueAt(v,schema.rowFilter.path)===schema.rowFilter.value)scan(v,schema?.item,[...labels,itemCaption(v,i,schema)],itemName||itemCaption(v,i,schema))})
+  else if(value&&typeof value==='object')for(const[k,v]of Object.entries(value))scan(v,schema?.fields?.[k],[...labels,schema?.fields?.[k]?.label||'圖片'],itemName)
  }
  if(blocks)for(const block of blocks)for(const f of block.fields)scan(valueAt(bodies[f.documentId],f.path),f.schema,[block.name,f.label])
  else for(const d of documents)scan(bodies[d.id],editingSchema(d.schema,d.id))

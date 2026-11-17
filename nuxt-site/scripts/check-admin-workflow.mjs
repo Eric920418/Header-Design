@@ -79,6 +79,8 @@ if(process.env.CMS_PAGE_HTTP){
  for(const p of allPages){
   const r=await call('/api/admin/page-editors/'+p.id);assert.equal(r.status,200,p.id);assert(r.body.blocks.length)
   assert(r.body.positionPresentation&&Array.isArray(r.body.positionPresentation.sections),p.id+' must include read-only position information')
+  assert(r.body.documents.every(d=>Object.hasOwn(d,'publishedBody')&&!Object.hasOwn(d.body,'publishedBody')),'Published status is read-only information, outside editable content')
+  assert.equal(r.body.pending,p.pending,'The dashboard and editor must agree on actual pending content')
   assert(r.body.documents.every(d=>!Object.hasOwn(d.body,'positionPresentation')&&!Object.hasOwn(d.body,'rowPresentation')),'Preview photographs cannot be added to stored bodies')
   const snapshot=await call('/api/admin/page-editors/'+p.id,'admin',{action:'preview',documents:r.body.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(snapshot.status,200,p.id+':'+JSON.stringify(snapshot.body));assert(snapshot.body.previewToken);assert(Array.isArray(snapshot.body.review.current)&&Array.isArray(snapshot.body.review.saved));console.log('Verified page read/preview/review: '+p.id)
  }
@@ -101,6 +103,14 @@ if(process.env.CMS_PAGE_HTTP){
  assert.equal((await call('/api/design-inspiration/cases/'+caseId+'?'+draft)).status,200);assert.equal((await call('/api/design-inspiration/cases/'+hiddenId+'?'+draft)).status,404)
  const caseFilters=await call('/api/design-inspiration/filters?'+draft);assert(caseFilters.body.forms.includes(caseForm));assert(!caseFilters.body.styles.includes('隱藏風格-'+hiddenId))
  const projected=await call('/api/content/custom-cases?preview=page:inspiration&cmsDraft='+casesPreview.body.previewToken);assert(projected.body.items.some(i=>i.id===caseId));assert(!projected.body.items.some(i=>i.id===hiddenId));assert.equal((await call('/api/design-inspiration/cases?'+draft,'guest')).status,401)
+ const newsEditor=(await call('/api/admin/page-editors/news-latest')).body,newsDocument=newsEditor.documents.find(d=>d.id==='news-articles'),article=structuredClone(newsDocument.body.items.find(i=>i.summary.category==='latest'))
+ article.id=randomUUID();article.slug='unsaved-'+article.id;article.summary.title='未刊登文章的預覽驗收';newsDocument.body.items.push(article)
+ const articlePreview=await call('/api/admin/page-editors/news-latest','admin',{action:'preview',documents:newsEditor.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(articlePreview.status,200)
+ const articlePath='/news/latest/'+article.slug,draftQuery='cmsPreview=page:news-latest&cmsDraft='+articlePreview.body.previewToken,headers={Cookie:Object.entries(jars.admin).map(([k,v])=>k+'='+v).join('; ')}
+ const privateArticle=await fetch(base+articlePath+'?'+draftQuery,{headers,signal:AbortSignal.timeout(30000)});assert.equal(privateArticle.status,200);assert((await privateArticle.text()).includes(article.summary.title));assert.match(privateArticle.headers.get('cache-control'),/no-store/)
+ assert.equal((await fetch(base+articlePath,{headers,signal:AbortSignal.timeout(30000)})).status,404,'An unsaved article must never become publicly available')
+ assert.equal((await call('/api/content/data-news?preview=page:news-latest&cmsDraft='+articlePreview.body.previewToken,'guest')).status,401)
+ assert(!(await call('/api/content/data-news')).body.newsArticles.some(i=>i.id===article.id))
  assert.deepEqual((await call('/api/admin/documents')).body,before)
  console.log('PASS: all 28 page reads/previews, login/permissions/CSRF/409, custom case display across list/detail/filters/content API, authenticated snapshots and unchanged website documents')
 }

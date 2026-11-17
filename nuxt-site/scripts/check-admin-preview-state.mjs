@@ -6,6 +6,8 @@ import {createServer} from 'node:http'
 import ts from 'typescript'
 import {ref,computed,watch,nextTick} from 'vue'
 import {valueAt} from '../shared/cms/page-editors.mjs'
+import {itemPublication} from '../shared/cms/changes.mjs'
+import {itemWebsitePath} from '../shared/cms/workbench.mjs'
 import {contentAliases,publicContent} from '../shared/cms/public-content.mjs'
 
 // Exercise the editor's actual handlers without a browser, SQL or content writes.
@@ -71,7 +73,7 @@ console.log('PASS: one initial preview check instead of two')
 const pageSource=await readFile(new URL('../components/admin/AdminPageEditor.vue',import.meta.url),'utf8'),pageParsed=ts.createSourceFile('page-editor.ts',pageSource.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1],ts.ScriptTarget.Latest,true)
 const pageHandlers=new Set(['failPreview','sendPreview','receive','checkPreview','reloadPreview','showPreview','closePreview','save'])
 const pageCode=ts.transpileModule(pageParsed.statements.filter(s=>ts.isFunctionDeclaration(s)&&pageHandlers.has(s.name?.text)||ts.isExpressionStatement(s)&&s.getText(pageParsed).startsWith('watch(bodies,')).map(s=>s.getText(pageParsed)).join('\n'),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
-const idle={props:{id:'home'},docs:ref([{id:'home',revision:1}]),bodies:ref({home:{title:'仍保留的輸入'}}),baseline:ref({home:{title:'原始內容'}}),previewOpen:ref(false),previewReady:ref(false),previewResult:ref(null),initialToken:ref(''),previewError:ref(''),previewState:ref(''),fieldErrors:ref([]),previewFrame:ref(null),mobile:ref(false),busy:ref(false),error:ref(''),notice:ref(''),confirming:ref(false),controller:undefined,sequence:0,needsReload:false,recovery:0,timer:undefined,previewTimer:undefined,observer:undefined,JSON,AbortController,watch,nextTick,document:{querySelector:()=>null},window:{innerWidth:390},location:{origin:'https://cms.example'},setTimeout,clearTimeout,message:e=>e.message,focusError:async()=>{},refreshNuxtData:async()=>{}}
+const idle={props:{id:'home'},docs:ref([{id:'home',revision:1}]),bodies:ref({home:{title:'仍保留的輸入'}}),baseline:ref({home:{title:'原始內容'}}),pending:ref(true),previewOpen:ref(false),previewReady:ref(false),previewResult:ref(null),initialToken:ref(''),previewError:ref(''),previewState:ref(''),fieldErrors:ref([]),previewFrame:ref(null),mobile:ref(false),busy:ref(false),error:ref(''),notice:ref(''),confirming:ref(false),controller:undefined,sequence:0,needsReload:false,recovery:0,timer:undefined,previewTimer:undefined,observer:undefined,JSON,AbortController,watch,nextTick,document:{querySelector:()=>null},window:{innerWidth:390},location:{origin:'https://cms.example'},setTimeout,clearTimeout,message:e=>e.message,focusError:async()=>{},refreshNuxtData:async()=>{}}
 let idleRequests=0
 idle.api=async()=>{idleRequests++;return{previewToken:'page-token',documents:[]}}
 idle.payload=action=>({action,documents:[{id:'home',revision:1,body:idle.bodies.value.home}]})
@@ -84,9 +86,20 @@ await idle.check(false);assert.equal(idleRequests,2);assert.equal(idle.previewOp
 idle.api=async()=>({ok:true});await idle.savePage();assert.match(idle.error.value,/未回傳完整儲存結果/);assert.equal(idle.bodies.value.home.title,'關閉後繼續修改');assert.equal(idle.baseline.value.home.title,'原始內容')
 idle.workbench={rows:ref({'home:slides':{order:['row-1'],saved:{'row-1':{title:'舊值'}}}})};idle.valueAt=valueAt;idle.bodies.value.home.slides=[{title:'新存檔值'}]
 idle.api=async()=>({documents:[{id:'home',revision:2,body:JSON.parse(JSON.stringify(idle.bodies.value.home))}]});assert.equal(await idle.savePage(),true);assert.equal(idle.workbench.rows.value['home:slides'].saved['row-1'].title,'新存檔值');assert.equal(idle.baseline.value.home.slides[0].title,'新存檔值')
+await idle.savePage('publish');assert.deepEqual(JSON.parse(JSON.stringify(idle.docs.value[0].publishedBody)),JSON.parse(JSON.stringify(idle.bodies.value.home)),'Publishing updates the read-only public snapshot');idle.bodies.value.home.title='發布後的另一份草稿';assert.notEqual(idle.docs.value[0].publishedBody.title,idle.bodies.value.home.title);await idle.savePage('unpublish');assert.equal(idle.docs.value[0].publishedBody,null)
 console.log('PASS: successful save refreshes each item cancellation baseline; malformed responses preserve previous baselines and input')
 assert.match(pageSource,/<aside v-if="previewOpen"/)
 console.log('PASS: actual page editor is idle until preview is opened, defaults to phone on narrow screens, cancels on close, keeps confirmation separate, and retains input on malformed save responses')
+// Execute the header's actual route decisions: new/hidden rows use private preview only.
+const selection=ref({documentId:'news-articles',path:'items',index:0,value:{id:'new',slug:'new-test',enabled:true,summary:{category:'latest'}}})
+const routeState={computed,itemPublication,itemWebsitePath,props:{id:'news-latest'},workbench:{selection},docs:ref([{id:'news-articles',publishedBody:{items:[]}}]),active:ref({href:'/news/latest'}),activeDocs:ref([{publishedBody:{copy:{}}}]),pageData:ref({href:'/news/latest'})}
+const routing=pageParsed.statements.filter(s=>ts.isVariableStatement(s)&&['const locationHref=','const publicLocation='].some(start=>s.getText(pageParsed).startsWith(start))).map(s=>s.getText(pageParsed)).join('\n')
+runInNewContext(ts.transpileModule(routing+'\nthis.privatePath=locationHref;this.publicPath=publicLocation;',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,routeState)
+assert.equal(routeState.publicPath.value,'');assert.equal(routeState.privatePath.value,'/news/latest/new-test')
+routeState.docs.value[0].publishedBody.items=[JSON.parse(JSON.stringify(selection.value.value))];assert.equal(routeState.publicPath.value,'/news/latest/new-test')
+selection.value.value.enabled=false;assert.equal(routeState.publicPath.value,'/news/latest/new-test','Draft hiding must not change the real website link');assert.equal(routeState.privatePath.value,'/news/latest','A hidden draft is previewed on its list, not a nonexistent detail')
+routeState.docs.value[0].publishedBody.items[0].enabled=false;assert.equal(routeState.publicPath.value,'')
+console.log('PASS: new and hidden content cannot expose a public 404 link; published links use the actual published identity')
 const lateMessages=[],lateFrame={postMessage:m=>lateMessages.push(m)}
 idle.previewFrame.value={contentWindow:lateFrame};idle.api=async()=>({previewToken:'late-ready',documents:[{id:'home',body:JSON.parse(JSON.stringify(idle.bodies.value.home))}]})
 idle.open();await nextTick();await new Promise(resolve=>setImmediate(resolve));idle.fail('官網畫面載入超過 20 秒')
