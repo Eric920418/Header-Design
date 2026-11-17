@@ -38,13 +38,17 @@ export function legacyPage(id){
  return pageEditors.find(p=>p.ids.includes(w?.id||id)&&!p.extra?.includes(w?.id||id))||pageEditors.find(p=>p.ids.includes(w?.id||id))
 }
 export function pageEditorLink(id,query={},block){
- const p=pageEditor(id),{edit,part,area,sitePage,block:oldBlock,field,item,returnPath,...rest}=query
+ const p=pageEditor(id),{edit,part,area,sitePage,block:oldBlock,field,item,list,returnPath,...rest}=query
  const originalSection=rest.returnSection||rest.section
  return{path:p?.section==='home'?'/admin/home':'/admin/content',query:{...rest,...(p?.section!=='home'?{section:p?.section||'all',...(originalSection&&originalSection!==p?.section?{returnSection:originalSection}:{})}:rest.section?{returnPath:'/admin/content'}:{}),sitePage:id,...(block?{block}:{})}}
 }
 export function legacyPageLink(id,query={}){
  const p=legacyPage(id),link=pageEditorLink(p?.id||id,query)
  return{...link,query:{...link.query,legacy:query.part||id,...(query.returnPath?{returnPath:query.returnPath}:{})}}
+}
+export function searchResultLink(result,query={}){
+ const link=pageEditorLink(result.page.id,query,result.block?.id)
+ return {...link,query:{...link.query,...(result.item?{list:result.item.scope,item:result.item.key}:{})}}
 }
 export const valueAt=(body,path)=>path.split('.').reduce((v,key)=>v?.[key],body)
 export function withValue(body,path,value){
@@ -167,7 +171,8 @@ export function searchPages(pages,search){
  return pages.flatMap(p=>{
   if(!words.length)return[{page:p}]
   const match=text=>words.every(w=>text.toLocaleLowerCase().includes(w))
+  const items=p.blocks.flatMap(block=>(block.items||[]).filter(item=>words.some(w=>item.caption.toLocaleLowerCase().includes(w))&&match(p.title+' '+block.name+' '+item.caption+' '+block.fields.map(f=>f.searchTerms||'').join(' '))).map(item=>({page:p,block,item})))
   const found=p.blocks.filter(b=>match(p.title+' '+b.name+' '+(b.aliases||[]).map(a=>a.split(':').at(-1)).join(' ')+' '+b.fields.map(f=>f.label+' '+(f.searchTerms||'')).join(' ')))
-  return found.length?found.map(block=>({page:p,block})):match(p.searchTerms||p.title)?[{page:p}]:[]
- })
+  return [...items,...(found.length?found.map(block=>({page:p,block})):!items.length&&match(p.searchTerms||p.title)?[{page:p}]:[])]
+ }).sort((a,b)=>Number(!!b.item)-Number(!!a.item)||Number(b.item?.caption.toLocaleLowerCase()===String(search).trim().toLocaleLowerCase())-Number(a.item?.caption.toLocaleLowerCase()===String(search).trim().toLocaleLowerCase()))
 }

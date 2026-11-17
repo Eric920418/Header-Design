@@ -41,6 +41,6 @@ function select(src: string) { set(picking.value === 'mobile' ? 'mobileImage' : 
       </component>
     </div>
     <p class="cms-field-help">若主體被切到，可展開「調整圖片顯示位置」修正。手機可另外選圖，或沿用桌機圖片；更新官網後生效。</p>
-    <AdminDialog :open="Boolean(picking)" :title="`選擇${picking === 'mobile' ? '手機' : '桌機'}輪播圖片`" wide @close="picking = null"><AdminMediaGrid picking kind="image" @select="select($event.src)" /></AdminDialog>
+    <AdminDialog :open="Boolean(picking)" :title="`選擇${picking === 'mobile' ? '手機' : '桌機'}輪播圖片`" wide @close="picking = null"><AdminMediaGrid picking kind="image" :selected="picking==='mobile'?modelValue.mobileImage||modelValue.image:modelValue.image" @select="select($event.src)" /></AdminDialog>
   </section>
 </template>

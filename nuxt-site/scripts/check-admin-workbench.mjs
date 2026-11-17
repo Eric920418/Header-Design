@@ -10,7 +10,8 @@ import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshA
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
 import {blockThumbnail} from '../shared/cms/page-editors.mjs'
-import {valueAt} from '../shared/cms/page-editors.mjs'
+import {valueAt,searchPages} from '../shared/cms/page-editors.mjs'
+import {sameContent,pageChanges,changeImpacts,publishReview,pageSearchItems,pageMedia} from '../shared/cms/changes.mjs'
 import {normalizeVideos,validate} from '../server/cms/content.mjs'
 import {readableError} from '../server/cms/workspaces.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
@@ -112,10 +113,10 @@ thumbnailProps.contain=false;thumbnailProps.alt='品牌標誌縮圖';assert.equa
 thumbnailProps.alt='一般照片';assert.equal(thumbnailContext.mark.value,false)
 const source=await readFile(new URL('../components/admin/AdminItems.vue',import.meta.url),'utf8')
 const script=source.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(/^import .*$/gm,'')
-const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema,reorder,startDrag,drop,toggleVisibility,dragged};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
+const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema,reorder,startDrag,drop,toggleVisibility,dragged,cancelItem,changed};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
 const model=reactive({modelValue:Array.from({length:8},(_,i)=>({id:'row-'+i,title:'內容 '+i,image:'/image.webp'})),schema:{type:'array',label:'輪播內容',item:{type:'object',fields:{id:{type:'string'},title:{type:'string'}}},template:{id:'',title:''}},documentId:'home',path:'slides'})
-const state=ref({}),errors=ref([]),workbench={focused:ref(''),editing:ref(''),selection:ref(null),metadata:ref({}),busy:ref(false),select:()=>{}},emitted=[]
-const context={ref,computed,watch,nextTick,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
+const route=reactive({query:{}}),state=ref({}),errors=ref([]),workbench={rows:ref({}),baseline:ref({home:{slides:JSON.parse(JSON.stringify(model.modelValue))}}),focused:ref(''),editing:ref(''),selection:ref(null),metadata:ref({}),busy:ref(false),select:()=>{}},emitted=[]
+const context={ref,computed,watch,nextTick,useRoute:()=>route,useRouter:()=>({replace:async value=>{route.query=value.query}}),sameContent,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
 const scope=effectScope();scope.run(()=>runInNewContext(code,context))
 await nextTick();const ui=context.ui
 assert.equal(ui.visible.value.length,6);assert.equal(workbench.selection.value.caption,'內容 0');assert.equal(workbench.editing.value,'')
@@ -143,5 +144,36 @@ for(const [from,to]of [[-1,2],[0,99],[NaN,0],[0,1.5]])ui.reorder(from,to);assert
 const renamedRow=ui.rows.value.find(r=>r.key==='case-0');ui.search.value=renamedRow.value.title;await nextTick();ui.choose(ui.active.value,true);let automaticOpens=0;workbench.select=()=>automaticOpens++
 ui.item(ui.active.value.index,{...ui.active.value.value,title:'改名後仍可找到'});await nextTick();assert.equal(ui.rows.value.length,0);await ui.back();await nextTick();assert.equal(ui.search.value,'');assert.equal(ui.active.value.key,'case-0');assert(ui.visible.value.some(r=>r.key==='case-0'));assert.equal(automaticOpens,0,'Returning from a renamed filtered item must not open the position dialog')
 ui.add();await nextTick();assert.equal(ui.active.value.value.title,'新增案例');assert.equal(ui.active.value.value.enabled,true);assert.equal(workbench.editing.value,'custom-cases:items')
+
+// Cancellation must restore only this record, even after moving a row without an ID.
+model.documentId='cancel-test';model.path='items';model.schema={type:'array',label:'測試清單',item:{type:'object',fields:{title:{type:'string',label:'名稱'}}},template:{title:''}}
+model.modelValue=[{title:'甲'},{title:'乙'},{title:'丙'}];workbench.baseline.value={'cancel-test':{items:JSON.parse(JSON.stringify(model.modelValue))}};workbench.rows.value={};state.value={};workbench.focused.value='';await nextTick()
+ui.choose(ui.rows.value[0],true);ui.item(0,{title:'甲修改'});ui.item(1,{title:'乙修改'});await nextTick();ui.move(0,1);await nextTick()
+assert.equal(ui.active.value.value.title,'甲修改');ui.cancelItem();await nextTick()
+assert.equal(model.modelValue[0].title,'乙修改');assert.equal(model.modelValue[1].title,'甲');assert.equal(ui.active.value.value.title,'甲');assert.equal(ui.changed(ui.active.value),false)
+ui.back();ui.choose(ui.rows.value[0],true);ui.cancelItem();await nextTick();assert.equal(model.modelValue[0].title,'乙','Reopening a record must still restore the last saved value')
+const count=model.modelValue.length;ui.add();await nextTick();assert.equal(model.modelValue.length,count+1);ui.cancelItem();await nextTick();assert.equal(model.modelValue.length,count,'Cancelling a new item removes only that item')
+// A deep link opens the right item and page once, without repeatedly stealing input focus.
+model.documentId='direct-test';model.modelValue=Array.from({length:9},(_,i)=>({id:'direct-'+i,title:'項目'+i}));workbench.rows.value={};state.value={};route.query={list:'direct-test:items',item:'direct-8'};await nextTick();await nextTick()
+assert.equal(ui.active.value.key,'direct-8');assert.equal(ui.page.value,2);assert.equal(workbench.editing.value,'direct-test:items')
+ui.item(8,{...model.modelValue[8],title:'仍在編輯'});await nextTick();assert.equal(ui.active.value.key,'direct-8');await ui.back();await nextTick();assert.equal(route.query.item,undefined);assert.equal(route.query.list,undefined);route.query={list:'direct-test:items',item:'direct-8'};await nextTick();await nextTick();assert.equal(workbench.editing.value,'direct-test:items','The same search result must be able to reopen after returning')
 scope.stop()
+const nestedModel=reactive({modelValue:['一','二'],schema:{type:'array',item:{type:'string'},template:''},documentId:'nested',path:'paragraphs'}),nestedState=ref({}),nested={...context,defineProps:()=>nestedModel,defineEmits:()=>((_,v)=>nestedModel.modelValue=v),inject:(key,fallback)=>key==='cms-array-depth'?1:key==='cms-item-selections'?nestedState:fallback}
+const nestedScope=effectScope();nestedScope.run(()=>runInNewContext(code,nested));nested.ui.add();await nextTick();assert.equal(nested.ui.active.value.index,2,'Nested text/image additions must open the new item');nested.ui.choose(nested.ui.rows.value[0]);nested.ui.move(0,1);await nextTick();assert.equal(nested.ui.active.value.value,'一','Moving a nested item must keep editing the same content');nestedScope.stop()
+{
+const pavilion=docs.find(d=>d.id==='data-brandPavilions'),pavilionBlocks=workbenchBlocks('pavilions',pageBlocks(pageEditors.find(p=>p.id==='pavilions'),docs)),savedBodies={[pavilion.id]:structuredClone(pavilion.body)},nextBodies=structuredClone(savedBodies)
+const pavilionRow=nextBodies[pavilion.id].brandPavilions[0],hours=Object.keys(pavilionRow).find(k=>/hour|time/i.test(k));assert(hours);pavilionRow[hours]+='驗收'
+const detail=pageChanges(pavilionBlocks,[pavilion],savedBodies,nextBodies);assert.equal(detail.length,1);assert.match(detail[0].label,/台北館/);assert(detail[0].label.includes('時間'));assert(!detail[0].label.includes(hours));assert.notEqual(detail[0].before,detail[0].after)
+const impacts=changeImpacts(detail);assert.equal(impacts.length,2);assert(impacts.every(i=>/品牌館/.test(i.label)));assert(!impacts.some(i=>/影片/.test(i.label)))
+const stored=structuredClone(pavilion);stored.publishedBody=structuredClone(pavilion.body);stored.body.brandPavilions[1].address+='先前修改'
+const reviewingBodies={[pavilion.id]:structuredClone(stored.body)};reviewingBodies[pavilion.id].brandPavilions[0][hours]+='本次修改';const review=publishReview(pavilionBlocks,[stored],reviewingBodies);assert(review.current.length);assert(review.saved.some(c=>c.label.includes('台中館')));assert(!review.saved.some(c=>c.label.includes('台北館')))
+reviewingBodies[pavilion.id].brandPavilions.reverse();const reorderedReview=publishReview(pavilionBlocks,[stored],reviewingBodies);assert(reorderedReview.current.some(c=>c.kind==='order'));assert(reorderedReview.saved.some(c=>c.label.includes('台中館')&&c.after.includes('先前修改')),'Reordering must never hide an older saved edit in another row')
+stored.body.brandPavilions[0][hours]+='先前營業時間';const overwritten={[pavilion.id]:structuredClone(stored.body)};overwritten[pavilion.id].brandPavilions[0][hours]+='本次營業時間';const overwrittenReview=publishReview(pavilionBlocks,[stored],overwritten);assert(!overwrittenReview.saved.some(c=>c.label.includes('台北館')),'The same stable item field is shown once, using its current value')
+const indexed=pageEditors.map(p=>{const b=workbenchBlocks(p.id,pageBlocks(p,docs));return{...p,title:p.name,blocks:b.map(block=>({...block,items:pageSearchItems(block,Object.fromEntries(docs.map(d=>[d.id,d.body])))}))}})
+const direct=searchPages(indexed,'台北館');assert(direct.some(r=>r.page.id==='pavilions'&&r.item?.caption==='台北館'));assert(direct.every(r=>r.item?.scope==='data-brandPavilions:brandPavilions'))
+for(const id of ['news-latest','news-activities','news-video'])for(const block of indexed.find(p=>p.id===id).blocks)for(const i of block.items)assert(docs.find(d=>d.id==='news-articles').body.items.find(row=>itemKey(row)===i.key).summary.category===id.slice(5),'Search cannot leak other categories into a page')
+const media=pageMedia(docs.filter(d=>pageEditors[0].ids.includes(d.id)),Object.fromEntries(docs.map(d=>[d.id,d.body])));assert(media.length);assert(media.every(i=>i.label&&!/copy\./.test(i.label)));assert.equal(new Set(media.map(i=>i.src)).size,media.length)
+}
+console.log('PASS: actual-name item search, category scoping, exact before/after values and changed-document impacts, other saved changes, isolated item cancellation after reorder/reopen, new-item cancellation, deep-link pagination and page media descriptions')
+
 console.log('PASS: all 28 pages retain every field and old link; screenshot home order; list selection/edit/focus; custom case insertion sorting, drag scope, cross-page movement, search/busy guards and visibility toggles')

@@ -13,12 +13,15 @@ import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
 import {caseLibrary} from './case-library.mjs'
 import {pagePositions,positionImage} from '../../shared/cms/positions.mjs'
 import {firstImage} from '../../shared/cms/workflow.mjs'
+import {pageSearchItems,publishReview} from '../../shared/cms/changes.mjs'
+import {workbenchBlocks} from '../../shared/cms/workbench.mjs'
 
 export const editorSchema=d=>customCasesSchema(d.id,kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson))))))
 export async function pageEditorSummaries(){
- const [rows,schemas]=await Promise.all([workspaceSummaries(),query('SELECT d.id,d.schemaJson,COALESCE(p.body,v.body) AS body FROM cms.Documents d LEFT JOIN cms.Versions p ON p.id=d.publishedId LEFT JOIN cms.Versions v ON v.id=d.draftId')])
+ const [rows,schemas]=await Promise.all([workspaceSummaries(),query('SELECT d.id,d.schemaJson,COALESCE(p.body,v.body) AS body,v.body AS draftBody FROM cms.Documents d LEFT JOIN cms.Versions p ON p.id=d.publishedId LEFT JOIN cms.Versions v ON v.id=d.draftId')])
  const documents=schemas.recordset.map(d=>({id:d.id,schema:editorSchema(d),body:d.body?JSON.parse(d.body):{}}))
- return pageEditors.map(p=>{const summary=pageSummary(p,rows,documents);return{...summary,blocks:summary.blocks.map(b=>({...b,fields:b.fields.map(({documentId,path,label,searchTerms})=>({documentId,path,label,searchTerms}))}))}})
+ const bodies=Object.fromEntries(await Promise.all(schemas.recordset.map(async d=>{const body=JSON.parse(d.draftBody||d.body||'{}');return[d.id,d.id.startsWith('catalog-')?await alignSource(d.id,body):body]})))
+ return pageEditors.map(p=>{const summary=pageSummary(p,rows,documents);return{...summary,blocks:summary.blocks.map(b=>({...b,items:pageSearchItems(b,bodies),fields:b.fields.map(({documentId,path,label,searchTerms})=>({documentId,path,label,searchTerms}))}))}})
 }
 function parameters(p){return Object.fromEntries(p.ids.map((id,i)=>['id'+i,id]))}
 async function rowPresentation(p){
@@ -106,7 +109,9 @@ export async function changePageEditor(id,input,user,connection){
    const schema=editorSchema(d),previous=d.body?JSON.parse(d.body):{}
    try{checkPageBody(p,d.id,d.id.startsWith('catalog-')?await alignSource(d.id,previous,connection):previous,item.body,schema);const body=normalizeVideos(structuredClone(item.body),schema);validate(body,schema);return{id:d.id,revision:d.revision,body,title:resourceGuide(d.id).tabTitle||resourceGuide(d.id).location[0],changes:changedItems(d.publishedBody?JSON.parse(d.publishedBody):null,body,editingSchema(schema,d.id))}}catch(e){throw readableError(e,d.id,editingSchema(schema,d.id),item.body)}
   }))
-  return{documents,previewToken:await createDraftPreview(user.id,documents,connection),impacts:[...new Map(p.ids.flatMap(id=>resourceGuide(id).impacts).map(i=>[i.href+'|'+i.label,i])).values()]}
+  const stored=await Promise.all(rows.map(async d=>{let body=JSON.parse(d.body||'{}'),publishedBody=d.publishedBody?JSON.parse(d.publishedBody):null;if(d.id.startsWith('catalog-')){body=await alignSource(d.id,body,connection);if(publishedBody)publishedBody=await alignSource(d.id,publishedBody,connection)}return{id:d.id,schema:editorSchema(d),body,publishedBody}})),blocks=pageBlocks(p,stored)
+  const review=publishReview(workbenchBlocks(p.id,blocks),stored,Object.fromEntries(documents.map(d=>[d.id,d.body])))
+  return{documents,review,previewToken:await createDraftPreview(user.id,documents,connection),impacts:review.impacts}
  }
  return changeDocumentGroup(p,input,user,connection,async(d,previous,next,schema,tx)=>checkPageBody(p,d.id,d.id.startsWith('catalog-')?await alignSource(d.id,previous,tx):previous,next,schema))
 }

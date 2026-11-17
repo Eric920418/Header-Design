@@ -5,6 +5,7 @@ import {createRequire} from 'node:module'
 import {createServer} from 'node:http'
 import ts from 'typescript'
 import {ref,computed,watch,nextTick} from 'vue'
+import {valueAt} from '../shared/cms/page-editors.mjs'
 import {contentAliases,publicContent} from '../shared/cms/public-content.mjs'
 
 // Exercise the editor's actual handlers without a browser, SQL or content writes.
@@ -81,6 +82,9 @@ idle.close();assert.equal(idle.previewResult.value,null);assert.equal(idle.initi
 idle.bodies.value.home.title='關閉後繼續修改';await nextTick();assert.equal(idleRequests,1,'Closing preview cancels background updates')
 await idle.check(false);assert.equal(idleRequests,2);assert.equal(idle.previewOpen.value,false);assert.equal(idle.previewResult.value,null,'Publish validation must not open a preview')
 idle.api=async()=>({ok:true});await idle.savePage();assert.match(idle.error.value,/未回傳完整儲存結果/);assert.equal(idle.bodies.value.home.title,'關閉後繼續修改');assert.equal(idle.baseline.value.home.title,'原始內容')
+idle.workbench={rows:ref({'home:slides':{order:['row-1'],saved:{'row-1':{title:'舊值'}}}})};idle.valueAt=valueAt;idle.bodies.value.home.slides=[{title:'新存檔值'}]
+idle.api=async()=>({documents:[{id:'home',revision:2,body:JSON.parse(JSON.stringify(idle.bodies.value.home))}]});assert.equal(await idle.savePage(),true);assert.equal(idle.workbench.rows.value['home:slides'].saved['row-1'].title,'新存檔值');assert.equal(idle.baseline.value.home.slides[0].title,'新存檔值')
+console.log('PASS: successful save refreshes each item cancellation baseline; malformed responses preserve previous baselines and input')
 assert.match(pageSource,/<aside v-if="previewOpen"/)
 console.log('PASS: actual page editor is idle until preview is opened, defaults to phone on narrow screens, cancels on close, keeps confirmation separate, and retains input on malformed save responses')
 const lateMessages=[],lateFrame={postMessage:m=>lateMessages.push(m)}

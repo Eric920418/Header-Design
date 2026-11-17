@@ -68,7 +68,7 @@ if(process.env.CMS_PAGE_HTTP){
  async function call(path,role='admin',body,csrf=true){
   const headers={Origin:base,Cookie:Object.entries(jars[role]).map(([k,v])=>k+'='+v).join('; ')}
   if(body){headers['Content-Type']='application/json';if(csrf&&jars[role].csrf)headers['X-CSRF-Token']=jars[role].csrf}
-  const r=await fetch(base+path,{method:body?'POST':'GET',headers,...(body?{body:JSON.stringify(body)}:{})})
+  const r=await fetch(base+path,{method:body?'POST':'GET',headers,signal:AbortSignal.timeout(30000),...(body?{body:JSON.stringify(body)}:{})})
   for(const value of r.headers.getSetCookie()){const pair=value.split(';')[0],i=pair.indexOf('=');jars[role][pair.slice(0,i)]=pair.slice(i+1)}
   return{status:r.status,body:await r.json(),cache:r.headers.get('cache-control')}
  }
@@ -80,7 +80,7 @@ if(process.env.CMS_PAGE_HTTP){
   const r=await call('/api/admin/page-editors/'+p.id);assert.equal(r.status,200,p.id);assert(r.body.blocks.length)
   assert(r.body.positionPresentation&&Array.isArray(r.body.positionPresentation.sections),p.id+' must include read-only position information')
   assert(r.body.documents.every(d=>!Object.hasOwn(d.body,'positionPresentation')&&!Object.hasOwn(d.body,'rowPresentation')),'Preview photographs cannot be added to stored bodies')
-  const snapshot=await call('/api/admin/page-editors/'+p.id,'admin',{action:'preview',documents:r.body.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(snapshot.status,200,p.id+':'+JSON.stringify(snapshot.body));assert(snapshot.body.previewToken)
+  const snapshot=await call('/api/admin/page-editors/'+p.id,'admin',{action:'preview',documents:r.body.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(snapshot.status,200,p.id+':'+JSON.stringify(snapshot.body));assert(snapshot.body.previewToken);assert(Array.isArray(snapshot.body.review.current)&&Array.isArray(snapshot.body.review.saved));console.log('Verified page read/preview/review: '+p.id)
  }
  const input={action:'preview',documents:home.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))}
  input.documents.find(d=>d.id==='view-components-home-HomeProject').body.copy.text1='HTTP未儲存驗收'

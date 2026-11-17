@@ -7,6 +7,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(/hydration|duplicate keys/i.test(m.text()))errors.push(m.text())})
  const go=async path=>{await page.goto(base+path);await page.waitForLoadState('networkidle')}
  const field=(id,path)=>page.locator(`[data-cms-document="${id}"][data-cms-path="${path}"]`).locator('textarea,input:not([type=hidden])').first()
+ const caseNames=async()=>page.locator('.cms-case-table .cms-item-open>span').evaluateAll(nodes=>nodes.map(n=>n.childNodes[0].textContent.trim()))
  const select=async(name,width)=>{if(width<1280){await page.getByRole('button',{name:/選擇區塊/}).click();await page.getByRole('dialog').getByRole('button').filter({has:page.getByText(name,{exact:true})}).click()}else await page.getByRole('navigation',{name:'官網區塊',exact:true}).getByRole('button').filter({has:page.getByText(name,{exact:true})}).click()}
  try{
   await go('/admin');if(page.url().includes('preview-access')){await page.getByLabel('預覽密碼',{exact:true}).fill(process.env.PREVIEW_PASSWORD);await page.getByRole('button',{name:'進入網站',exact:true}).click()}
@@ -14,6 +15,12 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
   const api=async(path,body)=>page.evaluate(async({path,body})=>{const session=await(await fetch('/api/admin/session')).json(),r=await fetch('/api/admin/'+path,body?{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':session.csrf},body:JSON.stringify(body)}:{});return{status:r.status,body:await r.json()}},{path,body})
   const before=(await api('documents')).body
   const pages=(await api('page-editors')).body;assert.equal(pages.length,28)
+  await go('/admin/content?section=all');await page.getByRole('searchbox',{name:'找要修改的內容'}).fill('台北館');await page.locator('.cms-section-card').filter({hasText:'櫻花集團品牌館'}).click();await page.getByRole('textbox',{name:'營業時間',exact:true}).waitFor()
+  const hours=await page.getByRole('textbox',{name:'營業時間',exact:true}).inputValue();await page.getByRole('textbox',{name:'營業時間',exact:true}).fill(hours+'驗收')
+  await page.getByRole('button',{name:'看位置',exact:true}).click();await page.getByRole('dialog',{name:'官網位置示意'}).getByText(hours+'驗收',{exact:true}).waitFor();await page.getByRole('button',{name:'關閉視窗',exact:true}).click()
+  await page.getByRole('button',{name:'更新官網',exact:true}).click();const review=page.getByRole('dialog',{name:'確認要更新到官網的內容'});await review.getByText('品牌館資料 › 台北館 › 營業時間',{exact:true}).waitFor();assert(!(await review.innerText()).includes('影片'));await review.getByRole('button',{name:'返回修改',exact:true}).click()
+  await page.getByRole('button',{name:'取消本筆修改',exact:true}).click();await page.getByRole('button',{name:'確認取消本筆修改',exact:true}).click();assert.equal(await page.getByRole('textbox',{name:'營業時間',exact:true}).inputValue(),hours);assert.match(await page.locator('.cms-save-status').innerText(),/官網已更新/)
+
   for(const width of [1440,1024,768,390]){
    await page.setViewportSize({width,height:960})
    for(const p of pages){
@@ -37,7 +44,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
    await page.getByRole('searchbox',{name:'找要修改的內容'}).fill('設計靈感 按鈕');await page.locator('.cms-section-card').first().click();await page.locator('.cms-block-title').waitFor();assert.match(await page.locator('h1').innerText(),/設計靈感/)
    await page.getByRole('link',{name:'← 返回',exact:true}).click();assert(new URL(page.url()).searchParams.get('q').includes('按鈕'))
    await go('/admin/home');await page.locator('.cms-block-title').waitFor();assert.equal(await page.locator('.cms-effect-viewport iframe').count(),0,'No background preview on entry');assert.equal(await page.locator('dialog.cms-live-preview').isVisible(),false,'Closed preview must not reserve blank space');assert.equal(await page.locator('.cms-item-row .cms-thumbnail').count(),await page.locator('.cms-item-row').count(),'Every content row has a picture')
-   await page.locator('.cms-item-edit').first().click();const hero='view-components-home-HomeHero';await field(hero,'slides.0.title').fill('未儲存輪播驗收');await page.getByRole('button',{name:'返回清單',exact:true}).click()
+   await page.locator('.cms-item-edit').first().click();const hero='view-components-home-HomeHero';const oldHeroTitle=await field(hero,'slides.0.title').inputValue();await field(hero,'slides.0.title').fill('取消修改檢查');await page.getByRole('button',{name:'取消本筆修改',exact:true}).click();await page.getByRole('dialog',{name:'取消這一筆的修改？'}).getByRole('button',{name:'確認取消本筆修改',exact:true}).click();assert.equal(await field(hero,'slides.0.title').inputValue(),oldHeroTitle);await field(hero,'slides.0.title').fill('未儲存輪播驗收');await page.getByRole('button',{name:'返回清單',exact:true}).click()
    if(width<1024)await page.getByRole('button',{name:'看位置',exact:true}).click()
    assert.equal(await page.locator('.cms-position:visible .cms-home-hero-copy h3').innerText(),'未儲存輪播驗收');if(width<1024)await page.getByRole('dialog',{name:'官網位置示意',exact:true}).getByRole('button',{name:'關閉視窗',exact:true}).click()
    await select('品牌系列',width);const project='view-components-home-HomeProject';await page.locator('.cms-common-settings summary').click();await field(project,'copy.text1').fill('未儲存品牌驗收')
@@ -54,14 +61,14 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
   await page.setViewportSize({width:1440,height:960});await go('/admin/content?section=design&sitePage=inspiration&block='+encodeURIComponent('inspiration:案例管理與顯示排序'))
   for(const name of ['操作驗收 A','操作驗收 B','操作驗收 C']){
    await page.getByRole('button',{name:'新增案例',exact:true}).click();await page.getByRole('textbox',{name:'案例標題',exact:true}).fill(name)
-   await page.locator('[data-cms-document="custom-cases"][data-cms-path$=".cover"]').getByRole('button').click();await page.getByRole('textbox',{name:'搜尋圖片或檔案',exact:true}).fill('aikitchen');await page.getByRole('button',{name:'選擇 aikitchen.webp',exact:true}).click();await page.getByRole('button',{name:'返回清單',exact:true}).click()
+   await page.locator('[data-cms-document="custom-cases"][data-cms-path$=".cover"]').getByRole('button').click();await page.getByRole('button',{name:'全部素材',exact:true}).click();await page.getByRole('searchbox',{name:'搜尋圖片或檔案',exact:true}).fill('aikitchen');await page.locator('.cms-media-card').filter({hasText:'aikitchen.webp'}).first().click();await page.getByRole('button',{name:'返回清單',exact:true}).click()
   }
-  await page.locator('.cms-case-order').first().dragTo(page.locator('.cms-case-table tbody tr').nth(2));assert.deepEqual(await page.locator('.cms-case-table .cms-item-open').allTextContents(),['操作驗收 B','操作驗收 C','操作驗收 A'])
-  await page.locator('.cms-case-order').first().press('ArrowDown');assert.deepEqual(await page.locator('.cms-case-table .cms-item-open').allTextContents(),['操作驗收 C','操作驗收 B','操作驗收 A'])
+  await page.locator('.cms-case-order').first().dragTo(page.locator('.cms-case-table tbody tr').nth(2));assert.deepEqual(await caseNames(),['操作驗收 B','操作驗收 C','操作驗收 A'])
+  await page.locator('.cms-case-order').first().press('ArrowDown');assert.deepEqual(await caseNames(),['操作驗收 C','操作驗收 B','操作驗收 A'])
   await page.locator('.cms-case-status').last().click();await page.getByText('下架後不顯示',{exact:true}).waitFor();await page.getByRole('searchbox',{name:'搜尋案例標題',exact:true}).fill('操作驗收 B');assert.equal(await page.locator('.cms-case-table tbody tr').count(),1);assert.equal(await page.locator('.cms-case-order').isEnabled(),false);await page.getByRole('searchbox',{name:'搜尋案例標題',exact:true}).fill('')
-  await select('案例卡片按鈕',1440);await page.getByRole('textbox',{name:'案例圖片上的按鈕文字',exact:true}).fill('查看驗收案例');assert((await page.locator('.cms-inspiration-view').allTextContents()).every(t=>t==='查看驗收案例'));await select('案例管理與顯示排序',1440);assert.deepEqual(await page.locator('.cms-case-table .cms-item-open').allTextContents(),['操作驗收 C','操作驗收 B','操作驗收 A'])
+  await select('案例卡片按鈕',1440);await page.getByRole('textbox',{name:'案例圖片上的按鈕文字',exact:true}).fill('查看驗收案例');assert((await page.locator('.cms-inspiration-view').allTextContents()).every(t=>t==='查看驗收案例'));await select('案例管理與顯示排序',1440);assert.deepEqual(await caseNames(),['操作驗收 C','操作驗收 B','操作驗收 A'])
   for(const width of [1440,1024,768,390]){await page.setViewportSize({width,height:960});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.equal(await page.locator('.cms-effect-viewport iframe').count(),0);await page.screenshot({path:join(shots,`${width}-case-table.png`),fullPage:true})}
-  await page.locator('.cms-case-table .cms-item-edit').first().click();await page.getByRole('textbox',{name:'案例標題',exact:true}).waitFor();await page.getByRole('button',{name:'往後移',exact:true}).click();await page.getByRole('button',{name:'返回清單',exact:true}).click();assert(await page.locator('.cms-case-table .cms-item-open[aria-pressed="true"]').evaluate(el=>el===document.activeElement))
+  await page.locator('.cms-case-table .cms-item-edit').first().click();await page.getByRole('textbox',{name:'案例標題',exact:true}).waitFor();await page.locator('#cms-item-editor .cms-item-more summary').click();await page.getByRole('button',{name:'往後移',exact:true}).click();await page.getByRole('button',{name:'返回清單',exact:true}).click();assert(await page.locator('.cms-case-table .cms-item-open[aria-pressed="true"]').evaluate(el=>el===document.activeElement))
   assert.deepEqual((await api('documents')).body,before,'UI preview checks must not modify website documents');page.once('dialog',d=>d.accept())
   await go('/');assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[])
   console.log('PASS: all-page positions, case table drag/keyboard sorting, display changes, filtering, card text, retained input/focus, four widths, on-demand previews and unchanged website documents. Screenshots: '+shots)
