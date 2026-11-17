@@ -4746,11 +4746,17 @@ final result: passed
 - 28 頁 API 讀取與預覽、未登入／編輯者權限、CSRF、409、整頁交易儲存、發布、下架、失敗回滾通過。新增文章只透過受保護預覽可讀；一般網址仍為 404，官網列表不含測試文章。
 - 本機資料、版本、欄位結構指紋驗收前後相同：65 份內容、147 個版本；測試帳號僅建於原有本機測試資料庫。
 - 建置仍有既有 JSON import attribute 與樣式 sourcemap 提示；本機 SQL 連線有既有 TLS IP 名稱棄用提示，非此次新增錯誤。
-- 正式發布與發布後操作複驗：待完成後補上。
+- 正式發布完成：程式版本 `90de0be7`，Vercel 部署 `dpl_7huhAQQCbrWvtQLvBY8hTDNRHQgy`；`sakura-demo-vanlantech.com` 與 `header-design-two.vercel.app` 皆為此版本且狀態 READY。兩站各 26 個官網／登入網址回查為 200，未登入 CMS 讀取為 401。
+- 正式後台實測：工作首頁一次開啟新增消息、顯示「尚未刊登」、本頁圖片只列 3 筆最新消息圖片、選圖、日期顯示及未刊登完整內頁預覽可呈現目前標題與段落；關閉後預覽 iframe 為 0。取消後回到原有 3 筆消息，焦點回清單、狀態回到「官網已更新」。
+- 正式後台在 1440、1024、768、390px 核對輸入保留與無水平溢出；390px 輸入字體為 16px，文章標題位於固定操作列上方。已刊登消息的「查看官網」可正常開啟；官網首頁桌機與 390px 回歸正常，僅有原先 Google Maps Marker 棄用提示，後台無執行或 hydration 錯誤。
+- 正式驗收全程未儲存或發布測試文章；前後資料／欄位結構／版本指紋相同，維持 65 份內容、151 個版本。正式後台最後停留於乾淨的工作首頁，待更新 0、無測試輸入；本機測試帳號與自己的登入／預覽／紀錄及暫存密碼均已清除，驗收伺服器已關閉。
 
 畫面：
 
-![桌機新增消息](.gstack/qa-reports/cms-ux-six-fixes-20261117/01-new-article-desktop.png)
-![手機第一個畫面即可填寫標題](.gstack/qa-reports/cms-ux-six-fixes-20261117/02-new-article-mobile.png)
-![最新消息的本頁圖片](.gstack/qa-reports/cms-ux-six-fixes-20261117/03-media-category.png)
-![未刊登文章的完整預覽](.gstack/qa-reports/cms-ux-six-fixes-20261117/04-private-draft-preview.png)
+![正式站桌機新增消息（未儲存的驗證輸入）](.gstack/qa-reports/cms-ux-six-fixes-20261117/11-production-editor.jpg)
+![正式站手機第一個畫面即可填寫標題](.gstack/qa-reports/cms-ux-six-fixes-20261117/13-production-mobile.jpg)
+![正式站最新消息的本頁圖片](.gstack/qa-reports/cms-ux-six-fixes-20261117/10-production-media.jpg)
+![正式站未刊登文章的完整預覽](.gstack/qa-reports/cms-ux-six-fixes-20261117/12-production-private-preview.jpg)
+
+![正式工作首頁改前](.gstack/qa-reports/cms-ux-six-fixes-20261117/08-production-before.jpg)
+![正式工作首頁改後](.gstack/qa-reports/cms-ux-six-fixes-20261117/09-production-after-dashboard.jpg)
