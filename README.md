@@ -4697,3 +4697,6 @@ final result: passed
 - `check-admin-workbench.mjs`補無識別碼項目排序後取消、關閉重開後取消、新增項目取消、巢狀段落新增／移動、深連結分頁及重新開啟、其他草稿與排序共同更新的保護；`check-admin-preview-state.mjs`驗證成功儲存重設取消基準及失敗保留輸入。工作流程、名稱、預覽狀態、型別檢查與最終正式建置通過。證據位於`.gstack/qa-reports/cms-ux-improvements-20261117/`；正式站目前65份內容、151個版本已留唯讀指紋，發布後再比對。未實測Safari、螢幕閱讀器或實體手機，未改動來源商品、資料結構或真實官網內容。
 - 第一版`55c7c2d5`已發布至`dpl_3HobYLhXGdUv38EiyDC8ba1HDXGR`，兩正式網域指向同一READY版本；正式搜尋直達、欄位前後對照、取消一筆保留其他輸入、本頁圖庫／目前使用標記、四尺寸取消及手機看位置／焦點返回通過。完整預覽實際呈現未儲存時間，關閉後iframe歸零，測試輸入皆還原，未儲存或發布。
 - 正式站原有一份品牌系列草稿與發布內容逐欄完全相同，僅版本識別不同；唯讀核對後補上「只同步更新狀態，文字與圖片不變」提示，避免沒有差異時的確認視窗空白。沒有為此更新草稿或發布任何內容；提示修正版發布及最後比對續記。
+- 最終程式`630c2c77`已發布至`dpl_CJu6HA82mKouo1NTEFhroRBkUvZF`；兩正式網域皆逐一核對同一SHA／READY。相同草稿提示與手機取消已於最終版再實測；28頁首個編輯表單在正式1440px均可開啟，沒有水平溢出、表單錯誤或背景完整預覽。四尺寸的主要操作在品牌館完成，並另回查官網首頁；不將此宣稱為正式28頁每一欄位皆重做四尺寸驗收。
+- 兩正式網域各26個公開頁面／登入路由以正常提案授權讀取，皆HTTP 200；只有提案授權而未登入CMS時，編輯讀取API為401。正式65份內容、151個版本、資料結構及完整內容指紋與驗收前相同；既有未發布草稿保留。所有測試輸入已還原，沒有開啟中的確認或預覽視窗，iframe歸零。
+- 最終正式後台Chrome無error或hydration問題；官網僅保留原有Google Maps Marker棄用warning。`formal-confirm.png`、`formal-media.png`、`formal-mobile-editor.png`、`formal-mobile-position.png`、`formal-full-preview.png`與`formal-identical-review.png`為本輪實拍；`formal-pages.json`、`formal-interactions.json`、`production-http.json`、`release.json`及`result.json`記錄範圍與結果。本機65份內容、147個版本及指紋不變，兩個本輪臨時帳號與其登入／預覽／操作紀錄、暫存憑證皆精確清除，本機服務停止，瀏覽器尺寸已還原；正式後台留在乾淨的品牌館編輯頁。完成紀錄只本機提交README，不為文件再部署。
