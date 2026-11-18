@@ -4817,3 +4817,4 @@ final result: passed
 
 - 依 IMG_2986，門市大圖由依版型變動的百分比取景改為對齊原圖自頂部起 100px 的直向格柵上緣。圖片在原框內等比放大，沿裁切線縮放，維持原有 1 → 1.025 倍、5 秒停留效果與減少動態設定。此取景限定現有門市照片，CMS 換圖沿用原設定。
 - `pnpm --dir nuxt-site build` 及現有加盟大圖回歸斷言通過。本機 320／390／768／1024／1280／1440／1920px 的停留畫面實測均自原圖第 100px 起顯示，照片填滿原框、無水平溢位。原截圖對應的 1280×686 目視核對上方固定木條已切掉、白色屋頂與招牌完整。修前及本機證據存於 `.gstack/qa-reports/storefront-slat-edge-20261118/`。
+- `6bcb1520` 已部署至 `dpl_jZrcwGpCEDnKZuH5ubGbZWJgeD7D`，兩個正式網域皆指向 Ready 版本。主站以相同七尺寸重測，裁切點和本機一致，1280×686 確認自然從 1 倍放大至 1.025 倍且格柵裁切線固定，畫面與量測收於同一證據目錄的 `production-desktop.png`、`production-mobile.png`、`production.json`。未實測 Safari。
