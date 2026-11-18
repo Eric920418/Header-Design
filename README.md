@@ -4805,3 +4805,9 @@ final result: passed
 
 ![正式站加盟支援恢復白金標題](.gstack/qa-reports/franchise-support-colors-20261118/production-desktop.png)
 ![手機加盟支援白金標題](.gstack/qa-reports/franchise-support-colors-20261118/production-mobile.png)
+
+## 2026-11-18 建商管理平台捲動尾端
+
+- 正式站 1280×686 重現第三組內容因 12px 間距跨過高度門檻，導致左欄整組解除固定。現在較矮視窗先自然捲過左欄標題，統計到達可視區底部時繼續固定。將原有 105px 區尾留白納入雙欄固定範圍，讓文字伴隨第三張圖片捲到尾端，再自然離場。
+- 保留「管理平台」與下方說明的 12px 間距、各組原字級、三圖切換、計數以及手機單欄。此修正限建商頁前端。
+- pnpm 建置、315 組高度與寬度回歸、計數器、SSR、實際程式包與三圖載入檢查通過。本機瀏覽器於 1280×600、1280×686、1440×900 捲過第三張圖的上中下段，三組間距仍是 0／0／12px，桌機字級 80／80／72px。修前畫面與量測存於 `.gstack/qa-reports/builders-final-strength-20261118/`。

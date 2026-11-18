@@ -12,14 +12,15 @@ assert(!shortCss.includes('font-size:'),'短視窗只能調間距，不能因高
 assert(source.includes('.builders-strengths-copy { position: static; height: auto; }')&&source.includes('.builders-strengths-content { display: block; min-height: auto; padding: 0; transform: none; }'),'手機維持單欄自然捲動')
 assert(source.includes('ref="strengthsContent" class="builders-strengths-content"'))
 assert(!source.includes('--strengths-content-scale'),'不得再對左欄整組縮放造成二次縮字')
-assert(source.includes('.builders-strengths-copy[data-strengths-overflow="true"] { position: static; }'))
+assert(!source.includes('data-strengths-overflow'),'較高的統計不得讓左欄解除固定')
+assert(/\.builders-strengths-list \{[^}]*padding-bottom: 105px;/.test(source),'底部原留白須納入固定範圍')
 const stickySource=source.slice(source.indexOf('const strengthsCopy ='),source.indexOf('const moduleCounter ='))
 assert(stickySource.startsWith('const strengthsCopy ='))
 assert(!stickySource.includes("'scroll'")&&!stickySource.includes('scrollTo')&&!stickySource.includes('preventDefault'),'不得攔截右欄或全頁捲動')
 const js=transpileModule(stickySource,{compilerOptions:{target:ScriptTarget.ES2022,module:ModuleKind.ESNext}}).outputText
 function harness({width=1280,height=720,copyHeight=560,headerHeight=60,observer=true,visual=true,fonts=true}={}){
   const events=()=>({listeners:new Map(),addEventListener(type,fn){this.listeners.set(type,fn)},removeEventListener(type,fn){assert.equal(this.listeners.get(type),fn);this.listeners.delete(type)}})
-  const mounted=[],unmounted=[],styles=new Map(),content={offsetHeight:copyHeight},copy={dataset:{},style:{setProperty:(key,value)=>styles.set(key,value),removeProperty:key=>styles.delete(key)}},header={offsetHeight:headerHeight}
+  const mounted=[],unmounted=[],styles=new Map(),content={offsetHeight:copyHeight},copy={style:{setProperty:(key,value)=>styles.set(key,value),removeProperty:key=>styles.delete(key)}},header={offsetHeight:headerHeight}
   const viewport={...events(),height},window={...events(),innerWidth:width,innerHeight:height,...(visual?{visualViewport:viewport}:{}),...(observer?{ResizeObserver:true}:{})},fontSet=events()
   const document={querySelector:selector=>{assert.equal(selector,'header[data-breadcrumb-root]');return header},...(fonts?{fonts:fontSet}:{})}
   let io
@@ -30,29 +31,23 @@ function harness({width=1280,height=720,copyHeight=560,headerHeight=60,observer=
 }
 for(const width of [768,1024,1199,1280,1366,1440,1920])for(const height of [480,600,667,700,720,768,800,900,1080])for(const copyHeight of [320,420,560,684,1000]){
   const test=harness({width,height,copyHeight})
-  assert.equal(test.top(),75,'任何高度都不得把中文主標推到導覽上方')
-  if(copyHeight<=height-95){
-    assert.equal(test.copy.dataset.strengthsOverflow,'false')
-    assert(test.top()+copyHeight<=height-20,'固定時頂部與統計底部必須同時可見')
-  }else{
-    assert.equal(test.copy.dataset.strengthsOverflow,'true','放不下應自然閱讀，不得縮字、負top或裁切')
-  }
+  assert.equal(test.top(),Math.min(75,height-copyHeight-20),'一般視窗從頁首下固定，短視窗從統計底部固定')
+  assert(test.top()+copyHeight<=height-20,'固定時統計底部需保留 20px')
   assert.equal(Number.parseFloat(test.styles.get('--strengths-copy-height')),copyHeight,'不得用縮小整組的方式讓內容塞進視窗')
   assert.deepEqual(test.io.targets,[test.content,test.header])
   const stable=[...test.styles];test.io.callback();assert.deepEqual([...test.styles],stable,'重複量測不得累積縮放')
   test.unmount();assert(test.io.disconnected);assert.equal(test.window.listeners.size+test.viewport.listeners.size+test.fontSet.listeners.size,0)
 }
-const resizing=harness();resizing.content.offsetHeight=640;resizing.io.callback();assert.equal(resizing.top(),75);assert.equal(resizing.copy.dataset.strengthsOverflow,'true')
-resizing.viewport.height=600;resizing.viewport.listeners.get('resize')();assert.equal(resizing.top(),75);assert.equal(resizing.copy.dataset.strengthsOverflow,'true')
-resizing.content.offsetHeight=400;resizing.fontSet.listeners.get('loadingdone')();assert.equal(resizing.copy.dataset.strengthsOverflow,'false')
+const resizing=harness();resizing.content.offsetHeight=640;resizing.io.callback();assert.equal(resizing.top(),60)
+resizing.viewport.height=600;resizing.viewport.listeners.get('resize')();assert.equal(resizing.top(),-60)
+resizing.content.offsetHeight=400;resizing.fontSet.listeners.get('loadingdone')();assert.equal(resizing.top(),75)
 resizing.header.offsetHeight=80;resizing.io.callback();assert.equal(resizing.top(),95,'導覽高度變更也必須重算')
 resizing.window.innerWidth=767;resizing.window.listeners.get('resize')();assert.equal(resizing.styles.size,0,'進入手機版移除桌機位置')
-assert.deepEqual(resizing.copy.dataset,{},'手機清除極矮窗狀態')
 resizing.window.innerWidth=1280;resizing.window.listeners.get('resize')();assert.equal(resizing.top(),95)
 resizing.unmount();const before=[...resizing.styles];resizing.io.callback();assert.deepEqual([...resizing.styles],before,'卸載後遲到回呼不得更新')
-const fallback=harness({observer:false,visual:false,fonts:false});assert.equal(fallback.top(),75);fallback.window.innerHeight=600;fallback.window.listeners.get('resize')();assert.equal(fallback.top(),75);assert.equal(fallback.copy.dataset.strengthsOverflow,'true');fallback.unmount()
-const boundary=harness({height:695,copyHeight:600});assert.equal(boundary.copy.dataset.strengthsOverflow,'false');boundary.viewport.height=694;boundary.api.updateStrengthsSticky();assert.equal(boundary.copy.dataset.strengthsOverflow,'true');boundary.unmount()
-console.log('PASS 315組寬／高／內容尺寸：不依高度縮字或整組縮放、固定時上下同時可見、放不下自然閱讀；字型／導覽重算、手機、穩定量測及卸載清理')
+const fallback=harness({observer:false,visual:false,fonts:false});assert.equal(fallback.top(),75);fallback.window.innerHeight=600;fallback.window.listeners.get('resize')();assert.equal(fallback.top(),20);fallback.unmount()
+const boundary=harness({height:686,copyHeight:582});assert.equal(boundary.top(),75);boundary.content.offsetHeight+=12;boundary.io.callback();assert.equal(boundary.top(),72,'切到增加 12px 的管理平台仍固定');boundary.unmount()
+console.log('PASS 315組寬／高／內容尺寸：保留原字級，短窗貼底固定；字型／導覽重算、手機、穩定量測及卸載清理')
 const regression=readFileSync(new URL('./check-frontend-regressions.mjs',import.meta.url),'utf8')
 const counter=regression.slice(regression.indexOf('const moduleCounterSource='),regression.indexOf("console.log('PASS 建商Home7雙欄"))
 assert(counter.startsWith('const moduleCounterSource='));new Function('assert','buildersSource',counter)(assert,source)
@@ -73,7 +68,7 @@ assert.equal((strengths.match(/class="builders-solution ev/g)||[]).length,3)
 let previous=-1
 for(const item of cms.strengths){const at=strengths.indexOf(`src="${item.background}"`);assert(at>previous);previous=at;assert.equal(strengths.split(`src="${item.background}"`).length-1,1);await get(item.background,'HEAD')}
 assert(html.includes('--strengths-sticky-top')&&html.includes('--strengths-copy-height')&&!html.includes('--strengths-content-scale')&&!html.includes('6.4svh'),'實際SSR必須帶不縮字的量測規則')
-assert(!html.includes('max-height:759px'),'正式頁不得仍載入取消固定的舊規則')
+assert(!html.includes('max-height:759px')&&!html.includes('data-strengths-overflow'),'正式頁不得仍載入取消固定的舊規則')
 const bundles=[...new Set([...html.matchAll(/(?:src|href)="(\/_nuxt\/[^"?#]+\.js)"/g)].map(match=>match[1]))]
 assert(bundles.length>0&&bundles.length<=40,'限定檢查此頁實際載入的同站程式包')
 let stickyBundle
