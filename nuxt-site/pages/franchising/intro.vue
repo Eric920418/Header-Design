@@ -378,9 +378,17 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-hero__aside p + p { margin-top: 16px; }
 .franchise-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 50px; }
 
-.franchise-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -400px; overflow: hidden; border-radius: 24px; }
+.franchise-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -400px; overflow: hidden; border-radius: 24px; container-type: inline-size; }
 .franchise-hero-media :deep(img) { object-position: right 15%; }
 .franchise-hero-media.is-visible :deep(img) { transform-origin: right top; animation: franchise-hero-kenburns 5s ease-out 1.51s both; }
+.franchise-hero-media :deep(img[src="/section-6/franchise/hero-store.jpg"]) {
+  /* The slats start 100px from the top of the 1919 × 1280 photo. */
+  --storefront-crop: calc(100% * 100 / 1280);
+  height: max(calc(100% * 1280 / 1180), calc(100cqw * 1280 / 1919));
+  object-position: right top;
+  translate: 0 calc(-1 * var(--storefront-crop));
+  transform-origin: right var(--storefront-crop);
+}
 @keyframes franchise-hero-kenburns {
   from { transform: scale(1); }
   to { transform: scale(1.025); }
