@@ -4760,3 +4760,11 @@ final result: passed
 
 ![正式工作首頁改前](.gstack/qa-reports/cms-ux-six-fixes-20261117/08-production-before.jpg)
 ![正式工作首頁改後](.gstack/qa-reports/cms-ux-six-fixes-20261117/09-production-after-dashboard.jpg)
+
+
+## 2026-11-18 首頁品牌承諾影片停留畫面
+
+- 首頁品牌承諾影片封面改為使用者截圖中的一家人在白色廚房場景，直接擷取目前指定 MP4 第 0 秒完整畫面製作日期版 WebP，保留原影片黑邊與字幕；影片檔、播放器及播放行為維持。
+- 僅更新首頁 `site-visuals.images.asset_10b5a86c` 與首頁對應圖片說明、元件預設及 seed。服務流程獨立的 `serviceVideoCover`／`serviceVideoSrc` 及頁面文案維持；保留既有服務封面資產。
+- 正式資料採兩文件／兩欄位的精準發布，保留其他內容與所有歷史版本，有未發布草稿或自訂封面即停止。舊日期更新腳本的自檢固定使用當時封面 fixture，實際操作仍拒絕覆寫新版首頁。建置與正式驗收續記。
+- 新舊日期更新腳本自檢、原播放器檢查、後台工作流程及 `pnpm build`（含型別檢查）通過；新首頁封面 SHA256 `7f285b8b7d97d46ff04006aaf9f11860e135595c3c368b433db9c96515af86ca`，服務流程封面仍為 `283328a07f30af0fca7e32a2eb6aa998a316f8419c313ae37bf70b99eed67a38`。正式 dry-run 確認兩文件 revision 7／5 均無未發布草稿，先部署新資產再精準發布 CMS。

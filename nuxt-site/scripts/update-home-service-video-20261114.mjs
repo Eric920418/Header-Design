@@ -54,7 +54,11 @@ assert.equal(createHash('sha256').update(readFileSync(new URL('../../public'+pos
 if(args.includes('--self-check')){
   const seed=JSON.parse(readFileSync(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
   for(const id of ids){
-    const expected=seed.find(d=>d.id===id),original=structuredClone(expected.data),schema=structuredClone(expected.schema)
+    const expected=structuredClone(seed.find(d=>d.id===id))
+    // Keep this dated migration's fixture independent of later homepage poster choices.
+    if(id===visualsId)expected.data.images.asset_10b5a86c=poster
+    if(id===homeId)expected.data.copy.field10=alt
+    const original=structuredClone(expected.data),schema=structuredClone(expected.schema)
     if(id===visualsId){
       for(const key of Object.keys(fields)){delete original[key];delete schema.fields[key]}
       original.images.asset_10b5a86c='/home-2026/brand-commitment-opening-frame.webp'
