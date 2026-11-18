@@ -4766,5 +4766,12 @@ final result: passed
 
 - 首頁品牌承諾影片封面改為使用者截圖中的一家人在白色廚房場景，直接擷取目前指定 MP4 第 0 秒完整畫面製作日期版 WebP，保留原影片黑邊與字幕；影片檔、播放器及播放行為維持。
 - 僅更新首頁 `site-visuals.images.asset_10b5a86c` 與首頁對應圖片說明、元件預設及 seed。服務流程獨立的 `serviceVideoCover`／`serviceVideoSrc` 及頁面文案維持；保留既有服務封面資產。
-- 正式資料採兩文件／兩欄位的精準發布，保留其他內容與所有歷史版本，有未發布草稿或自訂封面即停止。舊日期更新腳本的自檢固定使用當時封面 fixture，實際操作仍拒絕覆寫新版首頁。建置與正式驗收續記。
+- 正式資料採兩文件／兩欄位的精準發布，保留其他內容與所有歷史版本，有未發布草稿或自訂封面即停止。舊日期更新腳本的自檢固定使用當時封面 fixture，實際操作仍拒絕覆寫新版首頁。
 - 新舊日期更新腳本自檢、原播放器檢查、後台工作流程及 `pnpm build`（含型別檢查）通過；新首頁封面 SHA256 `7f285b8b7d97d46ff04006aaf9f11860e135595c3c368b433db9c96515af86ca`，服務流程封面仍為 `283328a07f30af0fca7e32a2eb6aa998a316f8419c313ae37bf70b99eed67a38`。正式 dry-run 確認兩文件 revision 7／5 均無未發布草稿，先部署新資產再精準發布 CMS。
+- 程式 `aa23c84d` 已推送；兩正式網域均確認新資產可載入後才更新 CMS。正式回讀 `site-visuals` revision 9、首頁文案 revision 7，發布版本分別為 `7ed0d59e-9334-44ba-90d2-8a4fdfb5626c` 與 `cd5f8445-023b-4509-b04f-5acf03d07655`。逐欄比對只有指定首頁封面及圖片說明不同；服務流程整份文件與內容保持原樣，revision 5／發布版本 `d1cc5d0c-d996-4f2e-9627-e6c69d97b4ef`，欄位結構未更動。
+- `sakura-demo-vanlantech.com` 與 `header-design-two.vercel.app` 實際頁面均讀到新的首頁封面及原服務封面，影片來源相同。首頁 320、390、768、1440px 核對封面、16:9 比例及無水平溢出；主站桌機實拍確認白色廚房的一家人場景，390px 服務頁實拍仍是原本服務人員協助選材的場景。沒有注入停用動畫樣式或讀取 Vue 內部狀態。
+- 本輪瀏覽器未見執行錯誤，首頁仍有既有 Google Maps Marker 棄用 warning。未實測實體 Safari，也未重播完整 2 分 29 秒影片；本輪驗收限封面更新與保留範圍，不代表全站重新驗收。臨時分頁已關閉、瀏覽器尺寸還原。
+- 證據存於 `.gstack/qa-reports/home-video-poster-20261118/`：`verification-result.json`、`production-home-layouts.json`、`second-domain.json`、`cms-before.json`／`cms-after.json`、`cms-update.txt` 與 `browser-logs.json`。以下為更新後正式站實拍，完成紀錄只提交 README，不為文件再次部署。
+
+![正式首頁新的影片停留畫面](.gstack/qa-reports/home-video-poster-20261118/production-home-desktop.png)
+![服務流程保留原影片停留畫面](.gstack/qa-reports/home-video-poster-20261118/production-service.png)
