@@ -4779,5 +4779,9 @@ final result: passed
 ## 2026-11-18 門市外觀大圖微放大與停留構圖
 
 - 截圖中的門市外觀大圖實際位於 `/franchising/intro` 主視覺下方。僅將此圖取景從右上改為 `right 15%`，減少上方灰色屋簷，對齊參考圖的白色屋頂及招牌位置；不替換素材、不修改門市案例列表或其他圖片。
-- 沿用原進場及其後 5 秒、1 → 1.025 倍的一次微放大，完成後停留，不循環；保留右上縮放原點及減少動態偏好。現有回歸檢查同步更新取景要求，正式驗收結果續記。
+- 沿用原進場及其後 5 秒、1 → 1.025 倍的一次微放大，完成後停留，不循環；保留右上縮放原點及減少動態偏好。現有回歸檢查同步更新取景要求。
 - `pnpm --dir nuxt-site build`（含型別檢查）及現有加盟大圖回歸斷言通過；未執行包含其他頁面 API 的完整回歸腳本。本機 390／768／1440／1920px 實測圖片框、圖片來源均與改前相同、無水平溢出；正常進場量測由 1 倍到 1.025 倍，稍後及切換尺寸後保持終點，桌機與手機實拍確認招牌完整。證據存於 `.gstack/qa-reports/storefront-framing-20261118/`，本機未見 console error／warning。僅修改頁面 CSS，無 CMS、資料庫或素材寫入。
+- 程式 `6adb4955` 已正式發布，GitHub 的 Vercel 狀態為 success／Deployment has completed。主網域四組尺寸與本機結果一致，另一正式網域 390px 同樣為 `100% 15%` 及最終 1.025 倍；兩站未見 console error／warning。正式桌機與手機實拍已核對白色屋頂及招牌，未注入停用動畫樣式。`verification-result.json`、`production-layouts.json` 及 `before.json` 保存驗收範圍；未實測實體 Safari，減少動態以既有靜止規則斷言驗證。臨時分頁關閉、尺寸還原、本機驗收伺服器已停止；完成記錄只本機提交 README，不為文件再部署。
+
+![正式站門市大圖放大後停留構圖](.gstack/qa-reports/storefront-framing-20261118/production-desktop.png)
+![正式站手機門市大圖](.gstack/qa-reports/storefront-framing-20261118/production-mobile.png)
