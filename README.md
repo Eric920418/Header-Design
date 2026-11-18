@@ -4795,3 +4795,9 @@ final result: passed
 
 ![正式站管理平台下方增加12px留白](.gstack/qa-reports/builders-platform-gap-20261118/production-desktop.png)
 ![手機第三組同步增加留白](.gstack/qa-reports/builders-platform-gap-20261118/production-mobile.png)
+
+## 2026-11-18 加盟支援深色區塊恢復白金標題
+
+- `/franchising/intro` 加盟流程下方左側總部支援的四個標題誤用了 `InternalHeadingText`，其中文黑字 `!important` 覆蓋了深底白／金設計。僅在這四個標題改回 Vue 安全插值及原強調 span，明確指定主句白色、後三項強調句沿用金色；不改全站共 48 處頁面／元件使用的共用元件。
+- 保留全部文案、資料來源、字級行高、區塊尺寸、進場動畫、按鈕及右側資格條件；不寫入 CMS 或資料庫。建置與正式畫面驗收結果續記。
+- `pnpm --dir nuxt-site build`（含型別檢查）、既有 `check-heading-text.mjs` 通過。本機 390／768／1280／1440px 實際 DOM 核對四個主句為白色 `#FFFFFF`、三段強調句為金色 `#CAA05C`；逐字內容、字級、行高、標題框及整個支援區塊尺寸與正式修前相同、無水平溢出。右側資格內容與黑字、一般內容標題的中英配色和加盟按鈕目的地保持相同。改前實拍、本機實拍與量測存於 `.gstack/qa-reports/franchise-support-colors-20261118/`。

@@ -268,9 +268,10 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <div class="franchise-support-panel__shade" aria-hidden="true" />
             <div class="franchise-support-panel__content">
               <div v-for="(item, index) in franchiseSupportHighlights" :key="item.title" v-reveal="{ anim: 'opalMoveUp', delay: index * 65 }" class="franchise-support-item">
+                <!-- 深色照片上的白／金標題保留原配色，不套一般內容的中英分色。 -->
                 <h3>
-                  <template v-if="index === 0"><InternalHeadingText :text="item.detail.split('！')[0]" /><InternalHeadingText text="！" /></template>
-                  <template v-else><InternalHeadingText :text="item.title" /> <span><InternalHeadingText :text="item.detail.split('！')[0]" /><InternalHeadingText text="！" /></span></template>
+                  <template v-if="index === 0">{{ item.detail.split('！')[0] }}！</template>
+                  <template v-else>{{ item.title }} <span>{{ item.detail.split('！')[0] }}！</span></template>
                 </h3>
                 <p>{{ item.detail.split('！').slice(1).join('！') }}</p>
               </div>
@@ -507,7 +508,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-support-panel__shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(135deg, rgb(25 24 23 / 94%), rgb(28 28 29 / 78%)); }
 .franchise-support-panel__content { position: relative; z-index: 1; }
 .franchise-support-item + .franchise-support-item { margin-top: 24px; }
-.franchise-support-item h3 { margin: 0; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 27px; }
+.franchise-support-item h3 { margin: 0; color: #fff; font-family: var(--font-cjk-serif); font-size: 18px; font-weight: 600; line-height: 27px; }
 .franchise-support-item h3 span { color: #caa05c; }
 .franchise-support-item p { margin: 5px 0 0; color: rgb(255 255 255 / 72%); font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; }
 .franchise-support-panel__cta { display: flex; width: max-content; min-height: 60px; align-items: center; gap: 8px; margin: 30px auto 0; padding: 9px 9px 9px 30px; border: 1px solid rgb(255 255 255 / 60%); border-radius: 999px; color: #fff; background: transparent; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 24px; transition: background-color .3s ease; }
