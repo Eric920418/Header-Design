@@ -378,7 +378,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .franchise-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 50px; }
 
 .franchise-hero-media { position: relative; z-index: 9; height: clamp(520px, 42.5vw, 760px); margin-top: -400px; overflow: hidden; border-radius: 24px; }
-.franchise-hero-media :deep(img) { object-position: right top; }
+.franchise-hero-media :deep(img) { object-position: right 15%; }
 .franchise-hero-media.is-visible :deep(img) { transform-origin: right top; animation: franchise-hero-kenburns 5s ease-out 1.51s both; }
 @keyframes franchise-hero-kenburns {
   from { transform: scale(1); }

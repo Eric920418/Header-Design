@@ -4775,3 +4775,9 @@ final result: passed
 
 ![正式首頁新的影片停留畫面](.gstack/qa-reports/home-video-poster-20261118/production-home-desktop.png)
 ![服務流程保留原影片停留畫面](.gstack/qa-reports/home-video-poster-20261118/production-service.png)
+
+## 2026-11-18 門市外觀大圖微放大與停留構圖
+
+- 截圖中的門市外觀大圖實際位於 `/franchising/intro` 主視覺下方。僅將此圖取景從右上改為 `right 15%`，減少上方灰色屋簷，對齊參考圖的白色屋頂及招牌位置；不替換素材、不修改門市案例列表或其他圖片。
+- 沿用原進場及其後 5 秒、1 → 1.025 倍的一次微放大，完成後停留，不循環；保留右上縮放原點及減少動態偏好。現有回歸檢查同步更新取景要求，正式驗收結果續記。
+- `pnpm --dir nuxt-site build`（含型別檢查）及現有加盟大圖回歸斷言通過；未執行包含其他頁面 API 的完整回歸腳本。本機 390／768／1440／1920px 實測圖片框、圖片來源均與改前相同、無水平溢出；正常進場量測由 1 倍到 1.025 倍，稍後及切換尺寸後保持終點，桌機與手機實拍確認招牌完整。證據存於 `.gstack/qa-reports/storefront-framing-20261118/`，本機未見 console error／warning。僅修改頁面 CSS，無 CMS、資料庫或素材寫入。

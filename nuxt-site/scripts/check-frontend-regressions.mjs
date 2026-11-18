@@ -909,7 +909,7 @@ console.log('PASS 加盟與建商 Hero 黑體／字級／字重／行高一致�
 assert(franchise.includes('v-reveal="{ anim: \'opalMoveUp\', delay: 260 }" data-ev="opalMoveUp" class="source-rail-wide franchise-hero-media elementor-729c843 ev"'),'加盟大圖需保留原進場與260ms延遲')
 assert(/\.franchise-hero-media\.is-visible :deep\(img\)\s*\{[^}]*animation: franchise-hero-kenburns 5s ease-out 1\.51s both;/.test(franchise),'加盟大圖需等待原260ms延遲＋1.25秒進場後，使用低幅度Ken Burns')
 assert(/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.franchise-hero-media\.is-visible :deep\(img\)\s*\{ animation: none; transform: none;/.test(franchise),'減少動態需保持加盟照片靜止')
-assert(franchise.includes('.franchise-hero-media :deep(img) { object-position: right top; }'),'加盟照片靠右上保留招牌')
+assert(franchise.includes('.franchise-hero-media :deep(img) { object-position: right 15%; }'),'加盟門市大圖需向上取景15%，讓白色屋頂與完整招牌符合停留參考圖')
 console.log('PASS 加盟門市大圖原進場、延後低幅度Ken Burns、減少動態與裁切基準保留')
 assert(franchise.includes('.project-block:nth-child(even) { margin-top: 50px; }'),'加盟行銷卡片桌面需1／3／5在上、2／4在下')
 assert(!franchise.includes('.project-block:nth-child(3n + 2)'),'不得以三張為一組造成第3／4張同高')
