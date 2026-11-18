@@ -4785,3 +4785,9 @@ final result: passed
 
 ![正式站門市大圖放大後停留構圖](.gstack/qa-reports/storefront-framing-20261118/production-desktop.png)
 ![正式站手機門市大圖](.gstack/qa-reports/storefront-framing-20261118/production-mobile.png)
+
+## 2026-11-18 建商管理平台標題下方間距
+
+- 僅為第三組「管理平台」與「案件進度／精準掌握」增加 12px 上間距，桌機固定文字及手機圖片下方說明同步處理。原管理平台字級、金色、另外兩組數據與間距、捲動切換及固定邏輯保留。
+- 改動限定頁面 CSS，不變更 CMS、資料庫或圖片；建置及正式畫面驗收結果續記。
+- `pnpm --dir nuxt-site build`（含型別檢查）及既有 `check-builder-strengths.mjs` 的 315 組固定／短窗／卸載檢查、計數器純邏輯回歸通過，未執行該腳本末段 HTTP 檢查。本機正常捲動切換三組，主文字框與說明間距依序為 0／0／12px；原字級 80／80／72px 保留。390×844、768×1024、1280×600、1440×900 核對各組圖片來源及字級不變、僅第三組說明上外距增加、無水平溢出；短窗沿用放不下時自然閱讀的既有規則。本機桌機／手機實拍、量測與無 console error／warning 的記錄存於 `.gstack/qa-reports/builders-platform-gap-20261118/`。

@@ -454,6 +454,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-solution__copy .builders-solution__number { min-height: 96px; color: #c4a574; font-size: 80px; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .builders-solution__copy[data-active-strength="2"] .builders-solution__number > span,
 .builders-solution[data-strength-index="2"] .builders-solution__caption strong > span { font-size: .9em; }
+.builders-solution__copy[data-active-strength="2"] h3,
+.builders-solution[data-strength-index="2"] .builders-solution__caption h3 { margin-top: 12px; }
 .builders-solution__caption { display: none; padding: 20px 0 6px; font-family: var(--font-cjk-sans); font-size: 20px; line-height: 1.4; }
 .builders-solution__caption p, .builders-solution__caption h3 { margin: 0; font: inherit; }
 .builders-solution__caption strong { color: #c4a574; font-size: 40px; font-weight: 700; }
