@@ -29,18 +29,22 @@ onMounted(() => {
 
 const strengthsCopy = ref<HTMLElement>()
 const strengthsContent = ref<HTMLElement>()
+const strengthsList = ref<HTMLElement>()
 let strengthsObserver: ResizeObserver | undefined
 function updateStrengthsSticky() {
   const copy = strengthsCopy.value
   const content = strengthsContent.value
-  if (!copy || !content) return
+  const list = strengthsList.value
+  if (!copy || !content || !list) return
   if (window.innerWidth < 768) {
     copy.style.removeProperty('--strengths-sticky-top')
     copy.style.removeProperty('--strengths-copy-height')
+    copy.style.removeProperty('--strengths-list-height')
     return
   }
   const headerHeight = document.querySelector<HTMLElement>('header[data-breadcrumb-root]')?.offsetHeight ?? 60
   const viewportHeight = window.visualViewport?.height ?? window.innerHeight
+  copy.style.setProperty('--strengths-list-height', `${list.getBoundingClientRect().height}px`)
   const contentHeight = content.offsetHeight
   // In a short viewport, scroll the heading first and keep the figures in view.
   const top = Math.min(headerHeight + 15, viewportHeight - contentHeight - 20)
@@ -55,6 +59,7 @@ onMounted(() => {
   if ('ResizeObserver' in window && strengthsContent.value) {
     strengthsObserver = new ResizeObserver(updateStrengthsSticky)
     strengthsObserver.observe(strengthsContent.value)
+    if (strengthsList.value) strengthsObserver.observe(strengthsList.value)
     const header = document.querySelector<HTMLElement>('header[data-breadcrumb-root]')
     if (header) strengthsObserver.observe(header)
   }
@@ -119,7 +124,6 @@ onBeforeUnmount(finishModuleCount)
 const activePavilionId = ref<(typeof brandPavilions)[number]['id']>('taipei')
 const activePavilion = computed(() => brandPavilions.find(item => item.id === activePavilionId.value) ?? brandPavilions[0]!)
 
-const strengthsList = ref<HTMLElement>()
 const activeStrengthIndex = ref(0)
 const activeStrength = computed(() => strengths[activeStrengthIndex.value])
 let strengthObserver: IntersectionObserver | undefined
@@ -428,16 +432,15 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-capability > .builders-rail { width: min(1410px, calc(100% - 60px)); }
 .builders-section-heading--split { display: grid; grid-template-columns: 30% 70%; align-items: start; }
 .builders-section-heading--split > div > p { max-width: 760px; margin: 25px 0 0; color: #59585d; font-size: 15px; line-height: 25px; }
-.builders-strengths-section { padding: 75px 30px 0; color: #fff; background: #241c18; }
+.builders-strengths-section { padding: 75px 30px 105px; color: #fff; background: #241c18; }
 .builders-strengths-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 30px; }
 .builders-strengths-copy { position: sticky; top: var(--strengths-sticky-top, calc(var(--site-header-height, 60px) + 15px)); align-self: start; min-width: 0; height: var(--strengths-copy-height, auto); container-type: inline-size; }
-.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: calc(100svh - var(--site-header-height, 60px) - 53px); padding: 35px 0 6px; }
+.builders-strengths-content { display: grid; grid-template-rows: 1fr auto; gap: 48px; min-height: min(calc(100svh - var(--site-header-height, 60px) - 53px), var(--strengths-list-height, 100svh)); padding: 35px 0 6px; }
 .builders-strengths-heading h2 { color: #caa05c; max-width: 597px; margin: 24px 0 30px; font-family: var(--font-display); font-size: 60px; font-weight: 400; line-height: 1.067; letter-spacing: -.01em; text-transform: none; }
 .builders-strengths-heading h2 b { color: #fff; display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
 .builders-strengths-heading > p { max-width: 444px; margin: 0; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
-/* Keep the existing bottom space in the same grid row as the sticky column. */
-.builders-strengths-list { display: grid; gap: 30px; min-width: 0; padding-bottom: 105px; }
+.builders-strengths-list { display: grid; align-self: start; gap: 30px; min-width: 0; }
 .builders-strengths-list :deep(.builder-image) { height: auto; background: #fff; }
 .builders-capability__showcase { width: min(1280px, 100%); margin: 70px auto 0; container-type: inline-size; font-family: var(--font-cjk-sans); }
 .builders-capability__showcase :deep(.builder-image) { height: auto; background: transparent; }
@@ -540,11 +543,14 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-contact__aside { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 30px; padding: 0 0 48px; }
 }
 
-@media (min-width: 768px) and (max-height: 899px) {
+@media (min-width: 768px) and (max-height: 899px),
+       (min-width: 768px) and (max-width: 1023px) {
   .builders-strengths-content { gap: 16px; padding: 8px 0 6px; }
   .builders-strengths-heading h2 { margin: 14px 0 16px; }
   .builders-strengths-heading h2 b { margin-bottom: 10px; }
 }
+
+.builders-strengths-content:has(> .builders-solution__copy[data-active-strength="2"]) { padding-bottom: 0; }
 
 @media (max-width: 767px) {
   .builders-page { --builders-mobile-image-height: calc((100vw - 30px) / 2.2); }
@@ -566,7 +572,6 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-capability > .builders-rail { width: calc(100% - 30px); }
   .builders-strengths-section { padding: 60px 15px; }
   .builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
-  .builders-strengths-list { padding-bottom: 0; }
   .builders-strengths-copy { position: static; height: auto; }
   .builders-strengths-content > .builders-solution__copy { display: none; }
   .builders-solution__caption { display: block; }
