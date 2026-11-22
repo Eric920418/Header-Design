@@ -187,7 +187,12 @@ assert.deepEqual(caseCards.map(c=>[c.slug,c.source]),[['case-1','自建案例'],
 assert.equal(caseCards[0].description,'修改中的介紹')
 assert.equal(caseCards[0].enabled,false)
 
-const builders=workbenchBlocks('builders',pageBlocks(pageEditors.find(p=>p.id==='builders'),docs)),builderHero=builders.find(b=>b.name==='頁面最上方')
+const builders=workbenchBlocks('builders',pageBlocks(pageEditors.find(p=>p.id==='builders'),docs)),builderHero=builders[0]
+assert.equal(builderHero.id,'builders:主視覺標題')
+assert(builderHero.aliases.includes('builders:頁面最上方'))
+assert.equal(builderHero.href,'/builders#builders-title')
+assert(builderHero.fields.some(f=>f.documentId==='data-builders'&&f.path==='BUILDER_APPOINTMENT_HASH'))
+assert(!builders.some(block=>block.id==='builders:頁面最上方'))
 assert(builderHero.fields.some(f=>f.path==='copy.field6'),'Builder hero image must be beside its heading, not in brand information')
 previewBodies['view-pages-builders-index'].copy.text2='目前輸入的建商標題';previewBodies['view-pages-builders-index'].copy.field6='/changed-builder.webp'
 const builderScene=pagePositionContent(builderHero,previewBodies,{heroImage:'/published-builder.webp'})

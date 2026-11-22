@@ -27,7 +27,7 @@ const copyGroups={
   ['品牌館地址與時間',{text12:'地址欄位名稱',text13:'營業時間欄位名稱',bookingDestination:'前往頁面'}],['參觀注意事項',{text14:'區塊英文主標題',text15:'區塊中文主標題'}],
  ],
  'builders-index':[
-  ['頁面最上方',{text1:'區塊英文標籤',text2:'區塊中文主標題（第一段）',text3:'區塊中文主標題（第二段）',text5:'預約按鈕文字',field6:'主圖片',field7:'圖片說明'}],
+  ['主視覺標題',{text1:'區塊英文標籤',text2:'區塊中文主標題（第一段）',text3:'區塊中文主標題（第二段）',text5:'預約按鈕文字',field6:'主圖片',field7:'圖片說明'}],
   ['廚房品牌介紹',{text9:'區塊中文主標題',text11:'介紹文字',field12:'品牌空間圖片說明',field13:'品牌標誌說明',field14:'即將推出圖片說明',text15:'即將推出文字第一行',text16:'即將推出文字第二行'}],
   ['售後服務',{text24:'影片區塊名稱',field28:'服務說明圖片',field29:'圖片說明'}],
   ['聯繫與參觀預約',{text33:'區塊英文標籤',text38:'品牌館名稱',text39:'預約方式說明',text40:'表單介紹文字',text41:'地址欄位名稱',text42:'營業時間欄位名稱'}],
@@ -193,7 +193,7 @@ export const pagePositions={
   {...section('型錄管理','管理型錄封面、預覽與下載檔案','franchise-download-catalogue','franchise-catalogue-preview',[franchiseDownloadDocument,'brochurePages.0.image']),aliases:['franchise-download:型錄預覽圖片']},
   {...section('區塊共用設定','加盟簡介、按鈕、頁碼與載入提示文字','franchise-download-document','franchise-document-title'),aliases:['加盟簡介與檔案','加盟簡介與下載按鈕',...franchiseDownloadSettings.map(group=>group.name)].map(name=>'franchise-download:'+name)},
  ]},
- builders:{hero:[view('builders-index'),'copy.field6'],sections:[section('頁面最上方','主標題、預約按鈕與廚房大圖','hero','builders-title'),section('廚房品牌介紹','品牌介紹與即將推出文字','cards','builders-team-title',['data-builders','builderProjectCards.0.image']),section('建商實力','智能整合與建商實力圖文','cards','builders-capability-title'),section('三大服務','建商實力下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),section('合作夥伴','保留的合作夥伴標誌設定','inactive'),section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment')]},
+ builders:{hero:[view('builders-index'),'copy.field6'],sections:[{...section('主視覺標題','主標題、預約按鈕與廚房大圖','hero','builders-title'),aliases:['builders:頁面最上方']},section('廚房品牌介紹','品牌介紹與即將推出文字','cards','builders-team-title',['data-builders','builderProjectCards.0.image']),section('建商實力','智能整合與建商實力圖文','cards','builders-capability-title'),section('三大服務','建商實力下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),section('合作夥伴','保留的合作夥伴標誌設定','inactive'),section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment')]},
  'builder-series':{hero:[view('builders-sakura-kitchen'),'copy.field1'],sections:[section('頁面最上方','主圖片、品牌標誌與介紹','hero','sakura-kitchen-title'),section('品牌承諾入口','主圖片下方的介紹入口','cards','brand-advantage'),section('品牌優勢','品牌優勢介紹與圖片','cards','sakura-kitchen-advantage-title'),section('品牌系列','系列圖片、介紹與預約按鈕','cards','sakura-kitchen-series-title')]},
  'builder-catalogues':{hero:commonHero,sections:[section('頁面最上方','建商型錄頁最上方的大標題','hero','builder-catalogue-title'),section('型錄封面與下載','型錄卡片、封面與下載按鈕','catalogue','builder-catalogue-list-title')]},
  menu:{sections:[
@@ -216,7 +216,7 @@ const dataGroups={
  'data-service':{serviceSteps:'服務流程',faqGroups:'服務指南'},
  'data-brandPavilions':{brandPavilions:'品牌館地址與時間',pavilionNotice:'參觀注意事項'},
  'data-franchise':{FRANCHISE_FORM_URL:'主視覺標題',FRANCHISE_OFFICIAL_FORM_URL:'主視覺標題',FRANCHISE_BROCHURE_URL:'加盟簡介與下載按鈕',franchiseAdvantages:'專業品牌實力',franchiseTestimonials:'加盟夥伴真實分享',franchiseMarketingStories:'品牌信賴',franchiseQualifications:'加盟資格與條件',franchiseSupportHighlights:'總部支援',franchiseFaqItems:'了解加盟資訊'},
- 'data-builders':{BUILDER_APPOINTMENT_HASH:'頁面最上方',builderPartners:'合作夥伴'},
+ 'data-builders':{BUILDER_APPOINTMENT_HASH:'主視覺標題',builderPartners:'合作夥伴'},
  'data-storeCases':{storeCases:'門市管理',regionCities:'區域與縣市'},
  'data-productCatalogues':{PRODUCT_CARE_CATEGORIES:'清潔與保養問答'},
  'data-kitchenSystemCabinet':{systemCabinetImportance:'系統櫃材質重點',systemCabinetMaterials:'系統櫃板材比較',systemCabinetSelectionSteps:'系統櫃挑選步驟',systemCabinetCaseStudies:'系統櫃推薦案例'},
