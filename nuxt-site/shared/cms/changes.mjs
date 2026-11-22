@@ -4,6 +4,7 @@ import {editingSchema} from './presentation.mjs'
 import {itemCaption,itemKey,itemThumbnail} from './workbench.mjs'
 import {fieldImpacts} from './impact-targets.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument,builderStrengthsFields,isBuilderStrengthsCopy} from './builder-strengths.mjs'
+import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImage,builderHomeOneImages} from './builder-home-one.mjs'
 
 export function sameContent(a,b){
  if(a===b)return true
@@ -67,6 +68,13 @@ export function pageChanges(blocks,documents,previous,next,context={}){
    change.before=builderStrengthsCopy(previous[d.id]?.copy)[key]
    change.after=builderStrengthsCopy(next[d.id]?.copy)[key]
   }
+  const homeOne=d.id===builderHomeOneDocument&&builderHomeOneField(change.path)
+  if(homeOne){
+   const field={documentId:d.id,path:change.path}
+   change.label=homeOne.label
+   change.before=display(pageFieldValue(previous,field))
+   change.after=display(pageFieldValue(next,field))
+  }
   return {...change,keyParts,stable,...scope,blockId:block?.id,location:block?.name||(owner?owner.page.name+' › '+owner.block.name:'其他已儲存內容'),impacts:fieldImpacts({...scope,path:change.path},context,previous[d.id],next[d.id])}
  }))
 }
@@ -95,9 +103,10 @@ export function publishReview(blocks,documents,bodies,context={}){
 }
 
 export function pageSearchItems(block,bodies){
+ const fallback=block.kind==='builders-home-one'?builderHomeOneImage(bodies[builderHomeOneDocument]?.copy,builderHomeOneImages[1]).src:''
  return block.fields.filter(f=>f.schema.type==='array').flatMap(f=>(valueAt(bodies[f.documentId],f.path)||[]).flatMap((value,index)=>{
   if(!inRowScope(f.schema,value))return []
-  return [{key:itemKey(value,index),scope:f.documentId+':'+f.path,caption:itemCaption(value,index,f.schema),image:itemThumbnail(value,f.schema),...(block.id==='knowledge:文章管理'&&f.formGroup?{articleSection:f.formGroup}:{})}]
+  return [{key:itemKey(value,index),scope:f.documentId+':'+f.path,caption:itemCaption(value,index,f.schema),image:itemThumbnail(value,f.schema)||fallback,...(block.id==='knowledge:文章管理'&&f.formGroup?{articleSection:f.formGroup}:{})}]
  }))
 }
 
@@ -108,7 +117,7 @@ export function pageMedia(documents,bodies,blocks){
   if(Array.isArray(value))value.forEach((v,i)=>{if(inRowScope(schema||{},v))scan(v,schema?.item,[...labels,itemCaption(v,i,schema)],itemName||itemCaption(v,i,schema))})
   else if(value&&typeof value==='object')for(const[k,v]of Object.entries(value))scan(v,schema?.fields?.[k],[...labels,schema?.fields?.[k]?.label||'圖片'],itemName)
  }
- if(blocks)for(const block of blocks)for(const f of block.fields)scan(valueAt(bodies[f.documentId],f.path),f.schema,[block.name,f.label])
+ if(blocks)for(const block of blocks)for(const f of block.fields)scan(pageFieldValue(bodies,f),f.schema,[block.name,f.label])
  else for(const d of documents)scan(bodies[d.id],editingSchema(d.schema,d.id))
  return [...new Map(result.map(i=>[i.src,i])).values()]
 }

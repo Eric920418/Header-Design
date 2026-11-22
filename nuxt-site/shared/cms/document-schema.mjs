@@ -7,9 +7,10 @@ import { pageDestinationSchema } from './page-destinations.mjs'
 
 import { breadcrumbSchema } from './page-breadcrumbs.mjs'
 import { builderStrengthsSchema } from './builder-strengths.mjs'
+import { builderHomeOneSchema } from './builder-home-one.mjs'
 
 export function documentSchema(id, schema) {
-  for (const extend of [homeHeroSchema, homeGallerySchema, builderSeriesSchema, kitchenSeriesHeroSchema, customCasesSchema, homeHeadingSchema, pageDestinationSchema, breadcrumbSchema, builderStrengthsSchema]) {
+  for (const extend of [homeHeroSchema, homeGallerySchema, builderSeriesSchema, kitchenSeriesHeroSchema, customCasesSchema, homeHeadingSchema, pageDestinationSchema, breadcrumbSchema, builderStrengthsSchema, builderHomeOneSchema]) {
     schema = extend(id, schema)
   }
   return schema

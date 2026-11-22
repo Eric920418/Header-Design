@@ -5,6 +5,7 @@ import { ArrowRight, Check, Clock3, MapPin } from 'lucide-vue-next'
 import { BUILDER_APPOINTMENT_HASH as cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards as cmsSeed_builderProjectCards, builderBrandHeading, builderComingSoonImages } from '~/data/builders'
 import { brandPavilions as cmsSeed_brandPavilions } from '~/data/brandPavilions'
 import { builderStrengthsCopy, builderStrengthImageAlt } from '~/shared/cms/builder-strengths.mjs'
+import { builderHomeOneImage, builderHomeOneImages } from '~/shared/cms/builder-home-one.mjs'
 const { BUILDER_APPOINTMENT_HASH, builderProjectCards } = await useCmsResource('data-builders', { BUILDER_APPOINTMENT_HASH: cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards: cmsSeed_builderProjectCards })
 const { brandPavilions } = await useCmsResource('data-brandPavilions', { brandPavilions: cmsSeed_brandPavilions })
 const heroContactLabel = cmsCopy.copy.text5 === '專人聯繫' ? '立即預約' : cmsCopy.copy.text5
@@ -22,6 +23,8 @@ const strengths = cmsCopy.strengths
 const strengthsHeading = builderStrengthsCopy(cmsCopy.copy)
 
 const services = cmsCopy.services
+const homeOneBanner = builderHomeOneImage(cmsCopy.copy, builderHomeOneImages[0])
+const homeOneServicesImage = builderHomeOneImage(cmsCopy.copy, builderHomeOneImages[1])
 
 const homeOne = ref<HTMLElement>()
 const homeOneReady = ref(false)
@@ -282,18 +285,16 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
       <div class="builders-rail internal-rail-safe">
         <div class="builders-capability__showcase">
-          <div ref="homeOne" v-reveal="{ anim: 'fadeIn' }" class="builders-home-one" :data-image-ready="homeOneReady || undefined" @load.capture="homeOneReady = true" @error.capture="homeOneReady = true">
+          <div id="builders-home-one" ref="homeOne" v-reveal="{ anim: 'fadeIn' }" class="builders-home-one" :data-image-ready="homeOneReady || undefined" @load.capture="homeOneReady = true" @error.capture="homeOneReady = true">
             <InternalBuilderImage
-              src="/section-6/builders/proposal-20261002/home-in-one.webp"
-              alt="HOME IN O.N.E：ONE-STOP 一站式服務、NUMEROUS 多樣產品選擇、EFFICIENT 輕鬆擁有"
+              v-bind="homeOneBanner"
               class="builders-home-one__visual"
             />
           </div>
 
           <div id="builder-dedicated-services" v-reveal="{ anim: 'opalMoveUp' }" class="builders-services-panel">
             <InternalBuilderImage
-              src="/section-6/builders/proposal-20261002/dedicated-services.webp"
-              alt="專業銷講選材、專屬監工規劃與專人驗收"
+              v-bind="homeOneServicesImage"
               class="builders-services-panel__visual"
               fit="contain"
             />
@@ -465,6 +466,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-strengths-list :deep(.builder-image img) { height: auto; }
 .builders-solution__visual { overflow: hidden; border-radius: 24px; }
 .builders-home-one__visual { aspect-ratio: 2.7 / 1; }
+#builders-home-one, #builder-dedicated-services { scroll-margin-top: var(--site-header-height, 60px); }
 .builders-home-one:not([data-image-ready]) { animation-play-state: paused; }
 @media (prefers-reduced-motion: no-preference) {
   .builders-home-one.ev.is-visible { animation-name: builders-home-one-reveal; }

@@ -2,6 +2,7 @@ import {inspirationBreadcrumb,latestNewsBreadcrumb} from './page-breadcrumbs.mjs
 import {firstImage,rowName} from './workflow.mjs'
 import {blockThumbnail,pageFieldValue,valueAt,withValue,desktopCatalogueFields,usesDesktopCatalogue} from './page-editors.mjs'
 import {decoratePosition,franchiseMarqueeRows,franchiseSupportImageFallback,franchiseSupportImagePath,pagePositions,positionImage} from './positions.mjs'
+import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from './builder-home-one.mjs'
 
 const home=[
  ['主視覺輪播','首頁輪播圖片','首頁圖片、標題與連結','hero'],
@@ -158,7 +159,8 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const blockImage=firstImage(positionImage(block?.image,bodies))||presentation.blockImages?.[block?.id]||''
  const serviceVideo=block?.anchor==='service-brand-video'||block?.id==='visuals:服務介紹影片'
  const serviceCover=serviceVideo?bodies['site-visuals']?.serviceVideoCover||presentation.serviceVideoCover:''
- const mappedImage=block?.kind==='franchise-support'?franchiseSupportImage(bodies):blockImage||serviceCover
+ const mappedImage=block?.kind==='builders-home-one'?builderHomeOneImage(bodies[builderHomeOneDocument]?.copy,builderHomeOneImages[0]).src
+  :block?.kind==='franchise-support'?franchiseSupportImage(bodies):blockImage||serviceCover
  const image=block?.kind==='franchise-news'?franchiseItems[0]?.image||mappedImage:block?.kind==='news-recent'?recentItems[0]?.image||mappedImage:selected?selected.image||mappedImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||mappedImage||videoImage||''
  const media=fields.filter(f=>f.schema.format==='media').map(f=>({path:f.path,label:f.label,image:firstImage(f.value)})).filter(f=>f.image)
  const heading=texts.filter(f=>/標題|小標|品牌名稱|區塊(?:英|中)文標籤/.test(f.label)),buttons=texts.filter(f=>/按鈕|連結文字/.test(f.label)&&!/介紹|說明/.test(f.label))

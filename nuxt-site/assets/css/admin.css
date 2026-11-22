@@ -979,6 +979,20 @@
 @container (min-width:500px){
  .cms .cms-scene-builders-strengths{grid-template-areas:"heading image" "stat image";grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);}
 }
+.cms .cms-workbench .cms-home-one-images{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:18px;padding:12px;border:1px solid var(--cms-line);border-radius:6px;}
+.cms .cms-home-one-images legend{padding:0 4px;font-weight:600;}
+.cms .cms-home-one-images>.cms-field-help{grid-column:1/-1;margin:0;}
+.cms .cms-workbench .cms-home-one-images img.cms-field-thumbnail{width:100%;height:auto;aspect-ratio:3/1;object-fit:contain;}
+.cms .cms-scene-home-one{display:grid;gap:12px;overflow-wrap:anywhere;}
+.cms .cms-scene-home-one figure{min-width:0;margin:0;padding:4px;border-radius:4px;}
+.cms .cms-scene-home-one figcaption{margin:0 0 6px;font-size:12px;color:var(--cms-muted);}
+.cms .cms-workbench .cms-scene-home-one img.cms-home-one-image{display:block;width:100%;height:auto;aspect-ratio:2.7/1;object-fit:cover;background:#e3e3e8;border-radius:4px;padding:0;}
+.cms .cms-workbench .cms-scene-home-one img.cms-home-one-montage{aspect-ratio:1280/391;object-fit:contain;}
+.cms .cms-home-one-service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center;}
+.cms .cms-home-one-service-grid article{padding:6px 2px;border-radius:4px;}
+.cms .cms-website-scene .cms-home-one-service-grid h3{display:flex;align-items:center;justify-content:center;gap:3px;margin:0 0 4px;font-family:var(--font-cjk-serif);font-size:clamp(12px,2.6cqw,18px);line-height:1.45;}
+.cms .cms-home-one-service-grid svg{flex:none;color:#a47c38;}
+.cms .cms-website-scene .cms-home-one-service-grid p{margin:0;line-height:1.65;}
 .cms .cms-scene-wide-image{display:block;width:100%;max-height:265px;object-fit:contain;border-radius:4px;background:#f5f0e6;}
 .cms .cms-scene-small-image{display:block;width:100%;height:100px;object-fit:contain;border-radius:4px;background:#f5f0e6;}
 .cms .cms-scene-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}

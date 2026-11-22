@@ -9,6 +9,7 @@ import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
 import {storeRegionCities} from '~/shared/cms/store-location.mjs'
+import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
 const props=defineProps<{id:string}>()
 const route=useRoute(),router=useRouter(),{api,session,message}=useCmsAdmin()
 const {data:namedPages}=useNuxtData<any[]>('cms-pages')
@@ -120,6 +121,12 @@ function editableBlockFields(block:any){
  return [...fields,...cardFields]
 }
 const visibleFields=computed(()=>editableBlockFields(active.value))
+const homeOneSettings=computed<any[]>(()=>active.value?.kind==='builders-home-one'?visibleFields.value.filter((f:any)=>f.schema.format==='media'):[])
+const homeOneThumbnail=computed(()=>builderHomeOneImage(bodies.value[builderHomeOneDocument]?.copy,builderHomeOneImages[1]).src)
+function updateHomeOneService(field:any,index:number,path:'title'|'copy',value:string){
+ const services=pageFieldValue(bodies.value,field)
+ update(field,services.map((service:any,i:number)=>i===index?{...service,[path]:path==='copy'?value.split('\n'):value}:service))
+}
 const caseManagement=computed(()=>active.value?.preview==='inspiration-cases')
 const headerId='view-components-SiteHeader'
 const catalogueIndex=computed(()=>bodies.value[headerId]?.leftNav?.findIndex(usesDesktopCatalogue)??-1)
@@ -128,7 +135,7 @@ const catalogueFields=computed(()=>active.value?.id==='menu:左側主導覽'&&ca
 const commonFields=computed<any[]>(()=>{
  const body=bodies.value[franchiseMarqueeDocument]
  const repeated=active.value?.kind==='franchise-marquee'?franchiseMarqueeRows.filter(row=>valueAt(body,row.image)===valueAt(body,row.loop)).map(row=>row.loop):[]
- return visibleFields.value.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!repeated.includes(f.path))
+ return visibleFields.value.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!homeOneSettings.value.includes(f)&&!repeated.includes(f.path))
 })
 const brochureSettings=computed(()=>franchiseDownloadCommon.value?commonFields.value.filter(f=>franchiseDownloadActions.includes(f.path)):[])
 const downloadSettings=computed(()=>franchiseDownloadCommon.value?franchiseDownloadSettings.map(group=>({...group,fields:commonFields.value.filter(f=>group.fields.includes(f.path))})):[])
@@ -338,6 +345,11 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
    </div>
    <p v-if="caseManagement" class="cms-case-scope">這裡管理從後台新增的案例。請到<NuxtLink :to="pageEditorLink(storeCasesPageId,route.query)">「門市案例」</NuxtLink>修改門市文章與照片。從其他系統同步的案例請回原系統修改。</p>
    <p v-if="franchiseNews" class="cms-case-scope">按「編輯文章」修改標題、封面、摘要或內文。更新後，「優惠消息」也會使用修改後的文章。</p>
+   <fieldset v-if="homeOneSettings.length" :disabled="busy" class="cms-edit-form cms-home-one-images">
+    <legend>區塊圖片</legend>
+    <AdminFields v-for="f in homeOneSettings" :key="f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
+    <p class="cms-field-help">三項服務共用一張合圖。下方可逐筆修改標題與說明。</p>
+   </fieldset>
    <fieldset v-if="franchiseCatalogue" :disabled="busy" class="cms-edit-form cms-download-file-settings" data-position-group="franchise-pdf-actions">
     <AdminFields v-for="f in commonFields" :key="f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
     <p class="cms-field-help">「線上預覽」與「下載 PDF」共用此檔案。下方圖片顯示在官網頁面中。</p>
@@ -368,6 +380,13 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
    </div><div v-else-if="active?.kind==='franchise-support'||franchiseFaq" class="cms-block-field">
     <p v-if="franchiseFaq" class="cms-field-help">官網顯示排序前 {{ FRANCHISE_FAQ_DISPLAY_LIMIT }} 題。</p>
     <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :fallback-image="franchiseFaq?faqCover:franchiseSupportImage(bodies)" :display-limit="franchiseFaq?FRANCHISE_FAQ_DISPLAY_LIMIT:undefined" @update:model-value="update(f,$event)" />
+   </div><div v-else-if="active?.kind==='builders-home-one'" class="cms-block-field">
+    <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :fallback-image="homeOneThumbnail" @update:model-value="update(f,$event)">
+     <template #editor="{row}">
+      <AdminFields :model-value="row.value.title" :schema="f.schema.item.fields.title" :document-id="f.documentId" :path="`services.${row.index}.title`" @update:model-value="updateHomeOneService(f,row.index,'title',$event)" />
+      <AdminFields :model-value="row.value.copy.join('\n')" :schema="{...f.schema.item.fields.copy,type:'string',help:'每行顯示為一句服務說明。'}" :document-id="f.documentId" :path="`services.${row.index}.copy`" @update:model-value="updateHomeOneService(f,row.index,'copy',$event)" />
+     </template>
+    </AdminItems>
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
    <details v-if="collections.length&&commonFields.length&&!franchiseCatalogue" class="cms-common-settings">
     <summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary>

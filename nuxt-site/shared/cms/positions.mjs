@@ -1,5 +1,6 @@
 // Interface locations only. Stored document names, values and public URLs stay unchanged.
 import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
+import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImages} from './builder-home-one.mjs'
 
 const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
@@ -199,7 +200,7 @@ export const pagePositions={
   {...section('主視覺標題','主標題、預約按鈕與廚房大圖','hero','builders-title'),aliases:['builders:頁面最上方']},
   section('廚房品牌介紹','品牌卡片上方的中文主標題、介紹文字與即將推出卡片文字','builders-brand-intro','builders-team-title',['data-builders','builderProjectCards.0.image']),
   section('智能整合','區塊共用標題、介紹與三張統計圖文','builders-strengths','builders-capability-title'),
-  section('三大服務','智能整合下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),
+  section('HOME IN ONE','更換橫幅、服務合圖與編輯下方說明','builders-home-one',builderHomeOneImages[0].anchor,[builderHomeOneDocument,'copy.homeOneBanner']),
   section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),
   section('合作夥伴','保留的合作夥伴標誌設定','inactive'),
   section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment'),
@@ -244,6 +245,7 @@ export function positionGroup(page,id,path){
  }
  if(page==='builders'&&id==='data-brandPavilions')return '聯繫與參觀預約'
  if(page==='builders'&&id===builderStrengthsDocument&&(path==='strengths'||isBuilderStrengthsCopy(path)))return '智能整合'
+ if(page==='builders'&&id===builderHomeOneDocument&&(path==='services'||builderHomeOneField(path)))return 'HOME IN ONE'
  if(page==='franchise'&&path==='FRANCHISE_BROCHURE_URL')return '加盟資料下載入口'
  if(id==='knowledge-articles')return '文章管理'
  if(page==='news-latest'&&id===view('news-latest-index')&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'

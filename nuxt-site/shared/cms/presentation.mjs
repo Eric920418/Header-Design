@@ -5,6 +5,7 @@ import {positionField,readingField} from './positions.mjs'
 import {homeHeadingSchema,HOME_SERVICES_ID} from './home-headings.mjs'
 import {pageDestinationSchema} from './page-destinations.mjs'
 import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
+import {builderHomeOneDocument,builderHomeOneField} from './builder-home-one.mjs'
 
 // Presentation only: resource IDs, stored schemas and website content stay intact.
 const target=(label,href)=>({label,href})
@@ -149,6 +150,14 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁聯繫與參觀預約區','建商首頁的預約區']}
  if(resourceId===builderStrengthsDocument&&normalized==='strengths')return{label:'智能整合圖文',newItemLabel:'圖文項目'}
  if(resourceId===builderStrengthsDocument&&isBuilderStrengthsCopy(normalized))return{label:schema.label}
+ if(resourceId===builderHomeOneDocument){
+  const image=builderHomeOneField(normalized)
+  if(image)return{label:image.label}
+  if(normalized==='services')return{label:'服務說明',newItemLabel:'服務',searchLabel:'搜尋服務標題'}
+  if(normalized==='services.*.title')return{label:'服務標題'}
+  if(normalized==='services.*.copy')return{label:'說明文字',newItemLabel:'一行說明'}
+  if(normalized==='services.*.copy.*')return{label:'說明文字'}
+ }
  if(resourceId==='view-pages-about-introduce'&&normalized==='copy.field10')return{label:'圖片放大方式',hidden:true,readOnly:true}
  if(resourceId==='view-pages-franchising-intro'&&['copy.field21','copy.field25'].includes(normalized))return{label:'輪播重複圖片文字',hidden:true,readOnly:true}
  if(resourceId==='site-visuals'&&normalized==='images.asset_1795db00')return{label:'總部支援背景圖片'}

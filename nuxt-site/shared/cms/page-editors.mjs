@@ -1,6 +1,7 @@
 import {isSystemCabinetDocument,legacyKnowledgeSection} from './knowledge-editor.mjs'
 import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {builderStrengthsDocument,builderStrengthsFields,isBuilderStrengthsCopy} from './builder-strengths.mjs'
+import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImage} from './builder-home-one.mjs'
 import {workspaceFor,firstImage} from './workflow.mjs'
 import {editingSchema,resourceGuide,homeResources,placeDestinations} from './presentation.mjs'
 import {positionGroup,positionField,pagePositions,decoratePosition,franchiseSupportImagePath} from './positions.mjs'
@@ -101,6 +102,11 @@ export const valueAt=(body,path)=>path.split('.').reduce((v,key)=>v?.[key],body)
 export const inRowScope=(schema,row)=>(!schema.rowFilter||valueAt(row,schema.rowFilter.path)===schema.rowFilter.value)&&(!schema.rowIds||schema.rowIds.includes(row?.id))
 export function pageFieldValue(bodies, field){
  const body=bodies?.[field.documentId]
+ const homeOne=field.documentId===builderHomeOneDocument&&builderHomeOneField(field.path)
+ if(homeOne){
+  const image=builderHomeOneImage(body?.copy,homeOne.image)
+  return homeOne.format==='media'?image.src:image.alt
+ }
  if(field.documentId===builderStrengthsDocument&&isBuilderStrengthsCopy(field.path)){
   const key=field.path.slice(5)
   return body?.copy?.[key]??builderStrengthsFields[key].fallback
@@ -170,6 +176,7 @@ function fieldGroup(p,id,path,schema){
  if(id===view('design-inspiration-index')||id===view('knowledge-index')||id===view('gallery-index')||/^view-pages-news-(latest|activities|video)-index$/.test(id))return '列表標題與按鈕'
  if(groups[id]?.[path])return groups[id][path]
  if(id===builderStrengthsDocument&&(path==='strengths'||isBuilderStrengthsCopy(path)))return '建商實力'
+ if(id===builderHomeOneDocument&&(path==='services'||builderHomeOneField(path)))return '三大服務'
  if(path.startsWith('copy.')){
   const context=(schema.positionLegacyLabel||schema.label)?.split('・')
   if(context?.length>1){
@@ -181,7 +188,6 @@ function fieldGroup(p,id,path,schema){
   if(id===view('franchising-intro'))return '主視覺'
   return '標題與說明'
  }
- if(path==='services'&&p.id==='builders')return '三大服務'
  if(path==='series')return '品牌系列'
  return schema.label||'整頁共用文字'
 }

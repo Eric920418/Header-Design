@@ -19,6 +19,7 @@ import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
 import {franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
+import {builderHomeOneImage,builderHomeOneImages} from '../shared/cms/builder-home-one.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 {
@@ -352,8 +353,21 @@ const products=workbenchBlocks('products-sakura',pageBlocks(pageEditors.find(p=>
 const productId=previewBodies['catalog-sakura'].items[0].id,productScene=pagePositionContent(products,previewBodies,{rows:{'catalog-sakura':{[productId]:{image:'/real-source-product.webp'}}}})
 assert.equal(productScene.thumbnail,'/real-source-product.webp');assert.equal(productScene.items[0].image,'/real-source-product.webp');assert(!previewBodies['catalog-sakura'].items[0].image,'Read-only source images must never become editable content')
 assert.equal(itemCaption({year:'1978'},0),'1978 年');assert.equal(itemCaption({value:['45','萬'],lines:['設計模組']},0),'45 萬 · 設計模組')
-const sharedService=builders.find(b=>b.name==='三大服務'),serviceScene=pagePositionContent(sharedService,previewBodies,{}, {caption:'專業銷講',image:'',value:{title:'專業銷講'}})
-assert.equal(serviceScene.image,'/section-6/builders/proposal-20261002/dedicated-services.webp','A text card may use its explicitly mapped shared section image')
+const homeOne=builders.find(b=>b.id==='builders:HOME IN ONE')
+const [homeOneBanner,homeOneMontage]=builderHomeOneImages
+assert(homeOne.aliases.includes('builders:三大服務'))
+assert.equal(homeOne.href,'/builders#'+homeOneBanner.anchor)
+const serviceScene=pagePositionContent(homeOne,previewBodies)
+assert.equal(serviceScene.thumbnail,homeOneBanner.originalImage)
+assert.deepEqual(serviceScene.media.map(media=>media.image),[homeOneBanner.originalImage,homeOneMontage.originalImage])
+assert.equal(homeOne.fields.filter(f=>f.schema.imageReading).length,2)
+const serviceEdit=structuredClone(originalStrengths)
+serviceEdit.copy[homeOneMontage.imageKey]='/changed-builder.webp'
+validate(serviceEdit,strengthsDocument.schema)
+checkPageBody(strengthsPage,builderStrengthsDocument,originalStrengths,serviceEdit,strengthsDocument.schema)
+assert.deepEqual(builderHomeOneImage(serviceEdit.copy,homeOneMontage),{src:'/changed-builder.webp',alt:homeOneMontage.label})
+const serviceChanges=pageChanges(builders,[strengthsDocument],{[builderStrengthsDocument]:originalStrengths},{[builderStrengthsDocument]:serviceEdit})
+assert.deepEqual(serviceChanges.map(e=>[e.before,e.after,e.impacts[0].href]),[[homeOneMontage.originalImage,'/changed-builder.webp','/builders#'+homeOneMontage.anchor]])
 assert.equal(serviceScene.mappedImage,serviceScene.image,'The shared section photo must display above the text cards')
 assert.equal(builders.find(b=>b.name==='合作夥伴').kind,'inactive','Archived builder partners are not a website section')
 assert.equal(itemWebsitePath('data-storeCases','臺北市'),'','County selection keeps the filter position instead of linking to a case detail')

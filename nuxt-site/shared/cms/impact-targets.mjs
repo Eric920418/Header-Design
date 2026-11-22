@@ -2,6 +2,7 @@ import { resourceGuide } from './presentation.mjs'
 import { HOME_HERO_ID, heroSeriesTitle } from './hero-media.mjs'
 import { franchiseNewsIds } from './public-content.mjs'
 import { builderStrengthsDocument, isBuilderStrengthsCopy } from './builder-strengths.mjs'
+import { builderHomeOneDocument, builderHomeOneField, builderHomeOneImages } from './builder-home-one.mjs'
 
 const target = (label, href) => ({ label, href })
 const homePromise = target('首頁 → 品牌承諾', '/#brand-promise')
@@ -69,6 +70,11 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  }
  if (documentId === builderStrengthsDocument && (key === 'strengths' || isBuilderStrengthsCopy(path)))
   return [target('建商專區首頁 → 智能整合', '/builders#builders-capability-title')]
+ if (documentId === builderHomeOneDocument) {
+  const image = builderHomeOneField(path)
+  if (image) return [target('建商專區首頁 → '+image.image.label, '/builders#'+image.image.anchor)]
+  if (key === 'services') return [target('建商專區首頁 → HOME IN ONE 的服務說明', '/builders#'+builderHomeOneImages[1].anchor)]
+ }
  if (documentId === 'data-franchise' && path) {
   if (key === 'franchiseSupportHighlights') return [target('加盟介紹 → 總部支援','/franchising/intro#franchise-support')]
   if (key === 'franchiseFaqItems') return [target('加盟介紹 → 了解加盟資訊','/franchising/intro#franchise-faq-title')]
