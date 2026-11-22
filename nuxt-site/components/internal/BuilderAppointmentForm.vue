@@ -4,6 +4,8 @@ import { ArrowRight, LoaderCircle } from 'lucide-vue-next'
 type FormKey = 'contactName' | 'phone' | 'company' | 'email'
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
+const props = defineProps<{ preview?: boolean }>()
+const headingId = props.preview ? useId() : 'builder-form-heading'
 const config = useRuntimeConfig()
 const endpoint = computed(() => '/api/forms/builder-appointment')
 const requestKey = ref('')
@@ -62,6 +64,7 @@ const resetForm = () => {
 }
 
 const submit = async () => {
+  if (props.preview) return
   if(submitState.value==='submitting')return
   notice.value = null
   submitState.value = 'idle'
@@ -123,13 +126,13 @@ const submit = async () => {
 </script>
 
 <template>
-  <section class="builder-form" aria-labelledby="builder-form-heading">
+  <section class="builder-form" :aria-labelledby="headingId">
     <header class="builder-form__header">
       <span>Appointment Form</span>
-      <h3 id="builder-form-heading"><InternalHeadingText text="預約品牌館參訪" /></h3>
+      <h3 :id="headingId"><InternalHeadingText text="預約品牌館參訪" /></h3>
     </header>
 
-    <form ref="formElement" novalidate @submit.prevent="submit">
+    <form ref="formElement" :inert="props.preview" novalidate @submit.prevent="submit">
       <div class="builder-form__grid">
         <label>
           <span>聯絡人（必填）</span>

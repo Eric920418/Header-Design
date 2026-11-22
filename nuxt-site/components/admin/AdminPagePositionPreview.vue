@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {ArrowRight,Play,Plus,Search,MessageSquare,Download,MapPin,ExternalLink,Check} from 'lucide-vue-next'
+import {ArrowRight,Play,Plus,Search,MessageSquare,Download,MapPin,ExternalLink,Check,Clock3} from 'lucide-vue-next'
+import type {BrandPavilion} from '~/types/content'
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
 import {franchiseDownloadBreadcrumb,knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
@@ -8,6 +9,7 @@ import {franchiseDownloadDocument,franchiseMarqueeDocument,franchiseMarqueeRows,
 import {builderBrandHeading,builderComingSoonImages,type builderProjectCards} from '~/data/builders'
 import {builderStrengthsDocument,builderStrengthsCopy,builderStrengthImageAlt} from '~/shared/cms/builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
+import {builderAppointmentHeading} from '~/shared/cms/builder-appointment.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
@@ -66,6 +68,9 @@ const strengthIndex=computed(()=>props.selected?.path==='strengths'?props.select
 const strengthItem=computed<{value:string[];lines:string[];background:string}|undefined>(()=>props.bodies[builderStrengthsDocument]?.strengths?.[strengthIndex.value])
 const homeOneAssets=computed(()=>builderHomeOneImages.map(asset=>({...asset,...builderHomeOneImage(props.bodies[builderHomeOneDocument]?.copy,asset)})))
 const homeOneServices=computed<{title:string;copy:string[]}[]>(()=>props.bodies[builderHomeOneDocument]?.services||[])
+const appointmentHeading=computed(()=>builderAppointmentHeading(buildersCopy.value))
+const appointmentPavilions=computed<BrandPavilion[]>(()=>props.bodies['data-brandPavilions']?.brandPavilions||[])
+const appointmentPavilion=computed(()=>appointmentPavilions.value.find(p=>p.id===(props.selected?.path==='brandPavilions'?props.selected.value?.id:'taipei'))||appointmentPavilions.value[0])
 const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
 const previewStores=computed(()=>scene.value.items.map((i:any)=>({name:i.value?.storeName||i.value?.name||i.title,address:i.value?.address,hours:i.value?.hours,phone:i.value?.contact?.phone||i.value?.phone,image:i.image})).filter((i:any)=>i.address||i.image))
 const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='systemCabinetMaterials');return f?props.bodies[f.documentId]?.[f.path]:null})
@@ -276,6 +281,35 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
    </div>
    <div v-else-if="scene.kind==='builders-icare'&&buildersCopy?.field28" class="cms-scene-builders-icare" role="region" :aria-label="buildersCopy.text24" :class="{'is-focused':['copy.text24','copy.field28','copy.field29'].includes(focusedField||'')}">
     <AdminThumbnail :src="buildersCopy.field28" :alt="buildersCopy.field29" contain />
+   </div>
+   <div v-else-if="scene.kind==='builders-appointment'&&buildersCopy" class="cms-builder-appointment-preview">
+    <header class="cms-builder-appointment-heading">
+     <InternalSectionPill :class="{'is-focused':highlighted('copy.text33')}">{{ buildersCopy.text33 }}</InternalSectionPill>
+     <h3>
+      <span class="cms-appointment-eyebrow" :class="{'is-focused':highlighted('copy.appointmentEyebrow')}">{{ appointmentHeading.eyebrow }}</span>
+      <b :class="{'is-focused':highlighted('copy.appointmentChineseTitle')}"><InternalHeadingText :text="appointmentHeading.chinese" /></b>
+      <span :class="{'is-focused':highlighted('copy.appointmentEnglishTitleFirst')}"><InternalHeadingText :text="appointmentHeading.firstText" /><strong><InternalHeadingText :text="appointmentHeading.firstAccent" /></strong></span><br />
+      <span :class="{'is-focused':highlighted('copy.appointmentEnglishTitleSecond')}"><strong><InternalHeadingText :text="appointmentHeading.secondAccent" /></strong><InternalHeadingText :text="appointmentHeading.secondText" /></span>
+     </h3>
+    </header>
+    <div class="cms-builder-appointment-grid">
+     <div class="cms-appointment-pavilion">
+      <h4>
+       <span :class="{'is-focused':highlighted('copy.text38')}">{{ buildersCopy.text38 }}</span><br />
+       <span :class="{'is-focused':highlighted('copy.text39')}">{{ buildersCopy.text39 }}</span>
+      </h4>
+      <p :class="{'is-focused':highlighted('copy.text40')}">{{ buildersCopy.text40 }}</p>
+      <dl v-if="appointmentPavilion" class="cms-scene-details">
+       <dt :class="{'is-focused':highlighted('copy.text41')}"><MapPin :size="13" aria-hidden="true" />{{ buildersCopy.text41 }}</dt><dd>{{ appointmentPavilion.address }}</dd>
+       <dt :class="{'is-focused':highlighted('copy.text42')}"><Clock3 :size="13" aria-hidden="true" />{{ buildersCopy.text42 }}</dt><dd>{{ appointmentPavilion.hours }}</dd>
+      </dl>
+      <div v-if="appointmentPavilion" class="cms-appointment-tabs">
+       <span v-for="pavilion in appointmentPavilions" :key="pavilion.id" :class="{'is-active':pavilion.id===appointmentPavilion.id}">{{ pavilion.name.replace('館','') }}</span>
+      </div>
+      <AdminThumbnail v-if="appointmentPavilion?.image" :src="appointmentPavilion.image" :alt="appointmentPavilion.alt" />
+     </div>
+     <InternalBuilderAppointmentForm preview />
+    </div>
    </div>
    <div v-else-if="scene.kind==='franchise-news'" class="cms-scene-franchise-news">
     <span class="cms-franchise-news-eyebrow" :class="{'is-focused':highlighted('copy.text58')}">{{ franchiseDownloadCard?.text58 }}</span>

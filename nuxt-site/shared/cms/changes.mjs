@@ -5,6 +5,7 @@ import {itemCaption,itemKey,itemThumbnail} from './workbench.mjs'
 import {fieldImpacts} from './impact-targets.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument,builderStrengthsFields,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImage,builderHomeOneImages} from './builder-home-one.mjs'
+import {builderAppointmentDocument,builderAppointmentHeadingFields,builderAppointmentHeadingValue,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 
 export function sameContent(a,b){
  if(a===b)return true
@@ -68,6 +69,12 @@ export function pageChanges(blocks,documents,previous,next,context={}){
    change.label=builderStrengthsFields[key].label
    change.before=builderStrengthsCopy(previous[d.id]?.copy)[key]
    change.after=builderStrengthsCopy(next[d.id]?.copy)[key]
+  }
+  if(d.id===builderAppointmentDocument&&isBuilderAppointmentHeading(change.path)){
+   const key=change.path.slice(5)
+   change.label=builderAppointmentHeadingFields[key].label
+   change.before=builderAppointmentHeadingValue(previous[d.id]?.copy,key)
+   change.after=builderAppointmentHeadingValue(next[d.id]?.copy,key)
   }
   const homeOne=d.id===builderHomeOneDocument&&builderHomeOneField(change.path)
   if(homeOne){

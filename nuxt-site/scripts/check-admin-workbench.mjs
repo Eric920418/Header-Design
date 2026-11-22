@@ -20,6 +20,7 @@ import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/pub
 import {franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
 import {builderHomeOneImage,builderHomeOneImages} from '../shared/cms/builder-home-one.mjs'
+import {builderAppointmentHeading,builderAppointmentHeadingFields} from '../shared/cms/builder-appointment.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 {
@@ -221,6 +222,20 @@ const strengthsBlock=builders.find(b=>b.id==='builders:智能整合')
 const strengthsDocument=docs.find(d=>d.id===builderStrengthsDocument)
 const strengthsPage=pageEditors.find(p=>p.id==='builders')
 const originalStrengths=strengthsDocument.body
+const appointmentBlock=builders.find(b=>b.id==='builders:品牌館資訊與預約')
+assert(appointmentBlock.aliases.includes('builders:聯繫與參觀預約'))
+assert.equal(appointmentBlock.href,'/builders#appointment')
+assert.deepEqual(appointmentBlock.fields.slice(0,5).map(f=>f.path),['copy.text33',...Object.keys(builderAppointmentHeadingFields).map(key=>'copy.'+key)])
+const originalAppointment=builderAppointmentHeading(originalStrengths.copy)
+assert.deepEqual(originalAppointment,{eyebrow:'Explore Our',chinese:'櫻花集團品牌館',firstText:'The Art ',firstAccent:'Of',secondAccent:'Kitchen',secondText:' Showrooms'})
+const appointmentEdit=structuredClone(originalStrengths)
+appointmentEdit.copy.appointmentChineseTitle='品牌館標題驗收'
+appointmentEdit.copy.appointmentEnglishTitleFirst='  '
+validate(appointmentEdit,strengthsDocument.schema)
+checkPageBody(strengthsPage,strengthsDocument.id,originalStrengths,appointmentEdit,strengthsDocument.schema)
+assert.deepEqual(builderAppointmentHeading(appointmentEdit.copy),{...originalAppointment,chinese:'品牌館標題驗收'})
+const appointmentChanges=pageChanges(builders,[strengthsDocument],{[strengthsDocument.id]:originalStrengths},{[strengthsDocument.id]:appointmentEdit})
+assert(appointmentChanges.some(change=>change.path==='copy.appointmentChineseTitle'&&change.before===originalAppointment.chinese&&change.impacts[0].href==='/builders#appointment'))
 assert(strengthsBlock.aliases.includes('builders:建商實力'))
 assert.equal(strengthsBlock.href,'/builders#builders-capability-title')
 assert.deepEqual(strengthsBlock.fields.map(f=>f.path),['strengths',...Object.keys(builderStrengthsCopy()).map(key=>'copy.'+key)])

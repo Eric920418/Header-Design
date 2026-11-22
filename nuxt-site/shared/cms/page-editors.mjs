@@ -2,6 +2,7 @@ import {isSystemCabinetDocument,legacyKnowledgeSection} from './knowledge-editor
 import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {builderStrengthsDocument,builderStrengthsFields,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImage} from './builder-home-one.mjs'
+import {builderAppointmentDocument,builderAppointmentHeadingFields,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 import {workspaceFor,firstImage} from './workflow.mjs'
 import {editingSchema,resourceGuide,homeResources,placeDestinations} from './presentation.mjs'
 import {positionGroup,positionField,pagePositions,decoratePosition,franchiseSupportImagePath} from './positions.mjs'
@@ -108,6 +109,10 @@ export const valueAt=(body,path)=>path.split('.').reduce((v,key)=>v?.[key],body)
 export const inRowScope=(schema,row)=>(!schema.rowFilter||valueAt(row,schema.rowFilter.path)===schema.rowFilter.value)&&(!schema.rowIds||schema.rowIds.includes(row?.id))
 export function pageFieldValue(bodies, field){
  const body=bodies?.[field.documentId]
+ if(field.documentId===builderAppointmentDocument&&isBuilderAppointmentHeading(field.path)){
+  const key=field.path.slice(5)
+  return body?.copy?.[key]??builderAppointmentHeadingFields[key].fallback
+ }
  const homeOne=field.documentId===builderHomeOneDocument&&builderHomeOneField(field.path)
  if(homeOne){
   const image=builderHomeOneImage(body?.copy,homeOne.image)
@@ -170,6 +175,7 @@ function fieldGroup(p,id,path,schema){
  }
  if(id==='site-visuals'&&p.id!=='visuals')return p.id==='home'?'品牌承諾':p.id==='franchise'?'加盟夥伴分享':'品牌影片'
  if(id==='data-brandPavilions'&&p.id==='builders')return '聯繫預約'
+ if(id===builderAppointmentDocument&&isBuilderAppointmentHeading(path))return '聯繫預約'
  if(id===view('knowledge-design-systemcabinet')){
   if(['designStyleLinks','kitchenSeriesLinks'].includes(path))return '系統櫃挑選步驟'
   const number=Number(path.match(/\d+$/)?.[0]);if(number<=2)return '整頁共用文字';if(number===3)return '系統櫃介紹';if(number<=7)return '系統櫃材質';if(number<=14)return '系統櫃挑選步驟';if(number===15)return '系統櫃推薦案例';if(number>=16)return '文章結語'

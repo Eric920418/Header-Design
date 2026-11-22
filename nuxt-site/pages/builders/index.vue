@@ -6,6 +6,7 @@ import { BUILDER_APPOINTMENT_HASH as cmsSeed_BUILDER_APPOINTMENT_HASH, builderPr
 import { brandPavilions as cmsSeed_brandPavilions } from '~/data/brandPavilions'
 import { builderStrengthsCopy, builderStrengthImageAlt } from '~/shared/cms/builder-strengths.mjs'
 import { builderHomeOneImage, builderHomeOneImages } from '~/shared/cms/builder-home-one.mjs'
+import { builderAppointmentHeading } from '~/shared/cms/builder-appointment.mjs'
 const { BUILDER_APPOINTMENT_HASH, builderProjectCards } = await useCmsResource('data-builders', { BUILDER_APPOINTMENT_HASH: cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards: cmsSeed_builderProjectCards })
 const { brandPavilions } = await useCmsResource('data-brandPavilions', { brandPavilions: cmsSeed_brandPavilions })
 const heroContactLabel = cmsCopy.copy.text5 === '專人聯繫' ? '立即預約' : cmsCopy.copy.text5
@@ -25,6 +26,7 @@ const strengthsHeading = builderStrengthsCopy(cmsCopy.copy)
 const services = cmsCopy.services
 const homeOneBanner = builderHomeOneImage(cmsCopy.copy, builderHomeOneImages[0])
 const homeOneServicesImage = builderHomeOneImage(cmsCopy.copy, builderHomeOneImages[1])
+const appointmentHeading = builderAppointmentHeading(cmsCopy.copy)
 
 const homeOne = ref<HTMLElement>()
 const homeOneReady = ref(false)
@@ -319,7 +321,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <header v-reveal="{ anim: 'opalMoveUp' }" class="builders-section-heading builders-section-heading--split builders-contact__heading">
           <InternalTemplateHeadingRail :label="cmsCopy.copy.text33" />
           <div>
-            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">Explore Our</span><b class="builders-contact-chinese"><InternalHeadingText text="櫻花集團品牌館" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="The Art " /><span><InternalHeadingText text="Of" /></span><br /> <span><InternalHeadingText text="Kitchen" /></span><InternalHeadingText text=" Showrooms" /></span></h2>
+            <h2 id="builders-contact-title"><span class="bilingual-heading-lead"><span class="builders-contact-eyebrow">{{ appointmentHeading.eyebrow }}</span><b class="builders-contact-chinese"><InternalHeadingText :text="appointmentHeading.chinese" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText :text="appointmentHeading.firstText" /><span v-if="appointmentHeading.firstAccent"><InternalHeadingText :text="appointmentHeading.firstAccent" /></span><br /> <span><InternalHeadingText :text="appointmentHeading.secondAccent" /></span><InternalHeadingText :text="appointmentHeading.secondText" /></span></h2>
           </div>
         </header>
 

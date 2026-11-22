@@ -35,11 +35,11 @@ for(const field of blocks.flatMap(block=>block.fields)){
  assert.match(field.label,/朗讀文字/)
  assert.match(field.searchTerms,/圖片說明/)
 }
-const pavilionFields=blocks.find(block=>block.id==='builders:聯繫與參觀預約').fields.find(f=>f.path==='brandPavilions').schema.item.fields
+const pavilionFields=blocks.find(block=>block.id==='builders:品牌館資訊與預約').fields.find(f=>f.path==='brandPavilions').schema.item.fields
 assert(pavilionFields.alt.imageReading)
 assert.equal(pavilionFields.alt.label,'圖片朗讀文字')
 assert(!pavilionFields.address.imageReading)
-assert(blocks.find(block=>block.id==='builders:聯繫與參觀預約').fields.some(f=>f.path==='copy.text39'&&!f.schema.advanced),'Visible booking copy stays in the main form')
+assert(blocks.find(block=>block.id==='builders:品牌館資訊與預約').fields.some(f=>f.path==='copy.text39'&&!f.schema.advanced),'Visible booking copy stays in the main form')
 const heroFields=blocks.find(block=>block.id==='home:主視覺輪播').fields.filter(f=>f.path.startsWith('copy.')&&!f.schema.advanced)
 assert.deepEqual(heroFields.slice(0,6).map(f=>f.path),['copy.text6','copy.text7','copy.text8','copy.text9','copy.field5','copy.text10'])
 assert(heroFields[4].searchTerms.includes('圓形按鈕前往頁面'))

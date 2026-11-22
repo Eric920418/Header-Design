@@ -6,6 +6,7 @@ import {homeHeadingSchema,HOME_SERVICES_ID} from './home-headings.mjs'
 import {pageDestinationSchema} from './page-destinations.mjs'
 import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneField} from './builder-home-one.mjs'
+import {builderAppointmentDocument,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 
 // Presentation only: resource IDs, stored schemas and website content stay intact.
 const target=(label,href)=>({label,href})
@@ -147,7 +148,8 @@ export function placeDestinations(fields, keyOf, afterOf) {
 export function fieldPresentation(resourceId,path,schema={}){
  const normalized=path.replace(/^\./,'').replace(/\.\d+(?=\.|$)/g,'.*'),key=normalized.split('.').at(-1)
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
- if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁聯繫與參觀預約區','建商首頁的預約區']}
+ if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁品牌館資訊與預約','建商首頁的預約區']}
+ if(resourceId===builderAppointmentDocument&&isBuilderAppointmentHeading(normalized))return{label:schema.label}
  if(resourceId===builderStrengthsDocument&&normalized==='strengths')return{label:'智能整合圖文',newItemLabel:'圖文項目'}
  if(resourceId===builderStrengthsDocument&&isBuilderStrengthsCopy(normalized))return{label:schema.label}
  if(resourceId===builderHomeOneDocument){

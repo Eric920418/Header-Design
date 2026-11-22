@@ -994,6 +994,40 @@
 .cms .cms-home-one-service-grid svg{flex:none;color:#a47c38;}
 .cms .cms-website-scene .cms-home-one-service-grid p{margin:0;line-height:1.65;}
 .cms .cms-workbench .cms-scene-builders-icare img.cms-thumbnail{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#e3e3e8;border-radius:6px;padding:0;}
+.cms .cms-builder-appointment-preview{display:grid;gap:16px;padding:clamp(8px,2.8cqw,16px);border-radius:6px;background:#fafafa;overflow-wrap:anywhere;}
+.cms .cms-builder-appointment-heading{display:grid;justify-items:start;gap:10px;}
+.cms .cms-website-scene .cms-builder-appointment-heading h3{margin:0;color:#1c1c1d;font-size:clamp(18px,5cqw,29px);font-weight:400;line-height:1.25;}
+.cms .cms-builder-appointment-heading h3 strong{color:#886123;font-weight:inherit;}
+.cms .cms-builder-appointment-heading h3 b{display:block;margin:4px 0 8px;font-family:var(--font-cjk-serif);}
+.cms .cms-appointment-eyebrow{display:inline-block;border-bottom:1px solid #caa05c;font-size:12px;}
+.cms .cms-builder-appointment-grid{display:grid;gap:12px;align-items:start;}
+.cms .cms-appointment-pavilion{min-width:0;}
+.cms .cms-appointment-pavilion h4{margin:0;font-family:var(--font-cjk-serif);font-size:clamp(14px,3.4cqw,19px);}
+.cms .cms-appointment-pavilion .cms-scene-details dt{display:flex;align-items:center;gap:4px;}
+.cms .cms-appointment-pavilion .cms-scene-details svg{flex:none;}
+.cms .cms-appointment-tabs{display:flex;gap:4px;flex-wrap:wrap;margin:12px 0 6px;}
+.cms .cms-appointment-tabs>span{padding:3px 8px;border:1px solid #dedde2;border-radius:20px;background:white;font-size:11px;}
+.cms .cms-appointment-tabs>.is-active{border-color:#caa05c;background:#f6e7ca;}
+.cms .cms-workbench .cms-appointment-pavilion img.cms-thumbnail{display:block;width:100%;height:auto;aspect-ratio:1.18/1;object-fit:cover;border-radius:8px;}
+.cms .cms-builder-appointment-preview .builder-form{min-width:0;padding:clamp(10px,2.6cqw,16px);border-radius:8px;}
+.cms .cms-builder-appointment-preview .builder-form__header h3{font-size:clamp(14px,3.4cqw,19px);line-height:1.4;}
+.cms .cms-builder-appointment-preview .builder-form form{margin-top:10px;}
+.cms .cms-builder-appointment-preview .builder-form__grid{gap:8px;}
+.cms .cms-builder-appointment-preview .builder-form label{font-size:10px;line-height:1.4;}
+.cms .cms-builder-appointment-preview .builder-form label>span:first-child{margin-bottom:4px;}
+.cms .cms-builder-appointment-preview .builder-form input:not([type='checkbox']),.cms .cms-builder-appointment-preview .builder-form textarea{padding:5px 8px;font-size:10px;}
+.cms .cms-builder-appointment-preview .builder-form input:not([type='checkbox']){height:28px;}
+.cms .cms-builder-appointment-preview .builder-form textarea{min-height:46px;}
+.cms .cms-builder-appointment-preview .builder-form__submit-row{flex-wrap:wrap;gap:6px;margin-top:8px;}
+.cms .cms-builder-appointment-preview .builder-form__submit-row button{min-height:30px;padding:3px 6px 3px 10px;font-size:11px;}
+.cms .cms-builder-appointment-preview .builder-form__submit-icon{width:22px;height:22px;}
+.cms .cms-builder-appointment-preview .builder-form__submit-icon svg{width:13px;height:13px;}
+@container (min-width:430px){
+ .cms .cms-builder-appointment-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+}
+@container (min-width:500px){
+ .cms .cms-builder-appointment-heading{grid-template-columns:minmax(0,3fr) minmax(0,7fr);align-items:start;}
+}
 .cms .cms-scene-wide-image{display:block;width:100%;max-height:265px;object-fit:contain;border-radius:4px;background:#f5f0e6;}
 .cms .cms-scene-small-image{display:block;width:100%;height:100px;object-fit:contain;border-radius:4px;background:#f5f0e6;}
 .cms .cms-scene-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}

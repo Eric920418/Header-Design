@@ -3,6 +3,7 @@ import { HOME_HERO_ID, heroSeriesTitle } from './hero-media.mjs'
 import { franchiseNewsIds } from './public-content.mjs'
 import { builderStrengthsDocument, isBuilderStrengthsCopy } from './builder-strengths.mjs'
 import { builderHomeOneDocument, builderHomeOneField, builderHomeOneImages } from './builder-home-one.mjs'
+import { builderAppointmentDocument, isBuilderAppointmentCopy } from './builder-appointment.mjs'
 
 const target = (label, href) => ({ label, href })
 const homePromise = target('首頁 → 品牌承諾', '/#brand-promise')
@@ -70,6 +71,8 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  }
  if (documentId === builderStrengthsDocument && (key === 'strengths' || isBuilderStrengthsCopy(path)))
   return [target('建商專區首頁 → 智能整合', '/builders#builders-capability-title')]
+ if (documentId === builderAppointmentDocument && isBuilderAppointmentCopy(path))
+  return [target('建商專區首頁 → 品牌館資訊與預約', '/builders#appointment')]
  if (documentId === builderHomeOneDocument) {
   const image = builderHomeOneField(path)
   if (image) return [target('建商專區首頁 → '+image.image.label, '/builders#'+image.image.anchor)]

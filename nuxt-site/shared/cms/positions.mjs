@@ -1,6 +1,7 @@
 // Interface locations only. Stored document names, values and public URLs stay unchanged.
 import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImages} from './builder-home-one.mjs'
+import {builderAppointmentDocument,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 
 const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
@@ -33,7 +34,7 @@ const copyGroups={
   ['主視覺標題',{text1:'區塊英文標籤',text2:'區塊中文主標題（第一段）',text3:'區塊中文主標題（第二段）',text5:'預約按鈕文字',field6:'主圖片',field7:'圖片說明'}],
   ['廚房品牌介紹',{text9:'區塊中文主標題',text11:'介紹文字',field12:'品牌空間圖片說明',field13:'品牌標誌說明',field14:'即將推出圖片說明',text15:'即將推出文字第一行',text16:'即將推出文字第二行'}],
   ['SAKURA iCare',{text24:readingField('iCare 區塊','區塊朗讀名稱'),field28:'iCare 服務說明圖片',field29:'iCare 圖片說明'}],
-  ['聯繫與參觀預約',{text33:'區塊英文標籤',text38:'品牌館名稱',text39:'預約方式說明',text40:'表單介紹文字',text41:'地址欄位名稱',text42:'營業時間欄位名稱'}],
+  ['品牌館資訊與預約',{text33:'區塊英文標籤',text38:'品牌館資訊標題',text39:'預約方式說明',text40:'表單介紹文字',text41:'地址欄位名稱',text42:'營業時間欄位名稱'}],
  ],
  'builders-sakura-kitchen':[
   ['頁面最上方',{field1:'主圖片',field2:'主圖片說明',text3:readingField('頁首','頁面名稱'),field4:'英文品牌標誌',field5:'英文標誌說明',field6:'中文品牌標誌',field7:'中文標誌說明',text8:'介紹文字',field9:'預約按鈕前往頁面',text10:'預約按鈕第一行',text11:'預約按鈕第二行'}],
@@ -202,7 +203,7 @@ export const pagePositions={
   section('智能整合','區塊共用標題、介紹與三張統計圖文','builders-strengths','builders-capability-title'),
   section('HOME IN ONE','更換橫幅、服務合圖與編輯下方說明','builders-home-one',builderHomeOneImages[0].anchor,[builderHomeOneDocument,'copy.homeOneBanner']),
   {...section('SAKURA iCare','更換官網的 iCare 服務說明圖片','builders-icare','builders-icare',[view('builders-index'),'copy.field28']),aliases:['builders:售後服務']},
-  section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment'),
+  {...section('品牌館資訊與預約','中英文標題、館別照片與預約說明','builders-appointment','appointment'),aliases:['builders:聯繫與參觀預約']},
  ]},
  'builder-series':{hero:[view('builders-sakura-kitchen'),'copy.field1'],sections:[section('頁面最上方','主圖片、品牌標誌與介紹','hero','sakura-kitchen-title'),section('品牌承諾入口','主圖片下方的介紹入口','cards','brand-advantage'),section('品牌優勢','品牌優勢介紹與圖片','cards','sakura-kitchen-advantage-title'),section('品牌系列','系列圖片、介紹與預約按鈕','cards','sakura-kitchen-series-title')]},
  'builder-catalogues':{hero:commonHero,sections:[section('頁面最上方','建商型錄頁最上方的大標題','hero','builder-catalogue-title'),section('型錄封面與下載','型錄卡片、封面與下載按鈕','catalogue','builder-catalogue-list-title')]},
@@ -242,7 +243,7 @@ export function positionGroup(page,id,path){
   if(page==='franchise')return path===franchiseSupportImagePath?'總部支援':'加盟夥伴真實分享'
   if(page==='visuals')return path.startsWith('images.')?(/asset_(?:7a7fece6|39582b0b|18ed1982|52e702e4|d0922f9d|82b9dd3e|b3dcb152|1795db00|38bb39f2)$/.test(path)?'加盟與建商背景':path.endsWith('asset_7692def0')?'共用主視覺背景':path.endsWith('asset_10b5a86c')?'首頁品牌影片':'品牌與服務背景'):({brandVideoId:'首頁品牌影片',brandVideoSrc:'首頁品牌影片',franchiseVideoId:'加盟夥伴影片',pavilionVideoId:'品牌館影片',serviceVideoSrc:'服務介紹影片',serviceVideoCover:'服務介紹影片'})[path]
  }
- if(page==='builders'&&id==='data-brandPavilions')return '聯繫與參觀預約'
+ if(page==='builders'&&(id==='data-brandPavilions'||id===builderAppointmentDocument&&isBuilderAppointmentHeading(path)))return '品牌館資訊與預約'
  if(page==='builders'&&id===builderStrengthsDocument&&(path==='strengths'||isBuilderStrengthsCopy(path)))return '智能整合'
  if(page==='builders'&&id===builderHomeOneDocument&&(path==='services'||builderHomeOneField(path)))return 'HOME IN ONE'
  if(page==='franchise'&&path==='FRANCHISE_BROCHURE_URL')return '加盟資料下載入口'
