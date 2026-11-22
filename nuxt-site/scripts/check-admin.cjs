@@ -15,6 +15,15 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright'),{mkd
   const api=async(path,body)=>page.evaluate(async({path,body})=>{const session=await(await fetch('/api/admin/session')).json(),r=await fetch('/api/admin/'+path,body?{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':session.csrf},body:JSON.stringify(body)}:{});return{status:r.status,body:await r.json()}},{path,body})
   const before=(await api('documents')).body
   const pages=(await api('page-editors')).body;assert.equal(pages.length,28)
+  await go('/admin/home');await select('品牌承諾',1440)
+  await page.locator('.cms-block-title').filter({hasText:'品牌承諾'}).waitFor()
+  const videoField=page.locator('[data-cms-document="site-visuals"][data-cms-path="brandVideoSrc"]')
+  if(await videoField.count()){
+   assert.equal(await videoField.locator('input').count(),1,'An MP4 source uses one direct input')
+   assert.equal(await videoField.locator('select').count(),0,'An MP4 source is never a page destination')
+   await videoField.locator('input').focus()
+   assert.equal(await page.locator('.cms-position .cms-scene-a11y').filter({hasText:/^前往頁面/}).count(),0)
+  }
   await go('/admin');await page.getByRole('link',{name:'01 新增消息 直接填寫標題、圖片與內文',exact:true}).click();await page.getByRole('textbox',{name:'文章標題',exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'預覽草稿',exact:true}).count(),1);assert.equal(await page.locator('.cms-item-open').filter({hasText:'尚未刊登'}).count(),1);assert(!new URL(page.url()).searchParams.has('create'),'The shortcut is consumed once');await page.getByRole('button',{name:'取消本筆修改',exact:true}).click();await page.getByRole('button',{name:'確認取消本筆修改',exact:true}).click();assert.match(await page.locator('.cms-save-status').innerText(),/官網已更新/)
   await go('/admin/content?section=all');await page.getByRole('searchbox',{name:'找要修改的內容'}).fill('台北館');await page.locator('.cms-section-card').filter({hasText:'櫻花集團品牌館'}).click();await page.getByRole('textbox',{name:'營業時間',exact:true}).waitFor()
   const hours=await page.getByRole('textbox',{name:'營業時間',exact:true}).inputValue();await page.getByRole('textbox',{name:'營業時間',exact:true}).fill(hours+'驗收')

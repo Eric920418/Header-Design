@@ -119,7 +119,8 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const contextImage=(detail?presentation.detailHeroImage:'')||firstImage(positionImage(definition?.hero,bodies))||presentation.heroImage||''
  const auxiliary=fields.filter(f=>typeof f.value==='string'&&f.schema.advanced&&!f.schema.format).map(f=>({path:f.path,label:f.label,value:f.value}))
  const displaySettings=fields.filter(f=>['cmsSettings','seo'].includes(f.path)).map(f=>({label:f.label,value:f.value||{}}))
- const destination=fields.find(f=>typeof f.value==='string'&&f.schema.format==='url'&&(f.schema.destination||f.path===focusedPath))
+ const destinations=fields.filter(f=>typeof f.value==='string'&&f.schema.format==='url'&&f.schema.destination)
+ const destination=destinations.find(f=>f.path===focusedPath)||destinations[0]
  const item=selected?.value,paragraphs=item?.intro?.paragraphs||item?.paragraphs||item?.description||item?.summary?.excerpt||item?.detail||item?.quote||item?.summary||''
  const paragraphsList=Array.isArray(paragraphs)?paragraphs.filter(p=>typeof p==='string'):typeof paragraphs==='string'?[paragraphs]:[]
  const questions=items.flatMap(i=>i.value?.items||i.value?.questions||i.value?.question&&[i.value]||[]).slice(0,3)

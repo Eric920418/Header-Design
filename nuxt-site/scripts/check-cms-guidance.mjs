@@ -50,7 +50,11 @@ const mediaUrlLabels={
 }
 function checkDestinationLabel(schema,id,path){
  if(schema.hidden||Object.hasOwn(schema,'fixed'))return
- if(schema.format==='url')assert.equal(schema.label,mediaUrlLabels[id+':'+path]||'前往頁面',id+':'+path)
+ if(schema.format==='url'){
+  const fileLabel=mediaUrlLabels[id+':'+path]
+  assert.equal(schema.label,fileLabel||'前往頁面',id+':'+path)
+  assert.equal(!!schema.destination,!fileLabel,id+':'+path)
+ }
  for(const [key,field] of Object.entries(schema.fields||{}))checkDestinationLabel(field,id,path+'.'+key)
  if(schema.item)checkDestinationLabel(schema.item,id,path+'.*')
 }

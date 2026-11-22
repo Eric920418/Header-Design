@@ -215,6 +215,7 @@ export function editingSchema(schema,resourceId,path=''){
   result.positionLegacyLabel ||= result.label
   result.label='前往頁面'
  }
+ if(schema.format==='url'&&resourceId==='site-visuals'&&['brandVideoSrc','serviceVideoSrc'].includes(path))result.help='更換影片時，請貼上 MP4 檔案網址。'
  if(schema.fields){
   const fieldPath=key=>path?path+'.'+key:key
   const entries=Object.entries(schema.fields).map(([key,value])=>[key,editingSchema(value,resourceId,fieldPath(key))])
