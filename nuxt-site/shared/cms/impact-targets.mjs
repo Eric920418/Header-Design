@@ -74,6 +74,8 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
   const image = builderHomeOneField(path)
   if (image) return [target('建商專區首頁 → '+image.image.label, '/builders#'+image.image.anchor)]
   if (key === 'services') return [target('建商專區首頁 → HOME IN ONE 的服務說明', '/builders#'+builderHomeOneImages[1].anchor)]
+  if (['copy.text24','copy.field28','copy.field29'].includes(path))
+   return [target('建商專區首頁 → SAKURA iCare', '/builders#builders-icare')]
  }
  if (documentId === 'data-franchise' && path) {
   if (key === 'franchiseSupportHighlights') return [target('加盟介紹 → 總部支援','/franchising/intro#franchise-support')]

@@ -32,7 +32,7 @@ const copyGroups={
  'builders-index':[
   ['主視覺標題',{text1:'區塊英文標籤',text2:'區塊中文主標題（第一段）',text3:'區塊中文主標題（第二段）',text5:'預約按鈕文字',field6:'主圖片',field7:'圖片說明'}],
   ['廚房品牌介紹',{text9:'區塊中文主標題',text11:'介紹文字',field12:'品牌空間圖片說明',field13:'品牌標誌說明',field14:'即將推出圖片說明',text15:'即將推出文字第一行',text16:'即將推出文字第二行'}],
-  ['售後服務',{text24:'影片區塊名稱',field28:'服務說明圖片',field29:'圖片說明'}],
+  ['SAKURA iCare',{text24:readingField('iCare 區塊','區塊朗讀名稱'),field28:'iCare 服務說明圖片',field29:'iCare 圖片說明'}],
   ['聯繫與參觀預約',{text33:'區塊英文標籤',text38:'品牌館名稱',text39:'預約方式說明',text40:'表單介紹文字',text41:'地址欄位名稱',text42:'營業時間欄位名稱'}],
  ],
  'builders-sakura-kitchen':[
@@ -201,7 +201,7 @@ export const pagePositions={
   section('廚房品牌介紹','品牌卡片上方的中文主標題、介紹文字與即將推出卡片文字','builders-brand-intro','builders-team-title',['data-builders','builderProjectCards.0.image']),
   section('智能整合','區塊共用標題、介紹與三張統計圖文','builders-strengths','builders-capability-title'),
   section('HOME IN ONE','更換橫幅、服務合圖與編輯下方說明','builders-home-one',builderHomeOneImages[0].anchor,[builderHomeOneDocument,'copy.homeOneBanner']),
-  section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),
+  {...section('SAKURA iCare','更換官網的 iCare 服務說明圖片','builders-icare','builders-icare',[view('builders-index'),'copy.field28']),aliases:['builders:售後服務']},
   section('合作夥伴','保留的合作夥伴標誌設定','inactive'),
   section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment'),
  ]},

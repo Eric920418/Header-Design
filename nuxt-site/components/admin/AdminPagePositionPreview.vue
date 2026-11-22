@@ -59,7 +59,7 @@ const downloadSheets=computed(()=>{
 })
 const brochureFile=computed(()=>props.bodies['data-franchise']?.FRANCHISE_BROCHURE_URL?.split(/[?#]/)[0].split('/').pop())
 const franchiseApplication=computed(()=>props.bodies['view-pages-franchising-form']?.copy)
-const builderBrandCopy=computed(()=>props.bodies['view-pages-builders-index']?.copy)
+const buildersCopy=computed(()=>props.bodies['view-pages-builders-index']?.copy)
 const builderBrandProject=computed(()=>(props.bodies['data-builders']?.builderProjectCards as typeof builderProjectCards|undefined)?.find(card=>card.type==='project'))
 const strengthsHeading=computed(()=>builderStrengthsCopy(props.bodies[builderStrengthsDocument]?.copy))
 const strengthIndex=computed(()=>props.selected?.path==='strengths'?props.selected.index:0)
@@ -223,25 +223,25 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </div>
     </div>
    </section>
-   <div v-else-if="scene.kind==='builders-brand-intro'&&builderBrandCopy" class="cms-scene-builders-brand">
+   <div v-else-if="scene.kind==='builders-brand-intro'&&buildersCopy" class="cms-scene-builders-brand">
     <header>
      <InternalSectionPill>{{ builderBrandHeading.label }}</InternalSectionPill>
      <h3>
-      <b :class="{'is-focused':highlighted('copy.text9')}"><InternalHeadingText :text="builderBrandCopy.text9" /></b>
+      <b :class="{'is-focused':highlighted('copy.text9')}"><InternalHeadingText :text="buildersCopy.text9" /></b>
       <InternalHeadingText :text="builderBrandHeading.line1" /><span><InternalHeadingText :text="builderBrandHeading.line1Accent" /></span><br />
       <span><InternalHeadingText :text="builderBrandHeading.line2Accent" /></span><InternalHeadingText :text="builderBrandHeading.line2" />
      </h3>
-     <p :class="{'is-focused':highlighted('copy.text11')}">{{ builderBrandCopy.text11 }}</p>
+     <p :class="{'is-focused':highlighted('copy.text11')}">{{ buildersCopy.text11 }}</p>
     </header>
     <div class="cms-builders-brand-cards">
      <div v-if="builderBrandProject" class="cms-builders-brand-card cms-builders-project-card" :class="{'is-focused':highlighted('copy.field12')||highlighted('copy.field13')}">
-      <AdminThumbnail :src="builderBrandProject.image" :alt="builderBrandCopy.field12" />
-      <AdminThumbnail v-if="builderBrandProject.logo" :src="builderBrandProject.logo" :alt="builderBrandCopy.field13" class="cms-builders-card-logo" contain />
+      <AdminThumbnail :src="builderBrandProject.image" :alt="buildersCopy.field12" />
+      <AdminThumbnail v-if="builderBrandProject.logo" :src="builderBrandProject.logo" :alt="buildersCopy.field13" class="cms-builders-card-logo" contain />
       <span class="cms-builders-card-caption"><span><strong>{{ builderBrandProject.title }}</strong><br />{{ builderBrandProject.subtitle }}</span><ArrowRight :size="14" aria-hidden="true" /></span>
      </div>
      <div class="cms-builders-brand-card cms-builders-coming-soon" :class="{'is-focused':highlighted('copy.field14')}">
-      <AdminThumbnail :src="builderComingSoonImages[0]" :alt="builderBrandCopy.field14" />
-      <strong><span :class="{'is-focused':highlighted('copy.text15')}">{{ builderBrandCopy.text15 }}</span><br /><span :class="{'is-focused':highlighted('copy.text16')}">{{ builderBrandCopy.text16 }}</span></strong>
+      <AdminThumbnail :src="builderComingSoonImages[0]" :alt="buildersCopy.field14" />
+      <strong><span :class="{'is-focused':highlighted('copy.text15')}">{{ buildersCopy.text15 }}</span><br /><span :class="{'is-focused':highlighted('copy.text16')}">{{ buildersCopy.text16 }}</span></strong>
      </div>
     </div>
    </div>
@@ -273,6 +273,9 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
       <p v-for="(line,lineIndex) in service.copy" :key="lineIndex">{{ line }}</p>
      </article>
     </div>
+   </div>
+   <div v-else-if="scene.kind==='builders-icare'&&buildersCopy?.field28" class="cms-scene-builders-icare" role="region" :aria-label="buildersCopy.text24" :class="{'is-focused':['copy.text24','copy.field28','copy.field29'].includes(focusedField||'')}">
+    <AdminThumbnail :src="buildersCopy.field28" :alt="buildersCopy.field29" contain />
    </div>
    <div v-else-if="scene.kind==='franchise-news'" class="cms-scene-franchise-news">
     <span class="cms-franchise-news-eyebrow" :class="{'is-focused':highlighted('copy.text58')}">{{ franchiseDownloadCard?.text58 }}</span>

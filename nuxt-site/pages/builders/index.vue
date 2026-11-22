@@ -306,7 +306,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </div>
           </div>
 
-          <section v-reveal="{ anim: 'opalMoveUp' }" class="builders-lifetime" aria-labelledby="builders-lifetime-title">
+          <section id="builders-icare" v-reveal="{ anim: 'opalMoveUp' }" class="builders-lifetime" aria-labelledby="builders-lifetime-title">
             <h3 id="builders-lifetime-title" class="sr-only">{{ cmsCopy.copy.text24 }}</h3>
             <InternalBuilderImage :src="cmsCopy.copy.field28" :alt="cmsCopy.copy.field29" class="builders-lifetime__visual" fit="contain" />
           </section>
@@ -481,7 +481,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-service h3 { display: flex; align-items: center; justify-content: center; gap: .25em; margin: 0; font-family: var(--font-cjk-serif); font-size: clamp(12px, 2.8cqw, 36px); font-weight: 600; line-height: 1.4; }
 .builders-service h3 svg { width: .9em; height: .9em; flex: none; color: #c4a574; }
 .builders-service p { display: flex; flex-direction: column; margin: .6em 0 0; color: #59585d; font-size: clamp(10px, 1.8cqw, 22px); line-height: 1.6; }
-.builders-lifetime { margin: 0; padding: 0; }
+.builders-lifetime { margin: 0; padding: 0; scroll-margin-top: var(--site-header-height, 60px); }
 .builders-lifetime__visual { aspect-ratio: 16 / 9; border-radius: 24px; }
 .builders-contact { scroll-margin-top: 60px; padding: 120px 30px 130px; background: #fafafa var(--cms-image-asset_d0922f9d, url('/section-6/franchise/antra-original/h1-bg02.png')) top right / auto no-repeat; }
 .builders-contact__heading { margin-bottom: 58px; }
