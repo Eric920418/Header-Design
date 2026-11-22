@@ -19,9 +19,9 @@ const destinationTitle=computed(()=>destinationName(scene.value.destination?.val
 const scene=computed(()=>pagePositionContent(props.block,props.bodies,props.presentation,props.selected,props.focusedField))
 const breadcrumb=computed(()=>newsBreadcrumbPosition(props.block,props.bodies,props.presentation))
 const isCatalogueTrail=computed(()=>props.block?.id.startsWith('series-catalogue:'))
-const isBuilderCatalogueTrail=computed(()=>props.block?.id.startsWith('builder-catalogues:'))
+const isBuilderCatalogue=computed(()=>props.block?.id.startsWith('builder-catalogues:'))
 const trailCopy=computed(()=>props.bodies[props.block?.fields[0]?.documentId]?.copy)
-const pageTrail=computed(()=>isBuilderCatalogueTrail.value?builderCatalogueBreadcrumb(trailCopy.value):isCatalogueTrail.value?seriesCatalogueBreadcrumb(trailCopy.value):knowledgeBreadcrumb(trailCopy.value))
+const pageTrail=computed(()=>isCatalogueTrail.value?seriesCatalogueBreadcrumb(trailCopy.value):knowledgeBreadcrumb(trailCopy.value))
 const highlighted=(path:string)=>props.focusedField===path
 const isLabel=(label:string)=>/標籤|小標|前置英文/.test(label)
 const headings=computed(()=>scene.value.heading.filter((f:any)=>!isLabel(f.label)&&!/語音/.test(f.label)))
@@ -65,6 +65,7 @@ const franchiseApplication=computed(()=>props.bodies['view-pages-franchising-for
 const buildersCopy=computed(()=>props.bodies['view-pages-builders-index']?.copy)
 const builderSeriesCopy=computed(()=>props.bodies['view-pages-builders-sakura-kitchen']?.copy)
 const builderCatalogueCopy=computed(()=>props.bodies['view-pages-builders-catalogues']?.copy)
+const builderTrail=computed(()=>builderCatalogueBreadcrumb(builderCatalogueCopy.value))
 const builderBrandProject=computed(()=>(props.bodies['data-builders']?.builderProjectCards as typeof builderProjectCards|undefined)?.find(card=>card.type==='project'))
 const strengthsHeading=computed(()=>builderStrengthsCopy(props.bodies[builderStrengthsDocument]?.copy))
 const strengthIndex=computed(()=>props.selected?.path==='strengths'?props.selected.index:0)
@@ -373,15 +374,28 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <p v-else class="cms-field-help">官網側欄目前沒有文章。</p>
     </div>
    </div>
+   <header v-else-if="isBuilderCatalogue&&builderCatalogueCopy&&['hero','page-breadcrumb'].includes(scene.kind)" class="cms-scene-news-hero cms-builder-catalogue-hero">
+    <AdminThumbnail v-if="scene.contextImage" :src="scene.contextImage" :alt="pageTitle+'頁首照片'" />
+    <div>
+     <strong :class="{'is-focused':highlighted('copy.text1')}">{{ builderCatalogueCopy.text1 }}</strong>
+     <p aria-label="麵包屑">
+      <span :class="{'is-focused':highlighted('copy.breadcrumbHome')}">{{ builderTrail.breadcrumbHome }}</span>
+      <span aria-hidden="true"> / </span>
+      <span :class="{'is-focused':highlighted('copy.breadcrumbParent')}">{{ builderTrail.breadcrumbParent }}</span>
+      <span aria-hidden="true"> / </span>
+      <span :class="{'is-focused':highlighted('copy.breadcrumbList')}">{{ builderTrail.breadcrumbList }}</span>
+     </p>
+    </div>
+   </header>
    <template v-else-if="scene.kind==='page-breadcrumb'">
     <header class="cms-scene-news-hero">
      <AdminThumbnail v-if="scene.contextImage" :src="scene.contextImage" :alt="pageTitle+'頁首照片'" />
      <div>
       <strong>{{ trailCopy?.text1 }}</strong>
-      <p><span :class="{'is-focused':highlighted('copy.breadcrumbHome')}">{{ pageTrail.breadcrumbHome }}</span> / <template v-if="isBuilderCatalogueTrail"><span :class="{'is-focused':highlighted('copy.breadcrumbParent')}">{{ pageTrail.breadcrumbParent }}</span> / </template><span :class="{'is-focused':highlighted('copy.breadcrumbList')}">{{ pageTrail.breadcrumbList }}</span></p>
+      <p><span :class="{'is-focused':highlighted('copy.breadcrumbHome')}">{{ pageTrail.breadcrumbHome }}</span> / <span :class="{'is-focused':highlighted('copy.breadcrumbList')}">{{ pageTrail.breadcrumbList }}</span></p>
      </div>
     </header>
-    <p class="cms-field-help">{{ isBuilderCatalogueTrail?'首頁與建商專區沿用原有連結。':isCatalogueTrail?'從系列內頁進入型錄時，中間會顯示該系列的返回連結。':'列表與文章會使用同一組導覽文字。' }}</p>
+    <p class="cms-field-help">{{ isCatalogueTrail?'從系列內頁進入型錄時，中間會顯示該系列的返回連結。':'列表與文章會使用同一組導覽文字。' }}</p>
    </template>
    <template v-else-if="scene.kind==='breadcrumb'||scene.kind==='news-shared'">
     <header v-if="scene.kind==='breadcrumb'" class="cms-scene-news-hero">
