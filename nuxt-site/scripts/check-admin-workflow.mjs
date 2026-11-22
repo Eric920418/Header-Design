@@ -6,11 +6,31 @@ import {editingSchema,fieldPresentation} from '../shared/cms/presentation.mjs'
 import {publicContent,contentAliases} from '../shared/cms/public-content.mjs'
 import {createDraftPreview,readDraftPreview} from '../server/cms/previews.mjs'
 import {workspaceInput} from '../server/cms/workspaces.mjs'
-import {pageEditors,pageEditor,pageBlocks,legacyPage,pageEditorLink,searchPages,pageSummary,valueAt,withValue} from '../shared/cms/page-editors.mjs'
+import {pageEditors,pageEditor,pageBlocks,legacyPage,pageEditorLink,searchPages,pageSummary,valueAt,withValue,pageFieldValue} from '../shared/cms/page-editors.mjs'
 import {checkPageBody,pageEditorInput,editorSchema,changePageEditor} from '../server/cms/page-editors.mjs'
+import {validate} from '../server/cms/content.mjs'
+import {HOME_PROJECT_ID,HOME_SERVICES_ID,homeProjectHeading} from '../shared/cms/home-headings.mjs'
+import {hasPageChanges,pageChanges} from '../shared/cms/changes.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 assert.deepEqual(['copy.field1','copy.text2','copy.text3','copy.text4'].map(path=>fieldPresentation('view-pages-privacy',path).label),['頁面英文標題','條款介紹文字','最後修訂日期','公司名稱'])
 const pageDocuments=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
+const homePage=pageEditor('home'), headingDoc=pageDocuments.find(d=>d.id===HOME_PROJECT_ID), homeBlocks=pageBlocks(homePage,pageDocuments)
+const headingFields=homeBlocks.find(b=>b.id==='home:品牌系列').fields.filter(f=>f.documentId===HOME_PROJECT_ID)
+assert.deepEqual(headingFields.map(f=>f.label),['區塊英文標籤','主標題前置英文','區塊中文主標題','區塊英文主標題（第一段）','區塊英文主標題（第二段）','介紹文字'])
+const beforeHeading={[HOME_PROJECT_ID]:headingDoc.body}
+assert.deepEqual(headingFields.slice(0,5).map(f=>pageFieldValue(beforeHeading,f)),['BRAND SERIES','Explore Our',headingDoc.body.copy.text1+headingDoc.body.copy.text2,'Creative Projects','That Define Our Style'])
+const editedHeading=structuredClone(headingDoc.body)
+Object.assign(editedHeading.copy,{englishTitleSecond:'Another Line',chineseTitle:'完整中文標題',englishLabel:'NEW LABEL',englishTitleFirst:'Different Ideas',englishLead:'Take A Look'})
+checkPageBody(homePage,HOME_PROJECT_ID,headingDoc.body,editedHeading,headingDoc.schema)
+validate(headingDoc.body,headingDoc.schema);validate(editedHeading,headingDoc.schema)
+assert.deepEqual(Object.values(homeProjectHeading(editedHeading.copy)),['NEW LABEL','Take A Look','完整中文標題','Different Ideas','Another Line'])
+assert.equal(homeProjectHeading({...editedHeading.copy,englishLead:''}).englishLead,'')
+assert(!Object.hasOwn(headingDoc.body.copy,'chineseTitle'))
+assert(!hasPageChanges(homeBlocks,beforeHeading,{[HOME_PROJECT_ID]:{...headingDoc.body,copy:{...headingDoc.body.copy,...homeProjectHeading(headingDoc.body.copy)}}}),'Reading old titles does not generate unpublished edits')
+assert.equal(pageChanges(homeBlocks,[headingDoc],beforeHeading,{[HOME_PROJECT_ID]:editedHeading}).find(c=>c.path==='copy.englishLabel').before,'BRAND SERIES')
+assert.throws(()=>checkPageBody(homePage,HOME_PROJECT_ID,headingDoc.body,{...editedHeading,copy:{...editedHeading.copy,text1:'越過欄位限制'}},headingDoc.schema),e=>e.statusCode===400)
+const serviceHeadingDoc=pageDocuments.find(d=>d.id===HOME_SERVICES_ID),serviceTitleField=homeBlocks.flatMap(b=>b.fields).find(f=>f.documentId===HOME_SERVICES_ID&&f.path==='copy.chineseTitle')
+assert.equal(pageFieldValue({[HOME_SERVICES_ID]:serviceHeadingDoc.body},serviceTitleField),'廚房產品')
 for(const w of workspaces)assert(legacyPage(w.id),'Missing page: '+w.id)
 assert.equal(legacyPage('site-visuals').id,'visuals');assert.equal(legacyPage('data-brandPavilions').id,'pavilions');assert.equal(legacyPage('data-kitchenStyles').id,'home')
 assert.deepEqual(pageEditors.filter(p=>p.section==='design').map(p=>p.name),['品牌系列','設計靈感','廚房裝修指南','品牌系列型錄'])
@@ -44,6 +64,21 @@ const locationDoc=pageDocuments.find(d=>d.id==='view-components-home-HomeStoreLo
 locationNext.stores[0].region='中部';locationNext.stores[0].city='臺中市';checkPageBody(pageEditor('home'),locationDoc.id,locationDoc.body,locationNext,locationDoc.schema)
 const serviceDoc=pageDocuments.find(d=>d.id==='view-components-home-HomeServices'),serviceNext=structuredClone(serviceDoc.body);serviceNext.services[0].imageLayout='arbitrary-style'
 assert.throws(()=>checkPageBody(pageEditor('home'),serviceDoc.id,serviceDoc.body,serviceNext,serviceDoc.schema))
+const homeLinkCards=[
+ ['view-components-home-HomeStyleMarquee','styles','/knowledge?cms-link-check=style'],
+ ['view-components-home-HomeServices','services','/gallery?cms-link-check=product'],
+]
+for(const [id,key,route] of homeLinkCards){
+ const d=pageDocuments.find(d=>d.id===id),next=structuredClone(d.body)
+ assert.equal(next[key][0].route,undefined)
+ next[key][0].route=route
+ checkPageBody(homePage,id,d.body,next,d.schema)
+ validate(next,d.schema)
+ const change=pageChanges(homeBlocks,[d],{[id]:d.body},{[id]:next})[0]
+ assert.equal(change.path,key+'.0.route');assert.match(change.label,/前往頁面$/)
+ next[key][0].route='invalid://destination'
+ assert.throws(()=>validate(next,d.schema),e=>e.statusCode===400&&e.message.includes('.route'))
+}
 const summaries=pageEditors.map(p=>pageSummary(p,[],pageDocuments)),found=searchPages(summaries,'品牌系列 圖片')
 assert(found.some(r=>r.page.id==='series'&&r.block));assert(!searchPages(summaries,'完全不存在的修改位置').length)
 const oldQuery={q:'案例',page:'2',group:'設計靈感'},newLink=pageEditorLink('inspiration',oldQuery,'inspiration:案例內容');assert.equal(newLink.query.q,'案例');assert.equal(newLink.query.page,'2');assert.equal(newLink.query.block,'inspiration:案例內容')
@@ -75,6 +110,61 @@ if(process.env.CMS_PAGE_HTTP){
  for(const role of ['admin','editor','guest']){assert.equal((await call('/api/preview-access',role,{password:process.env.PREVIEW_PASSWORD})).status,200);if(role!=='guest'){assert.equal((await call('/api/admin/login',role,{email:role==='admin'?process.env.CMS_TEST_EMAIL:process.env.CMS_EDITOR_EMAIL,password:process.env.CMS_TEST_PASSWORD})).status,200);jars[role].csrf=(await call('/api/admin/session',role)).body.csrf}}
  assert.equal((await call('/api/admin/page-editors','guest')).status,401)
  const before=(await call('/api/admin/documents')).body,home=(await call('/api/admin/page-editors/home')).body
+ const links=home.documents.map(d=>({id:d.id,revision:d.revision,body:structuredClone(d.body)}))
+ for(const [id,key,route] of homeLinkCards)links.find(d=>d.id===id).body[key][0].route=route
+ const linkPreview=await call('/api/admin/page-editors/home','admin',{action:'preview',documents:links})
+ assert.equal(linkPreview.status,200)
+ const linkHeaders={Cookie:Object.entries(jars.admin).map(([k,v])=>k+'='+v).join('; ')}
+ const pageHtml=async path=>{
+  const response=await fetch(base+path,{headers:linkHeaders,signal:AbortSignal.timeout(30000)})
+  assert.equal(response.status,200,path.split('?')[0])
+  return await response.text()
+ }
+ const originalHome=await pageHtml('/'),previewHome=await pageHtml('/?cmsPreview=page:home&cmsDraft='+linkPreview.body.previewToken)
+ assert(originalHome.includes('href="/design-inspiration?style=')&&originalHome.includes('href="/products/sakura"'))
+ for(const [,,route] of homeLinkCards){
+  assert(previewHome.includes('href="'+route+'"'),route)
+  assert(!originalHome.includes(route),'A preview must leave the published links unchanged')
+ }
+ const heroInput=home.documents.map(d=>({id:d.id,revision:d.revision,body:structuredClone(d.body)}))
+ const heroSlides=heroInput.find(d=>d.id===heroDoc.id).body.slides
+ const basic=heroSlides.find(s=>s.route==='/home-style/basic-plus')
+ const ai=heroSlides.find(s=>s.route==='/home-style/aikitchen')
+ basic.description='輪播描述範圍驗收'
+ const createHeroPreview=async()=>{
+  const response=await call('/api/admin/page-editors/home','admin',{action:'preview',documents:heroInput})
+  assert.equal(response.status,200)
+  return response.body
+ }
+ const descriptionPreview=await createHeroPreview()
+ assert(!descriptionPreview.impacts.some(i=>i.href.startsWith('/home-style/')))
+ basic.title='Basic+ 預設標題驗收';ai.title='AI 主視覺驗收'
+ const titlePreview=await createHeroPreview()
+ assert.deepEqual(titlePreview.impacts.filter(i=>i.href.startsWith('/home-style/')).map(i=>i.href),['/home-style/basic-plus'])
+ const heroQuery='?cmsPreview=page:home&cmsDraft='+titlePreview.previewToken
+ const h1=html=>html.match(/<h1\b[^>]*id="ai-kitchen-hero-title"[^>]*>(.*?)<\/h1>/s)?.[1]
+ assert.equal(h1(await pageHtml('/home-style/basic-plus'+heroQuery)),basic.title)
+ assert.notEqual(h1(await pageHtml('/home-style/basic-plus')),basic.title)
+ assert.equal(h1(await pageHtml('/home-style/aikitchen'+heroQuery)),h1(await pageHtml('/home-style/aikitchen')))
+ console.log('PASS: published series with dedicated hero stories ignore a changed homepage title, while the default title is used by Basic+')
+ const fixedLinks=[
+  ['series','data-kitchenSeries','KITCHEN_SERIES_PAGES.0.buttonDestinations.explore','/home-style/aikitchen'],
+  ['products-sakura','data-productBrands','PRODUCT_BRANDS.sakura.catalogueDestination','/products/sakura/all'],
+  ['stores','view-pages-gallery-slug-','copy.storeBookingDestination','/gallery/case10'],
+  ['pavilions','view-pages-about-exhibition','copy.bookingDestination','/about/exhibition'],
+  ['knowledge','view-pages-knowledge-design-slug-','copy.moreDestination','/knowledge/design/systemcabinet'],
+ ]
+ for(const [page,id,field,location] of fixedLinks){
+  const route='/knowledge?cms-link-check='+page
+  const editor=await call('/api/admin/page-editors/'+page)
+  assert.equal(editor.status,200,page)
+  const documents=editor.body.documents.map(d=>({id:d.id,revision:d.revision,body:d.id===id?withValue(d.body,field,route):d.body}))
+  const preview=await call('/api/admin/page-editors/'+page,'admin',{action:'preview',documents})
+  assert.equal(preview.status,200,page)
+  assert((await pageHtml(location+'?cmsPreview=page:'+page+'&cmsDraft='+preview.body.previewToken)).includes('href="'+route+'"'),page+' must render its configured link')
+  assert(!(await pageHtml(location)).includes(route),page+' preview must not update the public website')
+ }
+ console.log('PASS: fixed button destinations and both homepage card links render in previews only')
  const allPages=(await call('/api/admin/page-editors')).body;assert.equal(allPages.length,28)
  for(const p of allPages){
   const r=await call('/api/admin/page-editors/'+p.id);assert.equal(r.status,200,p.id);assert(r.body.blocks.length)
@@ -85,14 +175,14 @@ if(process.env.CMS_PAGE_HTTP){
   const snapshot=await call('/api/admin/page-editors/'+p.id,'admin',{action:'preview',documents:r.body.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))});assert.equal(snapshot.status,200,p.id+':'+JSON.stringify(snapshot.body));assert(snapshot.body.previewToken);assert(Array.isArray(snapshot.body.review.current)&&Array.isArray(snapshot.body.review.saved));console.log('Verified page read/preview/review: '+p.id)
  }
  const input={action:'preview',documents:home.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))}
- input.documents.find(d=>d.id==='view-components-home-HomeProject').body.copy.text1='HTTP未儲存驗收'
+ input.documents.find(d=>d.id==='view-components-home-HomeProject').body.copy.chineseTitle='HTTP未儲存驗收'
  assert.equal((await call('/api/admin/page-editors/home','admin',input,false)).status,403)
  const preview=await call('/api/admin/page-editors/home','admin',input);assert.equal(preview.status,200);assert.match(preview.cache,/no-store/)
  const path='/api/content/view-components-home-HomeProject?preview=page:home&cmsDraft='+preview.body.previewToken
- assert.equal((await call(path)).body.copy.text1,'HTTP未儲存驗收');assert.equal((await call(path,'guest')).status,401);assert.equal((await call(path,'editor')).status,404)
+ assert.equal((await call(path)).body.copy.chineseTitle,'HTTP未儲存驗收');assert.equal((await call(path,'guest')).status,401);assert.equal((await call(path,'editor')).status,404)
  assert.equal((await call('/api/admin/page-editors/home','editor',{...input,action:'publish'})).status,403)
  const stale=structuredClone(input);stale.documents[0].revision--;assert.equal((await call('/api/admin/page-editors/home','admin',stale)).status,409)
- const invalid=structuredClone(input);invalid.documents.find(d=>d.id==='view-components-home-HomeProject').body.copy.text1=42;const issue=await call('/api/admin/page-editors/home','admin',invalid);assert.equal(issue.status,400);assert(issue.body.data.fieldErrors?.length)
+ const invalid=structuredClone(input);invalid.documents.find(d=>d.id==='view-components-home-HomeProject').body.copy.chineseTitle=42;const issue=await call('/api/admin/page-editors/home','admin',invalid);assert.equal(issue.status,400);assert(issue.body.data.fieldErrors?.length)
  const inspiration=(await call('/api/admin/page-editors/inspiration')).body,custom=inspiration.documents.find(d=>d.id==='custom-cases'),caseId=randomUUID(),hiddenId=randomUUID(),caseForm='驗收型式-'+caseId
  assert.equal(custom.schema.fields.items.item.fields.enabled.type,'boolean')
  const sample={...custom.schema.fields.items.template,id:caseId,title:'未儲存的自建案例',description:'只供預覽',cover:'/home-2026/hero/10bn/aikitchen.webp',images:['/home-2026/hero/10bn/aikitchen.webp'],form:caseForm,style:'現代風',specs:[]}
@@ -142,10 +232,12 @@ if(process.env.CMS_WORKFLOW_DB==='1'){
   const homepage=pageEditor('home'),homeDocs=[]
   for(const id of homepage.ids){const d=(await query('SELECT d.*,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.draftId WHERE d.id=@id',{id},tx)).recordset[0];homeDocs.push({id,revision:d.revision,body:JSON.parse(d.body)})}
   homeDocs.find(d=>d.id==='view-components-home-HomeHero').body.slides[0].title+='回滾預覽測試'
-  homeDocs.find(d=>d.id==='view-components-home-HomeProject').body.copy.text1+='整頁一起儲存'
+  homeDocs.find(d=>d.id==='view-components-home-HomeProject').body.copy.chineseTitle='整頁一起儲存'
+  for(const [id,key,route] of homeLinkCards)homeDocs.find(d=>d.id===id).body[key][0].route=route
   const homeInput={action:'preview',documents:homeDocs},versionCount=(await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n
   const preview=await changePageEditor('home',homeInput,user,tx);assert(preview.previewToken);assert.equal((await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n,versionCount)
-  const homeSaved=await changePageEditor('home',{...homeInput,action:'save'},user,tx);assert.equal((await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n,versionCount+2,'Only changed documents get new versions')
+  const homeSaved=await changePageEditor('home',{...homeInput,action:'save'},user,tx);assert.equal((await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n,versionCount+4,'Only changed documents get new versions')
+  for(const [id,key,route] of homeLinkCards)assert.equal(homeSaved.documents.find(d=>d.id===id).body[key][0].route,route)
   const publishHome={action:'publish',documents:homeSaved.documents.map(d=>({id:d.id,revision:d.revision,body:d.body}))}
   await assert.rejects(()=>changePageEditor('home',publishHome,{...user,role:'editor'},tx),e=>e.statusCode===403)
   const homePublished=await changePageEditor('home',publishHome,user,tx);assert(homePublished.documents.every(d=>d.draftId===d.publishedId))

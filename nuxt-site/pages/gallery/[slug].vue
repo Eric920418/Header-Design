@@ -20,6 +20,7 @@ const index = storeCases.findIndex(entry => entry.slug === item.slug)
 const previous = storeCases[(index - 1 + storeCases.length) % storeCases.length]!
 const next = storeCases[(index + 1) % storeCases.length]!
 
+const storeBookingDestination = (cmsCopy.copy as typeof cmsCopy.copy & { storeBookingDestination?: string }).storeBookingDestination || 'https://www.sakura-kitchenlife.com.tw/measuring'
 const metaLabels: Record<string, string> = cmsCopy.metaLabels
 
 const metaOrder = ['style', 'color', 'series', 'form', 'size', 'kitchenArea', 'budget', 'countertop', 'household', 'designer']
@@ -90,7 +91,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <section v-if="item.contact" class="case-detail-widget" aria-labelledby="case-store-title" v-reveal="{ anim: 'opalMoveLeft', delay: 160 }">
                 <div class="case-detail-store-heading">
                   <h2 id="case-store-title"><InternalHeadingText :text="cmsCopy.copy.text4" /></h2>
-                  <a href="https://www.sakura-kitchenlife.com.tw/measuring" target="_blank" rel="noopener noreferrer" class="case-detail-store-booking">
+                  <a :href="storeBookingDestination" target="_blank" rel="noopener noreferrer" class="case-detail-store-booking">
                     <span>{{ cmsCopy.copy.text2 }}</span><ArrowUpRight aria-hidden="true" />
                   </a>
                 </div>

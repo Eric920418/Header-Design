@@ -9,6 +9,7 @@ const { PRODUCT_BRANDS } = await useCmsResource('data-productBrands', { PRODUCT_
 
 const { brand, category } = defineProps<{ brand: ProductBrand; category?: number }>()
 const info = PRODUCT_BRANDS[brand]
+const catalogueDestination = info.catalogueDestination || '/catalogues/catalog'
 const route = useRoute()
 const query = computed(() => ({ ...(category ? { category } : {}), page: route.query.page ?? '1', q: route.query.q ?? '' }))
 const { data, error, status, refresh } = await useFetch<ProductList>(`/api/products/${brand}/items`, { query:computed(()=>({...query.value,...(useRoute().query.cmsPreview?{cmsPreview:useRoute().query.cmsPreview,...(useRoute().query.cmsDraft?{cmsDraft:useRoute().query.cmsDraft}:{})}:{})})) })
@@ -144,7 +145,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
             <span class="near-suction-catalogue__chinese"><InternalHeadingText text="廚房商品型錄" /></span>
             <span><InternalHeadingText text="Kitchen " /><em><InternalHeadingText text="Product" /><br><InternalHeadingText text="Catalogues" /></em></span>
           </h2>
-          <NuxtLink to="/catalogues/catalog" class="site-content-cta near-suction-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
+          <NuxtLink :to="catalogueDestination" class="site-content-cta near-suction-catalogue__cta" aria-label="前往廚房商品型錄與產品保養">
             <span>廚房商品型錄下載</span>
             <span class="site-cta-icon"><ArrowRight aria-hidden="true" /></span>
           </NuxtLink>
@@ -155,7 +156,7 @@ useSeoMeta({ title: () => `${heading.value}｜${info.name} 廚房產品`, descri
           <NuxtLink
             v-for="(catalogue, index) in catalogueHighlights"
             :key="catalogue.id"
-            to="/catalogues/catalog"
+            :to="catalogueDestination"
             :aria-label="`前往廚房商品型錄：${catalogue.title}`"
             v-reveal="{ anim: 'opalMoveUp', delay: 100 + index * 100 }"
             class="near-suction-catalogue-card"

@@ -1,5 +1,5 @@
 import {firstImage,rowName} from './workflow.mjs'
-import {blockThumbnail,valueAt,withValue} from './page-editors.mjs'
+import {blockThumbnail,pageFieldValue,valueAt,withValue} from './page-editors.mjs'
 import {decoratePosition,pagePositions,positionImage} from './positions.mjs'
 
 const home=[
@@ -27,11 +27,13 @@ export function workbenchBlocks(page,blocks){
 export const itemKey=(value,index)=>String(value&&typeof value==='object'?(value.id??value.slug??index):index)
 export function itemWebsitePath(documentId,item){
  if(!item)return ''
- if(documentId==='news-articles')return `/news/${item.summary.category}/${item.slug}`
- if(documentId==='knowledge-articles')return `/knowledge/design/${item.slug}`
- if(documentId==='data-kitchenSeries')return `/home-style/${item.slug}`
- if(documentId==='data-storeCases')return `/gallery/${item.slug}`
- if(documentId==='custom-cases')return `/design-inspiration/${item.id}`
+ if(documentId==='custom-cases'&&item.id)return `/design-inspiration/${encodeURIComponent(item.id)}`
+ if(!item.slug)return ''
+ const slug=encodeURIComponent(item.slug)
+ if(documentId==='news-articles'&&item.summary?.category)return `/news/${item.summary.category}/${slug}`
+ if(documentId==='knowledge-articles')return `/knowledge/design/${slug}`
+ if(documentId==='data-kitchenSeries')return `/home-style/${slug}`
+ if(documentId==='data-storeCases')return `/gallery/${slug}`
  return ''
 }
 export function articleDateLabel(value){
@@ -69,7 +71,7 @@ export function thumbnailPlaceholder(label=''){
  return 'data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="144" height="96" viewBox="0 0 144 96"><rect width="144" height="96" fill="#f4f0e7"/>${drawing}</svg>`)
 }
 export function positionContent(block,bodies,selected){
- const values=block?.fields.map(f=>({f,value:valueAt(bodies[f.documentId],f.path)}))||[]
+ const values=block?.fields.map(f=>({f,value:pageFieldValue(bodies,f)}))||[]
  const text=values.filter(({f,value})=>typeof value==='string'&&f.schema.type==='string'&&!f.schema.format)
  return{title:selected?.caption||text.find(({f})=>/標題/.test(f.label))?.value||block?.name||'',image:selected?.image||blockThumbnail(block||{fields:[]},bodies),description:selected?.value?.description||selected?.value?.summary?.excerpt||text.find(({f})=>/介紹/.test(f.label))?.value||'',value:selected?.value,kind:block?.kind||'content'}
 }
@@ -85,25 +87,42 @@ export function homeHeroPosition(bodies,selected){
  const styles=bodies['view-components-home-HomeStyleMarquee']
  return{slide,copy:hero.copy||{},styles:styles?.cmsSettings?.visible===false?[]:styles?.styles||[],index,pan:index%2===0?'-4%':'4%'}
 }
+export function newsBreadcrumbPosition(block,bodies,presentation={}){
+ const copy=bodies[block?.fields?.[0]?.documentId]?.copy||{}
+ return{
+  title:copy.text1||'',
+  categories:[{value:copy.text3,path:'copy.text3',destination:'copy.field2'},{value:copy.text5,path:'copy.text5',destination:'copy.field4'}],
+  image:presentation.detailHeroImage,
+  article:presentation.detailSample,
+ }
+}
+
 export function pagePositionContent(block,bodies,presentation={},selected,focusedPath=''){
  const page=block?.id?.split(':')[0],definition=pagePositions[page],base=positionContent(block,bodies,selected)
- const fields=(block?.fields||[]).map(f=>({...f,value:valueAt(bodies[f.documentId],f.path)}))
+ const fields=(block?.fields||[]).map(f=>({...f,value:pageFieldValue(bodies,f)}))
  const texts=fields.filter(f=>typeof f.value==='string'&&!f.schema.format&&!f.schema.enum&&!f.schema.advanced&&!/圖片說明|替代文字/.test(f.label)).map(f=>({path:f.path,label:f.label,value:f.value}))
  const arrays=fields.filter(f=>f.schema.type==='array').flatMap(f=>(f.value||[]).filter(v=>!f.schema.rowFilter||valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value).slice(0,3).map((v,i)=>({title:itemCaption(v,i,f.schema),image:itemThumbnail(v,f.schema,presentation.rows?.[f.documentId]?.[v?.id]),value:v})))
  const sample=/全部消息列表|最近文章推薦|最新加盟資訊/.test(block?.name)?presentation.samples||[]:[]
- const items=selected?[{title:selected.caption,image:selected.image||'',value:selected.value}]:arrays.length?arrays:sample
+ const fixedAction=block?.fixedAction
+ const referenceItems=fixedAction==='廚房商品型錄下載'?presentation.catalogueCovers:fixedAction==='更多廚房知識'?presentation.relatedArticles:sample
+ const items=selected?[{title:selected.caption,image:selected.image||'',value:selected.value}]:arrays.length?arrays:referenceItems||[]
  const video=fields.find(f=>f.schema.format==='youtube')?.value
  const videoImage=typeof video==='string'&&/^[\w-]{11}$/.test(video)?'https://i.ytimg.com/vi/'+video+'/hqdefault.jpg':''
  const focusedImage=firstImage(fields.find(f=>f.path===focusedPath&&f.schema.format==='media')?.value)
  const blockImage=firstImage(positionImage(block?.image,bodies))||presentation.blockImages?.[block?.id]||''
- const image=selected?selected.image||blockImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||blockImage||videoImage||(/內頁|系統櫃|文章底部/.test(block?.name)?presentation.specialImage:'')||''
+ const serviceCover=block?.kind==='video'&&block?.name==='服務介紹影片'?bodies['site-visuals']?.serviceVideoCover||presentation.serviceVideoCover:''
+ const mappedImage=blockImage||serviceCover
+ const image=selected?selected.image||mappedImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||mappedImage||videoImage||''
  const media=fields.filter(f=>f.schema.format==='media').map(f=>({path:f.path,label:f.label,image:firstImage(f.value)})).filter(f=>f.image)
- const heading=texts.filter(f=>/標題|小標|品牌名稱/.test(f.label)),buttons=texts.filter(f=>/按鈕|連結文字/.test(f.label))
+ const heading=texts.filter(f=>/標題|小標|品牌名稱|區塊(?:英|中)文標籤/.test(f.label)),buttons=texts.filter(f=>/按鈕|連結文字/.test(f.label)&&!/介紹|說明/.test(f.label))
  const detail=fields.some(f=>/-slug-$/.test(f.documentId))||/系統櫃/.test(block?.name)
- const contextImage=(detail?presentation.specialImage:'')||firstImage(positionImage(definition?.hero,bodies))||presentation.heroImage||''
+ const contextImage=(detail?presentation.detailHeroImage:'')||firstImage(positionImage(definition?.hero,bodies))||presentation.heroImage||''
+ const auxiliary=fields.filter(f=>typeof f.value==='string'&&f.schema.advanced&&!f.schema.format).map(f=>({path:f.path,label:f.label,value:f.value}))
+ const displaySettings=fields.filter(f=>['cmsSettings','seo'].includes(f.path)).map(f=>({label:f.label,value:f.value||{}}))
+ const destination=fields.find(f=>typeof f.value==='string'&&f.schema.format==='url'&&(f.schema.destination||f.path===focusedPath))
  const item=selected?.value,paragraphs=item?.intro?.paragraphs||item?.paragraphs||item?.description||item?.summary?.excerpt||item?.detail||item?.quote||item?.summary||''
  const paragraphsList=Array.isArray(paragraphs)?paragraphs.filter(p=>typeof p==='string'):typeof paragraphs==='string'?[paragraphs]:[]
  const questions=items.flatMap(i=>i.value?.items||i.value?.questions||i.value?.question&&[i.value]||[]).slice(0,3)
  const details=fields.filter(f=>f.schema.fields&&!['cmsSettings','seo'].includes(f.path)).flatMap(f=>Object.entries(f.schema.fields).filter(([,s])=>!s.hidden&&!s.format&&s.type==='string').map(([key,s])=>({label:s.label||f.label,value:f.value?.[key]}))).filter(f=>typeof f.value==='string'&&f.value)
- return{...base,image,texts,items,media,heading,paragraphs:paragraphsList,questions,details,contextImage,thumbnail:image||contextImage,heroImage:contextImage,sections:definition?.sections||[],buttons,text:texts.filter(f=>!/按鈕|連結文字/.test(f.label)),bodyText:texts.filter(f=>!heading.includes(f)&&!buttons.includes(f)),description:base.description||paragraphsList.join(' '),kind:block?.kind||'text'}
+ return{...base,image,mappedImage,fixedAction,destination,auxiliary,displaySettings,texts,items,media,heading,paragraphs:paragraphsList,questions,details,contextImage,thumbnail:image||contextImage,heroImage:contextImage,sections:definition?.sections||[],buttons,text:texts.filter(f=>!buttons.includes(f)),bodyText:texts.filter(f=>!heading.includes(f)&&!buttons.includes(f)),description:base.description||paragraphsList.join(' '),kind:block?.kind||'text'}
 }

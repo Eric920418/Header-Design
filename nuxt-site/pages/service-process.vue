@@ -45,7 +45,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
     </section>
 
-    <section aria-label="SAKURA 品牌影片" class="antra-service-video">
+    <section id="service-brand-video" aria-label="SAKURA 品牌影片" class="antra-service-video">
       <div v-reveal="{ anim: 'opalScaleUp' }" class="antra-service-video__rail">
         <InternalBrandVideo
           :cover="cmsVisuals.serviceVideoCover || '/section-3/service-process/video/service-guide-2027-20261027-poster.webp'"

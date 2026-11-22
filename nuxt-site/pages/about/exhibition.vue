@@ -6,6 +6,7 @@ import { brandPavilions as cmsSeed_brandPavilions, pavilionNotice as cmsSeed_pav
 const { brandPavilions, pavilionNotice } = await useCmsResource('data-brandPavilions', { brandPavilions: cmsSeed_brandPavilions, pavilionNotice: cmsSeed_pavilionNotice })
 
 
+const bookingDestination = (cmsCopy.copy as typeof cmsCopy.copy & { bookingDestination?: string }).bookingDestination || '/builders#appointment'
 const activePavilionId = ref<(typeof brandPavilions)[number]['id']>('taipei')
 const activePavilion = computed(() => brandPavilions.find(item => item.id === activePavilionId.value) ?? brandPavilions[0]!)
 
@@ -84,7 +85,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
                   <div><dt><Clock3 aria-hidden="true" />{{ cmsCopy.copy.text13 }}</dt><dd>{{ activePavilion.hours }}</dd></div>
                 </dl>
                 <div class="pavilion-booking">
-                  <NuxtLink to="/builders#appointment" aria-describedby="pavilion-booking-notice" class="site-content-cta group/cta inline-flex h-[60px] items-center gap-2 rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white focus-visible:border-[#CAA05C] focus-visible:bg-[#CAA05C] focus-visible:text-white">
+                  <NuxtLink :to="bookingDestination" aria-describedby="pavilion-booking-notice" class="site-content-cta group/cta inline-flex h-[60px] items-center gap-2 rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white focus-visible:border-[#CAA05C] focus-visible:bg-[#CAA05C] focus-visible:text-white">
                     <span class="font-cjk-sans text-[15px]">立即預約</span>
                     <span class="site-cta-icon flex h-10 w-10 -rotate-45 items-center justify-center rounded-full bg-[#CAA05C] text-white transition-transform group-hover/cta:rotate-0 group-focus-visible/cta:rotate-0"><ArrowRight aria-hidden="true" class="h-5 w-5" /></span>
                   </NuxtLink>

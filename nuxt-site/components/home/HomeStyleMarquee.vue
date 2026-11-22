@@ -3,7 +3,7 @@ const cmsCopy = await useCmsResource('view-components-home-HomeStyleMarquee', {"
 
 import emblaCarouselVue from 'embla-carousel-vue'
 
-const styles = cmsCopy.styles
+const styles: (typeof cmsCopy.styles[number] & { route?: string })[] = cmsCopy.styles
 const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'start', duration: 25 })
 const preview = ref<{ left: number; top: number; title: string; images: string[] } | null>(null)
 const previewIndex = ref(0)
@@ -41,7 +41,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <div class="mx-auto w-full max-w-[1770px]">
       <div ref="emblaRef" class="h-[62px] overflow-hidden"><div class="flex h-[62px] touch-pan-y">
         <template v-for="setIndex in 3" :key="setIndex"><div v-for="(item, index) in styles" :key="`${setIndex}-${item.en}`" class="brand-carousel-slide group/item mr-[120px] flex h-[62px] min-w-0 shrink-0 items-center justify-center overflow-visible">
-          <NuxtLink :to="{ path: '/design-inspiration', query: { style: item.zh } }" :tabindex="setIndex > 1 ? -1 : undefined" class="flex h-[62px] shrink-0 items-center justify-center gap-4 p-[2px]" @mouseenter="showPreview($event, index, item.zh)" @focus="showPreview($event, index, item.zh)" @mouseleave="preview = null" @blur="preview = null">
+          <NuxtLink :to="item.route || { path: '/design-inspiration', query: { style: item.zh } }" :tabindex="setIndex > 1 ? -1 : undefined" class="flex h-[62px] shrink-0 items-center justify-center gap-4 p-[2px]" @mouseenter="showPreview($event, index, item.zh)" @focus="showPreview($event, index, item.zh)" @mouseleave="preview = null" @blur="preview = null">
             <img :src="item.logo" :alt="cmsCopy.copy.field1" draggable="false" class="h-[58px] w-auto transition-[filter,opacity] duration-300 group-hover/brands:opacity-50 group-hover/brands:grayscale group-hover/item:!opacity-100 group-hover/item:!grayscale-0" />
             <span class="shrink-0 leading-tight text-[#59585D] transition-colors group-hover/item:text-[#CAA05C]"><span class="block text-[15px] font-bold">{{ item.zh }}</span><span class="block text-[13px] tracking-wide">{{ item.en }}</span></span>
           </NuxtLink>

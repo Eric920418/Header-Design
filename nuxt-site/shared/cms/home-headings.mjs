@@ -1,0 +1,41 @@
+export const HOME_PROJECT_ID = 'view-components-home-HomeProject'
+export const HOME_SERVICES_ID = 'view-components-home-HomeServices'
+
+const projectDefaults = {
+  englishLabel: 'BRAND SERIES',
+  englishLead: 'Explore Our',
+  englishTitleFirst: 'Creative Projects',
+  englishTitleSecond: 'That Define Our Style',
+}
+
+export function homeChineseTitle(id, copy = {}) {
+  if (copy.chineseTitle !== undefined) return copy.chineseTitle
+  if (typeof copy.text1 === 'string' && typeof copy.text2 === 'string') return copy.text1 + copy.text2
+  return id === HOME_PROJECT_ID ? '品牌系列' : '廚房產品'
+}
+
+export function homeProjectHeading(copy = {}) {
+  return {
+    englishLabel: copy.englishLabel ?? projectDefaults.englishLabel,
+    englishLead: copy.englishLead ?? projectDefaults.englishLead,
+    chineseTitle: homeChineseTitle(HOME_PROJECT_ID, copy),
+    englishTitleFirst: copy.englishTitleFirst ?? projectDefaults.englishTitleFirst,
+    englishTitleSecond: copy.englishTitleSecond ?? projectDefaults.englishTitleSecond,
+  }
+}
+
+export function homeHeadingSchema(id, schema) {
+  if (id !== HOME_PROJECT_ID && id !== HOME_SERVICES_ID) return schema
+  const copy = schema.fields.copy
+  const keys = id === HOME_PROJECT_ID ? Object.keys(homeProjectHeading()) : ['chineseTitle']
+  const fields = Object.fromEntries(keys.map(key => [key, { type: 'string' }]))
+  // Archived versions still contain the two original title strings.
+  return { ...schema, fields: { ...schema.fields, copy: { ...copy, fields: { ...fields, ...copy.fields } } } }
+}
+
+export function effectiveHomeHeadingBody(id, body) {
+  if (!body?.copy || (id !== HOME_PROJECT_ID && id !== HOME_SERVICES_ID)) return body
+  const heading = id === HOME_PROJECT_ID ? homeProjectHeading(body.copy) : { chineseTitle: homeChineseTitle(id, body.copy) }
+  const { text1, text2, ...copy } = body.copy
+  return { ...body, copy: { ...copy, ...heading } }
+}

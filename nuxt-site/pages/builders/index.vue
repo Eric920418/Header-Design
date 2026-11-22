@@ -288,7 +288,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             />
           </div>
 
-          <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-services-panel">
+          <div id="builder-dedicated-services" v-reveal="{ anim: 'opalMoveUp' }" class="builders-services-panel">
             <InternalBuilderImage
               src="/section-6/builders/proposal-20261002/dedicated-services.webp"
               alt="專業銷講選材、專屬監工規劃與專人驗收"

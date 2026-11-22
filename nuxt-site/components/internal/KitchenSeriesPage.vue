@@ -5,13 +5,15 @@ import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight } from 'luci
 import { KITCHEN_EQUIPMENT_DETAIL_ROUTES, type KitchenSeriesPageData } from '~/data/kitchenSeries'
 import { KITCHEN_EQUIPMENT_CUTOUTS } from '~/data/kitchenEquipmentCutouts'
 import { kitchenHeroStory } from '~/shared/cms/kitchen-series-hero.mjs'
+import { heroSeriesTitle } from '~/shared/cms/hero-media.mjs'
 import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
 const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
 
 
 const { data } = defineProps<{ data: KitchenSeriesPageData }>()
+const destinations = computed(() => data.buttonDestinations)
 const homeHero = await useCmsResource('view-components-home-HomeHero', { slides: [] as { route?: string; title: string }[], cmsSettings: { visible: true, seoTitle: '', seoDescription: '' } })
-const heroTitle = homeHero.slides.find(slide => slide.route?.split(/[?#]/)[0] === `/home-style/${data.slug}`)?.title.trim() || data.name
+const heroTitle = heroSeriesTitle(homeHero.slides, `/home-style/${data.slug}`) || data.name
 const heroSeriesSubtitle = ['aikitchen', 'basic-plus'].includes(data.slug) ? '' : KITCHEN_STYLES.find(style => style.slug === data.slug)?.zh
 const reducedMotion = useReducedMotion()
 const currentHero = ref(0)
@@ -232,10 +234,10 @@ useSeoMeta({
             <button type="button" :disabled="data.heroSlides.length < 2" aria-label="下一張品牌圖片" @click="showHero(currentHero + 1)"><ChevronRight /></button>
           </div>
           <div class="ai-hero__actions">
-            <NuxtLink :to="`/catalogues/kitchenware-catalog?series=${data.slug}`" target="_blank" rel="noopener noreferrer" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
+            <NuxtLink :to="destinations?.catalogue || `/catalogues/kitchenware-catalog?series=${data.slug}`" target="_blank" rel="noopener noreferrer" class="ai-hero__catalogue-link" aria-label="前往品牌系列型錄列表頁">
               <span>品牌系列<br>型錄</span>
             </NuxtLink>
-            <NuxtLink to="/design-inspiration" class="ai-hero__explore-link">
+            <NuxtLink :to="destinations?.explore || '/design-inspiration'" class="ai-hero__explore-link">
               <span>探索設計案例</span><ArrowUpRight aria-hidden="true" />
             </NuxtLink>
           </div>
@@ -365,7 +367,7 @@ useSeoMeta({
           </article>
         </div>
         <div v-reveal="{ anim: 'opalMoveUp', delay: 160 }" class="mt-10 flex justify-center md:mt-12">
-          <a href="https://pse.is/9kq37z" target="_blank" rel="noopener noreferrer" aria-label="立即預約，另開 SAKURA iCare 分頁" class="site-content-cta group/cta inline-flex h-[60px] items-center gap-2 rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white focus-visible:border-[#CAA05C] focus-visible:bg-[#CAA05C] focus-visible:text-white">
+          <a :href="destinations?.booking || 'https://pse.is/9kq37z'" target="_blank" rel="noopener noreferrer" aria-label="立即預約，另開 SAKURA iCare 分頁" class="site-content-cta group/cta inline-flex h-[60px] items-center gap-2 rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-[#1C1C1D] transition-colors hover:border-[#CAA05C] hover:bg-[#CAA05C] hover:text-white focus-visible:border-[#CAA05C] focus-visible:bg-[#CAA05C] focus-visible:text-white">
             <span class="font-cjk-sans text-[15px]">立即預約</span>
             <span class="site-cta-icon flex h-10 w-10 -rotate-45 items-center justify-center rounded-full bg-[#CAA05C] text-white transition-transform group-hover/cta:rotate-0 group-focus-visible/cta:rotate-0"><ArrowRight aria-hidden="true" class="h-5 w-5" /></span>
           </a>
@@ -439,7 +441,7 @@ useSeoMeta({
         </div>
         <div v-else class="rounded-3xl bg-[#fafafa] p-10 text-center font-cjk-sans">
           <p>此系列目前尚無公開推薦案例。</p>
-          <NuxtLink to="/design-inspiration" class="mt-5 inline-flex rounded-full border border-[#caa05c] px-8 py-3 hover:bg-[#caa05c] hover:text-white">探索設計靈感</NuxtLink>
+          <NuxtLink :to="destinations?.moreCases || '/design-inspiration'" class="mt-5 inline-flex rounded-full border border-[#caa05c] px-8 py-3 hover:bg-[#caa05c] hover:text-white">探索設計靈感</NuxtLink>
         </div>
       </div>
     </section>

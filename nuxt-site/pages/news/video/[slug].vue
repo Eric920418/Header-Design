@@ -38,7 +38,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <main class="media-detail-page">
-    <section data-hero-photo="songzhu" class="media-detail-breadcrumb hero-includes-header" aria-label="媒體影音麵包屑">
+    <section id="article-breadcrumb" data-hero-photo="songzhu" class="media-detail-breadcrumb hero-includes-header" aria-label="媒體影音麵包屑">
       <div class="media-detail-breadcrumb__overlay" aria-hidden="true" />
       <div class="media-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <p class="media-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>
@@ -85,7 +85,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </a>
           </section>
 
-          <nav class="media-detail-categories" aria-label="優惠消息分類" v-reveal="{ anim: 'opalMoveUp' }">
+          <nav class="media-detail-categories" id="article-categories" aria-label="優惠消息分類" v-reveal="{ anim: 'opalMoveUp' }">
             <NuxtLink :to="cmsCopy.copy.field6"><Camera aria-hidden="true" />{{ cmsCopy.copy.text7 }}</NuxtLink>
             <NuxtLink :to="cmsCopy.copy.field8"><Images aria-hidden="true" />{{ cmsCopy.copy.text9 }}</NuxtLink>
             <NuxtLink :to="cmsCopy.copy.field10" aria-current="page"><PlaySquare aria-hidden="true" />{{ cmsCopy.copy.text11 }}</NuxtLink>

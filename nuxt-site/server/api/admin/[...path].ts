@@ -1,9 +1,6 @@
 import { query, transaction, fail, passwordHash, checkPassword, digest, randomUUID, audit, throttle } from '../../cms/database.mjs'
+import { documentSchema } from '../../../shared/cms/document-schema.mjs'
 import { getDocument, changeDocument, alignSource } from '../../cms/content.mjs'
-import { homeHeroSchema } from '../../../shared/cms/hero-media.mjs'
-import { homeGallerySchema, customCasesSchema } from '../../../shared/cms/gallery-cases.mjs'
-import { builderSeriesSchema } from '../../../shared/cms/builder-series.mjs'
-import { kitchenSeriesHeroSchema } from '../../../shared/cms/kitchen-series-hero.mjs'
 import { caseLibrary } from '../../cms/case-library.mjs'
 import { cmsHandler, cmsUser, cmsWrite, sameOrigin, cmsSession } from '../../utils/cms'
 import {workspaceSummaries,changeWorkspace} from '../../cms/workspaces.mjs'
@@ -43,7 +40,7 @@ export default defineEventHandler(event=>cmsHandler(event,async()=>{
    const d=await getDocument(path[1]);const v=(await query('SELECT body FROM cms.Versions WHERE id=@id',{id:d.draftId})).recordset[0]
    const versions=(await query('SELECT v.id,v.createdAt,u.name AS actor FROM cms.Versions v LEFT JOIN cms.Users u ON u.id=v.actor WHERE documentId=@id ORDER BY createdAt DESC',{id:d.id})).recordset
    const body=v?JSON.parse(v.body):{}
-   return{...d,schema:customCasesSchema(d.id,kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson)))))),body:d.id.startsWith('catalog-')?await alignSource(d.id,body):body,versions}
+   return{...d,schema:documentSchema(d.id,JSON.parse(d.schemaJson)),body:d.id.startsWith('catalog-')?await alignSource(d.id,body):body,versions}
   }
   if(path[1]&&method==='POST')return changeDocument(path[1],await readBody(event),user)
  }

@@ -1,4 +1,5 @@
 import {query,fail} from './database.mjs'
+import { documentSchema } from '../../shared/cms/document-schema.mjs'
 import {alignSource,normalizeVideos,validate} from './content.mjs'
 import {changeDocumentGroup,workspaceSummaries,readableError} from './workspaces.mjs'
 import {changedItems} from '../../shared/cms/workflow.mjs'
@@ -6,17 +7,14 @@ import {resourceGuide} from '../../shared/cms/presentation.mjs'
 import {createDraftPreview} from './previews.mjs'
 import {pageEditors,pageEditor,pageBlocks,pageSummary,valueAt,withValue} from '../../shared/cms/page-editors.mjs'
 import {editingSchema} from '../../shared/cms/presentation.mjs'
-import {homeHeroSchema} from '../../shared/cms/hero-media.mjs'
-import {homeGallerySchema,customCasesSchema} from '../../shared/cms/gallery-cases.mjs'
-import {builderSeriesSchema} from '../../shared/cms/builder-series.mjs'
-import {kitchenSeriesHeroSchema} from '../../shared/cms/kitchen-series-hero.mjs'
 import {caseLibrary} from './case-library.mjs'
 import {pagePositions,positionImage} from '../../shared/cms/positions.mjs'
 import {firstImage} from '../../shared/cms/workflow.mjs'
 import {pageSearchItems,publishReview,hasPageChanges,sameContent} from '../../shared/cms/changes.mjs'
 import {workbenchBlocks} from '../../shared/cms/workbench.mjs'
+import {kitchenHeroStory} from '../../shared/cms/kitchen-series-hero.mjs'
 
-export const editorSchema=d=>customCasesSchema(d.id,kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson))))))
+export const editorSchema=d=>documentSchema(d.id,JSON.parse(d.schemaJson))
 export async function pageEditorSummaries(){
  const [rows,schemas]=await Promise.all([workspaceSummaries(),query('SELECT d.id,d.schemaJson,COALESCE(p.body,v.body) AS body,p.body AS publishedBody,v.body AS draftBody FROM cms.Documents d LEFT JOIN cms.Versions p ON p.id=d.publishedId LEFT JOIN cms.Versions v ON v.id=d.draftId')])
  const documents=schemas.recordset.map(d=>({id:d.id,schema:editorSchema(d),body:d.body?JSON.parse(d.body):{}}))
@@ -35,18 +33,52 @@ async function rowPresentation(p){
  return result
 }
 async function positionPresentation(p){
- const definition=pagePositions[p.id],ids=[...new Set(['site-visuals',...p.ids,...(p.id==='news'||p.id==='franchise'?['news-articles']:[]),...(definition?.sections||[]).flatMap(s=>Array.isArray(s.image)?[s.image[0]]:[])])]
+ const definition=pagePositions[p.id],ids=[...new Set(['site-visuals',...p.ids,...(p.id==='news'||p.id==='franchise'?['news-articles']:[]),...(p.brand?['data-productCatalogues']:[]),...(p.id==='inspiration'?['data-storeCases','custom-cases']:[]),...(definition?.sections||[]).flatMap(s=>Array.isArray(s.image)?[s.image[0]]:[])])]
  const rows=(await query(`SELECT d.id,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.publishedId WHERE d.id IN (${ids.map((_,i)=>'@context'+i).join(',')})`,Object.fromEntries(ids.map((id,i)=>['context'+i,id])))).recordset
  const bodies=Object.fromEntries(rows.map(d=>[d.id,JSON.parse(d.body)])),heroImage=firstImage(positionImage(definition?.hero,bodies))
  const result={heroImage,blockImages:Object.fromEntries((definition?.sections||[]).map(s=>[p.id+':'+s.name,firstImage(positionImage(s.image,bodies))])),sections:definition?.sections||[]}
- if(p.id==='inspiration'){const cases=await caseLibrary();return{...result,heroImage:bodies['site-visuals']?.images?.asset_7692def0||'/section-3/store-songzhu.jpg',cases:cases.slice(0,3),detailCase:cases.find(c=>c.route.startsWith('/design-inspiration/'))}}
- const articles=bodies['news-articles']?.items?.filter(i=>!p.category||i.summary.category===p.category)||[]
+ if(p.brand)result.catalogueCovers=(bodies['data-productCatalogues']?.PRODUCT_CATALOGUES||[])
+  .filter(i=>['sakura-kitchen-2026','kitchenware-2026'].includes(i.id))
+  .map(i=>({title:i.id==='kitchenware-2026'?'櫻花整廚廚房配備型錄':i.title,image:i.cover}))
+ if(p.id==='service'||p.id==='visuals')result.serviceVideoCover=bodies['site-visuals']?.serviceVideoCover||'/section-3/service-process/video/service-guide-2027-20261027-poster.webp'
+ if(p.id==='home')result.heroTitlePages=(await homeImpactContext()).heroTitlePages
+ if(p.id==='inspiration'){
+  const cases=await caseLibrary(),stores=bodies['data-storeCases']?.storeCases||[],custom=bodies['custom-cases']?.items||[]
+  const describe=c=>({...c,description:stores.find(i=>i.slug===c.slug)?.article?.[0]?.paragraphs?.[0]||custom.find(i=>i.id===c.slug)?.excerpt||''})
+  return{...result,heroImage:bodies['site-visuals']?.images?.asset_7692def0||'/section-3/store-songzhu.jpg',cases:cases.slice(0,3).map(describe),detailCase:cases.find(c=>c.route.startsWith('/design-inspiration/'))}
+ }
+ const articles=bodies['news-articles']?.items?.filter(i=>i.enabled&&(!p.category||i.summary.category===p.category))||[]
  if(p.id==='news')result.samples=articles.slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
  if(p.id==='franchise')result.samples=articles.filter(i=>/franchise/.test(i.slug)).slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
- if(p.id.startsWith('news-')&&articles[0]){result.detailPath=`/news/${p.category}/${articles[0].slug}`;result.specialImage=articles[0].summary.cover}
- if(p.id==='knowledge'){const first=bodies['knowledge-articles']?.items?.find(i=>i.slug!=='systemcabinet');if(first)result.detailPath='/knowledge/design/'+first.slug;result.specialImage=bodies['knowledge-articles']?.items?.find(i=>i.slug==='systemcabinet')?.summary.cover}
+ if(p.category){
+  const first=articles[0]
+  if(p.category==='latest'){
+   const registration=articles.find(article=>article.slug==='2026-franchise-seminar')
+   const section=registration?.detail?.sections?.[3]
+   if(section)result.registration={title:registration.summary.title,heading:section.heading,images:section.images||[],path:'/news/latest/2026-franchise-seminar#article-registration'}
+  }
+  const images=bodies['site-visuals']?.images
+  result.detailHeroImage=p.category==='latest'
+   ?images?.asset_44761f00||'/section-5/brand-pavilion/pavilion-taichung.jpg'
+   :images?.asset_7692def0||'/section-3/store-songzhu.jpg'
+  if(first){
+   result.detailPath=`/news/${p.category}/${first.slug}`
+   result.specialImage=first.detail?.cover?.src||first.summary.cover
+   result.detailSample={title:first.summary.title,date:first.summary.displayDate,image:result.specialImage,alt:first.detail?.cover?.alt||first.summary.title}
+  }
+ }
+ if(p.id==='knowledge'){
+  const related=(bodies['knowledge-articles']?.items||[]).filter(i=>i.enabled&&i.slug!=='systemcabinet')
+  if(related.length)result.detailPath='/knowledge/design/'+related[0].slug
+  result.relatedArticles=related.slice(0,2).map(i=>({title:i.summary.title,image:i.summary.cover}))
+ }
  if(p.id==='stores'&&bodies['data-storeCases']?.storeCases?.[0]){const first=bodies['data-storeCases'].storeCases[0];result.detailPath='/gallery/'+first.slug;result.specialImage=first.cover||first.images?.[0]}
  return result
+}
+async function homeImpactContext(connection){
+ const rows=(await query("SELECT v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.publishedId WHERE d.id=N'data-kitchenSeries'",{},connection)).recordset
+ const pages=JSON.parse(rows[0]?.body||'{}').KITCHEN_SERIES_PAGES||[]
+ return {heroTitlePages:pages.filter(page=>page.heroSlides?.some(image=>!kitchenHeroStory(page,image)?.title)).map(page=>({href:'/home-style/'+encodeURIComponent(page.slug),title:page.name,fallbackTitle:page.name}))}
 }
 async function pageRows(p,connection){return(await query(`SELECT d.*,v.body,p.body AS publishedBody FROM cms.Documents d LEFT JOIN cms.Versions v ON v.id=d.draftId LEFT JOIN cms.Versions p ON p.id=d.publishedId WHERE d.id IN (${p.ids.map((_,i)=>'@id'+i).join(',')})`,parameters(p),connection)).recordset}
 export async function readPageEditor(id){
@@ -61,7 +93,15 @@ export async function readPageEditor(id){
  const [rowsForDisplay,position]=await Promise.all([rowPresentation(p),positionPresentation(p)]),summary=pageSummary(p,summaries,documents)
  summary.pending=hasPageChanges(summary.blocks,Object.fromEntries(documents.map(d=>[d.id,d.publishedBody])),Object.fromEntries(documents.map(d=>[d.id,d.body])))
  if(position?.detailCase)summary.blocks=summary.blocks.map(b=>b.preview==='inspiration-detail'?{...b,href:position.detailCase.route}:b)
- summary.blocks=summary.blocks.map(b=>p.id==='knowledge'&&b.name.startsWith('系統櫃')?{...b,href:'/knowledge/design/systemcabinet'}:position?.detailPath&&b.fields.some(f=>/-slug-$/.test(f.documentId))?{...b,href:position.detailPath}:b)
+ summary.blocks=summary.blocks.map(b=>{
+  if(p.id==='knowledge'&&b.name.startsWith('系統櫃'))return{...b,href:'/knowledge/design/systemcabinet'}
+  if(b.kind==='registration')return{...b,href:position.registration?.path||p.href}
+  if(position.detailPath&&b.fields.some(f=>/-slug-$/.test(f.documentId))){
+   const anchor=p.category?(b.kind==='breadcrumb'?'#article-breadcrumb':b.kind==='navigation'?'#article-categories':''):''
+   return{...b,href:position.detailPath+anchor}
+  }
+  return b
+ })
  return{...summary,documents,rowPresentation:rowsForDisplay,positionPresentation:position}
 }
 const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b)
@@ -94,7 +134,7 @@ export function checkPageBody(p,id,previous,next,schema){
   editable(old,value,f.schema)
   merged=withValue(merged,f.path,value)
  }
- if(!equal(merged,next))fail(400,'修改包含目前頁面以外的內容，請重新開啟正確位置；目前輸入仍保留。')
+ if(!sameContent(merged,next))fail(400,'修改包含目前頁面以外的內容，請重新開啟正確位置；目前輸入仍保留。')
 }
 export function pageEditorInput(id,input){
  const p=pageEditor(id)
@@ -113,7 +153,8 @@ export async function changePageEditor(id,input,user,connection){
    try{checkPageBody(p,d.id,d.id.startsWith('catalog-')?await alignSource(d.id,previous,connection):previous,item.body,schema);const body=normalizeVideos(structuredClone(item.body),schema);validate(body,schema);return{id:d.id,revision:d.revision,body,title:resourceGuide(d.id).tabTitle||resourceGuide(d.id).location[0],changes:changedItems(d.publishedBody?JSON.parse(d.publishedBody):null,body,editingSchema(schema,d.id))}}catch(e){throw readableError(e,d.id,editingSchema(schema,d.id),item.body)}
   }))
   const stored=await Promise.all(rows.map(async d=>{let body=JSON.parse(d.body||'{}'),publishedBody=d.publishedBody?JSON.parse(d.publishedBody):null;if(d.id.startsWith('catalog-')){body=await alignSource(d.id,body,connection);if(publishedBody)publishedBody=await alignSource(d.id,publishedBody,connection)}return{id:d.id,schema:editorSchema(d),body,publishedBody}})),blocks=pageBlocks(p,stored)
-  const review=publishReview(workbenchBlocks(p.id,blocks),stored,Object.fromEntries(documents.map(d=>[d.id,d.body])))
+  const context=p.id==='home'?await homeImpactContext(connection):{}
+  const review=publishReview(workbenchBlocks(p.id,blocks),stored,Object.fromEntries(documents.map(d=>[d.id,d.body])),context)
   return{documents,review,previewToken:await createDraftPreview(user.id,documents,connection),impacts:review.impacts}
  }
  return changeDocumentGroup(p,input,user,connection,async(d,previous,next,schema,tx)=>checkPageBody(p,d.id,d.id.startsWith('catalog-')?await alignSource(d.id,previous,tx):previous,next,schema))

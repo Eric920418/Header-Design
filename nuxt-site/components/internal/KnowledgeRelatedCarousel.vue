@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<{
   variant: 'cards',
 })
 
+const settings = props.variant === 'home07' ? await useCmsResource('view-pages-knowledge-design-slug-', { copy: { moreDestination: '/knowledge' }, cmsSettings: { visible: true } }) : null
 const home07Articles = computed(() => props.articles.slice(0, 2))
 const articleRoute = (article: RelatedArticle) => 'legacyPath' in article
   ? article.legacyPath
@@ -22,11 +23,11 @@ const [viewport] = emblaCarouselVue({ loop: false, align: 'start', duration: 24 
 </script>
 
 <template>
-  <section v-if="variant === 'home07'" class="knowledge-related knowledge-related--home07" aria-label="延伸文章">
+  <section v-if="variant === 'home07'" id="knowledge-related-heading" class="knowledge-related knowledge-related--home07" aria-label="延伸文章">
     <header class="knowledge-related-home07__intro" v-reveal="{ anim: 'opalMoveRight' }">
       <InternalSectionPill>Straight From The Newsroom</InternalSectionPill>
       <h2><span class="knowledge-related-home07__chinese"><InternalHeadingText text="廚房知識與靈感" /></span><InternalHeadingText text="Take A Look" /><br><em><InternalHeadingText text="At Our Latest" /></em><br><InternalHeadingText text="Articles" /></h2>
-      <NuxtLink to="/knowledge" class="knowledge-related-home07__cta site-content-cta">
+      <NuxtLink :to="settings?.copy.moreDestination || '/knowledge'" class="knowledge-related-home07__cta site-content-cta">
         <span>更多廚房知識</span>
         <i class="site-cta-icon"><ArrowUpRight aria-hidden="true" /></i>
       </NuxtLink>

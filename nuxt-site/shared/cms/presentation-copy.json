@@ -957,7 +957,7 @@
       "label": "主視覺・主視覺標題"
     },
     "copy.text2": {
-      "label": "區塊標題",
+      "label": "區塊中文主標題",
       "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
     }
   },
@@ -1019,7 +1019,7 @@
       "label": "主視覺・主視覺標題"
     },
     "copy.text2": {
-      "label": "區塊標題",
+      "label": "區塊中文主標題",
       "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
     }
   },
@@ -1063,7 +1063,7 @@
       "label": "主視覺・主視覺標題"
     },
     "copy.text2": {
-      "label": "區塊標題",
+      "label": "區塊中文主標題",
       "help": "此文字供輔助閱讀使用，不會顯示在一般版面。"
     }
   },
@@ -1236,10 +1236,10 @@
       "label": "背景圖片替代文字"
     },
     "copy.text2": {
-      "label": "英文小標"
+      "label": "區塊英文標籤"
     },
     "copy.text3": {
-      "label": "區塊標題"
+      "label": "區塊中文主標題"
     },
     "copy.field4": {
       "label": "按鈕連結"
@@ -1287,36 +1287,30 @@
     }
   },
   "view-components-home-HomeProject": {
-    "copy.text1": {
-      "label": "區塊標題（前半段）"
-    },
-    "copy.text2": {
-      "label": "區塊標題（後半段）"
-    },
-    "copy.text3": {
-      "label": "介紹文字"
-    }
+    "copy.englishLabel": { "label": "區塊英文標籤", "help": "顯示於品牌系列區塊左側。" },
+    "copy.englishLead": { "label": "主標題前置英文", "help": "顯示於中文主標題前方。" },
+    "copy.chineseTitle": { "label": "區塊中文主標題" },
+    "copy.englishTitleFirst": { "label": "區塊英文主標題（第一段）" },
+    "copy.englishTitleSecond": { "label": "區塊英文主標題（第二段）", "help": "接續第一段，實際換行依螢幕寬度調整。" },
+    "copy.text1": { "label": "舊版中文標題", "hidden": true },
+    "copy.text2": { "label": "舊版中文標題", "hidden": true },
+    "copy.text3": { "label": "介紹文字" }
   },
   "view-components-home-HomeServices": {
-    "copy.text1": {
-      "label": "區塊標題（前半段）"
-    },
-    "copy.text2": {
-      "label": "區塊標題（後半段）"
-    },
-    "copy.field3": {
-      "label": "圖片替代文字"
-    }
+    "copy.chineseTitle": { "label": "區塊中文主標題" },
+    "copy.text1": { "label": "舊版中文標題", "hidden": true },
+    "copy.text2": { "label": "舊版中文標題", "hidden": true },
+    "copy.field3": { "label": "圖片替代文字" }
   },
   "view-components-home-HomeStoreLocation": {
     "copy.text1": {
-      "label": "區塊英文小標"
+      "label": "區塊英文標籤"
     },
     "copy.text2": {
-      "label": "區塊標題（第一行）"
+      "label": "區塊中文主標題（第一段）"
     },
     "copy.text3": {
-      "label": "區塊標題（第二行）"
+      "label": "區塊中文主標題（第二段）"
     },
     "copy.text4": {
       "label": "定位按鈕文字"
@@ -1342,13 +1336,13 @@
       "label": "圖片替代文字（第 1 段）"
     },
     "copy.text3": {
-      "label": "區塊小標"
+      "label": "區塊中文標籤"
     },
     "copy.text4": {
-      "label": "區塊英文標題（前半段）"
+      "label": "區塊英文主標題（第一段）"
     },
     "copy.text5": {
-      "label": "區塊英文標題（品牌名稱）"
+      "label": "區塊英文主標題（第二段）"
     },
     "copy.text6": {
       "label": "介紹標題"

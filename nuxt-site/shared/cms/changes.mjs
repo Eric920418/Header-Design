@@ -1,6 +1,8 @@
-import {valueAt,pageEditors,pageBlocks} from './page-editors.mjs'
-import {resourceGuide,editingSchema} from './presentation.mjs'
+import {valueAt,pageFieldValue,pageEditors,pageBlocks} from './page-editors.mjs'
+import {effectiveHomeHeadingBody} from './home-headings.mjs'
+import {editingSchema} from './presentation.mjs'
 import {itemCaption,itemKey,itemThumbnail} from './workbench.mjs'
+import {fieldImpacts} from './impact-targets.mjs'
 
 export function sameContent(a,b){
  if(a===b)return true
@@ -11,7 +13,7 @@ export function sameContent(a,b){
 }
 export function hasPageChanges(blocks,published,draft){
  return blocks.some(b=>b.fields.some(f=>{
-  const values=body=>{const value=valueAt(body?.[f.documentId],f.path);return f.schema.rowFilter&&Array.isArray(value)?value.filter(i=>valueAt(i,f.schema.rowFilter.path)===f.schema.rowFilter.value):value}
+  const values=body=>{const value=pageFieldValue(body,f);return f.schema.rowFilter&&Array.isArray(value)?value.filter(i=>valueAt(i,f.schema.rowFilter.path)===f.schema.rowFilter.value):value}
   return !sameContent(values(published),values(draft))
  }))
 }
@@ -47,43 +49,42 @@ export function contentChanges(previous,next,schema,path='',labels=[]){
  return [{path,label:labels.join(' › ')||'內容',before:display(previous),after:display(next),image:schema?.format==='media'}]
 }
 
-export function pageChanges(blocks,documents,previous,next){
- return documents.flatMap(d=>contentChanges(previous[d.id],next[d.id],editingSchema(d.schema,d.id)).map(change=>{
+export function pageChanges(blocks,documents,previous,next,context={}){
+ return documents.flatMap(d=>contentChanges(effectiveHomeHeadingBody(d.id,previous[d.id]),effectiveHomeHeadingBody(d.id,next[d.id]),editingSchema(d.schema,d.id)).map(change=>{
   const body=change.kind==='remove'?previous[d.id]:next[d.id]
   const owns=f=>f.documentId===d.id&&overlaps(f.path,change.path)&&(!f.schema.rowFilter||valueAt(body,change.path.startsWith(f.path+'.')?f.path+'.'+change.path.slice(f.path.length+1).split('.')[0]+'.'+f.schema.rowFilter.path:f.path)===f.schema.rowFilter.value)
   const block=blocks.find(b=>b.fields.some(owns))
   const owner=block?null:pageEditors.filter(p=>p.ids.includes(d.id)).flatMap(p=>pageBlocks(p,[d]).filter(b=>b.fields.some(owns)).map(b=>({page:p,block:b})))[0]
-  const row=d.id==='news-articles'?body?.items?.[Number(change.path.split('.')[1])]:null
+  const [collection,index]=change.path.split('.')
+  const row=Array.isArray(body?.[collection])?body[collection][Number(index)]:undefined
+  const scope={documentId:d.id,category:d.id==='news-articles'?row?.summary?.category:undefined,slug:row?.slug,rowId:row?.id,blockHref:block?.previewPage||block?.href}
   let cursor=body,stable=true
   const keyParts=change.path.split('.').map(key=>{if(Array.isArray(cursor)){const item=cursor[Number(key)],id=item&&typeof item==='object'?(item.id??item.slug):undefined;cursor=item;if(id===undefined)stable=false;return id===undefined?key:'@'+id}cursor=cursor?.[key];return key})
-  return {...change,keyParts,stable,documentId:d.id,blockId:block?.id,location:block?.name||(owner?owner.page.name+' › '+owner.block.name:'其他已儲存內容'),...(row?{category:row.summary?.category,slug:row.slug}:{})}
+  return {...change,keyParts,stable,...scope,blockId:block?.id,location:block?.name||(owner?owner.page.name+' › '+owner.block.name:'其他已儲存內容'),impacts:fieldImpacts({...scope,path:change.path},context,previous[d.id],next[d.id])}
  }))
 }
 
-export function changeImpacts(changes){
- const result=[]
- for(const c of changes){
-  let targets=resourceGuide(c.documentId)?.impacts||[]
-  if(c.documentId==='site-visuals'){
-   const index=/^brandVideo|^images\.asset_10b5a86c/.test(c.path)?0:/^serviceVideo/.test(c.path)?1:/^pavilionVideo/.test(c.path)?2:/^franchiseVideo/.test(c.path)?3:-1
-   if(index>=0)targets=targets.slice(index,index+1)
-  }
-  if(c.documentId==='news-articles'&&c.category)targets=targets.filter(i=>i.href==='/news'||i.href.startsWith('/news/'+c.category)||/franchise/.test(c.slug||'')&&i.href.startsWith('/franchising/'))
-  result.push(...targets)
- }
- return [...new Map(result.map(i=>[i.href+'|'+i.label,i])).values()]
+export function changeImpacts(changes,context={}){
+ const targets=changes.flatMap(c=>c.impacts??fieldImpacts(c,context))
+ return [...new Map(targets.map(i=>[i.href+'|'+i.label,i])).values()]
 }
 
-export function publishReview(blocks,documents,bodies){
+export function blockImpacts(block,changes,context={}){
+ if(!block)return []
+ const edited=changes.filter(c=>c.blockId===block.id)
+ return changeImpacts(edited.length?edited:block.fields.map(f=>({documentId:f.documentId,path:f.path,category:f.schema.rowFilter?.value,blockHref:block.previewPage||block.href})),context)
+}
+
+export function publishReview(blocks,documents,bodies,context={}){
  const saved=Object.fromEntries(documents.map(d=>[d.id,d.body])),published=Object.fromEntries(documents.map(d=>[d.id,d.publishedBody]))
- const current=pageChanges(blocks,documents,saved,bodies),pending=pageChanges(blocks,documents,published,saved)
+ const current=pageChanges(blocks,documents,saved,bodies,context),pending=pageChanges(blocks,documents,published,saved,context)
  const replaced=(c,n)=>{
   if(n.documentId!==c.documentId||!n.stable||!c.stable)return false
   // Ordering does not replace saved text or images in another item.
   if(c.kind==='order'||n.kind==='order')return c.kind===n.kind&&sameContent(c.keyParts,n.keyParts)
   return c.keyParts.slice(0,Math.min(c.keyParts.length,n.keyParts.length)).every((key,i)=>key===n.keyParts[i])
  }
- return {current,saved:pending.filter(c=>!current.some(n=>replaced(c,n))),impacts:changeImpacts(pageChanges(blocks,documents,published,bodies))}
+ return {current,saved:pending.filter(c=>!current.some(n=>replaced(c,n))),impacts:changeImpacts(pageChanges(blocks,documents,published,bodies,context))}
 }
 
 export function pageSearchItems(block,bodies){

@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { homeProjectHeading } from '~/shared/cms/home-headings.mjs'
 const cmsCopy = await useCmsResource('view-components-home-HomeProject', {"copy":{"text1":" 品牌","text2":"系列","text3":" 櫻花整體廚房用心找出未曾注意的生活需求，發展出不同生活行為的廚房空間概念、並融合多元設計風格，與消費者一起打造符合每個家庭的理想廚房 "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const heading = homeProjectHeading(cmsCopy.copy)
+const englishHeading = [heading.englishTitleFirst, heading.englishTitleSecond].map(text => text.trim()).filter(Boolean).join(' ')
 
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
@@ -59,13 +62,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   <section id="kitchen-series" aria-labelledby="home-project-heading" class="home-project-section relative z-10 bg-[#F6F6F6]">
     <div class="home-project-heading mx-auto grid max-w-[1470px] grid-cols-1 px-[15px] md:px-[30px] min-[768px]:grid-cols-[30%_70%]">
       <div v-reveal="{ anim: 'opalMoveRight' }">
-        <InternalTemplateHeadingRail label="BRAND SERIES" source="home9" />
+        <InternalTemplateHeadingRail v-if="heading.englishLabel" :label="heading.englishLabel" source="home9" />
       </div>
       <div v-reveal="{ anim: 'opalMoveLeft' }" class="home-project-heading-copy">
         <h2 id="home-project-heading" class="home-project-title">
-          <span class="bilingual-heading-lead"><span class="home-project-title__eyebrow">Explore Our</span>
-          <span class="home-project-title__chinese"><InternalHeadingText :text="cmsCopy.copy.text1" /><InternalHeadingText :text="cmsCopy.copy.text2" /></span></span><br class="home-project-title__break" />
-          {{ ' ' }}<span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Creative " /><span class="text-[#CAA05C]"><InternalHeadingText text="Projects That" /></span><InternalHeadingText text=" Define Our Style" /></span>
+          <span class="bilingual-heading-lead"><span v-if="heading.englishLead" class="home-project-title__eyebrow">{{ heading.englishLead }}</span>
+          <span class="home-project-title__chinese"><InternalHeadingText :text="heading.chineseTitle" /></span></span><br v-if="englishHeading" class="home-project-title__break" />
+          <template v-if="englishHeading">{{ ' ' }}<span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText :text="englishHeading" /></span></template>
         </h2>
         <p class="home-project-heading-description">{{ cmsCopy.copy.text3 }}</p>
       </div>

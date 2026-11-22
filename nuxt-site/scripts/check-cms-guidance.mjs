@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
 import {resourceGuide,resourceSearchText,editingSchema,homeResources} from '../shared/cms/presentation.mjs'
+import {HOME_PROJECT_ID,HOME_SERVICES_ID,homeProjectHeading} from '../shared/cms/home-headings.mjs'
+import {pageBlocks,pageEditors} from '../shared/cms/page-editors.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
 const aliases=new Set(['data-news','data-latestArticles','data-activityArticles','data-mediaVideos','data-kitchenGuides','data-kitchenGuideDetails'])
 const docs=seed.filter(d=>!aliases.has(d.id)),ids=new Set(docs.map(d=>d.id))
@@ -23,11 +25,49 @@ for(const doc of docs)verify(doc)
 assert.equal(homeResources.length,8)
 const galleryCopy=editingSchema(seed.find(d=>d.id==='view-components-home-HomeGallery').schema,'view-components-home-HomeGallery').fields.copy
 assert.equal(galleryCopy.label,'標題與按鈕設定')
-assert.deepEqual(['text2','text3','field4','text5'].map(key=>galleryCopy.fields[key].label),['英文小標','區塊標題','按鈕連結','按鈕文字'])
+assert.deepEqual(['text2','text3','field4','text5'].map(key=>galleryCopy.fields[key].label),['區塊英文標籤','區塊中文主標題','前往頁面','按鈕文字'])
+assert.equal(Object.keys(galleryCopy.fields)[Object.keys(galleryCopy.fields).indexOf('text5')+1],'field4')
+const blocks=pageEditors.flatMap(page=>pageBlocks(page,seed))
+const heroFields=blocks.find(block=>block.id==='home:主視覺輪播').fields.filter(f=>f.path.startsWith('copy.')&&!f.schema.advanced)
+assert.deepEqual(heroFields.slice(0,6).map(f=>f.path),['copy.text6','copy.text7','copy.text8','copy.text9','copy.field5','copy.text10'])
+assert(heroFields[4].searchTerms.includes('圓形按鈕前往頁面'))
+let destinations=0
+for(const block of blocks){
+ const fields=block.fields.filter(f=>!f.schema.advanced&&f.schema.type!=='array')
+ for(const [i,field] of fields.entries()){
+  if(!field.schema.destinationAfter)continue
+  destinations++
+  assert.equal(field.label,'前往頁面')
+  const prior=fields[i-1]
+  assert.equal(prior?.documentId+':'+prior?.path,field.schema.destinationAfter,block.id)
+ }
+}
+assert.equal(destinations,36)
+const mediaUrlLabels={
+ 'site-visuals:brandVideoSrc':'首頁品牌承諾影片網址（MP4）',
+ 'site-visuals:serviceVideoSrc':'服務流程影片網址（MP4）',
+ 'data-franchise:FRANCHISE_BROCHURE_URL':'加盟型錄 PDF 連結',
+}
+function checkDestinationLabel(schema,id,path){
+ if(schema.hidden||Object.hasOwn(schema,'fixed'))return
+ if(schema.format==='url')assert.equal(schema.label,mediaUrlLabels[id+':'+path]||'前往頁面',id+':'+path)
+ for(const [key,field] of Object.entries(schema.fields||{}))checkDestinationLabel(field,id,path+'.'+key)
+ if(schema.item)checkDestinationLabel(schema.item,id,path+'.*')
+}
+for(const b of blocks)for(const f of b.fields)checkDestinationLabel(f.schema,f.documentId,f.path)
+const logoField=blocks.find(b=>b.id==='home:集團品牌標誌').fields.find(f=>f.path==='logos')
+assert.equal(logoField.schema.item.fields.to.label,'前往頁面')
+assert(logoField.searchTerms.includes('按鈕連結'))
+const footerField=blocks.find(b=>b.id==='footer:數位展板與社群連結').fields.find(f=>f.path==='copy.field4')
+assert.equal(footerField.schema.help,'數位展板')
+const footerGroups=blocks.find(b=>b.id==='footer:網站地圖與隱私權入口').fields.find(f=>f.path==='sitemapGroups')
+assert.deepEqual(footerGroups.schema.item.fields.links.item.itemLabels,['連結文字','前往頁面'])
 const styleSchema=editingSchema(seed.find(d=>d.id==='view-components-home-HomeStyleMarquee').schema,'view-components-home-HomeStyleMarquee').fields.styles
 assert.equal(styleSchema.label,'設計風格')
 assert.equal(styleSchema.rowLabel,'zh')
 assert.equal(styleSchema.rowImage,'images')
+assert.equal(styleSchema.item.fields.route.label,'前往頁面')
+assert(styleSchema.item.fields.route.autoDestination)
 assert(editingSchema(seed.find(d=>d.id==='view-components-home-HomeStyleMarquee').schema,'view-components-home-HomeStyleMarquee').fields.copy.hidden,'Preview teleport target is a template setting, not editable website copy')
 const storeSchema=editingSchema(seed.find(d=>d.id==='view-components-home-HomeStoreLocation').schema,'view-components-home-HomeStoreLocation')
 assert.equal(storeSchema.fields.regions.label,'地區與縣市設定')
@@ -53,6 +93,9 @@ assert(!brands.item.fields.logoClass.hidden)
 assert.equal(brands.item.fields.logoClass.enum.length,brands.item.fields.logoClass.optionLabels.length)
 assert.equal(brands.item.fields.captionTop.label,'品牌標誌與介紹置於圖片上方')
 assert(brands.item.fields.captionTop.help.includes('569px'))
+assert.equal(brands.item.fields.alt.label,'品牌名稱')
+assert.equal(brands.item.fields.route.label,'前往頁面')
+assert(brands.item.fields.route.autoDestination)
 for(const brand of seed.find(d=>d.id==='view-components-home-HomeServices').data.services)assert(brands.item.fields.logoClass.enum.includes(brand.logoClass),'Existing brand sizes must retain their original values')
 for(const [name,title]of [['HomeServices','廚房產品'],['HomeGallery','設計案例'],['HomeStyleMarquee','設計風格']]){
  const guide=resourceGuide('view-components-home-'+name)
@@ -77,8 +120,12 @@ for(const file of viewPaths)files['view-pages-'+file.replace(/[^a-zA-Z0-9]+/g,'-
 for(const[id,file]of Object.entries(files)){
  if(id==='view-components-FloatingButtons')continue // Removed management entry; public component is tested separately.
  const source=await readFile(new URL(file,root),'utf8'),schema=editingSchema(seed.find(d=>d.id===id).schema,id)
+ const linkSource=id==='view-pages-knowledge-design-slug-'?await readFile(new URL('components/internal/KnowledgeRelatedCarousel.vue',root),'utf8'):source
  const used=new Set([...source.matchAll(/cmsCopy\.copy\.([a-zA-Z0-9_]+)/g)].map(m=>m[1]))
+ if(id===HOME_PROJECT_ID&&source.includes('homeProjectHeading(cmsCopy.copy)'))for(const key of Object.keys(homeProjectHeading()))if(source.includes('heading.'+key))used.add(key)
+ if(id===HOME_SERVICES_ID&&source.includes('homeChineseTitle(HOME_SERVICES_ID, cmsCopy.copy)')&&source.includes('{{ chineseTitle }}'))used.add('chineseTitle')
  for(const[key,s]of Object.entries(schema.fields.copy?.fields||{}))if(!Object.hasOwn(s,'fixed')){
+  if(s.autoDestination&&linkSource.includes('.'+key))used.add(key)
   if(!used.has(key))assert(s.hidden,`Obsolete copy must be hidden: ${id}:${key}`)
   if(used.has(key)&&!s.hidden)assert(!s.unmapped,`Current field needs a description: ${id}:${key}`)
  }

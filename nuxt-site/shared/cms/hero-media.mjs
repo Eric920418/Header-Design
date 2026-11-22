@@ -1,5 +1,9 @@
 export const HOME_HERO_ID = 'view-components-home-HomeHero'
 
+export function heroSeriesTitle(slides, path) {
+ return slides?.find(slide=>slide.route?.split(/[?#]/)[0]===path)?.title.trim() || ''
+}
+
 // Add optional fields at the schema boundary; existing documents and versions stay intact.
 export function homeHeroSchema(id, schema) {
  if (id !== HOME_HERO_ID) return schema

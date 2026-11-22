@@ -46,7 +46,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       'latest-detail-page--kaohsiung-brand-hall': isKaohsiungBrandHall,
     }"
   >
-    <section data-hero-photo="taichung" class="latest-detail-breadcrumb hero-includes-header" aria-label="最新消息麵包屑">
+    <section id="article-breadcrumb" data-hero-photo="taichung" class="latest-detail-breadcrumb hero-includes-header" aria-label="最新消息麵包屑">
       <div class="latest-detail-breadcrumb__overlay" aria-hidden="true" />
       <div class="latest-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <p class="latest-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>
@@ -87,6 +87,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             :key="section.heading ?? `section-${sectionIndex}`"
           >
             <section
+              :id="isFranchiseSeminar && sectionIndex === 3 ? 'article-registration' : undefined"
               class="latest-detail-section"
               :class="{
                 'latest-detail-section--franchise-register': isFranchiseSeminar && sectionIndex === 3,
@@ -137,7 +138,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </section>
           </template>
 
-          <nav class="latest-detail-categories" aria-label="優惠消息分類" v-reveal="{ anim: 'opalMoveUp' }">
+          <nav class="latest-detail-categories" id="article-categories" aria-label="優惠消息分類" v-reveal="{ anim: 'opalMoveUp' }">
             <NuxtLink :to="cmsCopy.copy.field7"><Camera aria-hidden="true" />{{ cmsCopy.copy.text8 }}</NuxtLink>
             <NuxtLink :to="cmsCopy.copy.field9" aria-current="page"><Images aria-hidden="true" />{{ cmsCopy.copy.text10 }}</NuxtLink>
             <NuxtLink :to="cmsCopy.copy.field11"><PlaySquare aria-hidden="true" />{{ cmsCopy.copy.text12 }}</NuxtLink>

@@ -54,6 +54,7 @@ export type KitchenSeriesPageData = {
   slug: string
   name: string
   heroSlides: string[]
+  buttonDestinations?: { catalogue?: string; explore?: string; booking?: string; moreCases?: string }
   heroStories?: { image: string; title: string; subtitle: string; paragraphs: string[] }[]
   intro: {
     title: string

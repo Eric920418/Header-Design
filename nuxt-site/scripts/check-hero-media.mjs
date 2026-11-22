@@ -3,6 +3,7 @@ import {readFile} from 'node:fs/promises'
 import {HOME_HERO_ID,homeHeroSchema,heroImageSource,heroPosition,heroPreviewSlide} from '../shared/cms/hero-media.mjs'
 import {validate} from '../server/cms/content.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
+import {documentSchema} from '../shared/cms/document-schema.mjs'
 
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
 const original=seed.find(d=>d.id===HOME_HERO_ID),fingerprint=JSON.stringify(original)
@@ -44,8 +45,9 @@ assert.equal(heroImageSource(slide,'mobile'),slide.image)
 assert.equal(editingSchema(original.schema,HOME_HERO_ID).fields.slides.item.editor,'hero-images')
 const api=await readFile(new URL('../server/api/admin/[...path].ts',import.meta.url),'utf8')
 const mutations=await readFile(new URL('../server/cms/content.mjs',import.meta.url),'utf8')
-assert(api.includes('homeHeroSchema(d.id,JSON.parse(d.schemaJson))'))
-assert(mutations.includes('homeHeroSchema(d.id,JSON.parse(d.schemaJson))')&&mutations.includes('await publicationMedia(body,schema)'),'Save/restore/publish must all use the effective schema and check mobile media')
+assert.deepEqual(documentSchema(HOME_HERO_ID,original.schema),schema)
+assert(api.includes('documentSchema(d.id,JSON.parse(d.schemaJson))'))
+assert(mutations.includes('documentSchema(d.id,JSON.parse(d.schemaJson))')&&mutations.includes('await publicationMedia(body,schema)'),'Save/restore/publish must all use the effective schema and check mobile media')
 const hero=await readFile(new URL('../components/home/HomeHero.vue',import.meta.url),'utf8')
 assert.equal((hero.match(/<HomeHeroImage/g)||[]).length,4,'Both animation layers, previous slide and preload use responsive images')
 const globals=await readFile(new URL('../../src/styles/globals.css',import.meta.url),'utf8')

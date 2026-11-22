@@ -1,10 +1,8 @@
 import {access} from 'node:fs/promises'
+import { documentSchema } from '../../shared/cms/document-schema.mjs'
 import {resolve,sep} from 'node:path'
 import { query, transaction, randomUUID, fail, audit } from './database.mjs'
-import { homeHeroSchema } from '../../shared/cms/hero-media.mjs'
-import { homeGallerySchema, customCasesSchema, HOME_GALLERY_ID } from '../../shared/cms/gallery-cases.mjs'
-import { builderSeriesSchema } from '../../shared/cms/builder-series.mjs'
-import { kitchenSeriesHeroSchema } from '../../shared/cms/kitchen-series-hero.mjs'
+import { HOME_GALLERY_ID } from '../../shared/cms/gallery-cases.mjs'
 import { HOME_STORES_ID, storeLocationIssue } from '../../shared/cms/store-location.mjs'
 import { caseLibrary, validateGalleryCases } from './case-library.mjs'
 import {contentAliases,publicContent} from '../../shared/cms/public-content.mjs'
@@ -95,7 +93,7 @@ export async function changeDocument(id,input,user,connection){
  const run=async tx=>{
  const d=(await query('SELECT * FROM cms.Documents WITH(UPDLOCK,HOLDLOCK) WHERE id=@id',{id},tx)).recordset[0];if(!d)fail(404,'找不到內容')
  if(input.revision!==d.revision)fail(409,'內容已被其他人修改，請先重新載入；本次輸入尚未覆蓋')
- const schema=customCasesSchema(d.id,kitchenSeriesHeroSchema(d.id,builderSeriesSchema(d.id,homeGallerySchema(d.id,homeHeroSchema(d.id,JSON.parse(d.schemaJson))))))
+ const schema=documentSchema(d.id,JSON.parse(d.schemaJson))
  let draft=d.draftId,published=d.publishedId
  if(input.action==='save'||input.action==='restore'){
  let body=input.body

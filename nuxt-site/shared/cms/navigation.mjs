@@ -1,3 +1,5 @@
+import {HOME_PROJECT_ID,HOME_SERVICES_ID,homeChineseTitle} from './home-headings.mjs'
+
 // Public names are resolved from published content, independently of editable drafts.
 export const siteSections=[
  {key:'design',label:'設計案例',shortLabel:'案例',anchor:'/design-inspiration'},
@@ -77,7 +79,8 @@ export function workspaceNames(workspaces,published={}){
   const b=nameBindings[w.id];if(!b)throw new Error('缺少官網位置名稱：'+w.id)
   const sectionTitle=b.section==='home'?'首頁':sections.find(s=>s.key===b.section).label
   let pageTitle=b.name
-  if(b.fields?.length){const values=b.fields.map(key=>text(published[w.id]?.copy?.[key]));if(values.every(Boolean))pageTitle=values.join('')}
+  if(w.id===HOME_PROJECT_ID||w.id===HOME_SERVICES_ID)pageTitle=text(homeChineseTitle(w.id,published[w.id]?.copy))||b.name
+  else if(b.fields?.length){const values=b.fields.map(key=>text(published[w.id]?.copy?.[key]));if(values.every(Boolean))pageTitle=values.join('')}
   else if(b.route==='series')pageTitle=text(nav.find(n=>n.seriesMega)?.children?.find(c=>!c.to)?.label)||b.name
   else if(b.route){pageTitle=text(nav.flatMap(links).find(n=>pathname(n.to)===b.route)?.label)||b.name
    if(b.route==='/catalogues/catalog')pageTitle=text(header.copy?.text20)||pageTitle
@@ -109,6 +112,25 @@ export function orderDesignWorkspaces(rows){
 
 export function navigationSections(rows=[]){
  return siteSections.map(s=>{const w=rows.find(w=>w.section===s.key);return{...s,label:w?.sectionTitle||s.label,order:w?.sectionOrder??siteSections.indexOf(s)+100}}).sort((a,b)=>a.order-b.order)
+}
+
+/** @returns {{key:string,label:string,links:{href:string,title:string}[]}[]} */
+export function destinationGroups(pages=[],workspaces=[]){
+ const seen=new Set(['/'])
+ const unique=links=>links.filter(({href})=>{
+  if(!href||seen.has(href))return false
+  seen.add(href)
+  return true
+ })
+ const sections=navigationSections(workspaces).map(section=>({
+  key:section.key,
+  label:section.key==='shared'?'其他頁面':section.label,
+  links:unique(pages.filter(page=>page.section===section.key&&page.id!=='series'&&(section.key!=='shared'||page.id==='privacy'))),
+ }))
+ const series=workspaces.find(w=>w.id==='data-kitchenSeries')
+ const seriesLinks=unique([...(series?.pageLinks||[]),...pages.filter(page=>page.id==='series')])
+ sections.splice(sections.findIndex(section=>section.key==='design'),0,{key:'series',label:series?.pageTitle||'品牌系列',links:seriesLinks})
+ return sections.filter(group=>group.links.length)
 }
 
 export function namedEditorSchema(schema,id,pageTitle){

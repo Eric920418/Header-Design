@@ -3,7 +3,8 @@ import {spawnSync} from 'node:child_process'
 import {readFile} from 'node:fs/promises'
 import {workspaces,workspaceFor,editorLink,cmsDate} from '../shared/cms/workflow.mjs'
 import {workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
-import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace,orderDesignWorkspaces} from '../shared/cms/navigation.mjs'
+import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace,orderDesignWorkspaces,destinationGroups} from '../shared/cms/navigation.mjs'
+import {pageEditors,pageSummary} from '../shared/cms/page-editors.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url))),published=Object.fromEntries(seed.map(d=>[d.id,structuredClone(d.data)])),original=JSON.stringify(published)
 const names=workspaceNames(workspaces,published),find=(rows,id)=>rows.find(w=>w.id===workspaceFor(id)?.id)
 const design=names.filter(w=>w.section==='design'),beforeDesign=design.map(w=>w.id)
@@ -42,6 +43,21 @@ assert.equal(sectionForQuery({section:'invalid'}),'all')
 const link=editorLink('data-kitchenStyles',{area:'pages',q:'品牌',page:'2',section:'all'});assert.equal(link.path,'/admin/home');assert.equal(link.query.part,'data-kitchenStyles');assert.equal(link.query.returnPath,'/admin/content');assert.equal(link.query.q,'品牌');assert.equal(link.query.page,'2');assert(!('area'in link.query));assert.equal(editorLink('knowledge-articles').query.section,'design')
 const latest=find(names,'view-pages-news-latest-slug-');assert(latest.pageLinks.every(p=>p.href==='/news/latest'),'shared text must not masquerade as a single article')
 for(const brand of ['sakura','svago','teka'])assert(find(names,'catalog-'+brand).pageLinks.some(p=>p.href==='/products/'+brand))
+const pages=pageEditors.map(page=>pageSummary(page,names))
+const destinations=destinationGroups(pages,names)
+const hrefs=destinations.flatMap(group=>group.links.map(page=>page.href))
+const seriesLinks=find(names,'data-kitchenSeries').pageLinks
+assert.equal(new Set(hrefs).size,hrefs.length,'A destination can appear only once')
+assert.deepEqual(new Set(hrefs),new Set([...pages.filter(p=>p.href!=='/'&&(p.section!=='shared'||p.id==='privacy')).map(p=>p.href),...seriesLinks.map(p=>p.href)]))
+const seriesGroup=destinations.find(group=>group.key==='series')
+assert.equal(seriesGroup.label,'品牌系列')
+assert.deepEqual(seriesGroup.links,seriesLinks)
+assert(seriesGroup.links.some(page=>page.href==='/home-style/basic-plus'),'Basic+ remains under the series category')
+assert.equal(hrefs.filter(href=>href==='/home-style/aikitchen').length,1)
+assert.equal(destinationGroups(pages,renamed)[0].label,'櫻花新消息','Category order and labels follow the published navigation')
+assert.deepEqual(destinationGroups(pages).find(group=>group.key==='series').links.map(p=>p.href),['/home-style/aikitchen'])
+assert.deepEqual(destinationGroups(),[],'Pages and categories can load independently')
+console.log('PASS: grouped destination options retain the same URLs, native categories, published ordering and series labels')
 assert.equal(JSON.stringify(published),original,'Name resolution must not mutate published content')
 const dateCode="import {cmsDate} from './shared/cms/workflow.mjs';console.log(cmsDate('2026-09-28T14:02:46Z'))"
 const formatted=['UTC','Asia/Taipei'].map(TZ=>{const r=spawnSync(process.execPath,['--input-type=module','-e',dateCode],{cwd:new URL('../',import.meta.url),env:{...process.env,TZ},encoding:'utf8'});assert.equal(r.status,0,r.stderr);return r.stdout.trim()})

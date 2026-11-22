@@ -1,5 +1,6 @@
+import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {workspaceFor,firstImage} from './workflow.mjs'
-import {editingSchema,resourceGuide,homeResources} from './presentation.mjs'
+import {editingSchema,resourceGuide,homeResources,placeDestinations} from './presentation.mjs'
 import {positionGroup,positionField,pagePositions,decoratePosition} from './positions.mjs'
 
 const view=id=>'view-pages-'+id
@@ -57,6 +58,10 @@ export function searchResultLink(result,query={}){
  return {...link,query:{...link.query,...(result.item?{list:result.item.scope,item:result.item.key}:{})}}
 }
 export const valueAt=(body,path)=>path.split('.').reduce((v,key)=>v?.[key],body)
+export function pageFieldValue(bodies, field){
+ const body=bodies?.[field.documentId]
+ return valueAt(effectiveHomeHeadingBody(field.documentId,body),field.path)
+}
 export function withValue(body,path,value){
  const keys=path.split('.');if(keys.some(k=>['__proto__','constructor','prototype'].includes(k)))throw Error('不支援的修改位置')
  const next={...body};let cursor=next,previous=body
@@ -111,7 +116,7 @@ function fieldGroup(p,id,path,schema){
   const number=Number(path.match(/\d+$/)?.[0]);if(number<=2)return '整頁共用文字';if(number===3)return '系統櫃介紹';if(number<=7)return '系統櫃材質';if(number<=14)return '系統櫃挑選步驟';if(number===15)return '系統櫃推薦案例';if(number>=16)return '文章結語'
  }
  if(p.id==='home')return resourceGuide(workspaceFor(id)?.id)?.tabTitle||'整頁共用文字'
- if(id==='data-productBrands')return '品牌介紹'
+ if(id==='data-productBrands')return path.endsWith('.catalogueDestination')?'商品頁型錄按鈕':'品牌介紹'
  if(id.startsWith('catalog-'))return groups[id]?.[path]||'商品顯示與順序'
  if(id===view('design-inspiration-id-')||/-slug-$/.test(id))return '整頁共用文字'
  if(id===view('design-inspiration-index')||id===view('knowledge-index')||id===view('gallery-index')||/^view-pages-news-(latest|activities|video)-index$/.test(id))return '列表標題與按鈕'
@@ -145,18 +150,19 @@ export function pageBlocks(p,documents){
    if(!block){block={id,name,secondary:name==='顯示與搜尋設定',href:p.id==='home'?resourceGuide(workspaceFor(d.id).id).href:p.href,...(p.id==='inspiration'?inspirationSections[name]:{}),fields:[]};blocks.push(block)}
    if(previous!==name)block.aliases=[...new Set([...(block.aliases||[]),p.id+':'+previous])]
    if(p.id==='visuals'&&path.startsWith('images.'))block.aliases=[...new Set([...(block.aliases||[]),'visuals:圖片集'])]
-   const cleanLabel=location?.label||(name==='顯示與搜尋設定'?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,'').replace('圖片替代文字','圖片說明').replace('按鈕連結','前往頁面'))
-   const labels=s=>[s.label||'',...Object.values(s.fields||{}).flatMap(labels),...(s.item?labels(s.item):[])]
+   const cleanLabel=(s.destination?s.label:location?.label)||(name==='顯示與搜尋設定'?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,'').replace('圖片替代文字','圖片說明'))
+   const labels=s=>[s.label||'',s.positionLegacyLabel||'',...(s.destination?[s.help]:[]),...Object.values(s.fields||{}).flatMap(labels),...(s.item?labels(s.item):[])]
    block.fields.push({documentId:d.id,path,label:cleanLabel,searchTerms:labels(s).join(' '),schema:{...s,label:cleanLabel,...(location?{singleLine:location.singleLine}:{}),...(/供語音朗讀/.test(cleanLabel)?{advanced:true,help:'供語音朗讀辨識此位置，不顯示於一般官網畫面。'}:{}),...(d.id==='news-articles'?{rowFilter:{path:'summary.category',value:p.category},newCategory:p.category}:{})}})
   }
   if(p.scopes?.[d.id]){for(const path of p.scopes[d.id]){const s=path.split('.').reduce((s,key)=>s?.fields?.[key],schema);if(s)add(path,s)}continue}
   for(const[key,s]of Object.entries(schema.fields||{})){
    if(key==='copy')for(const[k,v]of Object.entries(s.fields||{}))add('copy.'+k,v)
    else if(p.id==='visuals'&&key==='images')for(const[k,v]of Object.entries(s.fields||{}))add('images.'+k,v)
-   else if(d.id==='data-productBrands')for(const[k,v]of Object.entries(s.fields||{}))add(key+'.'+k,v)
+   else if(d.id==='data-productBrands')for(const[k,v]of Object.entries(s.fields?.[p.brand]?.fields||{}))add(key+'.'+p.brand+'.'+k,v)
    else add(key,s)
   }
  }
+ for(const block of blocks)block.fields=placeDestinations(block.fields,f=>f.documentId+':'+f.path,f=>f.schema.destinationAfter)
  const sorted=pagePositions[p.id]?.sections.length?pagePositions[p.id].sections.map(s=>s.name):order[p.id]||[]
  return blocks.map(b=>{const positioned=decoratePosition(p.id,b);return positioned.anchor?{...positioned,href:p.href.split('#')[0]+'#'+positioned.anchor}:positioned}).sort((a,b)=>Number(a.secondary)-Number(b.secondary)||(sorted.includes(a.name)?sorted.indexOf(a.name):99)-(sorted.includes(b.name)?sorted.indexOf(b.name):99))
 }

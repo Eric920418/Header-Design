@@ -2,6 +2,8 @@ import copyFields from './presentation-copy.json' with {type:'json'}
 import { homeHeroSchema, HOME_HERO_ID } from './hero-media.mjs'
 import { homeGallerySchema, HOME_GALLERY_ID } from './gallery-cases.mjs'
 import {positionField} from './positions.mjs'
+import {homeHeadingSchema} from './home-headings.mjs'
+import {pageDestinationSchema} from './page-destinations.mjs'
 
 // Presentation only: resource IDs, stored schemas and website content stay intact.
 const target=(label,href)=>({label,href})
@@ -32,7 +34,7 @@ const home=[
  ['HomeGallery','設計案例','輪播圖片、門市與按鈕','/#gallery-heading','hero',['data-storeCases','custom-cases','catalog-cases']],
  ['HomeWhatWeDo','品牌承諾','標題、介紹文字與按鈕','/#brand-promise','hero',['site-visuals','data-brandAdvantage']],
  ['HomeStoreLocation','全台門市據點','地圖門市資訊與地區篩選','/#contact','store',['data-storeCases']],
- ['HomeStyleMarquee','設計風格','風格名稱、圖示與預覽圖片','/#home-styles','cards',[]],
+ ['HomeStyleMarquee','設計風格','風格名稱、圖示、預覽圖片與連結','/#home-styles','cards',[]],
  ['LogoMarquee','集團品牌標誌','標誌圖片與連結','/#brand-logos','cards',[]],
 ]
 for(const[name,title,contents,href,visual,related]of home)guides['view-components-home-'+name]={title: title+'・'+contents,tabTitle:title,location:['首頁',title,contents],href,visual,summary:`修改首頁「${title}」的${contents}。`,impacts:[target('首頁 → '+title,href)],related}
@@ -105,8 +107,43 @@ const inspirationCopy={
  text9:{label:'提示標題'},text10:{label:'提示說明',singleLine:false},text11:{label:'查看全部案例按鈕文字'},
 }
 
+// Link destinations follow their last visible caption, even when saved in separate documents.
+const copyButtonText={
+ 'components-home-HomeHero':{5:9},
+ 'components-home-HomeGallery':{4:5},
+ 'components-home-HomeWhatWeDo':{8:9},
+ 'pages-builders-sakura-kitchen':{9:11,12:16,24:25,30:31},
+ 'pages-franchising-intro':{12:13,55:56,62:63},
+ 'pages-franchising-form':{4:5},
+ 'pages-franchising-download':{22:23},
+ 'pages-gallery-slug-':{1:2},
+ 'pages-knowledge-design-slug-':{1:2},
+ 'pages-knowledge-design-systemcabinet':{1:2,18:19},
+ 'pages-news-latest-slug-':{2:3,4:5,7:8,9:10,11:12},
+ 'pages-news-activities-slug-':{2:3,4:5,6:7,8:9,10:11},
+ 'pages-news-video-slug-':{2:3,4:5,6:7,8:9,10:11},
+ 'components-SiteFooter':{2:3},
+ 'components-SiteHeader':{1:2,19:20},
+}
+const fileUrlFields=new Set(['site-visuals:brandVideoSrc','site-visuals:serviceVideoSrc','data-franchise:FRANCHISE_BROCHURE_URL'])
+const genericDestinationLabel=/^(?:前往頁面|按鈕連結|前往頁面連結|卡片連結|輪播連結|案例連結|連結網址)$/
+
+export function placeDestinations(fields, keyOf, afterOf) {
+ const ordered=[...fields]
+ for(const field of fields){
+  const after=afterOf(field)
+  if(!after)continue
+  const caption=ordered.find(candidate=>keyOf(candidate)===after)
+  if(!caption)continue
+  ordered.splice(ordered.indexOf(field),1)
+  ordered.splice(ordered.indexOf(caption)+1,0,field)
+ }
+ return ordered
+}
+
 export function fieldPresentation(resourceId,path,schema={}){
  const normalized=path.replace(/^\./,'').replace(/\.\d+(?=\.|$)/g,'.*'),key=normalized.split('.').at(-1)
+ if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁聯繫與參觀預約區','建商首頁的預約區']}
  if(resourceId==='view-pages-about-introduce'&&normalized==='copy.field10')return{label:'圖片放大視窗',enum:['body'],optionLabels:['全螢幕顯示（固定）'],readOnly:true,advanced:true}
  if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
@@ -151,7 +188,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  const contextual={'KITCHEN_STYLES.*.image':'卡片圖片','KITCHEN_STYLES.*.zh':'系列中文名稱','KITCHEN_STYLES.*.en':'系列英文名稱','KITCHEN_STYLES.*.desc':'卡片介紹文字','KITCHEN_STYLES.*.route':'卡片連結','services.*.copy':'卡片介紹文字','slides.*.title':'輪播標題','slides.*.description':'輪播介紹文字','slides.*.route':'輪播連結','slides.*.image':'輪播圖片','items.*.summary.title':'文章標題','items.*.summary.excerpt':'文章摘要','items.*.summary.cover':'文章封面圖片','storeCases.*.title':'案例文章標題','brandPavilions.*.name':'品牌館名稱','stores.*.name':'門市名稱','services.*.excerpt':'卡片介紹文字','copy.*':'段落文字'}
  if(contextual[normalized])return{label:contextual[normalized]}
  if(key==='id'&&schema.format==='youtube')return{label:'YouTube 影片連結或識別碼'}
- if(resourceId==='view-components-home-HomeServices'&&normalized==='services.*.alt')return{label:'品牌名稱（決定商品頁連結）',help:'使用 SAKURA、SVAGO 或 TEKA；此名稱也決定卡片點擊後前往的品牌商品頁。'}
+ if(resourceId==='view-components-home-HomeServices'&&normalized==='services.*.alt')return{label:'品牌名稱',singleLine:true}
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.cover')return{label:'案例門市列表封面',help:'用於案例門市列表；設計靈感列表使用下方圖片集中的第一張圖片。'}
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.images')return{label:'案例內頁圖片集',help:'第一張圖片也用於設計靈感列表的門市案例卡片。'}
  const copy=copyFields[resourceId]?.[normalized]
@@ -162,10 +199,27 @@ export function fieldPresentation(resourceId,path,schema={}){
  return{label:'內容欄位',help:'此欄位尚未提供位置說明，請先確認對應範圍。',unmapped:true}
 }
 export function editingSchema(schema,resourceId,path=''){
- if(!path)schema=homeGallerySchema(resourceId,homeHeroSchema(resourceId,schema))
+ if(!path)schema=pageDestinationSchema(resourceId,homeHeadingSchema(resourceId,homeGallerySchema(resourceId,homeHeroSchema(resourceId,schema))))
  const result={...schema},info=fieldPresentation(resourceId,path,schema)
  if(path)Object.assign(result,info)
- if(schema.fields)result.fields=Object.fromEntries(Object.entries(schema.fields).map(([key,value])=>[key,editingSchema(value,resourceId,path?path+'.'+key:key)]))
+ const caption=copyButtonText[resourceId.slice(5)]?.[path.match(/^copy\.field(\d+)$/)?.[1]]
+ if(caption&&schema.format==='url')result.destinationAfter=resourceId+':copy.text'+caption
+ if(resourceId==='data-builders'&&path==='BUILDER_APPOINTMENT_HASH')result.destinationAfter='view-pages-builders-index:copy.text5'
+ if(resourceId==='data-franchise'&&path==='FRANCHISE_FORM_URL'){
+  result.destinationAfter='view-pages-franchising-intro:copy.text9'
+  result.help='加盟介紹頁的申請按鈕共用此目的地。'
+ }
+ if(result.destinationAfter||(schema.format==='url'&&!fileUrlFields.has(resourceId+':'+path))){
+  if(!result.destinationAfter&&result.label&&!genericDestinationLabel.test(result.label))result.help ||= result.label.replace(/(?:前往頁面|連結|網址)$/,'')
+  result.destination=true
+  result.positionLegacyLabel ||= result.label
+  result.label='前往頁面'
+ }
+ if(schema.fields){
+  const fieldPath=key=>path?path+'.'+key:key
+  const entries=Object.entries(schema.fields).map(([key,value])=>[key,editingSchema(value,resourceId,fieldPath(key))])
+  result.fields=Object.fromEntries(placeDestinations(entries,([key])=>resourceId+':'+fieldPath(key),([,field])=>field.destinationAfter))
+ }
  if(schema.item)result.item=editingSchema(schema.item,resourceId,path?path+'.*':'*')
  if(resourceId===HOME_GALLERY_ID&&path==='cases')result.editor='home-cases'
  if(resourceId===HOME_HERO_ID&&path==='slides.*'){
@@ -174,13 +228,13 @@ export function editingSchema(schema,resourceId,path=''){
  }
  if(path==='items'&&['news-articles','knowledge-articles','custom-cases'].includes(resourceId)){result.label=resourceId==='news-articles'?'消息、活動與影片':resourceId==='knowledge-articles'?'廚房知識文章':'自行建置案例';result.newItemLabel=resourceId==='news-articles'?'消息或活動':resourceId==='knowledge-articles'?'文章':'案例'}
  if(resourceId==='data-builders'&&path==='builderProjectCards'||resourceId==='data-franchise'&&path==='franchiseProcessSteps')result.hidden=true
- if(path==='sitemapGroups.*.links.*')result.itemLabels=['連結文字','連結網址']
+ if(path==='sitemapGroups.*.links.*')result.itemLabels=['連結文字','前往頁面']
  if(path.split('.').at(-1)==='imageLayout'||path.split('.').at(-1)==='logoClass'&&!(resourceId==='view-components-home-HomeServices'&&path==='services.*.logoClass'))result.hidden=true
  if(['id','articleId','slug','code'].includes(path.split('.').at(-1))&&schema.format!=='youtube')result.hidden=true
- if(['alt','imageAlt'].includes(path.split('.').at(-1)))result.label='圖片說明'
+ if(['alt','imageAlt'].includes(path.split('.').at(-1))&&!(resourceId==='view-components-home-HomeServices'&&path==='services.*.alt'))result.label='圖片說明'
  if(schema.format==='youtube')result.label='YouTube 影片連結'
  if(resourceId==='site-visuals'&&path==='brandVideoId')Object.assign(result,{label:'首頁舊版 YouTube 影片（保留）',advanced:true,help:'目前首頁使用影片檔案；此欄保留舊設定，不會取代目前播放的影片。'})
- if(result.type==='string'&&!result.format&&/名稱|標題|按鈕|日期/.test(result.label))result.singleLine=true
+ if(result.type==='string'&&!result.format&&/名稱|標題|英文標籤|按鈕|日期/.test(result.label))result.singleLine=true
  if(path==='copy')result.hidden=Object.values(result.fields||{}).every(f=>f.hidden)
  return result
 }
