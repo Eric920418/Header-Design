@@ -197,6 +197,13 @@ assert(builderHero.fields.some(f=>f.path==='copy.field6'),'Builder hero image mu
 previewBodies['view-pages-builders-index'].copy.text2='目前輸入的建商標題';previewBodies['view-pages-builders-index'].copy.field6='/changed-builder.webp'
 const builderScene=pagePositionContent(builderHero,previewBodies,{heroImage:'/published-builder.webp'})
 assert(builderScene.text.some(t=>t.value==='目前輸入的建商標題'));assert.equal(builderScene.image,'/changed-builder.webp');assert.equal(builderScene.heroImage,'/changed-builder.webp')
+const builderBrand=builders.find(b=>b.name==='廚房品牌介紹')
+assert.equal(builderBrand.href,'/builders#builders-team-title')
+assert.equal(builderBrand.kind,'builders-brand-intro')
+assert.equal(builderBrand.fields.find(f=>f.path==='copy.text9').label,'區塊中文主標題')
+const brandScene=pagePositionContent(builderBrand,previewBodies)
+assert.deepEqual(brandScene.heading,[{path:'copy.text9',label:'區塊中文主標題',value:previewBodies['view-pages-builders-index'].copy.text9}])
+assert.equal(brandScene.mappedImage,previewBodies['data-builders'].builderProjectCards[0].image)
 const badBuilder=structuredClone(previewBodies['view-pages-builders-index']);badBuilder.copy.text2=42
 const builderSchema=docs.find(d=>d.id==='view-pages-builders-index').schema
 assert.throws(()=>validate(badBuilder,builderSchema),e=>{const issue=readableError(e,'view-pages-builders-index',editingSchema(builderSchema,'view-pages-builders-index'),badBuilder);assert.equal(issue.fieldErrors[0].path,'copy.text2');assert.match(issue.message,/區塊中文主標題（第一段）/);return true})

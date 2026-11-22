@@ -5,6 +5,7 @@ import {franchiseDownloadBreadcrumb,knowledgeBreadcrumb,seriesCatalogueBreadcrum
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 import {valueAt} from '~/shared/cms/page-editors.mjs'
 import {franchiseDownloadDocument,franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
+import {builderBrandHeading,builderComingSoonImages,type builderProjectCards} from '~/data/builders'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
@@ -56,6 +57,8 @@ const downloadSheets=computed(()=>{
 })
 const brochureFile=computed(()=>props.bodies['data-franchise']?.FRANCHISE_BROCHURE_URL?.split(/[?#]/)[0].split('/').pop())
 const franchiseApplication=computed(()=>props.bodies['view-pages-franchising-form']?.copy)
+const builderBrandCopy=computed(()=>props.bodies['view-pages-builders-index']?.copy)
+const builderBrandProject=computed(()=>(props.bodies['data-builders']?.builderProjectCards as typeof builderProjectCards|undefined)?.find(card=>card.type==='project'))
 const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
 const previewStores=computed(()=>scene.value.items.map((i:any)=>({name:i.value?.storeName||i.value?.name||i.title,address:i.value?.address,hours:i.value?.hours,phone:i.value?.contact?.phone||i.value?.phone,image:i.image})).filter((i:any)=>i.address||i.image))
 const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='systemCabinetMaterials');return f?props.bodies[f.documentId]?.[f.path]:null})
@@ -213,6 +216,28 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </div>
     </div>
    </section>
+   <div v-else-if="scene.kind==='builders-brand-intro'&&builderBrandCopy" class="cms-scene-builders-brand">
+    <header>
+     <InternalSectionPill>{{ builderBrandHeading.label }}</InternalSectionPill>
+     <h3>
+      <b :class="{'is-focused':highlighted('copy.text9')}"><InternalHeadingText :text="builderBrandCopy.text9" /></b>
+      <InternalHeadingText :text="builderBrandHeading.line1" /><span><InternalHeadingText :text="builderBrandHeading.line1Accent" /></span><br />
+      <span><InternalHeadingText :text="builderBrandHeading.line2Accent" /></span><InternalHeadingText :text="builderBrandHeading.line2" />
+     </h3>
+     <p :class="{'is-focused':highlighted('copy.text11')}">{{ builderBrandCopy.text11 }}</p>
+    </header>
+    <div class="cms-builders-brand-cards">
+     <div v-if="builderBrandProject" class="cms-builders-brand-card cms-builders-project-card" :class="{'is-focused':highlighted('copy.field12')||highlighted('copy.field13')}">
+      <AdminThumbnail :src="builderBrandProject.image" :alt="builderBrandCopy.field12" />
+      <AdminThumbnail v-if="builderBrandProject.logo" :src="builderBrandProject.logo" :alt="builderBrandCopy.field13" class="cms-builders-card-logo" contain />
+      <span class="cms-builders-card-caption"><span><strong>{{ builderBrandProject.title }}</strong><br />{{ builderBrandProject.subtitle }}</span><ArrowRight :size="14" aria-hidden="true" /></span>
+     </div>
+     <div class="cms-builders-brand-card cms-builders-coming-soon" :class="{'is-focused':highlighted('copy.field14')}">
+      <AdminThumbnail :src="builderComingSoonImages[0]" :alt="builderBrandCopy.field14" />
+      <strong><span :class="{'is-focused':highlighted('copy.text15')}">{{ builderBrandCopy.text15 }}</span><br /><span :class="{'is-focused':highlighted('copy.text16')}">{{ builderBrandCopy.text16 }}</span></strong>
+     </div>
+    </div>
+   </div>
    <div v-else-if="scene.kind==='franchise-news'" class="cms-scene-franchise-news">
     <span class="cms-franchise-news-eyebrow" :class="{'is-focused':highlighted('copy.text58')}">{{ franchiseDownloadCard?.text58 }}</span>
     <h3>最新加盟資訊</h3>

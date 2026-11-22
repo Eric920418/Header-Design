@@ -950,6 +950,22 @@
 .cms .cms-scene-copy small{font-size:11px;color:#716a60;}
 .cms .cms-scene-copy span{font-size:13px;line-height:1.8;white-space:pre-line;}
 .cms .cms-scene-target .is-focused{outline:2px solid var(--cms-gold);outline-offset:3px;background:#fff7e5;}
+.cms .cms-scene-builders-brand{display:grid;gap:18px;padding:clamp(8px,3cqw,16px);background:#fff;overflow-wrap:anywhere;}
+.cms .cms-scene-builders-brand header{display:grid;justify-items:center;gap:12px;text-align:center;}
+.cms .cms-website-scene .cms-scene-builders-brand h3{margin:0;font-size:clamp(17px,5cqw,30px);line-height:1.2;font-weight:400;}
+.cms .cms-scene-builders-brand h3>span{color:#896224;}
+.cms .cms-scene-builders-brand h3>b{display:block;margin-bottom:8px;color:#896224;font-family:var(--font-cjk-serif);font-size:clamp(16px,4.5cqw,25px);}
+.cms .cms-scene-builders-brand header p{margin:0;color:var(--cms-muted);}
+.cms .cms-builders-brand-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.cms .cms-builders-brand-card{position:relative;display:grid;aspect-ratio:4/5;place-items:center;overflow:hidden;border-radius:8px;background:#1c1c1d;color:#fff;}
+.cms .cms-workbench .cms-builders-brand-card img.cms-thumbnail{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;padding:0;border-radius:0;}
+.cms .cms-builders-brand-card::after{content:'';position:absolute;inset:0;background:rgb(16 8 1 / 42%);pointer-events:none;}
+.cms .cms-builders-coming-soon::after{background:rgb(0 0 0 / 60%);}
+.cms .cms-workbench .cms-builders-brand-card img.cms-builders-card-logo{inset:38% auto auto 19%;width:62%;height:20%;object-fit:contain;background:transparent;z-index:1;}
+.cms .cms-builders-card-caption{position:absolute;z-index:1;inset:auto 6px 6px;display:flex;justify-content:space-between;align-items:center;gap:4px;padding:5px 8px;border-radius:6px;background:#1c1c1dd6;font-size:clamp(9px,2.5cqw,12px);}
+.cms .cms-builders-card-caption svg{flex:none;}
+.cms .cms-builders-coming-soon>strong{position:relative;z-index:1;padding:6px;font-size:clamp(13px,5cqw,27px);font-weight:400;text-align:center;}
+.cms .cms-builders-coming-soon>strong .is-focused{color:#39240d;}
 .cms .cms-scene-wide-image{display:block;width:100%;max-height:265px;object-fit:contain;border-radius:4px;background:#f5f0e6;}
 .cms .cms-scene-small-image{display:block;width:100%;height:100px;object-fit:contain;border-radius:4px;background:#f5f0e6;}
 .cms .cms-scene-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}

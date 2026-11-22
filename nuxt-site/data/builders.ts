@@ -1,5 +1,19 @@
 export const BUILDER_APPOINTMENT_HASH = '#appointment'
 
+export const builderBrandHeading = {
+  label: 'EXPLORE OUR COLLECTIONS',
+  line1: 'Creating the ',
+  line1Accent: 'Ideal Kitchen',
+  line2Accent: 'For Every',
+  line2: ' Family',
+} as const
+
+export const builderComingSoonImages = [
+  '/section-6/builders/team/coming-soon-1.png',
+  '/section-6/builders/team/coming-soon-2.png',
+  '/section-6/builders/team/coming-soon-3.png',
+] as const
+
 export const builderPartners = [
   { name: '麗寶集團 LIH PAO GROUP', logo: '/section-6/builders/partners/leyoung.png' },
   { name: '興富發集團 Highwealth Corporation', logo: '/section-6/builders/partners/highwealth.png' },
