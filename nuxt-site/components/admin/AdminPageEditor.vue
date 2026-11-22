@@ -10,6 +10,7 @@ import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,is
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
 import {storeRegionCities} from '~/shared/cms/store-location.mjs'
 import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
+import {builderCatalogueNoticeAnchor,isBuilderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
 const props=defineProps<{id:string}>()
 const route=useRoute(),router=useRouter(),{api,session,message}=useCmsAdmin()
 const {data:namedPages}=useNuxtData<any[]>('cms-pages')
@@ -51,6 +52,8 @@ const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fiel
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
 const positionBlock=computed(()=>{
  const block=active.value
+ if(block?.kind==='builder-catalogue-cards'&&focusedGroup.value===builderCatalogueNoticeAnchor)
+  return {...block,previewPage:'/builders/catalogues#'+builderCatalogueNoticeAnchor}
  if(franchiseCatalogue.value&&focusedGroup.value==='franchise-pdf-actions')
   return {...block,previewPage:'/franchising/download#franchise-pdf-actions'}
  if(franchiseDownloadCommon.value){
@@ -135,6 +138,8 @@ function editableBlockFields(block:any){
  return [...fields,...cardFields]
 }
 const visibleFields=computed(()=>editableBlockFields(active.value))
+const builderNoticeFields=computed<any[]>(()=>active.value?.kind==='builder-catalogue-cards'
+ ?visibleFields.value.filter((f:any)=>isBuilderCatalogueNotice(f.path)):[])
 const homeOneSettings=computed<any[]>(()=>active.value?.kind==='builders-home-one'?visibleFields.value.filter((f:any)=>f.schema.format==='media'):[])
 const homeOneThumbnail=computed(()=>builderHomeOneImage(bodies.value[builderHomeOneDocument]?.copy,builderHomeOneImages[1]).src)
 function updateHomeOneService(field:any,index:number,path:'title'|'copy',value:string){
@@ -149,7 +154,7 @@ const catalogueFields=computed(()=>active.value?.id==='menu:左側主導覽'&&ca
 const commonFields=computed<any[]>(()=>{
  const body=bodies.value[franchiseMarqueeDocument]
  const repeated=active.value?.kind==='franchise-marquee'?franchiseMarqueeRows.filter(row=>valueAt(body,row.image)===valueAt(body,row.loop)).map(row=>row.loop):[]
- return visibleFields.value.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!homeOneSettings.value.includes(f)&&!repeated.includes(f.path))
+ return visibleFields.value.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!homeOneSettings.value.includes(f)&&!builderNoticeFields.value.includes(f)&&!repeated.includes(f.path))
 })
 const brochureSettings=computed(()=>franchiseDownloadCommon.value?commonFields.value.filter(f=>franchiseDownloadActions.includes(f.path)):[])
 const downloadSettings=computed(()=>franchiseDownloadCommon.value?franchiseDownloadSettings.map(group=>({...group,fields:commonFields.value.filter(f=>group.fields.includes(f.path))})):[])
@@ -225,7 +230,7 @@ function trackField(event:FocusEvent){
  const target=event.target as HTMLElement
  focusedField.value=target.closest('[data-cms-path]')?.getAttribute('data-cms-path')||''
  const group=target.closest<HTMLElement>('[data-position-group]')?.dataset.positionGroup
- if(group||(franchiseDownloadCommon.value||franchiseCatalogue.value)&&focusedField.value)focusedGroup.value=group||''
+ if(group||(franchiseDownloadCommon.value||franchiseCatalogue.value||builderNoticeFields.value.length)&&focusedField.value)focusedGroup.value=group||''
  if(active.value?.preview==='inspiration-breadcrumb'&&focusedField.value.startsWith('copy.breadcrumb'))
   focusedGroup.value=focusedField.value==='copy.breadcrumbDetail'?'breadcrumb-detail':''
 }
@@ -404,6 +409,11 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
      </template>
     </AdminItems>
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
+   <fieldset v-if="builderNoticeFields.length" :disabled="busy" class="cms-edit-form cms-builder-notice-settings" :data-position-group="builderCatalogueNoticeAnchor">
+    <legend>型錄下方說明</legend>
+    <p class="cms-field-help">這兩段文字會顯示在官網型錄卡片下方。</p>
+    <AdminFields v-for="f in builderNoticeFields" :key="f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
+   </fieldset>
    <details v-if="collections.length&&commonFields.length&&!franchiseCatalogue" class="cms-common-settings" :open="active?.kind==='builders-appointment'||undefined">
     <summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary>
     <p v-if="active?.kind==='builders-strengths'" class="cms-field-help">這些文字顯示在官網圖文旁，留空時沿用官網原文。</p>

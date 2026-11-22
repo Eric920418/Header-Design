@@ -9,9 +9,10 @@ import { breadcrumbSchema } from './page-breadcrumbs.mjs'
 import { builderStrengthsSchema } from './builder-strengths.mjs'
 import { builderHomeOneSchema } from './builder-home-one.mjs'
 import { builderAppointmentSchema } from './builder-appointment.mjs'
+import { builderCatalogueSchema } from './builder-catalogue.mjs'
 
 export function documentSchema(id, schema) {
-  for (const extend of [homeHeroSchema, homeGallerySchema, builderSeriesSchema, kitchenSeriesHeroSchema, customCasesSchema, homeHeadingSchema, pageDestinationSchema, breadcrumbSchema, builderStrengthsSchema, builderHomeOneSchema, builderAppointmentSchema]) {
+  for (const extend of [homeHeroSchema, homeGallerySchema, builderSeriesSchema, kitchenSeriesHeroSchema, customCasesSchema, homeHeadingSchema, pageDestinationSchema, breadcrumbSchema, builderStrengthsSchema, builderHomeOneSchema, builderAppointmentSchema, builderCatalogueSchema]) {
     schema = extend(id, schema)
   }
   return schema

@@ -2,6 +2,7 @@
 import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImages} from './builder-home-one.mjs'
 import {builderAppointmentDocument,isBuilderAppointmentHeading} from './builder-appointment.mjs'
+import {builderCatalogueDocument,isBuilderCatalogueNotice} from './builder-catalogue.mjs'
 
 const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
@@ -42,7 +43,7 @@ const copyGroups={
   ['品牌優勢',{text18:'區塊中文主標題（第一段）',text19:'區塊中文主標題（第二段）',text20:'介紹文字第一段',text21:'介紹文字第二段',field22:'區塊圖片',field23:'圖片說明',field24:'預約按鈕前往頁面',text25:'預約按鈕文字'}],
   ['品牌系列',{text26:'區塊英文標籤',text29:'介紹文字',field30:'預約按鈕前往頁面',text31:'預約按鈕文字'}],
  ],
- 'builders-catalogues':[['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄清單','清單名稱'),text3:'下載按鈕文字'}]],
+ 'builders-catalogues':[['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄區塊','型錄區塊名稱（僅供朗讀）'),text3:'下載按鈕文字'}]],
  'catalogues-catalog':[
   ['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}],
   ['清潔與保養問答',{text9:'保養步驟編號前的文字',text10:'小提醒標題'}],
@@ -264,8 +265,8 @@ export function positionGroup(page,id,path){
  if(id===view('news-index')&&path==='newsCategories')return '最新消息分類標籤'
  if(page==='privacy'&&['sections','numbers'].includes(path))return '隱私權條款'
  if(path==='sitemapGroups')return '網站地圖與隱私權入口'
- if(page==='builder-catalogues'&&id===view('builders-catalogues')){
-  if(path==='catalogues')return '型錄管理'
+ if(page==='builder-catalogues'&&id===builderCatalogueDocument){
+  if(path==='catalogues'||isBuilderCatalogueNotice(path))return '型錄管理'
   if(path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
  }
  if(page==='franchise-download'){

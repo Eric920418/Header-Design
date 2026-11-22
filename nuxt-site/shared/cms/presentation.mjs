@@ -7,6 +7,7 @@ import {pageDestinationSchema} from './page-destinations.mjs'
 import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneField} from './builder-home-one.mjs'
 import {builderAppointmentDocument,isBuilderAppointmentHeading} from './builder-appointment.mjs'
+import {builderCatalogueDocument,isBuilderCatalogueNotice} from './builder-catalogue.mjs'
 
 // Presentation only: resource IDs, stored schemas and website content stay intact.
 const target=(label,href)=>({label,href})
@@ -167,7 +168,8 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='view-pages-news-latest-slug-'&&normalized==='copy.text6')return{label:'報名 QR Code 下方文字',hidden:true,readOnly:true}
  if(['view-pages-design-inspiration-index','view-pages-knowledge-index','view-pages-catalogues-kitchenware-catalog','view-pages-news-latest-index','view-pages-franchising-download','view-pages-builders-catalogues'].includes(resourceId)&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
  if(resourceId==='view-pages-builders-sakura-kitchen'&&['copy.field4','copy.field6'].includes(normalized))return{label:positionField(resourceId,normalized).label,previewTone:'dark'}
- if(resourceId==='view-pages-builders-catalogues'){
+ if(resourceId===builderCatalogueDocument){
+  if(isBuilderCatalogueNotice(normalized))return{label:schema.label}
   if(normalized==='catalogues.*.actionLabel')return{label:'預覽按鈕文字',singleLine:true}
   if(normalized==='catalogues.*.pdfUrl')return{label:'預覽與下載用的 PDF',help:'官網的預覽與下載使用這份檔案。'}
  }

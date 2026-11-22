@@ -18,6 +18,7 @@ import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces
 import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
 import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
+import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalogueNotice} from '../shared/cms/builder-catalogue.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
 import {builderHomeOneImage,builderHomeOneImages} from '../shared/cms/builder-home-one.mjs'
 import {builderAppointmentHeading,builderAppointmentHeadingFields} from '../shared/cms/builder-appointment.mjs'
@@ -154,7 +155,7 @@ validate(catalogueCopyEdit,catalogueCopy.schema)
 assert.deepEqual(changeImpacts([{documentId:catalogueCopy.id,path:'copy.breadcrumbList'}]).map(i=>i.href),[catalogueTrail.href])
 for(const id of ['series-catalogue','product-catalogue','builder-catalogues']){
  const block=id==='series-catalogue'?catalogueList:pageBlocks(pageEditors.find(p=>p.id===id),docs).find(b=>b.name===(id==='builder-catalogues'?'型錄管理':'型錄封面與下載'))
- assert.equal(block.fields.find(f=>f.path==='copy.text2')?.schema.readingGroup,'型錄清單')
+ assert.equal(block.fields.find(f=>f.path==='copy.text2')?.schema.readingGroup,id==='builder-catalogues'?'型錄區塊':'型錄清單')
  assert(block.fields.find(f=>f.path==='copy.text2')?.schema.advanced)
  assert(block.fields.some(f=>f.label==='下載按鈕文字'&&!f.schema.advanced))
 }
@@ -170,6 +171,16 @@ assert.deepEqual(builderCatalogueBreadcrumb(builderTrailEdit.copy),{breadcrumbHo
 validate(builderTrailEdit,builderCatalogueDoc.schema)
 checkPageBody(builderCataloguePage,builderCatalogueDoc.id,builderCatalogueDoc.body,builderTrailEdit,builderCatalogueDoc.schema)
 assert.deepEqual(changeImpacts([{documentId:builderCatalogueDoc.id,path:'copy.breadcrumbParent'}]).map(i=>i.href),[builderCatalogueTrail.href])
+const builderNoticeEdit={...builderCatalogueDoc.body,copy:{...builderCatalogueDoc.body.copy,noticeFirst:' 供工程專案選用。 ',noticeSecond:' '}}
+const noticePaths=Object.keys(builderCatalogueNoticeFields).map(key=>'copy.'+key)
+assert.deepEqual(builderCatalogueCards.fields.filter(f=>noticePaths.includes(f.path)&&!f.schema.advanced).map(f=>f.path),noticePaths)
+validate(builderNoticeEdit,builderCatalogueDoc.schema)
+checkPageBody(builderCataloguePage,builderCatalogueDoc.id,builderCatalogueDoc.body,builderNoticeEdit,builderCatalogueDoc.schema)
+const builderNoticeChanges=pageChanges([builderCatalogueCards],[builderCatalogueDoc],{[builderCatalogueDoc.id]:builderCatalogueDoc.body},{[builderCatalogueDoc.id]:builderNoticeEdit})
+assert.equal(builderNoticeChanges.find(c=>c.path==='copy.noticeFirst').before,builderCatalogueNoticeFields.noticeFirst.fallback)
+assert.equal(builderNoticeChanges.find(c=>c.path==='copy.noticeFirst').after,'供工程專案選用。')
+assert.equal(builderCatalogueNotice(builderNoticeEdit.copy,'noticeSecond'),builderCatalogueNoticeFields.noticeSecond.fallback)
+assert.deepEqual(changeImpacts(builderNoticeChanges).map(i=>i.href),['/builders/catalogues#'+builderCatalogueNoticeAnchor])
 const builderSeriesBlocks=pageBlocks(pageEditors.find(p=>p.id==='builder-series'),docs)
 assert.deepEqual(builderSeriesBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','品牌承諾入口','品牌優勢','品牌系列'])
 assert(builderSeriesBlocks[0].aliases.includes('builder-series:頁面最上方'))

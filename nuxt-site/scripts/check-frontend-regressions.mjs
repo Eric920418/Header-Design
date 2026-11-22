@@ -658,7 +658,7 @@ assert(builderFormSource.includes('v-model="form.consent" type="checkbox" requir
 assert(builderFormSource.includes(':disabled="submitState === \'submitting\'" v-model="form.consent"'),'提交中勾選框不可改值')
 console.log('PASS 建商同意勾選框19px／44px同意列／文字換行、輸入樣式排除、SSR label／required及原驗證錯誤保留')
 const builderCataloguesHtml=await(await get('/builders/catalogues')).text()
-assert(/<p class="builder-catalogue-notice"[^>]*><span[^>]*>本專區型錄僅供建設公司、工程專案及設計師等大宗採購參考。<\/span><span[^>]*>若有個人家用需求，歡迎至櫻花整體廚房門市選購。<\/span><\/p>/.test(builderCataloguesHtml),'建商型錄用途警語需完整顯示')
+assert(/<p id="builder-catalogue-notice" class="builder-catalogue-notice"[^>]*><span[^>]*>本專區型錄僅供建設公司、工程專案及設計師等大宗採購參考。<\/span><span[^>]*>若有個人家用需求，歡迎至櫻花整體廚房門市選購。<\/span><\/p>/.test(builderCataloguesHtml),'建商型錄用途警語需完整顯示並能定位')
 assert(builderCataloguesHtml.includes('aria-label="開啟 2026 建商專區型錄 PDF"')&&builderCataloguesHtml.includes('download="SAKURA-建商專區型錄-2026.pdf"'),'建商型錄預覽與下載入口需保留')
 const builderCatalogueSource=await readFile(new URL('../pages/builders/catalogues.vue',import.meta.url),'utf8')
 assert(/\.builder-catalogue-notice \{[^}]*font-size: 16px;[^}]*line-height: 1\.75;/.test(builderCatalogueSource),'建商型錄說明需保留16px字級並增加至1.75倍行高（28px）')

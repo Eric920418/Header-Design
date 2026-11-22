@@ -6,6 +6,7 @@ import {fieldImpacts} from './impact-targets.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument,builderStrengthsFields,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImage,builderHomeOneImages} from './builder-home-one.mjs'
 import {builderAppointmentDocument,builderAppointmentHeadingFields,builderAppointmentHeadingValue,isBuilderAppointmentHeading} from './builder-appointment.mjs'
+import {builderCatalogueDocument,builderCatalogueNoticeFields,builderCatalogueNotice,isBuilderCatalogueNotice} from './builder-catalogue.mjs'
 
 export function sameContent(a,b){
  if(a===b)return true
@@ -75,6 +76,12 @@ export function pageChanges(blocks,documents,previous,next,context={}){
    change.label=builderAppointmentHeadingFields[key].label
    change.before=builderAppointmentHeadingValue(previous[d.id]?.copy,key)
    change.after=builderAppointmentHeadingValue(next[d.id]?.copy,key)
+  }
+  if(d.id===builderCatalogueDocument&&isBuilderCatalogueNotice(change.path)){
+   const key=change.path.slice(5)
+   change.label=builderCatalogueNoticeFields[key].label
+   change.before=builderCatalogueNotice(previous[d.id]?.copy,key)
+   change.after=builderCatalogueNotice(next[d.id]?.copy,key)
   }
   const homeOne=d.id===builderHomeOneDocument&&builderHomeOneField(change.path)
   if(homeOne){

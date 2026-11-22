@@ -3,6 +3,7 @@ const cmsCopy = await useCmsResource('view-pages-builders-catalogues', {"catalog
 
 import { ArrowUpRight, Download } from 'lucide-vue-next'
 import { builderCatalogueBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
+import { builderCatalogueNotice, builderCatalogueNoticeAnchor } from '~/shared/cms/builder-catalogue.mjs'
 
 interface BuilderCatalogueCard {
   id: string
@@ -84,9 +85,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </article>
           </li>
         </ul>
-        <p class="builder-catalogue-notice">
-          <span>本專區型錄僅供建設公司、工程專案及設計師等大宗採購參考。</span>
-          <span>若有個人家用需求，歡迎至櫻花整體廚房門市選購。</span>
+        <p :id="builderCatalogueNoticeAnchor" class="builder-catalogue-notice">
+          <span>{{ builderCatalogueNotice(cmsCopy.copy, 'noticeFirst') }}</span>
+          <span>{{ builderCatalogueNotice(cmsCopy.copy, 'noticeSecond') }}</span>
         </p>
       </div>
     </section>
@@ -143,7 +144,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builder-catalogue-hero__trail a { color: inherit; transition: color .3s ease; }
 .builder-catalogue-hero__trail a:hover,
 .builder-catalogue-hero__trail a:focus-visible { color: #caa05c; }
-#builder-catalogue-breadcrumb, #builder-catalogue-list { scroll-margin-top: var(--site-header-height, 60px); }
+#builder-catalogue-breadcrumb, #builder-catalogue-list, .builder-catalogue-notice { scroll-margin-top: var(--site-header-height, 60px); }
 
 .builder-catalogue-projects {
   overflow: hidden;

@@ -3,6 +3,7 @@ import {ArrowRight,ArrowUpRight,Play,Plus,Search,MessageSquare,Download,MapPin,E
 import type {BrandPavilion} from '~/types/content'
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
 import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
+import {builderCatalogueDocument,builderCatalogueNoticeFields,builderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 import {valueAt} from '~/shared/cms/page-editors.mjs'
 import {franchiseDownloadDocument,franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
@@ -64,7 +65,7 @@ const brochureFile=computed(()=>props.bodies['data-franchise']?.FRANCHISE_BROCHU
 const franchiseApplication=computed(()=>props.bodies['view-pages-franchising-form']?.copy)
 const buildersCopy=computed(()=>props.bodies['view-pages-builders-index']?.copy)
 const builderSeriesCopy=computed(()=>props.bodies['view-pages-builders-sakura-kitchen']?.copy)
-const builderCatalogueCopy=computed(()=>props.bodies['view-pages-builders-catalogues']?.copy)
+const builderCatalogueCopy=computed(()=>props.bodies[builderCatalogueDocument]?.copy)
 const builderTrail=computed(()=>builderCatalogueBreadcrumb(builderCatalogueCopy.value))
 const builderBrandProject=computed(()=>(props.bodies['data-builders']?.builderProjectCards as typeof builderProjectCards|undefined)?.find(card=>card.type==='project'))
 const strengthsHeading=computed(()=>builderStrengthsCopy(props.bodies[builderStrengthsDocument]?.copy))
@@ -336,6 +337,9 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </div>
      <p>{{ item.value.description }}</p>
     </article>
+    <p class="cms-builder-catalogue-notice">
+     <span v-for="(_,key) in builderCatalogueNoticeFields" :key="key" :class="{'is-focused':highlighted('copy.'+key)}">{{ builderCatalogueNotice(builderCatalogueCopy,key) }}</span>
+    </p>
    </div>
    <div v-else-if="scene.kind==='franchise-news'" class="cms-scene-franchise-news">
     <span class="cms-franchise-news-eyebrow" :class="{'is-focused':highlighted('copy.text58')}">{{ franchiseDownloadCard?.text58 }}</span>

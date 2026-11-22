@@ -1037,6 +1037,10 @@
 .cms .cms-builder-catalogue-title{display:flex;align-items:center;flex-wrap:wrap;gap:8px;justify-content:space-between;margin-top:8px;}
 .cms .cms-builder-catalogue-cards a{display:inline-flex;align-items:center;gap:5px;}
 .cms .cms-builder-catalogue-cards p{margin:4px 0 0;}
+.cms .cms-builder-catalogue-cards .cms-builder-catalogue-notice{margin-top:12px;color:#59585d;text-align:center;font-size:13px;line-height:1.75;}
+.cms .cms-builder-catalogue-notice span{display:block;text-wrap:balance;}
+.cms .cms-builder-notice-settings{margin:16px 0;padding:10px 12px 12px;border:1px solid var(--cms-line);border-radius:5px;}
+.cms .cms-builder-notice-settings legend{padding-inline:4px;font-weight:650;}
 @container (min-width:430px){
  .cms .cms-builder-appointment-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
 }
