@@ -51,8 +51,8 @@ const copyGroups={
  ],
  'franchising-form':[['加盟申請表單',{text1:'區塊英文標籤',text2:'區塊中文主標題',text3:'表單介紹文字',field4:'下載按鈕前往頁面',text5:'下載按鈕文字'}]],
  'franchising-download':[
-  ['主視覺標題',{field1:'主視覺背景圖片',field2:'圖片說明',text3:'主視覺英文小標',text4:'主視覺主標題'}],
-  ['加盟簡介與下載按鈕',{text5:'加盟簡介主標題（第一行）',text6:'加盟簡介主標題（第二行）',field7:'品牌標誌',field8:'標誌圖片說明',text9:'檔案介紹文字',text10:'格式欄位名稱',text11:'檔案格式文字',text12:'頁數欄位名稱',text13:'頁數文字',text14:'大小欄位名稱',text15:'檔案大小文字',text16:'線上預覽按鈕文字',text17:'下載按鈕文字'}],
+  ['主視覺標題',{field1:'主視覺背景圖片',field2:'圖片說明',text3:'區塊英文標籤',text4:'區塊英文主標題'}],
+  ['加盟簡介與下載按鈕',{text5:'區塊中文主標題（第一行）',text6:'區塊中文主標題（第二行）',field7:'品牌標誌',field8:'標誌圖片說明',text9:'檔案介紹文字',text10:'格式欄位名稱',text11:'檔案格式文字',text12:'頁數欄位名稱',text13:'頁數文字',text14:'大小欄位名稱',text15:'檔案大小文字',text16:'線上預覽按鈕文字',text17:'下載按鈕文字'}],
   ['型錄載入提示',{text18:'載入中的提示文字',text19:'載入失敗的提示文字',text20:'重試按鈕文字'}],
   ['型錄預覽圖片',{text21:'頁碼前的文字'}],['頁面底部返回按鈕',{field22:'前往頁面',text23:'按鈕文字'}],
  ],
@@ -185,7 +185,7 @@ export const pagePositions={
   {...section('加盟申請表單','表單上方的標題、填寫說明與下載按鈕','franchise-application','franchise-application-title'),aliases:['franchise-form:申請表單上方']},
  ]},
  'franchise-download':{hero:[franchiseDownloadDocument,'copy.field1'],sections:[
-  {...section('主視覺標題','下載頁最上方的大圖、英文小標與主標題','hero','franchise-download-title'),aliases:['franchise-download:頁面最上方']},
+  {...section('主視覺標題','下載頁最上方的大圖、英文標籤與英文主標題','hero','franchise-download-title'),aliases:['franchise-download:頁面最上方']},
   {...section('加盟簡介與下載按鈕','主視覺下方的簡介主標題、檔案資料與兩個按鈕','franchise-download-document','franchise-document-title',[franchiseDownloadDocument,'brochurePages.0.image']),aliases:['franchise-download:加盟簡介與檔案']},
   section('型錄預覽圖片','下載頁下方直接顯示的型錄圖片','catalogue'),section('型錄載入提示','檔案載入或失敗時的說明','download'),section('頁面底部返回按鈕','回到加盟介紹的按鈕','article'),
  ]},

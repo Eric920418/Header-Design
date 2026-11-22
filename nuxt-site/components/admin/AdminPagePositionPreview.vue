@@ -55,7 +55,9 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
 <template>
  <div class="cms-page-position-scene cms-website-scene" :data-position-kind="scene.kind">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
-  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','news-shared','franchise-application'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image"><AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ franchiseDownloadCopy?.text4 || pageTitle }}</span></div>
+  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','news-shared','franchise-application'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image" :class="{'cms-franchise-download-context':franchiseDownloadCopy}">
+   <AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ franchiseDownloadCopy?.text4 || pageTitle }}</span>
+  </div>
   <section class="cms-scene-target" :aria-label="block?.name+'的位置示意'">
    <span class="cms-scene-tag">{{ block?.name }}<template v-if="selected"> · {{ selected.caption }}</template></span>
    <template v-if="scene.displaySettings.length">
@@ -107,9 +109,17 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <small v-if="franchiseDownloadCard.field55!==franchiseDownloadCard.field52">標題前往 {{ destinationName(franchiseDownloadCard.field55,destinations) }}</small>
     </aside>
    </div>
+   <div v-else-if="scene.kind==='hero'&&franchiseDownloadCopy" class="cms-scene-hero cms-franchise-download-hero">
+    <AdminThumbnail :src="franchiseDownloadCopy.field1" :alt="franchiseDownloadCopy.field2" :class="{'is-focused':highlighted('copy.field1')||highlighted('copy.field2')}" />
+    <div class="cms-scene-hero-copy">
+     <InternalSectionPill tone="dark" :class="{'is-focused':highlighted('copy.text3')}">{{ franchiseDownloadCopy.text3 }}</InternalSectionPill>
+     <h3 :class="{'is-focused':highlighted('copy.text4')}">{{ franchiseDownloadCopy.text4 }}</h3>
+     <small aria-label="麵包屑">首頁 / 我要加盟 / 加盟資料下載</small>
+    </div>
+   </div>
    <div v-else-if="scene.kind==='franchise-download-document'&&franchiseDownloadCopy" class="cms-franchise-download-preview">
     <header>
-     <h3><span :class="{'is-focused':highlighted('copy.text5')}">{{ franchiseDownloadCopy.text5 }}</span><br /><span :class="{'is-focused':highlighted('copy.text6')}">{{ franchiseDownloadCopy.text6 }}</span></h3>
+     <h3><span :class="{'is-focused':highlighted('copy.text5')}"><InternalHeadingText :text="franchiseDownloadCopy.text5" /></span><br /><span :class="{'is-focused':highlighted('copy.text6')}"><InternalHeadingText :text="franchiseDownloadCopy.text6" /></span></h3>
      <AdminThumbnail v-if="franchiseDownloadCopy.field7" :src="franchiseDownloadCopy.field7" :alt="franchiseDownloadCopy.field8" :class="{'is-focused':highlighted('copy.field7')||highlighted('copy.field8')}" contain />
     </header>
     <div>
@@ -121,7 +131,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
       </div>
      </dl>
      <div class="cms-scene-buttons">
-      <span v-for="button in scene.buttons" :key="button.path" :class="{'is-focused':highlighted(button.path)||highlighted('FRANCHISE_BROCHURE_URL')}">{{ button.value }}<Download v-if="button.path==='copy.text17'" :size="14" aria-hidden="true" /><ExternalLink v-else :size="14" aria-hidden="true" /></span>
+      <span v-for="button in scene.buttons" :key="button.path" :class="{'cms-preview-primary':button.path==='copy.text16','is-focused':highlighted(button.path)||highlighted('FRANCHISE_BROCHURE_URL')}">{{ button.value }}<Download v-if="button.path==='copy.text17'" :size="14" aria-hidden="true" /><ExternalLink v-else :size="14" aria-hidden="true" /></span>
      </div>
      <small v-if="highlighted('FRANCHISE_BROCHURE_URL')" class="cms-field-help">{{ brochureFile || '尚未選擇 PDF' }}</small>
     </div>
