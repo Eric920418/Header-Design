@@ -4,8 +4,10 @@ import {alignSource,normalizeVideos,validate} from './content.mjs'
 import {changeDocumentGroup,workspaceSummaries,readableError} from './workspaces.mjs'
 import {changedItems} from '../../shared/cms/workflow.mjs'
 import {resourceGuide} from '../../shared/cms/presentation.mjs'
+import {orderNewsPages} from '../../shared/cms/navigation.mjs'
+import {publicContent} from '../../shared/cms/public-content.mjs'
 import {createDraftPreview} from './previews.mjs'
-import {pageEditors,pageEditor,pageBlocks,pageSummary,valueAt,withValue} from '../../shared/cms/page-editors.mjs'
+import {pageEditors,pageEditor,pageBlocks,pageSummary,valueAt,withValue,storeCasesPageId} from '../../shared/cms/page-editors.mjs'
 import {editingSchema} from '../../shared/cms/presentation.mjs'
 import {caseLibrary} from './case-library.mjs'
 import {pagePositions,positionImage} from '../../shared/cms/positions.mjs'
@@ -20,7 +22,7 @@ export async function pageEditorSummaries(){
  const documents=schemas.recordset.map(d=>({id:d.id,schema:editorSchema(d),body:d.body?JSON.parse(d.body):{}}))
  const bodies=Object.fromEntries(await Promise.all(schemas.recordset.map(async d=>{const body=JSON.parse(d.draftBody||d.body||'{}');return[d.id,d.id.startsWith('catalog-')?await alignSource(d.id,body):body]})))
  const published=Object.fromEntries(await Promise.all(schemas.recordset.map(async d=>{const body=d.publishedBody?JSON.parse(d.publishedBody):null;return[d.id,body&&d.id.startsWith('catalog-')?sameContent(body,JSON.parse(d.draftBody||'null'))?bodies[d.id]:await alignSource(d.id,body):body]})))
- return pageEditors.map(p=>{const summary=pageSummary(p,rows,documents);return{...summary,pending:hasPageChanges(summary.blocks,published,bodies),blocks:summary.blocks.map(b=>({...b,items:pageSearchItems(b,bodies),fields:b.fields.map(({documentId,path,label,searchTerms})=>({documentId,path,label,searchTerms}))}))}})
+ return orderNewsPages(pageEditors,published).map(p=>{const summary=pageSummary(p,rows,documents);return{...summary,pending:hasPageChanges(summary.blocks,published,bodies),blocks:summary.blocks.map(b=>({...b,items:pageSearchItems(b,bodies),fields:b.fields.map(({documentId,path,label,searchTerms})=>({documentId,path,label,searchTerms}))}))}})
 }
 function parameters(p){return Object.fromEntries(p.ids.map((id,i)=>['id'+i,id]))}
 async function rowPresentation(p){
@@ -48,7 +50,12 @@ async function positionPresentation(p){
   return{...result,heroImage:bodies['site-visuals']?.images?.asset_7692def0||'/section-3/store-songzhu.jpg',cases:cases.slice(0,3).map(describe),detailCase:cases.find(c=>c.route.startsWith('/design-inspiration/'))}
  }
  const articles=bodies['news-articles']?.items?.filter(i=>i.enabled&&(!p.category||i.summary.category===p.category))||[]
- if(p.id==='news')result.samples=articles.slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
+ if(p.id==='news'){
+  const {newsArticles,recentNewsArticles}=publicContent('data-news',bodies['news-articles']||{items:[]})
+  const samples=items=>items.slice(0,3).map(item=>({title:item.title,image:item.cover}))
+  result.samples=samples(newsArticles)
+  result.recentArticles=samples(recentNewsArticles)
+ }
  if(p.id==='franchise')result.samples=articles.filter(i=>/franchise/.test(i.slug)).slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
  if(p.category){
   const first=articles[0]
@@ -72,7 +79,22 @@ async function positionPresentation(p){
   if(related.length)result.detailPath='/knowledge/design/'+related[0].slug
   result.relatedArticles=related.slice(0,2).map(i=>({title:i.summary.title,image:i.summary.cover}))
  }
- if(p.id==='stores'&&bodies['data-storeCases']?.storeCases?.[0]){const first=bodies['data-storeCases'].storeCases[0];result.detailPath='/gallery/'+first.slug;result.specialImage=first.cover||first.images?.[0]}
+ const storeCases=bodies['data-storeCases']?.storeCases||[]
+ if(p.id==='stores'&&storeCases[0])result.specialImage=storeCases[0].cover||storeCases[0].images?.[0]
+ if(p.id===storeCasesPageId&&storeCases[0]){
+  const first=storeCases[0],spec=storeCases.find(store=>Object.values(store.meta||{}).some(Boolean)),contact=storeCases.find(store=>store.contact)
+  result.detailPath='/gallery/'+encodeURIComponent(first.slug)
+  result.storeCaseExamples={
+   'store-booking':{slug:storeCases.find(store=>store.meta||store.contact)?.slug,anchor:'case-booking'},
+   'store-info':{slug:(spec||contact)?.slug,anchor:spec?'case-spec-title':'case-store-title'},
+   'store-navigation':{slug:first.slug,anchor:'case-navigation'},
+   'store-reviews':{slug:storeCases.find(store=>store.reviews?.length)?.slug,anchor:'case-reviews-title'},
+  }
+  for(const section of definition.sections){
+   const example=storeCases.find(store=>store.slug===result.storeCaseExamples[section.kind]?.slug)
+   if(example)result.blockImages[p.id+':'+section.name]=firstImage(example.images)||example.cover
+  }
+ }
  return result
 }
 async function homeImpactContext(connection){
@@ -93,9 +115,13 @@ export async function readPageEditor(id){
  const [rowsForDisplay,position]=await Promise.all([rowPresentation(p),positionPresentation(p)]),summary=pageSummary(p,summaries,documents)
  summary.pending=hasPageChanges(summary.blocks,Object.fromEntries(documents.map(d=>[d.id,d.publishedBody])),Object.fromEntries(documents.map(d=>[d.id,d.body])))
  summary.blocks=summary.blocks.map(b=>{
-  if(p.id==='knowledge'&&b.name.startsWith('系統櫃'))return{...b,href:'/knowledge/design/systemcabinet'}
   if(b.kind==='registration')return{...b,href:position.registration?.path||p.href}
-  if(position.detailPath&&b.fields.some(f=>/-slug-$/.test(f.documentId))){
+  if(p.id===storeCasesPageId){
+   const example=position.storeCaseExamples?.[b.kind]
+   const href=example?.slug?`/gallery/${encodeURIComponent(example.slug)}#${example.anchor}`:position.detailPath
+   return {...b,href:href||'/gallery'}
+  }
+  if(p.id!=='knowledge'&&position.detailPath&&b.fields.some(f=>/-slug-$/.test(f.documentId))){
    const anchor=p.category?(b.kind==='breadcrumb'?'#article-breadcrumb':b.kind==='navigation'?'#article-categories':''):''
    return{...b,href:position.detailPath+anchor}
   }

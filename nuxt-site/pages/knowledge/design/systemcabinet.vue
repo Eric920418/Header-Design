@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-knowledge-design-systemcabinet', {"designStyleLinks":[{"label":"北歐風","to":"/design-inspiration?style=北歐風"},{"label":"現代風","to":"/design-inspiration?style=現代風"},{"label":"工業風","to":"/design-inspiration?style=工業風"}],"kitchenSeriesLinks":["鄉村","童樂","閤樂","臻美","潮派","君璽","大廚"],"copy":{"field1":"/knowledge","text2":"廚房裝修指南","text3":"廚房系統櫃材質重要嗎？4大重點告訴你！","text4":"廚房系統櫃材質有哪些？常見5大板材比較","text5":"塑合板、木芯板、密集板、美耐板與實木的基材、優缺點及用途比較","text6":"材質","text7":"手機與窄螢幕可左右滑動查看完整比較內容。","text8":"廚房系統櫃材質如何挑選？7步驟教你輕鬆選！","text9":"為了幫助你有條不紊地為自家廚房，選出最適合的系統櫃材質，以下用7大挑選步驟說明，讓你學會如何從預算到美學，從耐用度到環保安心選擇，一次搞定！","text10":" 色彩與紋理：根據家中風格（","text11":"等），挑選合適的木紋、石紋、亮面或霧面烤漆材質，營造統一氛圍。 ","text12":"門板造型：平面簡約、線條雕刻或格柵式鄉村風，各自展現不同氛圍，可依個人喜好與整體搭配做決定。","text13":" 門板顏色推薦：","field14":"/#kitchen-series","text15":"廚房系統櫃材質案例推薦","text16":"SAKURA KITCHEN","text17":"在廚房系統櫃材質的選擇上，始終堅持品質與安心兼具。從主打的MFC塑合板到頂級的FENIX奈米門板、自製的極晶門板，皆展現出對細節的高度重視。並搭配台灣櫻花自製封邊工藝與多道驗證測試，其耐用性與安全性更勝一籌。想了解更多廚房材質案例分享？那就快去看看","field18":"/catalogues/kitchenware-catalog","text19":"廚房系列型錄","text20":"吧！"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+import { knowledgeBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
+const { copy: listCopy } = await useCmsResource('view-pages-knowledge-index', { copy: knowledgeBreadcrumb(), cmsSettings: { visible: true } })
+const breadcrumbs = knowledgeBreadcrumb(listCopy)
 
 import { systemCabinetCaseStudies as cmsSeed_systemCabinetCaseStudies, systemCabinetImportance as cmsSeed_systemCabinetImportance, systemCabinetMaterials as cmsSeed_systemCabinetMaterials, systemCabinetSelectionSteps as cmsSeed_systemCabinetSelectionSteps,  } from '~/data/kitchenSystemCabinet'
 import { KITCHEN_GUIDE_ARTICLES as cmsSeed_KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
@@ -37,8 +40,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   <main class="knowledge-article-page">
     <section data-hero-photo="songzhu" class="knowledge-article-breadcrumb hero-includes-header" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-article-breadcrumb__overlay" aria-hidden="true" />
-      <nav class="knowledge-article-breadcrumb__trail" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
-        <InternalSmartBreadcrumb preserve-hierarchy :fallback='[{ label: "首頁", to: "/" }, { label: "廚房裝修指南", to: "/knowledge" }]' v-slot="{ items, follow }">
+      <nav class="knowledge-article-breadcrumb__trail" id="knowledge-breadcrumb" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
+        <InternalSmartBreadcrumb preserve-hierarchy :fallback="[{ label: breadcrumbs.breadcrumbHome, to: '/' }, { label: breadcrumbs.breadcrumbList, to: '/knowledge' }]" v-slot="{ items, follow }">
           <template v-for="(item, index) in items" :key="index">
             <span v-if="index" aria-hidden="true">/</span>
             <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
@@ -50,7 +53,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
     <article class="knowledge-article" aria-labelledby="system-cabinet-title">
       <header class="knowledge-article__header" v-reveal="{ anim: 'opalMoveUp' }">
-        <div class="knowledge-article__meta">
+        <div id="system-cabinet-return" class="knowledge-article__meta">
           <NuxtLink :to="cmsCopy.copy.field1">{{ cmsCopy.copy.text2 }}</NuxtLink>
           <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
         </div>
@@ -62,7 +65,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </figure>
 
       <div class="knowledge-article__content">
-        <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
+        <section id="system-cabinet-importance" class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
           <h2><InternalHeadingText :text="cmsCopy.copy.text3" /></h2>
           <p>{{ article.excerpt }}</p>
 
@@ -72,7 +75,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
         </section>
 
-        <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
+        <section id="system-cabinet-materials" class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
           <h2><InternalHeadingText :text="cmsCopy.copy.text4" /></h2>
           <div class="knowledge-material-table" tabindex="0" role="region" aria-label="常見五大廚房系統櫃板材比較表">
             <table>
@@ -94,7 +97,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <p class="knowledge-material-table__hint">{{ cmsCopy.copy.text7 }}</p>
         </section>
 
-        <section class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
+        <section id="system-cabinet-steps" class="knowledge-copy-block" v-reveal="{ anim: 'opalMoveUp' }">
           <h2><InternalHeadingText :text="cmsCopy.copy.text8" /></h2>
           <p>{{ cmsCopy.copy.text9 }}</p>
 
@@ -137,7 +140,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </article>
         </section>
 
-        <section class="knowledge-copy-block knowledge-article__closing" v-reveal="{ anim: 'opalMoveUp' }">
+        <section id="system-cabinet-closing" class="knowledge-copy-block knowledge-article__closing" v-reveal="{ anim: 'opalMoveUp' }">
           <p><strong>{{ cmsCopy.copy.text16 }}</strong>{{ cmsCopy.copy.text17 }}<NuxtLink :to="cmsCopy.copy.field18"><strong>{{ cmsCopy.copy.text19 }}</strong></NuxtLink>{{ cmsCopy.copy.text20 }}</p>
         </section>
 

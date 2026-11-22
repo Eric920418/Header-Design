@@ -104,6 +104,10 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
   if (['title','article','images','meta'].includes(property)) return targets.slice(1)
   if (['reservationUrl','designer'].includes(property)) return targets.slice(1,2)
  }
+ if (documentId === 'view-pages-knowledge-index' && path.startsWith('copy.breadcrumb'))
+  return [target('廚房裝修指南列表 → 位置導覽','/knowledge#knowledge-breadcrumb'),target('廚房裝修指南所有文章 → 位置導覽','/knowledge/design/systemcabinet#knowledge-breadcrumb')]
+ if (documentId === 'view-pages-catalogues-kitchenware-catalog' && path.startsWith('copy.breadcrumb'))
+  return [target('品牌系列型錄 → 位置導覽','/catalogues/kitchenware-catalog#series-catalogue-breadcrumb')]
  if (documentId === 'view-pages-knowledge-design-slug-' && key === 'copy' && index === 'moreDestination')
   return [target('系統櫃與指定知識文章 → 延伸文章按鈕','/knowledge/design/systemcabinet#knowledge-related-heading')]
  if (documentId === 'view-pages-design-inspiration-index' && ['cmsSettings','seo'].includes(key)) return targets
@@ -116,8 +120,12 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
   const anchor=path==='copy.text8'?'design-projects-grid':/text[67]$/.test(path)?'design-projects-result':'design-projects-filter-title'
   return [{...targets[0],href:'/design-inspiration#'+anchor}]
  }
- if (documentId === 'view-pages-gallery-slug-' && (!path || path==='copy.field1' || path==='copy.text2'))
-  return [...targets,target('設計靈感案例內頁 → 到店預約','/design-inspiration')]
+ if (documentId === 'view-pages-gallery-slug-') {
+  const detail=blockHref?targets.map(t=>({...t,href:blockHref})):targets
+  return !path || path==='copy.field1' || path==='copy.text2'
+   ? [...detail,target('設計靈感案例內頁 → 到店預約','/design-inspiration')]
+   : detail
+ }
  if (blockHref && targets.length===1 && !targets[0].label.startsWith('所有官網頁面') && blockHref.split('#')[0]===targets[0].href.split('#')[0])
   return [{...targets[0],href:blockHref}]
  return targets

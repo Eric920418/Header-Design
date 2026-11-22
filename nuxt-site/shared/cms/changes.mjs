@@ -90,7 +90,7 @@ export function publishReview(blocks,documents,bodies,context={}){
 export function pageSearchItems(block,bodies){
  return block.fields.filter(f=>f.schema.type==='array').flatMap(f=>(valueAt(bodies[f.documentId],f.path)||[]).flatMap((value,index)=>{
   if(f.schema.rowFilter&&valueAt(value,f.schema.rowFilter.path)!==f.schema.rowFilter.value)return []
-  return [{key:itemKey(value,index),scope:f.documentId+':'+f.path,caption:itemCaption(value,index,f.schema),image:itemThumbnail(value,f.schema)}]
+  return [{key:itemKey(value,index),scope:f.documentId+':'+f.path,caption:itemCaption(value,index,f.schema),image:itemThumbnail(value,f.schema),...(block.id==='knowledge:文章管理'&&f.formGroup?{articleSection:f.formGroup}:{})}]
  }))
 }
 

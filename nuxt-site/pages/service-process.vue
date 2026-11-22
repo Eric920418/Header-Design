@@ -57,7 +57,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
     </section>
 
-    <InternalFaqAccordion safe-rail class="service-guide-faq">
+    <InternalFaqAccordion id="service-guide" safe-rail class="service-guide-faq">
       <template #title>
         <span class="bilingual-heading-lead"><span class="service-faq-eyebrow">Explore Our</span><b class="service-faq-chinese-title"><InternalHeadingText text="服務指南" /></b></span><span class="bilingual-heading-english" style="color: inherit"><InternalHeadingText text="Clear " /><span class="service-faq-accent"><InternalHeadingText text="Answers" /></span><InternalHeadingText text=" To Your " /><span class="service-faq-accent"><InternalHeadingText text="Main" /></span><InternalHeadingText text=" Questions" /></span>
       </template>

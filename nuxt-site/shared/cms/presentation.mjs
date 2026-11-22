@@ -95,7 +95,7 @@ const labels={
  zh:'中文名稱',en:'英文名稱',style:'設計風格',styles:'風格項目',color:'設計顏色',size:'設計尺寸',form:'廚房型式',model:'商品型號',type:'內容類型',badge:'標籤文字',budget:'預算',countertop:'檯面材質',kitchenArea:'廚房坪數',household:'家庭成員',designer:'設計師',role:'職稱',tenure:'加盟年資',
  phone:'聯絡電話',email:'電子郵件',address:'地址',hours:'營業時間',city:'所在縣市',region:'所在地區',regionCities:'地區與縣市對照',regions:'門市地區與縣市',mapUrl:'地圖連結',lineUrl:'LINE 諮詢連結',reservationUrl:'預約連結',contact:'門市聯絡資訊',specs:'案例規格',meta:'案例規格',metaLabels:'規格欄位名稱',store:'門市名稱',storeName:'門市名稱',stores:'地圖門市資料',storeCases:'門市資料與案例文章',cases:'推薦案例',article:'案例文章內文',reviews:'顧客分享',
  services:'服務項目',strengths:'建商實力圖文',series:'系列卡片',suites:'系列組合',finishes:'板材與顏色',equipment:'推薦廚電',hero:'系列主視覺',logos:'品牌標誌清單',newsCategories:'消息分類導覽',designStyleLinks:'設計風格推薦連結',kitchenSeriesLinks:'廚房系列推薦文字',columns:'比較表欄位',rows:'比較表項目',catalogues:'型錄卡片',pdfUrl:'型錄 PDF 檔案',downloadFilename:'下載檔案名稱',brochurePages:'加盟型錄預覽頁',video:'影片設定',videoId:'YouTube 影片連結或識別碼',brandVideoId:'品牌承諾影片連結或識別碼',pavilionVideoId:'集團品牌館影片連結或識別碼',franchiseVideoId:'加盟介紹影片連結或識別碼',serviceVideoSrc:'服務流程影片網址（MP4）',brandVideoSrc:'首頁品牌承諾影片網址（MP4）',serviceVideoCover:'服務流程影片封面',caseLink:'相關案例連結',position:'顯示位置',icon:'圖示圖片',
- KITCHEN_STYLES:'系列卡片圖片與文字',KITCHEN_SERIES_PAGES:'十個系列的內頁內容',KITCHEN_CATALOGUES:'品牌系列型錄',PRODUCT_CATALOGUES:'廚房商品型錄',PRODUCT_CARE_CATEGORIES:'保養問題分類',PRODUCT_BRANDS:'三品牌介紹',KITCHEN_GUIDE_ARTICLES:'知識文章列表資訊',KITCHEN_GUIDE_DETAILS:'知識文章內文',
+ KITCHEN_STYLES:'系列卡片圖片與文字',KITCHEN_SERIES_PAGES:'系列清單',KITCHEN_CATALOGUES:'品牌系列型錄',PRODUCT_CATALOGUES:'廚房商品型錄',PRODUCT_CARE_CATEGORIES:'保養問題分類',PRODUCT_BRANDS:'三品牌介紹',KITCHEN_GUIDE_ARTICLES:'知識文章列表資訊',KITCHEN_GUIDE_DETAILS:'知識文章內文',
  FRANCHISE_FORM_URL:'站內加盟申請連結',FRANCHISE_OFFICIAL_FORM_URL:'原官網加盟申請連結',FRANCHISE_BROCHURE_URL:'加盟型錄 PDF 連結',BUILDER_APPOINTMENT_HASH:'建商預約區連結',brandHistory:'品牌沿革',brandValues:'品牌承諾內容',brandIdentities:'品牌識別圖片',brandFamilies:'家庭情境圖文',brandBenefits:'品牌優勢圖文',brandAdvantageFaqGroups:'品牌優勢常見問題',brandPavilions:'品牌館資料',pavilionNotice:'品牌館注意事項',serviceSteps:'服務步驟',faqGroups:'常見問題分類',franchiseAdvantages:'加盟優勢圖文',franchiseTestimonials:'加盟夥伴分享',franchiseMarketingStories:'品牌行銷案例',franchiseProcessSteps:'加盟流程',franchiseQualifications:'加盟資格與條件',franchiseSupportHighlights:'總部支援內容',franchiseFaqItems:'加盟常見問題',builderPartners:'合作夥伴標誌',builderProjectCards:'建商合作案例',systemCabinetImportance:'系統櫃材質重點',systemCabinetMaterials:'材質比較表',systemCabinetSelectionSteps:'材質挑選步驟',systemCabinetCaseStudies:'系統櫃推薦案例',sakura:'櫻花品牌介紹',svago:'義大利 SVAGO 品牌介紹',teka:'德國 TEKA 品牌介紹',
  北部:'北部縣市',中部:'中部縣市',南部:'南部縣市',東部:'東部縣市',離島:'離島縣市',
 }
@@ -147,11 +147,14 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁聯繫與參觀預約區','建商首頁的預約區']}
  if(resourceId==='view-pages-about-introduce'&&normalized==='copy.field10')return{label:'圖片放大方式',hidden:true,readOnly:true}
- if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
+ if(['view-pages-design-inspiration-index','view-pages-knowledge-index','view-pages-catalogues-kitchenware-catalog'].includes(resourceId)&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
+ if(resourceId==='data-catalogues'&&normalized==='KITCHEN_CATALOGUES.*.pdfUrl')return{label:'預覽與下載用的 PDF',help:'官網的「預覽」和「下載」會使用這份檔案。'}
  if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
  if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}
+ if(resourceId==='view-components-SiteHeader'&&normalized==='leftNav')return{label:'左側主導覽',positionLegacyLabel:'左側主選單'}
+ if(resourceId==='view-components-SiteHeader'&&normalized==='rightNav')return{label:'右側主導覽',positionLegacyLabel:'右側主選單'}
  if(resourceId==='custom-cases'&&normalized==='items')return{label:'自行建置案例',newItemLabel:'案例',editor:'case-table',rowLabel:'title',rowImage:'cover'}
- if(resourceId==='custom-cases'&&normalized.startsWith('items.*.')){const label={title:'案例標題',description:'案例介紹',form:'廚房型式',style:'設計風格',enabled:'更新官網後顯示'}[key];if(label)return{label,...(['title','form','style'].includes(key)?{singleLine:true}:{})}}
+ if(resourceId==='custom-cases'&&normalized.startsWith('items.*.')){const label={title:'案例標題',description:'案例介紹',cover:'案例列表封面',images:'案例內頁照片',specs:'案例規格（選填）',form:'廚房型式',style:'設計風格',enabled:'更新官網後顯示'}[key];if(label)return{label,...(['title','form','style'].includes(key)?{singleLine:true}:{})}}
  if(['news-articles','knowledge-articles'].includes(resourceId)){
   if(normalized==='items.*.summary.cover')return{label:'列表卡片圖片'}
   if(normalized==='items.*.detail.cover')return{label:'文章頂部圖片'}
@@ -166,7 +169,7 @@ export function fieldPresentation(resourceId,path,schema={}){
   if(label)return{label,singleLine:true}
  }
  if(resourceId==='view-components-home-HomeStyleMarquee'&&normalized==='styles')return{label:'設計風格',rowLabel:'zh',rowImage:'images'}
- if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='regions')return{label:'地區與縣市設定',editor:'store-regions'}
+ if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='regions')return{label:'地區與縣市設定',hidden:true}
  if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='stores')return{label:'門市',idGenerator:'store',newItemLabel:'新增門市',template:{id:0,region:'北部',city:'',name:'',address:'',phone:''}}
  if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='stores.*')return{label:'門市資料',editor:'store-location'}
  if(resourceId==='view-components-home-HomeStoreLocation'&&['stores.*.id','stores.*.region','stores.*.city'].includes(normalized))return{label:normalized.endsWith('.id')?'識別碼':normalized.endsWith('.region')?'區域':'縣市',hidden:true,readOnly:normalized.endsWith('.id')}
@@ -192,6 +195,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='view-components-home-HomeServices'&&normalized==='services.*.alt')return{label:'品牌名稱',singleLine:true}
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.cover')return{label:'案例門市列表封面',help:'用於案例門市列表；設計靈感列表使用下方圖片集中的第一張圖片。'}
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.images')return{label:'案例內頁圖片集',help:'第一張圖片也用於設計靈感列表的門市案例卡片。'}
+ if(resourceId==='data-storeCases'&&normalized.startsWith('regionCities.'))return schema.type==='array'?{label:key+'縣市',newItemLabel:'縣市'}:{label:'縣市名稱',singleLine:true}
  const copy=copyFields[resourceId]?.[normalized]
  if(copy){const position=positionField(resourceId,normalized);return position?{...copy,label:position.label,singleLine:position.singleLine,positionLegacyLabel:copy.label,...(position.readingGroup?readingField(position.readingGroup,position.label):{})}:copy}
  if(assetLabels[key])return{label:assetLabels[key]}

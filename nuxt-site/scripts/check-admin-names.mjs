@@ -3,7 +3,7 @@ import {spawnSync} from 'node:child_process'
 import {readFile} from 'node:fs/promises'
 import {workspaces,workspaceFor,editorLink,cmsDate} from '../shared/cms/workflow.mjs'
 import {workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
-import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace,orderDesignWorkspaces,destinationGroups,destinationName} from '../shared/cms/navigation.mjs'
+import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace,orderDesignWorkspaces,orderNewsPages,destinationGroups,destinationName} from '../shared/cms/navigation.mjs'
 import {pageEditors,pageSummary} from '../shared/cms/page-editors.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url))),published=Object.fromEntries(seed.map(d=>[d.id,structuredClone(d.data)])),original=JSON.stringify(published)
 const names=workspaceNames(workspaces,published),find=(rows,id)=>rows.find(w=>w.id===workspaceFor(id)?.id)
@@ -25,6 +25,21 @@ assert.deepEqual(orderDesignWorkspaces(orderDesignWorkspaces(design)).map(w=>w.i
 assert.deepEqual(orderDesignWorkspaces(design.filter(w=>matchesWorkspace(w,'設計靈感'))).map(w=>w.id),expectedDesign.slice(1,4))
 assert.deepEqual(orderDesignWorkspaces([...design].reverse()).filter(w=>w.id.startsWith('view-pages-knowledge')).map(w=>w.id),['view-pages-knowledge-design-slug-','view-pages-knowledge-index','view-pages-knowledge-design-systemcabinet'],'Order within the same category stays stable, including article subpages')
 console.log('PASS: design entries follow website category order, retain related article settings, and survive renamed titles without mutations or omissions')
+const newsNames=pages=>pages.filter(p=>p.section==='news').map(p=>p.id)
+const defaultNews=['news','news-activities','news-latest','news-video']
+assert.deepEqual(newsNames(orderNewsPages(pageEditors,published)),defaultNews)
+assert.deepEqual(newsNames(orderNewsPages(pageEditors)),defaultNews)
+const newsOrderFixture=structuredClone(published)
+const newsMenu=newsOrderFixture['view-components-SiteHeader'].leftNav.find(item=>item.to==='/news')
+newsMenu.children=[{label:'改名後的影音',to:'/news/video?ref=menu#list'},newsMenu.children.find(item=>item.to==='/news/latest')]
+const reordered=orderNewsPages(pageEditors,newsOrderFixture)
+assert.deepEqual(newsNames(reordered),['news','news-video','news-latest','news-activities'])
+assert.deepEqual(reordered.filter(p=>p.section!=='news'),pageEditors.filter(p=>p.section!=='news'))
+const overview=newsOrderFixture['view-pages-news-index']
+overview.newsCategories.reverse()
+assert.deepEqual(newsNames(orderNewsPages(pageEditors,{'view-pages-news-index':overview})),['news','news-video','news-latest','news-activities'])
+assert.deepEqual(newsNames(pageEditors),defaultNews,'Sorting a published menu must leave editor definitions unchanged')
+console.log('PASS: news cards follow published menu routes, preserve the overview, fall back to the published categories and retain other pages')
 assert.equal(names.length,47);assert.deepEqual(Object.keys(nameBindings).sort(),workspaces.map(w=>w.id).sort());assert.equal(new Set(names.map(w=>w.title)).size,47)
 for(const w of names){assert(w.pageTitle&&w.purpose&&w.sectionTitle);assert.equal(w.title,w.pageTitle+'｜'+w.purpose);assert(w.href.startsWith('/'));assert.equal(w.location.at(-1),w.purpose);assert(matchesWorkspace(w,w.title));assert(matchesWorkspace(w,workspaces.find(i=>i.id===w.id).title));assert(siteSections.some(s=>s.key===w.section)||w.section==='home')}
 for(const id of ['news-articles','knowledge-articles','custom-cases','catalog-sakura']){const schema={fields:{items:{label:'原有清單標題',type:'array'}}},title=find(names,id).pageTitle;const result=namedEditorSchema(schema,id,title);assert.equal(result.fields.items.label,title);assert.equal(schema.fields.items.label,'原有清單標題')}

@@ -1330,10 +1330,12 @@
   },
   "view-components-home-HomeWhatWeDo": {
     "copy.field1": {
-      "label": "裝飾背景圖片"
+      "label": "裝飾背景圖片",
+      "hidden": true
     },
     "copy.field2": {
-      "label": "圖片替代文字（第 1 段）"
+      "label": "圖片替代文字（第 1 段）",
+      "hidden": true
     },
     "copy.text3": {
       "label": "區塊中文標籤"

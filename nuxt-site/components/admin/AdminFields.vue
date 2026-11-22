@@ -18,8 +18,7 @@ function set(key:string,value:any){
 </script>
 <template>
  <div class="cms-field-node" :data-cms-document="documentId" :data-cms-path="path">
- <AdminStoreRegions v-if="schema.editor==='store-regions'" :model-value="modelValue" @update:model-value="emit('update:modelValue',$event)" />
- <fieldset v-else-if="schema.type==='object'" class="cms-fields">
+ <fieldset v-if="schema.type==='object'" class="cms-fields">
   <legend v-if="label">{{ title }}</legend>
   <AdminStoreLocation v-if="schema.editor==='store-location'" :model-value="modelValue" @update:model-value="emit('update:modelValue',$event)" />
   <template v-for="[key,field] in contentFields" :key="key">

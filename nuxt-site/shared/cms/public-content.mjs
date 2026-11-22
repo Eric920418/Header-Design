@@ -1,4 +1,5 @@
 export const contentAliases={'data-kitchenGuides':'knowledge-articles','data-kitchenGuideDetails':'knowledge-articles','data-news':'news-articles','data-latestArticles':'news-articles','data-activityArticles':'news-articles','data-mediaVideos':'news-articles'}
+export const compareNewsDates=(a,b)=>(b||'').localeCompare(a||'')
 // Keep saved, published and unsaved previews on the same data projection.
 export function publicContent(id,input){
  const body=JSON.parse(JSON.stringify(input))
@@ -7,7 +8,7 @@ export function publicContent(id,input){
   const all=body.items.filter(i=>i.enabled)
   if(id==='data-kitchenGuides')return{KITCHEN_GUIDE_ARTICLES:all.map(i=>({...i.summary,id:i.id,detailRoute:`/knowledge/design/${i.slug}`,legacyUrl:`https://www.sakura-kitchenlife.com.tw/knowledge/design/${i.slug}`}))}
   if(id==='data-kitchenGuideDetails')return{KITCHEN_GUIDE_DETAILS:all.filter(i=>i.slug!=='systemcabinet').map(i=>({...i.detail,articleId:i.id,slug:i.slug}))}
-  const newsArticles=all.map(i=>({...i.summary,id:i.id,legacyPath:`/news/${i.summary.category}/${i.slug}`})).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))
+  const newsArticles=all.map(i=>({...i.summary,id:i.id,legacyPath:`/news/${i.summary.category}/${i.slug}`})).sort((a,b)=>compareNewsDates(a.publishedAt,b.publishedAt))
   if(id==='data-news')return{newsArticles,recentNewsArticles:newsArticles.filter(i=>i.recentRank!==undefined).sort((a,b)=>(a.recentRank??99)-(b.recentRank??99))}
   const types={'data-latestArticles':['latest','latestArticleDetails'],'data-activityArticles':['activities','activityArticleDetails'],'data-mediaVideos':['video','mediaVideoDetails']},[category,key]=types[id]
   return{[key]:all.filter(i=>i.summary.category===category).map(i=>({...i.detail,id:i.id,slug:i.slug,cover:i.detail.cover||{src:i.summary.cover,alt:i.summary.title},sections:i.detail.sections||[],paragraphs:i.detail.paragraphs||[]}))}

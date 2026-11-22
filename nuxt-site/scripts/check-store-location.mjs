@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
-import {HOME_STORES_ID,storeRegionCities,newStoreId,storeLocationIssue} from '../shared/cms/store-location.mjs'
+import {HOME_STORES_ID,storeRegionCities,newStoreId,storeLocationIssue,storeFilterRegions} from '../shared/cms/store-location.mjs'
 import {validate} from '../server/cms/content.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
 const original=seed.find(d=>d.id===HOME_STORES_ID),before=JSON.stringify(original)
 assert.deepEqual(storeRegionCities,original.data.regions)
+assert.deepEqual(storeFilterRegions(original.data),original.data.regions)
 assert.deepEqual(storeRegionCities,seed.find(d=>d.id==='data-storeCases').data.regionCities)
 assert.equal(storeLocationIssue(original.data,true),'')
 const stores=structuredClone(original.data.stores),oldIds=stores.map(s=>s.id)
@@ -16,7 +17,10 @@ store.id=body.stores[1].id;assert.match(storeLocationIssue(body),/重複/);store
 store.region='東部';assert.match(storeLocationIssue(body),/縣市不屬於東部/)
 store.city='';assert.equal(storeLocationIssue(body),'');assert.match(storeLocationIssue(body,true),/縣市/)
 store.city='花蓮縣';validate(body,original.schema);assert.equal(storeLocationIssue(body,true),'')
-body.regions['東部']=['臺東縣'];assert.match(storeLocationIssue(body,true),/尚未啟用/)
+body.regions['東部']=['臺東縣']
+assert.equal(storeLocationIssue(body,true),'')
+assert.deepEqual(storeFilterRegions(body)['東部'],['臺東縣','花蓮縣'])
+assert.deepEqual(body.regions['東部'],['臺東縣'])
 store.region='其他';assert.match(storeLocationIssue(body),/區域無效/)
 assert.equal(JSON.stringify(original),before)
 console.log('PASS 1000 generated safe/unique IDs, legacy ID 0, unchanged classification, duplicate/range/region/city validation and draft/publish rules (no database writes)')

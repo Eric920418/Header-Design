@@ -281,7 +281,7 @@ useSeoMeta({
           </div>
         </div>
 
-        <div v-reveal="{ anim: 'opalMoveUp' }" class="ai-suite-stage">
+        <div id="series-suites" v-reveal="{ anim: 'opalMoveUp' }" class="ai-suite-stage">
           <div :key="`${activeSuite.id}-${activeSuiteImageIndex}-left`" class="ai-suite-image ai-suite-image--left-top">
             <InternalBrandImage :src="activeSuitePrimaryImage" :alt="`${activeSuite.name} 套系空間 ${activeSuiteImageIndex + 1}`" class="h-full w-full" />
           </div>

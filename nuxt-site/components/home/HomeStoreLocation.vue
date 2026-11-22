@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeFilterRegions } from '~/shared/cms/store-location.mjs'
 const cmsCopy = await useCmsResource('view-components-home-HomeStoreLocation', {"stores":[{"id":0,"region":"北部","city":"臺北市","name":"承德店","address":"臺北市士林區承德路四段238號","phone":"02-28839919"},{"id":1,"region":"北部","city":"臺北市","name":"石牌店","address":"臺北市北投區石牌路一段68號","phone":"02-28218500"},{"id":2,"region":"北部","city":"臺北市","name":"民權店","address":"臺北市中山區民權東路二段68號","phone":"02-25371659"},{"id":3,"region":"北部","city":"臺北市","name":"中山南京店","address":"臺北市中山區中山北路一段71號","phone":"02-25238868"},{"id":4,"region":"北部","city":"臺北市","name":"八德店","address":"臺北市松山區八德路4段230號","phone":"02-27486733"},{"id":5,"region":"中部","city":"臺中市","name":"中港店","address":"臺中市西屯區臺灣大道四段872號","phone":"04-24650688"},{"id":6,"region":"中部","city":"臺中市","name":"松竹店","address":"臺中市北屯區松竹路一段763號","phone":"04-22397068"},{"id":7,"region":"中部","city":"臺中市","name":"台中復興店","address":"臺中市南區復興路二段87號","phone":"04-22658989"},{"id":8,"region":"中部","city":"臺中市","name":"博館店","address":"臺中市西屯區西屯路二段8-3號","phone":"04-23179966"}],"regions":{"北部":["臺北市","新北市","基隆市","新竹市","桃園市","新竹縣","宜蘭縣"],"中部":["臺中市","苗栗縣","彰化縣","南投縣","雲林縣"],"南部":["高雄市","臺南市","嘉義市","嘉義縣","屏東縣","澎湖縣"],"東部":["花蓮縣","臺東縣"],"離島":["金門縣","連江縣"]},"copy":{"text1":"STORE LOCATOR","text2":"櫻花整體廚房","text3":"全台門市據點","text4":"我的位置","text5":"此區域尚無門市資料。"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ChevronDown, LocateFixed } from 'lucide-vue-next'
@@ -11,7 +12,7 @@ const STORE_FLIP_INTERVAL = 1400
 const STORE_FLIP_DURATION = 760
 
 const stores: Store[] = cmsCopy.stores
-const regions: Record<string, string[]> = cmsCopy.regions
+const regions: Record<string, string[]> = storeFilterRegions(cmsCopy)
 const region = ref('')
 const city = ref('')
 const selected = ref(0)

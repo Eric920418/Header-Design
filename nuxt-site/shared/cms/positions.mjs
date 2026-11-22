@@ -29,7 +29,7 @@ const copyGroups={
   ['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}],
   ['清潔與保養問答',{text9:'保養步驟編號前的文字',text10:'小提醒標題'}],
  ],
- 'catalogues-kitchenware-catalog':[['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}]],
+ 'catalogues-kitchenware-catalog':[['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}]],
  'franchising-intro':[
   ['頁面最上方',{field1:'背景圖片',field2:'背景圖片說明',text3:'區塊英文標籤',text4:'區塊中文主標題（第一段）',text5:'區塊中文主標題（第二段）',text7:'介紹文字第一段',text8:'介紹文字第二段',text9:'申請加盟按鈕文字',field10:'門市大圖',field11:'門市圖片說明',field12:'說明會前往頁面',text13:'說明會按鈕文字'}],
   ['加盟夥伴真實分享',{field17:'影片名稱'}],['品牌成果圖片',{field18:'第一張圖片',field19:'第一張圖片說明',field20:'第一張循環圖片',field22:'第二張圖片',field23:'第二張圖片說明',field24:'第二張循環圖片'}],
@@ -63,7 +63,12 @@ const copyGroups={
   ['系統櫃挑選步驟',{text8:'段落標題',text9:'介紹文字',text10:'色彩建議連結前文字',text11:'色彩建議連結後文字',text12:'門板造型說明',text13:'系列推薦前的文字',field14:'系列推薦前往頁面'}],
   ['系統櫃推薦案例',{text15:'段落標題'}],['系統櫃文章結語',{text16:'品牌名稱',text17:'介紹文字',field18:'型錄前往頁面',text19:'型錄連結文字',text20:'連結後的文字'}],
  ],
- 'news-index':[['主視覺標題',{text1:'主視覺標題'}],['全部消息列表',{text2:readingField('全部消息清單','清單名稱')}],['消息分類選單',{text3:'分類選單標題'}],['最近文章推薦',{text4:'推薦區標題'}]],
+ 'news-index':[
+  ['主視覺標題',{text1:'主視覺標題'}],
+  ['最新消息列表',{text2:readingField('總覽頁文章列表','清單名稱')}],
+  ['最新消息分類標籤',{text3:'分類標籤區標題'}],
+  ['最新文章',{text4:'最新文章區標題'}],
+ ],
  'news-latest-index':[['主視覺標題',{text1:'主視覺標題'}],['消息管理',{text2:readingField('最新消息清單','清單名稱')}]],
  'news-activities-index':[['主視覺標題',{text1:'主視覺標題'}],['活動管理',{text2:readingField('優惠活動清單','清單名稱')}]],
  'news-video-index':[['主視覺標題',{text1:'主視覺標題'}],['影音管理',{text2:readingField('媒體影音清單','清單名稱')}]],
@@ -81,12 +86,12 @@ const copyGroups={
  ],
  privacy:[['頁面標題與修訂日期',{field1:'頁面英文標題',text2:'條款介紹文字',text3:'最後修訂日期',text4:'公司名稱'}]],
  'service-process':[
-  ['主視覺標題',{text1:'主視覺標題'}],['服務流程與介紹',{text2:'區塊中文主標題',text3:'區塊英文主標題（第一段）',text4:'區塊英文主標題（第二段）',text5:'區塊英文主標題（第三段）',text6:'介紹文字'}],['服務介紹影片',{field7:'影片圖片說明'}],
+  ['主視覺標題',{text1:'主視覺標題'}],['服務流程',{text2:'區塊中文主標題',text3:'區塊英文主標題（第一段）',text4:'區塊英文主標題（第二段）',text5:'區塊英文主標題（第三段）',text6:'介紹文字'}],['品牌影片',{field7:'影片圖片說明'}],
  ],
 }
 const componentCopyGroups={
  'view-components-SiteHeader':[
-  ['展開選單中的型錄入口',{field1:'前往頁面',text2:'按鈕文字'}],['展開選單中的系列文字',{text3:'區塊英文標籤',text4:'第一組系列標題',text5:'系列英文標籤',text6:'第二組系列標題',text7:'開放系列提示',text8:'尚未開放提示'}],
+  ['左側主導覽',{field1:'前往頁面',text2:'型錄按鈕文字'}],['品牌系列選單設定',{text3:'區塊英文標籤',text4:'第一組系列標題',text5:'系列英文標籤',text6:'第二組系列標題',text7:'開放系列提示',text8:'尚未開放提示'}],
   ['桌機品牌標誌',{field9:'標誌前往頁面',field10:'品牌標誌圖片',field11:'圖片說明'}],['手機品牌標誌',{field12:'標誌前往頁面',field13:'品牌標誌圖片',field14:'圖片說明'}],
   ['手機選單文字',{text15:'總覽連結文字',text16:'系列分類名稱',text17:'未開放提示',text18:'未開放項目後的文字',field19:'型錄前往頁面',text20:'型錄連結文字',text21:'搜尋按鈕名稱'}],
  ],
@@ -107,15 +112,49 @@ const commonHero=['site-visuals','images.asset_7692def0']
 const taichungHero=['site-visuals','images.asset_44761f00']
 export const pagePositions={
  home:{hero:['view-components-home-HomeHero','slides.0.image'],sections:[section('首頁輪播圖片','首頁圖片、標題與連結','hero','hero-title'),section('品牌系列','首頁系列卡片與區塊介紹','cards','kitchen-series'),section('設計風格圖片','風格圖示、廚房圖片與連結','cards','home-styles'),section('廚房產品','品牌產品圖片與介紹','cards','services-heading'),section('集團品牌標誌','品牌標誌與前往頁面','logos','brand-logos'),section('設計案例','首頁輪播案例與更多按鈕','cards','gallery-heading'),section('品牌承諾','品牌介紹、影片封面與連結','video','brand-promise',['site-visuals','images.asset_10b5a86c']),section('全台門市據點','門市地圖、聯絡資料與查詢','map','contact')]},
- series:{hero:['data-kitchenSeries','KITCHEN_SERIES_PAGES.0.heroSlides'],sections:[section('系列內頁','選擇系列，修改介紹、圖片與組合','cards'),{...section('首頁與選單系列卡片','系列名稱、封面與前往頁面','cards'),href:'/#kitchen-series',previewPage:'/#kitchen-series'}]},
+ series:{hero:['data-kitchenSeries','KITCHEN_SERIES_PAGES.0.heroSlides'],sections:[
+  {...section('品牌系列內頁','選擇系列，修改介紹、圖片與組合','cards'),aliases:['series:系列內頁']},
+ ]},
  inspiration:{sections:[]},
- knowledge:{hero:commonHero,sections:[section('主視覺標題','列表最上方的大標題','hero','kitchen-guide-page-title'),section('文章管理','文章封面、摘要與內文','cards','kitchen-guide-heading'),section('系統櫃文章返回按鈕','專題最上方的返回連結','article'),section('系統櫃材質重點','系統櫃文章的第一個段落','article'),section('系統櫃板材比較','材質比較表與手機提示','table'),section('系統櫃挑選步驟','文章中的步驟與推薦連結','steps'),section('系統櫃推薦案例','文章中的推薦案例與圖片','cards'),section('系統櫃文章結語','文末介紹與型錄連結','article'),section('文章底部返回按鈕','所有一般知識文章的返回連結','article'),{...section('延伸文章按鈕','更多廚房知識的前往頁面','article','knowledge-related-heading'),previewPage:'/knowledge/design/systemcabinet#knowledge-related-heading',fixedAction:'更多廚房知識'}]},
- 'series-catalogue':{hero:commonHero,sections:[section('頁面最上方','型錄頁最上方的大標題','hero','catalogue-page-title'),section('型錄封面與下載','系列型錄、預覽與下載按鈕','catalogue','catalogue-list-title')]},
+ knowledge:{hero:commonHero,sections:[
+  section('主視覺標題','列表最上方的大標題','hero','kitchen-guide-page-title'),
+  section('麵包屑編輯設定','列表與內頁上方的位置導覽文字','page-breadcrumb','knowledge-breadcrumb'),
+  section('文章管理','文章封面、摘要與內文，含系統櫃專題','cards','kitchen-guide-heading'),
+  section('頁面共用設定','文章返回、延伸閱讀及顯示設定','article'),
+ ]},
+ 'series-catalogue':{hero:commonHero,sections:[
+  {...section('主視覺標題','型錄頁最上方的大標題','hero','catalogue-page-title'),aliases:['series-catalogue:頁面最上方']},
+  section('麵包屑編輯設定','型錄頁上方的位置導覽文字','page-breadcrumb','series-catalogue-breadcrumb'),
+  {...section('型錄管理','管理型錄封面、預覽與下載檔案','catalogue','brand-series-catalogues'),aliases:['series-catalogue:型錄封面與下載']},
+ ]},
  ...Object.fromEntries(['sakura','svago','teka'].map(brand=>['products-'+brand,{hero:['data-productBrands','PRODUCT_BRANDS.'+brand+'.image'],sections:[section('品牌介紹','品牌名稱、介紹文字與圖片','cards'),{...section('商品頁型錄按鈕','品牌商品列表與內頁的共用連結','catalogue'),previewPage:'/products/'+brand+'/all#near-suction-catalogue-title',fixedAction:'廚房商品型錄下載'},section('商品顯示與排序','選擇商品，調整顯示與順序','products')]}])),
  'product-catalogue':{hero:commonHero,sections:[section('頁面最上方','商品型錄頁最上方的大標題','hero','product-catalogue-title'),section('型錄封面與下載','型錄封面、預覽與下載按鈕','catalogue','product-catalogue-list-title'),section('清潔與保養問答','依商品分類的保養問題與圖文','faq','product-care-title')]},
- stores:{hero:commonHero,sections:[section('主視覺標題','門市列表最上方的大標題','hero','gallery-page-title'),section('地區篩選列','區域與縣市的篩選名稱','filter','gallery-filter-title'),section('門市管理','選擇門市，修改資料與案例','stores','gallery-filter-title'),section('搜尋結果提示','篩選後的門市筆數說明','results','gallery-filter-title'),section('無符合門市提示','沒有符合條件門市時的訊息','empty','gallery-filter-title'),section('區域與縣市','門市篩選的縣市分類','map','gallery-filter-title'),section('門市內頁預約按鈕','每個門市案例內頁的預約入口','article'),section('門市內頁規格與資訊','規格、聯絡資訊與地圖按鈕','stores'),section('門市內頁上一篇與下一篇','內頁下方的案例切換','article'),section('門市內頁顧客評論','內頁顧客留言區標題','comments')]},
- service:{hero:taichungHero,sections:[section('主視覺標題','頁面最上方的大標題','hero','service-page-title'),section('服務流程與介紹','服務介紹與每一步的內容','steps','service-intro-title'),section('服務介紹影片','服務影片、封面與圖片說明','video','service-brand-video',['site-visuals','serviceVideoCover']),section('服務指南問答','頁面下方的常見問題','faq')]},
- news:{hero:commonHero,sections:[section('主視覺標題','消息總覽最上方的大標題','hero','news-page-title'),section('全部消息列表','消息列表的輔助閱讀名稱','cards','news-list-title'),section('消息分類選單','列表旁的消息分類與連結','navigation','news-tags-title'),section('最近文章推薦','列表旁的最近文章標題','cards','sidebar-recent-title')]},
+ stores:{hero:commonHero,sections:[
+  section('主視覺標題','門市列表最上方的大標題','hero','gallery-page-title'),
+  section('地區篩選列','區域與縣市的篩選名稱','filter','gallery-filter-title'),
+  section('搜尋結果提示','篩選後的門市筆數說明','results','gallery-filter-title'),
+  section('無符合門市提示','沒有符合條件門市時的訊息','empty','gallery-filter-title'),
+  section('區域與縣市','調整官網地區篩選的縣市選項與順序','filter','gallery-filter-title'),
+ ]},
+ 'store-cases':{hero:commonHero,sections:[
+  section('門市管理','選擇門市，修改文章、照片及門市資料','stores'),
+  section('門市內頁預約按鈕','所有門市案例共用的預約按鈕','store-booking','case-booking'),
+  section('門市內頁規格與資訊','所有門市案例共用的規格標題、聯絡按鈕與地圖文字','store-info','case-spec-title'),
+  section('門市內頁上一篇與下一篇','所有門市案例共用的前後篇按鈕文字','store-navigation','case-navigation'),
+  section('門市內頁顧客評論','所有門市案例共用的評論區標題','store-reviews','case-reviews-title'),
+ ]},
+ service:{hero:taichungHero,sections:[
+  section('主視覺標題','頁面最上方的大標題','hero','service-page-title'),
+  {...section('服務流程','流程介紹與每一步的內容','steps','service-intro-title'),aliases:['service:服務流程與介紹']},
+  {...section('品牌影片','影片、封面與圖片說明','video','service-brand-video',['site-visuals','serviceVideoCover']),aliases:['service:服務介紹影片']},
+  {...section('服務指南','頁面下方的常見問題','faq','service-guide'),aliases:['service:服務指南問答']},
+ ]},
+ news:{hero:commonHero,sections:[
+  section('主視覺標題','消息總覽最上方的大標題','hero','news-page-title'),
+  {...section('最新消息列表','找到文章後按「編輯文章」，可修改封面、標題、摘要與內文。','news-overview','news-list-title'),aliases:['news:全部消息列表']},
+  {...section('最新消息分類標籤','列表旁的分類名稱與連結','navigation','news-tags-title'),aliases:['news:消息分類選單']},
+  {...section('最新文章','總覽頁側欄的最新文章標題','cards','sidebar-recent-title'),aliases:['news:最近文章推薦']},
+ ]},
  ...Object.fromEntries(['latest','activities','video'].map((category,i)=>['news-'+category,{hero:commonHero,sections:[section('主視覺標題','列表最上方的大標題','hero',['latest','activity','video'][i]+'-page-title'),{...section('麵包屑導覽設定','文章頁首的英文標題與分類連結','breadcrumb'),aliases:['news-'+category+':文章最上方與返回導覽']},section(['消息管理','活動管理','影音管理'][i],'封面、標題、日期與完整內文','cards'),...(category==='latest'?[section('文章報名圖片提示','加盟說明會文章中，報名 QR Code 下方的文字','registration')]:[]),section('文章旁的分類選單','文章末段的優惠活動、最新消息與媒體影音連結','navigation')]}])),
  about:{hero:'/section-5/brand-pavilion/pavilion-taichung.jpg',sections:[section('品牌歷程','年份、沿革照片與品牌故事','timeline','about-services-title'),section('品牌承諾','介紹內容與情境圖片','cards','about-values-title'),section('專屬品牌識別','品牌銘板與識別圖片','logos','about-identity-title')]},
  advantage:{hero:'/section-5/brand-advantage/banner.jpg',sections:[section('家庭情境','家庭情境照片、標題與介紹','cards','brand-family-title'),section('品牌優勢','優勢內容與對應圖片','cards'),section('品牌優勢問答','頁面下方的品牌常見問題','faq','brand-advantage-faq-title')]},
@@ -126,17 +165,24 @@ export const pagePositions={
  builders:{hero:[view('builders-index'),'copy.field6'],sections:[section('頁面最上方','主標題、預約按鈕與廚房大圖','hero','builders-title'),section('廚房品牌介紹','品牌介紹與即將推出文字','cards','builders-team-title',['data-builders','builderProjectCards.0.image']),section('建商實力','智能整合與建商實力圖文','cards','builders-capability-title'),section('三大服務','建商實力下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),section('合作夥伴','保留的合作夥伴標誌設定','inactive'),section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment')]},
  'builder-series':{hero:[view('builders-sakura-kitchen'),'copy.field1'],sections:[section('頁面最上方','主圖片、品牌標誌與介紹','hero','sakura-kitchen-title'),section('品牌承諾入口','主圖片下方的介紹入口','cards','brand-advantage'),section('品牌優勢','品牌優勢介紹與圖片','cards','sakura-kitchen-advantage-title'),section('品牌系列','系列圖片、介紹與預約按鈕','cards','sakura-kitchen-series-title')]},
  'builder-catalogues':{hero:commonHero,sections:[section('頁面最上方','建商型錄頁最上方的大標題','hero','builder-catalogue-title'),section('型錄封面與下載','型錄卡片、封面與下載按鈕','catalogue','builder-catalogue-list-title')]},
- menu:{sections:[section('左側主選單','桌機官網左側分類與連結','navigation'),section('右側主選單','桌機官網右側分類與連結','navigation'),section('展開選單中的系列文字','展開品牌系列選單後的標題','navigation'),section('展開選單中的型錄入口','展開產品選單後的型錄按鈕','navigation'),section('桌機品牌標誌','桌機導覽中央的品牌標誌','logos'),section('手機品牌標誌','手機頁首的品牌標誌','logos'),section('手機選單文字','手機選單的分類與提示','navigation')]},
+ menu:{sections:[
+  {...section('左側主導覽','官網左側分類與連結，含廚房產品型錄按鈕','navigation'),aliases:['menu:左側主選單','menu:展開選單中的型錄入口']},
+  {...section('右側主導覽','官網右側分類與連結','navigation'),aliases:['menu:右側主選單']},
+  {...section('品牌系列選單設定','展開品牌系列後的標題與提示','navigation'),aliases:['menu:展開選單中的系列文字']},
+  section('桌機品牌標誌','桌機導覽中央的品牌標誌','logos'),
+  section('手機品牌標誌','手機頁首的品牌標誌','logos'),
+  section('手機選單文字','手機選單的分類與提示','navigation'),
+ ]},
  footer:{sections:[section('網站地圖與隱私權入口','頁尾網站地圖與隱私權連結','footer'),section('數位展板與社群連結','頁尾右側的外部連結與圖示','footer'),section('版權與品牌標誌','頁尾底部版權與品牌標誌','footer')]},
  visuals:{sections:[section('共用主視覺背景','多個列表頁使用的背景圖片','hero'),section('加盟與建商背景','加盟與建商頁的裝飾背景','cards'),section('品牌與服務背景','品牌介紹、服務與知識頁背景','cards'),section('首頁品牌影片','首頁品牌承諾的影片與封面','video'),section('加盟夥伴影片','加盟頁分享影片','video'),section('品牌館影片','集團品牌館的影片','video'),section('服務介紹影片','服務流程的影片與封面','video')]},
  privacy:{sections:[section('頁面標題與修訂日期','隱私權頁的標題與修訂資訊','article'),section('隱私權條款','條款編號與各段完整內容','article','privacy-0')]},
 }
 
 const dataGroups={
- 'data-kitchenSeries':{KITCHEN_SERIES_PAGES:'系列內頁'},'data-kitchenStyles':{KITCHEN_STYLES:'首頁與選單系列卡片'},
+ 'data-kitchenSeries':{KITCHEN_SERIES_PAGES:'品牌系列內頁'},
  'data-aboutUs':{brandHistory:'品牌歷程',brandValues:'品牌承諾',brandIdentities:'專屬品牌識別'},
  'data-brandAdvantage':{brandFamilies:'家庭情境',brandBenefits:'品牌優勢',brandAdvantageFaqGroups:'品牌優勢問答'},
- 'data-service':{serviceSteps:'服務流程與介紹',faqGroups:'服務指南問答'},
+ 'data-service':{serviceSteps:'服務流程',faqGroups:'服務指南'},
  'data-brandPavilions':{brandPavilions:'品牌館地址與時間',pavilionNotice:'參觀注意事項'},
  'data-franchise':{FRANCHISE_FORM_URL:'頁面最上方',FRANCHISE_OFFICIAL_FORM_URL:'頁面最上方',FRANCHISE_BROCHURE_URL:'加盟簡介與檔案',franchiseAdvantages:'專業品牌實力',franchiseTestimonials:'加盟夥伴真實分享',franchiseMarketingStories:'品牌信賴與行銷',franchiseQualifications:'加盟資格與條件',franchiseSupportHighlights:'總部支援',franchiseFaqItems:'加盟常見問題'},
  'data-builders':{BUILDER_APPOINTMENT_HASH:'頁面最上方',builderPartners:'合作夥伴'},
@@ -147,8 +193,10 @@ const dataGroups={
 export function positionGroup(page,id,path){
  if(page==='home'||page==='inspiration')return
  if(path==='cmsSettings'||path==='seo')return
+ if(page==='series-catalogue'&&id===view('catalogues-kitchenware-catalog')&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
+ if(page==='series-catalogue'&&id==='data-catalogues'&&path==='KITCHEN_CATALOGUES')return '型錄管理'
  if(id==='site-visuals'){
-  if(page==='service')return '服務介紹影片'
+  if(page==='service')return '品牌影片'
   if(page==='pavilions')return '品牌館影片'
   if(page==='franchise')return '加盟夥伴真實分享'
   if(page==='visuals')return path.startsWith('images.')?(/asset_(?:7a7fece6|39582b0b|18ed1982|52e702e4|d0922f9d|82b9dd3e|b3dcb152|1795db00|38bb39f2)$/.test(path)?'加盟與建商背景':path.endsWith('asset_7692def0')?'共用主視覺背景':path.endsWith('asset_10b5a86c')?'首頁品牌影片':'品牌與服務背景'):({brandVideoId:'首頁品牌影片',brandVideoSrc:'首頁品牌影片',franchiseVideoId:'加盟夥伴影片',pavilionVideoId:'品牌館影片',serviceVideoSrc:'服務介紹影片',serviceVideoCover:'服務介紹影片'})[path]
@@ -156,10 +204,10 @@ export function positionGroup(page,id,path){
  if(page==='builders'&&id==='data-brandPavilions')return '聯繫與參觀預約'
  if(page==='franchise'&&path==='FRANCHISE_BROCHURE_URL')return '加盟資料下載'
  if(id==='knowledge-articles')return '文章管理'
- if(id==='news-articles')return page==='news-latest'?'消息管理':page==='news-activities'?'活動管理':'影音管理'
+ if(id==='news-articles')return page==='news'?'最新消息列表':page==='news-latest'?'消息管理':page==='news-activities'?'活動管理':'影音管理'
  if(id.startsWith('catalog-'))return '商品顯示與排序'
  if(path==='metaLabels')return '門市內頁規格與資訊'
- if(path==='newsCategories')return '消息分類選單'
+ if(id===view('news-index')&&path==='newsCategories')return '最新消息分類標籤'
  if(page==='privacy'&&['sections','numbers'].includes(path))return '隱私權條款'
  if(path==='sitemapGroups')return '網站地圖與隱私權入口'
  if(page==='builder-catalogues'&&path==='catalogues')return '型錄封面與下載'

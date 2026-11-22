@@ -4,17 +4,19 @@ import {runInNewContext} from 'node:vm'
 import {randomUUID} from 'node:crypto'
 import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
-import {pageEditors,pageBlocks} from '../shared/cms/page-editors.mjs'
+import {pageEditors,pageBlocks,searchResultLink,seriesCardRedirect} from '../shared/cms/page-editors.mjs'
 import {checkPageBody,editorSchema} from '../server/cms/page-editors.mjs'
 import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField} from '../shared/cms/workbench.mjs'
+import {seriesEditorSections,seriesEditorSchema,sectionForSeriesField} from '../shared/cms/series-editor.mjs'
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
 import {blockThumbnail} from '../shared/cms/page-editors.mjs'
-import {valueAt,searchPages,pageTaskLink} from '../shared/cms/page-editors.mjs'
+import {valueAt,searchPages,pageTaskLink,pageSummary,storeCasesPageId,storeCaseRedirect} from '../shared/cms/page-editors.mjs'
 import {sameContent,pageChanges,changeImpacts,blockImpacts,publishReview,pageSearchItems,pageMedia,hasPageChanges,itemPublication} from '../shared/cms/changes.mjs'
 import {normalizeVideos,validate} from '../server/cms/content.mjs'
 import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
+import {compareNewsDates,publicContent} from '../shared/cms/public-content.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 {
@@ -64,6 +66,52 @@ for(const p of pageEditors){
 }
 const home=workbenchBlocks('home',pageBlocks(pageEditors[0],docs))
 assert.deepEqual(home.filter(b=>!b.secondary).map(b=>b.name),['首頁輪播圖片','品牌系列','設計風格圖片','廚房產品','集團品牌標誌','設計案例','品牌承諾','全台門市據點'])
+const seriesPage=pageEditors.find(p=>p.id==='series'),series=pageBlocks(seriesPage,docs)
+assert.deepEqual(seriesPage.ids,['data-kitchenSeries'])
+assert.deepEqual(series.filter(b=>!b.secondary).map(b=>b.name),['品牌系列內頁'])
+assert(series[0].aliases.includes('series:系列內頁'))
+const seriesSchema=series[0].fields.find(field=>field.path==='KITCHEN_SERIES_PAGES').schema.item
+const sections=seriesEditorSections.map(part=>seriesEditorSchema(seriesSchema,part.id))
+assert.deepEqual(seriesEditorSections.map(part=>part.name),['主視覺輪播','探索廚房美學','套系與特色','板材顏色選擇','廚房電器推薦','風格廚房實例'])
+assert.deepEqual(sections.flatMap(section=>Object.keys(section.fields).filter(key=>key!=='buttonDestinations')).sort(),
+ Object.keys(seriesSchema.fields).filter(key=>key!=='buttonDestinations'&&!seriesSchema.fields[key].hidden).sort())
+assert.deepEqual(sections.flatMap(section=>Object.keys(section.fields.buttonDestinations?.fields||{})).sort(),
+ Object.keys(seriesSchema.fields.buttonDestinations.fields).sort())
+const seriesTemplate=await readFile(new URL('../components/internal/KitchenSeriesPage.vue',import.meta.url),'utf8')
+for(const part of seriesEditorSections){
+ assert(seriesTemplate.includes('id="'+part.anchor+'"'),part.name+' must have a website anchor')
+ for(const field of part.fields)assert.equal(sectionForSeriesField('KITCHEN_SERIES_PAGES.0.'+field)?.id,part.id)
+ for(const button of part.buttons)assert.equal(sectionForSeriesField('KITCHEN_SERIES_PAGES.1.buttonDestinations.'+button)?.id,part.id)
+}
+
+const homeSeries=home.find(b=>b.id==='home:品牌系列')
+assert(homeSeries.fields.some(f=>f.path==='KITCHEN_STYLES'))
+assert.equal(searchPages([{title:'首頁',blocks:home}],'首頁與選單系列卡片')[0].block.id,homeSeries.id)
+const oldCards=seriesCardRedirect({sitePage:'series',block:'series:首頁與選單系列卡片',section:'design',q:'AI',page:'2',list:'data-kitchenStyles:KITCHEN_STYLES',item:'aikitchen'})
+assert.deepEqual(oldCards,{path:'/admin/home',query:{section:'design',q:'AI',page:'2',returnPath:'/admin/content',sitePage:'home',block:'home:品牌系列',list:'data-kitchenStyles:KITCHEN_STYLES',item:'aikitchen'}})
+assert.equal(seriesCardRedirect({sitePage:'series',block:'series:系列內頁'}),undefined)
+const guidePage=pageEditors.find(p=>p.id==='knowledge'),guideBlocks=pageBlocks(guidePage,docs)
+assert.deepEqual(guideBlocks.map(b=>b.name),['主視覺標題','麵包屑編輯設定','文章管理','頁面共用設定'])
+const guideArticles=guideBlocks.find(b=>b.name==='文章管理'),guideShared=guideBlocks.find(b=>b.name==='頁面共用設定')
+assert(guideArticles.aliases.includes('knowledge:系統櫃板材比較'))
+assert(guideShared.aliases.includes('knowledge:延伸文章按鈕'))
+assert.deepEqual(guideArticles.fields.filter(f=>!f.formGroup).map(f=>[f.documentId,f.path]),[['knowledge-articles','items']])
+assert(guideArticles.fields.some(f=>f.path==='systemCabinetMaterials'&&f.formGroup==='系統櫃板材比較'))
+const knowledgeListing=docs.find(d=>d.id==='view-pages-knowledge-index')
+const relabelledGuide=structuredClone(knowledgeListing.body)
+relabelledGuide.copy.breadcrumbList='裝修指南測試'
+checkPageBody(guidePage,knowledgeListing.id,knowledgeListing.body,relabelledGuide,knowledgeListing.schema)
+validate(relabelledGuide,knowledgeListing.schema)
+assert.deepEqual(changeImpacts([{documentId:knowledgeListing.id,path:'copy.breadcrumbList'}]).map(i=>i.href),['/knowledge#knowledge-breadcrumb','/knowledge/design/systemcabinet#knowledge-breadcrumb'])
+assert.equal(searchResultLink({page:guidePage,block:guideArticles},{q:'系統櫃板材比較'}).query.block,'knowledge:系統櫃板材比較')
+const promise=docs.find(d=>d.id==='view-components-home-HomeWhatWeDo'),promiseFields=home.find(b=>b.id==='home:品牌承諾').fields
+for(const key of ['field1','field2']){
+ assert(!promiseFields.some(f=>f.documentId===promise.id&&f.path==='copy.'+key))
+ const modified={...promise.body,copy:{...promise.body.copy,[key]:'/decor/other.png'}}
+ assert.throws(()=>checkPageBody(pageEditors[0],promise.id,promise.body,modified,promise.schema),/目前頁面以外/)
+}
+assert(promiseFields.some(f=>f.documentId===promise.id&&f.path==='copy.field8'&&f.schema.destination))
+assert(promiseFields.some(f=>f.path==='images.asset_10b5a86c'))
 const inspiration=workbenchBlocks('inspiration',pageBlocks(pageEditors.find(p=>p.id==='inspiration'),docs))
 assert.deepEqual(inspiration.map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理','頁面共用設定'])
 const inspirationShared=inspiration.find(b=>b.name==='頁面共用設定')
@@ -87,8 +135,21 @@ assert.deepEqual(filterFields.filter(f=>f.schema.advanced).map(f=>f.path),['copy
 assert.equal(filterFields.find(f=>f.path==='copy.text5').schema.advanced,undefined)
 assert(inspirationShared.fields.filter(f=>f.formGroup==='搜尋結果提示').every(f=>f.schema.advanced&&f.schema.readingGroup==='搜尋結果'))
 assert.deepEqual(inspirationShared.fields.filter(f=>f.formGroup==='案例卡片按鈕').map(f=>f.path),['copy.text8'])
+const cataloguePage=pageEditors.find(p=>p.id==='series-catalogue'),catalogueBlocks=pageBlocks(cataloguePage,docs)
+assert.deepEqual(catalogueBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','型錄管理'])
+const [catalogueHero,catalogueTrail,catalogueList]=catalogueBlocks
+assert(catalogueHero.aliases.includes('series-catalogue:頁面最上方'))
+assert(catalogueList.aliases.includes('series-catalogue:型錄封面與下載'))
+assert.equal(catalogueList.hint,'管理型錄封面、預覽與下載檔案')
+assert(catalogueList.fields.some(f=>f.documentId==='data-catalogues'&&f.path==='KITCHEN_CATALOGUES'))
+assert.deepEqual(catalogueTrail.fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbList'])
+const catalogueCopy=docs.find(d=>d.id==='view-pages-catalogues-kitchenware-catalog')
+const catalogueCopyEdit={...catalogueCopy.body,copy:{...catalogueCopy.body.copy,breadcrumbList:'系列型錄'}}
+checkPageBody(cataloguePage,catalogueCopy.id,catalogueCopy.body,catalogueCopyEdit,catalogueCopy.schema)
+validate(catalogueCopyEdit,catalogueCopy.schema)
+assert.deepEqual(changeImpacts([{documentId:catalogueCopy.id,path:'copy.breadcrumbList'}]).map(i=>i.href),[catalogueTrail.href])
 for(const id of ['series-catalogue','product-catalogue','builder-catalogues']){
- const block=pageBlocks(pageEditors.find(p=>p.id===id),docs).find(b=>b.name==='型錄封面與下載')
+ const block=id==='series-catalogue'?catalogueList:pageBlocks(pageEditors.find(p=>p.id===id),docs).find(b=>b.name==='型錄封面與下載')
  assert.equal(block.fields.find(f=>f.path==='copy.text2')?.schema.readingGroup,'型錄清單')
  assert(block.fields.find(f=>f.path==='copy.text2')?.schema.advanced)
  assert(block.fields.some(f=>f.label==='下載按鈕文字'&&!f.schema.advanced))
@@ -96,6 +157,14 @@ for(const id of ['series-catalogue','product-catalogue','builder-catalogues']){
 const identity=pageBlocks(pageEditors.find(p=>p.id==='about'),docs).find(b=>b.name==='專屬品牌識別')
 assert(!identity.fields.some(f=>f.path==='copy.field10'),'Fixed modal placement is not an editable field')
 const previewBodies=Object.fromEntries(docs.map(d=>[d.id,structuredClone(d.body)])),presentation={heroImage:'/hero.jpg',cases:[{title:'真實案例',image:'/case.jpg'}]},serialized=JSON.stringify(presentation)
+const menu=workbenchBlocks('menu',pageBlocks(pageEditors.find(p=>p.id==='menu'),docs))
+assert.deepEqual(menu.slice(0,3).map(b=>b.name),['左側主導覽','右側主導覽','品牌系列選單設定'])
+assert(menu[0].aliases.includes('menu:左側主選單')&&menu[0].aliases.includes('menu:展開選單中的型錄入口'))
+assert.deepEqual(menu[0].fields.map(f=>f.path),['leftNav','copy.text2','copy.field1'])
+const header=previewBodies['view-components-SiteHeader']
+assert(menu.some(b=>b.name==='手機選單文字'&&b.fields.some(f=>f.path==='copy.field19')))
+assert.equal(pagePositionContent(menu[0],previewBodies,{}, {value:header.leftNav.find(i=>i.mega)}).buttons[0].value,header.copy.text2)
+assert.equal(pagePositionContent(menu[0],previewBodies,{}, {value:header.leftNav.find(i=>!i.mega)}).buttons.length,0)
 const heroSchema=home.find(b=>b.id==='home:主視覺輪播').fields.find(f=>f.path==='slides').schema
 assert.equal(heroSchema.label,'輪播內容');assert.equal(heroSchema.searchLabel,'搜尋輪播名稱')
 const heroBefore=JSON.stringify(previewBodies),heroSelected={documentId:'view-components-home-HomeHero',path:'slides',index:1,value:{image:'/selected-home.webp',title:'所選輪播',description:'目前的介紹',mobileImage:'/mobile-home.webp',desktopFocusX:20}}
@@ -110,6 +179,13 @@ previewBodies['view-pages-design-inspiration-index'].copy.text5='套用篩選';p
 const samplePosition=inspirationPosition(previewBodies,presentation)
 assert.equal(samplePosition.copy.text5,'套用篩選');assert.equal(samplePosition.copy.text9,'沒有符合的案例');assert.equal(samplePosition.cases[0].title,'真實案例')
 assert.equal(inspirationPosition(previewBodies,presentation,{caption:'正在編輯',image:'/selected.jpg'}).cases[0].image,'/selected.jpg');assert.equal(JSON.stringify(presentation),serialized,'The schematic cannot mutate published case samples')
+const publishedCase={slug:'case-1',title:'已發布標題',source:'自建案例',image:'/published.jpg'}
+const selectedCase={caption:'修改中的標題',image:'/selected.jpg',value:{id:'case-1',description:'修改中的介紹',enabled:false}}
+const caseCards=inspirationPosition(previewBodies,{cases:[publishedCase,{slug:'store-1',source:'門市案例'}]},selectedCase).cases
+assert.deepEqual(caseCards.map(c=>[c.slug,c.source]),[['case-1','自建案例'],['store-1','門市案例']])
+assert.equal(caseCards[0].description,'修改中的介紹')
+assert.equal(caseCards[0].enabled,false)
+
 const builders=workbenchBlocks('builders',pageBlocks(pageEditors.find(p=>p.id==='builders'),docs)),builderHero=builders.find(b=>b.name==='頁面最上方')
 assert(builderHero.fields.some(f=>f.path==='copy.field6'),'Builder hero image must be beside its heading, not in brand information')
 previewBodies['view-pages-builders-index'].copy.text2='目前輸入的建商標題';previewBodies['view-pages-builders-index'].copy.field6='/changed-builder.webp'
@@ -138,6 +214,52 @@ assert.equal(serviceScene.mappedImage,serviceScene.image,'The shared section pho
 assert.equal(builders.find(b=>b.name==='合作夥伴').kind,'inactive','Archived builder partners are not a website section')
 assert.equal(itemWebsitePath('data-storeCases','臺北市'),'','County selection keeps the filter position instead of linking to a case detail')
 assert.equal(itemWebsitePath('data-storeCases',{slug:'songzhu'}),'/gallery/songzhu')
+const storeRegions=pageBlocks(pageEditors.find(p=>p.id==='stores'),docs).find(b=>b.name==='區域與縣市')
+assert.equal(storeRegions.kind,'filter')
+assert.equal(storeRegions.fields[0].path,'regionCities')
+assert.deepEqual(Object.keys(storeRegions.fields[0].schema.fields),['北部','中部','南部','東部','離島'])
+assert.equal(storeRegions.fields[0].schema.fields['中部'].item.label,'縣市名稱')
+const serviceEditor=pageEditors.find(p=>p.id==='service'),serviceBlocks=pageBlocks(serviceEditor,docs).filter(b=>!b.secondary)
+assert.deepEqual(serviceBlocks.map(b=>b.name),['主視覺標題','服務流程','品牌影片','服務指南'])
+for(const [name,oldName,anchor,field] of [
+ ['服務流程','服務流程與介紹','service-intro-title','serviceSteps'],
+ ['品牌影片','服務介紹影片','service-brand-video','serviceVideoSrc'],
+ ['服務指南','服務指南問答','service-guide','faqGroups'],
+]){
+ const block=serviceBlocks.find(b=>b.name===name)
+ assert(block.aliases.includes('service:'+oldName))
+ assert.equal(block.href,'/service-process#'+anchor)
+ assert(block.fields.some(f=>f.path===field))
+ assert.equal(searchPages([pageSummary(serviceEditor,[],docs)],oldName)[0].block.id,block.id)
+}
+const serviceVideo=serviceBlocks.find(b=>b.kind==='video')
+const legacyVideo={...serviceVideo,fields:serviceVideo.fields.filter(f=>f.documentId!=='site-visuals')}
+assert.equal(pagePositionContent(legacyVideo,{},{serviceVideoCover:'/service-poster.webp'}).image,'/service-poster.webp')
+const newsOverview=pageSummary(pageEditors.find(p=>p.id==='news'),[],docs)
+const overviewSections=[
+ ['最新消息列表','全部消息列表','news-list-title',['items','copy.text2']],
+ ['最新消息分類標籤','消息分類選單','news-tags-title',['newsCategories','copy.text3']],
+ ['最新文章','最近文章推薦','sidebar-recent-title',['copy.text4']],
+]
+assert.deepEqual(newsOverview.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題',...overviewSections.map(row=>row[0])])
+for(const [name,oldName,anchor,fields] of overviewSections){
+ const block=newsOverview.blocks.find(b=>b.name===name)
+ assert(block.aliases.includes('news:'+oldName))
+ assert.equal(block.href,'/news#'+anchor)
+ assert.deepEqual(block.fields.map(f=>f.path).sort(),[...fields].sort())
+ assert.equal(searchPages([newsOverview],oldName)[0].block.id,block.id)
+}
+const newsSamples={samples:[{title:'總覽文章'}],recentArticles:[{title:'側欄文章'}]}
+assert.equal(pagePositionContent(newsOverview.blocks[1],{},newsSamples).items[0].title,'總覽文章')
+assert.equal(pagePositionContent(newsOverview.blocks[3],{},newsSamples).items[0].title,'側欄文章')
+const overviewField=newsOverview.blocks[1].fields.find(f=>f.documentId==='news-articles')
+assert(overviewField.schema.newsOverview&&!overviewField.schema.rowFilter)
+assert(!newsOverview.unpublishIds.includes('news-articles'))
+const overviewNewsDoc=docs.find(d=>d.id==='news-articles'),overviewEdit=structuredClone(overviewNewsDoc.body)
+for(const item of overviewEdit.items)item.summary.excerpt+='驗收預覽'
+checkPageBody(newsOverview,overviewNewsDoc.id,overviewNewsDoc.body,overviewEdit,overviewNewsDoc.schema)
+const publishedNews=publicContent('data-news',overviewNewsDoc.body).newsArticles
+assert.deepEqual(overviewNewsDoc.body.items.filter(i=>i.enabled).sort((a,b)=>compareNewsDates(a.summary.publishedAt,b.summary.publishedAt)).map(i=>i.id),publishedNews.map(i=>i.id))
 for(const brand of ['sakura','svago','teka']){
  const p=pageEditors.find(p=>p.id==='products-'+brand)
  const block=pageBlocks(p,docs).find(b=>b.name==='商品頁型錄按鈕')
@@ -190,7 +312,7 @@ const script=source.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(
 const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema,reorder,startDrag,drop,toggleVisibility,dragged,cancelItem,changed,focusRow,root};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
 const model=reactive({modelValue:Array.from({length:8},(_,i)=>({id:'row-'+i,title:'內容 '+i,image:'/image.webp'})),schema:{type:'array',label:'輪播內容',item:{type:'object',fields:{id:{type:'string'},title:{type:'string'}}},template:{id:'',title:''}},documentId:'home',path:'slides'})
 const route=reactive({query:{}}),state=ref({}),errors=ref([]),workbench={rows:ref({}),baseline:ref({home:{slides:JSON.parse(JSON.stringify(model.modelValue))}}),focused:ref(''),editing:ref(''),selection:ref(null),metadata:ref({}),busy:ref(false),select:()=>{}},emitted=[]
-const context={ref,computed,watch,nextTick,useRoute:()=>route,useRouter:()=>({replace:async value=>{route.query=value.query}}),sameContent,itemPublication,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,articleDateLabel,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
+const context={ref,computed,watch,nextTick,useRoute:()=>route,useRouter:()=>({replace:async value=>{route.query=value.query}}),sameContent,itemPublication,compareNewsDates,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,articleDateLabel,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
 const scope=effectScope();scope.run(()=>runInNewContext(code,context))
 await nextTick();const ui=context.ui
 assert.equal(ui.visible.value.length,6);assert.equal(workbench.selection.value.caption,'內容 0');assert.equal(workbench.editing.value,'')
@@ -247,12 +369,37 @@ reviewingBodies[pavilion.id].brandPavilions.reverse();const reorderedReview=publ
 stored.body.brandPavilions[0][hours]+='先前營業時間';const overwritten={[pavilion.id]:structuredClone(stored.body)};overwritten[pavilion.id].brandPavilions[0][hours]+='本次營業時間';const overwrittenReview=publishReview(pavilionBlocks,[stored],overwritten);assert(!overwrittenReview.saved.some(c=>c.label.includes('台北館')),'The same stable item field is shown once, using its current value')
 const indexed=pageEditors.map(p=>{const b=workbenchBlocks(p.id,pageBlocks(p,docs));return{...p,title:p.name,blocks:b.map(block=>({...block,items:pageSearchItems(block,Object.fromEntries(docs.map(d=>[d.id,d.body])))}))}})
 const direct=searchPages(indexed,'台北館');assert(direct.some(r=>r.page.id==='pavilions'&&r.item?.caption==='台北館'));assert(direct.every(r=>r.item?.scope==='data-brandPavilions:brandPavilions'))
+const servicePages=pageEditors.filter(p=>p.section==='service').map(p=>pageSummary(p,[],docs))
+const serviceCards=searchPages(servicePages,'')
+assert.deepEqual(serviceCards.map(r=>r.page.title),['案例門市','服務流程','門市案例'])
+const caseCard=serviceCards[2],storeDoc=docs.find(d=>d.id==='data-storeCases')
+assert.equal(caseCard.page.thumbnail,storeDoc.body.storeCases[0].images[0])
+const sharedSections=['門市內頁預約按鈕','門市內頁規格與資訊','門市內頁上一篇與下一篇','門市內頁顧客評論']
+assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['門市管理',...sharedSections])
+const listPage=servicePages[0]
+assert(!listPage.blocks.some(b=>sharedSections.includes(b.name)||b.name==='門市管理'))
+assert.deepEqual(searchResultLink(searchPages(servicePages,'門市案例')[0],{section:'service',q:'門市案例'}).query,{section:'service',q:'門市案例',sitePage:storeCasesPageId})
+for(const name of sharedSections)assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:'+name}).query.block,storeCasesPageId+':'+name)
+const oldStoreLink={section:'service',sitePage:'stores',q:'安康店',page:'2',block:'stores:門市與案例',list:'data-storeCases:storeCases',item:storeDoc.body.storeCases[0].slug}
+assert.deepEqual(storeCaseRedirect(oldStoreLink).query,{...oldStoreLink,sitePage:storeCasesPageId,block:storeCasesPageId+':門市管理'})
+assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:區域與縣市'}),undefined)
+const changedRegion=structuredClone(storeDoc.body)
+changedRegion.regionCities['北部'].reverse()
+checkPageBody(listPage,storeDoc.id,storeDoc.body,changedRegion,storeDoc.schema)
+assert.throws(()=>checkPageBody(caseCard.page,storeDoc.id,storeDoc.body,changedRegion,storeDoc.schema),/目前頁面以外/)
+const changedCase=structuredClone(storeDoc.body)
+changedCase.storeCases[0].title='門市案例內容測試'
+checkPageBody(caseCard.page,storeDoc.id,storeDoc.body,changedCase,storeDoc.schema)
+assert.throws(()=>checkPageBody(listPage,storeDoc.id,storeDoc.body,changedCase,storeDoc.schema),/目前頁面以外/)
+const crossPageReview=publishReview(caseCard.page.blocks,[{...storeDoc,body:changedRegion,publishedBody:storeDoc.body}],{[storeDoc.id]:changedRegion})
+assert(crossPageReview.saved.length&&crossPageReview.saved.every(c=>c.location==='案例門市 › 區域與縣市'))
+for(const page of [listPage,caseCard.page])assert(!page.unpublishIds.includes(storeDoc.id))
 for(const id of ['news-latest','news-activities','news-video'])for(const block of indexed.find(p=>p.id===id).blocks)for(const i of block.items)assert(docs.find(d=>d.id==='news-articles').body.items.find(row=>itemKey(row)===i.key).summary.category===id.slice(5),'Search cannot leak other categories into a page')
 const media=pageMedia(docs.filter(d=>pageEditors[0].ids.includes(d.id)),Object.fromEntries(docs.map(d=>[d.id,d.body])));assert(media.length);assert(media.every(i=>i.label&&!/copy\./.test(i.label)));assert.equal(new Set(media.map(i=>i.src)).size,media.length)
 }
 console.log('PASS: actual-name item search, category scoping, exact before/after values and changed-document impacts, other saved changes, isolated item cancellation after reorder/reopen, new-item cancellation, deep-link pagination and page media descriptions')
 
-console.log('PASS: all 28 pages retain every field and old link; screenshot home order; list selection/edit/focus; custom case insertion sorting, drag scope, cross-page movement, search/busy guards and visibility toggles')
+console.log('PASS: all page editors retain every field and old link; screenshot home order; list selection/edit/focus; custom case insertion sorting, drag scope, cross-page movement, search/busy guards and visibility toggles')
 
 // Public status and pending counts reflect content, never version numbers or a draft switch.
 const article=structuredClone(newsDoc.body.items[0]),publishedDoc={id:newsDoc.id,publishedBody:{items:[structuredClone(article)]}}

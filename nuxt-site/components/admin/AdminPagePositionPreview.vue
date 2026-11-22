@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ArrowRight,Play,Plus,Search,MessageSquare,Download,MapPin} from 'lucide-vue-next'
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
+import {knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
@@ -8,24 +9,40 @@ const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
 const destinationTitle=computed(()=>destinationName(scene.value.destination?.value,destinationGroups(sitePages.value||[],workspaces.value||[]))||'沿用既有連結')
 const scene=computed(()=>pagePositionContent(props.block,props.bodies,props.presentation,props.selected,props.focusedField))
 const breadcrumb=computed(()=>newsBreadcrumbPosition(props.block,props.bodies,props.presentation))
+const isCatalogueTrail=computed(()=>props.block?.id.startsWith('series-catalogue:'))
+const trailCopy=computed(()=>props.bodies[props.block?.fields[0]?.documentId]?.copy)
+const pageTrail=computed(()=>isCatalogueTrail.value?seriesCatalogueBreadcrumb(trailCopy.value):knowledgeBreadcrumb(trailCopy.value))
 const highlighted=(path:string)=>props.focusedField===path
 const isLabel=(label:string)=>/標籤|小標|前置英文/.test(label)
 const headings=computed(()=>scene.value.heading.filter((f:any)=>!isLabel(f.label)&&!/語音/.test(f.label)))
 const eyebrows=computed(()=>scene.value.heading.filter((f:any)=>isLabel(f.label)))
 const seriesHeading=computed(()=>props.block?.id==='home:品牌系列'?scene.value.heading.filter((f:any)=>['copy.englishLabel','copy.englishLead','copy.chineseTitle','copy.englishTitleFirst','copy.englishTitleSecond'].includes(f.path)):null)
 const regions=computed(()=>Object.entries(props.bodies['data-storeCases']?.regionCities||{}) as [string,string[]][])
+const filterCities=computed(()=>props.block?.storeRegion?regions.value.find(([region])=>region===props.block.storeRegion)?.[1]||[]:regions.value[0]?.[1]?.slice(0,3)||[])
+const filterImage=computed(()=>props.block?.storeRegion
+ ? props.bodies['data-storeCases']?.storeCases?.find((store:any)=>store.region===props.block.storeRegion&&store.cover)?.cover
+ : props.presentation?.specialImage)
+const storeExampleKind=computed(()=>scene.value.kind.startsWith('store-'))
+const storeDetails=computed(()=>props.bodies['view-pages-gallery-slug-'])
+const storeCases=computed<any[]>(()=>props.bodies['data-storeCases']?.storeCases||[])
+const storeExample=computed(()=>storeCases.value.find(store=>store.slug===props.presentation?.storeCaseExamples?.[scene.value.kind]?.slug))
+const storeNeighbors=computed(()=>{
+ const rows=storeCases.value,index=rows.indexOf(storeExample.value)
+ return index<0?[]:[rows[(index-1+rows.length)%rows.length],rows[(index+1)%rows.length]]
+})
+const storeSpecs=computed(()=>Object.entries(storeDetails.value?.metaLabels||{}).flatMap(([key,label])=>storeExample.value?.meta?.[key]?[{key,label,value:storeExample.value.meta[key]}]:[]))
 const captions=computed(()=>scene.value.bodyText.filter((f:any)=>!/供語音|載入|失敗|格式欄位|頁數欄位|大小欄位/.test(f.label)))
 const media=computed(()=>scene.value.media.filter((f:any,index:number)=>index<3||highlighted(f.path)))
 const itemText=(item:any)=>{const text=item.value?.summary?.excerpt||item.value?.intro?.paragraphs||item.value?.description||item.value?.paragraphs||item.value?.detail||item.value?.copy||item.value?.quote||item.value?.excerpt||item.value?.summary||'';return Array.isArray(text)?text.join('\n'):typeof text==='string'?text:''}
 const formFields=computed(()=>props.block?.id.startsWith('franchise-form:')?['姓名','電子郵件','聯絡電話','居住地']:['聯絡人','聯絡電話','建設公司','電子信箱'])
-const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
+const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
 const previewStores=computed(()=>scene.value.items.map((i:any)=>({name:i.value?.storeName||i.value?.name||i.title,address:i.value?.address,hours:i.value?.hours,phone:i.value?.contact?.phone||i.value?.phone,image:i.image})).filter((i:any)=>i.address||i.image))
 const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='systemCabinetMaterials');return f?props.bodies[f.documentId]?.[f.path]:null})
 </script>
 <template>
  <div class="cms-page-position-scene cms-website-scene" :data-position-kind="scene.kind">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
-  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','inactive','registration'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image"><AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ pageTitle }}</span></div>
+  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','registration'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image"><AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ pageTitle }}</span></div>
   <section class="cms-scene-target" :aria-label="block?.name+'的位置示意'">
    <span class="cms-scene-tag">{{ block?.name }}<template v-if="selected"> · {{ selected.caption }}</template></span>
    <template v-if="scene.displaySettings.length">
@@ -46,6 +63,60 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <AdminThumbnail v-for="image in presentation?.registration?.images" :key="image.src" :src="image.src" :alt="image.alt||'報名 QR Code'" class="cms-scene-wide-image" />
     <p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p>
     <p v-if="!presentation?.registration" class="cms-scene-a11y">報名文章目前沒有可顯示的公開範例。</p>
+   </template>
+   <template v-else-if="storeExampleKind">
+    <template v-if="storeExample&&storeDetails">
+     <AdminThumbnail :src="storeExample.images?.[0]||storeExample.cover" :alt="storeExample.storeName+'案例照片'" class="cms-scene-wide-image" />
+     <h3>{{ storeExample.title }}</h3>
+     <div v-if="scene.kind==='store-booking'" class="cms-scene-buttons">
+      <span :class="{'is-focused':highlighted('copy.text2')||highlighted('copy.field1')}">{{ storeDetails.copy.text2 }}<ArrowRight :size="13" /></span>
+     </div>
+     <template v-else-if="scene.kind==='store-info'">
+      <h3 v-if="storeSpecs.length" :class="{'is-focused':highlighted('copy.text3')}">{{ storeDetails.copy.text3 }}</h3>
+      <dl v-if="storeSpecs.length" class="cms-scene-details">
+       <template v-for="spec in storeSpecs" :key="spec.key"><dt :class="{'is-focused':highlighted('metaLabels.'+spec.key)}">{{ spec.label }}</dt><dd>{{ spec.value }}</dd></template>
+      </dl>
+      <template v-if="storeExample.contact">
+       <h3 :class="{'is-focused':highlighted('copy.text4')}">{{ storeDetails.copy.text4 }}</h3>
+       <p>{{ storeExample.contact.address }}</p>
+       <div class="cms-scene-buttons">
+        <span :class="{'is-focused':highlighted('copy.storeBookingDestination')}">{{ storeDetails.copy.text2 }}<ArrowRight :size="13" /></span>
+        <span v-if="storeExample.contact.lineUrl" :class="{'is-focused':highlighted('copy.text5')}">{{ storeDetails.copy.text5 }}</span>
+        <span v-if="storeExample.contact.mapUrl" :class="{'is-focused':highlighted('copy.text6')}">{{ storeDetails.copy.text6 }}</span>
+       </div>
+      </template>
+     </template>
+     <dl v-else-if="scene.kind==='store-navigation'" class="cms-scene-details">
+      <template v-for="(neighbor,index) in storeNeighbors" :key="index">
+       <dt :class="{'is-focused':highlighted(index?'copy.text8':'copy.text7')}">{{ index?storeDetails.copy.text8:storeDetails.copy.text7 }}</dt><dd>{{ neighbor.title }}</dd>
+      </template>
+     </dl>
+     <template v-else>
+      <h3 :class="{'is-focused':highlighted('copy.text9')}">{{ storeDetails.copy.text9 }}</h3>
+      <blockquote v-if="storeExample.reviews?.[0]">{{ storeExample.reviews[0] }}</blockquote>
+     </template>
+    </template>
+    <p v-else class="cms-field-help">目前沒有刊登的門市案例顯示此區。</p>
+   </template>
+   <div v-else-if="scene.kind==='news-overview'" class="cms-scene-news-overview">
+    <article v-for="item in scene.items" :key="item.title">
+     <AdminThumbnail v-if="item.image" :src="item.image" :alt="item.title+'封面'" />
+     <div>
+      <small v-if="item.value?.summary">{{ item.value.summary.categoryLabel }} · {{ item.value.summary.displayDate || item.value.summary.publishedAt }}</small>
+      <h3>{{ item.title }}</h3>
+      <p v-if="itemText(item)">{{ itemText(item) }}</p>
+     </div>
+    </article>
+   </div>
+   <template v-else-if="scene.kind==='page-breadcrumb'">
+    <header class="cms-scene-news-hero">
+     <AdminThumbnail v-if="scene.contextImage" :src="scene.contextImage" :alt="pageTitle+'頁首照片'" />
+     <div>
+      <strong>{{ trailCopy?.text1 }}</strong>
+      <p><span :class="{'is-focused':highlighted('copy.breadcrumbHome')}">{{ pageTrail.breadcrumbHome }}</span> / <span :class="{'is-focused':highlighted('copy.breadcrumbList')}">{{ pageTrail.breadcrumbList }}</span></p>
+     </div>
+    </header>
+    <p class="cms-field-help">{{ isCatalogueTrail?'從系列內頁進入型錄時，中間會顯示該系列的返回連結。':'列表與文章會使用同一組導覽文字。' }}</p>
    </template>
    <template v-else-if="scene.kind==='breadcrumb'">
     <header class="cms-scene-news-hero">
@@ -79,7 +150,18 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </template>
     </header>
     <header v-else-if="headings.length||eyebrows.length" class="cms-scene-heading"><small v-for="f in eyebrows" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</small><h3 v-for="f in headings" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</h3></header>
-    <template v-if="scene.kind==='filter'"><div class="cms-scene-filter"><strong :class="{'is-focused':highlighted('copy.text3')}">{{ bodies['view-pages-gallery-index']?.copy?.text3 }}</strong><span :class="{'is-focused':highlighted('copy.text4')}">{{ bodies['view-pages-gallery-index']?.copy?.text4 }}</span><span v-for="[region] in regions" :key="region">{{ region }}</span></div><div class="cms-scene-filter"><strong :class="{'is-focused':highlighted('copy.text5')}">{{ bodies['view-pages-gallery-index']?.copy?.text5 }}</strong><span v-for="city in regions[0]?.[1]?.slice(0,3)||[]" :key="city">{{ city }}</span></div><AdminThumbnail v-if="presentation?.specialImage" :src="presentation.specialImage" :alt="block?.name+'下方的門市清單位置'" class="cms-scene-wide-image" /></template>
+    <template v-if="scene.kind==='filter'">
+     <div class="cms-scene-filter">
+      <strong :class="{'is-focused':highlighted('copy.text3')}">{{ bodies['view-pages-gallery-index']?.copy?.text3 }}</strong>
+      <span :class="{'is-focused':highlighted('copy.text4')}">{{ bodies['view-pages-gallery-index']?.copy?.text4 }}</span>
+      <span v-for="[region] in regions" :key="region" :class="{'is-focused':block?.storeRegion===region}">{{ region }}</span>
+     </div>
+     <div class="cms-scene-filter">
+      <strong :class="{'is-focused':highlighted('copy.text5')}">{{ bodies['view-pages-gallery-index']?.copy?.text5 }}</strong>
+      <span v-for="(city,index) in filterCities" :key="index" :class="{'is-focused':block?.storeRegion&&selected?.index===index}">{{ city }}</span>
+     </div>
+     <AdminThumbnail v-if="filterImage" :src="filterImage" :alt="block?.name+'下方的門市清單位置'" class="cms-scene-wide-image" />
+    </template>
     <template v-else-if="scene.kind==='results'"><p v-for="f in scene.text" :key="f.path" class="cms-scene-result" :class="{'is-focused':highlighted(f.path)}"><Search :size="18" aria-hidden="true" />{{ (bodies['data-storeCases']?.storeCases?.length||0)+f.value }}</p><AdminThumbnail v-if="presentation?.specialImage" :src="presentation.specialImage" :alt="pageTitle+'搜尋結果第一張案例照片'" class="cms-scene-wide-image" /></template>
     <template v-else-if="scene.kind==='empty'"><div class="cms-scene-empty"><Search :size="25" /><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div></template>
     <template v-else-if="scene.kind==='navigation'||scene.kind==='footer'"><div class="cms-scene-navigation" :class="{'is-footer':scene.kind==='footer'}"><h3 v-if="selected">{{ selected.caption }}</h3><div v-if="links.length" class="cms-scene-link-grid"><span v-for="(link,index) in links" :key="index">{{ link.label||link.title }}<ArrowRight :size="12" /></span></div><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p><div v-if="media.length" class="cms-scene-nav-media"><AdminThumbnail v-for="f in media" :key="f.path" :src="f.image" :alt="f.label" :class="{'is-focused':highlighted(f.path)}" contain /></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+'導覽位置圖'" contain /></div></template>
@@ -105,12 +187,12 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="scene.kind!=='breadcrumb'&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
    <p v-if="scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>
    <dl v-if="scene.auxiliary.some((f:any)=>highlighted(f.path))" class="cms-scene-details"><template v-for="field in scene.auxiliary.filter((f:any)=>highlighted(f.path))" :key="field.path"><dt>螢幕閱讀器會讀到</dt><dd>{{ field.value }}</dd></template></dl>
-   <p v-if="!['breadcrumb','registration','inactive'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
+   <p v-if="!['breadcrumb','page-breadcrumb','registration','inactive','filter'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
   </section>
  </div>
 </template>

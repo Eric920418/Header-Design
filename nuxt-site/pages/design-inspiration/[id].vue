@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-design-inspiration-id-', {"copy":{"text1":"此案例尚未提供圖片。","text2":"案例規格","text3":"返回設計靈感"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
-import { inspirationBreadcrumb } from '~/shared/cms/inspiration-breadcrumb.mjs'
+import { inspirationBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import type { DesignCaseDetail } from '~/types/designCloud'
 

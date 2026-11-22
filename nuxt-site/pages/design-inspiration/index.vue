@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-design-inspiration-index', {"copy":{"text1":"Inspiration","text2":"篩選設計靈感案例","text3":"設計型式","text4":"設計風格","text5":"Filter","text6":"共 ","text7":" 筆符合條件的設計案例","text8":"View","text9":"目前沒有符合條件的設計案例","text10":"請調整設計型式或設計風格，再重新篩選。","text11":"查看全部案例"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
-import { inspirationBreadcrumb } from '~/shared/cms/inspiration-breadcrumb.mjs'
+import { inspirationBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
 import { ArrowRight, SlidersHorizontal } from 'lucide-vue-next'
 import type { DesignCase, DesignCasePage, DesignFilters } from '~/types/designCloud'
 

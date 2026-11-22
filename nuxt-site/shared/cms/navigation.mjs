@@ -109,6 +109,19 @@ export function orderDesignWorkspaces(rows){
  return [...rows].sort((a,b)=>rank(a)-rank(b))
 }
 
+export function orderNewsPages(pages,published={}){
+ const header=published['view-components-SiteHeader']||{}
+ const menu=[...(header.leftNav||[]),...(header.rightNav||[])].find(item=>pathname(item.to)==='/news')
+ const categories=published['view-pages-news-index']?.newsCategories||[]
+ const order=[...new Set(['/news',...(menu?.children||[]).map(link=>pathname(link.to)),...categories.map(link=>pathname(link.to))])]
+ const ranks=new Map(order.map((path,index)=>[path,index]))
+ const news=pages.filter(page=>page.section==='news')
+ const rank=page=>ranks.get(pathname(page.href))??ranks.size
+ news.sort((a,b)=>rank(a)-rank(b))
+ let next=0
+ return pages.map(page=>page.section==='news'?news[next++]:page)
+}
+
 export function navigationSections(rows=[]){
  return siteSections.map(s=>{const w=rows.find(w=>w.section===s.key);return{...s,label:w?.sectionTitle||s.label,order:w?.sectionOrder??siteSections.indexOf(s)+100}}).sort((a,b)=>a.order-b.order)
 }

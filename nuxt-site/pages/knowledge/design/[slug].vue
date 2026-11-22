@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-knowledge-design-slug-', {"copy":{"field1":"/knowledge","text2":"廚房裝修指南"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+import { knowledgeBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
+const { copy: listCopy } = await useCmsResource('view-pages-knowledge-index', { copy: knowledgeBreadcrumb(), cmsSettings: { visible: true } })
+const breadcrumbs = knowledgeBreadcrumb(listCopy)
 
 import { KITCHEN_GUIDE_DETAILS as cmsSeed_KITCHEN_GUIDE_DETAILS } from '~/data/kitchenGuideDetails'
 import { KITCHEN_GUIDE_ARTICLES as cmsSeed_KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
@@ -51,8 +54,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   >
     <section :data-hero-photo="usesPptArticleTemplate ? 'songzhu' : undefined" class="knowledge-detail-breadcrumb hero-includes-header" aria-label="廚房裝修指南麵包屑">
       <span class="knowledge-detail-breadcrumb__overlay" aria-hidden="true" />
-      <nav class="knowledge-detail-breadcrumb__trail" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
-        <InternalSmartBreadcrumb preserve-hierarchy :fallback='[{ label: "首頁", to: "/" }, { label: "廚房裝修指南", to: "/knowledge" }]' v-slot="{ items, follow }">
+      <nav class="knowledge-detail-breadcrumb__trail" id="knowledge-breadcrumb" aria-label="麵包屑" v-reveal="{ anim: 'opalMoveUp' }">
+        <InternalSmartBreadcrumb preserve-hierarchy :fallback="[{ label: breadcrumbs.breadcrumbHome, to: '/' }, { label: breadcrumbs.breadcrumbList, to: '/knowledge' }]" v-slot="{ items, follow }">
           <template v-for="(item, index) in items" :key="index">
             <span v-if="index" aria-hidden="true">/</span>
             <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
@@ -65,7 +68,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <article class="knowledge-detail" :aria-labelledby="`knowledge-detail-title-${article.id}`">
       <header class="knowledge-detail__header" v-reveal="{ anim: 'opalMoveUp' }">
         <div class="knowledge-detail__meta">
-          <NuxtLink :to="cmsCopy.copy.field1">{{ cmsCopy.copy.text2 }}</NuxtLink>
+          <NuxtLink id="knowledge-return-link" :to="cmsCopy.copy.field1">{{ cmsCopy.copy.text2 }}</NuxtLink>
           <time :datetime="article.publishedAt">{{ article.displayDate }}</time>
         </div>
         <h1 :id="`knowledge-detail-title-${article.id}`"><InternalHeadingText :text="article.title" /></h1>

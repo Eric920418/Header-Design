@@ -55,7 +55,7 @@ export async function changeDocumentGroup(w,input,user,connection,checkScope){
     if(input.action!=='preview'){
      if(input.action!=='unpublish'&&JSON.stringify(body)!==previous?.body)state=await changeDocument(d.id,{action:'save',revision:state.revision,body},user,tx)
      if(input.action==='publish'&&state.draftId!==state.publishedId)state=await changeDocument(d.id,{action:'publish',revision:state.revision},user,tx)
-     if(input.action==='unpublish'&&state.publishedId)state=await changeDocument(d.id,{action:'unpublish',revision:state.revision},user,tx)
+     if(input.action==='unpublish'&&state.publishedId&&(!w.unpublishIds||w.unpublishIds.includes(d.id)))state=await changeDocument(d.id,{action:'unpublish',revision:state.revision},user,tx)
     }
     const history=input.action==='preview'?{}:{updatedAt:(await query('SELECT updatedAt FROM cms.Documents WHERE id=@id',{id:d.id},tx)).recordset[0].updatedAt,versions:(await query('SELECT v.id,v.createdAt,u.name AS actor FROM cms.Versions v LEFT JOIN cms.Users u ON u.id=v.actor WHERE documentId=@id ORDER BY createdAt DESC',{id:d.id},tx)).recordset}
     result.push({id:d.id,...state,...history,body,changes:changedItems(published?JSON.parse(published.body):null,body,schema),title:resourceGuide(d.id).tabTitle||resourceGuide(d.id).title})

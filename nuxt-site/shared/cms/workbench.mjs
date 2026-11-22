@@ -1,6 +1,6 @@
-import {inspirationBreadcrumb} from './inspiration-breadcrumb.mjs'
+import {inspirationBreadcrumb} from './page-breadcrumbs.mjs'
 import {firstImage,rowName} from './workflow.mjs'
-import {blockThumbnail,pageFieldValue,valueAt,withValue} from './page-editors.mjs'
+import {blockThumbnail,pageFieldValue,valueAt,withValue,desktopCatalogueFields,usesDesktopCatalogue} from './page-editors.mjs'
 import {decoratePosition,pagePositions,positionImage} from './positions.mjs'
 
 const home=[
@@ -18,8 +18,8 @@ export function workbenchBlocks(page,blocks){
  const result=[]
  for(const b of blocks){
   const h=page==='home'&&home.find(i=>b.id==='home:'+i[0])
-  const old=page==='knowledge'&&b.name==='文章管理'?'文章列表':page==='stores'&&b.name==='門市管理'?'門市與案例':page.startsWith('news-')&&/管理$/.test(b.name)?'消息列表':''
-  const fields=b.fields.map(f=>f.documentId==='news-articles'?{...f,schema:{...f.schema,label:({'news-latest':'最新消息','news-activities':'優惠活動','news-video':'媒體影音'})[page]||f.label,newItemLabel:({'news-latest':'消息','news-activities':'活動','news-video':'影片'})[page]||'文章'}}:f)
+  const old=page==='knowledge'&&b.name==='文章管理'?'文章列表':page.startsWith('news-')&&/管理$/.test(b.name)?'消息列表':''
+  const fields=b.fields.map(f=>f.documentId==='news-articles'?{...f,schema:{...f.schema,label:({'news':'文章清單','news-latest':'最新消息','news-activities':'優惠活動','news-video':'媒體影音'})[page]||f.label,newItemLabel:({'news':'消息','news-latest':'消息','news-activities':'活動','news-video':'影片'})[page]||'文章',...(f.schema.newsOverview?{searchLabel:'搜尋文章標題'}:{})}}:f)
   result.push(decoratePosition(page,{...b,name:h?.[1]||b.name,hint:b.hint||h?.[2]||(b.fields.some(f=>f.schema.type==='array')?'圖片、文字與順序':'標題、介紹與按鈕'),kind:b.kind||h?.[3]||(/門市|品牌館/.test(b.name)?'stores':/型錄/.test(b.name)?'catalogue':'content'),fields,aliases:[...new Set([b.id,...b.aliases||[],...(old?[page+':'+old]:[])])]}))
  }
  if(page==='home')result.sort((a,b)=>(home.findIndex(i=>a.id==='home:'+i[0])+1||99)-(home.findIndex(i=>b.id==='home:'+i[0])+1||99))
@@ -78,8 +78,9 @@ export function positionContent(block,bodies,selected){
 }
 export function inspirationPosition(bodies,presentation={},selected){
  const copy=bodies['view-pages-design-inspiration-index']?.copy||{},detail=bodies['view-pages-design-inspiration-id-']?.copy||{}
- const cases=(presentation.cases||[]).slice(0,3)
- if(selected)cases.splice(0,1,{title:selected.caption,image:selected.image,selected:true,enabled:selected.value?.enabled!==false})
+ const slug=selected?.value?.id
+ const cases=(presentation.cases||[]).filter(c=>!slug||c.slug!==slug).slice(0,selected?2:3)
+ if(selected)cases.unshift({slug,title:selected.caption,image:selected.image,description:selected.value?.description,source:'自建案例',selected:true,enabled:selected.value?.enabled!==false})
  return{copy,detail,breadcrumb:inspirationBreadcrumb(copy),cases,detailCase:presentation.detailCase||cases[0],heroImage:presentation.heroImage}
 }
 export function homeHeroPosition(bodies,selected){
@@ -100,10 +101,10 @@ export function newsBreadcrumbPosition(block,bodies,presentation={}){
 
 export function pagePositionContent(block,bodies,presentation={},selected,focusedPath=''){
  const page=block?.id?.split(':')[0],definition=pagePositions[page],base=positionContent(block,bodies,selected)
- const fields=(block?.fields||[]).map(f=>({...f,value:pageFieldValue(bodies,f)}))
+ const fields=(block?.fields||[]).filter(f=>block?.id!=='menu:左側主導覽'||!desktopCatalogueFields.includes(f.path)||usesDesktopCatalogue(selected?.value)).map(f=>({...f,value:pageFieldValue(bodies,f)}))
  const texts=fields.filter(f=>typeof f.value==='string'&&!f.schema.format&&!f.schema.enum&&!f.schema.advanced).map(f=>({path:f.path,label:f.label,value:f.value}))
- const arrays=fields.filter(f=>f.schema.type==='array').flatMap(f=>(f.value||[]).filter(v=>!f.schema.rowFilter||valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value).slice(0,3).map((v,i)=>({title:itemCaption(v,i,f.schema),image:itemThumbnail(v,f.schema,presentation.rows?.[f.documentId]?.[v?.id]),value:v})))
- const sample=/全部消息列表|最近文章推薦|最新加盟資訊/.test(block?.name)?presentation.samples||[]:[]
+ const arrays=fields.filter(f=>f.schema.type==='array'&&!f.schema.newsOverview).flatMap(f=>(f.value||[]).filter(v=>!f.schema.rowFilter||valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value).slice(0,3).map((v,i)=>({title:itemCaption(v,i,f.schema),image:itemThumbnail(v,f.schema,presentation.rows?.[f.documentId]?.[v?.id]),value:v})))
+ const sample=block?.anchor==='sidebar-recent-title'?presentation.recentArticles||[]:['news-list-title','franchise-news-title'].includes(block?.anchor)?presentation.samples||[]:[]
  const fixedAction=block?.fixedAction
  const referenceItems=fixedAction==='廚房商品型錄下載'?presentation.catalogueCovers:fixedAction==='更多廚房知識'?presentation.relatedArticles:sample
  const items=selected?[{title:selected.caption,image:selected.image||'',value:selected.value}]:arrays.length?arrays:referenceItems||[]
@@ -111,7 +112,8 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const videoImage=typeof video==='string'&&/^[\w-]{11}$/.test(video)?'https://i.ytimg.com/vi/'+video+'/hqdefault.jpg':''
  const focusedImage=firstImage(fields.find(f=>f.path===focusedPath&&f.schema.format==='media')?.value)
  const blockImage=firstImage(positionImage(block?.image,bodies))||presentation.blockImages?.[block?.id]||''
- const serviceCover=block?.kind==='video'&&block?.name==='服務介紹影片'?bodies['site-visuals']?.serviceVideoCover||presentation.serviceVideoCover:''
+ const serviceVideo=block?.anchor==='service-brand-video'||block?.id==='visuals:服務介紹影片'
+ const serviceCover=serviceVideo?bodies['site-visuals']?.serviceVideoCover||presentation.serviceVideoCover:''
  const mappedImage=blockImage||serviceCover
  const image=selected?selected.image||mappedImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||mappedImage||videoImage||''
  const media=fields.filter(f=>f.schema.format==='media').map(f=>({path:f.path,label:f.label,image:firstImage(f.value)})).filter(f=>f.image)

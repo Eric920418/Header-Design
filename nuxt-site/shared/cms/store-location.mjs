@@ -9,6 +9,16 @@ export function newStoreId(stores){
  return id
 }
 
+export function storeFilterRegions(body){
+ const filters={...body.regions}
+ for(const {region,city} of body.stores){
+  if(Object.hasOwn(regions,region)&&regions[region].includes(city)&&!filters[region]?.includes(city)){
+   filters[region]=[...(filters[region]||[]),city]
+  }
+ }
+ return filters
+}
+
 export function storeLocationIssue(body,publishing=false){
  const ids=new Set()
  for(const store of body.stores){
@@ -19,7 +29,6 @@ export function storeLocationIssue(body,publishing=false){
   if(!Object.hasOwn(regions,store.region))return `${label}的區域無效，請重新選擇區域。`
   if(!store.city&&!publishing)continue
   if(!regions[store.region].includes(store.city))return `${label}的縣市不屬於${store.region}，請重新選擇縣市。`
-  if(publishing&&!body.regions[store.region]?.includes(store.city))return `${label}的${store.city}尚未啟用，請先在「地區與縣市設定」加入此縣市。`
  }
  return ''
 }

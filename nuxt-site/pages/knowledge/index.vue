@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-knowledge-index', {"copy":{"text1":"Kitchen Knowledge","text2":" Take A Look At ","text3":"Our Latest Blog","text4":" & Articles. "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+import { knowledgeBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
+const breadcrumbs = knowledgeBreadcrumb(cmsCopy.copy)
 
 import { KITCHEN_GUIDE_ARTICLES as cmsSeed_KITCHEN_GUIDE_ARTICLES } from '~/data/kitchenGuides'
 const { KITCHEN_GUIDE_ARTICLES } = await useCmsResource('data-kitchenGuides', { KITCHEN_GUIDE_ARTICLES: cmsSeed_KITCHEN_GUIDE_ARTICLES })
@@ -24,8 +26,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <span class="kitchen-guide-hero__overlay" aria-hidden="true" />
       <div class="kitchen-guide-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="kitchen-guide-page-title">{{ cmsCopy.copy.text1 }}</h1>
-        <nav aria-label="麵包屑" class="kitchen-guide-hero__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "廚房裝修指南" }]' v-slot="{ items, follow }">
+        <nav id="knowledge-breadcrumb" aria-label="麵包屑" class="kitchen-guide-hero__trail">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumbs.breadcrumbHome, to: '/' }, { label: breadcrumbs.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>

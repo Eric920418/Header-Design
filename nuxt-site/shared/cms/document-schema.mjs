@@ -5,10 +5,10 @@ import { kitchenSeriesHeroSchema } from './kitchen-series-hero.mjs'
 import { homeHeadingSchema } from './home-headings.mjs'
 import { pageDestinationSchema } from './page-destinations.mjs'
 
-import { inspirationBreadcrumbSchema } from './inspiration-breadcrumb.mjs'
+import { breadcrumbSchema } from './page-breadcrumbs.mjs'
 
 export function documentSchema(id, schema) {
-  for (const extend of [homeHeroSchema, homeGallerySchema, builderSeriesSchema, kitchenSeriesHeroSchema, customCasesSchema, homeHeadingSchema, pageDestinationSchema, inspirationBreadcrumbSchema]) {
+  for (const extend of [homeHeroSchema, homeGallerySchema, builderSeriesSchema, kitchenSeriesHeroSchema, customCasesSchema, homeHeadingSchema, pageDestinationSchema, breadcrumbSchema]) {
     schema = extend(id, schema)
   }
   return schema

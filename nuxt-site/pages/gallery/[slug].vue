@@ -68,6 +68,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <aside v-if="item.meta || item.contact" class="case-detail-sidebar" aria-label="案例規格與門市資訊">
             <div class="case-detail-sidebar__sticky">
               <a
+                id="case-booking"
                 :href="cmsCopy.copy.field1"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -146,7 +147,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             </section>
           </article>
 
-          <nav aria-label="前後案例" class="case-detail-navigation" v-reveal="{ anim: 'opalMoveUp' }">
+          <nav id="case-navigation" aria-label="前後案例" class="case-detail-navigation" v-reveal="{ anim: 'opalMoveUp' }">
             <NuxtLink :to="detailRoute(previous.slug)" class="case-detail-navigation__previous">
               <span><ArrowLeft aria-hidden="true" />{{ cmsCopy.copy.text7 }}</span>
               <strong>{{ previous.title }}</strong>

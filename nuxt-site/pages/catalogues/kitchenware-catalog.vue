@@ -4,12 +4,14 @@ const cmsCopy = await useCmsResource('view-pages-catalogues-kitchenware-catalog'
 import { ArrowUpRight, Download } from 'lucide-vue-next'
 import { KITCHEN_CATALOGUES as cmsSeed_KITCHEN_CATALOGUES } from '~/data/catalogues'
 import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
+import { seriesCatalogueBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
 const { KITCHEN_CATALOGUES } = await useCmsResource('data-catalogues', { KITCHEN_CATALOGUES: cmsSeed_KITCHEN_CATALOGUES })
 const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
 
 
 const route = useRoute()
 const sourceSeries = computed(() => KITCHEN_STYLES.find(series => series.slug === route.query.series && series.route))
+const breadcrumb = computed(() => seriesCatalogueBreadcrumb(cmsCopy.copy))
 
 useSeoMeta({
   title: '品牌系列型錄｜SAKURA 整體廚房',
@@ -28,8 +30,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <span class="catalogue-hero__overlay" aria-hidden="true" />
       <div class="catalogue-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="catalogue-page-title">{{ cmsCopy.copy.text1 }}</h1>
-        <nav aria-label="麵包屑" class="catalogue-hero__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, ...(sourceSeries ? [{ label: sourceSeries.zh, to: sourceSeries.route! }] : []), { label: "品牌系列型錄" }]' v-slot="{ items, follow }">
+        <nav id="series-catalogue-breadcrumb" aria-label="麵包屑" class="catalogue-hero__trail">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumb.breadcrumbHome, to: '/' }, ...(sourceSeries ? [{ label: sourceSeries.zh, to: sourceSeries.route! }] : []), { label: breadcrumb.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
@@ -40,7 +42,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
     </section>
 
-    <section class="catalogue-projects" aria-labelledby="catalogue-list-title">
+    <section id="brand-series-catalogues" class="catalogue-projects" aria-labelledby="catalogue-list-title">
       <div class="catalogue-projects__rail internal-rail-safe">
         <h2 id="catalogue-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
         <ul class="catalogue-grid" aria-label="品牌系列型錄清單">

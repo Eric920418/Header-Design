@@ -73,6 +73,9 @@ heroNext.slides[0].image='/kitchen-styles/basic-plus.jpg';heroNext.slides[0].mob
 checkPageBody(pageEditor('home'),heroDoc.id,heroDoc.body,heroNext,heroDoc.schema)
 const locationDoc=pageDocuments.find(d=>d.id==='view-components-home-HomeStoreLocation'),locationNext=structuredClone(locationDoc.body)
 locationNext.stores[0].region='中部';locationNext.stores[0].city='臺中市';checkPageBody(pageEditor('home'),locationDoc.id,locationDoc.body,locationNext,locationDoc.schema)
+const changedRegions=structuredClone(locationNext)
+changedRegions.regions['中部'].pop()
+assert.throws(()=>checkPageBody(pageEditor('home'),locationDoc.id,locationDoc.body,changedRegions,locationDoc.schema),/目前頁面以外/)
 const serviceDoc=pageDocuments.find(d=>d.id==='view-components-home-HomeServices'),serviceNext=structuredClone(serviceDoc.body);serviceNext.services[0].imageLayout='arbitrary-style'
 assert.throws(()=>checkPageBody(pageEditor('home'),serviceDoc.id,serviceDoc.body,serviceNext,serviceDoc.schema))
 const homeLinkCards=[
@@ -161,7 +164,7 @@ if(process.env.CMS_PAGE_HTTP){
  const fixedLinks=[
   ['series','data-kitchenSeries','KITCHEN_SERIES_PAGES.0.buttonDestinations.explore','/home-style/aikitchen'],
   ['products-sakura','data-productBrands','PRODUCT_BRANDS.sakura.catalogueDestination','/products/sakura/all'],
-  ['stores','view-pages-gallery-slug-','copy.storeBookingDestination','/gallery/case10'],
+  ['store-cases','view-pages-gallery-slug-','copy.storeBookingDestination','/gallery/case10'],
   ['pavilions','view-pages-about-exhibition','copy.bookingDestination','/about/exhibition'],
   ['knowledge','view-pages-knowledge-design-slug-','copy.moreDestination','/knowledge/design/systemcabinet'],
  ]
@@ -176,7 +179,7 @@ if(process.env.CMS_PAGE_HTTP){
   assert(!(await pageHtml(location)).includes(route),page+' preview must not update the public website')
  }
  console.log('PASS: fixed button destinations and both homepage card links render in previews only')
- const allPages=(await call('/api/admin/page-editors')).body;assert.equal(allPages.length,28)
+ const allPages=(await call('/api/admin/page-editors')).body;assert.equal(allPages.length,pageEditors.length)
  for(const p of allPages){
   const r=await call('/api/admin/page-editors/'+p.id);assert.equal(r.status,200,p.id);assert(r.body.blocks.length)
   assert(r.body.positionPresentation&&Array.isArray(r.body.positionPresentation.sections),p.id+' must include read-only position information')
@@ -213,7 +216,7 @@ if(process.env.CMS_PAGE_HTTP){
  assert.equal((await call('/api/content/data-news?preview=page:news-latest&cmsDraft='+articlePreview.body.previewToken,'guest')).status,401)
  assert(!(await call('/api/content/data-news')).body.newsArticles.some(i=>i.id===article.id))
  assert.deepEqual((await call('/api/admin/documents')).body,before)
- console.log('PASS: all 28 page reads/previews, login/permissions/CSRF/409, custom case display across list/detail/filters/content API, authenticated snapshots and unchanged website documents')
+ console.log('PASS: all page reads/previews, login/permissions/CSRF/409, custom case display across list/detail/filters/content API, authenticated snapshots and unchanged website documents')
 }
 if(process.env.CMS_WORKFLOW_DB==='1'){
  assert.equal(process.env.NUXT_DESIGN_DB_SERVER||'127.0.0.1','127.0.0.1','Write checks require the local database')
@@ -263,6 +266,35 @@ if(process.env.CMS_WORKFLOW_DB==='1'){
   const inspirationSaved=await changePageEditor('inspiration',{action:'save',documents:inspirationDocs},user,tx)
   assert.equal((await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n,inspirationVersions+2)
   assert(inspirationSaved.documents.filter(d=>['view-pages-design-inspiration-index','view-pages-design-inspiration-id-'].includes(d.id)).every(d=>d.draftId!==d.publishedId))
+  for(const pageId of ['stores','store-cases']){
+   const page=pageEditor(pageId),documents=[]
+   const shared=(await query("SELECT revision,publishedId FROM cms.Documents WHERE id=N'data-storeCases'",{},tx)).recordset[0]
+   assert(shared.publishedId)
+   for(const id of page.ids){
+    const d=(await query('SELECT d.*,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.draftId WHERE d.id=@id',{id},tx)).recordset[0]
+    documents.push({id,revision:d.revision,body:JSON.parse(d.body)})
+   }
+   const paused=await changePageEditor(pageId,{action:'unpublish',documents},user,tx)
+   assert(paused.documents.filter(d=>page.unpublishIds.includes(d.id)).every(d=>d.publishedId===null))
+   assert.deepEqual((await query("SELECT revision,publishedId FROM cms.Documents WHERE id=N'data-storeCases'",{},tx)).recordset[0],shared)
+  }
+  console.log('PASS: each store editor can hide its own page settings while preserving the published store data; transaction rolled back')
+  const newsOverview=pageEditor('news'),overviewDocuments=[]
+  for(const id of newsOverview.ids){
+   const d=(await query('SELECT d.revision,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.draftId WHERE d.id=@id',{id},tx)).recordset[0]
+   overviewDocuments.push({id,revision:d.revision,body:JSON.parse(d.body)})
+  }
+  const articles=overviewDocuments.find(d=>d.id==='news-articles')
+  const activity=articles.body.items.find(i=>i.summary.category==='activities')
+  activity.detail.sections[0].paragraphs[0]+='（總覽內文回滾驗收）'
+  const beforeNews=(await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n
+  const newsSaved=await changePageEditor(newsOverview.id,{action:'save',documents:overviewDocuments},user,tx)
+  assert.equal((await query('SELECT COUNT(*) n FROM cms.Versions',{},tx)).recordset[0].n,beforeNews+1)
+  const articleState=newsSaved.documents.find(d=>d.id==='news-articles')
+  assert.notEqual(articleState.draftId,articleState.publishedId)
+  const newsPaused=await changePageEditor(newsOverview.id,{action:'unpublish',documents:newsSaved.documents},user,tx)
+  assert.equal(newsPaused.documents.find(d=>d.id==='news-articles').publishedId,articleState.publishedId)
+  console.log('PASS: overview body edits save to the shared article draft; pausing the overview preserves published articles')
   console.log('PASS: inspiration filter and detail text save together as two drafts; their preview creates no content versions; this transaction is rolled back')
   console.log('PASS: whole-page preview creates no versions, two modified blocks save atomically, unchanged documents create no versions, editor publish denied and stale page returns 409')
   console.log('PASS: read-only preview, draft save, admin-only publish, unpublish and stale-edit conflict against real SQL inside a rollback-only transaction.')
