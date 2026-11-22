@@ -108,6 +108,12 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
   return [target('廚房裝修指南列表 → 位置導覽','/knowledge#knowledge-breadcrumb'),target('廚房裝修指南所有文章 → 位置導覽','/knowledge/design/systemcabinet#knowledge-breadcrumb')]
  if (documentId === 'view-pages-catalogues-kitchenware-catalog' && path.startsWith('copy.breadcrumb'))
   return [target('品牌系列型錄 → 位置導覽','/catalogues/kitchenware-catalog#series-catalogue-breadcrumb')]
+ if (documentId === 'view-pages-news-latest-index' && path.startsWith('copy.breadcrumb'))
+  return [target('最新消息列表 → 麵包屑','/news/latest#latest-breadcrumb'),target('最新消息內頁 → 麵包屑',context.newsDetailRoute?context.newsDetailRoute+'#article-breadcrumb':'/news/latest')]
+ if (documentId === 'view-pages-news-latest-slug-' && key==='copy') {
+  const [label,anchor]=index==='text1'?['文章頁首','#article-breadcrumb']:/^(field2|text3|field4|text5)$/.test(index)?['文章標題上方的分類連結','#article-header-categories']:index==='text6'?['加盟說明會的報名圖片','#article-registration']:['文章底部的分類選單','#article-categories']
+  return [target('最新消息 → '+label,index==='text6'?'/news/latest/2026-franchise-seminar'+anchor:context.newsDetailRoute?context.newsDetailRoute+anchor:'/news/latest')]
+ }
  if (documentId === 'view-pages-knowledge-design-slug-' && key === 'copy' && index === 'moreDestination')
   return [target('系統櫃與指定知識文章 → 延伸文章按鈕','/knowledge/design/systemcabinet#knowledge-related-heading')]
  if (documentId === 'view-pages-design-inspiration-index' && ['cmsSettings','seo'].includes(key)) return targets

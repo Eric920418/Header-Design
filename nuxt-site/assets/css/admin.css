@@ -781,6 +781,7 @@
 .cms .cms-inspiration-trail-sample small{display:block;margin-bottom:5px;color:var(--cms-muted);}
 .cms .cms-inspiration-form-group{min-width:0;display:grid;gap:8px;border:0;border-top:1px solid var(--cms-line);margin:0;padding:8px 0 0;}
 .cms .cms-inspiration-form-group legend{padding-right:8px;font-weight:600;}
+@media(min-width:768px){.cms .cms-news-link-settings{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:12px;}}
 .cms .cms-knowledge-article-sections{display:grid;gap:8px;margin-top:14px;}
 .cms .cms-knowledge-article-sections h3{font-size:15px;font-weight:650;}
 .cms .cms-knowledge-article-sections details[open]{padding-bottom:12px;}

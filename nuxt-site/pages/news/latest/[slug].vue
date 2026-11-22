@@ -4,8 +4,11 @@ const cmsCopy = await useCmsResource('view-pages-news-latest-slug-', {"copy":{"t
 import { Camera, Images, PlaySquare } from 'lucide-vue-next'
 import { latestArticleDetails as cmsSeed_latestArticleDetails } from '~/data/latestArticles'
 import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
+import { latestNewsBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
 const { latestArticleDetails } = await useCmsResource('data-latestArticles', { latestArticleDetails: cmsSeed_latestArticleDetails })
 const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
+const listCopy = await useCmsResource('view-pages-news-latest-index', {copy:{},cmsSettings:{visible:true}})
+const breadcrumb = latestNewsBreadcrumb(listCopy.copy)
 
 
 const route = useRoute()
@@ -51,7 +54,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="latest-detail-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <p class="latest-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>
         <nav aria-label="麵包屑" class="latest-detail-breadcrumb__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "優惠消息", to: "/news" }, { label: "最新消息", to: "/news/latest" }]' v-slot="{ items, follow }">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumb.breadcrumbHome, to: '/' }, { label: breadcrumb.breadcrumbParent, to: '/news' }, { label: breadcrumb.breadcrumbList, to: '/news/latest' }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
@@ -66,7 +69,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="latest-detail-single-content">
         <header class="latest-detail-header entry-header" v-reveal="{ anim: 'opalMoveUp' }">
           <div class="latest-detail-meta entry-meta-top">
-            <span class="categories-link">
+            <span id="article-header-categories" class="categories-link">
               <NuxtLink :to="cmsCopy.copy.field2">{{ cmsCopy.copy.text3 }}</NuxtLink>
               <NuxtLink :to="cmsCopy.copy.field4">{{ cmsCopy.copy.text5 }}</NuxtLink>
             </span>

@@ -42,7 +42,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
 <template>
  <div class="cms-page-position-scene cms-website-scene" :data-position-kind="scene.kind">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
-  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','registration'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image"><AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ pageTitle }}</span></div>
+  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','news-shared'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image"><AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ pageTitle }}</span></div>
   <section class="cms-scene-target" :aria-label="block?.name+'的位置示意'">
    <span class="cms-scene-tag">{{ block?.name }}<template v-if="selected"> · {{ selected.caption }}</template></span>
    <template v-if="scene.displaySettings.length">
@@ -57,13 +57,6 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     </div>
    </template>
    <p v-else-if="scene.kind==='inactive'" class="cms-scene-a11y">官網目前沒有顯示區塊，這些設定不會出現在頁面上。</p>
-   <template v-else-if="scene.kind==='registration'">
-    <small v-if="presentation?.registration?.title">{{ presentation.registration.title }}</small>
-    <h3 v-if="presentation?.registration?.heading">{{ presentation.registration.heading }}</h3>
-    <AdminThumbnail v-for="image in presentation?.registration?.images" :key="image.src" :src="image.src" :alt="image.alt||'報名 QR Code'" class="cms-scene-wide-image" />
-    <p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p>
-    <p v-if="!presentation?.registration" class="cms-scene-a11y">報名文章目前沒有可顯示的公開範例。</p>
-   </template>
    <template v-else-if="storeExampleKind">
     <template v-if="storeExample&&storeDetails">
      <AdminThumbnail :src="storeExample.images?.[0]||storeExample.cover" :alt="storeExample.storeName+'案例照片'" class="cms-scene-wide-image" />
@@ -134,20 +127,24 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     </header>
     <p class="cms-field-help">{{ isCatalogueTrail?'從系列內頁進入型錄時，中間會顯示該系列的返回連結。':'列表與文章會使用同一組導覽文字。' }}</p>
    </template>
-   <template v-else-if="scene.kind==='breadcrumb'">
-    <header class="cms-scene-news-hero">
+   <template v-else-if="scene.kind==='breadcrumb'||scene.kind==='news-shared'">
+    <header v-if="scene.kind==='breadcrumb'" class="cms-scene-news-hero">
      <AdminThumbnail v-if="breadcrumb.image" :src="breadcrumb.image" alt="文章頁首背景" />
      <div>
       <strong :class="{'is-focused':highlighted('copy.text1')}">{{ breadcrumb.title }}</strong>
-      <p>首頁 / 優惠消息 / {{ pageTitle }}</p>
+      <p v-if="breadcrumb.trail"><span :class="{'is-focused':highlighted('copy.breadcrumbHome')}">{{ breadcrumb.trail.breadcrumbHome }}</span> / <span :class="{'is-focused':highlighted('copy.breadcrumbParent')}">{{ breadcrumb.trail.breadcrumbParent }}</span> / <span :class="{'is-focused':highlighted('copy.breadcrumbList')}">{{ breadcrumb.trail.breadcrumbList }}</span></p>
+      <p v-else>首頁 / 優惠消息 / {{ pageTitle }}</p>
      </div>
     </header>
-    <div class="cms-scene-news-meta">
+    <div v-if="!breadcrumb.trail||scene.kind==='news-shared'" class="cms-scene-news-meta">
      <span v-for="category in breadcrumb.categories" :key="category.path" :class="{'is-focused':highlighted(category.path)||highlighted(category.destination)}">{{ category.value }}</span>
      <time v-if="breadcrumb.article?.date">{{ breadcrumb.article.date }}</time>
     </div>
     <h3 v-if="breadcrumb.article?.title" class="cms-scene-news-title">{{ breadcrumb.article.title }}</h3>
     <AdminThumbnail v-if="breadcrumb.article?.image" :src="breadcrumb.article.image" :alt="breadcrumb.article.alt" class="cms-scene-wide-image" />
+    <div v-if="scene.kind==='news-shared'" class="cms-scene-buttons" aria-label="文章底部的分類選單">
+     <span v-for="category in breadcrumb.sharedCategories" :key="category.path" :class="{'is-focused':highlighted(category.path)||highlighted(category.destination)}">{{ category.value }}</span>
+    </div>
    </template>
    <template v-else-if="scene.kind==='hero'">
     <div class="cms-scene-hero"><AdminThumbnail v-if="scene.image||scene.contextImage" :src="scene.image||scene.contextImage" :alt="block?.name+'主圖片位置'" /><div class="cms-scene-hero-copy"><span v-for="f in eyebrows" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</span><h3 v-for="f in headings" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</h3><h3 v-if="!headings.length">{{ scene.title }}</h3><p v-for="f in captions.slice(0,2)" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div></div>
@@ -203,12 +200,12 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb','news-shared'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
    <p v-if="scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>
    <dl v-if="scene.auxiliary.some((f:any)=>highlighted(f.path))" class="cms-scene-details"><template v-for="field in scene.auxiliary.filter((f:any)=>highlighted(f.path))" :key="field.path"><dt>螢幕閱讀器會讀到</dt><dd>{{ field.value }}</dd></template></dl>
-   <p v-if="!['breadcrumb','page-breadcrumb','registration','inactive','filter'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
+   <p v-if="!['breadcrumb','page-breadcrumb','news-shared','inactive','filter'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
   </section>
  </div>
 </template>

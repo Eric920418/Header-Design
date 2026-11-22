@@ -2,8 +2,9 @@
 const cmsCopy = await useCmsResource('view-pages-news-latest-index', {"copy":{"text1":"NEWS","text2":"最新消息文章列表"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
+import { latestNewsBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
 const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
-
+const breadcrumb = latestNewsBreadcrumb(cmsCopy.copy)
 
 const latestArticles = computed(() => newsArticles.filter(article => article.category === 'latest'))
 const { currentPage, totalPages, paginatedItems: paginatedArticles } = useListPagination(latestArticles)
@@ -25,8 +26,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="antra-latest-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-latest-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="latest-page-title">{{ cmsCopy.copy.text1 }}</h1>
-        <nav aria-label="麵包屑" class="antra-latest-breadcrumb__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "優惠消息", to: "/news" }, { label: "最新消息" }]' v-slot="{ items, follow }">
+        <nav id="latest-breadcrumb" aria-label="麵包屑" class="antra-latest-breadcrumb__trail">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumb.breadcrumbHome, to: '/' }, { label: breadcrumb.breadcrumbParent, to: '/news' }, { label: breadcrumb.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>

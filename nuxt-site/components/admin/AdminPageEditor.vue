@@ -37,12 +37,15 @@ const seriesPart=computed(()=>props.id==='series'?seriesEditorSection(route.quer
 const focusedGroup=ref('')
 const sharedInspiration=computed(()=>active.value?.id==='inspiration:頁面共用設定')
 const sharedKnowledge=computed(()=>active.value?.id==='knowledge:頁面共用設定')
+const sharedNews=computed(()=>active.value?.kind==='news-shared')
+const newsTopLinks='文章標題上方的分類連結'
 const knowledgeArticles=computed(()=>active.value?.id==='knowledge:文章管理')
 const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fields.filter((f:any)=>isSystemCabinetDocument(f.documentId)):[])
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
 const positionBlock=computed(()=>{
  const block=active.value
  if(newsArticleList.value&&!workbench.editing.value)return {...block,previewPage:block.href}
+ if(sharedNews.value&&focusedGroup.value===newsTopLinks&&block.href.endsWith('#article-categories'))return {...block,previewPage:block.href.replace(/#article-categories$/,'#article-header-categories')}
  if(regionField.value)return {...block,storeRegion:storeRegion.value,previewPage:`/gallery?region=${encodeURIComponent(storeRegion.value)}#gallery-filter-title`}
  if(seriesPart.value&&block)return {...block,name:seriesPart.value.name,seriesPart:seriesPart.value.id}
  if(knowledgeArticles.value){
@@ -99,9 +102,12 @@ const catalogueIndex=computed(()=>bodies.value[headerId]?.leftNav?.findIndex(use
 const catalogueFields=computed(()=>active.value?.id==='menu:左側主導覽'&&catalogueIndex.value>=0
  ?active.value.fields.filter((f:any)=>desktopCatalogueFields.includes(f.path)):[])
 const commonFields=computed(()=>active.value?.fields.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f))||[])
-const sharedFormGroups=computed(()=>Object.entries(sharedKnowledge.value?knowledgeSharedSections:inspirationSharedGroups).map(([key,group])=>({
- key,title:'title' in group?group.title:key,help:'help' in group?group.help:'',fields:commonFields.value.filter((f:any)=>f.formGroup===key),
-})).filter(group=>group.fields.length))
+const sharedFormGroups=computed(()=>{
+ const groups=sharedNews.value?{'文章底部的分類選單':{},[newsTopLinks]:{}}:sharedKnowledge.value?knowledgeSharedSections:inspirationSharedGroups
+ return Object.entries(groups).map(([key,group])=>({
+  key,title:'title' in group?group.title:key,help:'help' in group?group.help:'',fields:commonFields.value.filter((f:any)=>f.formGroup===key),
+ })).filter(group=>group.fields.length)
+})
 const systemCabinetGroups=computed(()=>Object.entries(knowledgeArticleSections).map(([key,section])=>({
  key,title:section.title,fields:systemCabinetFields.value.filter((f:any)=>f.formGroup===key),
 })).filter(group=>group.fields.length))
@@ -158,6 +164,7 @@ function blockPicture(block:any){
   const item=workbench.selection.value?.value
   return firstImage(block.id==='intro'?item?.suites:block.fields.map((key:string)=>item?.[key]))
  }
+ if(block.kind==='news-shared'&&positionPresentation.value.detailSample?.image)return positionPresentation.value.detailSample.image
  return pagePositionContent(block,bodies.value,positionPresentation.value).thumbnail
 }
 function trackField(event:FocusEvent){
@@ -180,7 +187,7 @@ const modified=computed(()=>blocks.value.filter(b=>b.fields.some((f:any)=>{
  return JSON.stringify(value(bodies.value))!==JSON.stringify(value(baseline.value))
 })))
 const dirty=computed(()=>modified.value.length>0),pending=computed(()=>hasPageChanges(blocks.value,Object.fromEntries(docs.value.map(d=>[d.id,d.publishedBody])),baseline.value))
-const impactContext=computed(()=>({heroTitlePages:pageData.value?.positionPresentation?.heroTitlePages,caseDetailRoute:pageData.value?.positionPresentation?.detailCase?.route}))
+const impactContext=computed(()=>({heroTitlePages:pageData.value?.positionPresentation?.heroTitlePages,caseDetailRoute:pageData.value?.positionPresentation?.detailCase?.route,newsDetailRoute:pageData.value?.positionPresentation?.detailPath}))
 const changeDetails=computed(()=>pageChanges(blocks.value,docs.value,baseline.value,bodies.value,impactContext.value)),changesOpen=ref(false)
 const status=computed(()=>dirty.value?`尚未儲存 · ${changeDetails.value.length} 處修改`:pending.value?'已儲存，官網尚未更新':'官網已更新')
 const shared=computed(()=>changeImpacts(changeDetails.value).filter(i=>i.href.split('#')[0]!==pageData.value?.href.split('#')[0]||/全站|所有官網頁面/.test(i.label)))
@@ -223,7 +230,10 @@ const choices=computed(()=>docs.value.flatMap(d=>{
 const locationHref=computed(()=>{const selected=workbench.selection.value,item=selected?.value;if(item?.enabled===false||item?.available===false)return pageData.value?.href||'/';return seriesLocation(positionBlock.value?.previewPage||(props.id==='home'?'':selected?.href||itemWebsitePath(selected?.documentId,item))||positionBlock.value?.href||pageData.value?.href||'/')})
 const publicLocation=computed(()=>{
  const selected=workbench.selection.value
- if(newsArticleList.value&&!workbench.editing.value)return docs.value.find(d=>d.id==='view-pages-news-index')?.publishedBody?positionBlock.value?.href:''
+ if(newsArticleList.value&&!workbench.editing.value){
+  const listId=props.id==='news-latest'?'view-pages-news-latest-index':'view-pages-news-index'
+  return docs.value.find(d=>d.id===listId)?.publishedBody?positionBlock.value?.href:''
+ }
  if(props.id!=='home'&&selected&&(itemWebsitePath(selected.documentId,selected.value)||selected.href)){
   const published=itemPublication(docs.value.find(d=>d.id===selected.documentId),selected.path,selected.value,selected.index)
   return published.visible?seriesLocation(positionBlock.value?.previewPage&&knowledgeArticles.value?positionBlock.value.previewPage:itemWebsitePath(selected.documentId,published.item)||selected.href||'/'):''
@@ -304,8 +314,8 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     </AdminItems>
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
    <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
-   <fieldset v-else-if="sharedInspiration||sharedKnowledge" :disabled="busy" class="cms-edit-form">
-    <fieldset v-for="group in sharedFormGroups" :key="group.key" :data-position-group="group.key" class="cms-inspiration-form-group">
+   <fieldset v-else-if="sharedInspiration||sharedKnowledge||sharedNews" :disabled="busy" class="cms-edit-form">
+    <fieldset v-for="group in sharedFormGroups" :key="group.key" :data-position-group="group.key" class="cms-inspiration-form-group" :class="{'cms-news-link-settings':sharedNews}">
      <legend>{{ group.title }}</legend>
      <p v-if="group.help" class="cms-field-help">{{ group.help }}</p>
      <AdminFields v-for="field in group.fields" :key="field.documentId+':'+field.path" :model-value="pageFieldValue(bodies,field)" :schema="field.schema" :document-id="field.documentId" :path="field.path" @update:model-value="update(field,$event)" />

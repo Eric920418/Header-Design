@@ -59,11 +59,6 @@ async function positionPresentation(p){
  if(p.id==='franchise')result.samples=articles.filter(i=>/franchise/.test(i.slug)).slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
  if(p.category){
   const first=articles[0]
-  if(p.category==='latest'){
-   const registration=articles.find(article=>article.slug==='2026-franchise-seminar')
-   const section=registration?.detail?.sections?.[3]
-   if(section)result.registration={title:registration.summary.title,heading:section.heading,images:section.images||[],path:'/news/latest/2026-franchise-seminar#article-registration'}
-  }
   const images=bodies['site-visuals']?.images
   result.detailHeroImage=p.category==='latest'
    ?images?.asset_44761f00||'/section-5/brand-pavilion/pavilion-taichung.jpg'
@@ -115,14 +110,13 @@ export async function readPageEditor(id){
  const [rowsForDisplay,position]=await Promise.all([rowPresentation(p),positionPresentation(p)]),summary=pageSummary(p,summaries,documents)
  summary.pending=hasPageChanges(summary.blocks,Object.fromEntries(documents.map(d=>[d.id,d.publishedBody])),Object.fromEntries(documents.map(d=>[d.id,d.body])))
  summary.blocks=summary.blocks.map(b=>{
-  if(b.kind==='registration')return{...b,href:position.registration?.path||p.href}
   if(p.id===storeCasesPageId){
    const example=position.storeCaseExamples?.[b.kind]
    const href=example?.slug?`/gallery/${encodeURIComponent(example.slug)}#${example.anchor}`:position.detailPath
    return {...b,href:href||'/gallery'}
   }
   if(p.id!=='knowledge'&&position.detailPath&&b.fields.some(f=>/-slug-$/.test(f.documentId))){
-   const anchor=p.category?(b.kind==='breadcrumb'?'#article-breadcrumb':b.kind==='navigation'?'#article-categories':''):''
+   const anchor=p.category?(b.kind==='breadcrumb'?'#article-breadcrumb':['navigation','news-shared'].includes(b.kind)?'#article-categories':''):''
    return{...b,href:position.detailPath+anchor}
   }
   return b

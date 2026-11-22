@@ -69,12 +69,12 @@ const copyGroups={
   ['最新消息分類標籤',{text3:'分類標籤區標題'}],
   ['最新文章',{text4:'最新文章區標題'}],
  ],
- 'news-latest-index':[['主視覺標題',{text1:'主視覺標題'}],['消息管理',{text2:readingField('最新消息清單','清單名稱')}]],
+ 'news-latest-index':[['主視覺標題',{text1:'主視覺標題'}],['消息文章管理',{text2:readingField('最新消息清單','清單名稱')}]],
  'news-activities-index':[['主視覺標題',{text1:'主視覺標題'}],['活動管理',{text2:readingField('優惠活動清單','清單名稱')}]],
  'news-video-index':[['主視覺標題',{text1:'主視覺標題'}],['影音管理',{text2:readingField('媒體影音清單','清單名稱')}]],
  'news-latest-slug-':[
-  ['麵包屑導覽設定',{text1:'內頁英文標題',field2:'優惠消息前往頁面',text3:'優惠消息連結文字',field4:'最新消息前往頁面',text5:'最新消息連結文字'}],
-  ['文章報名圖片提示',{text6:'報名 QR Code 下方文字'}],['文章旁的分類選單',{field7:'優惠活動前往頁面',text8:'優惠活動連結文字',field9:'最新消息前往頁面',text10:'最新消息連結文字',field11:'媒體影音前往頁面',text12:'媒體影音連結文字'}],
+  ['麵包屑編輯設定',{text1:'文章頁首英文標題'}],
+  ['頁面共用設定',{field2:'優惠消息前往頁面',text3:'優惠消息連結文字',field4:'最新消息前往頁面',text5:'最新消息連結文字',field7:'優惠活動前往頁面',text8:'優惠活動連結文字',field9:'最新消息前往頁面',text10:'最新消息連結文字',field11:'媒體影音前往頁面',text12:'媒體影音連結文字'}],
  ],
  'news-activities-slug-':[
   ['麵包屑導覽設定',{text1:'內頁英文標題',field2:'優惠消息前往頁面',text3:'優惠消息連結文字',field4:'優惠活動前往頁面',text5:'優惠活動連結文字'}],
@@ -155,7 +155,13 @@ export const pagePositions={
   {...section('最新消息分類標籤','列表旁的分類名稱與連結','navigation','news-tags-title'),aliases:['news:消息分類選單']},
   {...section('最新文章','官網右側顯示的文章與側欄標題','news-recent','sidebar-recent-title'),aliases:['news:最近文章推薦'],help:'文章與「最新消息列表」共用。修改封面、標題、摘要或內文，會同步更新該篇文章。'},
  ]},
- ...Object.fromEntries(['latest','activities','video'].map((category,i)=>['news-'+category,{hero:commonHero,sections:[section('主視覺標題','列表最上方的大標題','hero',['latest','activity','video'][i]+'-page-title'),{...section('麵包屑導覽設定','文章頁首的英文標題與分類連結','breadcrumb'),aliases:['news-'+category+':文章最上方與返回導覽']},section(['消息管理','活動管理','影音管理'][i],'封面、標題、日期與完整內文','cards'),...(category==='latest'?[section('文章報名圖片提示','加盟說明會文章中，報名 QR Code 下方的文字','registration')]:[]),section('文章旁的分類選單','文章末段的優惠活動、最新消息與媒體影音連結','navigation')]}])),
+ 'news-latest':{hero:commonHero,sections:[
+  section('主視覺標題','列表最上方的大標題','hero','latest-page-title'),
+  {...section('麵包屑編輯設定','列表與文章頁首的位置導覽','breadcrumb'),aliases:['news-latest:文章最上方與返回導覽','news-latest:麵包屑導覽設定']},
+  {...section('消息文章管理','封面、標題、日期與完整內文','news-overview','latest-list-title'),aliases:['news-latest:消息管理','news-latest:文章報名圖片提示']},
+  {...section('頁面共用設定','每篇文章共用的分類連結','news-shared'),aliases:['news-latest:文章旁的分類選單']},
+ ]},
+ ...Object.fromEntries(['activities','video'].map((category,i)=>['news-'+category,{hero:commonHero,sections:[section('主視覺標題','列表最上方的大標題','hero',['activity','video'][i]+'-page-title'),{...section('麵包屑導覽設定','文章頁首的英文標題與分類連結','breadcrumb'),aliases:['news-'+category+':文章最上方與返回導覽']},section(['活動管理','影音管理'][i],'封面、標題、日期與完整內文','cards'),section('文章旁的分類選單','文章末段的優惠活動、最新消息與媒體影音連結','navigation')]}])),
  about:{hero:'/section-5/brand-pavilion/pavilion-taichung.jpg',sections:[section('品牌歷程','年份、沿革照片與品牌故事','timeline','about-services-title'),section('品牌承諾','介紹內容與情境圖片','cards','about-values-title'),section('專屬品牌識別','品牌銘板與識別圖片','logos','about-identity-title')]},
  advantage:{hero:'/section-5/brand-advantage/banner.jpg',sections:[section('家庭情境','家庭情境照片、標題與介紹','cards','brand-family-title'),section('品牌優勢','優勢內容與對應圖片','cards'),section('品牌優勢問答','頁面下方的品牌常見問題','faq','brand-advantage-faq-title')]},
  pavilions:{hero:'/section-5/brand-pavilion/banner.jpg',sections:[section('品牌館影片','頁面最上方的品牌影片','video','pavilion-hero-title'),section('品牌館空間介紹','空間介紹與左右兩張照片','cards','pavilion-fundamentals-title'),section('品牌館地址與時間','館別照片、聯絡資訊與預約按鈕','stores','pavilion-gallery-title'),section('參觀注意事項','頁面下方的注意事項','article','pavilion-styles-title')]},
@@ -204,7 +210,8 @@ export function positionGroup(page,id,path){
  if(page==='builders'&&id==='data-brandPavilions')return '聯繫與參觀預約'
  if(page==='franchise'&&path==='FRANCHISE_BROCHURE_URL')return '加盟資料下載'
  if(id==='knowledge-articles')return '文章管理'
- if(id==='news-articles')return page==='news'?'最新消息列表':page==='news-latest'?'消息管理':page==='news-activities'?'活動管理':'影音管理'
+ if(page==='news-latest'&&id===view('news-latest-index')&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
+ if(id==='news-articles')return page==='news'?'最新消息列表':page==='news-latest'?'消息文章管理':page==='news-activities'?'活動管理':'影音管理'
  if(id.startsWith('catalog-'))return '商品顯示與排序'
  if(path==='metaLabels')return '門市內頁規格與資訊'
  if(id===view('news-index')&&path==='newsCategories')return '最新消息分類標籤'

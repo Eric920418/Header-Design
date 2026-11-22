@@ -1,4 +1,4 @@
-import {inspirationBreadcrumb} from './page-breadcrumbs.mjs'
+import {inspirationBreadcrumb,latestNewsBreadcrumb} from './page-breadcrumbs.mjs'
 import {firstImage,rowName} from './workflow.mjs'
 import {blockThumbnail,pageFieldValue,valueAt,withValue,desktopCatalogueFields,usesDesktopCatalogue} from './page-editors.mjs'
 import {decoratePosition,pagePositions,positionImage} from './positions.mjs'
@@ -107,10 +107,13 @@ export function homeHeroPosition(bodies,selected){
  return{slide,copy:hero.copy||{},styles:styles?.cmsSettings?.visible===false?[]:styles?.styles||[],index,pan:index%2===0?'-4%':'4%'}
 }
 export function newsBreadcrumbPosition(block,bodies,presentation={}){
- const copy=bodies[block?.fields?.[0]?.documentId]?.copy||{}
+ const latest=block?.id?.startsWith('news-latest:')
+ const copy=bodies[latest?'view-pages-news-latest-slug-':block?.fields?.[0]?.documentId]?.copy||{}
  return{
   title:copy.text1||'',
+  trail:latest?latestNewsBreadcrumb(bodies['view-pages-news-latest-index']?.copy):null,
   categories:[{value:copy.text3,path:'copy.text3',destination:'copy.field2'},{value:copy.text5,path:'copy.text5',destination:'copy.field4'}],
+  sharedCategories:latest?[8,10,12].map(index=>({value:copy['text'+index],path:'copy.text'+index,destination:'copy.field'+(index-1)})):[],
   image:presentation.detailHeroImage,
   article:presentation.detailSample,
  }

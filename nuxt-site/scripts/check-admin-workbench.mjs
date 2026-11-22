@@ -296,16 +296,31 @@ assert(builderScene.auxiliary.some(f=>f.path==='copy.field7'&&f.value===previewB
 for(const category of ['latest','activities','video']){
  const id='news-'+category,blocks=workbenchBlocks(id,pageBlocks(pageEditors.find(p=>p.id===id),docs))
  const articleBlock=blocks[1]
- assert.equal(articleBlock.name,'麵包屑導覽設定')
+ assert.equal(articleBlock.name,category==='latest'?'麵包屑編輯設定':'麵包屑導覽設定')
  assert.equal(articleBlock.kind,'breadcrumb')
  assert(articleBlock.aliases.includes(id+':文章最上方與返回導覽'))
- const copy=previewBodies[articleBlock.fields[0].documentId].copy
+ const copy=previewBodies['view-pages-'+id+'-slug-'].copy
  const sample={title:'已公開文章',image:'/actual-cover.webp'},background='/article-background.webp'
  const scene=newsBreadcrumbPosition(articleBlock,previewBodies,{detailSample:sample,detailHeroImage:background})
  assert.equal(scene.image,background)
  assert.equal(scene.article,sample)
  assert.equal(scene.title,copy.text1)
  assert.deepEqual(scene.categories.map(c=>c.value),[copy.text3,copy.text5])
+ if(category==='latest'){
+  assert.deepEqual(blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','消息文章管理','頁面共用設定'])
+  assert(blocks[2].aliases.includes(id+':消息管理')&&blocks[2].aliases.includes(id+':文章報名圖片提示'))
+  assert(blocks[3].aliases.includes(id+':文章旁的分類選單'))
+  assert.equal(blocks[2].href,'/news/latest#latest-list-title')
+  const listDoc=docs.find(d=>d.id==='view-pages-news-latest-index'),articleDoc=docs.find(d=>d.id==='view-pages-news-latest-slug-'),edited=structuredClone(listDoc.body)
+  assert.deepEqual(scene.trail,{breadcrumbHome:'首頁',breadcrumbParent:'優惠消息',breadcrumbList:'最新消息'})
+  edited.copy.breadcrumbHome='返回首頁';edited.copy.breadcrumbList='品牌動態'
+  validate(edited,listDoc.schema)
+  checkPageBody(pageEditors.find(p=>p.id===id),listDoc.id,listDoc.body,edited,listDoc.schema)
+  assert.equal(newsBreadcrumbPosition(articleBlock,{...previewBodies,[listDoc.id]:edited}).trail.breadcrumbList,'品牌動態')
+  assert.deepEqual(scene.sharedCategories.map(c=>c.value),[copy.text8,copy.text10,copy.text12])
+  assert(!blocks.flatMap(b=>b.fields).some(f=>f.documentId===articleDoc.id&&f.path==='copy.text6'))
+  assert.throws(()=>checkPageBody(pageEditors.find(p=>p.id===id),articleDoc.id,articleDoc.body,{...articleDoc.body,copy:{...copy,text6:'不可修改'}},articleDoc.schema),/頁面以外/)
+ }
 }
 const image='/home-2026/hero/10bn/aikitchen.webp',selected={caption:'AI Kitchen',image,value:{image,description:'介紹'}}
 const before=JSON.stringify(selected);assert.equal(positionContent(home[0],{},selected).image,image);assert.equal(JSON.stringify(selected),before)
