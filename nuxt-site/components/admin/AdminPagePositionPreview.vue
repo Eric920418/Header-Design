@@ -5,10 +5,12 @@ import {knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-b
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 import {valueAt} from '~/shared/cms/page-editors.mjs'
 import {franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
+import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
 const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
-const destinationTitle=computed(()=>destinationName(scene.value.destination?.value,destinationGroups(sitePages.value||[],workspaces.value||[]))||'沿用既有連結')
+const destinations=computed(()=>destinationGroups(sitePages.value||[],workspaces.value||[]))
+const destinationTitle=computed(()=>destinationName(scene.value.destination?.value,destinations.value)||'沿用既有連結')
 const scene=computed(()=>pagePositionContent(props.block,props.bodies,props.presentation,props.selected,props.focusedField))
 const breadcrumb=computed(()=>newsBreadcrumbPosition(props.block,props.bodies,props.presentation))
 const isCatalogueTrail=computed(()=>props.block?.id.startsWith('series-catalogue:'))
@@ -41,6 +43,8 @@ const marqueeRows=computed(()=>{
  return franchiseMarqueeRows.map(row=>({...row,src:valueAt(body,row.image),loopSrc:valueAt(body,row.loop),description:valueAt(body,row.alt)}))
 })
 const supportItems=computed<{title:string;detail:string}[]>(()=>props.bodies['data-franchise']?.franchiseSupportHighlights||[])
+const franchiseQuestions=computed<{question:string;answer:string}[]>(()=>props.bodies['data-franchise']?.franchiseFaqItems?.slice(0,FRANCHISE_FAQ_DISPLAY_LIMIT)||[])
+const franchiseDownload=computed(()=>props.bodies[franchiseMarqueeDocument]?.copy)
 const formFields=computed(()=>props.block?.id.startsWith('franchise-form:')?['姓名','電子郵件','聯絡電話','居住地']:['聯絡人','聯絡電話','建設公司','電子信箱'])
 const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
 const previewStores=computed(()=>scene.value.items.map((i:any)=>({name:i.value?.storeName||i.value?.name||i.title,address:i.value?.address,hours:i.value?.hours,phone:i.value?.contact?.phone||i.value?.phone,image:i.image})).filter((i:any)=>i.address||i.image))
@@ -85,6 +89,22 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <small v-if="scene.destination">前往 {{ destinationTitle }}</small>
     </div>
    </article>
+   <div v-else-if="scene.kind==='franchise-faq'" class="cms-franchise-faq-preview">
+    <div class="cms-franchise-faq-questions">
+     <h3>了解加盟資訊</h3>
+     <p v-if="selected?.index>=FRANCHISE_FAQ_DISPLAY_LIMIT" class="cms-field-help">這題目前超出官網顯示範圍。</p>
+     <div v-for="(item,index) in franchiseQuestions" :key="index" class="cms-scene-question" :class="{'is-focused':index===selected?.index}">
+      <strong>{{ item.question }}</strong><Plus :size="15" aria-hidden="true" />
+      <p v-if="index===(selected?.index??0)">{{ item.answer }}</p>
+     </div>
+    </div>
+    <aside v-if="franchiseDownload" class="cms-franchise-faq-card" :class="{'is-focused':['copy.field52','copy.field53','copy.field54'].includes(focusedField||'')}">
+     <AdminThumbnail :src="franchiseDownload.field53" :alt="franchiseDownload.field54||'加盟資料封面'" contain />
+     <strong>{{ franchiseDownload.text56 }}</strong>
+     <small>封面前往 {{ destinationName(franchiseDownload.field52,destinations) }}</small>
+     <small v-if="franchiseDownload.field55!==franchiseDownload.field52">標題前往 {{ destinationName(franchiseDownload.field55,destinations) }}</small>
+    </aside>
+   </div>
    <template v-else-if="storeExampleKind">
     <template v-if="storeExample&&storeDetails">
      <AdminThumbnail :src="storeExample.images?.[0]||storeExample.cover" :alt="storeExample.storeName+'案例照片'" class="cms-scene-wide-image" />

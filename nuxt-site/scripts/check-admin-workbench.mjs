@@ -6,7 +6,7 @@ import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
 import {pageEditors,pageBlocks,searchResultLink,seriesCardRedirect} from '../shared/cms/page-editors.mjs'
 import {checkPageBody,editorSchema} from '../server/cms/page-editors.mjs'
-import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField,recentArticleIndexes,updateFranchiseMarqueeImage} from '../shared/cms/workbench.mjs'
+import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField,recentArticleIndexes,updateFranchiseMarqueeImage,updateFranchiseFaqDestination} from '../shared/cms/workbench.mjs'
 import {seriesEditorSections,seriesEditorSchema,sectionForSeriesField} from '../shared/cms/series-editor.mjs'
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
@@ -228,8 +228,23 @@ assert(franchise.find(b=>b.name==='加盟資料下載').fields.some(f=>f.path===
   assert.equal(independent.copy[loop],'/custom-loop.webp')
  }
 }
-const faqScene=pagePositionContent(franchise.find(b=>b.name==='加盟常見問題'),previewBodies,{}, {caption:'申請條件',image:'',value:{question:'如何申請？',answer:'先填表'}})
-assert.equal(faqScene.image,'','Text-only selections must not borrow a neighboring photo');assert.equal(faqScene.items[0].value.answer,'先填表')
+const faqScene=pagePositionContent(franchise.find(b=>b.name==='了解加盟資訊'),previewBodies,{}, {caption:'申請條件',image:'',value:{question:'如何申請？',answer:'先填表'}})
+assert.equal(faqScene.image,previewBodies['view-pages-franchising-intro'].copy.field53)
+assert.equal(faqScene.items[0].value.answer,'先填表')
+{
+ const block=franchise.find(b=>b.name==='了解加盟資訊'),page=pageEditors.find(p=>p.id==='franchise')
+ const doc=docs.find(d=>d.id==='view-pages-franchising-intro'),target='/franchising/form'
+ assert(block.aliases.includes('franchise:加盟常見問題'))
+ assert.equal(block.href,'/franchising/intro#franchise-faq-title')
+ const previous={...doc.body,copy:{...doc.body.copy,field52:'/franchising/download',field55:'/franchising/download'}}
+ const paired=updateFranchiseFaqDestination(previous,target)
+ assert.equal(paired.copy.field52,target)
+ assert.equal(paired.copy.field55,target)
+ assert.equal(paired.copy.field53,previous.copy.field53)
+ checkPageBody(page,doc.id,previous,paired,doc.schema)
+ const independent={...previous,copy:{...previous.copy,field55:'/news'}}
+ assert.equal(updateFranchiseFaqDestination(independent,target).copy.field55,'/news')
+}
 const pavilion=workbenchBlocks('pavilions',pageBlocks(pageEditors.find(p=>p.id==='pavilions'),docs)).find(b=>b.name==='品牌館空間介紹')
 previewBodies['view-pages-about-exhibition'].copy.field7='/right-pavilion-photo.webp'
 assert.equal(pagePositionContent(pavilion,previewBodies,{},null,'copy.field7').image,'/right-pavilion-photo.webp','Focusing the second photo must show that photo, not the first one')
@@ -319,8 +334,8 @@ for(const brand of ['sakura','svago','teka']){
  assert.equal(position.fixedAction,'廚房商品型錄下載')
  assert.deepEqual(position.items,catalogueCovers)
 }
-const faqBodies=JSON.stringify(previewBodies),faqContent=pagePositionContent(franchise.find(b=>b.name==='加盟常見問題'),previewBodies,{}, {caption:'如何申請',image:'',value:{question:'如何申請？',answer:'先填表'}})
-assert.equal(faqContent.questions[0].answer,'先填表');assert.equal(faqContent.image,'');assert(faqContent.contextImage,'Text-only positions retain the real page context without claiming a borrowed item photo')
+const faqBodies=JSON.stringify(previewBodies),faqContent=pagePositionContent(franchise.find(b=>b.name==='了解加盟資訊'),previewBodies,{}, {caption:'如何申請',image:'',value:{question:'如何申請？',answer:'先填表'}})
+assert.equal(faqContent.questions[0].answer,'先填表');assert.equal(faqContent.image,previewBodies['view-pages-franchising-intro'].copy.field53);assert(faqContent.contextImage)
 assert.equal(JSON.stringify(previewBodies),faqBodies)
 assert(builderScene.heading.some(f=>f.value==='目前輸入的建商標題'))
 assert(!builderScene.bodyText.some(f=>f.path==='copy.field7'))

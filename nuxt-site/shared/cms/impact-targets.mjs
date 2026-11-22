@@ -67,6 +67,7 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  }
  if (documentId === 'data-franchise' && path) {
   if (key === 'franchiseSupportHighlights') return [target('加盟介紹 → 總部支援','/franchising/intro#franchise-support')]
+  if (key === 'franchiseFaqItems') return [target('加盟介紹 → 了解加盟資訊','/franchising/intro#franchise-faq-title')]
   if (key === 'franchiseMarketingStories') return [target('加盟介紹 → 品牌信賴','/franchising/intro#franchise-marketing-title')]
   if (key === 'franchiseProcessSteps') return []
   if (key === 'FRANCHISE_BROCHURE_URL') return targets.slice(2)
@@ -75,6 +76,8 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  }
  if (documentId === 'view-pages-franchising-intro' && ['copy.text46','copy.supportDestination'].includes(path))
   return [target('加盟介紹 → 總部支援按鈕','/franchising/intro#franchise-support')]
+ if (documentId === 'view-pages-franchising-intro' && /^copy\.(field5[2-5]|text5[67])$/.test(path))
+  return [target('加盟介紹 → 加盟資料下載卡片','/franchising/intro#franchise-faq-title')]
  if (documentId === 'view-pages-franchising-intro' && /^copy\.field(?:18|19|20|21|22|23|24|25)$/.test(path))
   return [target('加盟介紹 → 加盟介紹輪播圖','/franchising/intro#franchise-intro-marquee')]
  if (documentId === 'data-productCatalogues' && path) {

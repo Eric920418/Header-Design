@@ -5,7 +5,7 @@ const cmsCopy = await useCmsResource('view-pages-franchising-intro', {"copy":{"f
 
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import { FRANCHISE_FORM_URL as cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages as cmsSeed_franchiseAdvantages, franchiseFaqItems as cmsSeed_franchiseFaqItems, franchiseMarketingStories as cmsSeed_franchiseMarketingStories, franchiseQualifications as cmsSeed_franchiseQualifications, franchiseSupportHighlights as cmsSeed_franchiseSupportHighlights, franchiseTestimonials as cmsSeed_franchiseTestimonials,  } from '~/data/franchise'
+import { FRANCHISE_FAQ_DISPLAY_LIMIT, FRANCHISE_FORM_URL as cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages as cmsSeed_franchiseAdvantages, franchiseFaqItems as cmsSeed_franchiseFaqItems, franchiseMarketingStories as cmsSeed_franchiseMarketingStories, franchiseQualifications as cmsSeed_franchiseQualifications, franchiseSupportHighlights as cmsSeed_franchiseSupportHighlights, franchiseTestimonials as cmsSeed_franchiseTestimonials,  } from '~/data/franchise'
 import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
 const { FRANCHISE_FORM_URL, franchiseAdvantages, franchiseFaqItems, franchiseMarketingStories, franchiseQualifications, franchiseSupportHighlights, franchiseTestimonials } = await useCmsResource('data-franchise', { FRANCHISE_FORM_URL: cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages: cmsSeed_franchiseAdvantages, franchiseFaqItems: cmsSeed_franchiseFaqItems, franchiseMarketingStories: cmsSeed_franchiseMarketingStories, franchiseQualifications: cmsSeed_franchiseQualifications, franchiseSupportHighlights: cmsSeed_franchiseSupportHighlights, franchiseTestimonials: cmsSeed_franchiseTestimonials })
 const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
@@ -307,7 +307,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
         <div class="franchise-faq__body">
           <div v-reveal="{ anim: 'opalMoveRight' }" data-ev="opalMoveRight" class="franchise-faq__list elementor-nested-accordion ev">
-            <article v-for="(item, index) in franchiseFaqItems.slice(0, 4)" :key="item.question" class="franchise-faq__item">
+            <article v-for="(item, index) in franchiseFaqItems.slice(0, FRANCHISE_FAQ_DISPLAY_LIMIT)" :key="item.question" class="franchise-faq__item">
               <h3>
                 <button type="button" :aria-expanded="openFaq === index" :aria-controls="`franchise-faq-panel-${index}`" @click="toggleFaq(index)">
                   <span class="franchise-faq__question"><span class="franchise-faq__number">{{ String(index + 1).padStart(2, '0') }}</span><InternalHeadingText :text="item.question" /></span>
@@ -319,7 +319,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
 
           <aside v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" data-ev="opalMoveLeft" class="franchise-faq__promo ev">
-            <NuxtLink :to="cmsCopy.copy.field52" target="_blank" rel="noopener" class="franchise-faq__promo-image" aria-label="在新分頁開啟加盟資料下載頁">
+            <NuxtLink :to="cmsCopy.copy.field52" target="_blank" rel="noopener" class="franchise-faq__promo-image" :aria-label="cmsCopy.copy.field52 === '/franchising/download' ? '在新分頁開啟加盟資料下載頁' : '在新分頁開啟加盟資料封面連結'">
               <InternalFranchiseImage :src="cmsCopy.copy.field53" :alt="cmsCopy.copy.field54" fit="contain" />
               <span class="franchise-faq__promo-arrow site-cta-icon" aria-hidden="true"><ChevronRight /></span>
             </NuxtLink>

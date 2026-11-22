@@ -3,8 +3,9 @@ import {valueAt,withValue,pageFieldValue,pageEditorLink,storeCasesPageId,desktop
 import {cmsDate,firstImage} from '~/shared/cms/workflow.mjs'
 import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
-import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes,updateFranchiseMarqueeImage,franchiseSupportImage} from '~/shared/cms/workbench.mjs'
+import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes,updateFranchiseMarqueeImage,franchiseSupportImage,updateFranchiseFaqDestination} from '~/shared/cms/workbench.mjs'
 import {franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
+import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
 import {storeRegionCities} from '~/shared/cms/store-location.mjs'
@@ -97,6 +98,17 @@ function seriesLocation(path:string){
 
 provide('cms-media-context',computed(()=>pageMedia(docs.value,bodies.value,blocks.value)))
 const collections=computed(()=>active.value?.fields.filter((f:any)=>f.schema.type==='array'&&!systemCabinetFields.value.includes(f))||[])
+const franchiseFaq=computed(()=>active.value?.kind==='franchise-faq')
+const faqCover=computed(()=>bodies.value[franchiseMarqueeDocument]?.copy?.field53)
+function editableBlockFields(block:any){
+ const fields=block?.fields||[]
+ if(block?.kind!=='franchise-faq')return fields
+ const card=blocks.value.find(b=>b.id==='franchise:加盟資料下載')
+ const cardFields=(card?.fields||[]).filter((field:any)=>['copy.field52','copy.field53','copy.field54'].includes(field.path))
+  .map((field:any)=>field.path==='copy.field52'?{...field,schema:{...field.schema,help:'封面點開的頁面。若封面和標題原本使用同一個連結，會一起更新。'}}:field)
+ return [...fields,...cardFields]
+}
+const visibleFields=computed(()=>editableBlockFields(active.value))
 const caseManagement=computed(()=>active.value?.preview==='inspiration-cases')
 const headerId='view-components-SiteHeader'
 const catalogueIndex=computed(()=>bodies.value[headerId]?.leftNav?.findIndex(usesDesktopCatalogue)??-1)
@@ -105,7 +117,7 @@ const catalogueFields=computed(()=>active.value?.id==='menu:左側主導覽'&&ca
 const commonFields=computed(()=>{
  const body=bodies.value[franchiseMarqueeDocument]
  const repeated=active.value?.kind==='franchise-marquee'?franchiseMarqueeRows.filter(row=>valueAt(body,row.image)===valueAt(body,row.loop)).map(row=>row.loop):[]
- return active.value?.fields.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!repeated.includes(f.path))||[]
+ return visibleFields.value.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!repeated.includes(f.path))
 })
 const sharedFormGroups=computed(()=>{
  const groups=sharedNews.value?{'文章底部的分類選單':{},[newsTopLinks]:{}}:sharedKnowledge.value?knowledgeSharedSections:inspirationSharedGroups
@@ -154,7 +166,7 @@ async function openCatalogueEditor(){
 }
 const settingGroups=computed(()=>{
  const groups=new Map<string,{title:string;readingGroup?:string;imageReading?:boolean;formGroup?:string;fields:any[]}>()
- for(const field of active.value?.fields||[]){
+ for(const field of visibleFields.value){
   if(!field.schema.advanced||systemCabinetFields.value.includes(field))continue
   const {readingGroup,imageReading}=field.schema
   const key=readingGroup||field.documentId+':'+field.path
@@ -184,7 +196,7 @@ watch([()=>active.value?.id,storeRegion],()=>{workbench.focused.value='';workben
 function closeItem(){workbench.editing.value='';workbench.returnFocus()}
 function preparePreview(){previewPath.value=props.id==='home'||locationHref.value===active.value?.href?'':locationHref.value;showPreview()}
 const title=computed(()=>namedPages.value?.find(p=>p.id===props.id)?.title||pageData.value?.title||(props.id==='home'?'首頁':'修改頁面'))
-const modified=computed(()=>blocks.value.filter(b=>b.fields.some((f:any)=>{
+const modified=computed(()=>blocks.value.filter(b=>editableBlockFields(b).some((f:any)=>{
  const value=(source:Record<string,any>)=>{
   const field=pageFieldValue(source,f)
   return f.schema.recentArticleIds?recentArticleIndexes(field,f.schema.recentArticleIds).map(index=>field[index]):field
@@ -197,11 +209,15 @@ const changeDetails=computed(()=>pageChanges(blocks.value,docs.value,baseline.va
 const status=computed(()=>dirty.value?`尚未儲存 · ${changeDetails.value.length} 處修改`:pending.value?'已儲存，官網尚未更新':'官網已更新')
 const shared=computed(()=>changeImpacts(changeDetails.value).filter(i=>i.href.split('#')[0]!==pageData.value?.href.split('#')[0]||/全站|所有官網頁面/.test(i.label)))
 const returnLink=computed(()=>{const {sitePage,block,edit,part,seriesPart,legacy,field,item,list,create,returnPath,returnSection,...query}=route.query;if(typeof returnSection==='string')query.section=returnSection;return{path:returnPath==='/admin/content'?'/admin/content':props.id==='home'?'/admin':'/admin/content',query}})
-const activeDocs=computed(()=>docs.value.filter(d=>active.value?.fields.some((f:any)=>f.documentId===d.id)))
+const activeDocs=computed(()=>docs.value.filter(d=>visibleFields.value.some((f:any)=>f.documentId===d.id)))
 const unpublishDocuments=computed(()=>docs.value.filter(d=>d.publishedId&&(!pageData.value?.unpublishIds||pageData.value.unpublishIds.includes(d.id))))
 const impacts=computed(()=>{
  const block=active.value
  const changes=pending.value?pageChanges(blocks.value,activeDocs.value,Object.fromEntries(activeDocs.value.map(d=>[d.id,d.publishedBody??d.body])),bodies.value,impactContext.value):changeDetails.value
+ if(franchiseFaq.value){
+  const related=changes.filter((change:{blockId?:string;documentId:string;path:string})=>change.blockId===block.id||visibleFields.value.some((f:any)=>f.documentId===change.documentId&&f.path===change.path))
+  return related.length?changeImpacts(related):blockImpacts({...block,fields:visibleFields.value},[],impactContext.value)
+ }
  if(!newsRecent.value)return blockImpacts(block,changes,impactContext.value)
  const item=workbench.selection.value?.value?.id
  const edited=changes.filter((change:{blockId?:string;documentId:string;rowId?:string|number})=>change.blockId===block.id||(item!==undefined&&change.documentId==='news-articles'&&change.rowId===item))
@@ -211,12 +227,14 @@ const payload=(action:string)=>({action,documents:docs.value.map(d=>({id:d.id,re
 async function selectBlock(id:string){locationOpen.value=false;await router.replace({query:{...route.query,block:id,legacy:undefined,field:undefined,list:undefined,item:undefined}});await nextTick();formRoot.value?.querySelector<HTMLElement>('.cms-block-title')?.focus({preventScroll:true})}
 function update(f:any,value:any){
  const body=bodies.value[f.documentId]
- bodies.value={...bodies.value,[f.documentId]:active.value?.kind==='franchise-marquee'&&f.documentId===franchiseMarqueeDocument?updateFranchiseMarqueeImage(body,f.path,value):withValue(body,f.path,value)}
+ const next=f.documentId===franchiseMarqueeDocument&&active.value?.kind==='franchise-marquee'?updateFranchiseMarqueeImage(body,f.path,value)
+  :f.documentId===franchiseMarqueeDocument&&franchiseFaq.value&&f.path==='copy.field52'?updateFranchiseFaqDestination(body,value):withValue(body,f.path,value)
+ bodies.value={...bodies.value,[f.documentId]:next}
 }
 async function load(){error.value='';try{const result=await api('page-editors/'+props.id,{timeout:20000,retry:0});if(!Array.isArray(result?.documents)||!Array.isArray(result?.blocks))throw Error('伺服器未回傳完整頁面內容，請確認連線後重試。');workbench.rows.value={};pageData.value=result;docs.value=result.documents;bodies.value=Object.fromEntries(result.documents.map((d:any)=>[d.id,d.body]));baseline.value=JSON.parse(JSON.stringify(bodies.value));if(props.id==='knowledge'&&(isSystemCabinetDocument(route.query.legacy)||knowledgeSection.value)){
  await openSystemCabinet(knowledgeSection.value?String(route.query.block):'knowledge:系統櫃材質重點')
  }else if(route.query.legacy){const b=result.blocks.find((b:any)=>b.fields.some((f:any)=>f.documentId===route.query.legacy));if(b)await router.replace({query:{...route.query,block:b.id,legacy:undefined}})}if(props.id==='menu'&&route.query.block==='menu:展開選單中的型錄入口')await openCatalogueEditor()}catch(e){error.value=message(e)}}
-async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;const block=[active.value,...blocks.value].find(b=>b?.fields.some((f:any)=>{
+async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;const block=[active.value,...blocks.value].find(b=>editableBlockFields(b).some((f:any)=>{
  if(f.documentId!==issue.documentId||!(issue.path===f.path||issue.path.startsWith(f.path+'.')))return false
  if(!f.schema.recentArticleIds)return true
  const index=Number(issue.path.slice(f.path.length+1).split('.')[0])
@@ -320,10 +338,11 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
       </section>
      </template>
     </AdminItems>
-   </div><div v-else-if="active?.kind==='franchise-support'" class="cms-block-field">
-    <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :fallback-image="franchiseSupportImage(bodies)" @update:model-value="update(f,$event)" />
+   </div><div v-else-if="active?.kind==='franchise-support'||franchiseFaq" class="cms-block-field">
+    <p v-if="franchiseFaq" class="cms-field-help">官網顯示排序前 {{ FRANCHISE_FAQ_DISPLAY_LIMIT }} 題。</p>
+    <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :fallback-image="franchiseFaq?faqCover:franchiseSupportImage(bodies)" :display-limit="franchiseFaq?FRANCHISE_FAQ_DISPLAY_LIMIT:undefined" @update:model-value="update(f,$event)" />
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
-   <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':active?.kind==='franchise-support'&&f.schema.format==='media'}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
+   <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':active?.kind==='franchise-support'&&f.schema.format==='media'}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
    <fieldset v-else-if="sharedInspiration||sharedKnowledge||sharedNews" :disabled="busy" class="cms-edit-form">
     <fieldset v-for="group in sharedFormGroups" :key="group.key" :data-position-group="group.key" class="cms-inspiration-form-group" :class="{'cms-news-link-settings':sharedNews}">
      <legend>{{ group.title }}</legend>

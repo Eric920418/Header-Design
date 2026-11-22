@@ -1,3 +1,5 @@
+export const FRANCHISE_FAQ_DISPLAY_LIMIT = 4
+
 export interface FranchiseAdvantage {
   id: string
   number: string

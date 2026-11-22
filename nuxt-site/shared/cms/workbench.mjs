@@ -49,6 +49,10 @@ export function updateFranchiseMarqueeImage(body,path,value){
 export function franchiseSupportImage(bodies){
  return firstImage(valueAt(bodies['site-visuals'],franchiseSupportImagePath))||franchiseSupportImageFallback
 }
+export function updateFranchiseFaqDestination(body,value){
+ const next=withValue(body,'copy.field52',value)
+ return body.copy.field52===body.copy.field55?withValue(next,'copy.field55',value):next
+}
 export const itemKey=(value,index)=>String(value&&typeof value==='object'?(value.id??value.slug??index):index)
 export function itemWebsitePath(documentId,item){
  if(!item)return ''

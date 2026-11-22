@@ -133,7 +133,7 @@ const pageSections={
   ['/franchising/intro#introduction','加盟介紹的頁首'],
   ['/franchising/intro#advantages','加盟優勢'],
   ['/franchising/intro#franchise-process','加盟流程'],
-  ['/franchising/intro#franchise-faq','加盟常見問題'],
+  ['/franchising/intro#franchise-faq','了解加盟資訊'],
  ],
 }
 

@@ -6,7 +6,7 @@ import {seriesEditorSchema,seriesEditorSection} from '~/shared/cms/series-editor
 import {sameContent,itemPublication} from '~/shared/cms/changes.mjs'
 import {compareNewsDates} from '~/shared/cms/public-content.mjs'
 import {GripVertical,Plus} from 'lucide-vue-next'
-const props=defineProps<{modelValue:any[];schema:any;documentId?:string;path?:string;hasRelatedChanges?:(value:any)=>boolean;seriesPart?:string;fallbackImage?:string}>()
+const props=defineProps<{modelValue:any[];schema:any;documentId?:string;path?:string;hasRelatedChanges?:(value:any)=>boolean;seriesPart?:string;fallbackImage?:string;displayLimit?:number}>()
 const emit=defineEmits<{'update:modelValue':[value:any[]];'cancel-related':[value:any]}>()
 const route=useRoute(),router=useRouter(),cancelOpen=ref(false),moreOpen=ref(false),directTarget=ref(''),itemNotice=ref('')
 const depth=inject('cms-array-depth',0);provide('cms-array-depth',depth+1)
@@ -115,6 +115,7 @@ watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||
        <AdminThumbnail :src="thumbnail(r)" :alt="caption(r)+'縮圖'" :contain="/標誌|標識|圖示/.test(label)" />
        <span>{{ caption(r) }}
         <small v-if="schema.newsOverview" class="cms-news-row-meta">{{ r.value.summary.categoryLabel }} · {{ r.value.summary.displayDate||r.value.summary.publishedAt }} · {{ publication(r).label }}</small>
+        <small v-if="displayLimit!==undefined&&r.index>=displayLimit" class="cms-news-row-meta">超出官網顯示範圍</small>
         <small v-if="changed(r)" class="cms-item-modified">尚未儲存</small>
        </span>
        <small v-if="!schema.newsOverview&&typeof r.value?.enabled==='boolean'">{{ publication(r).label }}</small>
