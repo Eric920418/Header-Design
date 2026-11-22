@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ArrowRight,Play,Plus,Search,MessageSquare,Download,MapPin,ExternalLink} from 'lucide-vue-next'
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
-import {knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
+import {franchiseDownloadBreadcrumb,knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 import {valueAt} from '~/shared/cms/page-editors.mjs'
 import {franchiseDownloadDocument,franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
@@ -46,6 +46,14 @@ const supportItems=computed<{title:string;detail:string}[]>(()=>props.bodies['da
 const franchiseQuestions=computed<{question:string;answer:string}[]>(()=>props.bodies['data-franchise']?.franchiseFaqItems?.slice(0,FRANCHISE_FAQ_DISPLAY_LIMIT)||[])
 const franchiseDownloadCard=computed(()=>props.bodies[franchiseMarqueeDocument]?.copy)
 const franchiseDownloadCopy=computed(()=>props.bodies[franchiseDownloadDocument]?.copy)
+const downloadTrail=computed(()=>franchiseDownloadBreadcrumb(franchiseDownloadCopy.value))
+const downloadAnchor=computed(()=>props.block?.previewPage?.split('#')[1]||props.block?.anchor)
+const downloadSheets=computed(()=>{
+ const pages=props.bodies[franchiseDownloadDocument]?.brochurePages||[]
+ const index=props.selected?.path==='brochurePages'?props.selected.index:0
+ const start=index<2?0:index
+ return pages.slice(start,start+2).map((page:any,offset:number)=>({...page,index:start+offset}))
+})
 const brochureFile=computed(()=>props.bodies['data-franchise']?.FRANCHISE_BROCHURE_URL?.split(/[?#]/)[0].split('/').pop())
 const franchiseApplication=computed(()=>props.bodies['view-pages-franchising-form']?.copy)
 const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
@@ -55,7 +63,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
 <template>
  <div class="cms-page-position-scene cms-website-scene" :data-position-kind="scene.kind">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
-  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','news-shared','franchise-application'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image" :class="{'cms-franchise-download-context':franchiseDownloadCopy}">
+  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','news-shared','franchise-application','franchise-download-breadcrumb'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image" :class="{'cms-franchise-download-context':franchiseDownloadCopy}">
    <AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ franchiseDownloadCopy?.text4 || pageTitle }}</span>
   </div>
   <section class="cms-scene-target" :aria-label="block?.name+'的位置示意'">
@@ -109,33 +117,52 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <small v-if="franchiseDownloadCard.field55!==franchiseDownloadCard.field52">標題前往 {{ destinationName(franchiseDownloadCard.field55,destinations) }}</small>
     </aside>
    </div>
-   <div v-else-if="scene.kind==='hero'&&franchiseDownloadCopy" class="cms-scene-hero cms-franchise-download-hero">
+   <div v-else-if="['hero','franchise-download-breadcrumb'].includes(scene.kind)&&franchiseDownloadCopy" class="cms-scene-hero cms-franchise-download-hero">
     <AdminThumbnail :src="franchiseDownloadCopy.field1" :alt="franchiseDownloadCopy.field2" :class="{'is-focused':highlighted('copy.field1')||highlighted('copy.field2')}" />
     <div class="cms-scene-hero-copy">
      <InternalSectionPill tone="dark" :class="{'is-focused':highlighted('copy.text3')}">{{ franchiseDownloadCopy.text3 }}</InternalSectionPill>
      <h3 :class="{'is-focused':highlighted('copy.text4')}">{{ franchiseDownloadCopy.text4 }}</h3>
-     <small aria-label="麵包屑">首頁 / 我要加盟 / 加盟資料下載</small>
+     <small aria-label="麵包屑" class="cms-franchise-download-trail">
+      <template v-for="(label,key,index) in downloadTrail" :key="key"><span v-if="index" aria-hidden="true"> / </span><span :class="{'is-focused':highlighted('copy.'+key)}">{{ label }}</span></template>
+     </small>
     </div>
    </div>
-   <div v-else-if="scene.kind==='franchise-download-document'&&franchiseDownloadCopy" class="cms-franchise-download-preview">
-    <header>
-     <h3><span :class="{'is-focused':highlighted('copy.text5')}"><InternalHeadingText :text="franchiseDownloadCopy.text5" /></span><br /><span :class="{'is-focused':highlighted('copy.text6')}"><InternalHeadingText :text="franchiseDownloadCopy.text6" /></span></h3>
-     <AdminThumbnail v-if="franchiseDownloadCopy.field7" :src="franchiseDownloadCopy.field7" :alt="franchiseDownloadCopy.field8" :class="{'is-focused':highlighted('copy.field7')||highlighted('copy.field8')}" contain />
-    </header>
-    <div>
-     <p :class="{'is-focused':highlighted('copy.text9')}">{{ franchiseDownloadCopy.text9 }}</p>
-     <dl class="cms-franchise-download-meta">
-      <div v-for="label in [10,12,14]" :key="label">
-       <dt :class="{'is-focused':highlighted('copy.text'+label)}">{{ franchiseDownloadCopy['text'+label] }}</dt>
-       <dd :class="{'is-focused':highlighted('copy.text'+(label+1))}">{{ franchiseDownloadCopy['text'+(label+1)] }}</dd>
+   <template v-else-if="['franchise-download-document','franchise-download-catalogue'].includes(scene.kind)&&franchiseDownloadCopy">
+    <div v-if="downloadAnchor==='franchise-download-back'" class="cms-scene-buttons">
+     <span :class="{'is-focused':highlighted('copy.text23')||highlighted('copy.field22')}">{{ franchiseDownloadCopy.text23 }}<ArrowRight :size="14" aria-hidden="true" /></span>
+     <small v-if="highlighted('copy.field22')" class="cms-field-help">前往 {{ destinationTitle }}</small>
+    </div>
+    <div v-else-if="scene.kind==='franchise-download-catalogue'||downloadAnchor!=='franchise-catalogue-preview'" class="cms-franchise-download-preview">
+     <header>
+      <h3><span :class="{'is-focused':highlighted('copy.text5')}"><InternalHeadingText :text="franchiseDownloadCopy.text5" /></span><br /><span :class="{'is-focused':highlighted('copy.text6')}"><InternalHeadingText :text="franchiseDownloadCopy.text6" /></span></h3>
+      <AdminThumbnail v-if="franchiseDownloadCopy.field7" :src="franchiseDownloadCopy.field7" :alt="franchiseDownloadCopy.field8" :class="{'is-focused':highlighted('copy.field7')||highlighted('copy.field8')}" contain />
+     </header>
+     <div>
+      <p :class="{'is-focused':highlighted('copy.text9')}">{{ franchiseDownloadCopy.text9 }}</p>
+      <dl class="cms-franchise-download-meta">
+       <div v-for="label in [10,12,14]" :key="label">
+        <dt :class="{'is-focused':highlighted('copy.text'+label)}">{{ franchiseDownloadCopy['text'+label] }}</dt>
+        <dd :class="{'is-focused':highlighted('copy.text'+(label+1))}">{{ franchiseDownloadCopy['text'+(label+1)] }}</dd>
+       </div>
+      </dl>
+      <div class="cms-scene-buttons">
+       <span v-for="key in ['text16','text17']" :key="key" :class="{'cms-preview-primary':key==='text16','is-focused':highlighted('copy.'+key)||highlighted('FRANCHISE_BROCHURE_URL')}">{{ franchiseDownloadCopy[key] }}<Download v-if="key==='text17'" :size="14" aria-hidden="true" /><ExternalLink v-else :size="14" aria-hidden="true" /></span>
       </div>
-     </dl>
-     <div class="cms-scene-buttons">
-      <span v-for="button in scene.buttons" :key="button.path" :class="{'cms-preview-primary':button.path==='copy.text16','is-focused':highlighted(button.path)||highlighted('FRANCHISE_BROCHURE_URL')}">{{ button.value }}<Download v-if="button.path==='copy.text17'" :size="14" aria-hidden="true" /><ExternalLink v-else :size="14" aria-hidden="true" /></span>
+      <small v-if="highlighted('FRANCHISE_BROCHURE_URL')" class="cms-field-help">{{ brochureFile || '尚未選擇 PDF' }}</small>
+      <div v-if="scene.kind==='franchise-download-document'&&downloadAnchor==='franchise-pdf-actions'" class="cms-scene-copy">
+       <template v-for="key in ['text18','text19','text20']" :key="key">
+        <p :class="{'is-focused':highlighted('copy.'+key)}">{{ franchiseDownloadCopy[key] }}</p>
+       </template>
+      </div>
      </div>
-     <small v-if="highlighted('FRANCHISE_BROCHURE_URL')" class="cms-field-help">{{ brochureFile || '尚未選擇 PDF' }}</small>
     </div>
-   </div>
+    <div v-if="scene.kind==='franchise-download-catalogue'||downloadAnchor==='franchise-catalogue-preview'" class="cms-franchise-download-sheets">
+     <figure v-for="sheet in downloadSheets" :key="sheet.index" :class="{'is-focused':sheet.index===selected?.index&&selected?.path==='brochurePages'}">
+      <AdminThumbnail :src="sheet.image" :alt="sheet.alt" contain />
+      <figcaption :class="{'is-focused':highlighted('copy.text21')}">{{ franchiseDownloadCopy.text21 }}{{ sheet.number }}</figcaption>
+     </figure>
+    </div>
+   </template>
    <template v-else-if="storeExampleKind">
     <template v-if="storeExample&&storeDetails">
      <AdminThumbnail :src="storeExample.images?.[0]||storeExample.cover" :alt="storeExample.storeName+'案例照片'" class="cms-scene-wide-image" />
@@ -306,10 +333,10 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
-   <p v-if="!['franchise-support','franchise-application'].includes(scene.kind)&&scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>
+   <p v-if="!['franchise-support','franchise-application','franchise-download-document'].includes(scene.kind)&&scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>
    <dl v-if="scene.auxiliary.some((f:any)=>highlighted(f.path))" class="cms-scene-details"><template v-for="field in scene.auxiliary.filter((f:any)=>highlighted(f.path))" :key="field.path"><dt>螢幕閱讀器會讀到</dt><dd>{{ field.value }}</dd></template></dl>
    <p v-if="!['breadcrumb','page-breadcrumb','news-shared','inactive','filter'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
   </section>

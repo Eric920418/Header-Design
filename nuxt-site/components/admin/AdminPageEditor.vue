@@ -4,7 +4,7 @@ import {cmsDate,firstImage} from '~/shared/cms/workflow.mjs'
 import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
 import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes,updateFranchiseMarqueeImage,franchiseSupportImage,updateFranchiseFaqDestination} from '~/shared/cms/workbench.mjs'
-import {franchiseDownloadActions,franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
+import {franchiseDownloadActions,franchiseDownloadSettings,franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
@@ -38,6 +38,9 @@ const workbench={focused:ref(''),editing:ref(''),selection:ref<any>(null),rows:r
 provide('cms-workbench',workbench)
 const seriesPart=computed(()=>props.id==='series'?seriesEditorSection(route.query.seriesPart):null)
 const focusedGroup=ref('')
+const franchiseCatalogue=computed(()=>active.value?.kind==='franchise-download-catalogue')
+const franchiseDownloadCommon=computed(()=>active.value?.kind==='franchise-download-document')
+const legacyDownloadGroup=computed(()=>franchiseDownloadSettings.find(group=>route.query.block==='franchise-download:'+group.name))
 const sharedInspiration=computed(()=>active.value?.id==='inspiration:頁面共用設定')
 const sharedKnowledge=computed(()=>active.value?.id==='knowledge:頁面共用設定')
 const sharedNews=computed(()=>active.value?.kind==='news-shared')
@@ -47,6 +50,13 @@ const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fiel
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
 const positionBlock=computed(()=>{
  const block=active.value
+ if(franchiseCatalogue.value&&focusedGroup.value==='franchise-pdf-actions')
+  return {...block,previewPage:'/franchising/download#franchise-pdf-actions'}
+ if(franchiseDownloadCommon.value){
+  const group=franchiseDownloadSettings.find(group=>group.fields.includes(focusedField.value)||group.name===focusedGroup.value)
+   ||(!focusedField.value?legacyDownloadGroup.value:undefined)
+  if(group)return {...block,name:group.name,previewPage:'/franchising/download#'+group.anchor}
+ }
  if(newsArticleList.value&&!workbench.editing.value)return {...block,previewPage:block.href}
  if(sharedNews.value&&focusedGroup.value===newsTopLinks&&block.href.endsWith('#article-categories'))return {...block,previewPage:block.href.replace(/#article-categories$/,'#article-header-categories')}
  if(regionField.value)return {...block,storeRegion:storeRegion.value,previewPage:`/gallery?region=${encodeURIComponent(storeRegion.value)}#gallery-filter-title`}
@@ -120,8 +130,9 @@ const commonFields=computed<any[]>(()=>{
  const repeated=active.value?.kind==='franchise-marquee'?franchiseMarqueeRows.filter(row=>valueAt(body,row.image)===valueAt(body,row.loop)).map(row=>row.loop):[]
  return visibleFields.value.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!repeated.includes(f.path))
 })
-const brochureSettings=computed(()=>active.value?.kind==='franchise-download-document'?commonFields.value.filter(f=>franchiseDownloadActions.includes(f.path)):[])
-const mainFields=computed(()=>commonFields.value.filter(f=>!brochureSettings.value.includes(f)))
+const brochureSettings=computed(()=>franchiseDownloadCommon.value?commonFields.value.filter(f=>franchiseDownloadActions.includes(f.path)):[])
+const downloadSettings=computed(()=>franchiseDownloadCommon.value?franchiseDownloadSettings.map(group=>({...group,fields:commonFields.value.filter(f=>group.fields.includes(f.path))})):[])
+const mainFields=computed(()=>commonFields.value.filter(f=>!brochureSettings.value.includes(f)&&!downloadSettings.value.some(group=>group.fields.includes(f))))
 const sharedFormGroups=computed(()=>{
  const groups=sharedNews.value?{'文章底部的分類選單':{},[newsTopLinks]:{}}:sharedKnowledge.value?knowledgeSharedSections:inspirationSharedGroups
  return Object.entries(groups).map(([key,group])=>({
@@ -191,7 +202,7 @@ function trackField(event:FocusEvent){
  const target=event.target as HTMLElement
  focusedField.value=target.closest('[data-cms-path]')?.getAttribute('data-cms-path')||''
  const group=target.closest<HTMLElement>('[data-position-group]')?.dataset.positionGroup
- if(group)focusedGroup.value=group
+ if(group||(franchiseDownloadCommon.value||franchiseCatalogue.value)&&focusedField.value)focusedGroup.value=group||''
  if(active.value?.preview==='inspiration-breadcrumb'&&focusedField.value.startsWith('copy.breadcrumb'))
   focusedGroup.value=focusedField.value==='copy.breadcrumbDetail'?'breadcrumb-detail':''
 }
@@ -327,6 +338,10 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
    </div>
    <p v-if="caseManagement" class="cms-case-scope">這裡管理從後台新增的案例。請到<NuxtLink :to="pageEditorLink(storeCasesPageId,route.query)">「門市案例」</NuxtLink>修改門市文章與照片。從其他系統同步的案例請回原系統修改。</p>
    <p v-if="franchiseNews" class="cms-case-scope">按「編輯文章」修改標題、封面、摘要或內文。更新後，「優惠消息」也會使用修改後的文章。</p>
+   <fieldset v-if="franchiseCatalogue" :disabled="busy" class="cms-edit-form cms-download-file-settings" data-position-group="franchise-pdf-actions">
+    <AdminFields v-for="f in commonFields" :key="f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
+    <p class="cms-field-help">「線上預覽」與「下載 PDF」共用此檔案。下方圖片顯示在官網頁面中。</p>
+   </fieldset>
    <fieldset :disabled="busy" class="cms-edit-form cms-collection-fields"><template v-for="f in collections" :key="f.documentId+':'+f.path+(newsRecent?':recent':'')"><div v-if="f.documentId===headerId&&f.path==='leftNav'" class="cms-block-field">
     <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :has-related-changes="catalogueChanged" @update:model-value="update(f,$event)" @cancel-related="restoreCatalogue">
      <template #item-settings="{row}"><fieldset v-if="usesDesktopCatalogue(row.value)&&catalogueFields.length" class="cms-fields">
@@ -354,7 +369,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <p v-if="franchiseFaq" class="cms-field-help">官網顯示排序前 {{ FRANCHISE_FAQ_DISPLAY_LIMIT }} 題。</p>
     <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :fallback-image="franchiseFaq?faqCover:franchiseSupportImage(bodies)" :display-limit="franchiseFaq?FRANCHISE_FAQ_DISPLAY_LIMIT:undefined" @update:model-value="update(f,$event)" />
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
-   <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':active?.kind==='franchise-support'&&f.schema.format==='media'}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
+   <details v-if="collections.length&&commonFields.length&&!franchiseCatalogue" class="cms-common-settings"><summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':active?.kind==='franchise-support'&&f.schema.format==='media'}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
    <fieldset v-else-if="sharedInspiration||sharedKnowledge||sharedNews" :disabled="busy" class="cms-edit-form">
     <fieldset v-for="group in sharedFormGroups" :key="group.key" :data-position-group="group.key" class="cms-inspiration-form-group" :class="{'cms-news-link-settings':sharedNews}">
      <legend>{{ group.title }}</legend>
@@ -373,11 +388,18 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-download-fields':brochureSettings.length}"><div v-for="f in mainFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':brochureSettings.length&&(f.schema.format==='media'||f.path==='copy.text9')}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset>
     <section v-if="brochureSettings.length" class="cms-download-actions-settings">
      <h3>預覽與下載按鈕</h3>
-     <p class="cms-field-help">兩個按鈕使用同一份 PDF。可分別更改按鈕文字。</p>
+     <p class="cms-field-help">更換 PDF 請到「型錄管理」。</p>
      <fieldset :disabled="busy" class="cms-edit-form cms-franchise-download-fields">
-      <div v-for="f in brochureSettings" :key="f.path" class="cms-block-field" :class="{'cms-block-field-long':f.path==='FRANCHISE_BROCHURE_URL'}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div>
+      <div v-for="f in brochureSettings" :key="f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div>
      </fieldset>
     </section>
+    <details v-for="group in downloadSettings" :key="active.id+group.name" class="cms-secondary" :open="legacyDownloadGroup?.name===group.name" :data-position-group="group.name">
+     <summary>{{ group.name }}</summary>
+     <p class="cms-field-help">{{ group.help }}</p>
+     <fieldset :disabled="busy" class="cms-edit-form">
+      <AdminFields v-for="f in group.fields" :key="f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
+     </fieldset>
+    </details>
    </template>
    <p v-if="active?.help" class="cms-field-help cms-position-help">{{ active.help }}</p>
    <details v-for="group in settingGroups" :key="active.id+group.title" :open="!group.imageReading&&!collections.length&&!commonFields.length" class="cms-secondary cms-purpose-settings" :data-position-group="group.formGroup">

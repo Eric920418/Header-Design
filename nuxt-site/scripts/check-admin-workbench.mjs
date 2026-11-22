@@ -17,6 +17,7 @@ import {normalizeVideos,validate} from '../server/cms/content.mjs'
 import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
+import {franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 {
@@ -234,18 +235,35 @@ const downloadEntry=franchise.find(b=>b.name==='加盟資料下載入口')
 assert(downloadEntry.fields.some(f=>f.path==='copy.field53'))
 assert(downloadEntry.aliases.includes('franchise:加盟資料下載'))
 assert.equal(downloadEntry.href,'/franchising/intro#franchise-faq-title')
-const downloadBlocks=workbenchBlocks('franchise-download',pageBlocks(pageEditors.find(p=>p.id==='franchise-download'),docs))
+const downloadPage=pageEditors.find(p=>p.id==='franchise-download')
+const downloadBlocks=workbenchBlocks('franchise-download',pageBlocks(downloadPage,docs))
 const downloadHero=downloadBlocks.find(b=>b.name==='主視覺標題')
 const downloadDocument=downloadBlocks.find(b=>b.kind==='franchise-download-document')
+const downloadCatalogue=downloadBlocks.find(b=>b.name==='型錄管理')
+const downloadBreadcrumb=downloadBlocks.find(b=>b.name==='麵包屑編輯設定')
+assert.deepEqual(downloadBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','型錄管理','區塊共用設定'])
 assert(downloadHero.aliases.includes('franchise-download:頁面最上方'))
 assert.equal(downloadHero.href,'/franchising/download#franchise-download-title')
 assert.deepEqual(downloadHero.fields.filter(f=>f.path.startsWith('copy.text')).map(f=>[f.path,f.label]),[['copy.text3','區塊英文標籤'],['copy.text4','區塊英文主標題']])
 assert.equal(pagePositionContent(downloadHero,previewBodies).image,previewBodies['view-pages-franchising-download'].copy.field1)
 assert(downloadDocument.aliases.includes('franchise-download:加盟簡介與檔案'))
+assert(['加盟簡介與下載按鈕','型錄載入提示','頁面底部返回按鈕'].every(name=>downloadDocument.aliases.includes('franchise-download:'+name)))
 assert.equal(downloadDocument.href,'/franchising/download#franchise-document-title')
 assert.deepEqual(downloadDocument.fields.slice(0,2).map(f=>[f.path,f.label]),[['copy.text5','區塊中文主標題（第一行）'],['copy.text6','區塊中文主標題（第二行）']])
-assert(downloadDocument.fields.some(f=>f.documentId==='data-franchise'&&f.path==='FRANCHISE_BROCHURE_URL'))
-assert.deepEqual(pagePositionContent(downloadDocument,previewBodies).buttons.map(f=>f.path),['copy.text16','copy.text17'])
+assert.deepEqual(downloadCatalogue.fields.map(f=>f.path),['brochurePages','FRANCHISE_BROCHURE_URL'])
+assert(downloadCatalogue.aliases.includes('franchise-download:型錄預覽圖片'))
+assert.equal(downloadCatalogue.href,'/franchising/download#franchise-catalogue-preview')
+assert.equal(downloadBreadcrumb.href,'/franchising/download#franchise-download-breadcrumb')
+assert.deepEqual(downloadBreadcrumb.fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbParent','copy.breadcrumbList'])
+assert.deepEqual(franchiseDownloadBreadcrumb({breadcrumbHome:' ',breadcrumbParent:' 合作專區 ',breadcrumbList:''}),{breadcrumbHome:'首頁',breadcrumbParent:'合作專區',breadcrumbList:'加盟資料下載'})
+{
+ const doc=docs.find(d=>d.id==='view-pages-franchising-download')
+ validate(doc.body,doc.schema)
+ const draft={...doc.body,copy:{...doc.body.copy,breadcrumbParent:'合作專區'}}
+ checkPageBody(downloadPage,doc.id,doc.body,draft,doc.schema)
+ validate(draft,doc.schema)
+ assert.deepEqual(draft.brochurePages,doc.body.brochurePages)
+}
 {
  const page=pageEditors.find(p=>p.id==='franchise'),support=franchise.find(b=>b.name==='總部支援')
  const intro=docs.find(d=>d.id==='view-pages-franchising-intro'),visuals=docs.find(d=>d.id==='site-visuals')

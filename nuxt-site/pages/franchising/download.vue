@@ -3,7 +3,9 @@ const cmsCopy = await useCmsResource('view-pages-franchising-download', {"brochu
 
 import { ArrowRight, Download, ExternalLink, FileText } from 'lucide-vue-next'
 import { FRANCHISE_BROCHURE_URL as cmsSeed_FRANCHISE_BROCHURE_URL } from '~/data/franchise'
+import { franchiseDownloadBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
 const { FRANCHISE_BROCHURE_URL } = await useCmsResource('data-franchise', { FRANCHISE_BROCHURE_URL: cmsSeed_FRANCHISE_BROCHURE_URL })
+const breadcrumb = franchiseDownloadBreadcrumb(cmsCopy.copy)
 
 
 useSeoMeta({
@@ -58,8 +60,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="download-hero__inner">
         <InternalSectionPill v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" tone="dark" class="ev">{{ cmsCopy.copy.text3 }}</InternalSectionPill>
         <h1 id="franchise-download-title" v-reveal="{ anim: 'opalMoveUp', delay: 80 }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text4 }}</h1>
-        <nav v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" aria-label="麵包屑" class="download-hero__trail ev">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "我要加盟", to: "/franchising/intro" }, { label: "加盟資料下載" }]' v-slot="{ items, follow }">
+        <nav id="franchise-download-breadcrumb" v-reveal="{ anim: 'opalMoveUp', delay: 140 }" data-ev="opalMoveUp" aria-label="麵包屑" class="download-hero__trail ev">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumb.breadcrumbHome, to: '/' }, { label: breadcrumb.breadcrumbParent, to: '/franchising/intro' }, { label: breadcrumb.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
@@ -78,7 +80,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <InternalFranchiseImage class="download-document__logo" :src="cmsCopy.copy.field7" :alt="cmsCopy.copy.field8" fit="contain" />
           </div>
 
-          <div class="download-document__summary">
+          <div id="franchise-pdf-actions" class="download-document__summary">
             <p v-reveal="{ anim: 'opalMoveLeft' }" data-ev="opalMoveLeft" class="ev">{{ cmsCopy.copy.text9 }}</p>
             <dl v-reveal="{ anim: 'opalMoveUp', delay: 90 }" data-ev="opalMoveUp" class="download-document__meta ev">
               <div><dt>{{ cmsCopy.copy.text10 }}</dt><dd>{{ cmsCopy.copy.text11 }}</dd></div>
@@ -119,7 +121,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
         </header>
 
-        <div class="download-preview" aria-label="加盟簡介雙面預覽">
+        <div id="franchise-catalogue-preview" class="download-preview" aria-label="加盟簡介雙面預覽">
           <article
             v-for="(page, index) in brochurePages"
             :key="page.number"
@@ -134,7 +136,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </article>
         </div>
 
-        <div v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="download-document__back ev">
+        <div id="franchise-download-back" v-reveal="{ anim: 'opalScaleUp' }" data-ev="opalScaleUp" class="download-document__back ev">
           <NuxtLink :to="cmsCopy.copy.field22" class="site-content-cta download-back-cta group/cta">
             <span>{{ cmsCopy.copy.text23 }}</span>
             <span class="site-cta-icon download-back-cta__icon"><ArrowRight aria-hidden="true" /></span>

@@ -19,6 +19,11 @@ const latestNewsLabels = {
   breadcrumbParent: { fallback: '優惠消息', label: '優惠消息連結文字' },
   breadcrumbList: { fallback: '最新消息', label: '最新消息分類名稱' },
 }
+const franchiseDownloadLabels = {
+  breadcrumbHome: inspirationLabels.breadcrumbHome,
+  breadcrumbParent: { fallback: '我要加盟', label: '我要加盟連結文字' },
+  breadcrumbList: { fallback: '加盟資料下載', label: '下載頁目前位置文字' },
+}
 
 function breadcrumb(copy, labels) {
   return Object.fromEntries(Object.entries(labels).map(([key, { fallback }]) => [
@@ -30,12 +35,14 @@ export const inspirationBreadcrumb = (copy = {}) => breadcrumb(copy, inspiration
 export const knowledgeBreadcrumb = (copy = {}) => breadcrumb(copy, knowledgeLabels)
 export const seriesCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, seriesCatalogueLabels)
 export const latestNewsBreadcrumb = (copy = {}) => breadcrumb(copy, latestNewsLabels)
+export const franchiseDownloadBreadcrumb = (copy = {}) => breadcrumb(copy, franchiseDownloadLabels)
 
 export function breadcrumbSchema(id, schema) {
   const labels = id === 'view-pages-design-inspiration-index' ? inspirationLabels
     : id === 'view-pages-knowledge-index' ? knowledgeLabels
     : id === 'view-pages-catalogues-kitchenware-catalog' ? seriesCatalogueLabels
-    : id === 'view-pages-news-latest-index' ? latestNewsLabels : null
+    : id === 'view-pages-news-latest-index' ? latestNewsLabels
+    : id === 'view-pages-franchising-download' ? franchiseDownloadLabels : null
   if (!labels) return schema
   const copy = schema.fields.copy
   const fields = Object.fromEntries(Object.entries(labels).map(([key, { label, fallback }]) => [

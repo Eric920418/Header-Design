@@ -3,7 +3,12 @@ const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
 export const franchiseMarqueeDocument=view('franchising-intro')
 export const franchiseDownloadDocument=view('franchising-download')
-export const franchiseDownloadActions=['copy.text16','copy.text17','FRANCHISE_BROCHURE_URL']
+export const franchiseDownloadActions=['copy.text16','copy.text17']
+export const franchiseDownloadSettings=[
+ {name:'型錄載入提示',help:'檔案載入或失敗時的說明',fields:['copy.text18','copy.text19','copy.text20'],anchor:'franchise-pdf-actions'},
+ {name:'型錄預覽頁碼',help:'顯示在型錄圖片下方',fields:['copy.text21'],anchor:'franchise-catalogue-preview'},
+ {name:'頁面底部返回按鈕',help:'頁面最下方的返回按鈕文字與去向',fields:['copy.text23','copy.field22'],anchor:'franchise-download-back'},
+]
 export const franchiseSupportImagePath='images.asset_1795db00'
 export const franchiseSupportImageFallback='/section-6/franchise/hero-store.jpg'
 export const franchiseMarqueeRows=[
@@ -52,9 +57,7 @@ const copyGroups={
  'franchising-form':[['加盟申請表單',{text1:'區塊英文標籤',text2:'區塊中文主標題',text3:'表單介紹文字',field4:'下載按鈕前往頁面',text5:'下載按鈕文字'}]],
  'franchising-download':[
   ['主視覺標題',{field1:'主視覺背景圖片',field2:'圖片說明',text3:'區塊英文標籤',text4:'區塊英文主標題'}],
-  ['加盟簡介與下載按鈕',{text5:'區塊中文主標題（第一行）',text6:'區塊中文主標題（第二行）',field7:'品牌標誌',field8:'標誌圖片說明',text9:'檔案介紹文字',text10:'格式欄位名稱',text11:'檔案格式文字',text12:'頁數欄位名稱',text13:'頁數文字',text14:'大小欄位名稱',text15:'檔案大小文字',text16:'線上預覽按鈕文字',text17:'下載按鈕文字'}],
-  ['型錄載入提示',{text18:'載入中的提示文字',text19:'載入失敗的提示文字',text20:'重試按鈕文字'}],
-  ['型錄預覽圖片',{text21:'頁碼前的文字'}],['頁面底部返回按鈕',{field22:'前往頁面',text23:'按鈕文字'}],
+  ['區塊共用設定',{text5:'區塊中文主標題（第一行）',text6:'區塊中文主標題（第二行）',field7:'品牌標誌',field8:'標誌圖片說明',text9:'檔案介紹文字',text10:'格式欄位名稱',text11:'檔案格式文字',text12:'頁數欄位名稱',text13:'頁數文字',text14:'大小欄位名稱',text15:'檔案大小文字',text16:'線上預覽按鈕文字',text17:'下載按鈕文字',text18:'載入中的提示文字',text19:'載入失敗的提示文字',text20:'重試按鈕文字',text21:'頁碼前的文字',field22:'返回按鈕前往頁面',text23:'返回按鈕文字'}],
  ],
  'gallery-index':[
   ['主視覺標題',{text1:'主視覺標題'}],['地區篩選列',{text2:readingField('門市篩選列','篩選區塊名稱'),text3:'區域標籤文字',text4:'全部區域按鈕文字',text5:'縣市標籤文字'}],
@@ -186,8 +189,9 @@ export const pagePositions={
  ]},
  'franchise-download':{hero:[franchiseDownloadDocument,'copy.field1'],sections:[
   {...section('主視覺標題','下載頁最上方的大圖、英文標籤與英文主標題','hero','franchise-download-title'),aliases:['franchise-download:頁面最上方']},
-  {...section('加盟簡介與下載按鈕','主視覺下方的簡介主標題、檔案資料與兩個按鈕','franchise-download-document','franchise-document-title',[franchiseDownloadDocument,'brochurePages.0.image']),aliases:['franchise-download:加盟簡介與檔案']},
-  section('型錄預覽圖片','下載頁下方直接顯示的型錄圖片','catalogue'),section('型錄載入提示','檔案載入或失敗時的說明','download'),section('頁面底部返回按鈕','回到加盟介紹的按鈕','article'),
+  section('麵包屑編輯設定','主視覺下方的頁面導覽文字','franchise-download-breadcrumb','franchise-download-breadcrumb'),
+  {...section('型錄管理','管理型錄封面、預覽與下載檔案','franchise-download-catalogue','franchise-catalogue-preview',[franchiseDownloadDocument,'brochurePages.0.image']),aliases:['franchise-download:型錄預覽圖片']},
+  {...section('區塊共用設定','加盟簡介、按鈕、頁碼與載入提示文字','franchise-download-document','franchise-document-title'),aliases:['加盟簡介與檔案','加盟簡介與下載按鈕',...franchiseDownloadSettings.map(group=>group.name)].map(name=>'franchise-download:'+name)},
  ]},
  builders:{hero:[view('builders-index'),'copy.field6'],sections:[section('頁面最上方','主標題、預約按鈕與廚房大圖','hero','builders-title'),section('廚房品牌介紹','品牌介紹與即將推出文字','cards','builders-team-title',['data-builders','builderProjectCards.0.image']),section('建商實力','智能整合與建商實力圖文','cards','builders-capability-title'),section('三大服務','建商實力下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),section('合作夥伴','保留的合作夥伴標誌設定','inactive'),section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment')]},
  'builder-series':{hero:[view('builders-sakura-kitchen'),'copy.field1'],sections:[section('頁面最上方','主圖片、品牌標誌與介紹','hero','sakura-kitchen-title'),section('品牌承諾入口','主圖片下方的介紹入口','cards','brand-advantage'),section('品牌優勢','品牌優勢介紹與圖片','cards','sakura-kitchen-advantage-title'),section('品牌系列','系列圖片、介紹與預約按鈕','cards','sakura-kitchen-series-title')]},
@@ -239,7 +243,10 @@ export function positionGroup(page,id,path){
  if(page==='privacy'&&['sections','numbers'].includes(path))return '隱私權條款'
  if(path==='sitemapGroups')return '網站地圖與隱私權入口'
  if(page==='builder-catalogues'&&path==='catalogues')return '型錄封面與下載'
- if(page==='franchise-download'&&path==='brochurePages')return '型錄預覽圖片'
+ if(page==='franchise-download'){
+  if(id===franchiseDownloadDocument&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
+  if(path==='brochurePages'||path==='FRANCHISE_BROCHURE_URL')return '型錄管理'
+ }
  if(id===view('knowledge-design-systemcabinet')&&['designStyleLinks','kitchenSeriesLinks'].includes(path))return '系統櫃挑選步驟'
  return positionField(id,path)?.name||dataGroups[id]?.[path]
 }
