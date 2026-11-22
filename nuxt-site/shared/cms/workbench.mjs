@@ -1,7 +1,7 @@
 import {inspirationBreadcrumb,latestNewsBreadcrumb} from './page-breadcrumbs.mjs'
 import {firstImage,rowName} from './workflow.mjs'
 import {blockThumbnail,pageFieldValue,valueAt,withValue,desktopCatalogueFields,usesDesktopCatalogue} from './page-editors.mjs'
-import {decoratePosition,pagePositions,positionImage} from './positions.mjs'
+import {decoratePosition,franchiseMarqueeRows,pagePositions,positionImage} from './positions.mjs'
 
 const home=[
  ['主視覺輪播','首頁輪播圖片','首頁圖片、標題與連結','hero'],
@@ -41,6 +41,10 @@ export function recentArticleIndexes(items,ids){
   const index=indexes.get(id)
   return index===undefined?[]:[index]
  })
+}
+export function updateFranchiseMarqueeImage(body,path,value){
+ const next=withValue(body,path,value),row=franchiseMarqueeRows.find(row=>row.image===path)
+ return row&&valueAt(body,row.loop)===valueAt(body,path)?withValue(next,row.loop,value):next
 }
 export const itemKey=(value,index)=>String(value&&typeof value==='object'?(value.id??value.slug??index):index)
 export function itemWebsitePath(documentId,item){

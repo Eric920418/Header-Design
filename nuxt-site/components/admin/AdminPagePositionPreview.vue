@@ -3,6 +3,8 @@ import {ArrowRight,Play,Plus,Search,MessageSquare,Download,MapPin} from 'lucide-
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
 import {knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
+import {valueAt} from '~/shared/cms/page-editors.mjs'
+import {franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
 const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
@@ -34,6 +36,10 @@ const storeSpecs=computed(()=>Object.entries(storeDetails.value?.metaLabels||{})
 const captions=computed(()=>scene.value.bodyText.filter((f:any)=>!/供語音|載入|失敗|格式欄位|頁數欄位|大小欄位/.test(f.label)))
 const media=computed(()=>scene.value.media.filter((f:any,index:number)=>index<3||highlighted(f.path)))
 const itemText=(item:any)=>{const text=item.value?.summary?.excerpt||item.value?.intro?.paragraphs||item.value?.description||item.value?.paragraphs||item.value?.detail||item.value?.copy||item.value?.quote||item.value?.excerpt||item.value?.summary||'';return Array.isArray(text)?text.join('\n'):typeof text==='string'?text:''}
+const marqueeRows=computed(()=>{
+ const body=props.bodies[franchiseMarqueeDocument]
+ return franchiseMarqueeRows.map(row=>({...row,src:valueAt(body,row.image),loopSrc:valueAt(body,row.loop),description:valueAt(body,row.alt)}))
+})
 const formFields=computed(()=>props.block?.id.startsWith('franchise-form:')?['姓名','電子郵件','聯絡電話','居住地']:['聯絡人','聯絡電話','建設公司','電子信箱'])
 const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
 const previewStores=computed(()=>scene.value.items.map((i:any)=>({name:i.value?.storeName||i.value?.name||i.title,address:i.value?.address,hours:i.value?.hours,phone:i.value?.contact?.phone||i.value?.phone,image:i.image})).filter((i:any)=>i.address||i.image))
@@ -57,6 +63,16 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     </div>
    </template>
    <p v-else-if="scene.kind==='inactive'" class="cms-scene-a11y">官網目前沒有顯示區塊，這些設定不會出現在頁面上。</p>
+   <div v-else-if="scene.kind==='franchise-marquee'" class="cms-franchise-marquee-preview">
+    <figure v-for="row in marqueeRows" :key="row.image">
+     <figcaption>{{ row.label }}</figcaption>
+     <AdminThumbnail :src="row.src" :alt="row.description||row.label" :class="{'is-focused':highlighted(row.image)||highlighted(row.alt)}" />
+     <template v-if="row.loopSrc&&row.loopSrc!==row.src">
+      <small>接續圖片（桌機）</small>
+      <AdminThumbnail :src="row.loopSrc" :alt="row.label+'的接續畫面'" :class="{'is-focused':highlighted(row.loop)}" />
+     </template>
+    </figure>
+   </div>
    <template v-else-if="storeExampleKind">
     <template v-if="storeExample&&storeDetails">
      <AdminThumbnail :src="storeExample.images?.[0]||storeExample.cover" :alt="storeExample.storeName+'案例照片'" class="cms-scene-wide-image" />

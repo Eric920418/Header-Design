@@ -6,7 +6,7 @@ import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
 import {pageEditors,pageBlocks,searchResultLink,seriesCardRedirect} from '../shared/cms/page-editors.mjs'
 import {checkPageBody,editorSchema} from '../server/cms/page-editors.mjs'
-import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField,recentArticleIndexes} from '../shared/cms/workbench.mjs'
+import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField,recentArticleIndexes,updateFranchiseMarqueeImage} from '../shared/cms/workbench.mjs'
 import {seriesEditorSections,seriesEditorSchema,sectionForSeriesField} from '../shared/cms/series-editor.mjs'
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
@@ -196,6 +196,23 @@ const builderSchema=docs.find(d=>d.id==='view-pages-builders-index').schema
 assert.throws(()=>validate(badBuilder,builderSchema),e=>{const issue=readableError(e,'view-pages-builders-index',editingSchema(builderSchema,'view-pages-builders-index'),badBuilder);assert.equal(issue.fieldErrors[0].path,'copy.text2');assert.match(issue.message,/區塊中文主標題（第一段）/);return true})
 const franchise=workbenchBlocks('franchise',pageBlocks(pageEditors.find(p=>p.id==='franchise'),docs))
 assert(franchise.find(b=>b.name==='加盟資料下載').fields.some(f=>f.path==='copy.field53'),'Franchise PDF cover belongs to downloads, not FAQ')
+{
+ const page=pageEditors.find(p=>p.id==='franchise'),doc=docs.find(d=>d.id==='view-pages-franchising-intro'),marquee=franchise.find(b=>b.kind==='franchise-marquee')
+ assert.deepEqual([franchise[0].name,franchise[2].name,franchise[5].name],['主視覺標題','加盟介紹輪播圖','品牌信賴'])
+ for(const [index,oldName] of [[0,'頁面最上方'],[2,'品牌成果圖片'],[5,'品牌信賴與行銷']])assert(franchise[index].aliases.includes('franchise:'+oldName))
+ assert.equal(marquee.href,'/franchising/intro#franchise-intro-marquee')
+ assert.equal(blockThumbnail(marquee,previewBodies),doc.body.copy.field18)
+ for(const [original,loop,other,alt] of [['field18','field20','field22','field19'],['field22','field24','field18','field23']]){
+  const image='/section-6/franchise/hero-store.jpg',body=structuredClone(doc.body)
+  body.copy[loop]=body.copy[original]
+  const changed=updateFranchiseMarqueeImage(body,'copy.'+original,image)
+  assert.equal(changed.copy[original],image);assert.equal(changed.copy[loop],image)
+  assert.equal(changed.copy[other],body.copy[other]);assert.equal(changed.copy[alt],body.copy[alt])
+  checkPageBody(page,doc.id,body,changed,doc.schema)
+  const independent=updateFranchiseMarqueeImage({...body,copy:{...body.copy,[loop]:'/custom-loop.webp'}},'copy.'+original,image)
+  assert.equal(independent.copy[loop],'/custom-loop.webp')
+ }
+}
 const faqScene=pagePositionContent(franchise.find(b=>b.name==='加盟常見問題'),previewBodies,{}, {caption:'申請條件',image:'',value:{question:'如何申請？',answer:'先填表'}})
 assert.equal(faqScene.image,'','Text-only selections must not borrow a neighboring photo');assert.equal(faqScene.items[0].value.answer,'先填表')
 const pavilion=workbenchBlocks('pavilions',pageBlocks(pageEditors.find(p=>p.id==='pavilions'),docs)).find(b=>b.name==='品牌館空間介紹')

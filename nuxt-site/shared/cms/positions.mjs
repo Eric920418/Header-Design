@@ -1,6 +1,11 @@
 // Interface locations only. Stored document names, values and public URLs stay unchanged.
 const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
+export const franchiseMarqueeDocument=view('franchising-intro')
+export const franchiseMarqueeRows=[
+ {label:'上排輪播圖片',image:'copy.field18',alt:'copy.field19',loop:'copy.field20'},
+ {label:'下排輪播圖片',image:'copy.field22',alt:'copy.field23',loop:'copy.field24'},
+]
 const copyGroups={
  'about-introduce':[
   ['品牌承諾',{text5:readingField('品牌承諾','區塊名稱')}],['專屬品牌識別',{text9:'介紹文字',field10:'圖片放大視窗'}],
@@ -31,11 +36,11 @@ const copyGroups={
  ],
  'catalogues-kitchenware-catalog':[['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}]],
  'franchising-intro':[
-  ['頁面最上方',{field1:'背景圖片',field2:'背景圖片說明',text3:'區塊英文標籤',text4:'區塊中文主標題（第一段）',text5:'區塊中文主標題（第二段）',text7:'介紹文字第一段',text8:'介紹文字第二段',text9:'申請加盟按鈕文字',field10:'門市大圖',field11:'門市圖片說明',field12:'說明會前往頁面',text13:'說明會按鈕文字'}],
-  ['加盟夥伴真實分享',{field17:'影片名稱'}],['品牌成果圖片',{field18:'第一張圖片',field19:'第一張圖片說明',field20:'第一張循環圖片',field22:'第二張圖片',field23:'第二張圖片說明',field24:'第二張循環圖片'}],
+  ['主視覺標題',{field1:'背景圖片',field2:'背景圖片說明',text3:'區塊英文標籤',text4:'區塊中文主標題（第一段）',text5:'區塊中文主標題（第二段）',text7:'介紹文字第一段',text8:'介紹文字第二段',text9:'申請加盟按鈕文字',field10:'門市大圖',field11:'門市圖片說明',field12:'說明會前往頁面',text13:'說明會按鈕文字'}],
+  ['加盟夥伴真實分享',{field17:'影片名稱'}],['加盟介紹輪播圖',{field18:franchiseMarqueeRows[0].label,field19:'上排圖片朗讀文字',field20:'上排接續圖片（桌機）',field22:franchiseMarqueeRows[1].label,field23:'下排圖片朗讀文字',field24:'下排接續圖片（桌機）'}],
   ['專業品牌實力',{text26:'區塊英文標籤',text30:'介紹文字',text31:'圖片上的裝飾文字'}],
   ['加盟邀請',{text32:'區塊英文標籤',text33:'區塊英文主標題（第一段）',text34:'區塊英文主標題（第二段）',text35:'介紹文字',text36:'按鈕文字'}],
-  ['品牌信賴與行銷',{text42:'介紹文字'}],['加盟流程與辦法',{text43:'區塊中文主標題',field44:'流程圖',field45:'流程圖圖片說明'}],
+  ['品牌信賴',{text42:'介紹文字'}],['加盟流程與辦法',{text43:'區塊中文主標題',field44:'流程圖',field45:'流程圖圖片說明'}],
   ['加盟資格與條件',{text47:'區塊中文主標題'}],['總部支援',{text46:'申請加盟按鈕文字'}],
   ['加盟資料下載',{field52:'封面前往頁面',field53:'下載封面圖片',field54:'封面圖片說明',field55:'標題前往頁面',text56:'下載區標題',text57:'下載區介紹文字'}],
   ['最新加盟資訊',{text58:'區塊英文標籤',field62:'更多消息前往頁面',text63:'更多消息按鈕文字'}],
@@ -165,7 +170,13 @@ export const pagePositions={
  about:{hero:'/section-5/brand-pavilion/pavilion-taichung.jpg',sections:[section('品牌歷程','年份、沿革照片與品牌故事','timeline','about-services-title'),section('品牌承諾','介紹內容與情境圖片','cards','about-values-title'),section('專屬品牌識別','品牌銘板與識別圖片','logos','about-identity-title')]},
  advantage:{hero:'/section-5/brand-advantage/banner.jpg',sections:[section('家庭情境','家庭情境照片、標題與介紹','cards','brand-family-title'),section('品牌優勢','優勢內容與對應圖片','cards'),section('品牌優勢問答','頁面下方的品牌常見問題','faq','brand-advantage-faq-title')]},
  pavilions:{hero:'/section-5/brand-pavilion/banner.jpg',sections:[section('品牌館影片','頁面最上方的品牌影片','video','pavilion-hero-title'),section('品牌館空間介紹','空間介紹與左右兩張照片','cards','pavilion-fundamentals-title'),section('品牌館地址與時間','館別照片、聯絡資訊與預約按鈕','stores','pavilion-gallery-title'),section('參觀注意事項','頁面下方的注意事項','article','pavilion-styles-title')]},
- franchise:{hero:[view('franchising-intro'),'copy.field1'],sections:[section('頁面最上方','加盟介紹、門市大圖與申請入口','hero','franchise-page-title'),section('加盟夥伴真實分享','加盟故事、影片與夥伴分享','video','franchise-story-title'),section('品牌成果圖片','循環展示的品牌與活動照片','cards'),section('專業品牌實力','加盟優勢的介紹與圖文','cards','franchise-advantage-title'),section('加盟邀請','邀請文案與加盟按鈕','text','franchise-conversion-title',['site-visuals','images.asset_b3dcb152']),section('品牌信賴與行銷','行銷介紹與品牌案例','cards','franchise-marketing-title'),section('加盟流程與辦法','七步驟流程圖與圖片說明','steps','franchise-process-title'),section('加盟資格與條件','資格條件與申請準備','text'),section('總部支援','總部提供的支援與申請按鈕','cards'),section('加盟常見問題','加盟問答內容','faq','franchise-faq-title'),section('加盟資料下載','問答旁的型錄封面與下載連結','catalogue','franchise-faq-title'),section('最新加盟資訊','最新加盟消息的更多入口','cards','franchise-news-title')]},
+ franchise:{hero:[franchiseMarqueeDocument,'copy.field1'],sections:[
+  {...section('主視覺標題','加盟介紹、門市大圖與申請入口','hero','franchise-page-title'),aliases:['franchise:頁面最上方']},
+  section('加盟夥伴真實分享','加盟故事、影片與夥伴分享','video','franchise-story-title'),
+  {...section('加盟介紹輪播圖','更換官網上下兩排的循環照片','franchise-marquee','franchise-intro-marquee'),aliases:['franchise:品牌成果圖片']},
+  section('專業品牌實力','加盟優勢的介紹與圖文','cards','franchise-advantage-title'),section('加盟邀請','邀請文案與加盟按鈕','text','franchise-conversion-title',['site-visuals','images.asset_b3dcb152']),
+  {...section('品牌信賴','介紹文字與品牌案例','cards','franchise-marketing-title'),aliases:['franchise:品牌信賴與行銷']},
+  section('加盟流程與辦法','七步驟流程圖與圖片說明','steps','franchise-process-title'),section('加盟資格與條件','資格條件與申請準備','text'),section('總部支援','總部提供的支援與申請按鈕','cards'),section('加盟常見問題','加盟問答內容','faq','franchise-faq-title'),section('加盟資料下載','問答旁的型錄封面與下載連結','catalogue','franchise-faq-title'),section('最新加盟資訊','最新加盟消息的更多入口','cards','franchise-news-title')]},
  'franchise-form':{hero:['site-visuals','images.asset_82b9dd3e'],sections:[section('申請表單上方','標題、填寫說明與下載按鈕','form','franchise-application-title')]},
  'franchise-download':{hero:[view('franchising-download'),'copy.field1'],sections:[section('頁面最上方','下載頁最上方的圖片與標題','hero','franchise-download-title'),section('加盟簡介與檔案','檔案介紹、大小與下載連結','catalogue','franchise-document-title'),section('型錄預覽圖片','線上預覽時的逐頁圖片','catalogue'),section('型錄載入提示','檔案載入或失敗時的說明','download'),section('頁面底部返回按鈕','回到加盟介紹的按鈕','article')]},
  builders:{hero:[view('builders-index'),'copy.field6'],sections:[section('頁面最上方','主標題、預約按鈕與廚房大圖','hero','builders-title'),section('廚房品牌介紹','品牌介紹與即將推出文字','cards','builders-team-title',['data-builders','builderProjectCards.0.image']),section('建商實力','智能整合與建商實力圖文','cards','builders-capability-title'),section('三大服務','建商實力下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),section('合作夥伴','保留的合作夥伴標誌設定','inactive'),section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment')]},
@@ -190,7 +201,7 @@ const dataGroups={
  'data-brandAdvantage':{brandFamilies:'家庭情境',brandBenefits:'品牌優勢',brandAdvantageFaqGroups:'品牌優勢問答'},
  'data-service':{serviceSteps:'服務流程',faqGroups:'服務指南'},
  'data-brandPavilions':{brandPavilions:'品牌館地址與時間',pavilionNotice:'參觀注意事項'},
- 'data-franchise':{FRANCHISE_FORM_URL:'頁面最上方',FRANCHISE_OFFICIAL_FORM_URL:'頁面最上方',FRANCHISE_BROCHURE_URL:'加盟簡介與檔案',franchiseAdvantages:'專業品牌實力',franchiseTestimonials:'加盟夥伴真實分享',franchiseMarketingStories:'品牌信賴與行銷',franchiseQualifications:'加盟資格與條件',franchiseSupportHighlights:'總部支援',franchiseFaqItems:'加盟常見問題'},
+ 'data-franchise':{FRANCHISE_FORM_URL:'主視覺標題',FRANCHISE_OFFICIAL_FORM_URL:'主視覺標題',FRANCHISE_BROCHURE_URL:'加盟簡介與檔案',franchiseAdvantages:'專業品牌實力',franchiseTestimonials:'加盟夥伴真實分享',franchiseMarketingStories:'品牌信賴',franchiseQualifications:'加盟資格與條件',franchiseSupportHighlights:'總部支援',franchiseFaqItems:'加盟常見問題'},
  'data-builders':{BUILDER_APPOINTMENT_HASH:'頁面最上方',builderPartners:'合作夥伴'},
  'data-storeCases':{storeCases:'門市管理',regionCities:'區域與縣市'},
  'data-productCatalogues':{PRODUCT_CARE_CATEGORIES:'清潔與保養問答'},

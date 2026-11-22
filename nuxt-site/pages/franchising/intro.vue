@@ -151,7 +151,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
         </div>
 
-        <div ref="marqueeRoot" v-reveal="{ anim: 'opalScaleUp' }" class="franchise-marquees" tabindex="0" aria-label="SAKURA KITCHEN 加盟夥伴與品牌成果影像，聚焦時暫停移動">
+        <div id="franchise-intro-marquee" ref="marqueeRoot" v-reveal="{ anim: 'opalScaleUp' }" class="franchise-marquees" tabindex="0" aria-label="SAKURA KITCHEN 加盟夥伴與品牌成果影像，聚焦時暫停移動">
           <div class="franchise-marquee" :style="{ '--marquee-image': marqueeRatios[0] ? `url(${JSON.stringify(cmsCopy.copy.field18)})` : 'none', '--marquee-ratio': marqueeRatios[0] }">
             <div class="franchise-marquee__track">
               <InternalFranchiseImage :src="cmsCopy.copy.field18" :alt="cmsCopy.copy.field19" fit="contain" eager @load.capture="updateMarqueeRatio($event.target, 0)" />

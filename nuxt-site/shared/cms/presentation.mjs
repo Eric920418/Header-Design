@@ -147,6 +147,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁聯繫與參觀預約區','建商首頁的預約區']}
  if(resourceId==='view-pages-about-introduce'&&normalized==='copy.field10')return{label:'圖片放大方式',hidden:true,readOnly:true}
+ if(resourceId==='view-pages-franchising-intro'&&['copy.field21','copy.field25'].includes(normalized))return{label:'輪播重複圖片文字',hidden:true,readOnly:true}
  if(resourceId==='view-pages-news-latest-slug-'&&normalized==='copy.text6')return{label:'報名 QR Code 下方文字',hidden:true,readOnly:true}
  if(['view-pages-design-inspiration-index','view-pages-knowledge-index','view-pages-catalogues-kitchenware-catalog','view-pages-news-latest-index'].includes(resourceId)&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
  if(resourceId==='data-catalogues'&&normalized==='KITCHEN_CATALOGUES.*.pdfUrl')return{label:'預覽與下載用的 PDF',help:'官網的「預覽」和「下載」會使用這份檔案。'}

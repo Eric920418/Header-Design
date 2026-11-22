@@ -3,7 +3,8 @@ import {valueAt,withValue,pageFieldValue,pageEditorLink,storeCasesPageId,desktop
 import {cmsDate,firstImage} from '~/shared/cms/workflow.mjs'
 import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
-import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes} from '~/shared/cms/workbench.mjs'
+import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes,updateFranchiseMarqueeImage} from '~/shared/cms/workbench.mjs'
+import {franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
 import {storeRegionCities} from '~/shared/cms/store-location.mjs'
@@ -101,7 +102,11 @@ const headerId='view-components-SiteHeader'
 const catalogueIndex=computed(()=>bodies.value[headerId]?.leftNav?.findIndex(usesDesktopCatalogue)??-1)
 const catalogueFields=computed(()=>active.value?.id==='menu:左側主導覽'&&catalogueIndex.value>=0
  ?active.value.fields.filter((f:any)=>desktopCatalogueFields.includes(f.path)):[])
-const commonFields=computed(()=>active.value?.fields.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f))||[])
+const commonFields=computed(()=>{
+ const body=bodies.value[franchiseMarqueeDocument]
+ const repeated=active.value?.kind==='franchise-marquee'?franchiseMarqueeRows.filter(row=>valueAt(body,row.image)===valueAt(body,row.loop)).map(row=>row.loop):[]
+ return active.value?.fields.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!repeated.includes(f.path))||[]
+})
 const sharedFormGroups=computed(()=>{
  const groups=sharedNews.value?{'文章底部的分類選單':{},[newsTopLinks]:{}}:sharedKnowledge.value?knowledgeSharedSections:inspirationSharedGroups
  return Object.entries(groups).map(([key,group])=>({
@@ -204,7 +209,10 @@ const impacts=computed(()=>{
 })
 const payload=(action:string)=>({action,documents:docs.value.map(d=>({id:d.id,revision:d.revision,body:bodies.value[d.id]}))})
 async function selectBlock(id:string){locationOpen.value=false;await router.replace({query:{...route.query,block:id,legacy:undefined,field:undefined,list:undefined,item:undefined}});await nextTick();formRoot.value?.querySelector<HTMLElement>('.cms-block-title')?.focus({preventScroll:true})}
-function update(f:any,value:any){bodies.value={...bodies.value,[f.documentId]:withValue(bodies.value[f.documentId],f.path,value)}}
+function update(f:any,value:any){
+ const body=bodies.value[f.documentId]
+ bodies.value={...bodies.value,[f.documentId]:active.value?.kind==='franchise-marquee'&&f.documentId===franchiseMarqueeDocument?updateFranchiseMarqueeImage(body,f.path,value):withValue(body,f.path,value)}
+}
 async function load(){error.value='';try{const result=await api('page-editors/'+props.id,{timeout:20000,retry:0});if(!Array.isArray(result?.documents)||!Array.isArray(result?.blocks))throw Error('伺服器未回傳完整頁面內容，請確認連線後重試。');workbench.rows.value={};pageData.value=result;docs.value=result.documents;bodies.value=Object.fromEntries(result.documents.map((d:any)=>[d.id,d.body]));baseline.value=JSON.parse(JSON.stringify(bodies.value));if(props.id==='knowledge'&&(isSystemCabinetDocument(route.query.legacy)||knowledgeSection.value)){
  await openSystemCabinet(knowledgeSection.value?String(route.query.block):'knowledge:系統櫃材質重點')
  }else if(route.query.legacy){const b=result.blocks.find((b:any)=>b.fields.some((f:any)=>f.documentId===route.query.legacy));if(b)await router.replace({query:{...route.query,block:b.id,legacy:undefined}})}if(props.id==='menu'&&route.query.block==='menu:展開選單中的型錄入口')await openCatalogueEditor()}catch(e){error.value=message(e)}}

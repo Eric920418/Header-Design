@@ -66,11 +66,14 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
   return key === 'BUILDER_APPOINTMENT_HASH' ? targets.slice(1) : [projects]
  }
  if (documentId === 'data-franchise' && path) {
+  if (key === 'franchiseMarketingStories') return [target('加盟介紹 → 品牌信賴','/franchising/intro#franchise-marketing-title')]
   if (key === 'franchiseProcessSteps') return []
   if (key === 'FRANCHISE_BROCHURE_URL') return targets.slice(2)
   if (key === 'FRANCHISE_OFFICIAL_FORM_URL') return [target('加盟申請 → 送出失敗時的備用表單', '/franchising/form')]
   return targets.slice(0,1)
  }
+ if (documentId === 'view-pages-franchising-intro' && /^copy\.field(?:18|19|20|21|22|23|24|25)$/.test(path))
+  return [target('加盟介紹 → 加盟介紹輪播圖','/franchising/intro#franchise-intro-marquee')]
  if (documentId === 'data-productCatalogues' && path) {
   if (key === 'PRODUCT_CARE_CATEGORIES') return [target('廚房商品型錄 → 清潔與保養問答', '/catalogues/catalog')]
   if (key === 'PRODUCT_CATALOGUES' && rowId && (
