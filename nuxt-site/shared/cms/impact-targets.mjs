@@ -1,6 +1,7 @@
 import { resourceGuide } from './presentation.mjs'
 import { HOME_HERO_ID, heroSeriesTitle } from './hero-media.mjs'
 import { franchiseNewsIds } from './public-content.mjs'
+import { builderStrengthsDocument, isBuilderStrengthsCopy } from './builder-strengths.mjs'
 
 const target = (label, href) => ({ label, href })
 const homePromise = target('首頁 → 品牌承諾', '/#brand-promise')
@@ -66,6 +67,8 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
   if (key === 'builderPartners') return []
   return key === 'BUILDER_APPOINTMENT_HASH' ? targets.slice(1) : [projects]
  }
+ if (documentId === builderStrengthsDocument && (key === 'strengths' || isBuilderStrengthsCopy(path)))
+  return [target('建商專區首頁 → 智能整合', '/builders#builders-capability-title')]
  if (documentId === 'data-franchise' && path) {
   if (key === 'franchiseSupportHighlights') return [target('加盟介紹 → 總部支援','/franchising/intro#franchise-support')]
   if (key === 'franchiseFaqItems') return [target('加盟介紹 → 了解加盟資訊','/franchising/intro#franchise-faq-title')]

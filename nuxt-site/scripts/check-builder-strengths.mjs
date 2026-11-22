@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import {readFileSync} from 'node:fs'
 import {transpileModule,ScriptTarget,ModuleKind} from 'typescript'
+import {builderStrengthsCopy} from '../shared/cms/builder-strengths.mjs'
 
 const source=readFileSync(new URL('../pages/builders/index.vue',import.meta.url),'utf8')
 assert(!source.includes('@media (max-height: 759px)'),'矮桌機不得直接取消左欄固定')
@@ -67,7 +68,13 @@ const cookie=login.headers.getSetCookie().map(value=>value.split(';')[0]).join('
 async function get(path,method='GET'){const response=await fetch(new URL(path,base),{method,redirect:'error',headers:{cookie},signal:AbortSignal.timeout(30000)});assert.equal(response.status,200,path);return response}
 const cms=await(await get('/api/content/view-pages-builders-index')).json(),html=await(await get('/builders')).text()
 const strengths=html.slice(html.indexOf('id="builders-solutions"'),html.indexOf('class="builders-home-one'))
-assert(strengths.includes('builders-strengths-copy')&&strengths.includes('builders-strengths-content')&&strengths.includes('智能整合，打造建築新價值')&&strengths.includes('OUR STRENGTHS')&&/Smart Solutions <span\b[^>]*>For<\/span>/.test(strengths)&&strengths.includes('Better Living'))
+assert(strengths.includes('builders-strengths-copy')&&strengths.includes('builders-strengths-content'))
+const copy=builderStrengthsCopy(cms.copy)
+const heading=strengths.match(/<h2\b[^>]*id="builders-capability-title"[^>]*>([\s\S]*?)<\/h2>/)?.[1]||''
+const escapeHtml=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#39;")
+assert.equal(heading.replace(/<br\b[^>]*>/g,'\n').replace(/<[^>]+>/g,''),escapeHtml(copy.strengthsChineseTitle+copy.strengthsEnglishTitleFirst+'\n'+copy.strengthsEnglishTitleSecond))
+assert(strengths.includes(escapeHtml(copy.strengthsLabel)))
+assert(copy.strengthsIntro.split('\n').every(line=>strengths.includes(escapeHtml(line))))
 assert(strengths.includes(`aria-label="${cms.strengths[0].value[0]}+${cms.strengths[0].value[1]}"`))
 assert.equal((strengths.match(/class="builders-solution ev/g)||[]).length,3)
 let previous=-1

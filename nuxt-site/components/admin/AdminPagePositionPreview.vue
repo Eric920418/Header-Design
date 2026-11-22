@@ -6,6 +6,7 @@ import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench
 import {valueAt} from '~/shared/cms/page-editors.mjs'
 import {franchiseDownloadDocument,franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
 import {builderBrandHeading,builderComingSoonImages,type builderProjectCards} from '~/data/builders'
+import {builderStrengthsDocument,builderStrengthsCopy,builderStrengthImageAlt} from '~/shared/cms/builder-strengths.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
@@ -59,6 +60,9 @@ const brochureFile=computed(()=>props.bodies['data-franchise']?.FRANCHISE_BROCHU
 const franchiseApplication=computed(()=>props.bodies['view-pages-franchising-form']?.copy)
 const builderBrandCopy=computed(()=>props.bodies['view-pages-builders-index']?.copy)
 const builderBrandProject=computed(()=>(props.bodies['data-builders']?.builderProjectCards as typeof builderProjectCards|undefined)?.find(card=>card.type==='project'))
+const strengthsHeading=computed(()=>builderStrengthsCopy(props.bodies[builderStrengthsDocument]?.copy))
+const strengthIndex=computed(()=>props.selected?.path==='strengths'?props.selected.index:0)
+const strengthItem=computed<{value:string[];lines:string[];background:string}|undefined>(()=>props.bodies[builderStrengthsDocument]?.strengths?.[strengthIndex.value])
 const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
 const previewStores=computed(()=>scene.value.items.map((i:any)=>({name:i.value?.storeName||i.value?.name||i.title,address:i.value?.address,hours:i.value?.hours,phone:i.value?.contact?.phone||i.value?.phone,image:i.image})).filter((i:any)=>i.address||i.image))
 const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='systemCabinetMaterials');return f?props.bodies[f.documentId]?.[f.path]:null})
@@ -236,6 +240,23 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
       <AdminThumbnail :src="builderComingSoonImages[0]" :alt="builderBrandCopy.field14" />
       <strong><span :class="{'is-focused':highlighted('copy.text15')}">{{ builderBrandCopy.text15 }}</span><br /><span :class="{'is-focused':highlighted('copy.text16')}">{{ builderBrandCopy.text16 }}</span></strong>
      </div>
+    </div>
+   </div>
+   <div v-else-if="scene.kind==='builders-strengths'" class="cms-scene-builders-strengths">
+    <header>
+     <InternalSectionPill tone="dark" :class="{'is-focused':highlighted('copy.strengthsLabel')}">{{ strengthsHeading.strengthsLabel }}</InternalSectionPill>
+     <h3>
+      <b :class="{'is-focused':highlighted('copy.strengthsChineseTitle')}">{{ strengthsHeading.strengthsChineseTitle }}</b>
+      <span :class="{'is-focused':highlighted('copy.strengthsEnglishTitleFirst')}">{{ strengthsHeading.strengthsEnglishTitleFirst }}</span><br />
+      <span :class="{'is-focused':highlighted('copy.strengthsEnglishTitleSecond')}">{{ strengthsHeading.strengthsEnglishTitleSecond }}</span>
+     </h3>
+     <p :class="{'is-focused':highlighted('copy.strengthsIntro')}">{{ strengthsHeading.strengthsIntro }}</p>
+    </header>
+    <AdminThumbnail v-if="strengthItem?.background" class="cms-builders-strength-image" :src="strengthItem.background" :alt="builderStrengthImageAlt(strengthIndex)" />
+    <div v-if="strengthItem" class="cms-builders-strength-stat">
+     <p>{{ strengthItem.lines[1]?.replaceAll('\n','') }}</p>
+     <strong>{{ strengthItem.value.join(strengthIndex===0?'+':'') }}</strong>
+     <p>{{ strengthItem.lines[0] }}<br />{{ strengthItem.lines[2] }}</p>
     </div>
    </div>
    <div v-else-if="scene.kind==='franchise-news'" class="cms-scene-franchise-news">

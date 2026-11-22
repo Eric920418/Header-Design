@@ -369,7 +369,15 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <p v-if="franchiseFaq" class="cms-field-help">官網顯示排序前 {{ FRANCHISE_FAQ_DISPLAY_LIMIT }} 題。</p>
     <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :fallback-image="franchiseFaq?faqCover:franchiseSupportImage(bodies)" :display-limit="franchiseFaq?FRANCHISE_FAQ_DISPLAY_LIMIT:undefined" @update:model-value="update(f,$event)" />
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
-   <details v-if="collections.length&&commonFields.length&&!franchiseCatalogue" class="cms-common-settings"><summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':active?.kind==='franchise-support'&&f.schema.format==='media'}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
+   <details v-if="collections.length&&commonFields.length&&!franchiseCatalogue" class="cms-common-settings">
+    <summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary>
+    <p v-if="active?.kind==='builders-strengths'" class="cms-field-help">這些文字顯示在官網圖文旁，留空時沿用官網原文。</p>
+    <fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}">
+     <div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':active?.kind==='franchise-support'&&f.schema.format==='media'}">
+      <AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
+     </div>
+    </fieldset>
+   </details>
    <fieldset v-else-if="sharedInspiration||sharedKnowledge||sharedNews" :disabled="busy" class="cms-edit-form">
     <fieldset v-for="group in sharedFormGroups" :key="group.key" :data-position-group="group.key" class="cms-inspiration-form-group" :class="{'cms-news-link-settings':sharedNews}">
      <legend>{{ group.title }}</legend>

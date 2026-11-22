@@ -18,6 +18,7 @@ import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces
 import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
 import {franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
+import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 {
@@ -204,6 +205,22 @@ assert.equal(builderBrand.fields.find(f=>f.path==='copy.text9').label,'區塊中
 const brandScene=pagePositionContent(builderBrand,previewBodies)
 assert.deepEqual(brandScene.heading,[{path:'copy.text9',label:'區塊中文主標題',value:previewBodies['view-pages-builders-index'].copy.text9}])
 assert.equal(brandScene.mappedImage,previewBodies['data-builders'].builderProjectCards[0].image)
+const strengthsBlock=builders.find(b=>b.id==='builders:智能整合')
+const strengthsDocument=docs.find(d=>d.id===builderStrengthsDocument)
+const strengthsPage=pageEditors.find(p=>p.id==='builders')
+const originalStrengths=strengthsDocument.body
+assert(strengthsBlock.aliases.includes('builders:建商實力'))
+assert.equal(strengthsBlock.href,'/builders#builders-capability-title')
+assert.deepEqual(strengthsBlock.fields.map(f=>f.path),['strengths',...Object.keys(builderStrengthsCopy()).map(key=>'copy.'+key)])
+const strengthEdit=structuredClone(originalStrengths)
+strengthEdit.copy.strengthsChineseTitle='智能整合自訂標題'
+assert.equal(builderStrengthsCopy({strengthsChineseTitle:'  '}).strengthsChineseTitle,'智能整合，打造建築新價值')
+assert.equal(builderStrengthsCopy(strengthEdit.copy).strengthsChineseTitle,'智能整合自訂標題')
+validate(originalStrengths,strengthsDocument.schema)
+validate(strengthEdit,strengthsDocument.schema)
+checkPageBody(strengthsPage,builderStrengthsDocument,originalStrengths,strengthEdit,strengthsDocument.schema)
+const edits=pageChanges(builders,[strengthsDocument],{[builderStrengthsDocument]:originalStrengths},{[builderStrengthsDocument]:strengthEdit})
+assert.deepEqual(edits.map(e=>[e.location,e.label,e.before,e.after,e.impacts[0].href]),[['智能整合','區塊中文主標題','智能整合，打造建築新價值','智能整合自訂標題','/builders#builders-capability-title']])
 const badBuilder=structuredClone(previewBodies['view-pages-builders-index']);badBuilder.copy.text2=42
 const builderSchema=docs.find(d=>d.id==='view-pages-builders-index').schema
 assert.throws(()=>validate(badBuilder,builderSchema),e=>{const issue=readableError(e,'view-pages-builders-index',editingSchema(builderSchema,'view-pages-builders-index'),badBuilder);assert.equal(issue.fieldErrors[0].path,'copy.text2');assert.match(issue.message,/區塊中文主標題（第一段）/);return true})

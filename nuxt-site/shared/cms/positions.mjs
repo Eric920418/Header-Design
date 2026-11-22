@@ -1,4 +1,6 @@
 // Interface locations only. Stored document names, values and public URLs stay unchanged.
+import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
+
 const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
 export const franchiseMarqueeDocument=view('franchising-intro')
@@ -193,7 +195,15 @@ export const pagePositions={
   {...section('型錄管理','管理型錄封面、預覽與下載檔案','franchise-download-catalogue','franchise-catalogue-preview',[franchiseDownloadDocument,'brochurePages.0.image']),aliases:['franchise-download:型錄預覽圖片']},
   {...section('區塊共用設定','加盟簡介、按鈕、頁碼與載入提示文字','franchise-download-document','franchise-document-title'),aliases:['加盟簡介與檔案','加盟簡介與下載按鈕',...franchiseDownloadSettings.map(group=>group.name)].map(name=>'franchise-download:'+name)},
  ]},
- builders:{hero:[view('builders-index'),'copy.field6'],sections:[{...section('主視覺標題','主標題、預約按鈕與廚房大圖','hero','builders-title'),aliases:['builders:頁面最上方']},section('廚房品牌介紹','品牌卡片上方的中文主標題、介紹文字與即將推出卡片文字','builders-brand-intro','builders-team-title',['data-builders','builderProjectCards.0.image']),section('建商實力','智能整合與建商實力圖文','cards','builders-capability-title'),section('三大服務','建商實力下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),section('合作夥伴','保留的合作夥伴標誌設定','inactive'),section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment')]},
+ builders:{hero:[view('builders-index'),'copy.field6'],sections:[
+  {...section('主視覺標題','主標題、預約按鈕與廚房大圖','hero','builders-title'),aliases:['builders:頁面最上方']},
+  section('廚房品牌介紹','品牌卡片上方的中文主標題、介紹文字與即將推出卡片文字','builders-brand-intro','builders-team-title',['data-builders','builderProjectCards.0.image']),
+  section('智能整合','區塊共用標題、介紹與三張統計圖文','builders-strengths','builders-capability-title'),
+  section('三大服務','智能整合下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),
+  section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),
+  section('合作夥伴','保留的合作夥伴標誌設定','inactive'),
+  section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment'),
+ ]},
  'builder-series':{hero:[view('builders-sakura-kitchen'),'copy.field1'],sections:[section('頁面最上方','主圖片、品牌標誌與介紹','hero','sakura-kitchen-title'),section('品牌承諾入口','主圖片下方的介紹入口','cards','brand-advantage'),section('品牌優勢','品牌優勢介紹與圖片','cards','sakura-kitchen-advantage-title'),section('品牌系列','系列圖片、介紹與預約按鈕','cards','sakura-kitchen-series-title')]},
  'builder-catalogues':{hero:commonHero,sections:[section('頁面最上方','建商型錄頁最上方的大標題','hero','builder-catalogue-title'),section('型錄封面與下載','型錄卡片、封面與下載按鈕','catalogue','builder-catalogue-list-title')]},
  menu:{sections:[
@@ -233,6 +243,7 @@ export function positionGroup(page,id,path){
   if(page==='visuals')return path.startsWith('images.')?(/asset_(?:7a7fece6|39582b0b|18ed1982|52e702e4|d0922f9d|82b9dd3e|b3dcb152|1795db00|38bb39f2)$/.test(path)?'加盟與建商背景':path.endsWith('asset_7692def0')?'共用主視覺背景':path.endsWith('asset_10b5a86c')?'首頁品牌影片':'品牌與服務背景'):({brandVideoId:'首頁品牌影片',brandVideoSrc:'首頁品牌影片',franchiseVideoId:'加盟夥伴影片',pavilionVideoId:'品牌館影片',serviceVideoSrc:'服務介紹影片',serviceVideoCover:'服務介紹影片'})[path]
  }
  if(page==='builders'&&id==='data-brandPavilions')return '聯繫與參觀預約'
+ if(page==='builders'&&id===builderStrengthsDocument&&(path==='strengths'||isBuilderStrengthsCopy(path)))return '智能整合'
  if(page==='franchise'&&path==='FRANCHISE_BROCHURE_URL')return '加盟資料下載入口'
  if(id==='knowledge-articles')return '文章管理'
  if(page==='news-latest'&&id===view('news-latest-index')&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'

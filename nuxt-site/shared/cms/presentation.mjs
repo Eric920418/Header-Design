@@ -4,6 +4,7 @@ import { homeGallerySchema, HOME_GALLERY_ID } from './gallery-cases.mjs'
 import {positionField,readingField} from './positions.mjs'
 import {homeHeadingSchema,HOME_SERVICES_ID} from './home-headings.mjs'
 import {pageDestinationSchema} from './page-destinations.mjs'
+import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 
 // Presentation only: resource IDs, stored schemas and website content stay intact.
 const target=(label,href)=>({label,href})
@@ -146,6 +147,8 @@ export function fieldPresentation(resourceId,path,schema={}){
  const normalized=path.replace(/^\./,'').replace(/\.\d+(?=\.|$)/g,'.*'),key=normalized.split('.').at(-1)
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁聯繫與參觀預約區','建商首頁的預約區']}
+ if(resourceId===builderStrengthsDocument&&normalized==='strengths')return{label:'智能整合圖文',newItemLabel:'圖文項目'}
+ if(resourceId===builderStrengthsDocument&&isBuilderStrengthsCopy(normalized))return{label:schema.label}
  if(resourceId==='view-pages-about-introduce'&&normalized==='copy.field10')return{label:'圖片放大方式',hidden:true,readOnly:true}
  if(resourceId==='view-pages-franchising-intro'&&['copy.field21','copy.field25'].includes(normalized))return{label:'輪播重複圖片文字',hidden:true,readOnly:true}
  if(resourceId==='site-visuals'&&normalized==='images.asset_1795db00')return{label:'總部支援背景圖片'}

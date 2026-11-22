@@ -3,6 +3,7 @@ import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {editingSchema} from './presentation.mjs'
 import {itemCaption,itemKey,itemThumbnail} from './workbench.mjs'
 import {fieldImpacts} from './impact-targets.mjs'
+import {builderStrengthsCopy,builderStrengthsDocument,builderStrengthsFields,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 
 export function sameContent(a,b){
  if(a===b)return true
@@ -60,6 +61,12 @@ export function pageChanges(blocks,documents,previous,next,context={}){
   const scope={documentId:d.id,category:d.id==='news-articles'?row?.summary?.category:undefined,slug:row?.slug,rowId:row?.id,blockHref:block?.previewPage||block?.href}
   let cursor=body,stable=true
   const keyParts=change.path.split('.').map(key=>{if(Array.isArray(cursor)){const item=cursor[Number(key)],id=item&&typeof item==='object'?(item.id??item.slug):undefined;cursor=item;if(id===undefined)stable=false;return id===undefined?key:'@'+id}cursor=cursor?.[key];return key})
+  if(d.id===builderStrengthsDocument&&isBuilderStrengthsCopy(change.path)){
+   const key=change.path.slice(5)
+   change.label=builderStrengthsFields[key].label
+   change.before=builderStrengthsCopy(previous[d.id]?.copy)[key]
+   change.after=builderStrengthsCopy(next[d.id]?.copy)[key]
+  }
   return {...change,keyParts,stable,...scope,blockId:block?.id,location:block?.name||(owner?owner.page.name+' › '+owner.block.name:'其他已儲存內容'),impacts:fieldImpacts({...scope,path:change.path},context,previous[d.id],next[d.id])}
  }))
 }

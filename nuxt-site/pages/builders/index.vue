@@ -4,6 +4,7 @@ const cmsCopy = await useCmsResource('view-pages-builders-index', {"strengths":[
 import { ArrowRight, Check, Clock3, MapPin } from 'lucide-vue-next'
 import { BUILDER_APPOINTMENT_HASH as cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards as cmsSeed_builderProjectCards, builderBrandHeading, builderComingSoonImages } from '~/data/builders'
 import { brandPavilions as cmsSeed_brandPavilions } from '~/data/brandPavilions'
+import { builderStrengthsCopy, builderStrengthImageAlt } from '~/shared/cms/builder-strengths.mjs'
 const { BUILDER_APPOINTMENT_HASH, builderProjectCards } = await useCmsResource('data-builders', { BUILDER_APPOINTMENT_HASH: cmsSeed_BUILDER_APPOINTMENT_HASH, builderProjectCards: cmsSeed_builderProjectCards })
 const { brandPavilions } = await useCmsResource('data-brandPavilions', { brandPavilions: cmsSeed_brandPavilions })
 const heroContactLabel = cmsCopy.copy.text5 === '專人聯繫' ? '立即預約' : cmsCopy.copy.text5
@@ -18,6 +19,7 @@ useSeoMeta({
 })
 
 const strengths = cmsCopy.strengths
+const strengthsHeading = builderStrengthsCopy(cmsCopy.copy)
 
 const services = cmsCopy.services
 
@@ -243,9 +245,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <header ref="strengthsCopy" class="builders-strengths-copy">
             <div ref="strengthsContent" class="builders-strengths-content">
               <div v-reveal="{ anim: 'opalMoveUp' }" class="builders-strengths-heading">
-                <InternalSectionPill tone="dark">OUR STRENGTHS</InternalSectionPill>
-                <h2 id="builders-capability-title"><b>智能整合，打造建築新價值</b>Smart Solutions <span>For</span><br /><span>Better Living</span></h2>
-                <p>SAKURA深耕台灣居家生活<br />透過「HOME IN O.N.E」全方位整合<br />將AI智能串聯「產品、生產與售後服務」<br />提供更精準、高效的空間解決方案</p>
+                <InternalSectionPill tone="dark">{{ strengthsHeading.strengthsLabel }}</InternalSectionPill>
+                <h2 id="builders-capability-title"><b>{{ strengthsHeading.strengthsChineseTitle }}</b>{{ strengthsHeading.strengthsEnglishTitleFirst }}<br /><span>{{ strengthsHeading.strengthsEnglishTitleSecond }}</span></h2>
+                <p><template v-for="(line, index) in strengthsHeading.strengthsIntro.split('\n')" :key="index"><br v-if="index" />{{ line }}</template></p>
               </div>
               <div v-if="activeStrength" v-reveal="{ anim: 'opalMoveUp' }" class="builders-solution__copy" :data-active-strength="activeStrengthIndex">
                 <p class="builders-solution__lead">{{ activeStrength.lines[1].replaceAll('\n', '') }}</p>
@@ -264,7 +266,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             >
               <InternalBuilderImage
                 :src="item.background"
-                :alt="index === 0 ? '建案搭配現代風、輕奢風及簡約風廚房設計模組' : index === 1 ? 'AI 智能廚衛工廠：人員監控產線生產率與即時數據' : '智能案件管理平台串接需求確認、合作洽談、簽約、下單、製作、安裝、驗收及售後服務'"
+                :alt="builderStrengthImageAlt(index)"
                 fit="contain"
                 class="builders-solution__visual"
               />

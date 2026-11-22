@@ -708,8 +708,8 @@ console.log('PASS 建商深色大圖同品牌優勢進場後5秒Ken Burns、減�
 assert(buildersHtml.includes('OUR STRENGTHS')&&buildersHtml.includes('智能整合，打造建築新價值'),'建商Home7實力区需指定中英標題')
 const strengthsTitle=buildersHtml.match(/<h2\b[^>]*id="builders-capability-title"[^>]*>([\s\S]*?)<\/h2>/)?.[1]||''
 assert.equal(strengthsTitle.replace(/<br\b[^>]*>/g,' ').replace(/<[^>]+>/g,''),'智能整合，打造建築新價值Smart Solutions For Better Living')
-assert(buildersHtml.includes('以多元設計模組、AI 智能製造與數位案件管理，')&&buildersHtml.includes('為建商提供從設計規劃到交付的整合服務。'))
-assert(buildersSource.includes('Smart Solutions <span>For</span><br /><span>Better Living</span>'),'指定兩行Smart Solutions For／Better Living，For大寫並保留金色')
+assert(buildersHtml.includes('SAKURA深耕台灣居家生活')&&buildersHtml.includes('提供更精準、高效的空間解決方案'))
+assert(buildersSource.includes('{{ strengthsHeading.strengthsEnglishTitleFirst }}<br /><span>{{ strengthsHeading.strengthsEnglishTitleSecond }}</span>'),'保留兩行英文標題')
 assert(buildersSource.includes(':fit="index === 1 ? \'cover\' : \'contain\'"')&&buildersSource.includes('.builders-solution__visual--factory { aspect-ratio: 1280 / 460; }')&&buildersSource.includes('.builders-solution__visual--factory :deep(img) { object-position: bottom; }'),'保留AI圖原空白裁切與其他兩圖contain')
 const strengthsSsr=buildersHtml.slice(buildersHtml.indexOf('id="builders-solutions"'),buildersHtml.indexOf('class="builders-home-one'))
 assert.equal((strengthsSsr.match(/class="builders-solution ev/g)||[]).length,3,'前三項實力不得增刪或重複')
