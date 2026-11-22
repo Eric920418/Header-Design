@@ -153,7 +153,7 @@ export const pagePositions={
   section('主視覺標題','消息總覽最上方的大標題','hero','news-page-title'),
   {...section('最新消息列表','找到文章後按「編輯文章」，可修改封面、標題、摘要與內文。','news-overview','news-list-title'),aliases:['news:全部消息列表']},
   {...section('最新消息分類標籤','列表旁的分類名稱與連結','navigation','news-tags-title'),aliases:['news:消息分類選單']},
-  {...section('最新文章','總覽頁側欄的最新文章標題','cards','sidebar-recent-title'),aliases:['news:最近文章推薦']},
+  {...section('最新文章','官網右側顯示的文章與側欄標題','news-recent','sidebar-recent-title'),aliases:['news:最近文章推薦'],help:'文章與「最新消息列表」共用。修改封面、標題、摘要或內文，會同步更新該篇文章。'},
  ]},
  ...Object.fromEntries(['latest','activities','video'].map((category,i)=>['news-'+category,{hero:commonHero,sections:[section('主視覺標題','列表最上方的大標題','hero',['latest','activity','video'][i]+'-page-title'),{...section('麵包屑導覽設定','文章頁首的英文標題與分類連結','breadcrumb'),aliases:['news-'+category+':文章最上方與返回導覽']},section(['消息管理','活動管理','影音管理'][i],'封面、標題、日期與完整內文','cards'),...(category==='latest'?[section('文章報名圖片提示','加盟說明會文章中，報名 QR Code 下方的文字','registration')]:[]),section('文章旁的分類選單','文章末段的優惠活動、最新消息與媒體影音連結','navigation')]}])),
  about:{hero:'/section-5/brand-pavilion/pavilion-taichung.jpg',sections:[section('品牌歷程','年份、沿革照片與品牌故事','timeline','about-services-title'),section('品牌承諾','介紹內容與情境圖片','cards','about-values-title'),section('專屬品牌識別','品牌銘板與識別圖片','logos','about-identity-title')]},

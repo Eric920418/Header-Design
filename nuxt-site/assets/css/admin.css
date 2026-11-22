@@ -715,6 +715,24 @@
 .cms .cms-scene-news-overview article img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;}
 .cms .cms-scene-news-overview article h3{font-size:16px;line-height:1.5;}
 .cms .cms-scene-news-overview article p,.cms .cms-scene-news-overview article small{font-size:13px;color:var(--cms-muted);}
+.cms .cms-scene-news-recent{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start;}
+.cms .cms-scene-news-recent-main{margin:0;min-width:0;}
+.cms .cms-scene-news-recent-main img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;}
+.cms .cms-scene-news-recent-main figcaption{margin-top:6px;font-size:12px;font-weight:600;}
+.cms .cms-scene-news-recent-sidebar{min-width:0;padding:8px;border:1px solid var(--cms-line);border-radius:6px;background:#faf8f3;}
+.cms .cms-scene-news-recent-sidebar h3{margin:0 0 8px;font-size:14px;}
+.cms .cms-scene-news-recent-sidebar ol{display:grid;gap:4px;margin:0;padding:0;list-style:none;}
+.cms .cms-scene-news-recent-sidebar li{display:grid;grid-template-columns:clamp(28px,25%,66px) minmax(0,1fr);gap:6px;align-items:start;padding:5px 3px;border:1px solid transparent;border-radius:4px;}
+.cms .cms-scene-news-recent-sidebar li.is-selected{border-color:#b78b43;background:#fff2d9;}
+.cms .cms-scene-news-recent-sidebar li img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px;}
+.cms .cms-scene-news-recent-sidebar li strong,.cms .cms-scene-news-recent-sidebar li small{display:block;overflow-wrap:anywhere;}
+.cms .cms-scene-news-recent-sidebar li strong{font-size:11px;line-height:1.45;}
+.cms .cms-scene-news-recent-sidebar li small{font-size:10px;color:var(--cms-muted);}
+@media(max-width:479px){
+ .cms .cms-scene-news-recent{grid-template-columns:minmax(0,1fr);}
+ .cms .cms-scene-news-recent-main{display:none;}
+ .cms .cms-scene-news-recent-sidebar li strong{font-size:13px;}
+}
 .cms .cms-item-row .cms-item-open>small{font-size:10px;white-space:normal;}
 .cms .cms-item-row .cms-item-edit{margin-right:5px;min-width:48px;min-height:36px;padding:5px 8px;font-size:12px;}
 .cms .cms-list-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;min-height:40px;margin-top:3px;}

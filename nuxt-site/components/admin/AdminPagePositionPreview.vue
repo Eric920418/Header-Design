@@ -108,6 +108,22 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </div>
     </article>
    </div>
+   <div v-else-if="scene.kind==='news-recent'" class="cms-scene-news-recent">
+    <figure v-if="presentation?.samples?.[0]" class="cms-scene-news-recent-main">
+     <AdminThumbnail :src="presentation.samples[0].image" :alt="presentation.samples[0].title+'封面'" />
+     <figcaption>{{ presentation.samples[0].title }}</figcaption>
+    </figure>
+    <div class="cms-scene-news-recent-sidebar">
+     <h3 :class="{'is-focused':highlighted('copy.text4')}">{{ bodies['view-pages-news-index']?.copy?.text4 || block.name }}</h3>
+     <ol v-if="scene.items.length">
+      <li v-for="item in scene.items" :key="item.id" :class="{'is-selected':item.id===selected?.value?.id}" :aria-current="item.id===selected?.value?.id?'true':undefined">
+       <AdminThumbnail :src="item.image" :alt="item.title+'封面'" />
+       <div><small v-if="item.date">{{ item.date }}</small><strong>{{ item.title }}</strong><small v-if="item.enabled===false">更新官網後隱藏</small></div>
+      </li>
+     </ol>
+     <p v-else class="cms-field-help">官網側欄目前沒有文章。</p>
+    </div>
+   </div>
    <template v-else-if="scene.kind==='page-breadcrumb'">
     <header class="cms-scene-news-hero">
      <AdminThumbnail v-if="scene.contextImage" :src="scene.contextImage" :alt="pageTitle+'頁首照片'" />

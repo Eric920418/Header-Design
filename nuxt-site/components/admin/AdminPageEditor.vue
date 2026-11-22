@@ -3,7 +3,7 @@ import {valueAt,withValue,pageFieldValue,pageEditorLink,storeCasesPageId,desktop
 import {cmsDate,firstImage} from '~/shared/cms/workflow.mjs'
 import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
-import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey} from '~/shared/cms/workbench.mjs'
+import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes} from '~/shared/cms/workbench.mjs'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
 import {storeRegionCities} from '~/shared/cms/store-location.mjs'
@@ -12,9 +12,10 @@ const route=useRoute(),router=useRouter(),{api,session,message}=useCmsAdmin()
 const {data:namedPages}=useNuxtData<any[]>('cms-pages')
 const pageData=ref<any>(),docs=ref<any[]>([]),bodies=ref<Record<string,any>>({}),baseline=ref<Record<string,any>>({}),error=ref(''),notice=ref(''),busy=ref(false),fieldErrors=ref<any[]>([]),selections=ref<Record<string,string>>({}),locationOpen=ref(false),positionOpen=ref(false),focusedField=ref(''),formRoot=ref<HTMLElement>()
 provide('cms-field-errors',fieldErrors);provide('cms-item-selections',selections)
-const blocks=computed<any[]>(()=>{const named=namedPages.value?.find(p=>p.id===props.id);return workbenchBlocks(props.id,(pageData.value?.blocks||[]).map((b:any)=>({...b,name:named?.blocks.find((n:any)=>n.id===b.id)?.name||b.name})))})
+const blocks=computed<any[]>(()=>{const named=namedPages.value?.find(p=>p.id===props.id);return workbenchBlocks(props.id,(pageData.value?.blocks||[]).map((b:any)=>({...b,name:named?.blocks.find((n:any)=>n.id===b.id)?.name||b.name})),pageData.value?.positionPresentation?.recentArticles||[])})
 const active=computed(()=>blocks.value.find(b=>b.aliases.includes(route.query.block))||blocks.value[0])
-const newsOverview=computed(()=>active.value?.kind==='news-overview')
+const newsRecent=computed(()=>active.value?.kind==='news-recent')
+const newsArticleList=computed(()=>newsRecent.value||active.value?.kind==='news-overview')
 const regionField=computed(()=>active.value?.fields.find((field:any)=>field.documentId==='data-storeCases'&&field.path==='regionCities'))
 const regionNames=Object.keys(storeRegionCities),storeRegion=ref(regionNames[0]!),regionLabelId=useId()
 const cityListPath=computed(()=>`regionCities.${storeRegion.value}`)
@@ -41,7 +42,7 @@ const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fiel
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
 const positionBlock=computed(()=>{
  const block=active.value
- if(newsOverview.value&&!workbench.editing.value)return {...block,previewPage:block.href}
+ if(newsArticleList.value&&!workbench.editing.value)return {...block,previewPage:block.href}
  if(regionField.value)return {...block,storeRegion:storeRegion.value,previewPage:`/gallery?region=${encodeURIComponent(storeRegion.value)}#gallery-filter-title`}
  if(seriesPart.value&&block)return {...block,name:seriesPart.value.name,seriesPart:seriesPart.value.id}
  if(knowledgeArticles.value){
@@ -171,7 +172,13 @@ watch([()=>active.value?.id,storeRegion],()=>{workbench.focused.value='';workben
 function closeItem(){workbench.editing.value='';workbench.returnFocus()}
 function preparePreview(){previewPath.value=props.id==='home'||locationHref.value===active.value?.href?'':locationHref.value;showPreview()}
 const title=computed(()=>namedPages.value?.find(p=>p.id===props.id)?.title||pageData.value?.title||(props.id==='home'?'首頁':'修改頁面'))
-const modified=computed(()=>blocks.value.filter(b=>b.fields.some((f:any)=>JSON.stringify(pageFieldValue(bodies.value,f))!==JSON.stringify(pageFieldValue(baseline.value,f)))))
+const modified=computed(()=>blocks.value.filter(b=>b.fields.some((f:any)=>{
+ const value=(source:Record<string,any>)=>{
+  const field=pageFieldValue(source,f)
+  return f.schema.recentArticleIds?recentArticleIndexes(field,f.schema.recentArticleIds).map(index=>field[index]):field
+ }
+ return JSON.stringify(value(bodies.value))!==JSON.stringify(value(baseline.value))
+})))
 const dirty=computed(()=>modified.value.length>0),pending=computed(()=>hasPageChanges(blocks.value,Object.fromEntries(docs.value.map(d=>[d.id,d.publishedBody])),baseline.value))
 const impactContext=computed(()=>({heroTitlePages:pageData.value?.positionPresentation?.heroTitlePages,caseDetailRoute:pageData.value?.positionPresentation?.detailCase?.route}))
 const changeDetails=computed(()=>pageChanges(blocks.value,docs.value,baseline.value,bodies.value,impactContext.value)),changesOpen=ref(false)
@@ -181,10 +188,12 @@ const returnLink=computed(()=>{const {sitePage,block,edit,part,seriesPart,legacy
 const activeDocs=computed(()=>docs.value.filter(d=>active.value?.fields.some((f:any)=>f.documentId===d.id)))
 const unpublishDocuments=computed(()=>docs.value.filter(d=>d.publishedId&&(!pageData.value?.unpublishIds||pageData.value.unpublishIds.includes(d.id))))
 const impacts=computed(()=>{
- if(!pending.value)return blockImpacts(active.value,changeDetails.value,impactContext.value)
- const published=Object.fromEntries(activeDocs.value.map(d=>[d.id,d.publishedBody??d.body]))
- const changes=pageChanges(blocks.value,activeDocs.value,published,bodies.value,impactContext.value)
- return blockImpacts(active.value,changes,impactContext.value)
+ const block=active.value
+ const changes=pending.value?pageChanges(blocks.value,activeDocs.value,Object.fromEntries(activeDocs.value.map(d=>[d.id,d.publishedBody??d.body])),bodies.value,impactContext.value):changeDetails.value
+ if(!newsRecent.value)return blockImpacts(block,changes,impactContext.value)
+ const item=workbench.selection.value?.value?.id
+ const edited=changes.filter((change:{blockId?:string;documentId:string;rowId?:string|number})=>change.blockId===block.id||(item!==undefined&&change.documentId==='news-articles'&&change.rowId===item))
+ return edited.length?changeImpacts(edited):blockImpacts({...block,fields:block.fields.filter((f:any)=>!f.schema.recentArticleIds)},[],impactContext.value)
 })
 const payload=(action:string)=>({action,documents:docs.value.map(d=>({id:d.id,revision:d.revision,body:bodies.value[d.id]}))})
 async function selectBlock(id:string){locationOpen.value=false;await router.replace({query:{...route.query,block:id,legacy:undefined,field:undefined,list:undefined,item:undefined}});await nextTick();formRoot.value?.querySelector<HTMLElement>('.cms-block-title')?.focus({preventScroll:true})}
@@ -192,7 +201,12 @@ function update(f:any,value:any){bodies.value={...bodies.value,[f.documentId]:wi
 async function load(){error.value='';try{const result=await api('page-editors/'+props.id,{timeout:20000,retry:0});if(!Array.isArray(result?.documents)||!Array.isArray(result?.blocks))throw Error('伺服器未回傳完整頁面內容，請確認連線後重試。');workbench.rows.value={};pageData.value=result;docs.value=result.documents;bodies.value=Object.fromEntries(result.documents.map((d:any)=>[d.id,d.body]));baseline.value=JSON.parse(JSON.stringify(bodies.value));if(props.id==='knowledge'&&(isSystemCabinetDocument(route.query.legacy)||knowledgeSection.value)){
  await openSystemCabinet(knowledgeSection.value?String(route.query.block):'knowledge:系統櫃材質重點')
  }else if(route.query.legacy){const b=result.blocks.find((b:any)=>b.fields.some((f:any)=>f.documentId===route.query.legacy));if(b)await router.replace({query:{...route.query,block:b.id,legacy:undefined}})}if(props.id==='menu'&&route.query.block==='menu:展開選單中的型錄入口')await openCatalogueEditor()}catch(e){error.value=message(e)}}
-async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;const block=blocks.value.find(b=>b.fields.some((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.'))));if(block&&(!seriesPart.value||block.id!==active.value?.id))await selectBlock(block.id);const part=seriesPart.value&&issue.documentId==='data-kitchenSeries'&&sectionForSeriesField(issue.path);if(part)await chooseLocation(part.id);if(issue.documentId===headerId&&desktopCatalogueFields.includes(issue.path))await openCatalogueEditor();if(props.id==='knowledge'&&isSystemCabinetDocument(issue.documentId)){const field=systemCabinetFields.value.find((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.')));await openSystemCabinet('knowledge:'+(field?.formGroup||'系統櫃材質重點'))}
+async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;const block=[active.value,...blocks.value].find(b=>b?.fields.some((f:any)=>{
+ if(f.documentId!==issue.documentId||!(issue.path===f.path||issue.path.startsWith(f.path+'.')))return false
+ if(!f.schema.recentArticleIds)return true
+ const index=Number(issue.path.slice(f.path.length+1).split('.')[0])
+ return recentArticleIndexes(pageFieldValue(bodies.value,f),f.schema.recentArticleIds).includes(index)
+ }));if(block&&(!seriesPart.value||block.id!==active.value?.id))await selectBlock(block.id);const part=seriesPart.value&&issue.documentId==='data-kitchenSeries'&&sectionForSeriesField(issue.path);if(part)await chooseLocation(part.id);if(issue.documentId===headerId&&desktopCatalogueFields.includes(issue.path))await openCatalogueEditor();if(props.id==='knowledge'&&isSystemCabinetDocument(issue.documentId)){const field=systemCabinetFields.value.find((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.')));await openSystemCabinet('knowledge:'+(field?.formGroup||'系統櫃材質重點'))}
  if(regionField.value&&issue.documentId===regionField.value.documentId&&issue.path.startsWith('regionCities.'))selectStoreRegion(issue.path.split('.')[1])
  await nextTick();await nextTick();const input=formRoot.value?.querySelector<HTMLElement>('[aria-invalid=true]');for(let p=input?.parentElement;p;p=p.parentElement)if(p instanceof HTMLDetailsElement)p.open=true;input?.focus()}
 function reload(){if(!dirty.value||window.confirm('重新載入會捨棄本頁尚未儲存的修改，確定繼續？'))void load()}
@@ -209,7 +223,7 @@ const choices=computed(()=>docs.value.flatMap(d=>{
 const locationHref=computed(()=>{const selected=workbench.selection.value,item=selected?.value;if(item?.enabled===false||item?.available===false)return pageData.value?.href||'/';return seriesLocation(positionBlock.value?.previewPage||(props.id==='home'?'':selected?.href||itemWebsitePath(selected?.documentId,item))||positionBlock.value?.href||pageData.value?.href||'/')})
 const publicLocation=computed(()=>{
  const selected=workbench.selection.value
- if(newsOverview.value&&!workbench.editing.value)return docs.value.find(d=>d.id==='view-pages-news-index')?.publishedBody?positionBlock.value?.href:''
+ if(newsArticleList.value&&!workbench.editing.value)return docs.value.find(d=>d.id==='view-pages-news-index')?.publishedBody?positionBlock.value?.href:''
  if(props.id!=='home'&&selected&&(itemWebsitePath(selected.documentId,selected.value)||selected.href)){
   const published=itemPublication(docs.value.find(d=>d.id===selected.documentId),selected.path,selected.value,selected.index)
   return published.visible?seriesLocation(positionBlock.value?.previewPage&&knowledgeArticles.value?positionBlock.value.previewPage:itemWebsitePath(selected.documentId,published.item)||selected.href||'/'):''
@@ -263,9 +277,9 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
  <div class="cms-page-edit-layout">
   <nav class="cms-block-nav cms-panel" aria-label="官網區塊"><h2>選擇{{ title==='首頁'?'首頁':'官網' }}區塊</h2><button v-for="b in navigationBlocks.filter(b=>!('secondary' in b&&b.secondary))" :key="b.id" type="button" :aria-current="currentLocation===b.id?'location':undefined" @click="chooseLocation(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span><strong>{{ b.name }}</strong><small>{{ b.hint }}</small></span><i v-if="modified.some(m=>m.id===b.id)" aria-label="尚未儲存">●</i></button><details v-if="blocks.some(b=>b.secondary)"><summary>其他設定</summary><button v-for="b in blocks.filter(b=>b.secondary)" :key="b.id" type="button" @click="selectBlock(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span>{{ b.name }}</span></button></details></nav>
   <div class="cms-page-form cms-panel">
-   <div class="cms-block-heading"><div><h2 class="cms-block-title" tabindex="-1">{{ caseManagement?'自建案例':seriesPart?.name||active?.name }}</h2><p v-if="!caseManagement" class="cms-field-help">{{ seriesPart?.hint||active?.hint }}<template v-if="collections.length&&!newsOverview">；選內容看位置，按「編輯」修改。</template></p></div><button type="button" class="cms-button cms-position-toggle" @click="positionOpen=true">看位置</button></div>
+   <div class="cms-block-heading"><div><h2 class="cms-block-title" tabindex="-1">{{ caseManagement?'自建案例':seriesPart?.name||active?.name }}</h2><p v-if="!caseManagement" class="cms-field-help">{{ seriesPart?.hint||active?.hint }}<template v-if="collections.length&&!newsArticleList">；選內容看位置，按「編輯」修改。</template></p></div><button type="button" class="cms-button cms-position-toggle" @click="positionOpen=true">看位置</button></div>
    <p v-if="caseManagement" class="cms-case-scope">這裡管理從後台新增的案例。請到<NuxtLink :to="pageEditorLink(storeCasesPageId,route.query)">「門市案例」</NuxtLink>修改門市文章與照片。從其他系統同步的案例請回原系統修改。</p>
-   <fieldset :disabled="busy" class="cms-edit-form cms-collection-fields"><template v-for="f in collections" :key="f.documentId+':'+f.path"><div v-if="f.documentId===headerId&&f.path==='leftNav'" class="cms-block-field">
+   <fieldset :disabled="busy" class="cms-edit-form cms-collection-fields"><template v-for="f in collections" :key="f.documentId+':'+f.path+(newsRecent?':recent':'')"><div v-if="f.documentId===headerId&&f.path==='leftNav'" class="cms-block-field">
     <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :has-related-changes="catalogueChanged" @update:model-value="update(f,$event)" @cancel-related="restoreCatalogue">
      <template #item-settings="{row}"><fieldset v-if="usesDesktopCatalogue(row.value)&&catalogueFields.length" class="cms-fields">
       <legend>型錄按鈕</legend>
@@ -289,7 +303,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
      </template>
     </AdminItems>
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
-   <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
+   <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
    <fieldset v-else-if="sharedInspiration||sharedKnowledge" :disabled="busy" class="cms-edit-form">
     <fieldset v-for="group in sharedFormGroups" :key="group.key" :data-position-group="group.key" class="cms-inspiration-form-group">
      <legend>{{ group.title }}</legend>

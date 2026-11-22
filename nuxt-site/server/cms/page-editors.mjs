@@ -54,7 +54,7 @@ async function positionPresentation(p){
   const {newsArticles,recentNewsArticles}=publicContent('data-news',bodies['news-articles']||{items:[]})
   const samples=items=>items.slice(0,3).map(item=>({title:item.title,image:item.cover}))
   result.samples=samples(newsArticles)
-  result.recentArticles=samples(recentNewsArticles)
+  result.recentArticles=recentNewsArticles.map(({id,title,cover,displayDate,publishedAt})=>({id,title,image:cover,date:displayDate||publishedAt}))
  }
  if(p.id==='franchise')result.samples=articles.filter(i=>/franchise/.test(i.slug)).slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
  if(p.category){

@@ -6,7 +6,7 @@ import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
 import {pageEditors,pageBlocks,searchResultLink,seriesCardRedirect} from '../shared/cms/page-editors.mjs'
 import {checkPageBody,editorSchema} from '../server/cms/page-editors.mjs'
-import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField} from '../shared/cms/workbench.mjs'
+import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField,recentArticleIndexes} from '../shared/cms/workbench.mjs'
 import {seriesEditorSections,seriesEditorSchema,sectionForSeriesField} from '../shared/cms/series-editor.mjs'
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
@@ -260,6 +260,25 @@ for(const item of overviewEdit.items)item.summary.excerpt+='驗收預覽'
 checkPageBody(newsOverview,overviewNewsDoc.id,overviewNewsDoc.body,overviewEdit,overviewNewsDoc.schema)
 const publishedNews=publicContent('data-news',overviewNewsDoc.body).newsArticles
 assert.deepEqual(overviewNewsDoc.body.items.filter(i=>i.enabled).sort((a,b)=>compareNewsDates(a.summary.publishedAt,b.summary.publishedAt)).map(i=>i.id),publishedNews.map(i=>i.id))
+{
+ const {recentNewsArticles}=publicContent('data-news',overviewNewsDoc.body)
+ const blocks=workbenchBlocks('news',newsOverview.blocks,recentNewsArticles)
+ const sidebar=blocks.find(block=>block.kind==='news-recent'),field=sidebar.fields.find(f=>f.documentId==='news-articles')
+ assert.equal(field.path,overviewField.path,'Sidebar editing uses the original article path')
+ const draft=structuredClone(overviewNewsDoc.body)
+ draft.items.reverse()
+ const indexes=recentArticleIndexes(draft.items,field.schema.recentArticleIds)
+ assert.deepEqual(indexes.map(index=>draft.items[index].id),recentNewsArticles.map(article=>article.id))
+ const article=draft.items[indexes[0]]
+ article.summary.title='側欄的文章草稿'
+ const bodyArticle=draft.items[indexes.find(index=>draft.items[index].detail.sections?.some(section=>section.paragraphs?.length))]
+ bodyArticle.detail.sections.find(section=>section.paragraphs?.length).paragraphs[0]='本次修改的內文'
+ const preview=pagePositionContent(sidebar,{'news-articles':draft})
+ assert.deepEqual(preview.items.map(item=>item.id),recentNewsArticles.map(article=>article.id))
+ assert.equal(preview.items[0].title,article.summary.title)
+ assert.equal(preview.items[0].image,article.summary.cover)
+ checkPageBody(newsOverview,overviewNewsDoc.id,overviewNewsDoc.body,draft,overviewNewsDoc.schema)
+}
 for(const brand of ['sakura','svago','teka']){
  const p=pageEditors.find(p=>p.id==='products-'+brand)
  const block=pageBlocks(p,docs).find(b=>b.name==='商品頁型錄按鈕')
@@ -312,7 +331,7 @@ const script=source.match(/<script setup[^>]*>([\s\S]*?)<\/script>/)[1].replace(
 const code=ts.transpileModule(script+'\nthis.ui={choose,back,item,add,move,remove,rows,active,visible,page,search,itemSchema,reorder,startDrag,drop,toggleVisibility,dragged,cancelItem,changed,focusRow,root};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText
 const model=reactive({modelValue:Array.from({length:8},(_,i)=>({id:'row-'+i,title:'內容 '+i,image:'/image.webp'})),schema:{type:'array',label:'輪播內容',item:{type:'object',fields:{id:{type:'string'},title:{type:'string'}}},template:{id:'',title:''}},documentId:'home',path:'slides'})
 const route=reactive({query:{}}),state=ref({}),errors=ref([]),workbench={rows:ref({}),baseline:ref({home:{slides:JSON.parse(JSON.stringify(model.modelValue))}}),focused:ref(''),editing:ref(''),selection:ref(null),metadata:ref({}),busy:ref(false),select:()=>{}},emitted=[]
-const context={ref,computed,watch,nextTick,useRoute:()=>route,useRouter:()=>({replace:async value=>{route.query=value.query}}),sameContent,itemPublication,compareNewsDates,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,articleDateLabel,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
+const context={ref,computed,watch,nextTick,useRoute:()=>route,useRouter:()=>({replace:async value=>{route.query=value.query}}),sameContent,itemPublication,compareNewsDates,recentArticleIndexes,defineProps:()=>model,defineEmits:()=>((_,v)=>{emitted.push(v);model.modelValue=v}),inject:(key,fallback)=>({'cms-workbench':workbench,'cms-item-selections':state,'cms-field-errors':errors}[key]??fallback),provide:()=>{},valueAt,itemKey,itemCaption,itemThumbnail,freshArticleValue,articleDateLabel,newStoreId:()=>123,crypto:{randomUUID},CSS:{escape:x=>x},document:{querySelector:()=>null},window:{confirm:()=>true},JSON}
 const scope=effectScope();scope.run(()=>runInNewContext(code,context))
 await nextTick();const ui=context.ui
 assert.equal(ui.visible.value.length,6);assert.equal(workbench.selection.value.caption,'內容 0');assert.equal(workbench.editing.value,'')
