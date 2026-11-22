@@ -11,7 +11,7 @@ import {seriesEditorSections,seriesEditorSchema,sectionForSeriesField} from '../
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
 import {blockThumbnail} from '../shared/cms/page-editors.mjs'
-import {valueAt,searchPages,pageTaskLink,pageSummary,storeCasesPageId,storeCaseRedirect} from '../shared/cms/page-editors.mjs'
+import {valueAt,searchPages,pageTaskLink,pageSummary,storeCasesPageId,storeCaseRedirect,retiredBuilderPartnersRedirect} from '../shared/cms/page-editors.mjs'
 import {sameContent,pageChanges,changeImpacts,blockImpacts,publishReview,pageSearchItems,pageMedia,hasPageChanges,itemPublication} from '../shared/cms/changes.mjs'
 import {normalizeVideos,validate} from '../server/cms/content.mjs'
 import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
@@ -380,7 +380,16 @@ assert.deepEqual(builderHomeOneImage(serviceEdit.copy,homeOneMontage),{src:'/cha
 const serviceChanges=pageChanges(builders,[strengthsDocument],{[builderStrengthsDocument]:originalStrengths},{[builderStrengthsDocument]:serviceEdit})
 assert.deepEqual(serviceChanges.map(e=>[e.before,e.after,e.impacts[0].href]),[[homeOneMontage.originalImage,'/changed-builder.webp','/builders#'+homeOneMontage.anchor]])
 assert.equal(serviceScene.mappedImage,serviceScene.image,'The shared section photo must display above the text cards')
-assert.equal(builders.find(b=>b.name==='合作夥伴').kind,'inactive','Archived builder partners are not a website section')
+const builderDataDocument=docs.find(d=>d.id==='data-builders')
+assert(!builders.some(b=>b.name==='合作夥伴'||b.fields.some(f=>f.path==='builderPartners')))
+assert.equal(searchPages([pageSummary(strengthsPage,[],docs)],'合作夥伴').length,0)
+for(const legacy of [{block:'builders:合作夥伴'},{list:'data-builders:builderPartners',item:'0'},{create:'data-builders:builderPartners'}])
+ assert.deepEqual(retiredBuilderPartnersRedirect({sitePage:'builders',...legacy}),{path:'/admin/content',query:{section:'builders',sitePage:'builders',block:'builders:主視覺標題'}})
+assert.equal(retiredBuilderPartnersRedirect({sitePage:'builders',block:'builders:SAKURA iCare'}),undefined)
+const archivedEdit=structuredClone(builderDataDocument.body)
+archivedEdit.builderPartners[0].name='已停用的編輯欄位'
+assert.throws(()=>checkPageBody(strengthsPage,builderDataDocument.id,builderDataDocument.body,archivedEdit,builderDataDocument.schema),/目前頁面以外的內容/)
+assert.deepEqual(pageChanges(builders,[builderDataDocument],{'data-builders':builderDataDocument.body},{'data-builders':archivedEdit}),[])
 assert.equal(itemWebsitePath('data-storeCases','臺北市'),'','County selection keeps the filter position instead of linking to a case detail')
 assert.equal(itemWebsitePath('data-storeCases',{slug:'songzhu'}),'/gallery/songzhu')
 const storeRegions=pageBlocks(pageEditors.find(p=>p.id==='stores'),docs).find(b=>b.name==='區域與縣市')

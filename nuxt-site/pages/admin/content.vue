@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {cmsDate} from '~/shared/cms/workflow.mjs'
 import {navigationSections,sectionForQuery} from '~/shared/cms/navigation.mjs'
-import {searchResultLink,legacyPageLink,searchPages,pageTaskLink,seriesCardRedirect,storeCaseRedirect} from '~/shared/cms/page-editors.mjs'
+import {searchResultLink,legacyPageLink,searchPages,pageTaskLink,seriesCardRedirect,storeCaseRedirect,retiredBuilderPartnersRedirect} from '~/shared/cms/page-editors.mjs'
 definePageMeta({layout:'admin',middleware:to=>{
  if(to.query.sitePage==='inspiration'&&(to.query.legacy==='catalog-cases'||to.query.list==='catalog-cases:items')){
   const {legacy,...query}=to.query
   return navigateTo(legacyPageLink('catalog-cases',query),{replace:true})
  }
- const link=seriesCardRedirect(to.query)||storeCaseRedirect(to.query)
+ const link=seriesCardRedirect(to.query)||storeCaseRedirect(to.query)||retiredBuilderPartnersRedirect(to.query)
  if(link)return navigateTo(link,{replace:true})
 }})
 const route=useRoute(),router=useRouter(),{message}=useCmsAdmin()

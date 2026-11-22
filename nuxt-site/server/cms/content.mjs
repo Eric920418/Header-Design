@@ -1,4 +1,5 @@
 import {access} from 'node:fs/promises'
+import {isDeepStrictEqual} from 'node:util'
 import { documentSchema } from '../../shared/cms/document-schema.mjs'
 import {resolve,sep} from 'node:path'
 import { query, transaction, randomUUID, fail, audit } from './database.mjs'
@@ -99,6 +100,10 @@ export async function changeDocument(id,input,user,connection){
  let body=input.body
  if(input.action==='restore'){const v=(await query('SELECT body FROM cms.Versions WHERE id=@version AND documentId=@id',{version:input.version,id},tx)).recordset[0];if(!v)fail(404,'版本不存在');body=JSON.parse(v.body)}
  body=normalizeVideos(body,schema);validate(body,schema)
+ if(d.id==='data-builders'&&input.action==='save'){
+  const previous=draft?JSON.parse((await query('SELECT body FROM cms.Versions WHERE id=@id',{id:draft},tx)).recordset[0].body):{}
+  if(!isDeepStrictEqual(body.builderPartners,previous.builderPartners))fail(400,'合作夥伴已停止編輯，請重新載入建商專區後再調整。')
+ }
  if(d.id===HOME_STORES_ID){const issue=storeLocationIssue(body);if(issue)fail(400,issue)}
  if(d.id.startsWith('catalog-')){
   if(input.action==='restore')body=await alignSource(id,body,tx)

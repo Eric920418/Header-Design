@@ -64,9 +64,9 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  if (documentId === 'data-brandPavilions' && key === 'pavilionNotice') return targets.slice(0,1)
  if (documentId === 'data-builders') {
   const projects=target('建商專區首頁 → 廚房品牌介紹圖文','/builders#builders-team-title')
-  if (!path) return [projects,targets[1]]
+  if (!path) return [projects,...targets]
   if (key === 'builderPartners') return []
-  return key === 'BUILDER_APPOINTMENT_HASH' ? targets.slice(1) : [projects]
+  return key === 'BUILDER_APPOINTMENT_HASH' ? targets : [projects]
  }
  if (documentId === builderStrengthsDocument && (key === 'strengths' || isBuilderStrengthsCopy(path)))
   return [target('建商專區首頁 → 智能整合', '/builders#builders-capability-title')]

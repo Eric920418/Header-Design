@@ -92,6 +92,12 @@ export function storeCaseRedirect(query={}){
  if(query.list===storeCasesScope&&typeof query.item==='string')Object.assign(link.query,{list:storeCasesScope,item:query.item})
  return link
 }
+export function retiredBuilderPartnersRedirect(query={}){
+ const scope='data-builders:builderPartners'
+ if(query.sitePage!=='builders'||!(query.block==='builders:合作夥伴'||query.list===scope||query.create===scope))return
+ const {legacy,...params}=query
+ return pageEditorLink('builders',params,'builders:主視覺標題')
+}
 export function searchResultLink(result,query={}){
  const term=typeof query.q==='string'?query.q.trim():''
  const articleSection=result.item?.articleSection||(result.page.id==='knowledge'&&result.block?.id==='knowledge:文章管理'&&!result.item&&legacyKnowledgeSection('knowledge:'+term))
@@ -121,7 +127,7 @@ export function withValue(body,path,value){
 }
 const groups={
  'data-franchise':{FRANCHISE_FORM_URL:'主視覺',FRANCHISE_OFFICIAL_FORM_URL:'主視覺',FRANCHISE_BROCHURE_URL:'加盟資料下載',franchiseAdvantages:'品牌優勢',franchiseTestimonials:'加盟夥伴分享',franchiseMarketingStories:'品牌行銷',franchiseQualifications:'加盟資格',franchiseSupportHighlights:'總部支援',franchiseFaqItems:'常見問題'},
- 'data-builders':{BUILDER_APPOINTMENT_HASH:'聯繫預約',builderPartners:'合作夥伴'},
+ 'data-builders':{BUILDER_APPOINTMENT_HASH:'聯繫預約'},
  'data-aboutUs':{brandHistory:'品牌沿革',brandValues:'品牌理念',brandIdentities:'品牌識別'},
  'data-brandAdvantage':{brandFamilies:'家庭情境',brandBenefits:'品牌優勢',brandAdvantageFaqGroups:'常見問題'},
  'data-service':{serviceSteps:'服務流程',faqGroups:'常見問題'},
@@ -136,7 +142,6 @@ const groups={
 }
 const order={
  home:homeResources.map(id=>resourceGuide(id).tabTitle),
- builders:['主視覺','品牌介紹','建商實力','三大服務','售後服務','合作夥伴','聯繫預約'],
  franchise:['主視覺','加盟夥伴分享','品牌介紹','品牌優勢','加盟邀請','品牌行銷','流程說明','加盟資格','總部支援','常見問題','加盟資料下載','最新消息'],
  about:['品牌沿革','品牌理念','品牌識別'],
  inspiration:['主視覺標題','麵包屑編輯設定','案例管理','頁面共用設定'],
