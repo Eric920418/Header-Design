@@ -3,6 +3,7 @@ import {readFile} from 'node:fs/promises'
 import {resourceGuide,resourceSearchText,editingSchema,homeResources} from '../shared/cms/presentation.mjs'
 import {HOME_PROJECT_ID,HOME_SERVICES_ID,homeProjectHeading} from '../shared/cms/home-headings.mjs'
 import {pageBlocks,pageEditors} from '../shared/cms/page-editors.mjs'
+import copyFields from '../shared/cms/presentation-copy.json' with {type:'json'}
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
 const aliases=new Set(['data-news','data-latestArticles','data-activityArticles','data-mediaVideos','data-kitchenGuides','data-kitchenGuideDetails'])
 const docs=seed.filter(d=>!aliases.has(d.id)),ids=new Set(docs.map(d=>d.id))
@@ -28,6 +29,17 @@ assert.equal(galleryCopy.label,'標題與按鈕設定')
 assert.deepEqual(['text2','text3','field4','text5'].map(key=>galleryCopy.fields[key].label),['區塊英文標籤','區塊中文主標題','前往頁面','按鈕文字'])
 assert.equal(Object.keys(galleryCopy.fields)[Object.keys(galleryCopy.fields).indexOf('text5')+1],'field4')
 const blocks=pageEditors.flatMap(page=>pageBlocks(page,seed))
+for(const field of blocks.flatMap(block=>block.fields)){
+ if(!/替代文字/.test(copyFields[field.documentId]?.[field.path]?.label||''))continue
+ assert(field.schema.imageReading&&field.schema.advanced,field.documentId+':'+field.path)
+ assert.match(field.label,/朗讀文字/)
+ assert.match(field.searchTerms,/圖片說明/)
+}
+const pavilionFields=blocks.find(block=>block.id==='builders:聯繫與參觀預約').fields.find(f=>f.path==='brandPavilions').schema.item.fields
+assert(pavilionFields.alt.imageReading)
+assert.equal(pavilionFields.alt.label,'圖片朗讀文字')
+assert(!pavilionFields.address.imageReading)
+assert(blocks.find(block=>block.id==='builders:聯繫與參觀預約').fields.some(f=>f.path==='copy.text39'&&!f.schema.advanced),'Visible booking copy stays in the main form')
 const heroFields=blocks.find(block=>block.id==='home:主視覺輪播').fields.filter(f=>f.path.startsWith('copy.')&&!f.schema.advanced)
 assert.deepEqual(heroFields.slice(0,6).map(f=>f.path),['copy.text6','copy.text7','copy.text8','copy.text9','copy.field5','copy.text10'])
 assert(heroFields[4].searchTerms.includes('圓形按鈕前往頁面'))
@@ -98,6 +110,7 @@ assert.equal(brands.item.fields.logoClass.enum.length,brands.item.fields.logoCla
 assert.equal(brands.item.fields.captionTop.label,'品牌標誌與介紹置於圖片上方')
 assert(brands.item.fields.captionTop.help.includes('569px'))
 assert.equal(brands.item.fields.alt.label,'品牌名稱')
+assert(!brands.item.fields.alt.imageReading)
 assert.equal(brands.item.fields.route.label,'前往頁面')
 assert(brands.item.fields.route.autoDestination)
 for(const brand of seed.find(d=>d.id==='view-components-home-HomeServices').data.services)assert(brands.item.fields.logoClass.enum.includes(brand.logoClass),'Existing brand sizes must retain their original values')

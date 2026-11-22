@@ -100,7 +100,7 @@ export function newsBreadcrumbPosition(block,bodies,presentation={}){
 export function pagePositionContent(block,bodies,presentation={},selected,focusedPath=''){
  const page=block?.id?.split(':')[0],definition=pagePositions[page],base=positionContent(block,bodies,selected)
  const fields=(block?.fields||[]).map(f=>({...f,value:pageFieldValue(bodies,f)}))
- const texts=fields.filter(f=>typeof f.value==='string'&&!f.schema.format&&!f.schema.enum&&!f.schema.advanced&&!/圖片說明|替代文字/.test(f.label)).map(f=>({path:f.path,label:f.label,value:f.value}))
+ const texts=fields.filter(f=>typeof f.value==='string'&&!f.schema.format&&!f.schema.enum&&!f.schema.advanced).map(f=>({path:f.path,label:f.label,value:f.value}))
  const arrays=fields.filter(f=>f.schema.type==='array').flatMap(f=>(f.value||[]).filter(v=>!f.schema.rowFilter||valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value).slice(0,3).map((v,i)=>({title:itemCaption(v,i,f.schema),image:itemThumbnail(v,f.schema,presentation.rows?.[f.documentId]?.[v?.id]),value:v})))
  const sample=/全部消息列表|最近文章推薦|最新加盟資訊/.test(block?.name)?presentation.samples||[]:[]
  const fixedAction=block?.fixedAction
@@ -124,6 +124,6 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const item=selected?.value,paragraphs=item?.intro?.paragraphs||item?.paragraphs||item?.description||item?.summary?.excerpt||item?.detail||item?.quote||item?.summary||''
  const paragraphsList=Array.isArray(paragraphs)?paragraphs.filter(p=>typeof p==='string'):typeof paragraphs==='string'?[paragraphs]:[]
  const questions=items.flatMap(i=>i.value?.items||i.value?.questions||i.value?.question&&[i.value]||[]).slice(0,3)
- const details=fields.filter(f=>f.schema.fields&&!['cmsSettings','seo'].includes(f.path)).flatMap(f=>Object.entries(f.schema.fields).filter(([,s])=>!s.hidden&&!s.format&&s.type==='string').map(([key,s])=>({label:s.label||f.label,value:f.value?.[key]}))).filter(f=>typeof f.value==='string'&&f.value)
+ const details=fields.filter(f=>f.schema.fields&&!['cmsSettings','seo'].includes(f.path)).flatMap(f=>Object.entries(f.schema.fields).filter(([,s])=>!s.hidden&&!s.format&&!s.imageReading&&s.type==='string').map(([key,s])=>({label:s.label||f.label,value:f.value?.[key]}))).filter(f=>typeof f.value==='string'&&f.value)
  return{...base,image,mappedImage,fixedAction,destination,auxiliary,displaySettings,texts,items,media,heading,paragraphs:paragraphsList,questions,details,contextImage,thumbnail:image||contextImage,heroImage:contextImage,sections:definition?.sections||[],buttons,text:texts.filter(f=>!buttons.includes(f)),bodyText:texts.filter(f=>!heading.includes(f)&&!buttons.includes(f)),description:base.description||paragraphsList.join(' '),kind:block?.kind||'text'}
 }

@@ -2,7 +2,7 @@ import copyFields from './presentation-copy.json' with {type:'json'}
 import { homeHeroSchema, HOME_HERO_ID } from './hero-media.mjs'
 import { homeGallerySchema, HOME_GALLERY_ID } from './gallery-cases.mjs'
 import {positionField,readingField} from './positions.mjs'
-import {homeHeadingSchema} from './home-headings.mjs'
+import {homeHeadingSchema,HOME_SERVICES_ID} from './home-headings.mjs'
 import {pageDestinationSchema} from './page-destinations.mjs'
 
 // Presentation only: resource IDs, stored schemas and website content stay intact.
@@ -127,6 +127,7 @@ const copyButtonText={
 }
 const fileUrlFields=new Set(['site-visuals:brandVideoSrc','site-visuals:serviceVideoSrc','data-franchise:FRANCHISE_BROCHURE_URL'])
 const genericDestinationLabel=/^(?:前往頁面|按鈕連結|前往頁面連結|卡片連結|輪播連結|案例連結|連結網址)$/
+export const imageReadingHelp='供螢幕閱讀器朗讀，圖片無法顯示時也可用來辨識圖片。'
 
 export function placeDestinations(fields, keyOf, afterOf) {
  const ordered=[...fields]
@@ -232,7 +233,12 @@ export function editingSchema(schema,resourceId,path=''){
  if(path==='sitemapGroups.*.links.*')result.itemLabels=['連結文字','前往頁面']
  if(path.split('.').at(-1)==='imageLayout'||path.split('.').at(-1)==='logoClass'&&!(resourceId==='view-components-home-HomeServices'&&path==='services.*.logoClass'))result.hidden=true
  if(['id','articleId','slug','code'].includes(path.split('.').at(-1))&&schema.format!=='youtube')result.hidden=true
- if(['alt','imageAlt'].includes(path.split('.').at(-1))&&!(resourceId==='view-components-home-HomeServices'&&path==='services.*.alt'))result.label='圖片說明'
+ const imageAlt=['alt','imageAlt'].includes(path.split('.').at(-1))&&!(resourceId===HOME_SERVICES_ID&&path==='services.*.alt')
+ if(imageAlt||/替代文字/.test(copyFields[resourceId]?.[path]?.label||'')){
+  const label=imageAlt?'圖片朗讀文字':result.label.replace(/^.*?・/,'').replace(/替代文字|說明/,'朗讀文字')
+  result.positionLegacyLabel ||= result.label
+  Object.assign(result,readingField('圖片',label),{imageReading:true})
+ }
  if(schema.format==='youtube')result.label='YouTube 影片連結'
  if(resourceId==='site-visuals'&&path==='brandVideoId')Object.assign(result,{label:'YouTube 影片連結',advanced:true,disclosureTitle:'首頁舊版影片（保留資料）',help:'目前首頁使用影片檔案；此欄保留舊設定，不會取代目前播放的影片。'})
  if(result.type==='string'&&!result.format&&/名稱|標題|英文標籤|按鈕|日期/.test(result.label))result.singleLine=true

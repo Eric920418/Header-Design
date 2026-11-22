@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import {imageReadingHelp} from '~/shared/cms/presentation.mjs'
+
 const props=defineProps<{modelValue:any;schema:any;label?:string;path?:string;documentId?:string}>()
 const emit=defineEmits<{'update:modelValue':[value:any]}>()
 const picker=ref(false),title=computed(()=>props.schema.label||'內容項目'),hintId=useId(),errors=inject<any>('cms-field-errors',ref([]))
 const fieldError=computed(()=>errors.value?.find((e:any)=>e.documentId===props.documentId&&e.path===(props.path||'').replace(/^\./,''))?.message)
 const fields=computed(()=>Object.entries(props.schema.fields||{}).filter(([,s]:any)=>!Object.hasOwn(s,'fixed')&&!s.hidden) as [string,any][])
+const contentFields=computed(()=>fields.value.filter(([,field])=>!field.imageReading))
+const imageReadingFields=computed(()=>fields.value.filter(([,field])=>field.imageReading))
 const asset=computed(()=>props.schema.format==='media'||['pdfUrl','brochureUrl','FRANCHISE_BROCHURE_URL'].includes(props.label||''))
 const pdf=computed(()=>['pdfUrl','brochureUrl'].includes(props.label||'')||/PDF|型錄檔案/.test(title.value))
 function set(key:string,value:any){
@@ -15,7 +19,23 @@ function set(key:string,value:any){
 <template>
  <div class="cms-field-node" :data-cms-document="documentId" :data-cms-path="path">
  <AdminStoreRegions v-if="schema.editor==='store-regions'" :model-value="modelValue" @update:model-value="emit('update:modelValue',$event)" />
- <fieldset v-else-if="schema.type==='object'" class="cms-fields"><legend v-if="label">{{ title }}</legend><AdminStoreLocation v-if="schema.editor==='store-location'" :model-value="modelValue" @update:model-value="emit('update:modelValue',$event)" /><template v-for="[key,field] in fields" :key="key"><details v-if="key==='cmsSettings'||key==='seo'" class="cms-secondary"><summary>顯示與搜尋結果設定</summary><AdminFields :model-value="modelValue?.[key]" :schema="field" :document-id="documentId" :label="key" :path="`${path?path+'.':''}${key}`" @update:model-value="set(key,$event)" /></details><AdminFields v-else :model-value="modelValue?.[key]" :schema="field" :document-id="documentId" :label="key" :path="`${path?path+'.':''}${key}`" @update:model-value="set(key,$event)" /></template><AdminHeroImages v-if="schema.editor==='hero-images'" :model-value="modelValue" :style="{'--hero-pan-x': Number(path?.split('.').at(-1)) % 2 === 1 ? '4%' : '-4%'}" @update:model-value="emit('update:modelValue',$event)" /></fieldset>
+ <fieldset v-else-if="schema.type==='object'" class="cms-fields">
+  <legend v-if="label">{{ title }}</legend>
+  <AdminStoreLocation v-if="schema.editor==='store-location'" :model-value="modelValue" @update:model-value="emit('update:modelValue',$event)" />
+  <template v-for="[key,field] in contentFields" :key="key">
+   <details v-if="key==='cmsSettings'||key==='seo'" class="cms-secondary">
+    <summary>顯示與搜尋結果設定</summary>
+    <AdminFields :model-value="modelValue?.[key]" :schema="field" :document-id="documentId" :label="key" :path="`${path?path+'.':''}${key}`" @update:model-value="set(key,$event)" />
+   </details>
+   <AdminFields v-else :model-value="modelValue?.[key]" :schema="field" :document-id="documentId" :label="key" :path="`${path?path+'.':''}${key}`" @update:model-value="set(key,$event)" />
+  </template>
+  <AdminHeroImages v-if="schema.editor==='hero-images'" :model-value="modelValue" :style="{'--hero-pan-x': Number(path?.split('.').at(-1)) % 2 === 1 ? '4%' : '-4%'}" @update:model-value="emit('update:modelValue',$event)" />
+  <details v-if="imageReadingFields.length" class="cms-secondary cms-image-reading">
+   <summary>圖片朗讀設定</summary>
+   <p class="cms-field-help">{{ imageReadingHelp }}</p>
+   <AdminFields v-for="[key,field] in imageReadingFields" :key="key" :model-value="modelValue?.[key]" :schema="field" :document-id="documentId" :label="key" :path="`${path?path+'.':''}${key}`" @update:model-value="set(key,$event)" />
+  </details>
+ </fieldset>
  <AdminHomeCases v-else-if="schema.editor==='home-cases'" :model-value="modelValue" :schema="schema" :document-id="documentId" :path="path" :label="title" :invalid="!!fieldError" @update:model-value="emit('update:modelValue',$event)" />
  <AdminItems v-else-if="schema.type==='array'" :model-value="modelValue||[]" :schema="schema" :document-id="documentId" :path="path" @update:model-value="emit('update:modelValue',$event)" />
  <div v-else-if="schema.enum" class="cms-field"><label :for="hintId+'-select'">{{ title }}</label><select :id="hintId+'-select'" :value="modelValue" :disabled="schema.readOnly" :aria-describedby="hintId" :aria-invalid="!!fieldError" @change="emit('update:modelValue',($event.target as HTMLSelectElement).value)"><option v-if="schema.optionLabels&&!schema.enum.includes(modelValue)" :value="modelValue">目前自訂尺寸（保留）</option><option v-for="(v,index) in schema.enum" :key="v" :value="v">{{ schema.optionLabels?.[index]||({latest:'最新消息',activities:'優惠活動',video:'影片'} as any)[v]||v }}</option></select></div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {valueAt,withValue,pageFieldValue} from '~/shared/cms/page-editors.mjs'
 import {cmsDate} from '~/shared/cms/workflow.mjs'
-import {resourceGuide} from '~/shared/cms/presentation.mjs'
+import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
 import {workbenchBlocks,pagePositionContent,itemWebsitePath} from '~/shared/cms/workbench.mjs'
 import {Info} from 'lucide-vue-next'
@@ -20,12 +20,12 @@ const collections=computed(()=>active.value?.fields.filter((f:any)=>f.schema.typ
 const caseManagement=computed(()=>active.value?.preview==='inspiration-cases'),sourceOpen=ref(false)
 const commonFields=computed(()=>active.value?.fields.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced)||[])
 const settingGroups=computed(()=>{
- const groups=new Map<string,{title:string;readingGroup?:string;fields:any[]}>()
+ const groups=new Map<string,{title:string;readingGroup?:string;imageReading?:boolean;fields:any[]}>()
  for(const field of active.value?.fields||[]){
   if(!field.schema.advanced)continue
-  const readingGroup=field.schema.readingGroup
+  const {readingGroup,imageReading}=field.schema
   const key=readingGroup||field.documentId+':'+field.path
-  if(!groups.has(key))groups.set(key,{title:readingGroup?readingGroup+'的朗讀文字':field.schema.disclosureTitle||field.label,readingGroup,fields:[]})
+  if(!groups.has(key))groups.set(key,{title:imageReading?'圖片朗讀設定':readingGroup?readingGroup+'的朗讀文字':field.schema.disclosureTitle||field.label,readingGroup,imageReading,fields:[]})
   groups.get(key)!.fields.push(field)
  }
  return Array.from(groups.values())
@@ -131,9 +131,10 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
    <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
    <fieldset v-else-if="!collections.length" :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset>
    <p v-if="active?.help" class="cms-field-help cms-position-help">{{ active.help }}</p>
-   <details v-for="group in settingGroups" :key="active.id+group.title" :open="!collections.length&&!commonFields.length" class="cms-secondary cms-purpose-settings">
+   <details v-for="group in settingGroups" :key="active.id+group.title" :open="!group.imageReading&&!collections.length&&!commonFields.length" class="cms-secondary cms-purpose-settings">
     <summary>{{ group.title }}</summary>
-    <p v-if="group.readingGroup" class="cms-field-help">訪客使用螢幕閱讀器瀏覽{{ group.readingGroup }}時，會聽到這裡設定的文字。平常可沿用原文。</p>
+    <p v-if="group.imageReading" class="cms-field-help">{{ imageReadingHelp }}</p>
+    <p v-else-if="group.readingGroup" class="cms-field-help">訪客使用螢幕閱讀器瀏覽{{ group.readingGroup }}時，會聽到這裡設定的文字。平常可沿用原文。</p>
     <fieldset :disabled="busy" class="cms-edit-form"><div v-for="f in group.fields" :key="f.documentId+':'+f.path"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset>
    </details>
    <details class="cms-secondary"><summary>影響頁面（{{ impacts.length }}）</summary><ul v-if="impacts.length"><li v-for="i in impacts" :key="i.href+i.label"><a :href="i.href" target="_blank" rel="noopener noreferrer">{{ i.label }} ↗</a></li></ul><p v-else class="cms-field-help">這些設定目前沒有官網顯示位置。</p></details>

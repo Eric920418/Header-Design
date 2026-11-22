@@ -137,7 +137,9 @@ for(const brand of ['sakura','svago','teka']){
 const faqBodies=JSON.stringify(previewBodies),faqContent=pagePositionContent(franchise.find(b=>b.name==='加盟常見問題'),previewBodies,{}, {caption:'如何申請',image:'',value:{question:'如何申請？',answer:'先填表'}})
 assert.equal(faqContent.questions[0].answer,'先填表');assert.equal(faqContent.image,'');assert(faqContent.contextImage,'Text-only positions retain the real page context without claiming a borrowed item photo')
 assert.equal(JSON.stringify(previewBodies),faqBodies)
-assert(builderScene.heading.some(f=>f.value==='目前輸入的建商標題'));assert(!builderScene.bodyText.some(f=>/圖片說明/.test(f.label)))
+assert(builderScene.heading.some(f=>f.value==='目前輸入的建商標題'))
+assert(!builderScene.bodyText.some(f=>f.path==='copy.field7'))
+assert(builderScene.auxiliary.some(f=>f.path==='copy.field7'&&f.value===previewBodies['view-pages-builders-index'].copy.field7))
 for(const category of ['latest','activities','video']){
  const id='news-'+category,blocks=workbenchBlocks(id,pageBlocks(pageEditors.find(p=>p.id===id),docs))
  const articleBlock=blocks[1]
