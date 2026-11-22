@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {valueAt,withValue,pageFieldValue} from '~/shared/cms/page-editors.mjs'
+import {valueAt,withValue,pageFieldValue,inspirationSharedGroups} from '~/shared/cms/page-editors.mjs'
 import {cmsDate} from '~/shared/cms/workflow.mjs'
 import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
@@ -15,32 +15,60 @@ provide('cms-select-block',(name:string)=>{const block=blocks.value.find(b=>b.na
 const active=computed(()=>blocks.value.find(b=>b.aliases.includes(route.query.block))||blocks.value[0])
 const workbench={focused:ref(''),editing:ref(''),selection:ref<any>(null),rows:ref<Record<string,any>>({}),baseline,documents:docs,metadata:computed(()=>pageData.value?.rowPresentation||{}),busy,returnFocus:()=>{},position:()=>{positionOpen.value=true},select:(edit:boolean)=>{positionOpen.value=!edit&&window.innerWidth<1024}}
 provide('cms-workbench',workbench)
+const focusedGroup=ref('')
+const sharedInspiration=computed(()=>active.value?.id==='inspiration:頁面共用設定')
+const positionBlock=computed(()=>{
+ const block=active.value
+ const detail=pageData.value?.positionPresentation?.detailCase?.route
+ if(block?.preview==='inspiration-breadcrumb'&&focusedGroup.value==='breadcrumb-detail'&&detail)
+  return {...block,previewPage:detail+'#design-inspiration-breadcrumb'}
+ if(!sharedInspiration.value)return block
+ const previous=typeof route.query.block==='string'?route.query.block.split(':').at(-1):''
+ const legacyGroup=previous==='整頁共用文字'?'案例內頁文字':previous
+ const selectedGroup=focusedGroup.value||legacyGroup
+ if(selectedGroup==='顯示與搜尋設定')return {...block,preview:'inspiration-page',href:'/design-inspiration'}
+ const target=inspirationSharedGroups[selectedGroup as keyof typeof inspirationSharedGroups]
+ if(!target)return block
+ return {...block,preview:target.preview,href:target.anchor?'/design-inspiration#'+target.anchor:detail||block.href}
+})
+watch(()=>route.query.block,()=>{focusedGroup.value=''})
+
 provide('cms-media-context',computed(()=>pageMedia(docs.value,bodies.value,blocks.value)))
 const collections=computed(()=>active.value?.fields.filter((f:any)=>f.schema.type==='array')||[])
-const caseManagement=computed(()=>active.value?.preview==='inspiration-cases'),sourceOpen=ref(false)
+const caseManagement=computed(()=>active.value?.preview==='inspiration-cases')
 const commonFields=computed(()=>active.value?.fields.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced)||[])
+const inspirationFormGroups=computed(()=>Object.entries(inspirationSharedGroups).map(([title,group])=>({
+ title,help:'help' in group?group.help:'',fields:commonFields.value.filter((f:any)=>f.formGroup===title),
+})).filter(group=>group.fields.length))
 const settingGroups=computed(()=>{
- const groups=new Map<string,{title:string;readingGroup?:string;imageReading?:boolean;fields:any[]}>()
+ const groups=new Map<string,{title:string;readingGroup?:string;imageReading?:boolean;formGroup?:string;fields:any[]}>()
  for(const field of active.value?.fields||[]){
   if(!field.schema.advanced)continue
   const {readingGroup,imageReading}=field.schema
   const key=readingGroup||field.documentId+':'+field.path
-  if(!groups.has(key))groups.set(key,{title:imageReading?'圖片朗讀設定':readingGroup?readingGroup+'的朗讀文字':field.schema.disclosureTitle||field.label,readingGroup,imageReading,fields:[]})
+  if(!groups.has(key))groups.set(key,{title:imageReading?'圖片朗讀設定':readingGroup?readingGroup+'的朗讀文字':field.schema.disclosureTitle||field.label,readingGroup,imageReading,formGroup:field.formGroup,fields:[]})
   groups.get(key)!.fields.push(field)
  }
  return Array.from(groups.values())
 })
 const positionPresentation=computed(()=>({...pageData.value?.positionPresentation,rows:pageData.value?.rowPresentation}))
 function blockPicture(block:any){return pagePositionContent(block,bodies.value,positionPresentation.value).thumbnail}
-function trackField(event:FocusEvent){focusedField.value=(event.target as HTMLElement)?.closest('[data-cms-path]')?.getAttribute('data-cms-path')||''}
-watch(()=>active.value?.id,()=>{workbench.focused.value='';workbench.editing.value='';workbench.selection.value=null;focusedField.value='';sourceOpen.value=route.query.list==='catalog-cases:items'},{flush:'sync'})
-function toggleSource(event:Event){sourceOpen.value=(event.target as HTMLDetailsElement).open;if(!sourceOpen.value&&workbench.focused.value.startsWith('catalog-cases:')){workbench.focused.value='';workbench.editing.value='';workbench.selection.value=null}}
+
+function trackField(event:FocusEvent){
+ const target=event.target as HTMLElement
+ focusedField.value=target.closest('[data-cms-path]')?.getAttribute('data-cms-path')||''
+ const group=target.closest<HTMLElement>('[data-inspiration-group]')?.dataset.inspirationGroup
+ if(group)focusedGroup.value=group
+ if(active.value?.preview==='inspiration-breadcrumb'&&focusedField.value.startsWith('copy.breadcrumb'))
+  focusedGroup.value=focusedField.value==='copy.breadcrumbDetail'?'breadcrumb-detail':''
+}
+watch(()=>active.value?.id,()=>{workbench.focused.value='';workbench.editing.value='';workbench.selection.value=null;focusedField.value=''},{flush:'sync'})
 function closeItem(){workbench.editing.value='';workbench.returnFocus()}
 function preparePreview(){previewPath.value=props.id==='home'||locationHref.value===active.value?.href?'':locationHref.value;showPreview()}
 const title=computed(()=>namedPages.value?.find(p=>p.id===props.id)?.title||pageData.value?.title||(props.id==='home'?'首頁':'修改頁面'))
 const modified=computed(()=>blocks.value.filter(b=>b.fields.some((f:any)=>JSON.stringify(pageFieldValue(bodies.value,f))!==JSON.stringify(pageFieldValue(baseline.value,f)))))
 const dirty=computed(()=>modified.value.length>0),pending=computed(()=>hasPageChanges(blocks.value,Object.fromEntries(docs.value.map(d=>[d.id,d.publishedBody])),baseline.value))
-const impactContext=computed(()=>({heroTitlePages:pageData.value?.positionPresentation?.heroTitlePages}))
+const impactContext=computed(()=>({heroTitlePages:pageData.value?.positionPresentation?.heroTitlePages,caseDetailRoute:pageData.value?.positionPresentation?.detailCase?.route}))
 const changeDetails=computed(()=>pageChanges(blocks.value,docs.value,baseline.value,bodies.value,impactContext.value)),changesOpen=ref(false)
 const status=computed(()=>dirty.value?`尚未儲存 · ${changeDetails.value.length} 處修改`:pending.value?'已儲存，官網尚未更新':'官網已更新')
 const shared=computed(()=>changeImpacts(changeDetails.value).filter(i=>i.href.split('#')[0]!==pageData.value?.href.split('#')[0]||/全站|所有官網頁面/.test(i.label)))
@@ -55,8 +83,8 @@ const impacts=computed(()=>{
 const payload=(action:string)=>({action,documents:docs.value.map(d=>({id:d.id,revision:d.revision,body:bodies.value[d.id]}))})
 async function selectBlock(id:string){locationOpen.value=false;await router.replace({query:{...route.query,block:id,legacy:undefined,field:undefined,list:undefined,item:undefined}});await nextTick();formRoot.value?.querySelector<HTMLElement>('.cms-block-title')?.focus({preventScroll:true})}
 function update(f:any,value:any){bodies.value={...bodies.value,[f.documentId]:withValue(bodies.value[f.documentId],f.path,value)}}
-async function load(){error.value='';try{const result=await api('page-editors/'+props.id,{timeout:20000,retry:0});if(!Array.isArray(result?.documents)||!Array.isArray(result?.blocks))throw Error('伺服器未回傳完整頁面內容，請確認連線後重試。');workbench.rows.value={};pageData.value=result;docs.value=result.documents;bodies.value=Object.fromEntries(result.documents.map((d:any)=>[d.id,d.body]));baseline.value=JSON.parse(JSON.stringify(bodies.value));if(route.query.legacy){const source=route.query.legacy==='catalog-cases',b=result.blocks.find((b:any)=>b.fields.some((f:any)=>f.documentId===route.query.legacy));if(b)await router.replace({query:{...route.query,block:b.id,legacy:undefined}});sourceOpen.value=source}}catch(e){error.value=message(e)}}
-async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;const block=blocks.value.find(b=>b.fields.some((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.'))));if(block)await selectBlock(block.id);if(issue.documentId==='catalog-cases')sourceOpen.value=true;await nextTick();await nextTick();const input=formRoot.value?.querySelector<HTMLElement>('[aria-invalid=true]');for(let p=input?.parentElement;p;p=p.parentElement)if(p instanceof HTMLDetailsElement)p.open=true;input?.focus()}
+async function load(){error.value='';try{const result=await api('page-editors/'+props.id,{timeout:20000,retry:0});if(!Array.isArray(result?.documents)||!Array.isArray(result?.blocks))throw Error('伺服器未回傳完整頁面內容，請確認連線後重試。');workbench.rows.value={};pageData.value=result;docs.value=result.documents;bodies.value=Object.fromEntries(result.documents.map((d:any)=>[d.id,d.body]));baseline.value=JSON.parse(JSON.stringify(bodies.value));if(route.query.legacy){const b=result.blocks.find((b:any)=>b.fields.some((f:any)=>f.documentId===route.query.legacy));if(b)await router.replace({query:{...route.query,block:b.id,legacy:undefined}})}}catch(e){error.value=message(e)}}
+async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;const block=blocks.value.find(b=>b.fields.some((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.'))));if(block)await selectBlock(block.id);await nextTick();await nextTick();const input=formRoot.value?.querySelector<HTMLElement>('[aria-invalid=true]');for(let p=input?.parentElement;p;p=p.parentElement)if(p instanceof HTMLDetailsElement)p.open=true;input?.focus()}
 function reload(){if(!dirty.value||window.confirm('重新載入會捨棄本頁尚未儲存的修改，確定繼續？'))void load()}
 
 const previewOpen=ref(false),previewReady=ref(false),previewResult=ref<any>(null),previewError=ref(''),previewState=ref(''),mobile=ref(false),previewPath=ref(''),initialToken=ref(''),previewFrame=ref<HTMLIFrameElement>(),previewSize=ref({width:480,height:640})
@@ -68,14 +96,14 @@ const choices=computed(()=>docs.value.flatMap(d=>{
  const b=bodies.value[d.id],items=d.id==='data-kitchenSeries'?b?.KITCHEN_SERIES_PAGES:d.id==='data-storeCases'?b?.storeCases:['custom-cases','knowledge-articles','news-articles'].includes(d.id)?b?.items:[]
  return(items||[]).filter((i:any)=>i.enabled!==false&&(!pageData.value?.category||i.summary?.category===pageData.value.category)).map((i:any)=>({label:i.summary?.title||i.title||i.name||i.slug,path:itemWebsitePath(d.id,i)}))
 }))
-const locationHref=computed(()=>{const selected=workbench.selection.value,item=selected?.value;if(item?.enabled===false||item?.available===false)return pageData.value?.href||'/';return active.value?.previewPage||(active.value?.preview==='inspiration-detail'?pageData.value?.positionPresentation?.detailCase?.route:'')||(props.id==='home'?'':selected?.href||itemWebsitePath(selected?.documentId,item))||active.value?.href||pageData.value?.href||'/'})
+const locationHref=computed(()=>{const selected=workbench.selection.value,item=selected?.value;if(item?.enabled===false||item?.available===false)return pageData.value?.href||'/';return positionBlock.value?.previewPage||(props.id==='home'?'':selected?.href||itemWebsitePath(selected?.documentId,item))||positionBlock.value?.href||pageData.value?.href||'/'})
 const publicLocation=computed(()=>{
  const selected=workbench.selection.value
  if(props.id!=='home'&&selected&&(itemWebsitePath(selected.documentId,selected.value)||selected.href)){
   const published=itemPublication(docs.value.find(d=>d.id===selected.documentId),selected.path,selected.value,selected.index)
   return published.visible?itemWebsitePath(selected.documentId,published.item)||selected.href:''
  }
- return activeDocs.value.length&&activeDocs.value.every(d=>d.publishedBody)?active.value?.previewPage||active.value?.href||pageData.value?.href||'/':''
+ return activeDocs.value.length&&activeDocs.value.every(d=>d.publishedBody)?positionBlock.value?.previewPage||positionBlock.value?.href||pageData.value?.href||'/':''
 })
 watch(previewFrame,frame=>{observer?.disconnect();if(frame?.parentElement){observer=new ResizeObserver(([entry])=>{if(entry)previewSize.value={width:entry.contentRect.width,height:entry.contentRect.height}});observer.observe(frame.parentElement)}},{flush:'post'})
 function failPreview(reason:string){clearTimeout(previewTimer);previewReady.value=false;needsReload=true;previewError.value=reason;previewState.value='目前輸入尚未套用，可重試或返回修改'}
@@ -125,13 +153,20 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
   <nav class="cms-block-nav cms-panel" aria-label="官網區塊"><h2>選擇{{ title==='首頁'?'首頁':'官網' }}區塊</h2><button v-for="b in blocks.filter(b=>!b.secondary)" :key="b.id" type="button" :aria-current="active?.id===b.id?'location':undefined" @click="selectBlock(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span><strong>{{ b.name }}</strong><small>{{ b.hint }}</small></span><i v-if="modified.some(m=>m.id===b.id)" aria-label="尚未儲存">●</i></button><details v-if="blocks.some(b=>b.secondary)"><summary>其他設定</summary><button v-for="b in blocks.filter(b=>b.secondary)" :key="b.id" type="button" @click="selectBlock(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span>{{ b.name }}</span></button></details></nav>
   <div class="cms-page-form cms-panel">
    <div class="cms-block-heading"><div><h2 class="cms-block-title" tabindex="-1">{{ caseManagement?'自行建置案例':active?.name }}</h2><p v-if="!caseManagement" class="cms-field-help">{{ active?.hint }}<template v-if="collections.length">；選內容看位置，按「編輯」修改。</template></p></div><button type="button" class="cms-button cms-position-toggle" @click="positionOpen=true">看位置</button></div>
-   <p v-if="caseManagement" class="cms-case-scope"><Info :size="16" aria-hidden="true" /><span>只管理自行新增的案例。門市案例請至<NuxtLink to="/admin/content?section=service&sitePage=stores">門市與服務</NuxtLink>修改。</span></p>
-   <fieldset :disabled="busy" class="cms-edit-form cms-collection-fields"><template v-for="f in collections" :key="f.documentId+':'+f.path"><details v-if="caseManagement&&f.documentId==='catalog-cases'" class="cms-secondary cms-imported-cases" :open="sourceOpen" @toggle="toggleSource"><summary>匯入的案例（{{ bodies[f.documentId]?.items?.length||0 }} 筆）</summary><p class="cms-field-help">管理原系統提供的案例顯示與順序；名稱和圖片由原系統提供。</p><div v-if="sourceOpen" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></details><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
+   <p v-if="caseManagement" class="cms-case-scope"><Info :size="16" aria-hidden="true" /><span>這裡管理自行新增的案例。串接案例由原系統管理。門市案例請至<NuxtLink to="/admin/content?section=service&sitePage=stores">門市與服務</NuxtLink>修改。</span></p>
+   <fieldset :disabled="busy" class="cms-edit-form cms-collection-fields"><template v-for="f in collections" :key="f.documentId+':'+f.path"><div class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
    <p v-if="caseManagement" class="cms-field-help cms-case-order-scope">官網先顯示門市案例，再依這裡的順序顯示自建案例，最後顯示匯入案例。</p>
    <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
+   <fieldset v-else-if="sharedInspiration" :disabled="busy" class="cms-edit-form">
+    <fieldset v-for="group in inspirationFormGroups" :key="group.title" :data-inspiration-group="group.title" class="cms-inspiration-form-group">
+     <legend>{{ group.title }}</legend>
+     <p v-if="group.help" class="cms-field-help">{{ group.help }}</p>
+     <AdminFields v-for="field in group.fields" :key="field.documentId+':'+field.path" :model-value="pageFieldValue(bodies,field)" :schema="field.schema" :document-id="field.documentId" :path="field.path" @update:model-value="update(field,$event)" />
+    </fieldset>
+   </fieldset>
    <fieldset v-else-if="!collections.length" :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset>
    <p v-if="active?.help" class="cms-field-help cms-position-help">{{ active.help }}</p>
-   <details v-for="group in settingGroups" :key="active.id+group.title" :open="!group.imageReading&&!collections.length&&!commonFields.length" class="cms-secondary cms-purpose-settings">
+   <details v-for="group in settingGroups" :key="active.id+group.title" :open="!group.imageReading&&!collections.length&&!commonFields.length" class="cms-secondary cms-purpose-settings" :data-inspiration-group="group.formGroup">
     <summary>{{ group.title }}</summary>
     <p v-if="group.imageReading" class="cms-field-help">{{ imageReadingHelp }}</p>
     <p v-else-if="group.readingGroup" class="cms-field-help">訪客使用螢幕閱讀器瀏覽{{ group.readingGroup }}時，會聽到這裡設定的文字。平常可沿用原文。</p>
@@ -141,12 +176,12 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
    <details v-if="session?.role==='admin'" class="cms-secondary"><summary>其他操作</summary><button type="button" class="cms-button" :disabled="busy||dirty||!docs.some(d=>d.publishedId)" @click="unpublish">暫停本頁內容</button></details>
    <details class="cms-secondary"><summary>過去的修改</summary><section v-for="d in activeDocs" :key="d.id"><h3>{{ resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0] }}</h3><div v-for="v in d.versions" :key="v.id" class="cms-history-row"><span>{{ cmsDate(v.createdAt) }} · {{ v.actor||'初始內容' }}</span><button v-if="session?.role==='admin'" type="button" class="cms-button" :disabled="busy||dirty" @click="restore(d,v.id)">取回這份內容</button></div></section></details>
   </div>
-  <aside class="cms-inspector cms-panel" :class="{'is-editing':!!workbench.editing.value}" aria-label="位置示意與編輯"><AdminPositionPreview v-if="!workbench.editing.value" :block="active" :bodies="bodies" :selected="workbench.selection.value" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /><div id="cms-item-editor" /></aside>
+  <aside class="cms-inspector cms-panel" :class="{'is-editing':!!workbench.editing.value}" aria-label="位置示意與編輯"><AdminPositionPreview v-if="!workbench.editing.value" :block="positionBlock" :bodies="bodies" :selected="workbench.selection.value" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /><div id="cms-item-editor" /></aside>
  </div>
  <footer class="cms-savebar" aria-label="目前內容操作"><span class="cms-save-status" role="status">{{ status }} <button v-if="dirty" type="button" class="cms-change-link" @click="changesOpen=true">查看修改</button></span><div class="cms-actions"><button type="button" class="cms-button cms-preview-button" :disabled="busy" @click="preparePreview">預覽效果</button><button type="button" class="cms-button" :class="{'cms-button-gold':dirty}" :disabled="busy||!dirty" @click="requestSave">{{ busy?'處理中…':'儲存草稿' }}</button><button v-if="session?.role==='admin'" type="button" class="cms-button cms-button-gold" :disabled="busy||validating||(!dirty&&!pending)" @click="confirmPublish">{{ validating?'正在確認…':'更新官網' }}</button></div></footer>
  <AdminDialog :open="changesOpen" title="本頁尚未儲存的修改" wide @close="changesOpen=false"><AdminChangeList :changes="changeDetails" /><p v-if="!dirty" role="status">目前沒有尚未儲存的修改。</p></AdminDialog>
  </template>
- <AdminDialog :open="positionOpen" title="官網位置示意" @close="positionOpen=false"><AdminPositionPreview :block="active" :bodies="bodies" :selected="workbench.selection.value" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /></AdminDialog>
+ <AdminDialog :open="positionOpen" title="官網位置示意" @close="positionOpen=false"><AdminPositionPreview :block="positionBlock" :bodies="bodies" :selected="workbench.selection.value" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /></AdminDialog>
  <AdminDialog :open="previewOpen" title="預覽效果" wide class="cms-live-preview" @close="closePreview"><aside v-if="previewOpen" class="cms-effect-panel" aria-label="官網效果"><div class="cms-effect-toolbar"><strong>完整官網效果</strong><button type="button" class="cms-button" @click="mobile=!mobile">{{ mobile?'看桌機':'看手機' }}</button><button type="button" class="cms-button" @click="reloadPreview()">重試</button><button type="button" class="cms-button" @click="closePreview">返回修改</button></div><select v-if="choices.length" v-model="previewPath" aria-label="選擇預覽頁面"><option value="">目前頁面</option><option v-for="p in choices" :key="p.path" :value="p.path">{{ p.label }}</option></select><p class="cms-field-help" role="status">{{ previewState }}</p><p v-if="previewError" class="cms-error" role="alert">{{ previewError }} <a v-if="previewResult&&initialToken" :href="previewUrl" target="_blank" rel="noopener noreferrer" class="cms-button">另開效果畫面 ↗</a></p><div class="cms-effect-viewport" :class="{'cms-effect-mobile':mobile}"><iframe v-if="previewResult" :key="initialToken" ref="previewFrame" :style="frameStyle" :src="previewUrl" title="目前輸入的官網效果" @error="failPreview('預覽載入失敗，請重試；目前輸入仍保留。')" /></div></aside></AdminDialog>
  <AdminDialog :open="locationOpen" title="選擇要修改的位置" @close="locationOpen=false"><nav class="cms-block-nav cms-block-picker" aria-label="選擇官網區塊"><button v-for="b in blocks" :key="b.id" type="button" :aria-current="active?.id===b.id?'location':undefined" @click="selectBlock(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'縮圖'" /><span><strong>{{ b.name }}</strong><small>{{ b.hint }}</small></span></button></nav></AdminDialog>
  <AdminDialog :open="confirming" :title="confirmMode==='unpublish'?'確認暫停本頁內容':confirmMode==='save'?'確認儲存共用內容':'確認要更新到官網的內容'" wide @close="confirming=false"><p>{{ confirmMode==='unpublish'?'這會暫停本頁管理的所有內容。使用共用資料的頁面也可能無法載入。':confirmMode==='save'?'儲存草稿後，官網不會立即改變。':'以下修改會一起更新到官網，請確認項目與修改前後內容。' }}</p><p v-if="confirmMode!=='unpublish'&&confirmation&&!confirmation.current?.length&&!confirmation.saved?.length" class="cms-notice" role="status">已儲存內容與官網相同；確認後只會同步更新狀態，文字與圖片不會改變。</p><section v-if="confirmation?.current?.length"><h3>本次尚未儲存的修改（{{ confirmation.current.length }}）</h3><AdminChangeList :changes="confirmation.current" /></section><section v-if="confirmation?.saved?.length"><h3>其他已儲存、尚未更新的修改（{{ confirmation.saved.length }}）</h3><AdminChangeList :changes="confirmation.saved" /></section><details v-if="confirmation?.impacts?.length" open><summary>這些內容的官網使用位置</summary><ul><li v-for="i in confirmation.impacts" :key="i.href+i.label">{{ i.label }}</li></ul></details><p v-if="error" class="cms-error" role="alert">{{ error }}</p><div class="cms-actions"><button type="button" class="cms-button" :disabled="busy" @click="confirming=false">返回修改</button><button type="button" class="cms-button cms-button-gold" :disabled="busy" @click="save(confirmMode)">{{ busy?'處理中…':confirmMode==='unpublish'?'確認暫停':confirmMode==='save'?'確認儲存':'確認更新官網' }}</button></div></AdminDialog>

@@ -70,7 +70,6 @@ async function version(tx,doc,body,actor){
 }
 export async function sourceItems(id,tx){
  const brands={'catalog-sakura':'櫻花','catalog-svago':'SVAGO','catalog-teka':'TEKA'}
- if(id==='catalog-cases')return(await query("SELECT id,name FROM sync.DesignCloudCases WHERE isWebsite=1 ORDER BY name,id",{},tx)).recordset
  if(!brands[id])fail(400,'未知來源')
  return(await query("SELECT CONVERT(nvarchar(80),id) AS id,name FROM sync.BuyKitchenProducts WHERE channel=N'展板' AND Brand=@brand ORDER BY name,id",{brand:brands[id]},tx)).recordset
 }
@@ -88,6 +87,7 @@ function checkIdentities(previous,next,schema,path='內容'){
  else if(schema.type==='array'&&schema.item.type==='object')for(const n of next){const identity=Object.keys(schema.item.fields).find(k=>schema.item.fields[k].identity);const p=identity?previous?.find(x=>x[identity]===n[identity]):undefined;if(p)checkIdentities(p,n,schema.item,path)}
 }
 export async function changeDocument(id,input,user,connection){
+ if(id.trim().toLowerCase()==='catalog-cases')fail(403,'串接案例請回原系統管理。')
  if(!['save','publish','unpublish','restore'].includes(input.action))fail(400,'未知內容操作')
  if(input.action!=='save'&&user.role!=='admin')fail(403,'僅管理員可發布、下架或還原')
  const run=async tx=>{
@@ -103,7 +103,7 @@ export async function changeDocument(id,input,user,connection){
  if(d.id.startsWith('catalog-')){
   if(input.action==='restore')body=await alignSource(id,body,tx)
   const live=await sourceItems(id,tx)
-  if(body.items.length!==live.length||body.items.some(i=>!live.some(o=>o.id===i.id&&o.name===i.name)))fail(400,'來源商品／案例已變更或識別碼與名稱遭修改，請重新載入；僅允許調整上架、排序與推薦')
+  if(body.items.length!==live.length||body.items.some(i=>!live.some(o=>o.id===i.id&&o.name===i.name)))fail(400,'來源商品已變更或識別碼與名稱遭修改，請重新載入；僅允許調整上架、排序與推薦')
  }
 
  if(published){const previous=JSON.parse((await query('SELECT body FROM cms.Versions WHERE id=@id',{id:published},tx)).recordset[0].body);checkIdentities(previous,body,schema)}

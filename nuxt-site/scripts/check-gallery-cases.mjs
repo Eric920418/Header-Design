@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
 import {HOME_GALLERY_ID,homeGallerySchema,customCasesSchema,galleryCaseRoute,galleryCaseLabel,galleryCaseEntry} from '../shared/cms/gallery-cases.mjs'
 import {publicContent} from '../shared/cms/public-content.mjs'
-import {validate} from '../server/cms/content.mjs'
+import {changeDocument,validate} from '../server/cms/content.mjs'
 import {validateGalleryCases} from '../server/cms/case-library.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
@@ -38,13 +38,17 @@ assert.equal(editingSchema(customSchema,'custom-cases').fields.items.item.fields
 const oldCase={...customSeed.schema.fields.items.template,id:'11111111-1111-4111-8111-111111111111'},caseBody={items:[oldCase,{...oldCase,id:'22222222-2222-4222-8222-222222222222',enabled:false},{...oldCase,id:'33333333-3333-4333-8333-333333333333',enabled:true}]},caseSnapshot=JSON.stringify(caseBody)
 validate(caseBody,customSchema);assert.deepEqual(publicContent('custom-cases',caseBody).items.map(i=>i.id),[oldCase.id,caseBody.items[2].id]);assert.equal(JSON.stringify(caseBody),caseSnapshot)
 assert.throws(()=>validate({items:[{...oldCase,enabled:'false'}]},customSchema),e=>e.statusCode===400)
+for(const action of ['save','publish','unpublish','restore'])await assert.rejects(
+ ()=>changeDocument(' CATALOG-CASES ',{action},{role:'admin'}),
+ e=>e.statusCode===403&&/原系統/.test(e.message),
+)
 console.log('PASS legacy cases, schema compatibility, automatic fields, case labels/routes, duplicate/missing/unpublished/wrong-link/media validation (no database writes)')
 
 if(process.env.CMS_GALLERY_DB_CHECK==='1'){
  assert(['127.0.0.1','localhost'].includes(process.env.NUXT_DESIGN_DB_SERVER||'127.0.0.1'))
  assert.equal(process.env.CMS_DB_DATABASE||process.env.NUXT_DESIGN_DB_DATABASE||'SakuraWebsiteDev','SakuraWebsiteDev')
  const {database,query,sql,digest,randomUUID}=await import('../server/cms/database.mjs')
- const {changeDocument,getDocument}=await import('../server/cms/content.mjs')
+ const {getDocument}=await import('../server/cms/content.mjs')
  const {caseLibrary}=await import('../server/cms/case-library.mjs')
  const db=await database(),tx=new sql.Transaction(db)
  const snapshot=async()=>digest(JSON.stringify({docs:(await query('SELECT * FROM cms.Documents ORDER BY id')).recordset,versions:(await query('SELECT * FROM cms.Versions ORDER BY id')).recordset,refs:(await query('SELECT * FROM cms.MediaRefs ORDER BY mediaId,versionId')).recordset,source:(await query('SELECT * FROM sync.DesignCloudCases ORDER BY id')).recordset}))
@@ -89,12 +93,10 @@ if(process.env.CMS_GALLERY_DB_CHECK==='1'){
    await changeDocument(custom.id,{action:'unpublish',revision:c.revision},user,tx)
    assert(!(await caseLibrary(tx)).some(i=>i.slug===sample.id))
    assert.throws(()=>validateGalleryCases([galleryCaseEntry(selected)],[]),e=>e.statusCode===400)
-   const policy=await getDocument('catalog-cases',tx),policyBody=await versionBody(policy.draftId)
-   const source=available.find(i=>i.source==='來源案例');assert(source)
-   policyBody.items.find(i=>i.id===source.slug).enabled=false
-   const p=await changeDocument(policy.id,{action:'save',revision:policy.revision,body:policyBody},user,tx)
-   await changeDocument(policy.id,{action:'publish',revision:p.revision},user,tx)
-   assert(!(await caseLibrary(tx)).some(i=>i.slug===source.slug),'Disabled source cases must be excluded')
+   const policy=await getDocument('catalog-cases',tx)
+   const publishedPolicy=await versionBody(policy.publishedId)
+   assert(available.some(i=>i.source==='來源案例'),'Previously published source cases remain available to the home picker')
+   for(const item of publishedPolicy.items.filter(i=>!i.enabled))assert(!available.some(i=>i.slug===item.id),'Previously disabled source cases must remain hidden')
   }finally{await tx.rollback()}
   assert.equal(await snapshot(),fingerprint)
   console.log('PASS local SQL: published-only library, source policy, real auto-fill, save/publish, 409, invalid-link rejection and historical restore; all documents/versions/references/source rows unchanged after ROLLBACK')

@@ -34,8 +34,9 @@ export default defineEventHandler(event=>cmsHandler(event,async()=>{
   if(path[1]&&method==='POST')return changeWorkspace(path[1],await readBody(event),user)
  }
  if(path[0]==='documents'){
-  if(!path[1]&&method==='GET')return(await query("SELECT id,title,category,route,revision,draftId,publishedId,updatedAt FROM cms.Documents WHERE id NOT IN (N'data-kitchenGuides',N'data-kitchenGuideDetails',N'data-news',N'data-latestArticles',N'data-activityArticles',N'data-mediaVideos',N'view-components-FloatingButtons') ORDER BY category,title")).recordset
+  if(!path[1]&&method==='GET')return(await query("SELECT id,title,category,route,revision,draftId,publishedId,updatedAt FROM cms.Documents WHERE id NOT IN (N'data-kitchenGuides',N'data-kitchenGuideDetails',N'data-news',N'data-latestArticles',N'data-activityArticles',N'data-mediaVideos',N'view-components-FloatingButtons',N'catalog-cases') ORDER BY category,title")).recordset
   if(path[1]?.trim().toLowerCase()==='view-components-floatingbuttons')fail(404,'此項目已從後台移除，官網快速服務按鈕仍保留。')
+  if(path[1]?.trim().toLowerCase()==='catalog-cases'&&method==='GET')fail(404,'串接案例請回原系統管理。')
   if(path[1]&&method==='GET'){
    const d=await getDocument(path[1]);const v=(await query('SELECT body FROM cms.Versions WHERE id=@id',{id:d.draftId})).recordset[0]
    const versions=(await query('SELECT v.id,v.createdAt,u.name AS actor FROM cms.Versions v LEFT JOIN cms.Users u ON u.id=v.actor WHERE documentId=@id ORDER BY createdAt DESC',{id:d.id})).recordset

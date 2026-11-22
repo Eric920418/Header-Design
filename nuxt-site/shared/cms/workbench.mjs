@@ -1,3 +1,4 @@
+import {inspirationBreadcrumb} from './inspiration-breadcrumb.mjs'
 import {firstImage,rowName} from './workflow.mjs'
 import {blockThumbnail,pageFieldValue,valueAt,withValue} from './page-editors.mjs'
 import {decoratePosition,pagePositions,positionImage} from './positions.mjs'
@@ -79,7 +80,7 @@ export function inspirationPosition(bodies,presentation={},selected){
  const copy=bodies['view-pages-design-inspiration-index']?.copy||{},detail=bodies['view-pages-design-inspiration-id-']?.copy||{}
  const cases=(presentation.cases||[]).slice(0,3)
  if(selected)cases.splice(0,1,{title:selected.caption,image:selected.image,selected:true,enabled:selected.value?.enabled!==false})
- return{copy,detail,cases,detailCase:presentation.detailCase||cases[0],heroImage:presentation.heroImage}
+ return{copy,detail,breadcrumb:inspirationBreadcrumb(copy),cases,detailCase:presentation.detailCase||cases[0],heroImage:presentation.heroImage}
 }
 export function homeHeroPosition(bodies,selected){
  const hero=bodies['view-components-home-HomeHero']||{},isSlide=selected?.documentId==='view-components-home-HomeHero'&&selected.path==='slides'

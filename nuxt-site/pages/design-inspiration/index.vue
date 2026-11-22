@@ -1,9 +1,11 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-design-inspiration-index', {"copy":{"text1":"Inspiration","text2":"篩選設計靈感案例","text3":"設計型式","text4":"設計風格","text5":"Filter","text6":"共 ","text7":" 筆符合條件的設計案例","text8":"View","text9":"目前沒有符合條件的設計案例","text10":"請調整設計型式或設計風格，再重新篩選。","text11":"查看全部案例"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
+import { inspirationBreadcrumb } from '~/shared/cms/inspiration-breadcrumb.mjs'
 import { ArrowRight, SlidersHorizontal } from 'lucide-vue-next'
 import type { DesignCase, DesignCasePage, DesignFilters } from '~/types/designCloud'
 
+const breadcrumbs = inspirationBreadcrumb(cmsCopy.copy)
 const route = useRoute()
 const router = useRouter()
 const queryString = (value: unknown) => typeof value === 'string' ? value : ''
@@ -55,8 +57,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <span class="design-projects-hero__overlay" aria-hidden="true" />
       <div class="design-projects-hero__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="design-projects-title">{{ cmsCopy.copy.text1 }}</h1>
-        <nav aria-label="麵包屑" class="design-projects-hero__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "設計靈感" }]' v-slot="{ items, follow }">
+        <nav id="design-inspiration-breadcrumb" aria-label="麵包屑" class="design-projects-hero__trail">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumbs.breadcrumbHome, to: '/' }, { label: breadcrumbs.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>

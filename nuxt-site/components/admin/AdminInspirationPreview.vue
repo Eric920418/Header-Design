@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ArrowRight,ChevronDown,SlidersHorizontal} from 'lucide-vue-next'
 import {inspirationPosition} from '~/shared/cms/workbench.mjs'
-const props=defineProps<{kind:string;bodies:Record<string,any>;presentation?:any;selected?:any;focusedField?:string;pageTitle:string}>()
+const props=defineProps<{kind:string;bodies:Record<string,any>;presentation?:any;selected?:any;focusedField?:string}>()
 const view=computed(()=>inspirationPosition(props.bodies,props.presentation,props.selected))
 const target=(part:string)=>props.kind==='inspiration-'+part
 const filterReading=computed(()=>target('filters')&&['copy.text2','copy.text3','copy.text4'].includes(props.focusedField||'')?view.value.copy[props.focusedField!.split('.').at(-1)!]:null)
@@ -10,10 +10,19 @@ const filterReading=computed(()=>target('filters')&&['copy.text2','copy.text3','
  <div class="cms-inspiration-position">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
   <div class="cms-inspiration-hero" :class="{'is-target':target('hero')}">
-   <AdminThumbnail :src="view.heroImage" alt="設計靈感頁面主視覺背景" /><div class="cms-inspiration-hero-copy"><h3>{{ view.copy.text1 }}</h3><span>首頁 / {{ pageTitle }}</span></div>
+   <AdminThumbnail :src="view.heroImage" alt="設計靈感頁面主視覺背景" /><div class="cms-inspiration-hero-copy">
+    <h3>{{ view.copy.text1 }}</h3>
+    <div class="cms-inspiration-trail" :class="{'is-target':target('breadcrumb')}">
+     <span>{{ view.breadcrumb.breadcrumbHome }} / {{ view.breadcrumb.breadcrumbList }}</span>
+    </div>
+   </div>
   </div>
   <div class="cms-inspiration-screen">
-   <template v-if="!target('detail')">
+   <div v-if="target('breadcrumb')" class="cms-inspiration-trail-sample is-target">
+    <small>案例內頁上方</small>
+    <p>{{ view.breadcrumb.breadcrumbHome }} / {{ view.breadcrumb.breadcrumbList }} / {{ view.breadcrumb.breadcrumbDetail }}</p>
+   </div>
+   <template v-else-if="!target('detail')">
     <div class="cms-inspiration-filters" :class="{'is-target':target('filters')}">
      <span :class="{'is-focused':focusedField==='copy.text3'}" :aria-label="view.copy.text3">全部型式 <ChevronDown :size="11" /></span>
      <span :class="{'is-focused':focusedField==='copy.text4'}" :aria-label="view.copy.text4">全部風格 <ChevronDown :size="11" /></span>

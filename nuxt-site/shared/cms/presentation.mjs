@@ -23,7 +23,7 @@ const guides={
  'data-productBrands':{title:'廚電品牌介紹',location:['廚房產品','三品牌商品頁','品牌名稱、圖片與介紹'],href:'/products/sakura',visual:'cards',summary:'修改櫻花、SVAGO、TEKA 的品牌介紹；不修改來源商品規格。',impacts:[target('三品牌首頁 → 品牌介紹與圖片','/products/sakura'),target('三品牌商品列表 → 品牌資訊','/products/sakura/all'),target('三品牌商品內頁 → 品牌資訊','/products/sakura')],related:['catalog-sakura','catalog-svago','catalog-teka']},
  'news-articles':{title:'消息、活動與影音文章',location:['優惠消息','文章列表與內頁','標題、封面與內文'],href:'/news',visual:'article',summary:'同一篇文章的列表資訊與內文在此一起管理。加盟頁只引用指定的加盟文章。',impacts:[target('優惠消息總覽 → 文章列表','/news'),target('最新消息 → 列表及全部文章內頁','/news/latest'),target('優惠活動 → 列表及全部活動內頁','/news/activities'),target('媒體影音 → 列表及全部影片內頁','/news/video'),target('加盟介紹 → 指定的最新加盟消息','/franchising/intro#franchise-news')],related:['view-pages-news-index','view-pages-news-latest-index','view-pages-news-activities-index','view-pages-news-video-index']},
  'knowledge-articles':{title:'廚房知識文章',location:['廚房裝修指南','文章列表與內頁','標題、封面與內文'],href:'/knowledge',visual:'article',summary:'管理知識文章列表資訊與一般文章內文。系統櫃的詳細內文使用專題編輯入口。',impacts:[target('廚房裝修指南 → 全部文章卡片','/knowledge'),target('知識文章內頁 → 文章資訊、內文與相關文章','/knowledge/design/kitchen-outlet-planning'),target('系統櫃專題 → 文章標題、摘要與相關文章','/knowledge/design/systemcabinet')],related:['data-kitchenSystemCabinet','view-pages-knowledge-index','view-pages-knowledge-design-slug-']},
- 'custom-cases':{title:'自建設計案例',location:['設計案例','設計靈感','新增案例與內文'],href:'/design-inspiration',visual:'article',summary:'新增獨立設計案例，管理圖片、說明、型式與風格；會與來源案例一起出現在搜尋結果。',impacts:[target('設計靈感 → 案例列表、篩選與搜尋','/design-inspiration'),target('設計靈感 → 自建案例內頁','/design-inspiration')],related:['catalog-cases','view-pages-design-inspiration-index','view-pages-design-inspiration-id-']},
+ 'custom-cases':{title:'自建設計案例',location:['設計案例','設計靈感','新增案例與內文'],href:'/design-inspiration',visual:'article',summary:'新增獨立設計案例，管理圖片、說明、型式與風格；會與來源案例一起出現在搜尋結果。',impacts:[target('設計靈感 → 案例列表、篩選與搜尋','/design-inspiration'),target('設計靈感 → 自建案例內頁','/design-inspiration')],related:['view-pages-design-inspiration-index','view-pages-design-inspiration-id-']},
  'site-visuals':{title:'全站共用背景與影片',location:['全站設定','共用視覺素材','背景圖片與影片'],href:'/#brand-promise',visual:'page',summary:'共用背景可能被多個頁面使用，替換前請確認下列範圍；各頁獨立圖片仍在對應項目中編輯。',impacts:[target('首頁 → 品牌承諾影片封面與影片','/#brand-promise'),target('服務流程 → 品牌影片','/service-process'),target('集團品牌館 → 主視覺品牌影片','/about/exhibition'),target('加盟介紹 → 加盟影片與背景裝飾','/franchising/intro'),target('消息、案例、知識、型錄及商品頁 → 共用主視覺背景','/news'),target('建商、加盟及品牌優勢頁 → 共用背景圖片','/builders')],related:['view-components-home-HomeWhatWeDo','view-pages-service-process','view-pages-franchising-intro']},
 }
 
@@ -31,7 +31,7 @@ const home=[
  ['HomeHero','主視覺輪播','輪播圖片、標題與按鈕','/#hero-title','hero',[]],
  ['HomeProject','品牌系列','區塊標題與介紹文字','/#kitchen-series','cards',['data-kitchenStyles','data-kitchenSeries']],
  ['HomeServices','廚房產品','品牌卡片圖片、文字與連結','/#services-heading','cards',['data-productBrands','catalog-sakura','catalog-svago','catalog-teka']],
- ['HomeGallery','設計案例','輪播圖片、門市與按鈕','/#gallery-heading','hero',['data-storeCases','custom-cases','catalog-cases']],
+ ['HomeGallery','設計案例','輪播圖片、門市與按鈕','/#gallery-heading','hero',['data-storeCases','custom-cases']],
  ['HomeWhatWeDo','品牌承諾','標題、介紹文字與按鈕','/#brand-promise','hero',['site-visuals','data-brandAdvantage']],
  ['HomeStoreLocation','全台門市據點','地圖門市資訊與地區篩選','/#contact','store',['data-storeCases']],
  ['HomeStyleMarquee','設計風格','風格名稱、圖示、預覽圖片與連結','/#home-styles','cards',[]],
@@ -48,8 +48,8 @@ const views=[
  ['builders-sakura-kitchen','建商櫻花廚房','主視覺、優勢與系列卡片','/builders/sakura-kitchen'],
  ['catalogues-catalog','廚房商品型錄','區塊標題與操作文字','/catalogues/catalog','data-productCatalogues'],
  ['catalogues-kitchenware-catalog','品牌系列型錄','區塊標題與操作文字','/catalogues/kitchenware-catalog','data-catalogues','data-kitchenStyles'],
- ['design-inspiration-index','設計靈感列表','篩選與列表提示文字','/design-inspiration','custom-cases','catalog-cases'],
- ['design-inspiration-id-','設計靈感內頁','規格標題與返回按鈕','/design-inspiration/01cd4a16-6c56-4af9-b8bf-f60a45b7296c','custom-cases','catalog-cases'],
+ ['design-inspiration-index','設計靈感列表','篩選與列表提示文字','/design-inspiration','custom-cases'],
+ ['design-inspiration-id-','設計靈感內頁','規格標題與返回按鈕','/design-inspiration/01cd4a16-6c56-4af9-b8bf-f60a45b7296c','custom-cases'],
  ['franchising-download','加盟資料下載','主視覺、檔案介紹與預覽圖片','/franchising/download','data-franchise'],
  ['franchising-form','加盟申請表單','標題、說明與下載入口','/franchising/form','data-franchise'],
  ['franchising-intro','加盟介紹','各區塊標題、圖片與按鈕','/franchising/intro','data-franchise','news-articles'],
@@ -74,12 +74,12 @@ for(const[key,title,contents,href,visual]of [
  ['SiteFooter','頁尾','網站地圖、版權文字與社群連結','/#footer-navigation','footer'],
  ['FloatingButtons','浮動服務入口','側邊按鈕、圖示與連結','/','navigation'],
 ])guides['view-components-'+key]={title:title+'・'+contents,location:['全站設定',title,contents],href,visual,summary:'共用元件：發布後會同步影響所有使用此元件的官網頁面。',impacts:[target('所有官網頁面 → '+title,href)],related:key==='SiteHeader'?['data-kitchenStyles']:[]}
-for(const[key,name]of [['sakura','櫻花'],['svago','SVAGO'],['teka','TEKA'],['cases','來源設計案例']]){const cases=key==='cases',href=cases?'/design-inspiration':'/products/'+key+'/all';guides['catalog-'+key]={title:name+'・上架、推薦與排序',location:[cases?'設計案例':'廚房產品',cases?name:name+'商品','上架狀態與順序'],href,visual:'cards',summary:'僅調整上架、推薦及顯示順序。來源名稱、價格、規格與圖片由原系統提供。',impacts:[target(name+' → 分類、列表與搜尋結果',href),target(name+' → 內容內頁的公開狀態',href)],related:cases?['custom-cases']:['data-productBrands']}}
+for(const[key,name]of [['sakura','櫻花'],['svago','SVAGO'],['teka','TEKA'],['cases','來源設計案例']]){const cases=key==='cases',href=cases?'/design-inspiration':'/products/'+key+'/all';guides['catalog-'+key]={title:cases?'串接案例（由原系統管理）':name+'・上架、推薦與排序',location:[cases?'設計案例':'廚房產品',cases?name:name+'商品',cases?'由原系統管理':'上架狀態與順序'],href,visual:'cards',summary:cases?'官網依原系統資料與既有發布設定顯示串接案例。':'僅調整上架、推薦及顯示順序。來源名稱、價格、規格與圖片由原系統提供。',impacts:[target(name+' → 分類、列表與搜尋結果',href),target(name+' → 內容內頁的公開狀態',href)],related:cases?['custom-cases']:['data-productBrands']}}
 
 guides['view-components-home-HomeProject'].summary='修改首頁品牌系列的標題、介紹與系列卡片。'
 guides['view-components-home-HomeProject'].relatedLabels={'data-kitchenStyles':'修改卡片圖片與文字','data-kitchenSeries':'修改系列內頁內容'}
 guides['view-components-home-HomeGallery'].summary='從案例庫新增或更換已發布案例，自動帶入圖片、門市與連結；此處的精選順序與圖片只影響首頁。'
-guides['view-components-home-HomeGallery'].relatedLabels={'data-storeCases':'編輯門市案例','custom-cases':'新增自建案例','catalog-cases':'管理來源案例上架'}
+guides['view-components-home-HomeGallery'].relatedLabels={'data-storeCases':'編輯門市案例','custom-cases':'新增自建案例'}
 
 export const homeResources=home.map(([name])=>'view-components-home-'+name)
 export function resourceGuide(id){return guides[id]}
@@ -147,6 +147,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁聯繫與參觀預約區','建商首頁的預約區']}
  if(resourceId==='view-pages-about-introduce'&&normalized==='copy.field10')return{label:'圖片放大方式',hidden:true,readOnly:true}
+ if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
  if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
  if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}
  if(resourceId==='custom-cases'&&normalized==='items')return{label:'自行建置案例',newItemLabel:'案例',editor:'case-table',rowLabel:'title',rowImage:'cover'}
@@ -164,7 +165,6 @@ export function fieldPresentation(resourceId,path,schema={}){
   const label={field5:'圓形按鈕前往頁面',text6:'圓形按鈕文字（第一行）',text7:'圓形按鈕文字（第二行）',text8:'滑過時按鈕文字（第一行）',text9:'滑過時按鈕文字（第二行）',text10:'背景大字',text11:'系列選單按鈕文字'}[key]
   if(label)return{label,singleLine:true}
  }
- if(resourceId==='catalog-cases'&&normalized==='items')return{label:'既有案例',help:'可調整顯示與順序；案例名稱與圖片由原系統提供。'}
  if(resourceId==='view-components-home-HomeStyleMarquee'&&normalized==='styles')return{label:'設計風格',rowLabel:'zh',rowImage:'images'}
  if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='regions')return{label:'地區與縣市設定',editor:'store-regions'}
  if(resourceId==='view-components-home-HomeStoreLocation'&&normalized==='stores')return{label:'門市',idGenerator:'store',newItemLabel:'新增門市',template:{id:0,region:'北部',city:'',name:'',address:'',phone:''}}

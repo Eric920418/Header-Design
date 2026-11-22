@@ -10,7 +10,7 @@ const names=workspaceNames(workspaces,published),find=(rows,id)=>rows.find(w=>w.
 const design=names.filter(w=>w.section==='design'),beforeDesign=design.map(w=>w.id)
 const expectedDesign=[
  'data-kitchenSeries',
- 'custom-cases','catalog-cases','view-pages-design-inspiration-index','view-pages-design-inspiration-id-',
+ 'custom-cases','view-pages-design-inspiration-index','view-pages-design-inspiration-id-',
  'view-pages-knowledge-design-systemcabinet','knowledge-articles','view-pages-knowledge-index','view-pages-knowledge-design-slug-',
  'view-pages-catalogues-kitchenware-catalog',
 ]
@@ -22,10 +22,10 @@ const unknown={id:'future-design-entry',title:'新增入口'}
 assert.deepEqual(orderDesignWorkspaces([unknown,...design]).map(w=>w.id),[...expectedDesign,unknown.id],'Unknown entries remain available after known categories')
 assert.deepEqual(orderDesignWorkspaces([]),[])
 assert.deepEqual(orderDesignWorkspaces(orderDesignWorkspaces(design)).map(w=>w.id),expectedDesign)
-assert.deepEqual(orderDesignWorkspaces(design.filter(w=>matchesWorkspace(w,'設計靈感'))).map(w=>w.id),expectedDesign.slice(1,5))
+assert.deepEqual(orderDesignWorkspaces(design.filter(w=>matchesWorkspace(w,'設計靈感'))).map(w=>w.id),expectedDesign.slice(1,4))
 assert.deepEqual(orderDesignWorkspaces([...design].reverse()).filter(w=>w.id.startsWith('view-pages-knowledge')).map(w=>w.id),['view-pages-knowledge-design-slug-','view-pages-knowledge-index','view-pages-knowledge-design-systemcabinet'],'Order within the same category stays stable, including article subpages')
 console.log('PASS: design entries follow website category order, retain related article settings, and survive renamed titles without mutations or omissions')
-assert.equal(names.length,48);assert.deepEqual(Object.keys(nameBindings).sort(),workspaces.map(w=>w.id).sort());assert.equal(new Set(names.map(w=>w.title)).size,48)
+assert.equal(names.length,47);assert.deepEqual(Object.keys(nameBindings).sort(),workspaces.map(w=>w.id).sort());assert.equal(new Set(names.map(w=>w.title)).size,47)
 for(const w of names){assert(w.pageTitle&&w.purpose&&w.sectionTitle);assert.equal(w.title,w.pageTitle+'｜'+w.purpose);assert(w.href.startsWith('/'));assert.equal(w.location.at(-1),w.purpose);assert(matchesWorkspace(w,w.title));assert(matchesWorkspace(w,workspaces.find(i=>i.id===w.id).title));assert(siteSections.some(s=>s.key===w.section)||w.section==='home')}
 for(const id of ['news-articles','knowledge-articles','custom-cases','catalog-sakura']){const schema={fields:{items:{label:'原有清單標題',type:'array'}}},title=find(names,id).pageTitle;const result=namedEditorSchema(schema,id,title);assert.equal(result.fields.items.label,title);assert.equal(schema.fields.items.label,'原有清單標題')}
 assert.equal(find(names,'knowledge-articles').section,'design');assert.equal(find(names,'data-brandPavilions').section,'brand');assert.equal(find(names,'data-service').section,'service')
@@ -71,16 +71,16 @@ const dateCode="import {cmsDate} from './shared/cms/workflow.mjs';console.log(cm
 const formatted=['UTC','Asia/Taipei'].map(TZ=>{const r=spawnSync(process.execPath,['--input-type=module','-e',dateCode],{cwd:new URL('../',import.meta.url),env:{...process.env,TZ},encoding:'utf8'});assert.equal(r.status,0,r.stderr);return r.stdout.trim()})
 assert.equal(formatted[0],formatted[1]);assert.equal(formatted[0],'2026/9/28 下午10:02:46');assert.equal(cmsDate('invalid'),'尚無時間');assert.equal(cmsDate(null),'尚無時間');assert.equal(cmsDate('2026-09-28T16:00:00Z'),'2026/9/29 上午12:00:00');assert.equal(cmsDate('2026-09-28T16:00:00Z',true),'2026/9/29')
 console.log('PASS: matching server/browser dates across UTC and Taipei; missing dates remain readable')
-console.log('PASS: 48 unique entries, official categories, published names/reordering, missing-name defaults, shared pages, legacy search/URLs, return conditions and page choices')
+console.log('PASS: 47 unique entries, official categories, published names/reordering, missing-name defaults, shared pages, legacy search/URLs, return conditions and page choices')
 if(process.env.CMS_NAMES_PRODUCTION==='1'){
  assert.equal(process.env.NUXT_DESIGN_DB_SERVER,'sakura-website-test-20260929.database.windows.net');assert.equal(process.env.CMS_DB_DATABASE,'SakuraWebsiteTest')
  const {query,database,digest}=await import('../server/cms/database.mjs'),{workspaceSummaries}=await import('../server/cms/workspaces.mjs')
  try{
   const fingerprint=async()=>digest(JSON.stringify((await query('SELECT id,revision,draftId,publishedId,updatedAt FROM cms.Documents ORDER BY id')).recordset)+JSON.stringify((await query('SELECT id,documentId,body FROM cms.Versions ORDER BY id')).recordset))
-  const before=await fingerprint(),rows=await workspaceSummaries();assert.equal(rows.length,48)
+  const before=await fingerprint(),rows=await workspaceSummaries();assert.equal(rows.length,47)
   for(const w of rows){assert(w.title&&w.section&&w.purpose&&w.location.length===3);assert(matchesWorkspace(w,w.title))}
   assert.equal(await fingerprint(),before,'Read-only acceptance must leave all documents and versions unchanged')
-  console.log('PASS: production SQL read-only summaries, 48 entries, published metadata and unchanged documents/versions')
+  console.log('PASS: production SQL read-only summaries, 47 entries, published metadata and unchanged documents/versions')
   console.log(JSON.stringify(rows.map(({id,section,title,href})=>({id,section,title,href}))))
  }finally{await(await database()).close()}
 }

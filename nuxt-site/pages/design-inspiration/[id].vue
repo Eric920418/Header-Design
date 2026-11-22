@@ -1,9 +1,12 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-design-inspiration-id-', {"copy":{"text1":"此案例尚未提供圖片。","text2":"案例規格","text3":"返回設計靈感"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
+import { inspirationBreadcrumb } from '~/shared/cms/inspiration-breadcrumb.mjs'
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import type { DesignCaseDetail } from '~/types/designCloud'
 
+const { copy: listCopy } = await useCmsResource('view-pages-design-inspiration-index', { copy: inspirationBreadcrumb(), cmsSettings: { visible: true } })
+const breadcrumbs = inspirationBreadcrumb(listCopy)
 const { copy: galleryCopy } = await useCmsResource('view-pages-gallery-slug-', { copy: { field1: 'https://pse.is/9kq37z', text2: '到店預約' } })
 
 const route = useRoute()
@@ -26,7 +29,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <main class="case-detail-page">
-    <InternalCaseBreadcrumbHero :design-list-url="listRoute" />
+    <InternalCaseBreadcrumbHero :design-list-url="listRoute" :labels="breadcrumbs" />
     <section class="case-detail-content">
       <div class="case-detail-rail internal-rail-safe">
         <InternalDesignLoadState :pending="status === 'pending'" :error="error" @retry="refresh()" />

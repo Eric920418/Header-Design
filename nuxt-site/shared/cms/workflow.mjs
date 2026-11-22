@@ -16,11 +16,11 @@ for(const [id,area,title,extra] of [
  ['view-pages-catalogues-kitchenware-catalog','pages','品牌系列型錄',['data-catalogues']],
  ['view-pages-knowledge-design-systemcabinet','news','系統櫃文章',['data-kitchenSystemCabinet']],
  ['data-kitchenSeries','pages','廚房系列內頁',[]],['news-articles','news','消息、活動與影片',[]],['knowledge-articles','news','廚房知識文章',[]],
- ['custom-cases','cases','新增與編輯案例',[]],['catalog-cases','cases','其他案例的顯示與排序',[]],['data-storeCases','stores','門市案例與介紹',[]],
+ ['custom-cases','cases','新增與編輯案例',[]],['data-storeCases','stores','門市案例與介紹',[]],
  ['data-productBrands','products','品牌介紹',[]],['catalog-sakura','products','SAKURA 商品',[]],['catalog-svago','products','SVAGO 商品',[]],['catalog-teka','products','TEKA 商品',[]],
  ['view-components-SiteHeader','settings','網站選單',[]],['view-components-SiteFooter','settings','網站頁尾',[]],['site-visuals','settings','共用背景與影片',[]],
 ])add(id,area,title,extra)
-for(const [id,guide]of Object.entries(resourceGuides))if(!assigned.has(id)&&id!=='view-components-FloatingButtons')add(id,'pages',guide.location[0])
+for(const [id,guide]of Object.entries(resourceGuides))if(!assigned.has(id)&&!['view-components-FloatingButtons','catalog-cases'].includes(id))add(id,'pages',guide.location[0])
 export const workspaces=groups
 export const workspaceDefaults=workspaceNames(groups)
 export function workspaceFor(id){id=contentAliases[id]||id;return groups.find(w=>w.id===id||w.ids.includes(id))}

@@ -35,7 +35,6 @@ const entries=[
  ['news-articles','news','優惠消息','消息、活動與影音內容','/news'],
  ['knowledge-articles','design','廚房裝修指南','文章內容','/knowledge'],
  ['custom-cases','design','設計靈感','案例內容','/design-inspiration'],
- ['catalog-cases','design','設計靈感','案例顯示與排序','/design-inspiration'],
  ['data-storeCases','service','案例門市','門市與案例內容','/gallery'],
  ['data-productBrands','products','廚房產品','品牌介紹與圖片',''],
  ['catalog-sakura','products','SAKURA 廚電','商品顯示與排序','/products/sakura'],
@@ -87,7 +86,7 @@ export function workspaceNames(workspaces,published={}){
    if(b.route==='/knowledge/design/systemcabinet')pageTitle=text(published['knowledge-articles']?.items?.find(i=>i.slug==='systemcabinet')?.summary?.title)||pageTitle
   }else if(w.id==='data-productBrands')pageTitle=sectionTitle
   let pageLinks=[{href:b.route&&b.route!=='series'?b.route:w.href,title:pageTitle}]
-  if(w.id.startsWith('catalog-')&&w.id!=='catalog-cases')pageLinks.push({href:w.href,title:pageTitle+'｜商品列表'})
+  if(w.id.startsWith('catalog-'))pageLinks.push({href:w.href,title:pageTitle+'｜商品列表'})
   if(w.id==='data-productBrands')pageLinks=[]
   if(b.route==='series')pageLinks=(published['data-kitchenStyles']?.KITCHEN_STYLES||[]).map(s=>({href:s.route||'/home-style/'+s.slug,title:text(s.zh)||text(s.en)}))
   return{...w,pageLinks,section:b.section,sectionTitle,sectionOrder:sections.find(s=>s.key===b.section)?.order??-1,pageTitle,purpose:b.purpose,title:pageTitle+'｜'+b.purpose,location:[sectionTitle,pageTitle,b.purpose],searchTerms:[w.title,b.name,b.purpose,sectionTitle,pageTitle,...w.ids].join(' ')}

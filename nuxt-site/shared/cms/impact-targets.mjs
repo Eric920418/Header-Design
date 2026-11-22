@@ -106,6 +106,16 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  }
  if (documentId === 'view-pages-knowledge-design-slug-' && key === 'copy' && index === 'moreDestination')
   return [target('系統櫃與指定知識文章 → 延伸文章按鈕','/knowledge/design/systemcabinet#knowledge-related-heading')]
+ if (documentId === 'view-pages-design-inspiration-index' && ['cmsSettings','seo'].includes(key)) return targets
+ if (documentId === 'view-pages-design-inspiration-index' && path.startsWith('copy.breadcrumb')) {
+  const list=target('設計靈感列表 → 麵包屑導覽','/design-inspiration#design-inspiration-breadcrumb')
+  const detail=target('設計靈感案例內頁 → 麵包屑導覽',(context.caseDetailRoute||resourceGuide('view-pages-design-inspiration-id-').href)+'#design-inspiration-breadcrumb')
+  return path==='copy.breadcrumbDetail'?[detail]:[list,detail]
+ }
+ if (documentId === 'view-pages-design-inspiration-index' && /^copy\.text(?:[5-9]|1[01])$/.test(path)) {
+  const anchor=path==='copy.text8'?'design-projects-grid':/text[67]$/.test(path)?'design-projects-result':'design-projects-filter-title'
+  return [{...targets[0],href:'/design-inspiration#'+anchor}]
+ }
  if (documentId === 'view-pages-gallery-slug-' && (!path || path==='copy.field1' || path==='copy.text2'))
   return [...targets,target('設計靈感案例內頁 → 到店預約','/design-inspiration')]
  if (blockHref && targets.length===1 && !targets[0].label.startsWith('所有官網頁面') && blockHref.split('#')[0]===targets[0].href.split('#')[0])

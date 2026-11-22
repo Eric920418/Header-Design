@@ -754,6 +754,11 @@
 .cms .cms-inspiration-hero .cms-image-error{position:relative;z-index:1;background:#fff;color:#8b2e1f;font-size:11px;overflow-wrap:anywhere;}
 .cms .cms-inspiration-hero h3{font-size:29px;font-weight:650;line-height:1.2;}
 .cms .cms-inspiration-hero span{font-size:9px;}
+.cms .cms-inspiration-trail{max-width:92%;padding:4px 9px;text-align:center;overflow-wrap:anywhere;}
+.cms .cms-inspiration-trail-sample{padding:12px;background:#f5efe2;overflow-wrap:anywhere;}
+.cms .cms-inspiration-trail-sample small{display:block;margin-bottom:5px;color:var(--cms-muted);}
+.cms .cms-inspiration-form-group{min-width:0;display:grid;gap:8px;border:0;border-top:1px solid var(--cms-line);margin:0;padding:8px 0 0;}
+.cms .cms-inspiration-form-group legend{padding-right:8px;font-weight:600;}
 .cms .cms-inspiration-screen{padding:18px 12px;}
 .cms .cms-inspiration-filters{display:flex;align-items:center;gap:7px;padding:8px 5px;margin-bottom:13px;}
 .cms .cms-inspiration-filters>span{display:flex;justify-content:space-between;align-items:center;gap:4px;min-width:0;flex:1;border-radius:30px;background:#fff;padding:8px 9px;font-size:10px;color:#59585d;}
@@ -811,9 +816,6 @@
 .cms .cms-case-status.is-hidden{border-color:#d9d5cd;background:#eeece7;color:#655f53;}
 .cms .cms-case-sort-help{margin:8px 0;padding:8px 9px;border-radius:4px;background:#faf3e4;font-size:11px;line-height:1.8;color:#5f523b;}
 .cms .cms-case-order-scope{margin-top:10px;}
-.cms .cms-imported-cases{margin-top:8px;border:1px solid var(--cms-line);border-radius:6px;padding:9px;min-width:0;}
-.cms .cms-imported-cases>summary{cursor:pointer;min-height:28px;font-size:13px;font-weight:600;}
-.cms .cms-imported-cases[open]>.cms-field-help{margin:7px 0 10px;}
 @media(min-width:1280px){.cms .cms-inspiration-workbench .cms-page-edit-layout{grid-template-columns:210px minmax(250px,.8fr) minmax(450px,1.5fr);}}
 .cms .cms-position-workbench .cms-page-form .cms-field input{min-height:42px;}
 .cms .cms-page-position-scene{border:1px solid var(--cms-line);border-radius:5px;overflow:hidden;background:#faf9f6;}

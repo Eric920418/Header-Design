@@ -2,7 +2,12 @@
 import {cmsDate} from '~/shared/cms/workflow.mjs'
 import {navigationSections,sectionForQuery} from '~/shared/cms/navigation.mjs'
 import {searchResultLink,legacyPageLink,searchPages,pageTaskLink} from '~/shared/cms/page-editors.mjs'
-definePageMeta({layout:'admin'})
+definePageMeta({layout:'admin',middleware:to=>{
+ if(to.query.sitePage==='inspiration'&&(to.query.legacy==='catalog-cases'||to.query.list==='catalog-cases:items')){
+  const {legacy,...query}=to.query
+  return navigateTo(legacyPageLink('catalog-cases',query),{replace:true})
+ }
+}})
 const route=useRoute(),router=useRouter(),{message}=useCmsAdmin()
 if(typeof route.query.edit==='string')await navigateTo(legacyPageLink(route.query.edit,route.query),{replace:true})
 const section=computed(()=>sectionForQuery(route.query))

@@ -6,7 +6,7 @@ import {editingSchema,fieldPresentation} from '../shared/cms/presentation.mjs'
 import {publicContent,contentAliases} from '../shared/cms/public-content.mjs'
 import {createDraftPreview,readDraftPreview} from '../server/cms/previews.mjs'
 import {workspaceInput} from '../server/cms/workspaces.mjs'
-import {pageEditors,pageEditor,pageBlocks,legacyPage,pageEditorLink,searchPages,pageSummary,valueAt,withValue,pageFieldValue} from '../shared/cms/page-editors.mjs'
+import {pageEditors,pageEditor,pageBlocks,legacyPage,legacyPageLink,pageEditorLink,searchPages,pageSummary,valueAt,withValue,pageFieldValue} from '../shared/cms/page-editors.mjs'
 import {checkPageBody,pageEditorInput,editorSchema,changePageEditor} from '../server/cms/page-editors.mjs'
 import {validate} from '../server/cms/content.mjs'
 import {HOME_PROJECT_ID,HOME_SERVICES_ID,homeProjectHeading} from '../shared/cms/home-headings.mjs'
@@ -32,6 +32,17 @@ assert.throws(()=>checkPageBody(homePage,HOME_PROJECT_ID,headingDoc.body,{...edi
 const serviceHeadingDoc=pageDocuments.find(d=>d.id===HOME_SERVICES_ID),serviceTitleField=homeBlocks.flatMap(b=>b.fields).find(f=>f.documentId===HOME_SERVICES_ID&&f.path==='copy.chineseTitle')
 assert.equal(pageFieldValue({[HOME_SERVICES_ID]:serviceHeadingDoc.body},serviceTitleField),'廚房產品')
 for(const w of workspaces)assert(legacyPage(w.id),'Missing page: '+w.id)
+assert.equal(workspaceFor('catalog-cases'),undefined)
+assert.equal(legacyPage('catalog-cases').id,'inspiration')
+assert.deepEqual(legacyPageLink('catalog-cases',{area:'cases',q:'案例',page:'2',list:'catalog-cases:items',item:'source-1'}),{
+ path:'/admin/content',query:{q:'案例',page:'2',section:'design',sitePage:'inspiration',block:'inspiration:案例管理'},
+})
+assert(!pageEditor('inspiration').ids.includes('catalog-cases'))
+assert.throws(()=>workspaceInput('catalog-cases',{action:'save',documents:[]}),e=>e.statusCode===404)
+const inspirationInput={action:'preview',documents:pageEditor('inspiration').ids.map(id=>({id,revision:1,body:{}}))}
+assert.equal(pageEditorInput('inspiration',inspirationInput).id,'inspiration')
+assert.throws(()=>pageEditorInput('inspiration',{...inspirationInput,documents:[...inspirationInput.documents,{id:'catalog-cases',revision:1,body:{}}]}),e=>e.statusCode===400)
+
 assert.equal(legacyPage('site-visuals').id,'visuals');assert.equal(legacyPage('data-brandPavilions').id,'pavilions');assert.equal(legacyPage('data-kitchenStyles').id,'home')
 assert.deepEqual(pageEditors.filter(p=>p.section==='design').map(p=>p.name),['品牌系列','設計靈感','廚房裝修指南','品牌系列型錄'])
 for(const p of pageEditors){
@@ -84,8 +95,8 @@ assert(found.some(r=>r.page.id==='series'&&r.block));assert(!searchPages(summari
 const oldQuery={q:'案例',page:'2',group:'設計靈感'},newLink=pageEditorLink('inspiration',oldQuery,'inspiration:案例內容');assert.equal(newLink.query.q,'案例');assert.equal(newLink.query.page,'2');assert.equal(newLink.query.block,'inspiration:案例內容')
 const allLink=pageEditorLink('inspiration',{section:'all',page:'2',q:'案例'});assert.equal(allLink.query.section,'design');assert.equal(allLink.query.returnSection,'all');assert.equal(allLink.query.page,'2')
 const raw={copy:{text:'保留',other:'不變'}},patched=withValue(raw,'copy.text','新文字');assert.equal(valueAt(patched,'copy.text'),'新文字');assert.equal(raw.copy.text,'保留');assert.equal(patched.copy.other,'不變');assert.throws(()=>withValue(raw,'__proto__.bad','x'))
-console.log(`PASS: ${pageEditors.length} page entries cover all 48 previous entries; design order, scoped fields, filtered articles, fixed data, search, immutable edits and old list conditions`)
-const ignored=new Set([...Object.keys(contentAliases),'view-components-FloatingButtons'])
+console.log(`PASS: ${pageEditors.length} page entries cover all editable workspace entries; design order, scoped fields, filtered articles, fixed data, search, immutable edits and old list conditions`)
+const ignored=new Set([...Object.keys(contentAliases),'view-components-FloatingButtons','catalog-cases'])
 for(const d of seed.filter(d=>!ignored.has(d.id))){assert(workspaceFor(d.id),`Missing task: ${d.id}`);assert.equal(workspaces.filter(w=>w.ids.includes(d.id)).length,1);assert.match(workspaceFor(d.id).title,/[\u4e00-\u9fffA-Z]/)}
 const project=workspaceFor('data-kitchenStyles');assert(project.ids.includes('view-components-home-HomeProject'));assert.equal(project.area,'home')
 const input={action:'preview',documents:project.ids.map(id=>({id,revision:1,body:{}}))};assert.equal(workspaceInput(project.id,input),project)

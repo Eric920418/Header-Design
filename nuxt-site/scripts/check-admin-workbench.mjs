@@ -5,7 +5,7 @@ import {randomUUID} from 'node:crypto'
 import ts from 'typescript'
 import {ref,reactive,computed,watch,nextTick,effectScope} from 'vue'
 import {pageEditors,pageBlocks} from '../shared/cms/page-editors.mjs'
-import {editorSchema} from '../server/cms/page-editors.mjs'
+import {checkPageBody,editorSchema} from '../server/cms/page-editors.mjs'
 import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField} from '../shared/cms/workbench.mjs'
 import {pagePositions} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
@@ -65,16 +65,28 @@ for(const p of pageEditors){
 const home=workbenchBlocks('home',pageBlocks(pageEditors[0],docs))
 assert.deepEqual(home.filter(b=>!b.secondary).map(b=>b.name),['首頁輪播圖片','品牌系列','設計風格圖片','廚房產品','集團品牌標誌','設計案例','品牌承諾','全台門市據點'])
 const inspiration=workbenchBlocks('inspiration',pageBlocks(pageEditors.find(p=>p.id==='inspiration'),docs))
-assert.deepEqual(inspiration.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','案例管理與顯示排序','案例篩選列','搜尋結果提示','案例卡片按鈕','無符合案例提示','案例內頁文字'])
-assert.deepEqual(inspiration.find(b=>b.preview==='inspiration-card-button').fields.map(f=>f.path),['copy.text8'])
-assert(!inspiration.find(b=>b.preview==='inspiration-cases').fields.some(f=>f.path==='copy.text8'))
-for(const old of ['案例內容','案例顯示與順序','案例列表','列表標題與按鈕','整頁共用文字'])assert(inspiration.some(b=>b.aliases.includes('inspiration:'+old)))
+assert.deepEqual(inspiration.map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理','頁面共用設定'])
+const inspirationShared=inspiration.find(b=>b.name==='頁面共用設定')
+const inspirationBreadcrumb=inspiration.find(b=>b.preview==='inspiration-breadcrumb')
+assert.equal(inspirationShared.fields.filter(f=>f.formGroup==='顯示與搜尋設定'&&f.schema.advanced).length,2)
+assert(inspirationShared.aliases.includes('inspiration:顯示與搜尋設定'))
+assert.deepEqual(inspirationBreadcrumb.fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbList','copy.breadcrumbDetail'])
+const breadcrumbDocument=docs.find(d=>d.id==='view-pages-design-inspiration-index')
+assert(!Object.hasOwn(breadcrumbDocument.body.copy,'breadcrumbHome'),'Older data must work without a migration')
+const breadcrumbEdit=structuredClone(breadcrumbDocument.body)
+breadcrumbEdit.copy.breadcrumbHome='網站首頁'
+checkPageBody(pageEditors.find(p=>p.id==='inspiration'),breadcrumbDocument.id,breadcrumbDocument.body,breadcrumbEdit,breadcrumbDocument.schema)
+validate(breadcrumbEdit,breadcrumbDocument.schema)
+assert.deepEqual(changeImpacts([{documentId:breadcrumbDocument.id,path:'copy.breadcrumbHome'}],{caseDetailRoute:'/design-inspiration/sample'}).map(i=>i.href),['/design-inspiration#design-inspiration-breadcrumb','/design-inspiration/sample#design-inspiration-breadcrumb'])
+assert.deepEqual(changeImpacts([{documentId:breadcrumbDocument.id,path:'copy.breadcrumbDetail'}],{caseDetailRoute:'/design-inspiration/sample'}).map(i=>i.href),['/design-inspiration/sample#design-inspiration-breadcrumb'])
+assert.deepEqual(inspiration.filter(b=>b.preview==='inspiration-cases').flatMap(b=>b.fields.map(f=>f.documentId)),['custom-cases'])
+for(const old of ['案例內容','案例管理與顯示排序','案例顯示與順序','案例列表','列表標題與按鈕','整頁共用文字','案例篩選列','搜尋結果提示','案例卡片按鈕','無符合案例提示','案例內頁文字'])assert(inspiration.some(b=>b.aliases.includes('inspiration:'+old)))
 for(const i of Array.from({length:11},(_,i)=>i+1))assert.equal(inspiration.flatMap(b=>b.fields).filter(f=>f.documentId==='view-pages-design-inspiration-index'&&f.path==='copy.text'+i).length,1)
-const filterFields=inspiration.find(b=>b.preview==='inspiration-filters').fields
-assert.deepEqual(filterFields.filter(f=>!f.schema.advanced).map(f=>f.label),['篩選按鈕文字'])
-assert.deepEqual(filterFields.filter(f=>f.schema.readingGroup==='案例篩選列').map(f=>f.path),['copy.text2','copy.text3','copy.text4'])
-assert(filterFields.every(f=>f.schema.singleLine))
-assert(inspiration.find(b=>b.preview==='inspiration-results').fields.every(f=>f.schema.advanced&&f.schema.readingGroup==='搜尋結果'))
+const filterFields=inspirationShared.fields.filter(f=>f.formGroup==='案例篩選列')
+assert.deepEqual(filterFields.filter(f=>f.schema.advanced).map(f=>f.path),['copy.text2','copy.text3','copy.text4'])
+assert.equal(filterFields.find(f=>f.path==='copy.text5').schema.advanced,undefined)
+assert(inspirationShared.fields.filter(f=>f.formGroup==='搜尋結果提示').every(f=>f.schema.advanced&&f.schema.readingGroup==='搜尋結果'))
+assert.deepEqual(inspirationShared.fields.filter(f=>f.formGroup==='案例卡片按鈕').map(f=>f.path),['copy.text8'])
 for(const id of ['series-catalogue','product-catalogue','builder-catalogues']){
  const block=pageBlocks(pageEditors.find(p=>p.id===id),docs).find(b=>b.name==='型錄封面與下載')
  assert.equal(block.fields.find(f=>f.path==='copy.text2')?.schema.readingGroup,'型錄清單')
@@ -193,7 +205,7 @@ model.schema.source=true;assert.equal(ui.itemSchema.value.fields.id.readOnly,tru
 errors.value=[];model.documentId='news-articles';model.path='items';model.modelValue=[];model.schema={...docs.find(d=>d.id==='news-articles').schema.fields.items,newCategory:'activities',newItemLabel:'活動'};ui.add();await nextTick()
 assert.equal(ui.active.value.value.summary.category,'activities');assert.equal(ui.active.value.value.summary.categoryLabel,'優惠活動');assert.equal(ui.active.value.value.summary.excerpt,'');assert.equal(ui.active.value.value.summary.cover,'');assert.equal(ui.active.value.value.detail.sections.length,0,'New articles must not copy a real existing article')
 model.documentId='custom-cases';model.schema=editingSchema(docs.find(d=>d.id==='custom-cases').schema,'custom-cases').fields.items;model.modelValue=Array.from({length:8},(_,i)=>({...JSON.parse(JSON.stringify(model.schema.template)),id:'case-'+i,title:'案例 '+i}));state.value={};workbench.focused.value='';workbench.editing.value='';await nextTick()
-ui.choose(ui.rows.value[0]);workbench.focused.value='catalog-cases:items';workbench.editing.value='catalog-cases:items';const oldCases=JSON.stringify(model.modelValue);ui.reorder(0,2);await nextTick();assert.equal(workbench.focused.value,'custom-cases:items');assert.equal(workbench.editing.value,'','Moving a custom case must leave an unrelated source editor')
+ui.choose(ui.rows.value[0]);workbench.focused.value='another-list:items';workbench.editing.value='another-list:items';const oldCases=JSON.stringify(model.modelValue);ui.reorder(0,2);await nextTick();assert.equal(workbench.focused.value,'custom-cases:items');assert.equal(workbench.editing.value,'','Moving a custom case must leave an unrelated editor')
 assert.equal(model.modelValue.slice(0,3).map(i=>i.id).join(','),'case-1,case-2,case-0','Drag ordering inserts the selected case, not swaps two rows');assert.equal(ui.active.value.key,'case-0');assert.notEqual(JSON.stringify(model.modelValue),oldCases)
 ui.toggleVisibility(ui.active.value);await nextTick();assert.equal(ui.active.value.value.enabled,false);assert.equal(workbench.selection.value.value.enabled,false);ui.toggleVisibility(ui.active.value);await nextTick();assert.equal(ui.active.value.value.enabled,true)
 ui.reorder(2,6);await nextTick();assert.equal(ui.page.value,2);assert.equal(ui.active.value.key,'case-0');assert.equal(ui.visible.value[0].key,'case-0')

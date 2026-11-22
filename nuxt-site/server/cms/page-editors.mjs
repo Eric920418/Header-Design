@@ -16,7 +16,7 @@ import {kitchenHeroStory} from '../../shared/cms/kitchen-series-hero.mjs'
 
 export const editorSchema=d=>documentSchema(d.id,JSON.parse(d.schemaJson))
 export async function pageEditorSummaries(){
- const [rows,schemas]=await Promise.all([workspaceSummaries(),query('SELECT d.id,d.schemaJson,COALESCE(p.body,v.body) AS body,p.body AS publishedBody,v.body AS draftBody FROM cms.Documents d LEFT JOIN cms.Versions p ON p.id=d.publishedId LEFT JOIN cms.Versions v ON v.id=d.draftId')])
+ const [rows,schemas]=await Promise.all([workspaceSummaries(),query("SELECT d.id,d.schemaJson,COALESCE(p.body,v.body) AS body,p.body AS publishedBody,v.body AS draftBody FROM cms.Documents d LEFT JOIN cms.Versions p ON p.id=d.publishedId LEFT JOIN cms.Versions v ON v.id=d.draftId WHERE d.id<>N'catalog-cases'")])
  const documents=schemas.recordset.map(d=>({id:d.id,schema:editorSchema(d),body:d.body?JSON.parse(d.body):{}}))
  const bodies=Object.fromEntries(await Promise.all(schemas.recordset.map(async d=>{const body=JSON.parse(d.draftBody||d.body||'{}');return[d.id,d.id.startsWith('catalog-')?await alignSource(d.id,body):body]})))
  const published=Object.fromEntries(await Promise.all(schemas.recordset.map(async d=>{const body=d.publishedBody?JSON.parse(d.publishedBody):null;return[d.id,body&&d.id.startsWith('catalog-')?sameContent(body,JSON.parse(d.draftBody||'null'))?bodies[d.id]:await alignSource(d.id,body):body]})))
@@ -27,8 +27,8 @@ async function rowPresentation(p){
  const result={}
  for(const id of p.ids.filter(id=>id.startsWith('catalog-'))){
   const brand={'catalog-sakura':'櫻花','catalog-svago':'SVAGO','catalog-teka':'TEKA'}[id]
-  const rows=id==='catalog-cases'?(await query("SELECT c.id,(SELECT TOP(1) url FROM sync.DesignCloudFiles WHERE caseId=c.id AND type='Image' ORDER BY mainImage DESC,CASE WHEN sort IS NULL THEN 1 ELSE 0 END,sort,url) AS image FROM sync.DesignCloudCases c WHERE c.isWebsite=1")).recordset:brand?(await query("SELECT CONVERT(nvarchar(80),p.id) AS id,(SELECT TOP(1) url FROM sync.BuyKitchenPublicFiles WHERE product_id=p.id AND type IN ('main','product_images') ORDER BY CASE WHEN type='main' THEN 0 ELSE 1 END,COALESCE(sort,2147483647),id) AS image FROM sync.BuyKitchenProducts p WHERE p.channel=N'展板' AND p.Brand=@brand",{brand})).recordset:[]
-  result[id]=Object.fromEntries(rows.map(r=>[r.id,{image:r.image||'',href:id==='catalog-cases'?'/design-inspiration/'+r.id:'/products/'+id.slice(8)+'/item/'+r.id}]))
+  const rows=brand?(await query("SELECT CONVERT(nvarchar(80),p.id) AS id,(SELECT TOP(1) url FROM sync.BuyKitchenPublicFiles WHERE product_id=p.id AND type IN ('main','product_images') ORDER BY CASE WHEN type='main' THEN 0 ELSE 1 END,COALESCE(sort,2147483647),id) AS image FROM sync.BuyKitchenProducts p WHERE p.channel=N'展板' AND p.Brand=@brand",{brand})).recordset:[]
+  result[id]=Object.fromEntries(rows.map(r=>[r.id,{image:r.image||'',href:'/products/'+id.slice(8)+'/item/'+r.id}]))
  }
  return result
 }
@@ -92,7 +92,6 @@ export async function readPageEditor(id){
  }))
  const [rowsForDisplay,position]=await Promise.all([rowPresentation(p),positionPresentation(p)]),summary=pageSummary(p,summaries,documents)
  summary.pending=hasPageChanges(summary.blocks,Object.fromEntries(documents.map(d=>[d.id,d.publishedBody])),Object.fromEntries(documents.map(d=>[d.id,d.body])))
- if(position?.detailCase)summary.blocks=summary.blocks.map(b=>b.preview==='inspiration-detail'?{...b,href:position.detailCase.route}:b)
  summary.blocks=summary.blocks.map(b=>{
   if(p.id==='knowledge'&&b.name.startsWith('系統櫃'))return{...b,href:'/knowledge/design/systemcabinet'}
   if(b.kind==='registration')return{...b,href:position.registration?.path||p.href}
@@ -153,7 +152,7 @@ export async function changePageEditor(id,input,user,connection){
    try{checkPageBody(p,d.id,d.id.startsWith('catalog-')?await alignSource(d.id,previous,connection):previous,item.body,schema);const body=normalizeVideos(structuredClone(item.body),schema);validate(body,schema);return{id:d.id,revision:d.revision,body,title:resourceGuide(d.id).tabTitle||resourceGuide(d.id).location[0],changes:changedItems(d.publishedBody?JSON.parse(d.publishedBody):null,body,editingSchema(schema,d.id))}}catch(e){throw readableError(e,d.id,editingSchema(schema,d.id),item.body)}
   }))
   const stored=await Promise.all(rows.map(async d=>{let body=JSON.parse(d.body||'{}'),publishedBody=d.publishedBody?JSON.parse(d.publishedBody):null;if(d.id.startsWith('catalog-')){body=await alignSource(d.id,body,connection);if(publishedBody)publishedBody=await alignSource(d.id,publishedBody,connection)}return{id:d.id,schema:editorSchema(d),body,publishedBody}})),blocks=pageBlocks(p,stored)
-  const context=p.id==='home'?await homeImpactContext(connection):{}
+  const context=p.id==='home'?await homeImpactContext(connection):p.id==='inspiration'?{caseDetailRoute:(await caseLibrary(connection)).find(c=>c.route.startsWith('/design-inspiration/'))?.route}:{}
   const review=publishReview(workbenchBlocks(p.id,blocks),stored,Object.fromEntries(documents.map(d=>[d.id,d.body])),context)
   return{documents,review,previewToken:await createDraftPreview(user.id,documents,connection),impacts:review.impacts}
  }

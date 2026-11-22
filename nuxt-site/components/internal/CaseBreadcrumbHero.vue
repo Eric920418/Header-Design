@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const props = defineProps<{ designListUrl?: string }>()
+const props = defineProps<{ designListUrl?: string; labels?: Record<string, string> }>()
 const route = useRoute()
 const fromDesignInspiration = computed(() => Boolean(props.designListUrl) || route.query.from === 'inspiration')
-const parentLabel = computed(() => fromDesignInspiration.value ? '設計靈感' : '案例門市')
+const parentLabel = computed(() => props.designListUrl ? props.labels?.breadcrumbList || '設計靈感' : fromDesignInspiration.value ? '設計靈感' : '案例門市')
 const parentRoute = computed(() => {
   if (props.designListUrl) return props.designListUrl
   if (!fromDesignInspiration.value) return '/gallery'
@@ -15,8 +15,8 @@ const parentRoute = computed(() => {
 <template>
   <section data-hero-photo="songzhu" class="case-breadcrumb-hero hero-includes-header" :aria-label="designListUrl ? '設計案例麵包屑' : '案例門市麵包屑'">
     <div class="case-breadcrumb-hero__overlay" aria-hidden="true" />
-    <nav aria-label="麵包屑" class="case-breadcrumb-hero__trail" v-reveal="{ anim: 'opalMoveUp' }">
-      <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: parentLabel, to: parentRoute }, { label: designListUrl ? "設計案例" : "門市案例" }]' v-slot="{ items, follow }">
+    <nav :id="designListUrl ? 'design-inspiration-breadcrumb' : undefined" aria-label="麵包屑" class="case-breadcrumb-hero__trail" v-reveal="{ anim: 'opalMoveUp' }">
+      <InternalSmartBreadcrumb :fallback="[{ label: (designListUrl && labels?.breadcrumbHome) || '首頁', to: '/' }, { label: parentLabel, to: parentRoute }, { label: designListUrl ? labels?.breadcrumbDetail || '設計案例' : '門市案例' }]" v-slot="{ items, follow }">
         <template v-for="(item, index) in items" :key="index">
           <span v-if="index" aria-hidden="true">/</span>
           <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
