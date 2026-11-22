@@ -160,6 +160,17 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     </template>
     <p v-else class="cms-field-help">目前沒有刊登的門市案例顯示此區。</p>
    </template>
+   <div v-else-if="scene.kind==='franchise-news'" class="cms-scene-franchise-news">
+    <span class="cms-franchise-news-eyebrow" :class="{'is-focused':highlighted('copy.text58')}">{{ franchiseDownloadCard?.text58 }}</span>
+    <h3>最新加盟資訊</h3>
+    <p class="cms-franchise-news-heading">Latest Franchise News<br />With <strong>SAKURA KITCHEN</strong></p>
+    <ol v-if="scene.items.length">
+     <li v-for="item in scene.items" :key="item.id" :class="{'is-focused':item.id===selected?.value?.id}">
+      <span>{{ item.title }}</span><ArrowRight :size="16" aria-hidden="true" />
+     </li>
+    </ol>
+    <p v-else class="cms-field-help">目前沒有顯示中的加盟文章。</p>
+   </div>
    <div v-else-if="scene.kind==='news-overview'" class="cms-scene-news-overview">
     <article v-for="item in scene.items" :key="item.title">
      <AdminThumbnail v-if="item.image" :src="item.image" :alt="item.title+'封面'" />

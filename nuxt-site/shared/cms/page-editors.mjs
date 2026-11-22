@@ -3,6 +3,7 @@ import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {workspaceFor,firstImage} from './workflow.mjs'
 import {editingSchema,resourceGuide,homeResources,placeDestinations} from './presentation.mjs'
 import {positionGroup,positionField,pagePositions,decoratePosition,franchiseSupportImagePath} from './positions.mjs'
+import {franchiseNewsIds} from './public-content.mjs'
 
 const view=id=>'view-pages-'+id
 const page=(id,section,name,ids,extra={})=>({id,section,name,ids:[...new Set(ids.flatMap(id=>workspaceFor(id)?.ids||[id]))],...extra})
@@ -29,7 +30,7 @@ export const pageEditors=[
  page('about','brand','關於我們',[view('about-introduce')],{href:'/about/introduce'}),
  page('advantage','brand','品牌優勢',[view('about-advantage')],{href:'/about/advantage'}),
  page('pavilions','brand','櫻花集團品牌館',[view('about-exhibition')],{href:'/about/exhibition',extra:['site-visuals'],scopes:{'site-visuals':['pavilionVideoId']}}),
- page('franchise','franchise','加盟介紹',[view('franchising-intro')],{href:'/franchising/intro',extra:['site-visuals'],scopes:{'site-visuals':['franchiseVideoId',franchiseSupportImagePath]}}),
+ page('franchise','franchise','加盟介紹',[view('franchising-intro')],{href:'/franchising/intro',extra:['site-visuals','news-articles'],scopes:{'site-visuals':['franchiseVideoId',franchiseSupportImagePath],'news-articles':['items']}}),
  page('franchise-form','franchise','加盟申請表單',[view('franchising-form')],{href:'/franchising/form'}),
  page('franchise-download','franchise','加盟資料下載',[view('franchising-download')],{href:'/franchising/download',extra:['data-franchise'],scopes:{'data-franchise':['FRANCHISE_BROCHURE_URL']}}),
  page('builders','builders','建商專區首頁',[view('builders-index')],{href:'/builders',extra:['data-brandPavilions'],scopes:{'data-brandPavilions':['brandPavilions']}}),
@@ -39,7 +40,10 @@ export const pageEditors=[
  page('footer','shared','網站頁尾',['view-components-SiteFooter'],{href:'/#footer-navigation'}),
  page('visuals','shared','共用背景與影片',['site-visuals'],{href:'/'}),
  page('privacy','shared','隱私權政策',[view('privacy')],{href:'/privacy'}),
-].map(p=>({...p,ids:[...new Set([...p.ids,...p.extra||[]])]}))
+].map(p=>{
+ const ids=[...new Set([...p.ids,...p.extra||[]])]
+ return {...p,ids,...(p.id==='franchise'?{unpublishIds:ids.filter(id=>id!=='news-articles')}:{})}
+})
 
 export const pageEditor=id=>pageEditors.find(p=>p.id===id)
 export const desktopCatalogueFields=['copy.text2','copy.field1']
@@ -93,6 +97,7 @@ export function searchResultLink(result,query={}){
  return {...link,query:{...link.query,...(result.item&&!articleSection?{list:result.item.scope,item:result.item.key}:{})}}
 }
 export const valueAt=(body,path)=>path.split('.').reduce((v,key)=>v?.[key],body)
+export const inRowScope=(schema,row)=>(!schema.rowFilter||valueAt(row,schema.rowFilter.path)===schema.rowFilter.value)&&(!schema.rowIds||schema.rowIds.includes(row?.id))
 export function pageFieldValue(bodies, field){
  const body=bodies?.[field.documentId]
  return valueAt(effectiveHomeHeadingBody(field.documentId,body),field.path)
@@ -201,7 +206,7 @@ export function pageBlocks(p,documents){
    if(p.id==='home'&&d.id==='data-kitchenStyles'&&path==='KITCHEN_STYLES')block.aliases=[...(block.aliases||[]),'home:首頁與選單系列卡片']
    const cleanLabel=(s.destination||s.imageReading?s.label:location?.label)||(displaySettings?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,''))
    const labels=s=>[s.label||'',s.positionLegacyLabel||'',s.readingGroup?'朗讀 輔助閱讀 螢幕閱讀器':'',s.imageReading?'圖片說明 圖片替代文字':'',...(s.destination?[s.help]:[]),...Object.values(s.fields||{}).flatMap(labels),...(s.item?labels(s.item):[])]
-   const newsList=d.id==='news-articles'&&(p.category?{rowFilter:{path:'summary.category',value:p.category},newCategory:p.category,...(p.id==='news-latest'?{newsOverview:true}:{})}:{newsOverview:true,newCategory:'latest'})
+   const newsList=d.id==='news-articles'&&(p.id==='franchise'?{newsOverview:true,rowIds:franchiseNewsIds}:p.category?{rowFilter:{path:'summary.category',value:p.category},newCategory:p.category,...(p.id==='news-latest'?{newsOverview:true}:{})}:{newsOverview:true,newCategory:'latest'})
    block.fields.push({documentId:d.id,path,label:cleanLabel,...(formGroup?{formGroup}:{}),searchTerms:labels(s).join(' '),schema:{...s,label:cleanLabel,...(displaySettings&&(p.id==='inspiration'||p.id==='knowledge'&&!systemArticle)?{advanced:true}:{}),...(location?{singleLine:location.singleLine}:{}),...(location?.readingGroup?{advanced:true,readingGroup:location.readingGroup,help:location.help}:{}),...newsList}})
   }
   if(p.scopes?.[d.id]){for(const path of p.scopes[d.id]){const s=path.split('.').reduce((s,key)=>s?.fields?.[key],schema);if(s)add(path,s)}continue}

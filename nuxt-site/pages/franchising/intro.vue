@@ -7,6 +7,7 @@ import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { FRANCHISE_FAQ_DISPLAY_LIMIT, FRANCHISE_FORM_URL as cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages as cmsSeed_franchiseAdvantages, franchiseFaqItems as cmsSeed_franchiseFaqItems, franchiseMarketingStories as cmsSeed_franchiseMarketingStories, franchiseQualifications as cmsSeed_franchiseQualifications, franchiseSupportHighlights as cmsSeed_franchiseSupportHighlights, franchiseTestimonials as cmsSeed_franchiseTestimonials,  } from '~/data/franchise'
 import { newsArticles as cmsSeed_newsArticles } from '~/data/news'
+import { franchiseNewsIds } from '~/shared/cms/public-content.mjs'
 const { FRANCHISE_FORM_URL, franchiseAdvantages, franchiseFaqItems, franchiseMarketingStories, franchiseQualifications, franchiseSupportHighlights, franchiseTestimonials } = await useCmsResource('data-franchise', { FRANCHISE_FORM_URL: cmsSeed_FRANCHISE_FORM_URL, franchiseAdvantages: cmsSeed_franchiseAdvantages, franchiseFaqItems: cmsSeed_franchiseFaqItems, franchiseMarketingStories: cmsSeed_franchiseMarketingStories, franchiseQualifications: cmsSeed_franchiseQualifications, franchiseSupportHighlights: cmsSeed_franchiseSupportHighlights, franchiseTestimonials: cmsSeed_franchiseTestimonials })
 const { newsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles })
 
@@ -39,7 +40,6 @@ const advantageGroups = computed(() => Array.from(
   (_, index) => franchiseAdvantages.slice(index * 2, index * 2 + 2),
 ))
 let advantageFrame = 0
-const franchiseNewsIds = ['franchise-seminar-2026', 'kaohsiung-brand-hall', 'franchise-expo-2025']
 const franchiseNews = franchiseNewsIds
   .map(id => newsArticles.find(article => article.id === id))
   .filter(article => article !== undefined)

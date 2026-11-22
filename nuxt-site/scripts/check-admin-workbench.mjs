@@ -16,7 +16,7 @@ import {sameContent,pageChanges,changeImpacts,blockImpacts,publishReview,pageSea
 import {normalizeVideos,validate} from '../server/cms/content.mjs'
 import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
-import {compareNewsDates,publicContent} from '../shared/cms/public-content.mjs'
+import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 {
@@ -195,6 +195,28 @@ const badBuilder=structuredClone(previewBodies['view-pages-builders-index']);bad
 const builderSchema=docs.find(d=>d.id==='view-pages-builders-index').schema
 assert.throws(()=>validate(badBuilder,builderSchema),e=>{const issue=readableError(e,'view-pages-builders-index',editingSchema(builderSchema,'view-pages-builders-index'),badBuilder);assert.equal(issue.fieldErrors[0].path,'copy.text2');assert.match(issue.message,/區塊中文主標題（第一段）/);return true})
 const franchise=workbenchBlocks('franchise',pageBlocks(pageEditors.find(p=>p.id==='franchise'),docs))
+{
+ const page=pageEditors.find(p=>p.id==='franchise'),block=franchise.find(b=>b.kind==='franchise-news')
+ const body=structuredClone(newsDoc.body),draft=structuredClone(body),unrelated=body.items.findIndex(i=>!franchiseNewsIds.includes(i.id))
+ const article=draft.items.find(i=>i.id===franchiseNewsIds[0])
+ assert(!page.unpublishIds.includes(newsDoc.id))
+ assert.equal(block.href,'/franchising/intro#franchise-news-title')
+ assert.deepEqual(block.fields.map(f=>f.path).sort(),['copy.field62','copy.text58','copy.text63','items'])
+ const items=pageSearchItems(block,{[newsDoc.id]:body})
+ assert.deepEqual(items.map(i=>i.key).sort(),franchiseNewsIds.slice().sort())
+ const publishedIds=franchiseNewsIds.filter(id=>body.items.some(i=>i.id===id&&i.enabled))
+ assert.deepEqual(pagePositionContent(block,{[newsDoc.id]:body}).items.map(i=>i.id),publishedIds)
+ article.summary.title='加盟文章草稿'
+ checkPageBody(page,newsDoc.id,body,draft,newsDoc.schema)
+ assert.equal(pagePositionContent(block,{[newsDoc.id]:draft}).items[0].title,article.summary.title)
+ const outOfScope=structuredClone(draft)
+ outOfScope.items[unrelated].summary.title='其他文章草稿'
+ assert.throws(()=>checkPageBody(page,newsDoc.id,draft,outOfScope,newsDoc.schema),/只可修改官網引用的加盟文章/)
+ assert.throws(()=>checkPageBody(page,newsDoc.id,body,{items:draft.items.toReversed()},newsDoc.schema),/只可修改官網引用的加盟文章/)
+ assert(!hasPageChanges(franchise,{[newsDoc.id]:draft},{[newsDoc.id]:outOfScope}))
+ const review=publishReview(franchise,[{...newsDoc,body:outOfScope,publishedBody:body}],{[newsDoc.id]:outOfScope})
+ assert(review.saved.some(c=>c.after==='其他文章草稿'&&c.blockId!==block.id))
+}
 const downloadEntry=franchise.find(b=>b.name==='加盟資料下載入口')
 assert(downloadEntry.fields.some(f=>f.path==='copy.field53'))
 assert(downloadEntry.aliases.includes('franchise:加盟資料下載'))

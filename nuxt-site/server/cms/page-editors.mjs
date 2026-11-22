@@ -35,7 +35,7 @@ async function rowPresentation(p){
  return result
 }
 async function positionPresentation(p){
- const definition=pagePositions[p.id],ids=[...new Set(['site-visuals',...p.ids,...(p.id==='news'||p.id==='franchise'?['news-articles']:[]),...(p.brand?['data-productCatalogues']:[]),...(p.id==='inspiration'?['data-storeCases','custom-cases']:[]),...(definition?.sections||[]).flatMap(s=>Array.isArray(s.image)?[s.image[0]]:[])])]
+ const definition=pagePositions[p.id],ids=[...new Set(['site-visuals',...p.ids,...(p.brand?['data-productCatalogues']:[]),...(p.id==='inspiration'?['data-storeCases','custom-cases']:[]),...(definition?.sections||[]).flatMap(s=>Array.isArray(s.image)?[s.image[0]]:[])])]
  const rows=(await query(`SELECT d.id,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.publishedId WHERE d.id IN (${ids.map((_,i)=>'@context'+i).join(',')})`,Object.fromEntries(ids.map((id,i)=>['context'+i,id])))).recordset
  const bodies=Object.fromEntries(rows.map(d=>[d.id,JSON.parse(d.body)])),heroImage=firstImage(positionImage(definition?.hero,bodies))
  const result={heroImage,blockImages:Object.fromEntries((definition?.sections||[]).map(s=>[p.id+':'+s.name,firstImage(positionImage(s.image,bodies))])),sections:definition?.sections||[]}
@@ -56,7 +56,6 @@ async function positionPresentation(p){
   result.samples=samples(newsArticles)
   result.recentArticles=recentNewsArticles.map(({id,title,cover,displayDate,publishedAt})=>({id,title,image:cover,date:displayDate||publishedAt}))
  }
- if(p.id==='franchise')result.samples=articles.filter(i=>/franchise/.test(i.slug)).slice(0,3).map(i=>({title:i.summary.title,image:i.summary.cover}))
  if(p.category){
   const first=articles[0]
   const images=bodies['site-visuals']?.images
@@ -150,6 +149,10 @@ export function checkPageBody(p,id,previous,next,schema){
    const keep=rows=>rows?.filter(row=>valueAt(row,f.schema.rowFilter.path)!==f.schema.rowFilter.value)
    if(!equal(keep(old),keep(value)))fail(400,'其他分類的文章不可從目前頁面修改；請從對應官網分類進入。')
   }
+  if(f.schema.rowIds&&(!Array.isArray(value)||!Array.isArray(old)||value.length!==old.length||old.some((row,index)=>{
+   const replacement=value[index]
+   return row.id!==replacement?.id||!f.schema.rowIds.includes(row.id)&&!sameContent(row,replacement)
+  })))fail(400,'此處只可修改官網引用的加盟文章。新增、刪除或其他文章請到「優惠消息」管理。')
   editable(old,value,f.schema)
   merged=withValue(merged,f.path,value)
  }

@@ -180,7 +180,7 @@ export const pagePositions={
   {...section('加盟介紹輪播圖','更換官網上下兩排的循環照片','franchise-marquee','franchise-intro-marquee'),aliases:['franchise:品牌成果圖片']},
   section('專業品牌實力','加盟優勢的介紹與圖文','cards','franchise-advantage-title'),section('加盟邀請','邀請文案與加盟按鈕','text','franchise-conversion-title',['site-visuals','images.asset_b3dcb152']),
   {...section('品牌信賴','介紹文字與品牌案例','cards','franchise-marketing-title'),aliases:['franchise:品牌信賴與行銷']},
-  section('加盟流程與辦法','七步驟流程圖與圖片說明','steps','franchise-process-title'),section('加盟資格與條件','資格條件與申請準備','text'),section('總部支援','支援項目、背景圖片與申請按鈕','franchise-support','franchise-support',['site-visuals',franchiseSupportImagePath]),{...section('了解加盟資訊','加盟問答與旁邊的資料封面','franchise-faq','franchise-faq-title',[franchiseMarqueeDocument,'copy.field53']),aliases:['franchise:加盟常見問題']},{...section('加盟資料下載入口','加盟介紹問答旁的封面、標題與連結','catalogue','franchise-faq-title'),aliases:['franchise:加盟資料下載']},section('最新加盟資訊','最新加盟消息的更多入口','cards','franchise-news-title')]},
+  section('加盟流程與辦法','七步驟流程圖與圖片說明','steps','franchise-process-title'),section('加盟資格與條件','資格條件與申請準備','text'),section('總部支援','支援項目、背景圖片與申請按鈕','franchise-support','franchise-support',['site-visuals',franchiseSupportImagePath]),{...section('了解加盟資訊','加盟問答與旁邊的資料封面','franchise-faq','franchise-faq-title',[franchiseMarqueeDocument,'copy.field53']),aliases:['franchise:加盟常見問題']},{...section('加盟資料下載入口','加盟介紹問答旁的封面、標題與連結','catalogue','franchise-faq-title'),aliases:['franchise:加盟資料下載']},section('最新加盟資訊','編輯官網此區的文章、小標及查看更多按鈕','franchise-news','franchise-news-title')]},
  'franchise-form':{hero:['site-visuals','images.asset_82b9dd3e'],sections:[section('申請表單上方','標題、填寫說明與下載按鈕','form','franchise-application-title')]},
  'franchise-download':{hero:[franchiseDownloadDocument,'copy.field1'],sections:[
   {...section('主視覺標題','下載頁最上方的大圖、英文小標與主標題','hero','franchise-download-title'),aliases:['franchise-download:頁面最上方']},
@@ -230,7 +230,7 @@ export function positionGroup(page,id,path){
  if(page==='franchise'&&path==='FRANCHISE_BROCHURE_URL')return '加盟資料下載入口'
  if(id==='knowledge-articles')return '文章管理'
  if(page==='news-latest'&&id===view('news-latest-index')&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
- if(id==='news-articles')return page==='news'?'最新消息列表':page==='news-latest'?'消息文章管理':page==='news-activities'?'活動管理':'影音管理'
+ if(id==='news-articles')return page==='franchise'?'最新加盟資訊':page==='news'?'最新消息列表':page==='news-latest'?'消息文章管理':page==='news-activities'?'活動管理':'影音管理'
  if(id.startsWith('catalog-'))return '商品顯示與排序'
  if(path==='metaLabels')return '門市內頁規格與資訊'
  if(id===view('news-index')&&path==='newsCategories')return '最新消息分類標籤'

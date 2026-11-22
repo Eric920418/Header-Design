@@ -1,5 +1,6 @@
 export const contentAliases={'data-kitchenGuides':'knowledge-articles','data-kitchenGuideDetails':'knowledge-articles','data-news':'news-articles','data-latestArticles':'news-articles','data-activityArticles':'news-articles','data-mediaVideos':'news-articles'}
 export const compareNewsDates=(a,b)=>(b||'').localeCompare(a||'')
+export const franchiseNewsIds=['franchise-seminar-2026','kaohsiung-brand-hall','franchise-expo-2025']
 // Keep saved, published and unsaved previews on the same data projection.
 export function publicContent(id,input){
  const body=JSON.parse(JSON.stringify(input))

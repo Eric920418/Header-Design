@@ -19,7 +19,7 @@ export function workbenchBlocks(page,blocks,recentArticles){
  for(const b of blocks){
   const h=page==='home'&&home.find(i=>b.id==='home:'+i[0])
   const old=page==='knowledge'&&b.name==='文章管理'?'文章列表':page.startsWith('news-')&&/管理$/.test(b.name)?'消息列表':''
-  const fields=b.fields.map(f=>f.documentId==='news-articles'?{...f,schema:{...f.schema,label:({'news':'文章清單','news-latest':'最新消息','news-activities':'優惠活動','news-video':'媒體影音'})[page]||f.label,newItemLabel:({'news':'消息','news-latest':'消息','news-activities':'活動','news-video':'影片'})[page]||'文章',...(f.schema.newsOverview?{searchLabel:'搜尋文章標題'}:{})}}:f)
+  const fields=b.fields.map(f=>f.documentId==='news-articles'?{...f,schema:{...f.schema,label:({'news':'文章清單','news-latest':'最新消息','news-activities':'優惠活動','news-video':'媒體影音','franchise':'加盟文章'})[page]||f.label,newItemLabel:({'news':'消息','news-latest':'消息','news-activities':'活動','news-video':'影片'})[page]||'文章',...(f.schema.newsOverview?{searchLabel:'搜尋文章標題'}:{})}}:f)
   result.push(decoratePosition(page,{...b,name:h?.[1]||b.name,hint:b.hint||h?.[2]||(b.fields.some(f=>f.schema.type==='array')?'圖片、文字與順序':'標題、介紹與按鈕'),kind:b.kind||h?.[3]||(/門市|品牌館/.test(b.name)?'stores':/型錄/.test(b.name)?'catalogue':'content'),fields,aliases:[...new Set([b.id,...b.aliases||[],...(old?[page+':'+old]:[])])]}))
  }
  if(page==='home')result.sort((a,b)=>(home.findIndex(i=>a.id==='home:'+i[0])+1||99)-(home.findIndex(i=>b.id==='home:'+i[0])+1||99))
@@ -143,10 +143,15 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
   const {id,summary,enabled}=recentField.value[index]
   return {id,title:summary.title,image:summary.cover,date:summary.displayDate||summary.publishedAt,enabled}
  }):presentation.recentArticles||[]
- const sample=['news-list-title','franchise-news-title'].includes(block?.anchor)?presentation.samples||[]:[]
+ const franchiseField=fields.find(f=>f.schema.rowIds)
+ const franchiseItems=franchiseField?recentArticleIndexes(franchiseField.value,franchiseField.schema.rowIds).flatMap(index=>{
+  const article=franchiseField.value[index]
+  return article.enabled?[{id:article.id,title:article.summary.title,image:article.summary.cover}]:[]
+ }):[]
+ const sample=block?.anchor==='news-list-title'?presentation.samples||[]:[]
  const fixedAction=block?.fixedAction
  const referenceItems=fixedAction==='廚房商品型錄下載'?presentation.catalogueCovers:fixedAction==='更多廚房知識'?presentation.relatedArticles:sample
- const items=block?.kind==='news-recent'?recentItems:selected?[{title:selected.caption,image:selected.image||'',value:selected.value}]:arrays.length?arrays:referenceItems||[]
+ const items=block?.kind==='franchise-news'?franchiseItems:block?.kind==='news-recent'?recentItems:selected?[{title:selected.caption,image:selected.image||'',value:selected.value}]:arrays.length?arrays:referenceItems||[]
  const video=fields.find(f=>f.schema.format==='youtube')?.value
  const videoImage=typeof video==='string'&&/^[\w-]{11}$/.test(video)?'https://i.ytimg.com/vi/'+video+'/hqdefault.jpg':''
  const focusedImage=firstImage(fields.find(f=>f.path===focusedPath&&f.schema.format==='media')?.value)
@@ -154,7 +159,7 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const serviceVideo=block?.anchor==='service-brand-video'||block?.id==='visuals:服務介紹影片'
  const serviceCover=serviceVideo?bodies['site-visuals']?.serviceVideoCover||presentation.serviceVideoCover:''
  const mappedImage=block?.kind==='franchise-support'?franchiseSupportImage(bodies):blockImage||serviceCover
- const image=block?.kind==='news-recent'?recentItems[0]?.image||mappedImage:selected?selected.image||mappedImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||mappedImage||videoImage||''
+ const image=block?.kind==='franchise-news'?franchiseItems[0]?.image||mappedImage:block?.kind==='news-recent'?recentItems[0]?.image||mappedImage:selected?selected.image||mappedImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||mappedImage||videoImage||''
  const media=fields.filter(f=>f.schema.format==='media').map(f=>({path:f.path,label:f.label,image:firstImage(f.value)})).filter(f=>f.image)
  const heading=texts.filter(f=>/標題|小標|品牌名稱|區塊(?:英|中)文標籤/.test(f.label)),buttons=texts.filter(f=>/按鈕|連結文字/.test(f.label)&&!/介紹|說明/.test(f.label))
  const detail=fields.some(f=>/-slug-$/.test(f.documentId))||/系統櫃/.test(block?.name)

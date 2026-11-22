@@ -814,6 +814,12 @@
 .cms .cms-franchise-download-meta div{flex:1 1 auto;padding:6px 8px;border:1px solid var(--cms-line);border-radius:6px;}
 .cms .cms-franchise-download-meta dt{font-size:11px;color:var(--cms-muted);}
 .cms .cms-franchise-download-meta dd{margin:0;font-weight:600;}
+.cms .cms-franchise-news-eyebrow{display:inline-block;padding:3px 8px;border:1px solid var(--cms-line);border-radius:999px;font-size:11px;}
+.cms .cms-scene-franchise-news h3{margin-top:8px;}
+.cms .cms-franchise-news-heading{margin:2px 0 12px;color:#8d661f;}
+.cms .cms-scene-franchise-news ol{padding:0;margin:0;list-style:none;border-top:1px solid var(--cms-line);}
+.cms .cms-scene-franchise-news li{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--cms-line);overflow-wrap:anywhere;}
+.cms .cms-scene-franchise-news li svg{flex:none;}
 @media(min-width:1024px){.cms .cms-common-settings>.cms-franchise-support-settings{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(min-width:768px){.cms .cms-news-link-settings{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:12px;}}
 .cms .cms-knowledge-article-sections{display:grid;gap:8px;margin-top:14px;}

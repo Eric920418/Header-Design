@@ -17,7 +17,8 @@ provide('cms-field-errors',fieldErrors);provide('cms-item-selections',selections
 const blocks=computed<any[]>(()=>{const named=namedPages.value?.find(p=>p.id===props.id);return workbenchBlocks(props.id,(pageData.value?.blocks||[]).map((b:any)=>({...b,name:named?.blocks.find((n:any)=>n.id===b.id)?.name||b.name})),pageData.value?.positionPresentation?.recentArticles||[])})
 const active=computed(()=>blocks.value.find(b=>b.aliases.includes(route.query.block))||blocks.value[0])
 const newsRecent=computed(()=>active.value?.kind==='news-recent')
-const newsArticleList=computed(()=>newsRecent.value||active.value?.kind==='news-overview')
+const franchiseNews=computed(()=>active.value?.kind==='franchise-news')
+const newsArticleList=computed(()=>newsRecent.value||franchiseNews.value||active.value?.kind==='news-overview')
 const regionField=computed(()=>active.value?.fields.find((field:any)=>field.documentId==='data-storeCases'&&field.path==='regionCities'))
 const regionNames=Object.keys(storeRegionCities),storeRegion=ref(regionNames[0]!),regionLabelId=useId()
 const cityListPath=computed(()=>`regionCities.${storeRegion.value}`)
@@ -212,6 +213,7 @@ const status=computed(()=>dirty.value?`尚未儲存 · ${changeDetails.value.len
 const shared=computed(()=>changeImpacts(changeDetails.value).filter(i=>i.href.split('#')[0]!==pageData.value?.href.split('#')[0]||/全站|所有官網頁面/.test(i.label)))
 const returnLink=computed(()=>{const {sitePage,block,edit,part,seriesPart,legacy,field,item,list,create,returnPath,returnSection,...query}=route.query;if(typeof returnSection==='string')query.section=returnSection;return{path:returnPath==='/admin/content'?'/admin/content':props.id==='home'?'/admin':'/admin/content',query}})
 const activeDocs=computed(()=>docs.value.filter(d=>visibleFields.value.some((f:any)=>f.documentId===d.id)))
+const historyDocs=computed(()=>activeDocs.value.filter(d=>!franchiseNews.value||d.id!=='news-articles'))
 const unpublishDocuments=computed(()=>docs.value.filter(d=>d.publishedId&&(!pageData.value?.unpublishIds||pageData.value.unpublishIds.includes(d.id))))
 const impacts=computed(()=>{
  const block=active.value
@@ -220,6 +222,8 @@ const impacts=computed(()=>{
   const related=changes.filter((change:{blockId?:string;documentId:string;path:string})=>change.blockId===block.id||visibleFields.value.some((f:any)=>f.documentId===change.documentId&&f.path===change.path))
   return related.length?changeImpacts(related):blockImpacts({...block,fields:visibleFields.value},[],impactContext.value)
  }
+ if(franchiseNews.value&&!changes.some((change:{blockId?:string})=>change.blockId===block.id))
+  return blockImpacts({...block,fields:block.fields.filter((f:any)=>f.documentId!=='news-articles')},[],impactContext.value)
  if(!newsRecent.value)return blockImpacts(block,changes,impactContext.value)
  const item=workbench.selection.value?.value?.id
  const edited=changes.filter((change:{blockId?:string;documentId:string;rowId?:string|number})=>change.blockId===block.id||(item!==undefined&&change.documentId==='news-articles'&&change.rowId===item))
@@ -238,9 +242,10 @@ async function load(){error.value='';try{const result=await api('page-editors/'+
  }else if(route.query.legacy){const b=result.blocks.find((b:any)=>b.fields.some((f:any)=>f.documentId===route.query.legacy));if(b)await router.replace({query:{...route.query,block:b.id,legacy:undefined}})}if(props.id==='menu'&&route.query.block==='menu:展開選單中的型錄入口')await openCatalogueEditor()}catch(e){error.value=message(e)}}
 async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;const block=[active.value,...blocks.value].find(b=>editableBlockFields(b).some((f:any)=>{
  if(f.documentId!==issue.documentId||!(issue.path===f.path||issue.path.startsWith(f.path+'.')))return false
- if(!f.schema.recentArticleIds)return true
+ const ids=f.schema.rowIds||f.schema.recentArticleIds
+ if(!ids)return true
  const index=Number(issue.path.slice(f.path.length+1).split('.')[0])
- return recentArticleIndexes(pageFieldValue(bodies.value,f),f.schema.recentArticleIds).includes(index)
+ return recentArticleIndexes(pageFieldValue(bodies.value,f),ids).includes(index)
  }));if(block&&(!seriesPart.value||block.id!==active.value?.id))await selectBlock(block.id);const part=seriesPart.value&&issue.documentId==='data-kitchenSeries'&&sectionForSeriesField(issue.path);if(part)await chooseLocation(part.id);if(issue.documentId===headerId&&desktopCatalogueFields.includes(issue.path))await openCatalogueEditor();if(props.id==='knowledge'&&isSystemCabinetDocument(issue.documentId)){const field=systemCabinetFields.value.find((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.')));await openSystemCabinet('knowledge:'+(field?.formGroup||'系統櫃材質重點'))}
  if(regionField.value&&issue.documentId===regionField.value.documentId&&issue.path.startsWith('regionCities.'))selectStoreRegion(issue.path.split('.')[1])
  await nextTick();await nextTick();const input=formRoot.value?.querySelector<HTMLElement>('[aria-invalid=true]');for(let p=input?.parentElement;p;p=p.parentElement)if(p instanceof HTMLDetailsElement)p.open=true;input?.focus()}
@@ -259,7 +264,7 @@ const locationHref=computed(()=>{const selected=workbench.selection.value,item=s
 const publicLocation=computed(()=>{
  const selected=workbench.selection.value
  if(newsArticleList.value&&!workbench.editing.value){
-  const listId=props.id==='news-latest'?'view-pages-news-latest-index':'view-pages-news-index'
+  const listId=franchiseNews.value?franchiseMarqueeDocument:props.id==='news-latest'?'view-pages-news-latest-index':'view-pages-news-index'
   return docs.value.find(d=>d.id===listId)?.publishedBody?positionBlock.value?.href:''
  }
  if(props.id!=='home'&&selected&&(itemWebsitePath(selected.documentId,selected.value)||selected.href)){
@@ -321,6 +326,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <NuxtLink :to="pageEditorLink('franchise-download',route.query)" class="cms-button">編輯「加盟資料下載」頁 →</NuxtLink>
    </div>
    <p v-if="caseManagement" class="cms-case-scope">這裡管理從後台新增的案例。請到<NuxtLink :to="pageEditorLink(storeCasesPageId,route.query)">「門市案例」</NuxtLink>修改門市文章與照片。從其他系統同步的案例請回原系統修改。</p>
+   <p v-if="franchiseNews" class="cms-case-scope">按「編輯文章」修改標題、封面、摘要或內文。更新後，「優惠消息」也會使用修改後的文章。</p>
    <fieldset :disabled="busy" class="cms-edit-form cms-collection-fields"><template v-for="f in collections" :key="f.documentId+':'+f.path+(newsRecent?':recent':'')"><div v-if="f.documentId===headerId&&f.path==='leftNav'" class="cms-block-field">
     <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :has-related-changes="catalogueChanged" @update:model-value="update(f,$event)" @cancel-related="restoreCatalogue">
      <template #item-settings="{row}"><fieldset v-if="usesDesktopCatalogue(row.value)&&catalogueFields.length" class="cms-fields">
@@ -382,7 +388,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
    </details>
    <details class="cms-secondary"><summary>影響頁面（{{ impacts.length }}）</summary><ul v-if="impacts.length"><li v-for="i in impacts" :key="i.href+i.label"><a :href="i.href" target="_blank" rel="noopener noreferrer">{{ i.label }} ↗</a></li></ul><p v-else class="cms-field-help">這些設定目前沒有官網顯示位置。</p></details>
    <details v-if="session?.role==='admin'" class="cms-secondary"><summary>其他操作</summary><button type="button" class="cms-button" :disabled="busy||dirty||!unpublishDocuments.length" @click="unpublish">暫停本頁內容</button></details>
-   <details class="cms-secondary"><summary>過去的修改</summary><section v-for="d in activeDocs" :key="d.id"><h3>{{ resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0] }}</h3><div v-for="v in d.versions" :key="v.id" class="cms-history-row"><span>{{ cmsDate(v.createdAt) }} · {{ v.actor||'初始內容' }}</span><button v-if="session?.role==='admin'" type="button" class="cms-button" :disabled="busy||dirty" @click="restore(d,v.id)">取回這份內容</button></div></section></details>
+   <details class="cms-secondary"><summary>過去的修改</summary><p v-if="franchiseNews" class="cms-field-help">文章版本可從<NuxtLink :to="pageEditorLink('news',route.query,'news:最新消息列表')">「優惠消息」</NuxtLink>查看。</p><section v-for="d in historyDocs" :key="d.id"><h3>{{ resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0] }}</h3><div v-for="v in d.versions" :key="v.id" class="cms-history-row"><span>{{ cmsDate(v.createdAt) }} · {{ v.actor||'初始內容' }}</span><button v-if="session?.role==='admin'" type="button" class="cms-button" :disabled="busy||dirty" @click="restore(d,v.id)">取回這份內容</button></div></section></details>
   </div>
   <aside class="cms-inspector cms-panel" :class="{'is-editing':!!workbench.editing.value}" aria-label="位置示意與編輯"><AdminPositionPreview v-if="!workbench.editing.value" :block="positionBlock" :bodies="bodies" :selected="positionSelection" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /><div id="cms-item-editor" /></aside>
  </div>

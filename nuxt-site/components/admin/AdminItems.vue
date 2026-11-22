@@ -12,7 +12,7 @@ const route=useRoute(),router=useRouter(),cancelOpen=ref(false),moreOpen=ref(fal
 const depth=inject('cms-array-depth',0);provide('cms-array-depth',depth+1)
 const workbench=depth===0?inject<any>('cms-workbench',null):null
 const state=inject<any>('cms-item-selections',ref({})),errors=inject<any>('cms-field-errors',ref([])),root=ref<HTMLElement>()
-const scope=computed(()=>props.documentId+':'+props.path),recentArticleIds=computed(()=>props.schema.recentArticleIds),viewScope=computed(()=>scope.value+(recentArticleIds.value?':recent':''))
+const scope=computed(()=>props.documentId+':'+props.path),fixedArticleIds=computed(()=>props.schema.rowIds||props.schema.recentArticleIds),viewScope=computed(()=>scope.value+(fixedArticleIds.value?':recent':''))
 const selected=computed({get:()=>state.value[viewScope.value],set:value=>state.value={...state.value,[viewScope.value]:value}})
 const tracking=computed(()=>{
  if(!workbench?.rows)return null
@@ -28,7 +28,7 @@ const pageSize=workbench?6:10
 const caseTable=computed(()=>props.schema.editor==='case-table'),dragged=ref(''),dropTarget=ref(''),orderNotice=ref('')
 const allRows=computed(()=>{
  const rows=(props.modelValue||[]).map((value,index)=>({value,index,key:tracking.value?.order[index]??itemKey(value,index)}))
- if(recentArticleIds.value)return recentArticleIndexes(props.modelValue,recentArticleIds.value).map(index=>rows[index]!)
+ if(fixedArticleIds.value)return recentArticleIndexes(props.modelValue,fixedArticleIds.value).map(index=>rows[index]!)
  const items=rows.filter(r=>!props.schema.rowFilter||valueAt(r.value,props.schema.rowFilter.path)===props.schema.rowFilter.value)
  return props.schema.newsOverview?items.sort((a,b)=>compareNewsDates(a.value.summary.publishedAt,b.value.summary.publishedAt)):items
 })
@@ -90,7 +90,7 @@ watch([visible,active,()=>workbench?.focused.value],()=>{if(!workbench)return;if
 watch([page,search],()=>{if(workbench&&visible.value[0]&&!visible.value.some(r=>r.key===selected.value))choose(visible.value[0],false,false)})
 watch(()=>errors.value,()=>{const prefix=(props.path?props.path+'.':''),issue=errors.value?.find((e:any)=>e.documentId===props.documentId&&e.path.startsWith(prefix));const index=allRows.value.findIndex(r=>r.index===Number(issue?.path.slice(prefix.length).split('.')[0]));if(issue&&index>=0){search.value='';page.value=Math.floor(index/pageSize)+1;choose(allRows.value[index],true)}},{deep:true,immediate:true})
 watch([()=>route.query.item,()=>route.query.list,allRows],()=>{const target=String(route.query.list)+':'+String(route.query.item);if(!workbench)return;if(route.query.list!==scope.value){directTarget.value='';return}if(directTarget.value===target)return;const row=allRows.value.find(r=>r.key===route.query.item);if(!row)return;directTarget.value=target;search.value='';page.value=Math.floor(allRows.value.indexOf(row)/pageSize)+1;nextTick(()=>choose(row,true))},{immediate:true})
-watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||recentArticleIds.value||target!==scope.value)return;await nextTick();if(route.query.create!==scope.value)return;await router.replace({query:{...route.query,create:undefined}});add()},{immediate:true})
+watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||fixedArticleIds.value||target!==scope.value)return;await nextTick();if(route.query.create!==scope.value)return;await router.replace({query:{...route.query,create:undefined}});add()},{immediate:true})
 </script>
 <template>
  <section ref="root" class="cms-items" :class="{'cms-items-workbench':workbench,'cms-case-manager':caseTable}">
@@ -101,7 +101,7 @@ watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||
     <button type="button" class="cms-button cms-button-gold" @click="add"><Plus :size="16" aria-hidden="true" />新增案例</button>
    </div>
    <template v-else>
-    <div class="cms-items-tools"><input v-if="caseTable" v-model="search" type="search" aria-label="搜尋案例標題" placeholder="搜尋案例標題" /><strong v-else>{{ label }} <span class="cms-count">{{ rows.length }}</span></strong><slot name="add"><button v-if="!schema.source&&!recentArticleIds" type="button" class="cms-button" :class="{'cms-button-gold':caseTable}" @click="add"><Plus v-if="caseTable" :size="16" aria-hidden="true" />{{ schema.newItemLabel?.startsWith('新增')?schema.newItemLabel:'新增'+(schema.newItemLabel||'項目') }}</button></slot></div>
+    <div class="cms-items-tools"><input v-if="caseTable" v-model="search" type="search" aria-label="搜尋案例標題" placeholder="搜尋案例標題" /><strong v-else>{{ label }} <span class="cms-count">{{ rows.length }}</span></strong><slot name="add"><button v-if="!schema.source&&!fixedArticleIds" type="button" class="cms-button" :class="{'cms-button-gold':caseTable}" @click="add"><Plus v-if="caseTable" :size="16" aria-hidden="true" />{{ schema.newItemLabel?.startsWith('新增')?schema.newItemLabel:'新增'+(schema.newItemLabel||'項目') }}</button></slot></div>
     <input v-if="!caseTable&&(workbench||rows.length>8||search)" v-model="search" type="search" :aria-label="schema.searchLabel||`搜尋${label}`" :placeholder="schema.searchLabel||'搜尋'+label+'名稱'" />
     <table v-if="caseTable&&rows.length" class="cms-case-table" aria-label="自建案例" :aria-describedby="allRows.length>1?'cms-custom-case-order-help':undefined"><thead><tr><th scope="col">順序</th><th scope="col">案例</th><th scope="col">官網顯示</th><th scope="col">編輯</th></tr></thead><tbody><tr v-for="r in visible" :key="r.key" :data-row-key="r.key" :class="{'is-selected':selected===r.key&&(!workbench||workbench.focused.value===scope),'is-dragging':dragged===r.key,'is-drop-target':dropTarget===r.key}" @dragover.prevent="dropTarget=dragged?r.key:''" @dragleave="dropTarget=''" @drop.prevent="drop($event,r)">
      <td><button type="button" class="cms-case-order" :draggable="!search&&!workbench?.busy.value" :disabled="!!search||workbench?.busy.value" :aria-label="caption(r)+'，第 '+(r.index+1)+' 位；按上下方向鍵調整順序'" @dragstart="startDrag($event,r)" @dragend="dragged='';dropTarget=''" @keydown.up.prevent="reorder(r.index,r.index-1,true)" @keydown.down.prevent="reorder(r.index,r.index+1,true)"><GripVertical :size="16" aria-hidden="true" /><span>{{ r.index+1 }}</span></button></td>
@@ -127,7 +127,7 @@ watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||
      <p role="status">找不到符合的自建案例。</p>
      <button type="button" class="cms-button" @click="clearCaseSearch">清除搜尋</button>
     </div>
-    <p v-else-if="!rows.length" class="cms-empty">{{ search?'找不到符合的項目':recentArticleIds?'官網側欄目前沒有可編輯的文章。':'目前沒有內容，可從上方新增。' }}</p>
+    <p v-else-if="!rows.length" class="cms-empty">{{ search?'找不到符合的項目':fixedArticleIds?'這個區塊目前沒有可編輯的文章。':'目前沒有內容，可從上方新增。' }}</p>
     <div v-if="(!caseTable||rows.length)&&(workbench||pages>1)" class="cms-list-footer"><span>共 {{ rows.length }} 筆<template v-if="rows.length"> · 顯示 {{ (page-1)*pageSize+1 }}–{{ Math.min(page*pageSize,rows.length) }} 筆</template></span><div v-if="pages>1" class="cms-actions"><button type="button" class="cms-button" :disabled="page===1" @click="page--">上一頁</button><button type="button" class="cms-button" :disabled="page===pages" @click="page++">下一頁 ›</button></div></div>
     <p v-if="caseTable&&rows.length&&allRows.length>1" id="cms-custom-case-order-help" class="cms-case-sort-help">{{ search?'清除搜尋後可調整順序。':'拖曳或用上下方向鍵移動順序。官網會把自建案例排在門市案例之後。' }}</p>
     <p v-if="caseTable&&rows.length&&orderNotice" class="cms-field-help" role="status">{{ orderNotice }}</p>
@@ -140,7 +140,7 @@ watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||
     <p v-if="itemNotice" class="cms-field-help" role="status">{{ itemNotice }}</p>
     <slot name="editor" :row="active"><AdminArticleFields v-if="path==='items'&&['news-articles','knowledge-articles'].includes(documentId||'')" :model-value="active.value" :schema="itemSchema" :document-id="documentId" :path="`${path?path+'.':''}${active.index}`" @update:model-value="item(active.index,$event)" /><AdminFields v-else :model-value="active.value" :schema="itemSchema" :document-id="documentId" :path="`${path?path+'.':''}${active.index}`" @update:model-value="item(active.index,$event)" /></slot>
     <slot name="item-settings" :row="active" />
-    <details v-if="!recentArticleIds" class="cms-item-more" :open="moreOpen" @toggle="moreOpen=($event.target as HTMLDetailsElement).open"><summary>更多操作</summary><div class="cms-actions cms-item-tools"><button v-if="!schema.newsOverview" type="button" class="cms-button" :disabled="rows[0]?.index===active.index||(caseTable&&!!search)" @click="move(active.index,-1)">往前移</button><button v-if="!schema.newsOverview" type="button" class="cms-button" :disabled="rows.at(-1)?.index===active.index||(caseTable&&!!search)" @click="move(active.index,1)">往後移</button><button v-if="!schema.source" type="button" class="cms-button" :disabled="modelValue.length<=(schema.min||0)" @click="remove(active.index)">移除此項</button></div></details>
+    <details v-if="!fixedArticleIds" class="cms-item-more" :open="moreOpen" @toggle="moreOpen=($event.target as HTMLDetailsElement).open"><summary>更多操作</summary><div class="cms-actions cms-item-tools"><button v-if="!schema.newsOverview" type="button" class="cms-button" :disabled="rows[0]?.index===active.index||(caseTable&&!!search)" @click="move(active.index,-1)">往前移</button><button v-if="!schema.newsOverview" type="button" class="cms-button" :disabled="rows.at(-1)?.index===active.index||(caseTable&&!!search)" @click="move(active.index,1)">往後移</button><button v-if="!schema.source" type="button" class="cms-button" :disabled="modelValue.length<=(schema.min||0)" @click="remove(active.index)">移除此項</button></div></details>
    </fieldset>
   <AdminDialog :open="cancelOpen" title="取消這一筆的修改？" @close="cancelOpen=false"><p>這一筆會回復到上次儲存的內容；新項目會移除。本頁其他修改與目前排序會保留。</p><div class="cms-actions"><button type="button" class="cms-button" @click="cancelOpen=false">繼續修改</button><button type="button" class="cms-button cms-button-gold" :disabled="workbench?.busy.value" @click="cancelItem">確認取消本筆修改</button></div></AdminDialog>
   </Teleport>

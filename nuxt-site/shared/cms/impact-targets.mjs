@@ -1,5 +1,6 @@
 import { resourceGuide } from './presentation.mjs'
 import { HOME_HERO_ID, heroSeriesTitle } from './hero-media.mjs'
+import { franchiseNewsIds } from './public-content.mjs'
 
 const target = (label, href) => ({ label, href })
 const homePromise = target('首頁 → 品牌承諾', '/#brand-promise')
@@ -99,7 +100,7 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  if (documentId === 'news-articles' && category) {
   const list='/news/'+category, detail=slug&&target('文章內頁',list+'/'+encodeURIComponent(slug))
   if (property==='detail' && detail) return [detail]
-  return targets.filter(i=>i.href==='/news'||i.href===list||i.href.startsWith('/franchising/')&&(!rowId||['franchise-seminar-2026','kaohsiung-brand-hall','franchise-expo-2025'].includes(rowId)))
+  return targets.filter(i=>i.href==='/news'||i.href===list||i.href.startsWith('/franchising/')&&(!rowId||franchiseNewsIds.includes(rowId)))
  }
  if (documentId === 'knowledge-articles' && property === 'detail' && slug)
   return [target('廚房知識文章內頁','/knowledge/design/'+encodeURIComponent(slug))]

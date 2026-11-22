@@ -1,4 +1,4 @@
-import {valueAt,pageFieldValue,pageEditors,pageBlocks} from './page-editors.mjs'
+import {valueAt,pageFieldValue,pageEditors,pageBlocks,inRowScope} from './page-editors.mjs'
 import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {editingSchema} from './presentation.mjs'
 import {itemCaption,itemKey,itemThumbnail} from './workbench.mjs'
@@ -13,7 +13,7 @@ export function sameContent(a,b){
 }
 export function hasPageChanges(blocks,published,draft){
  return blocks.some(b=>b.fields.some(f=>{
-  const values=body=>{const value=pageFieldValue(body,f);return f.schema.rowFilter&&Array.isArray(value)?value.filter(i=>valueAt(i,f.schema.rowFilter.path)===f.schema.rowFilter.value):value}
+  const values=body=>{const value=pageFieldValue(body,f);return (f.schema.rowFilter||f.schema.rowIds)&&Array.isArray(value)?value.filter(i=>inRowScope(f.schema,i)):value}
   return !sameContent(values(published),values(draft))
  }))
 }
@@ -52,7 +52,7 @@ export function contentChanges(previous,next,schema,path='',labels=[]){
 export function pageChanges(blocks,documents,previous,next,context={}){
  return documents.flatMap(d=>contentChanges(effectiveHomeHeadingBody(d.id,previous[d.id]),effectiveHomeHeadingBody(d.id,next[d.id]),editingSchema(d.schema,d.id)).map(change=>{
   const body=change.kind==='remove'?previous[d.id]:next[d.id]
-  const owns=f=>f.documentId===d.id&&overlaps(f.path,change.path)&&(!f.schema.rowFilter||valueAt(body,change.path.startsWith(f.path+'.')?f.path+'.'+change.path.slice(f.path.length+1).split('.')[0]+'.'+f.schema.rowFilter.path:f.path)===f.schema.rowFilter.value)
+  const owns=f=>f.documentId===d.id&&overlaps(f.path,change.path)&&inRowScope(f.schema,change.path.startsWith(f.path+'.')?valueAt(body,f.path+'.'+change.path.slice(f.path.length+1).split('.')[0]):undefined)
   const block=blocks.find(b=>b.fields.some(owns))
   const owner=block?null:pageEditors.filter(p=>p.ids.includes(d.id)).flatMap(p=>pageBlocks(p,[d]).filter(b=>b.fields.some(owns)).map(b=>({page:p,block:b})))[0]
   const [collection,index]=change.path.split('.')
@@ -89,7 +89,7 @@ export function publishReview(blocks,documents,bodies,context={}){
 
 export function pageSearchItems(block,bodies){
  return block.fields.filter(f=>f.schema.type==='array').flatMap(f=>(valueAt(bodies[f.documentId],f.path)||[]).flatMap((value,index)=>{
-  if(f.schema.rowFilter&&valueAt(value,f.schema.rowFilter.path)!==f.schema.rowFilter.value)return []
+  if(!inRowScope(f.schema,value))return []
   return [{key:itemKey(value,index),scope:f.documentId+':'+f.path,caption:itemCaption(value,index,f.schema),image:itemThumbnail(value,f.schema),...(block.id==='knowledge:文章管理'&&f.formGroup?{articleSection:f.formGroup}:{})}]
  }))
 }
@@ -98,7 +98,7 @@ export function pageMedia(documents,bodies,blocks){
  const result=[]
  function scan(value,schema,labels=[],itemName=''){
   if(typeof value==='string'&&(/\.(?:webp|png|jpe?g|svg|avif|gif|pdf)(?:$|[?#])/i.test(value)||/^\/media\/[a-f\d-]{36}$/i.test(value))){const purpose=/^(圖片|圖片檔案|檔案路徑)$/.test(labels.at(-1)||'')?labels.at(-2):labels.at(-1);result.push({src:value,label:[itemName||labels[0],purpose].filter(Boolean).join('｜'),caption:itemName||labels[0]||'本頁圖片',purpose,location:labels.join(' › '),pdf:/PDF|檔案/.test(schema?.label||'')||/\.pdf(?:$|[?#])/i.test(value)});return}
-  if(Array.isArray(value))value.forEach((v,i)=>{if(!schema?.rowFilter||valueAt(v,schema.rowFilter.path)===schema.rowFilter.value)scan(v,schema?.item,[...labels,itemCaption(v,i,schema)],itemName||itemCaption(v,i,schema))})
+  if(Array.isArray(value))value.forEach((v,i)=>{if(inRowScope(schema||{},v))scan(v,schema?.item,[...labels,itemCaption(v,i,schema)],itemName||itemCaption(v,i,schema))})
   else if(value&&typeof value==='object')for(const[k,v]of Object.entries(value))scan(v,schema?.fields?.[k],[...labels,schema?.fields?.[k]?.label||'圖片'],itemName)
  }
  if(blocks)for(const block of blocks)for(const f of block.fields)scan(valueAt(bodies[f.documentId],f.path),f.schema,[block.name,f.label])
