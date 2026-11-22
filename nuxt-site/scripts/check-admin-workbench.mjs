@@ -196,6 +196,19 @@ const builderSchema=docs.find(d=>d.id==='view-pages-builders-index').schema
 assert.throws(()=>validate(badBuilder,builderSchema),e=>{const issue=readableError(e,'view-pages-builders-index',editingSchema(builderSchema,'view-pages-builders-index'),badBuilder);assert.equal(issue.fieldErrors[0].path,'copy.text2');assert.match(issue.message,/區塊中文主標題（第一段）/);return true})
 const franchise=workbenchBlocks('franchise',pageBlocks(pageEditors.find(p=>p.id==='franchise'),docs))
 {
+ const formPage=pageEditors.find(p=>p.id==='franchise-form')
+ const block=pageBlocks(formPage,docs).find(b=>b.kind==='franchise-application')
+ assert.equal(block.name,'加盟申請表單')
+ assert(block.aliases.includes('franchise-form:申請表單上方'))
+ assert.equal(block.href,'/franchising/form#franchise-application-title')
+ assert.deepEqual(block.fields.slice(0,2).map(f=>f.label),['區塊英文標籤','區塊中文主標題'])
+ const copy=previewBodies['view-pages-franchising-form'].copy
+ const scene=pagePositionContent(block,previewBodies)
+ assert.equal(scene.heading.find(f=>f.path==='copy.text2').value,copy.text2)
+ assert.deepEqual(scene.buttons.map(f=>f.value),[copy.text5])
+ assert.equal(scene.destination.value,copy.field4)
+}
+{
  const page=pageEditors.find(p=>p.id==='franchise'),block=franchise.find(b=>b.kind==='franchise-news')
  const body=structuredClone(newsDoc.body),draft=structuredClone(body),unrelated=body.items.findIndex(i=>!franchiseNewsIds.includes(i.id))
  const article=draft.items.find(i=>i.id===franchiseNewsIds[0])

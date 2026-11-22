@@ -49,7 +49,7 @@ const copyGroups={
   ['加盟資料下載入口',{field52:'封面前往頁面',field53:'下載封面圖片',field54:'封面圖片說明',field55:'標題前往頁面',text56:'卡片標題',text57:'卡片介紹文字'}],
   ['最新加盟資訊',{text58:'區塊英文標籤',field62:'更多消息前往頁面',text63:'更多消息按鈕文字'}],
  ],
- 'franchising-form':[['申請表單上方',{text1:'區塊英文標籤',text2:'頁面標題',text3:'表單介紹文字',field4:'下載按鈕前往頁面',text5:'下載按鈕文字'}]],
+ 'franchising-form':[['加盟申請表單',{text1:'區塊英文標籤',text2:'區塊中文主標題',text3:'表單介紹文字',field4:'下載按鈕前往頁面',text5:'下載按鈕文字'}]],
  'franchising-download':[
   ['主視覺標題',{field1:'主視覺背景圖片',field2:'圖片說明',text3:'主視覺英文小標',text4:'主視覺主標題'}],
   ['加盟簡介與下載按鈕',{text5:'加盟簡介主標題（第一行）',text6:'加盟簡介主標題（第二行）',field7:'品牌標誌',field8:'標誌圖片說明',text9:'檔案介紹文字',text10:'格式欄位名稱',text11:'檔案格式文字',text12:'頁數欄位名稱',text13:'頁數文字',text14:'大小欄位名稱',text15:'檔案大小文字',text16:'線上預覽按鈕文字',text17:'下載按鈕文字'}],
@@ -181,7 +181,9 @@ export const pagePositions={
   section('專業品牌實力','加盟優勢的介紹與圖文','cards','franchise-advantage-title'),section('加盟邀請','邀請文案與加盟按鈕','text','franchise-conversion-title',['site-visuals','images.asset_b3dcb152']),
   {...section('品牌信賴','介紹文字與品牌案例','cards','franchise-marketing-title'),aliases:['franchise:品牌信賴與行銷']},
   section('加盟流程與辦法','七步驟流程圖與圖片說明','steps','franchise-process-title'),section('加盟資格與條件','資格條件與申請準備','text'),section('總部支援','支援項目、背景圖片與申請按鈕','franchise-support','franchise-support',['site-visuals',franchiseSupportImagePath]),{...section('了解加盟資訊','加盟問答與旁邊的資料封面','franchise-faq','franchise-faq-title',[franchiseMarqueeDocument,'copy.field53']),aliases:['franchise:加盟常見問題']},{...section('加盟資料下載入口','加盟介紹問答旁的封面、標題與連結','catalogue','franchise-faq-title'),aliases:['franchise:加盟資料下載']},section('最新加盟資訊','編輯官網此區的文章、小標及查看更多按鈕','franchise-news','franchise-news-title')]},
- 'franchise-form':{hero:['site-visuals','images.asset_82b9dd3e'],sections:[section('申請表單上方','標題、填寫說明與下載按鈕','form','franchise-application-title')]},
+ 'franchise-form':{hero:['site-visuals','images.asset_82b9dd3e'],sections:[
+  {...section('加盟申請表單','表單上方的標題、填寫說明與下載按鈕','franchise-application','franchise-application-title'),aliases:['franchise-form:申請表單上方']},
+ ]},
  'franchise-download':{hero:[franchiseDownloadDocument,'copy.field1'],sections:[
   {...section('主視覺標題','下載頁最上方的大圖、英文小標與主標題','hero','franchise-download-title'),aliases:['franchise-download:頁面最上方']},
   {...section('加盟簡介與下載按鈕','主視覺下方的簡介主標題、檔案資料與兩個按鈕','franchise-download-document','franchise-document-title',[franchiseDownloadDocument,'brochurePages.0.image']),aliases:['franchise-download:加盟簡介與檔案']},
