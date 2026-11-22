@@ -197,6 +197,21 @@ assert.throws(()=>validate(badBuilder,builderSchema),e=>{const issue=readableErr
 const franchise=workbenchBlocks('franchise',pageBlocks(pageEditors.find(p=>p.id==='franchise'),docs))
 assert(franchise.find(b=>b.name==='加盟資料下載').fields.some(f=>f.path==='copy.field53'),'Franchise PDF cover belongs to downloads, not FAQ')
 {
+ const page=pageEditors.find(p=>p.id==='franchise'),support=franchise.find(b=>b.name==='總部支援')
+ const intro=docs.find(d=>d.id==='view-pages-franchising-intro'),visuals=docs.find(d=>d.id==='site-visuals')
+ assert.equal(support.href,'/franchising/intro#franchise-support')
+ assert.deepEqual(support.fields.filter(f=>f.schema.type==='string').map(f=>f.label),['按鈕文字','前往頁面','總部支援背景圖片'])
+ assert.equal(pagePositionContent(support,previewBodies).destination.value,previewBodies['data-franchise'].FRANCHISE_FORM_URL)
+ assert.equal(pagePositionContent(support,previewBodies).mappedImage,visuals.body.images.asset_1795db00)
+ const edited={...intro.body,copy:{...intro.body.copy,supportDestination:'/franchising/download'}}
+ validate(edited,intro.schema);checkPageBody(page,intro.id,intro.body,edited,intro.schema)
+ assert.equal(pagePositionContent(support,{...previewBodies,[intro.id]:edited}).destination.value,'/franchising/download')
+ const newVisuals={...visuals.body,images:{...visuals.body.images,asset_1795db00:'/replaced-support.webp'}}
+ checkPageBody(page,visuals.id,visuals.body,newVisuals,visuals.schema)
+ assert.equal(pagePositionContent(support,{...previewBodies,[visuals.id]:newVisuals}).mappedImage,'/replaced-support.webp')
+ assert.throws(()=>checkPageBody(page,visuals.id,visuals.body,{...newVisuals,images:{...newVisuals.images,asset_7692def0:'/unrelated.webp'}},visuals.schema),/頁面以外/)
+}
+{
  const page=pageEditors.find(p=>p.id==='franchise'),doc=docs.find(d=>d.id==='view-pages-franchising-intro'),marquee=franchise.find(b=>b.kind==='franchise-marquee')
  assert.deepEqual([franchise[0].name,franchise[2].name,franchise[5].name],['主視覺標題','加盟介紹輪播圖','品牌信賴'])
  for(const [index,oldName] of [[0,'頁面最上方'],[2,'品牌成果圖片'],[5,'品牌信賴與行銷']])assert(franchise[index].aliases.includes('franchise:'+oldName))

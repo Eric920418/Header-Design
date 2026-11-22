@@ -2,6 +2,8 @@
 const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
 export const franchiseMarqueeDocument=view('franchising-intro')
+export const franchiseSupportImagePath='images.asset_1795db00'
+export const franchiseSupportImageFallback='/section-6/franchise/hero-store.jpg'
 export const franchiseMarqueeRows=[
  {label:'上排輪播圖片',image:'copy.field18',alt:'copy.field19',loop:'copy.field20'},
  {label:'下排輪播圖片',image:'copy.field22',alt:'copy.field23',loop:'copy.field24'},
@@ -41,7 +43,7 @@ const copyGroups={
   ['專業品牌實力',{text26:'區塊英文標籤',text30:'介紹文字',text31:'圖片上的裝飾文字'}],
   ['加盟邀請',{text32:'區塊英文標籤',text33:'區塊英文主標題（第一段）',text34:'區塊英文主標題（第二段）',text35:'介紹文字',text36:'按鈕文字'}],
   ['品牌信賴',{text42:'介紹文字'}],['加盟流程與辦法',{text43:'區塊中文主標題',field44:'流程圖',field45:'流程圖圖片說明'}],
-  ['加盟資格與條件',{text47:'區塊中文主標題'}],['總部支援',{text46:'申請加盟按鈕文字'}],
+  ['加盟資格與條件',{text47:'區塊中文主標題'}],['總部支援',{text46:'按鈕文字',supportDestination:'前往頁面'}],
   ['加盟資料下載',{field52:'封面前往頁面',field53:'下載封面圖片',field54:'封面圖片說明',field55:'標題前往頁面',text56:'下載區標題',text57:'下載區介紹文字'}],
   ['最新加盟資訊',{text58:'區塊英文標籤',field62:'更多消息前往頁面',text63:'更多消息按鈕文字'}],
  ],
@@ -176,7 +178,7 @@ export const pagePositions={
   {...section('加盟介紹輪播圖','更換官網上下兩排的循環照片','franchise-marquee','franchise-intro-marquee'),aliases:['franchise:品牌成果圖片']},
   section('專業品牌實力','加盟優勢的介紹與圖文','cards','franchise-advantage-title'),section('加盟邀請','邀請文案與加盟按鈕','text','franchise-conversion-title',['site-visuals','images.asset_b3dcb152']),
   {...section('品牌信賴','介紹文字與品牌案例','cards','franchise-marketing-title'),aliases:['franchise:品牌信賴與行銷']},
-  section('加盟流程與辦法','七步驟流程圖與圖片說明','steps','franchise-process-title'),section('加盟資格與條件','資格條件與申請準備','text'),section('總部支援','總部提供的支援與申請按鈕','cards'),section('加盟常見問題','加盟問答內容','faq','franchise-faq-title'),section('加盟資料下載','問答旁的型錄封面與下載連結','catalogue','franchise-faq-title'),section('最新加盟資訊','最新加盟消息的更多入口','cards','franchise-news-title')]},
+  section('加盟流程與辦法','七步驟流程圖與圖片說明','steps','franchise-process-title'),section('加盟資格與條件','資格條件與申請準備','text'),section('總部支援','支援項目、背景圖片與申請按鈕','franchise-support','franchise-support',['site-visuals',franchiseSupportImagePath]),section('加盟常見問題','加盟問答內容','faq','franchise-faq-title'),section('加盟資料下載','問答旁的型錄封面與下載連結','catalogue','franchise-faq-title'),section('最新加盟資訊','最新加盟消息的更多入口','cards','franchise-news-title')]},
  'franchise-form':{hero:['site-visuals','images.asset_82b9dd3e'],sections:[section('申請表單上方','標題、填寫說明與下載按鈕','form','franchise-application-title')]},
  'franchise-download':{hero:[view('franchising-download'),'copy.field1'],sections:[section('頁面最上方','下載頁最上方的圖片與標題','hero','franchise-download-title'),section('加盟簡介與檔案','檔案介紹、大小與下載連結','catalogue','franchise-document-title'),section('型錄預覽圖片','線上預覽時的逐頁圖片','catalogue'),section('型錄載入提示','檔案載入或失敗時的說明','download'),section('頁面底部返回按鈕','回到加盟介紹的按鈕','article')]},
  builders:{hero:[view('builders-index'),'copy.field6'],sections:[section('頁面最上方','主標題、預約按鈕與廚房大圖','hero','builders-title'),section('廚房品牌介紹','品牌介紹與即將推出文字','cards','builders-team-title',['data-builders','builderProjectCards.0.image']),section('建商實力','智能整合與建商實力圖文','cards','builders-capability-title'),section('三大服務','建商實力下方的三項服務','cards','builder-dedicated-services', '/section-6/builders/proposal-20261002/dedicated-services.webp'),section('售後服務','iCare 服務說明圖片','cards','builders-lifetime-title'),section('合作夥伴','保留的合作夥伴標誌設定','inactive'),section('聯繫與參觀預約','品牌館照片、地址與預約說明','form','appointment')]},
@@ -215,7 +217,7 @@ export function positionGroup(page,id,path){
  if(id==='site-visuals'){
   if(page==='service')return '品牌影片'
   if(page==='pavilions')return '品牌館影片'
-  if(page==='franchise')return '加盟夥伴真實分享'
+  if(page==='franchise')return path===franchiseSupportImagePath?'總部支援':'加盟夥伴真實分享'
   if(page==='visuals')return path.startsWith('images.')?(/asset_(?:7a7fece6|39582b0b|18ed1982|52e702e4|d0922f9d|82b9dd3e|b3dcb152|1795db00|38bb39f2)$/.test(path)?'加盟與建商背景':path.endsWith('asset_7692def0')?'共用主視覺背景':path.endsWith('asset_10b5a86c')?'首頁品牌影片':'品牌與服務背景'):({brandVideoId:'首頁品牌影片',brandVideoSrc:'首頁品牌影片',franchiseVideoId:'加盟夥伴影片',pavilionVideoId:'品牌館影片',serviceVideoSrc:'服務介紹影片',serviceVideoCover:'服務介紹影片'})[path]
  }
  if(page==='builders'&&id==='data-brandPavilions')return '聯繫與參觀預約'

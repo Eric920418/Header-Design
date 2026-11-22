@@ -9,6 +9,7 @@ const pageButtons = {
   'view-pages-about-exhibition': { bookingDestination: destination('品牌館的「立即預約」按鈕。') },
   'view-pages-gallery-slug-': { storeBookingDestination: destination('門市資訊右側的「到店預約」按鈕。') },
   'view-pages-knowledge-design-slug-': { moreDestination: destination('有延伸文章圖文區的知識文章，共用「更多廚房知識」按鈕。') },
+  'view-pages-franchising-intro': { supportDestination: { ...destination('選擇「沿用既有連結」會繼續使用加盟介紹的申請連結。'), destinationAfter: 'view-pages-franchising-intro:copy.text46' } },
 }
 const seriesButtons = {
   type: 'object',

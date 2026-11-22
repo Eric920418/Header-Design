@@ -4,7 +4,7 @@ import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
 import {knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 import {valueAt} from '~/shared/cms/page-editors.mjs'
-import {franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
+import {franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
 const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
@@ -40,6 +40,7 @@ const marqueeRows=computed(()=>{
  const body=props.bodies[franchiseMarqueeDocument]
  return franchiseMarqueeRows.map(row=>({...row,src:valueAt(body,row.image),loopSrc:valueAt(body,row.loop),description:valueAt(body,row.alt)}))
 })
+const supportItems=computed<{title:string;detail:string}[]>(()=>props.bodies['data-franchise']?.franchiseSupportHighlights||[])
 const formFields=computed(()=>props.block?.id.startsWith('franchise-form:')?['姓名','電子郵件','聯絡電話','居住地']:['聯絡人','聯絡電話','建設公司','電子信箱'])
 const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
 const previewStores=computed(()=>scene.value.items.map((i:any)=>({name:i.value?.storeName||i.value?.name||i.title,address:i.value?.address,hours:i.value?.hours,phone:i.value?.contact?.phone||i.value?.phone,image:i.image})).filter((i:any)=>i.address||i.image))
@@ -73,6 +74,17 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </template>
     </figure>
    </div>
+   <article v-else-if="scene.kind==='franchise-support'" class="cms-scene-franchise-support" :class="{'is-focused':highlighted(franchiseSupportImagePath)}">
+    <AdminThumbnail :src="scene.mappedImage" alt="官網總部支援區的背景圖片" />
+    <div v-for="(item,index) in supportItems" :key="index" :class="{'is-focused':selected?.index===index}">
+     <h3><template v-if="index!==0">{{ item.title }} </template>{{ item.detail.split('！')[0] }}！</h3>
+     <p>{{ item.detail.split('！').slice(1).join('！') }}</p>
+    </div>
+    <div class="cms-scene-franchise-support-button">
+     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)||highlighted(scene.destination?.path)}">{{ field.value }} <ArrowRight :size="14" aria-hidden="true" /></span>
+     <small v-if="scene.destination">前往 {{ destinationTitle }}</small>
+    </div>
+   </article>
    <template v-else-if="storeExampleKind">
     <template v-if="storeExample&&storeDetails">
      <AdminThumbnail :src="storeExample.images?.[0]||storeExample.cover" :alt="storeExample.storeName+'案例照片'" class="cms-scene-wide-image" />
@@ -216,10 +228,10 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb','news-shared'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb','news-shared','franchise-support'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
-   <p v-if="scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>
+   <p v-if="scene.kind!=='franchise-support'&&scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>
    <dl v-if="scene.auxiliary.some((f:any)=>highlighted(f.path))" class="cms-scene-details"><template v-for="field in scene.auxiliary.filter((f:any)=>highlighted(f.path))" :key="field.path"><dt>螢幕閱讀器會讀到</dt><dd>{{ field.value }}</dd></template></dl>
    <p v-if="!['breadcrumb','page-breadcrumb','news-shared','inactive','filter'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
   </section>

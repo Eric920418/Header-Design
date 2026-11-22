@@ -54,7 +54,7 @@ for(const block of blocks){
   assert.equal(prior?.documentId+':'+prior?.path,field.schema.destinationAfter,block.id)
  }
 }
-assert.equal(destinations,36)
+assert.equal(destinations,37)
 const mediaUrlLabels={
  'site-visuals:brandVideoSrc':'首頁品牌承諾影片網址（MP4）',
  'site-visuals:serviceVideoSrc':'服務流程影片網址（MP4）',

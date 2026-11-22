@@ -3,7 +3,7 @@ import {valueAt,withValue,pageFieldValue,pageEditorLink,storeCasesPageId,desktop
 import {cmsDate,firstImage} from '~/shared/cms/workflow.mjs'
 import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
-import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes,updateFranchiseMarqueeImage} from '~/shared/cms/workbench.mjs'
+import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes,updateFranchiseMarqueeImage,franchiseSupportImage} from '~/shared/cms/workbench.mjs'
 import {franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
@@ -320,8 +320,10 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
       </section>
      </template>
     </AdminItems>
+   </div><div v-else-if="active?.kind==='franchise-support'" class="cms-block-field">
+    <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :fallback-image="franchiseSupportImage(bodies)" @update:model-value="update(f,$event)" />
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
-   <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
+   <details v-if="collections.length&&commonFields.length" class="cms-common-settings"><summary>{{ newsRecent?'側欄標題設定':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary><fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':active?.kind==='franchise-support'&&f.schema.format==='media'}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset></details>
    <fieldset v-else-if="sharedInspiration||sharedKnowledge||sharedNews" :disabled="busy" class="cms-edit-form">
     <fieldset v-for="group in sharedFormGroups" :key="group.key" :data-position-group="group.key" class="cms-inspiration-form-group" :class="{'cms-news-link-settings':sharedNews}">
      <legend>{{ group.title }}</legend>

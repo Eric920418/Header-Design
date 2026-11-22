@@ -6,7 +6,7 @@ import {seriesEditorSchema,seriesEditorSection} from '~/shared/cms/series-editor
 import {sameContent,itemPublication} from '~/shared/cms/changes.mjs'
 import {compareNewsDates} from '~/shared/cms/public-content.mjs'
 import {GripVertical,Plus} from 'lucide-vue-next'
-const props=defineProps<{modelValue:any[];schema:any;documentId?:string;path?:string;hasRelatedChanges?:(value:any)=>boolean;seriesPart?:string}>()
+const props=defineProps<{modelValue:any[];schema:any;documentId?:string;path?:string;hasRelatedChanges?:(value:any)=>boolean;seriesPart?:string;fallbackImage?:string}>()
 const emit=defineEmits<{'update:modelValue':[value:any[]];'cancel-related':[value:any]}>()
 const route=useRoute(),router=useRouter(),cancelOpen=ref(false),moreOpen=ref(false),directTarget=ref(''),itemNotice=ref('')
 const depth=inject('cms-array-depth',0);provide('cms-array-depth',depth+1)
@@ -46,7 +46,7 @@ const itemSchema=computed(()=>{
 const label=computed(()=>props.schema.label||'內容')
 function caption(r:any){return itemCaption(r.value,r.index,props.schema)}
 function metadata(r:any){return workbench?.metadata.value?.[props.documentId||'']?.[r.key]||{}}
-function thumbnail(r:any){return itemThumbnail(r.value,props.schema,metadata(r))}
+function thumbnail(r:any){return itemThumbnail(r.value,props.schema,metadata(r))||props.fallbackImage||''}
 function changed(r:any){return !!tracking.value&&(!sameContent(tracking.value.saved[r.key],r.value)||!!props.hasRelatedChanges?.(r.value))}
 function publication(r:any){return workbench?.documents?itemPublication(workbench.documents.value.find((d:any)=>d.id===props.documentId),props.path||'',r.value,r.index):{label:r.value.enabled===false?'更新官網後隱藏':'更新官網後顯示'}}
 function cancelItem(){const row=active.value,t=tracking.value;if(!row||!t)return;const before=t.saved[row.key];if(props.hasRelatedChanges?.(row.value))emit('cancel-related',row.value);if(before===undefined){t.order.splice(row.index,1);emit('update:modelValue',props.modelValue.filter((_,i)=>i!==row.index));void back()}else{const restored=JSON.parse(JSON.stringify(before));if(props.schema.source)restored.sort=row.value.sort;item(row.index,restored);itemNotice.value='已取消這一筆的未儲存修改，其他修改仍保留。';nextTick(()=>document.querySelector<HTMLElement>('#cms-item-editor .cms-item-editor-heading')?.focus())}cancelOpen.value=false}

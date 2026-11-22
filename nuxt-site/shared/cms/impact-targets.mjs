@@ -26,7 +26,7 @@ const visuals = {
  'images.asset_82b9dd3e': [franchise, target('加盟申請', '/franchising/form'), target('加盟資料下載', '/franchising/download')],
  'images.asset_38bb39f2': [franchise],
  'images.asset_b3dcb152': [franchise],
- 'images.asset_1795db00': [franchise],
+ 'images.asset_1795db00': [target('加盟介紹 → 總部支援背景','/franchising/intro#franchise-support')],
  'images.asset_98d304fd': [target('一般廚房知識文章 → 頁首背景', '/knowledge/design/kitchen-outlet-planning')],
  'images.asset_44761f00': [target('服務流程 → 頁首背景', '/service-process'), target('最新消息內頁 → 頁首背景', '/news/latest')],
  'images.asset_9b0c0f62': [target('所有官網頁面 → 頁尾背景', '/#footer-navigation')],
@@ -66,12 +66,15 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
   return key === 'BUILDER_APPOINTMENT_HASH' ? targets.slice(1) : [projects]
  }
  if (documentId === 'data-franchise' && path) {
+  if (key === 'franchiseSupportHighlights') return [target('加盟介紹 → 總部支援','/franchising/intro#franchise-support')]
   if (key === 'franchiseMarketingStories') return [target('加盟介紹 → 品牌信賴','/franchising/intro#franchise-marketing-title')]
   if (key === 'franchiseProcessSteps') return []
   if (key === 'FRANCHISE_BROCHURE_URL') return targets.slice(2)
   if (key === 'FRANCHISE_OFFICIAL_FORM_URL') return [target('加盟申請 → 送出失敗時的備用表單', '/franchising/form')]
   return targets.slice(0,1)
  }
+ if (documentId === 'view-pages-franchising-intro' && ['copy.text46','copy.supportDestination'].includes(path))
+  return [target('加盟介紹 → 總部支援按鈕','/franchising/intro#franchise-support')]
  if (documentId === 'view-pages-franchising-intro' && /^copy\.field(?:18|19|20|21|22|23|24|25)$/.test(path))
   return [target('加盟介紹 → 加盟介紹輪播圖','/franchising/intro#franchise-intro-marquee')]
  if (documentId === 'data-productCatalogues' && path) {

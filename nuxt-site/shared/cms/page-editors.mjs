@@ -2,7 +2,7 @@ import {isSystemCabinetDocument,legacyKnowledgeSection} from './knowledge-editor
 import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {workspaceFor,firstImage} from './workflow.mjs'
 import {editingSchema,resourceGuide,homeResources,placeDestinations} from './presentation.mjs'
-import {positionGroup,positionField,pagePositions,decoratePosition} from './positions.mjs'
+import {positionGroup,positionField,pagePositions,decoratePosition,franchiseSupportImagePath} from './positions.mjs'
 
 const view=id=>'view-pages-'+id
 const page=(id,section,name,ids,extra={})=>({id,section,name,ids:[...new Set(ids.flatMap(id=>workspaceFor(id)?.ids||[id]))],...extra})
@@ -29,7 +29,7 @@ export const pageEditors=[
  page('about','brand','關於我們',[view('about-introduce')],{href:'/about/introduce'}),
  page('advantage','brand','品牌優勢',[view('about-advantage')],{href:'/about/advantage'}),
  page('pavilions','brand','櫻花集團品牌館',[view('about-exhibition')],{href:'/about/exhibition',extra:['site-visuals'],scopes:{'site-visuals':['pavilionVideoId']}}),
- page('franchise','franchise','加盟介紹',[view('franchising-intro')],{href:'/franchising/intro',extra:['site-visuals'],scopes:{'site-visuals':['franchiseVideoId']}}),
+ page('franchise','franchise','加盟介紹',[view('franchising-intro')],{href:'/franchising/intro',extra:['site-visuals'],scopes:{'site-visuals':['franchiseVideoId',franchiseSupportImagePath]}}),
  page('franchise-form','franchise','加盟申請表單',[view('franchising-form')],{href:'/franchising/form'}),
  page('franchise-download','franchise','加盟資料下載',[view('franchising-download')],{href:'/franchising/download',extra:['data-franchise'],scopes:{'data-franchise':['FRANCHISE_BROCHURE_URL']}}),
  page('builders','builders','建商專區首頁',[view('builders-index')],{href:'/builders',extra:['data-brandPavilions'],scopes:{'data-brandPavilions':['brandPavilions']}}),

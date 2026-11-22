@@ -1,7 +1,7 @@
 import {inspirationBreadcrumb,latestNewsBreadcrumb} from './page-breadcrumbs.mjs'
 import {firstImage,rowName} from './workflow.mjs'
 import {blockThumbnail,pageFieldValue,valueAt,withValue,desktopCatalogueFields,usesDesktopCatalogue} from './page-editors.mjs'
-import {decoratePosition,franchiseMarqueeRows,pagePositions,positionImage} from './positions.mjs'
+import {decoratePosition,franchiseMarqueeRows,franchiseSupportImageFallback,franchiseSupportImagePath,pagePositions,positionImage} from './positions.mjs'
 
 const home=[
  ['主視覺輪播','首頁輪播圖片','首頁圖片、標題與連結','hero'],
@@ -45,6 +45,9 @@ export function recentArticleIndexes(items,ids){
 export function updateFranchiseMarqueeImage(body,path,value){
  const next=withValue(body,path,value),row=franchiseMarqueeRows.find(row=>row.image===path)
  return row&&valueAt(body,row.loop)===valueAt(body,path)?withValue(next,row.loop,value):next
+}
+export function franchiseSupportImage(bodies){
+ return firstImage(valueAt(bodies['site-visuals'],franchiseSupportImagePath))||franchiseSupportImageFallback
 }
 export const itemKey=(value,index)=>String(value&&typeof value==='object'?(value.id??value.slug??index):index)
 export function itemWebsitePath(documentId,item){
@@ -125,7 +128,10 @@ export function newsBreadcrumbPosition(block,bodies,presentation={}){
 
 export function pagePositionContent(block,bodies,presentation={},selected,focusedPath=''){
  const page=block?.id?.split(':')[0],definition=pagePositions[page],base=positionContent(block,bodies,selected)
- const fields=(block?.fields||[]).filter(f=>block?.id!=='menu:左側主導覽'||!desktopCatalogueFields.includes(f.path)||usesDesktopCatalogue(selected?.value)).map(f=>({...f,value:pageFieldValue(bodies,f)}))
+ const fields=(block?.fields||[]).filter(f=>block?.id!=='menu:左側主導覽'||!desktopCatalogueFields.includes(f.path)||usesDesktopCatalogue(selected?.value)).map(f=>{
+  const value=pageFieldValue(bodies,f)
+  return {...f,value:block?.kind==='franchise-support'&&f.path==='copy.supportDestination'?value||bodies['data-franchise']?.FRANCHISE_FORM_URL:value}
+ })
  const texts=fields.filter(f=>typeof f.value==='string'&&!f.schema.format&&!f.schema.enum&&!f.schema.advanced).map(f=>({path:f.path,label:f.label,value:f.value}))
  const arrays=fields.filter(f=>f.schema.type==='array'&&!f.schema.newsOverview).flatMap(f=>(f.value||[]).filter(v=>!f.schema.rowFilter||valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value).slice(0,3).map((v,i)=>({title:itemCaption(v,i,f.schema),image:itemThumbnail(v,f.schema,presentation.rows?.[f.documentId]?.[v?.id]),value:v})))
  const recentField=fields.find(f=>f.schema.recentArticleIds)
@@ -143,7 +149,7 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const blockImage=firstImage(positionImage(block?.image,bodies))||presentation.blockImages?.[block?.id]||''
  const serviceVideo=block?.anchor==='service-brand-video'||block?.id==='visuals:服務介紹影片'
  const serviceCover=serviceVideo?bodies['site-visuals']?.serviceVideoCover||presentation.serviceVideoCover:''
- const mappedImage=blockImage||serviceCover
+ const mappedImage=block?.kind==='franchise-support'?franchiseSupportImage(bodies):blockImage||serviceCover
  const image=block?.kind==='news-recent'?recentItems[0]?.image||mappedImage:selected?selected.image||mappedImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||mappedImage||videoImage||''
  const media=fields.filter(f=>f.schema.format==='media').map(f=>({path:f.path,label:f.label,image:firstImage(f.value)})).filter(f=>f.image)
  const heading=texts.filter(f=>/標題|小標|品牌名稱|區塊(?:英|中)文標籤/.test(f.label)),buttons=texts.filter(f=>/按鈕|連結文字/.test(f.label)&&!/介紹|說明/.test(f.label))
