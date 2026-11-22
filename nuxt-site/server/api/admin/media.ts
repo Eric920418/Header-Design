@@ -9,8 +9,20 @@ import { normalizeMedia,saveMedia } from '../../cms/media.mjs'
 export default defineEventHandler(event=>cmsHandler(event,async()=>{
  if(event.method==='GET'){
   await cmsUser(event)
-  const rows=(await query(`SELECT m.*, (SELECT d.id AS documentId,d.title FROM cms.MediaRefs r JOIN cms.Versions v ON v.id=r.versionId JOIN cms.Documents d ON d.id=v.documentId WHERE r.mediaId=m.id GROUP BY d.id,d.title FOR JSON PATH) AS uses FROM cms.Media m ORDER BY createdAt DESC`)).recordset
-  return rows.map((m:any)=>({...m,src:`/media/${m.id}`,uses:JSON.parse(m.uses)}))
+  const rows=(await query(`
+   SELECT m.*, (
+    SELECT d.id AS documentId,d.title,
+     CASE MAX(CASE WHEN r.versionId=d.publishedId THEN 2 WHEN r.versionId=d.draftId THEN 1 ELSE 0 END)
+      WHEN 2 THEN 'published' WHEN 1 THEN 'draft' ELSE 'history' END AS state
+    FROM cms.MediaRefs r JOIN cms.Versions v ON v.id=r.versionId
+    JOIN cms.Documents d ON d.id=v.documentId WHERE r.mediaId=m.id
+    GROUP BY d.id,d.title FOR JSON PATH
+   ) AS uses FROM cms.Media m ORDER BY createdAt DESC`)).recordset
+  return rows.map((m:any)=>{
+   const uses=JSON.parse(m.uses)
+   const usage=uses.some((u:any)=>u.state==='published')?'published':uses.some((u:any)=>u.state==='draft')?'draft':uses.length?'history':'unverified'
+   return {...m,src:`/media/${m.id}`,uses,usage}
+  })
  }
  const user=await cmsWrite(event)
  if(event.method==='PATCH'){
