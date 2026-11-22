@@ -94,9 +94,23 @@ const positionBlock=computed(()=>{
 const positionSelection=computed(()=>knowledgeArticles.value&&positionBlock.value?.previewPage?undefined:workbench.selection.value)
 watch(()=>route.query.block,()=>{focusedGroup.value='';if(pageData.value&&knowledgeSection.value)void openSystemCabinet()})
 
-const navigationBlocks=computed(()=>seriesPart.value?seriesEditorSections:blocks.value)
+const builderCatalogueShortcuts=computed(()=>{
+ if(props.id!=='builder-series')return []
+ const catalogue=namedPages.value?.find(p=>p.id==='builder-catalogues')
+ return [
+  {id:'builder-catalogues:麵包屑編輯設定',name:'麵包屑編輯設定',hint:'建商專區型錄頁的導覽文字',image:pageData.value?.positionPresentation?.builderCatalogueHero||'/section-3/store-songzhu.jpg'},
+  {id:'builder-catalogues:型錄管理',name:'型錄管理',hint:'管理建商型錄封面、預覽與下載檔案',image:catalogue?.thumbnail||'/section-6/builders/catalogues/developer-catalogue-2026.jpg'},
+ ]
+})
+const navigationBlocks=computed(()=>seriesPart.value?seriesEditorSections:builderCatalogueShortcuts.value.length
+ ?[...blocks.value.slice(0,1),...builderCatalogueShortcuts.value,...blocks.value.slice(1)]
+ :blocks.value)
 const currentLocation=computed(()=>seriesPart.value?.id||active.value?.id)
 async function chooseLocation(id:string){
+ if(builderCatalogueShortcuts.value.some(block=>block.id===id)){
+  await router.push(pageEditorLink('builder-catalogues',route.query,id))
+  return
+ }
  if(!seriesPart.value)return selectBlock(id)
  locationOpen.value=false
  focusedField.value=''
@@ -198,6 +212,8 @@ const settingGroups=computed(()=>{
 })
 const positionPresentation=computed(()=>({...pageData.value?.positionPresentation,rows:pageData.value?.rowPresentation}))
 function blockPicture(block:any){
+ const shortcut=builderCatalogueShortcuts.value.find(item=>item.id===block.id)
+ if(shortcut)return shortcut.image
  if(seriesPart.value){
   const item=workbench.selection.value?.value
   return firstImage(block.id==='intro'?item?.suites:block.fields.map((key:string)=>item?.[key]))

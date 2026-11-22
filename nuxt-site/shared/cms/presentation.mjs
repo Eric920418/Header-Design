@@ -165,7 +165,12 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='site-visuals'&&normalized==='images.asset_1795db00')return{label:'總部支援背景圖片'}
  if(resourceId==='data-franchise'&&normalized==='franchiseFaqItems')return{label:'加盟問答',searchLabel:'搜尋加盟問題',newItemLabel:'問題'}
  if(resourceId==='view-pages-news-latest-slug-'&&normalized==='copy.text6')return{label:'報名 QR Code 下方文字',hidden:true,readOnly:true}
- if(['view-pages-design-inspiration-index','view-pages-knowledge-index','view-pages-catalogues-kitchenware-catalog','view-pages-news-latest-index','view-pages-franchising-download'].includes(resourceId)&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
+ if(['view-pages-design-inspiration-index','view-pages-knowledge-index','view-pages-catalogues-kitchenware-catalog','view-pages-news-latest-index','view-pages-franchising-download','view-pages-builders-catalogues'].includes(resourceId)&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
+ if(resourceId==='view-pages-builders-sakura-kitchen'&&['copy.field4','copy.field6'].includes(normalized))return{label:positionField(resourceId,normalized).label,previewTone:'dark'}
+ if(resourceId==='view-pages-builders-catalogues'){
+  if(normalized==='catalogues.*.actionLabel')return{label:'預覽按鈕文字',singleLine:true}
+  if(normalized==='catalogues.*.pdfUrl')return{label:'預覽與下載用的 PDF',help:'官網的預覽與下載使用這份檔案。'}
+ }
  if(resourceId==='data-catalogues'&&normalized==='KITCHEN_CATALOGUES.*.pdfUrl')return{label:'預覽與下載用的 PDF',help:'官網的「預覽」和「下載」會使用這份檔案。'}
  if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
  if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}

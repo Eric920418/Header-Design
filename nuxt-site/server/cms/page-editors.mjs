@@ -39,6 +39,7 @@ async function positionPresentation(p){
  const rows=(await query(`SELECT d.id,v.body FROM cms.Documents d JOIN cms.Versions v ON v.id=d.publishedId WHERE d.id IN (${ids.map((_,i)=>'@context'+i).join(',')})`,Object.fromEntries(ids.map((id,i)=>['context'+i,id])))).recordset
  const bodies=Object.fromEntries(rows.map(d=>[d.id,JSON.parse(d.body)])),heroImage=firstImage(positionImage(definition?.hero,bodies))
  const result={heroImage,blockImages:Object.fromEntries((definition?.sections||[]).map(s=>[p.id+':'+s.name,firstImage(positionImage(s.image,bodies))])),sections:definition?.sections||[]}
+ if(p.id==='builder-series')result.builderCatalogueHero=firstImage(positionImage(pagePositions['builder-catalogues'].hero,bodies))
  if(p.brand)result.catalogueCovers=(bodies['data-productCatalogues']?.PRODUCT_CATALOGUES||[])
   .filter(i=>['sakura-kitchen-2026','kitchenware-2026'].includes(i.id))
   .map(i=>({title:i.id==='kitchenware-2026'?'櫻花整廚廚房配備型錄':i.title,image:i.cover}))

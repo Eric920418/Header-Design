@@ -37,12 +37,12 @@ const copyGroups={
   ['品牌館資訊與預約',{text33:'區塊英文標籤',text38:'品牌館資訊標題',text39:'預約方式說明',text40:'表單介紹文字',text41:'地址欄位名稱',text42:'營業時間欄位名稱'}],
  ],
  'builders-sakura-kitchen':[
-  ['頁面最上方',{field1:'主圖片',field2:'主圖片說明',text3:readingField('頁首','頁面名稱'),field4:'英文品牌標誌',field5:'英文標誌說明',field6:'中文品牌標誌',field7:'中文標誌說明',text8:'介紹文字',field9:'預約按鈕前往頁面',text10:'預約按鈕第一行',text11:'預約按鈕第二行'}],
+  ['主視覺標題',{field1:'主圖片',field2:'主圖片說明',text3:readingField('頁首','頁面名稱'),field4:'英文品牌標誌',field5:'英文標誌說明',field6:'中文品牌標誌',field7:'中文標誌說明',text8:'介紹文字',field9:'預約按鈕前往頁面',text10:'預約按鈕第一行',text11:'預約按鈕第二行'}],
   ['品牌承諾入口',{field12:'前往頁面',field13:'入口圖片',field14:'圖片說明',text15:'按鈕英文文字',text16:'按鈕介紹文字',text17:'區塊英文標籤'}],
   ['品牌優勢',{text18:'區塊中文主標題（第一段）',text19:'區塊中文主標題（第二段）',text20:'介紹文字第一段',text21:'介紹文字第二段',field22:'區塊圖片',field23:'圖片說明',field24:'預約按鈕前往頁面',text25:'預約按鈕文字'}],
   ['品牌系列',{text26:'區塊英文標籤',text29:'介紹文字',field30:'預約按鈕前往頁面',text31:'預約按鈕文字'}],
  ],
- 'builders-catalogues':[['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'下載按鈕文字'}]],
+ 'builders-catalogues':[['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄清單','清單名稱'),text3:'下載按鈕文字'}]],
  'catalogues-catalog':[
   ['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}],
   ['清潔與保養問答',{text9:'保養步驟編號前的文字',text10:'小提醒標題'}],
@@ -205,8 +205,17 @@ export const pagePositions={
   {...section('SAKURA iCare','更換官網的 iCare 服務說明圖片','builders-icare','builders-icare',[view('builders-index'),'copy.field28']),aliases:['builders:售後服務']},
   {...section('品牌館資訊與預約','中英文標題、館別照片與預約說明','builders-appointment','appointment'),aliases:['builders:聯繫與參觀預約']},
  ]},
- 'builder-series':{hero:[view('builders-sakura-kitchen'),'copy.field1'],sections:[section('頁面最上方','主圖片、品牌標誌與介紹','hero','sakura-kitchen-title'),section('品牌承諾入口','主圖片下方的介紹入口','cards','brand-advantage'),section('品牌優勢','品牌優勢介紹與圖片','cards','sakura-kitchen-advantage-title'),section('品牌系列','系列圖片、介紹與預約按鈕','cards','sakura-kitchen-series-title')]},
- 'builder-catalogues':{hero:commonHero,sections:[section('頁面最上方','建商型錄頁最上方的大標題','hero','builder-catalogue-title'),section('型錄封面與下載','型錄卡片、封面與下載按鈕','catalogue','builder-catalogue-list-title')]},
+ 'builder-series':{hero:[view('builders-sakura-kitchen'),'copy.field1'],sections:[
+  {...section('主視覺標題','主圖片、品牌標誌與介紹','builder-series-hero','builder-sakura-hero'),aliases:['builder-series:頁面最上方']},
+  section('品牌承諾入口','主圖片下方的介紹入口','cards','brand-advantage'),
+  section('品牌優勢','品牌優勢介紹與圖片','cards','sakura-kitchen-advantage-title'),
+  section('品牌系列','系列圖片、介紹與預約按鈕','cards','sakura-kitchen-series-title'),
+ ]},
+ 'builder-catalogues':{hero:commonHero,sections:[
+  {...section('主視覺標題','建商型錄頁最上方的大標題','hero','builder-catalogue-title'),aliases:['builder-catalogues:頁面最上方']},
+  section('麵包屑編輯設定','建商專區型錄頁上方的位置導覽文字','page-breadcrumb','builder-catalogue-breadcrumb'),
+  {...section('型錄管理','管理型錄封面、預覽與下載檔案','builder-catalogue-cards','builder-catalogue-list'),aliases:['builder-catalogues:型錄封面與下載']},
+ ]},
  menu:{sections:[
   {...section('左側主導覽','官網左側分類與連結，含廚房產品型錄按鈕','navigation'),aliases:['menu:左側主選單','menu:展開選單中的型錄入口']},
   {...section('右側主導覽','官網右側分類與連結','navigation'),aliases:['menu:右側主選單']},
@@ -255,7 +264,10 @@ export function positionGroup(page,id,path){
  if(id===view('news-index')&&path==='newsCategories')return '最新消息分類標籤'
  if(page==='privacy'&&['sections','numbers'].includes(path))return '隱私權條款'
  if(path==='sitemapGroups')return '網站地圖與隱私權入口'
- if(page==='builder-catalogues'&&path==='catalogues')return '型錄封面與下載'
+ if(page==='builder-catalogues'&&id===view('builders-catalogues')){
+  if(path==='catalogues')return '型錄管理'
+  if(path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
+ }
  if(page==='franchise-download'){
   if(id===franchiseDownloadDocument&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
   if(path==='brochurePages'||path==='FRANCHISE_BROCHURE_URL')return '型錄管理'

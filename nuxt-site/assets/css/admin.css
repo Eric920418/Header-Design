@@ -1022,6 +1022,21 @@
 .cms .cms-builder-appointment-preview .builder-form__submit-row button{min-height:30px;padding:3px 6px 3px 10px;font-size:11px;}
 .cms .cms-builder-appointment-preview .builder-form__submit-icon{width:22px;height:22px;}
 .cms .cms-builder-appointment-preview .builder-form__submit-icon svg{width:13px;height:13px;}
+.cms .cms-builder-series-hero{position:relative;isolation:isolate;display:grid;align-content:end;min-height:clamp(230px,60cqw,420px);padding:clamp(12px,5cqw,30px);overflow:hidden;border-radius:6px;background:#29251f;color:white;}
+.cms .cms-workbench .cms-builder-series-hero img.cms-builder-series-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0;}
+.cms .cms-builder-series-hero::after{position:absolute;inset:0;content:'';background:linear-gradient(transparent 5%,rgb(0 0 0 / 68%) 95%);pointer-events:none;}
+.cms .cms-builder-series-brand{z-index:1;display:grid;justify-items:start;gap:7px;max-width:min(90%,300px);min-width:0;}
+.cms .cms-workbench .cms-builder-series-brand img.cms-thumbnail{width:min(215px,81%);height:auto;max-height:40px;object-fit:contain;object-position:left;background:transparent;border-radius:0;padding:0;}
+.cms .cms-workbench .cms-builder-series-brand img.cms-thumbnail:nth-child(2){width:min(165px,65%);}
+.cms .cms-website-scene .cms-builder-series-brand p{margin:1px 0;color:white;overflow-wrap:anywhere;}
+.cms .cms-builder-series-booking{display:grid;place-content:center;width:clamp(46px,12cqw,66px);aspect-ratio:1;border:1px solid #ffffff30;border-radius:50%;background:#454545b0;text-align:center;font-size:clamp(10px,2.8cqw,13px);line-height:1.4;overflow-wrap:anywhere;}
+.cms .cms-scene-target .cms-builder-series-hero .is-focused{background:#392b1ce0;outline-color:#e2b566;}
+.cms .cms-builder-catalogue-cards{display:grid;gap:16px;}
+.cms .cms-builder-catalogue-cover{display:grid;justify-items:end;gap:7px;background:#f5f0e6;border-radius:6px;padding:8px;}
+.cms .cms-workbench .cms-builder-catalogue-cover img.cms-thumbnail{display:block;width:100%;max-height:280px;object-fit:contain;}
+.cms .cms-builder-catalogue-title{display:flex;align-items:center;flex-wrap:wrap;gap:8px;justify-content:space-between;margin-top:8px;}
+.cms .cms-builder-catalogue-cards a{display:inline-flex;align-items:center;gap:5px;}
+.cms .cms-builder-catalogue-cards p{margin:4px 0 0;}
 @container (min-width:430px){
  .cms .cms-builder-appointment-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
 }

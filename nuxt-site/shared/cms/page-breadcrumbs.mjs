@@ -24,6 +24,11 @@ const franchiseDownloadLabels = {
   breadcrumbParent: { fallback: '我要加盟', label: '我要加盟連結文字' },
   breadcrumbList: { fallback: '加盟資料下載', label: '下載頁目前位置文字' },
 }
+const builderCatalogueLabels = {
+  breadcrumbHome: inspirationLabels.breadcrumbHome,
+  breadcrumbParent: { fallback: '建商專區', label: '建商專區連結文字' },
+  breadcrumbList: { fallback: '建商專區型錄', label: '型錄頁目前位置文字' },
+}
 
 function breadcrumb(copy, labels) {
   return Object.fromEntries(Object.entries(labels).map(([key, { fallback }]) => [
@@ -36,13 +41,15 @@ export const knowledgeBreadcrumb = (copy = {}) => breadcrumb(copy, knowledgeLabe
 export const seriesCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, seriesCatalogueLabels)
 export const latestNewsBreadcrumb = (copy = {}) => breadcrumb(copy, latestNewsLabels)
 export const franchiseDownloadBreadcrumb = (copy = {}) => breadcrumb(copy, franchiseDownloadLabels)
+export const builderCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, builderCatalogueLabels)
 
 export function breadcrumbSchema(id, schema) {
   const labels = id === 'view-pages-design-inspiration-index' ? inspirationLabels
     : id === 'view-pages-knowledge-index' ? knowledgeLabels
     : id === 'view-pages-catalogues-kitchenware-catalog' ? seriesCatalogueLabels
     : id === 'view-pages-news-latest-index' ? latestNewsLabels
-    : id === 'view-pages-franchising-download' ? franchiseDownloadLabels : null
+    : id === 'view-pages-franchising-download' ? franchiseDownloadLabels
+    : id === 'view-pages-builders-catalogues' ? builderCatalogueLabels : null
   if (!labels) return schema
   const copy = schema.fields.copy
   const fields = Object.fromEntries(Object.entries(labels).map(([key, { label, fallback }]) => [

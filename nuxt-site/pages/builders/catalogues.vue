@@ -2,6 +2,7 @@
 const cmsCopy = await useCmsResource('view-pages-builders-catalogues', {"catalogues":[{"id":"developer-2026","title":"建商專區型錄","description":"建商專區型錄 2026","cover":"/section-6/builders/catalogues/developer-catalogue-2026.jpg","pdfUrl":"/section-6/builders/catalogues/developer-catalogue-2026.pdf","actionLabel":"預覽"}],"copy":{"text1":"Developer Catalogue","text2":"建商專區與品牌系列型錄","text3":"下載"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 import { ArrowUpRight, Download } from 'lucide-vue-next'
+import { builderCatalogueBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
 
 interface BuilderCatalogueCard {
   id: string
@@ -13,6 +14,7 @@ interface BuilderCatalogueCard {
 }
 
 const catalogues: BuilderCatalogueCard[] = cmsCopy.catalogues
+const trail = builderCatalogueBreadcrumb(cmsCopy.copy)
 
 useSeoMeta({
   title: '建商專區型錄｜SAKURA 整體廚房',
@@ -31,8 +33,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <span class="builder-catalogue-hero__overlay" aria-hidden="true" />
       <div class="builder-catalogue-hero__inner">
         <h1 id="builder-catalogue-title" v-reveal="{ anim: 'opalMoveUp' }" data-ev="opalMoveUp" class="ev">{{ cmsCopy.copy.text1 }}</h1>
-        <nav v-reveal="{ anim: 'opalMoveUp', delay: 90 }" aria-label="麵包屑" class="builder-catalogue-hero__trail ev" data-ev="opalMoveUp" style="animation-delay:90ms">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "建商專區", to: "/builders" }, { label: "建商專區型錄" }]' v-slot="{ items, follow }">
+        <nav id="builder-catalogue-breadcrumb" v-reveal="{ anim: 'opalMoveUp', delay: 90 }" aria-label="麵包屑" class="builder-catalogue-hero__trail ev" data-ev="opalMoveUp" style="animation-delay:90ms">
+          <InternalSmartBreadcrumb :fallback="[{ label: trail.breadcrumbHome, to: '/' }, { label: trail.breadcrumbParent, to: '/builders' }, { label: trail.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
@@ -43,7 +45,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
     </section>
 
-    <section class="builder-catalogue-projects" aria-labelledby="builder-catalogue-list-title">
+    <section id="builder-catalogue-list" class="builder-catalogue-projects" aria-labelledby="builder-catalogue-list-title">
       <div class="builder-catalogue-projects__rail internal-rail-safe">
         <h2 id="builder-catalogue-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
         <ul class="builder-catalogue-grid" aria-label="建商專區型錄清單">
@@ -141,6 +143,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builder-catalogue-hero__trail a { color: inherit; transition: color .3s ease; }
 .builder-catalogue-hero__trail a:hover,
 .builder-catalogue-hero__trail a:focus-visible { color: #caa05c; }
+#builder-catalogue-breadcrumb, #builder-catalogue-list { scroll-margin-top: var(--site-header-height, 60px); }
 
 .builder-catalogue-projects {
   overflow: hidden;

@@ -48,7 +48,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <main class="sakura-kitchen-page">
-    <section class="sakura-kitchen-hero-shell hero-includes-header" aria-labelledby="sakura-kitchen-title">
+    <section id="builder-sakura-hero" class="sakura-kitchen-hero-shell hero-includes-header" aria-labelledby="sakura-kitchen-title">
       <div class="sakura-kitchen-hero">
         <InternalBuilderImage
           :src="cmsCopy.copy.field1"

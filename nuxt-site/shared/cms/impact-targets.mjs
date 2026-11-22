@@ -132,6 +132,10 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
   return [target('廚房裝修指南列表 → 位置導覽','/knowledge#knowledge-breadcrumb'),target('廚房裝修指南所有文章 → 位置導覽','/knowledge/design/systemcabinet#knowledge-breadcrumb')]
  if (documentId === 'view-pages-catalogues-kitchenware-catalog' && path.startsWith('copy.breadcrumb'))
   return [target('品牌系列型錄 → 位置導覽','/catalogues/kitchenware-catalog#series-catalogue-breadcrumb')]
+ if (documentId === 'view-pages-builders-catalogues' && path.startsWith('copy.breadcrumb'))
+  return [target('建商專區型錄 → 麵包屑','/builders/catalogues#builder-catalogue-breadcrumb')]
+ if (documentId === 'view-pages-builders-catalogues' && (key==='catalogues'||['copy.text2','copy.text3'].includes(path)))
+  return [target('建商專區型錄 → 型錄封面、預覽與下載','/builders/catalogues#builder-catalogue-list')]
  if (documentId === 'view-pages-news-latest-index' && path.startsWith('copy.breadcrumb'))
   return [target('最新消息列表 → 麵包屑','/news/latest#latest-breadcrumb'),target('最新消息內頁 → 麵包屑',context.newsDetailRoute?context.newsDetailRoute+'#article-breadcrumb':'/news/latest')]
  if (documentId === 'view-pages-news-latest-slug-' && key==='copy') {
