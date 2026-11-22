@@ -3,7 +3,7 @@ import {spawnSync} from 'node:child_process'
 import {readFile} from 'node:fs/promises'
 import {workspaces,workspaceFor,editorLink,cmsDate} from '../shared/cms/workflow.mjs'
 import {workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
-import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace,orderDesignWorkspaces,destinationGroups} from '../shared/cms/navigation.mjs'
+import {namedEditorSchema,nameBindings,siteSections,workspaceNames,navigationSections,sectionForQuery,matchesWorkspace,orderDesignWorkspaces,destinationGroups,destinationName} from '../shared/cms/navigation.mjs'
 import {pageEditors,pageSummary} from '../shared/cms/page-editors.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url))),published=Object.fromEntries(seed.map(d=>[d.id,structuredClone(d.data)])),original=JSON.stringify(published)
 const names=workspaceNames(workspaces,published),find=(rows,id)=>rows.find(w=>w.id===workspaceFor(id)?.id)
@@ -48,13 +48,21 @@ const destinations=destinationGroups(pages,names)
 const hrefs=destinations.flatMap(group=>group.links.map(page=>page.href))
 const seriesLinks=find(names,'data-kitchenSeries').pageLinks
 assert.equal(new Set(hrefs).size,hrefs.length,'A destination can appear only once')
-assert.deepEqual(new Set(hrefs),new Set([...pages.filter(p=>p.href!=='/'&&(p.section!=='shared'||p.id==='privacy')).map(p=>p.href),...seriesLinks.map(p=>p.href)]))
+const knownSections=['/#kitchen-series','/builders#appointment',...['introduction','advantages','franchise-process','franchise-faq'].map(id=>'/franchising/intro#'+id)]
+assert.deepEqual(new Set(hrefs),new Set([...pages.filter(p=>p.href!=='/'&&(p.section!=='shared'||p.id==='privacy')).map(p=>p.href),...seriesLinks.map(p=>p.href),...knownSections]))
+assert.equal(destinationName('/builders#appointment',destinations),'建商專區的預約表單')
+assert(destinations.find(group=>group.key==='builders').links.some(link=>link.href==='/builders#appointment'))
+assert.equal(destinationName('/builders?source=catalogue',destinations),'建商專區首頁的指定位置')
+assert.equal(destinationName('https://example.org/page?source=site',destinations),'外部網站 · example.org')
+assert.equal(destinationName('tel:02-12345678',destinations),'電話 · 02-12345678')
+assert.equal(destinationName('mailto:example@example.org?subject=hello',destinations),'電子郵件 · example@example.org')
+assert.equal(destinationName('/some/other/page',destinations),'官網內的連結')
 const seriesGroup=destinations.find(group=>group.key==='series')
 assert.equal(seriesGroup.label,'品牌系列')
 assert.deepEqual(seriesGroup.links,seriesLinks)
 assert(seriesGroup.links.some(page=>page.href==='/home-style/basic-plus'),'Basic+ remains under the series category')
 assert.equal(hrefs.filter(href=>href==='/home-style/aikitchen').length,1)
-assert.equal(destinationGroups(pages,renamed)[0].label,'櫻花新消息','Category order and labels follow the published navigation')
+assert.equal(destinationGroups(pages,renamed).filter(group=>group.key!=='home')[0].label,'櫻花新消息','Category order and labels follow the published navigation')
 assert.deepEqual(destinationGroups(pages).find(group=>group.key==='series').links.map(p=>p.href),['/home-style/aikitchen'])
 assert.deepEqual(destinationGroups(),[],'Pages and categories can load independently')
 console.log('PASS: grouped destination options retain the same URLs, native categories, published ordering and series labels')

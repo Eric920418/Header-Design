@@ -1,8 +1,9 @@
 // Interface locations only. Stored document names, values and public URLs stay unchanged.
 const view=id=>'view-pages-'+id
+export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
 const copyGroups={
  'about-introduce':[
-  ['品牌承諾',{text5:'區塊標題（供語音朗讀）'}],['專屬品牌識別',{text9:'介紹文字',field10:'圖片放大視窗'}],
+  ['品牌承諾',{text5:readingField('品牌承諾','區塊名稱')}],['專屬品牌識別',{text9:'介紹文字',field10:'圖片放大視窗'}],
  ],
  'about-advantage':[
   ['家庭情境',{text1:'區塊英文主標題',text2:'區塊中文主標題',text3:'介紹文字'}],
@@ -18,17 +19,17 @@ const copyGroups={
   ['聯繫與參觀預約',{text33:'區塊英文標籤',text38:'品牌館名稱',text39:'預約方式說明',text40:'表單介紹文字',text41:'地址欄位名稱',text42:'營業時間欄位名稱'}],
  ],
  'builders-sakura-kitchen':[
-  ['頁面最上方',{field1:'主圖片',field2:'主圖片說明',text3:'主標題（供語音朗讀）',field4:'英文品牌標誌',field5:'英文標誌說明',field6:'中文品牌標誌',field7:'中文標誌說明',text8:'介紹文字',field9:'預約按鈕前往頁面',text10:'預約按鈕第一行',text11:'預約按鈕第二行'}],
+  ['頁面最上方',{field1:'主圖片',field2:'主圖片說明',text3:readingField('頁首','頁面名稱'),field4:'英文品牌標誌',field5:'英文標誌說明',field6:'中文品牌標誌',field7:'中文標誌說明',text8:'介紹文字',field9:'預約按鈕前往頁面',text10:'預約按鈕第一行',text11:'預約按鈕第二行'}],
   ['品牌承諾入口',{field12:'前往頁面',field13:'入口圖片',field14:'圖片說明',text15:'按鈕英文文字',text16:'按鈕介紹文字',text17:'區塊英文標籤'}],
   ['品牌優勢',{text18:'區塊中文主標題（第一段）',text19:'區塊中文主標題（第二段）',text20:'介紹文字第一段',text21:'介紹文字第二段',field22:'區塊圖片',field23:'圖片說明',field24:'預約按鈕前往頁面',text25:'預約按鈕文字'}],
   ['品牌系列',{text26:'區塊英文標籤',text29:'介紹文字',field30:'預約按鈕前往頁面',text31:'預約按鈕文字'}],
  ],
- 'builders-catalogues':[['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:'型錄清單名稱（供語音朗讀）',text3:'下載按鈕文字'}]],
+ 'builders-catalogues':[['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'下載按鈕文字'}]],
  'catalogues-catalog':[
-  ['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:'型錄清單名稱（供語音朗讀）',text3:'預覽按鈕文字',text4:'下載按鈕文字'}],
+  ['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}],
   ['清潔與保養問答',{text9:'保養步驟編號前的文字',text10:'小提醒標題'}],
  ],
- 'catalogues-kitchenware-catalog':[['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:'型錄清單名稱（供語音朗讀）',text3:'預覽按鈕文字',text4:'下載按鈕文字'}]],
+ 'catalogues-kitchenware-catalog':[['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}]],
  'franchising-intro':[
   ['頁面最上方',{field1:'背景圖片',field2:'背景圖片說明',text3:'區塊英文標籤',text4:'區塊中文主標題（第一段）',text5:'區塊中文主標題（第二段）',text7:'介紹文字第一段',text8:'介紹文字第二段',text9:'申請加盟按鈕文字',field10:'門市大圖',field11:'門市圖片說明',field12:'說明會前往頁面',text13:'說明會按鈕文字'}],
   ['加盟夥伴真實分享',{field17:'影片名稱'}],['品牌成果圖片',{field18:'第一張圖片',field19:'第一張圖片說明',field20:'第一張循環圖片',field22:'第二張圖片',field23:'第二張圖片說明',field24:'第二張循環圖片'}],
@@ -47,7 +48,7 @@ const copyGroups={
   ['型錄預覽圖片',{text21:'頁碼前的文字'}],['頁面底部返回按鈕',{field22:'前往頁面',text23:'按鈕文字'}],
  ],
  'gallery-index':[
-  ['主視覺標題',{text1:'主視覺標題'}],['地區篩選列',{text2:'篩選區塊名稱（供語音朗讀）',text3:'區域標籤文字',text4:'全部區域按鈕文字',text5:'縣市標籤文字'}],
+  ['主視覺標題',{text1:'主視覺標題'}],['地區篩選列',{text2:readingField('門市篩選列','篩選區塊名稱'),text3:'區域標籤文字',text4:'全部區域按鈕文字',text5:'縣市標籤文字'}],
   ['搜尋結果提示',{text6:'門市筆數後的文字'}],['無符合門市提示',{text7:'提示標題',text8:'提示說明',text9:'查看全部按鈕文字'}],
  ],
  'gallery-slug-':[
@@ -58,14 +59,14 @@ const copyGroups={
  'knowledge-design-slug-':[['文章底部返回按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['延伸文章按鈕',{moreDestination:'前往頁面'}]],
  'knowledge-design-systemcabinet':[
   ['系統櫃文章返回按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['系統櫃材質重點',{text3:'段落標題'}],
-  ['系統櫃板材比較',{text4:'段落標題',text5:'比較表說明（供語音朗讀）',text6:'材質欄位名稱',text7:'手機滑動提示文字'}],
+  ['系統櫃板材比較',{text4:'段落標題',text5:readingField('板材比較表','表格說明'),text6:'材質欄位名稱',text7:'手機滑動提示文字'}],
   ['系統櫃挑選步驟',{text8:'段落標題',text9:'介紹文字',text10:'色彩建議連結前文字',text11:'色彩建議連結後文字',text12:'門板造型說明',text13:'系列推薦前的文字',field14:'系列推薦前往頁面'}],
   ['系統櫃推薦案例',{text15:'段落標題'}],['系統櫃文章結語',{text16:'品牌名稱',text17:'介紹文字',field18:'型錄前往頁面',text19:'型錄連結文字',text20:'連結後的文字'}],
  ],
- 'news-index':[['主視覺標題',{text1:'主視覺標題'}],['全部消息列表',{text2:'清單名稱（供語音朗讀）'}],['消息分類選單',{text3:'分類選單標題'}],['最近文章推薦',{text4:'推薦區標題'}]],
- 'news-latest-index':[['主視覺標題',{text1:'主視覺標題'}],['消息管理',{text2:'清單名稱（供語音朗讀）'}]],
- 'news-activities-index':[['主視覺標題',{text1:'主視覺標題'}],['活動管理',{text2:'清單名稱（供語音朗讀）'}]],
- 'news-video-index':[['主視覺標題',{text1:'主視覺標題'}],['影音管理',{text2:'清單名稱（供語音朗讀）'}]],
+ 'news-index':[['主視覺標題',{text1:'主視覺標題'}],['全部消息列表',{text2:readingField('全部消息清單','清單名稱')}],['消息分類選單',{text3:'分類選單標題'}],['最近文章推薦',{text4:'推薦區標題'}]],
+ 'news-latest-index':[['主視覺標題',{text1:'主視覺標題'}],['消息管理',{text2:readingField('最新消息清單','清單名稱')}]],
+ 'news-activities-index':[['主視覺標題',{text1:'主視覺標題'}],['活動管理',{text2:readingField('優惠活動清單','清單名稱')}]],
+ 'news-video-index':[['主視覺標題',{text1:'主視覺標題'}],['影音管理',{text2:readingField('媒體影音清單','清單名稱')}]],
  'news-latest-slug-':[
   ['麵包屑導覽設定',{text1:'內頁英文標題',field2:'優惠消息前往頁面',text3:'優惠消息連結文字',field4:'最新消息前往頁面',text5:'最新消息連結文字'}],
   ['文章報名圖片提示',{text6:'報名 QR Code 下方文字'}],['文章旁的分類選單',{field7:'優惠活動前往頁面',text8:'優惠活動連結文字',field9:'最新消息前往頁面',text10:'最新消息連結文字',field11:'媒體影音前往頁面',text12:'媒體影音連結文字'}],
@@ -95,7 +96,10 @@ const componentCopyGroups={
  ],
 }
 const fields=new Map()
-for(const [id,groups]of [...Object.entries(copyGroups).map(([id,g])=>[view(id),g]),...Object.entries(componentCopyGroups)])for(const[name,items]of groups)for(const[key,label]of Object.entries(items))fields.set(id+':copy.'+key,{name,label,singleLine:!/(介紹|說明|文字第一段|文字第二段|連結前|連結後|結語)/.test(label)})
+for(const [id,groups]of [...Object.entries(copyGroups).map(([id,g])=>[view(id),g]),...Object.entries(componentCopyGroups)])for(const[name,items]of groups)for(const[key,item]of Object.entries(items)){
+ const field=typeof item==='string'?{label:item}:item
+ fields.set(id+':copy.'+key,{name,...field,singleLine:!/(介紹|說明|文字第一段|文字第二段|連結前|連結後|結語)/.test(field.label)})
+}
 export const positionField=(id,path)=>fields.get(id+':'+path)
 
 const section=(name,hint,kind='text',anchor='',image)=>({name,hint,kind,anchor,image})

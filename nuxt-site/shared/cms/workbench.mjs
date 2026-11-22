@@ -117,7 +117,7 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const heading=texts.filter(f=>/標題|小標|品牌名稱|區塊(?:英|中)文標籤/.test(f.label)),buttons=texts.filter(f=>/按鈕|連結文字/.test(f.label)&&!/介紹|說明/.test(f.label))
  const detail=fields.some(f=>/-slug-$/.test(f.documentId))||/系統櫃/.test(block?.name)
  const contextImage=(detail?presentation.detailHeroImage:'')||firstImage(positionImage(definition?.hero,bodies))||presentation.heroImage||''
- const auxiliary=fields.filter(f=>typeof f.value==='string'&&f.schema.advanced&&!f.schema.format).map(f=>({path:f.path,label:f.label,value:f.value}))
+ const auxiliary=fields.filter(f=>typeof f.value==='string'&&f.schema.readingGroup).map(f=>({path:f.path,label:f.label,value:f.value}))
  const displaySettings=fields.filter(f=>['cmsSettings','seo'].includes(f.path)).map(f=>({label:f.label,value:f.value||{}}))
  const destinations=fields.filter(f=>typeof f.value==='string'&&f.schema.format==='url'&&f.schema.destination)
  const destination=destinations.find(f=>f.path===focusedPath)||destinations[0]

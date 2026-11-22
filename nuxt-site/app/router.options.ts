@@ -44,6 +44,22 @@ const scrollBehavior: RouterScrollBehavior = async (to, from, savedPosition) => 
       }
     }
     const top = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--site-header-height')) || 0
+    if (target && toPath === '/builders' && to.hash === '#appointment') {
+      // Images above the booking form can change its position just after navigation.
+      const retainBookingPosition = new ResizeObserver(() => {
+        const offset = target.getBoundingClientRect().top - top
+        if (target.isConnected && Math.abs(offset) > 1) window.scrollBy({ top: offset, behavior: 'instant' })
+      })
+      retainBookingPosition.observe(document.body)
+      const stop = window.setTimeout(() => controller.abort(), 2500)
+      controller.signal.addEventListener('abort', () => {
+        retainBookingPosition.disconnect()
+        window.clearTimeout(stop)
+      }, { once: true })
+      for (const event of ['wheel', 'touchstart', 'pointerdown', 'keydown', 'focusin']) {
+        window.addEventListener(event, () => controller.abort(), { signal: controller.signal, passive: true, capture: true, once: true })
+      }
+    }
     // Native smooth scrolling can be interrupted by Lenis/page layout refresh.
     return { el: to.hash, top, behavior: 'instant' as ScrollBehavior }
   }

@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import {ArrowRight,Play,Plus,Search,MessageSquare,Download,MapPin} from 'lucide-vue-next'
-import {destinationGroups} from '~/shared/cms/navigation.mjs'
+import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
 const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
-const destinationName=computed(()=>{
- const url=scene.value.destination?.value
- if(!url)return '沿用既有連結'
- if(url==='/')return '首頁'
- return destinationGroups(sitePages.value||[],workspaces.value||[]).flatMap(group=>group.links).find(page=>page.href===url)?.title||url
-})
+const destinationTitle=computed(()=>destinationName(scene.value.destination?.value,destinationGroups(sitePages.value||[],workspaces.value||[]))||'沿用既有連結')
 const scene=computed(()=>pagePositionContent(props.block,props.bodies,props.presentation,props.selected,props.focusedField))
 const breadcrumb=computed(()=>newsBreadcrumbPosition(props.block,props.bodies,props.presentation))
 const highlighted=(path:string)=>props.focusedField===path
@@ -113,9 +108,9 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
    <div v-if="scene.kind!=='breadcrumb'&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
-   <p v-if="scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationName }}</span></p>
-   <dl v-if="scene.auxiliary.some((f:any)=>highlighted(f.path))" class="cms-scene-details"><template v-for="field in scene.auxiliary.filter((f:any)=>highlighted(f.path))" :key="field.path"><dt>{{ field.label }}</dt><dd>{{ field.value }}</dd></template></dl>
-   <p v-if="!['breadcrumb','registration','inactive'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'這裡設定語音朗讀或其他輔助資訊。可選取欄位查看對應文字。':'此位置目前沒有可顯示的內容。' }}</p>
+   <p v-if="scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>
+   <dl v-if="scene.auxiliary.some((f:any)=>highlighted(f.path))" class="cms-scene-details"><template v-for="field in scene.auxiliary.filter((f:any)=>highlighted(f.path))" :key="field.path"><dt>螢幕閱讀器會讀到</dt><dd>{{ field.value }}</dd></template></dl>
+   <p v-if="!['breadcrumb','registration','inactive'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
   </section>
  </div>
 </template>

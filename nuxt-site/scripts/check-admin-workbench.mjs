@@ -71,8 +71,18 @@ assert(!inspiration.find(b=>b.preview==='inspiration-cases').fields.some(f=>f.pa
 for(const old of ['案例內容','案例顯示與順序','案例列表','列表標題與按鈕','整頁共用文字'])assert(inspiration.some(b=>b.aliases.includes('inspiration:'+old)))
 for(const i of Array.from({length:11},(_,i)=>i+1))assert.equal(inspiration.flatMap(b=>b.fields).filter(f=>f.documentId==='view-pages-design-inspiration-index'&&f.path==='copy.text'+i).length,1)
 const filterFields=inspiration.find(b=>b.preview==='inspiration-filters').fields
-assert.deepEqual(filterFields.filter(f=>!f.schema.advanced).map(f=>f.label),['型式選單名稱','風格選單名稱','篩選按鈕文字'])
-assert(filterFields.find(f=>f.path==='copy.text2').schema.advanced);assert(filterFields.every(f=>f.schema.singleLine))
+assert.deepEqual(filterFields.filter(f=>!f.schema.advanced).map(f=>f.label),['篩選按鈕文字'])
+assert.deepEqual(filterFields.filter(f=>f.schema.readingGroup==='案例篩選列').map(f=>f.path),['copy.text2','copy.text3','copy.text4'])
+assert(filterFields.every(f=>f.schema.singleLine))
+assert(inspiration.find(b=>b.preview==='inspiration-results').fields.every(f=>f.schema.advanced&&f.schema.readingGroup==='搜尋結果'))
+for(const id of ['series-catalogue','product-catalogue','builder-catalogues']){
+ const block=pageBlocks(pageEditors.find(p=>p.id===id),docs).find(b=>b.name==='型錄封面與下載')
+ assert.equal(block.fields.find(f=>f.path==='copy.text2')?.schema.readingGroup,'型錄清單')
+ assert(block.fields.find(f=>f.path==='copy.text2')?.schema.advanced)
+ assert(block.fields.some(f=>f.label==='下載按鈕文字'&&!f.schema.advanced))
+}
+const identity=pageBlocks(pageEditors.find(p=>p.id==='about'),docs).find(b=>b.name==='專屬品牌識別')
+assert(!identity.fields.some(f=>f.path==='copy.field10'),'Fixed modal placement is not an editable field')
 const previewBodies=Object.fromEntries(docs.map(d=>[d.id,structuredClone(d.body)])),presentation={heroImage:'/hero.jpg',cases:[{title:'真實案例',image:'/case.jpg'}]},serialized=JSON.stringify(presentation)
 const heroSchema=home.find(b=>b.id==='home:主視覺輪播').fields.find(f=>f.path==='slides').schema
 assert.equal(heroSchema.label,'輪播內容');assert.equal(heroSchema.searchLabel,'搜尋輪播名稱')

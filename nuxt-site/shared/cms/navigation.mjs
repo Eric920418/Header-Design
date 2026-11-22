@@ -114,6 +114,17 @@ export function navigationSections(rows=[]){
  return siteSections.map(s=>{const w=rows.find(w=>w.section===s.key);return{...s,label:w?.sectionTitle||s.label,order:w?.sectionOrder??siteSections.indexOf(s)+100}}).sort((a,b)=>a.order-b.order)
 }
 
+const pageSections={
+ '/':[['/#kitchen-series','首頁的品牌系列']],
+ '/builders':[['/builders#appointment','建商專區的預約表單']],
+ '/franchising/intro':[
+  ['/franchising/intro#introduction','加盟介紹的頁首'],
+  ['/franchising/intro#advantages','加盟優勢'],
+  ['/franchising/intro#franchise-process','加盟流程'],
+  ['/franchising/intro#franchise-faq','加盟常見問題'],
+ ],
+}
+
 /** @returns {{key:string,label:string,links:{href:string,title:string}[]}[]} */
 export function destinationGroups(pages=[],workspaces=[]){
  const seen=new Set(['/'])
@@ -125,12 +136,37 @@ export function destinationGroups(pages=[],workspaces=[]){
  const sections=navigationSections(workspaces).map(section=>({
   key:section.key,
   label:section.key==='shared'?'其他頁面':section.label,
-  links:unique(pages.filter(page=>page.section===section.key&&page.id!=='series'&&(section.key!=='shared'||page.id==='privacy'))),
+  links:unique(pages.filter(page=>page.section===section.key&&page.id!=='series'&&(section.key!=='shared'||page.id==='privacy'))
+   .flatMap(page=>[page,...sectionLinks(page.href)])),
  }))
  const series=workspaces.find(w=>w.id==='data-kitchenSeries')
  const seriesLinks=unique([...(series?.pageLinks||[]),...pages.filter(page=>page.id==='series')])
  sections.splice(sections.findIndex(section=>section.key==='design'),0,{key:'series',label:series?.pageTitle||'品牌系列',links:seriesLinks})
+ if(pages.some(page=>page.href==='/'))sections.unshift({key:'home',label:'首頁',links:unique(sectionLinks('/'))})
  return sections.filter(group=>group.links.length)
+}
+
+function sectionLinks(href){
+ return (pageSections[href]||[]).map(([href,title])=>({href,title}))
+}
+
+export function destinationName(value,groups){
+ if(!value)return ''
+ if(value==='/')return '首頁'
+ const links=groups.flatMap(group=>group.links)
+ const exact=links.find(link=>link.href===value)
+ if(exact)return exact.title
+ if(/^tel:/i.test(value))return '電話 · '+value.slice(4)
+ if(/^mailto:/i.test(value))return '電子郵件 · '+value.slice(7).split('?')[0]
+ if(value.startsWith('#')||/^\/(?!\/)/.test(value)){
+  const path=value.split(/[?#]/)[0]
+  const parent=path==='/'?'首頁':links.find(link=>link.href===path)?.title
+  return parent?parent+'的指定位置':'官網內的連結'
+ }
+ if(/^https?:\/\//i.test(value)){
+  try{return '外部網站 · '+new URL(value).hostname}catch{return '已儲存的連結'}
+ }
+ return '已儲存的連結'
 }
 
 export function namedEditorSchema(schema,id,pageTitle){

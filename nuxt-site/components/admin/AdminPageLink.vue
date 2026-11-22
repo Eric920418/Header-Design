@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {destinationGroups} from '~/shared/cms/navigation.mjs'
+import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
 
 const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
@@ -9,12 +9,14 @@ const groups=computed(()=>destinationGroups(sitePages.value||[],workspaces.value
 const custom=ref(false)
 const selected=computed(()=>{
  if(props.autoDestination&&!props.modelValue)return 'default'
- return props.modelValue==='/'||groups.value.some(group=>group.links.some(page=>page.href===props.modelValue))?props.modelValue:'custom'
+ if(!props.modelValue)return ''
+ return props.modelValue==='/'||groups.value.some(group=>group.links.some(page=>page.href===props.modelValue))?props.modelValue:'current'
 })
+const currentName=computed(()=>destinationName(props.modelValue,groups.value))
 function choose(event:Event){
  const value=(event.target as HTMLSelectElement).value
  custom.value=value==='custom'
- if(!custom.value)emit('update:modelValue',value==='default'?undefined:value)
+ if(!custom.value&&value!=='current')emit('update:modelValue',value==='default'?undefined:value)
 }
 function updateUrl(event:Event){
  const value=(event.target as HTMLInputElement).value
@@ -28,13 +30,14 @@ function updateUrl(event:Event){
     <option value="" disabled>選擇官網頁面</option>
     <option v-if="autoDestination" value="default">沿用既有連結</option>
     <option value="/">首頁</option>
+    <option v-if="selected==='current'" value="current">{{ currentName }}</option>
     <optgroup v-for="group in groups" :key="group.key" :label="group.label">
      <option v-for="page in group.links" :key="page.href" :value="page.href">{{ page.title }}</option>
     </optgroup>
-    <option value="custom">其他網址、電話或電子郵件</option>
+    <option value="custom">自行輸入連結</option>
    </select>
   </label>
-  <label v-if="custom||selected==='custom'">連結網址
+  <label v-if="custom">連結網址
    <input :aria-invalid="invalid" :aria-describedby="describedby" :value="modelValue" placeholder="https://…、tel:… 或 mailto:…" @input="updateUrl" />
   </label>
  </div>
