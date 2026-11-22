@@ -4,7 +4,7 @@ import {cmsDate,firstImage} from '~/shared/cms/workflow.mjs'
 import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
 import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes,updateFranchiseMarqueeImage,franchiseSupportImage,updateFranchiseFaqDestination} from '~/shared/cms/workbench.mjs'
-import {franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
+import {franchiseDownloadActions,franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
@@ -103,7 +103,7 @@ const faqCover=computed(()=>bodies.value[franchiseMarqueeDocument]?.copy?.field5
 function editableBlockFields(block:any){
  const fields=block?.fields||[]
  if(block?.kind!=='franchise-faq')return fields
- const card=blocks.value.find(b=>b.id==='franchise:加盟資料下載')
+ const card=blocks.value.find(b=>b.id==='franchise:加盟資料下載入口')
  const cardFields=(card?.fields||[]).filter((field:any)=>['copy.field52','copy.field53','copy.field54'].includes(field.path))
   .map((field:any)=>field.path==='copy.field52'?{...field,schema:{...field.schema,help:'封面點開的頁面。若封面和標題原本使用同一個連結，會一起更新。'}}:field)
  return [...fields,...cardFields]
@@ -114,11 +114,13 @@ const headerId='view-components-SiteHeader'
 const catalogueIndex=computed(()=>bodies.value[headerId]?.leftNav?.findIndex(usesDesktopCatalogue)??-1)
 const catalogueFields=computed(()=>active.value?.id==='menu:左側主導覽'&&catalogueIndex.value>=0
  ?active.value.fields.filter((f:any)=>desktopCatalogueFields.includes(f.path)):[])
-const commonFields=computed(()=>{
+const commonFields=computed<any[]>(()=>{
  const body=bodies.value[franchiseMarqueeDocument]
  const repeated=active.value?.kind==='franchise-marquee'?franchiseMarqueeRows.filter(row=>valueAt(body,row.image)===valueAt(body,row.loop)).map(row=>row.loop):[]
  return visibleFields.value.filter((f:any)=>f.schema.type!=='array'&&!f.schema.advanced&&!catalogueFields.value.includes(f)&&!systemCabinetFields.value.includes(f)&&!repeated.includes(f.path))
 })
+const brochureSettings=computed(()=>active.value?.kind==='franchise-download-document'?commonFields.value.filter(f=>franchiseDownloadActions.includes(f.path)):[])
+const mainFields=computed(()=>commonFields.value.filter(f=>!brochureSettings.value.includes(f)))
 const sharedFormGroups=computed(()=>{
  const groups=sharedNews.value?{'文章底部的分類選單':{},[newsTopLinks]:{}}:sharedKnowledge.value?knowledgeSharedSections:inspirationSharedGroups
  return Object.entries(groups).map(([key,group])=>({
@@ -314,6 +316,10 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
   <nav class="cms-block-nav cms-panel" aria-label="官網區塊"><h2>選擇{{ title==='首頁'?'首頁':'官網' }}區塊</h2><button v-for="b in navigationBlocks.filter(b=>!('secondary' in b&&b.secondary))" :key="b.id" type="button" :aria-current="currentLocation===b.id?'location':undefined" @click="chooseLocation(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span><strong>{{ b.name }}</strong><small>{{ b.hint }}</small></span><i v-if="modified.some(m=>m.id===b.id)" aria-label="尚未儲存">●</i></button><details v-if="blocks.some(b=>b.secondary)"><summary>其他設定</summary><button v-for="b in blocks.filter(b=>b.secondary)" :key="b.id" type="button" @click="selectBlock(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span>{{ b.name }}</span></button></details></nav>
   <div class="cms-page-form cms-panel">
    <div class="cms-block-heading"><div><h2 class="cms-block-title" tabindex="-1">{{ caseManagement?'自建案例':seriesPart?.name||active?.name }}</h2><p v-if="!caseManagement" class="cms-field-help">{{ seriesPart?.hint||active?.hint }}<template v-if="collections.length&&!newsArticleList">；選內容看位置，按「編輯」修改。</template></p></div><button type="button" class="cms-button cms-position-toggle" @click="positionOpen=true">看位置</button></div>
+   <div v-if="active?.id==='franchise:加盟資料下載入口'" class="cms-download-editor-link">
+    <p class="cms-field-help">這裡編輯加盟介紹上的入口。下載頁的大圖、主標題和按鈕請到下載頁編輯。</p>
+    <NuxtLink :to="pageEditorLink('franchise-download',route.query)" class="cms-button">編輯「加盟資料下載」頁 →</NuxtLink>
+   </div>
    <p v-if="caseManagement" class="cms-case-scope">這裡管理從後台新增的案例。請到<NuxtLink :to="pageEditorLink(storeCasesPageId,route.query)">「門市案例」</NuxtLink>修改門市文章與照片。從其他系統同步的案例請回原系統修改。</p>
    <fieldset :disabled="busy" class="cms-edit-form cms-collection-fields"><template v-for="f in collections" :key="f.documentId+':'+f.path+(newsRecent?':recent':'')"><div v-if="f.documentId===headerId&&f.path==='leftNav'" class="cms-block-field">
     <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :has-related-changes="catalogueChanged" @update:model-value="update(f,$event)" @cancel-related="restoreCatalogue">
@@ -357,7 +363,16 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     </div>
     <AdminFields :key="cityListPath" :model-value="pageFieldValue(bodies,regionField)?.[storeRegion]" :schema="regionField.schema.fields[storeRegion]" :document-id="regionField.documentId" :path="cityListPath" @update:model-value="update(regionField,{...pageFieldValue(bodies,regionField),[storeRegion]:$event})" />
    </fieldset>
-   <fieldset v-else-if="!collections.length" :disabled="busy" class="cms-edit-form"><div v-for="f in commonFields" :key="f.documentId+':'+f.path" class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset>
+   <template v-else-if="!collections.length">
+    <fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-download-fields':brochureSettings.length}"><div v-for="f in mainFields" :key="f.documentId+':'+f.path" class="cms-block-field" :class="{'cms-block-field-long':brochureSettings.length&&(f.schema.format==='media'||f.path==='copy.text9')}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></fieldset>
+    <section v-if="brochureSettings.length" class="cms-download-actions-settings">
+     <h3>預覽與下載按鈕</h3>
+     <p class="cms-field-help">兩個按鈕使用同一份 PDF。可分別更改按鈕文字。</p>
+     <fieldset :disabled="busy" class="cms-edit-form cms-franchise-download-fields">
+      <div v-for="f in brochureSettings" :key="f.path" class="cms-block-field" :class="{'cms-block-field-long':f.path==='FRANCHISE_BROCHURE_URL'}"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div>
+     </fieldset>
+    </section>
+   </template>
    <p v-if="active?.help" class="cms-field-help cms-position-help">{{ active.help }}</p>
    <details v-for="group in settingGroups" :key="active.id+group.title" :open="!group.imageReading&&!collections.length&&!commonFields.length" class="cms-secondary cms-purpose-settings" :data-position-group="group.formGroup">
     <summary>{{ group.title }}</summary>

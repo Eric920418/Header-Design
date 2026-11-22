@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {ArrowRight,Play,Plus,Search,MessageSquare,Download,MapPin} from 'lucide-vue-next'
+import {ArrowRight,Play,Plus,Search,MessageSquare,Download,MapPin,ExternalLink} from 'lucide-vue-next'
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
 import {knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 import {valueAt} from '~/shared/cms/page-editors.mjs'
-import {franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
+import {franchiseDownloadDocument,franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
@@ -44,7 +44,9 @@ const marqueeRows=computed(()=>{
 })
 const supportItems=computed<{title:string;detail:string}[]>(()=>props.bodies['data-franchise']?.franchiseSupportHighlights||[])
 const franchiseQuestions=computed<{question:string;answer:string}[]>(()=>props.bodies['data-franchise']?.franchiseFaqItems?.slice(0,FRANCHISE_FAQ_DISPLAY_LIMIT)||[])
-const franchiseDownload=computed(()=>props.bodies[franchiseMarqueeDocument]?.copy)
+const franchiseDownloadCard=computed(()=>props.bodies[franchiseMarqueeDocument]?.copy)
+const franchiseDownloadCopy=computed(()=>props.bodies[franchiseDownloadDocument]?.copy)
+const brochureFile=computed(()=>props.bodies['data-franchise']?.FRANCHISE_BROCHURE_URL?.split(/[?#]/)[0].split('/').pop())
 const formFields=computed(()=>props.block?.id.startsWith('franchise-form:')?['姓名','電子郵件','聯絡電話','居住地']:['聯絡人','聯絡電話','建設公司','電子信箱'])
 const links=computed(()=>scene.value.items.flatMap((i:any)=>i.value?.mega||i.value?.children||i.value?.links||[i.value]).map((i:any)=>Array.isArray(i)?{label:i[0]}:i).filter((i:any)=>i?.label||i?.title).slice(0,8))
 const previewStores=computed(()=>scene.value.items.map((i:any)=>({name:i.value?.storeName||i.value?.name||i.title,address:i.value?.address,hours:i.value?.hours,phone:i.value?.contact?.phone||i.value?.phone,image:i.image})).filter((i:any)=>i.address||i.image))
@@ -53,7 +55,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
 <template>
  <div class="cms-page-position-scene cms-website-scene" :data-position-kind="scene.kind">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
-  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','news-shared'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image"><AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ pageTitle }}</span></div>
+  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','breadcrumb','page-breadcrumb','inactive','news-shared'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image"><AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ franchiseDownloadCopy?.text4 || pageTitle }}</span></div>
   <section class="cms-scene-target" :aria-label="block?.name+'的位置示意'">
    <span class="cms-scene-tag">{{ block?.name }}<template v-if="selected"> · {{ selected.caption }}</template></span>
    <template v-if="scene.displaySettings.length">
@@ -98,12 +100,31 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
       <p v-if="index===(selected?.index??0)">{{ item.answer }}</p>
      </div>
     </div>
-    <aside v-if="franchiseDownload" class="cms-franchise-faq-card" :class="{'is-focused':['copy.field52','copy.field53','copy.field54'].includes(focusedField||'')}">
-     <AdminThumbnail :src="franchiseDownload.field53" :alt="franchiseDownload.field54||'加盟資料封面'" contain />
-     <strong>{{ franchiseDownload.text56 }}</strong>
-     <small>封面前往 {{ destinationName(franchiseDownload.field52,destinations) }}</small>
-     <small v-if="franchiseDownload.field55!==franchiseDownload.field52">標題前往 {{ destinationName(franchiseDownload.field55,destinations) }}</small>
+    <aside v-if="franchiseDownloadCard" class="cms-franchise-faq-card" :class="{'is-focused':['copy.field52','copy.field53','copy.field54'].includes(focusedField||'')}">
+     <AdminThumbnail :src="franchiseDownloadCard.field53" :alt="franchiseDownloadCard.field54||'加盟資料封面'" contain />
+     <strong>{{ franchiseDownloadCard.text56 }}</strong>
+     <small>封面前往 {{ destinationName(franchiseDownloadCard.field52,destinations) }}</small>
+     <small v-if="franchiseDownloadCard.field55!==franchiseDownloadCard.field52">標題前往 {{ destinationName(franchiseDownloadCard.field55,destinations) }}</small>
     </aside>
+   </div>
+   <div v-else-if="scene.kind==='franchise-download-document'&&franchiseDownloadCopy" class="cms-franchise-download-preview">
+    <header>
+     <h3><span :class="{'is-focused':highlighted('copy.text5')}">{{ franchiseDownloadCopy.text5 }}</span><br /><span :class="{'is-focused':highlighted('copy.text6')}">{{ franchiseDownloadCopy.text6 }}</span></h3>
+     <AdminThumbnail v-if="franchiseDownloadCopy.field7" :src="franchiseDownloadCopy.field7" :alt="franchiseDownloadCopy.field8" :class="{'is-focused':highlighted('copy.field7')||highlighted('copy.field8')}" contain />
+    </header>
+    <div>
+     <p :class="{'is-focused':highlighted('copy.text9')}">{{ franchiseDownloadCopy.text9 }}</p>
+     <dl class="cms-franchise-download-meta">
+      <div v-for="label in [10,12,14]" :key="label">
+       <dt :class="{'is-focused':highlighted('copy.text'+label)}">{{ franchiseDownloadCopy['text'+label] }}</dt>
+       <dd :class="{'is-focused':highlighted('copy.text'+(label+1))}">{{ franchiseDownloadCopy['text'+(label+1)] }}</dd>
+      </div>
+     </dl>
+     <div class="cms-scene-buttons">
+      <span v-for="button in scene.buttons" :key="button.path" :class="{'is-focused':highlighted(button.path)||highlighted('FRANCHISE_BROCHURE_URL')}">{{ button.value }}<Download v-if="button.path==='copy.text17'" :size="14" aria-hidden="true" /><ExternalLink v-else :size="14" aria-hidden="true" /></span>
+     </div>
+     <small v-if="highlighted('FRANCHISE_BROCHURE_URL')" class="cms-field-help">{{ brochureFile || '尚未選擇 PDF' }}</small>
+    </div>
    </div>
    <template v-else-if="storeExampleKind">
     <template v-if="storeExample&&storeDetails">
@@ -248,7 +269,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb','news-shared','franchise-support'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="!storeExampleKind&&!['breadcrumb','page-breadcrumb','news-shared','franchise-support','franchise-download-document'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
    <p v-if="scene.kind!=='franchise-support'&&scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>

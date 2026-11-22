@@ -802,6 +802,18 @@
 .cms .cms-franchise-faq-card img.cms-thumbnail{width:100%;height:clamp(100px,19vw,240px);object-fit:contain;background:#f7f4ee;}
 .cms .cms-franchise-faq-card small{color:var(--cms-muted);}
 @media(max-width:479px){.cms .cms-franchise-faq-preview{grid-template-columns:minmax(0,1fr);}}
+.cms .cms-download-editor-link{display:grid;justify-items:start;gap:8px;margin:0 0 16px;padding:12px;background:#f8eed8;border-radius:6px;}
+.cms .cms-download-editor-link p{margin:0;}
+.cms .cms-download-actions-settings{margin-top:16px;padding:12px;border:1px solid var(--cms-line);border-radius:6px;}
+.cms .cms-download-actions-settings h3{margin:0;font-size:15px;}
+.cms .cms-download-actions-settings p{margin:4px 0 12px;}
+@media(min-width:1280px){.cms .cms-workbench .cms-franchise-download-fields{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.cms .cms-franchise-download-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:14px;overflow-wrap:anywhere;}
+.cms .cms-workbench .cms-franchise-download-preview img.cms-thumbnail.is-mark{width:100%;height:auto;aspect-ratio:3156/245;margin-top:8px;padding:0;background:transparent;}
+.cms .cms-franchise-download-meta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.cms .cms-franchise-download-meta div{flex:1 1 auto;padding:6px 8px;border:1px solid var(--cms-line);border-radius:6px;}
+.cms .cms-franchise-download-meta dt{font-size:11px;color:var(--cms-muted);}
+.cms .cms-franchise-download-meta dd{margin:0;font-weight:600;}
 @media(min-width:1024px){.cms .cms-common-settings>.cms-franchise-support-settings{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(min-width:768px){.cms .cms-news-link-settings{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:12px;}}
 .cms .cms-knowledge-article-sections{display:grid;gap:8px;margin-top:14px;}
