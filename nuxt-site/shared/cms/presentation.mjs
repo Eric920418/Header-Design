@@ -8,6 +8,7 @@ import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengt
 import {builderHomeOneDocument,builderHomeOneField} from './builder-home-one.mjs'
 import {builderAppointmentDocument,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 import {builderCatalogueDocument,isBuilderCatalogueNotice} from './builder-catalogue.mjs'
+import {productCatalogueDocument,productCatalogueFields} from './product-catalogue.mjs'
 
 // Presentation only: resource IDs, stored schemas and website content stay intact.
 const target=(label,href)=>({label,href})
@@ -166,6 +167,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='site-visuals'&&normalized==='images.asset_1795db00')return{label:'總部支援背景圖片'}
  if(resourceId==='data-franchise'&&normalized==='franchiseFaqItems')return{label:'加盟問答',searchLabel:'搜尋加盟問題',newItemLabel:'問題'}
  if(resourceId==='view-pages-news-latest-slug-'&&normalized==='copy.text6')return{label:'報名 QR Code 下方文字',hidden:true,readOnly:true}
+ if(resourceId===productCatalogueDocument&&normalized.startsWith('copy.')&&(normalized.startsWith('copy.breadcrumb')||Object.hasOwn(productCatalogueFields,key)))return{label:schema.label}
  if(['view-pages-design-inspiration-index','view-pages-knowledge-index','view-pages-catalogues-kitchenware-catalog','view-pages-news-latest-index','view-pages-franchising-download','view-pages-builders-catalogues'].includes(resourceId)&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
  if(resourceId==='view-pages-builders-sakura-kitchen'&&['copy.field4','copy.field6'].includes(normalized))return{label:positionField(resourceId,normalized).label,previewTone:'dark'}
  if(resourceId===builderCatalogueDocument){
@@ -173,7 +175,11 @@ export function fieldPresentation(resourceId,path,schema={}){
   if(normalized==='catalogues.*.actionLabel')return{label:'預覽按鈕文字',singleLine:true}
   if(normalized==='catalogues.*.pdfUrl')return{label:'預覽與下載用的 PDF',help:'官網的預覽與下載使用這份檔案。'}
  }
- if(resourceId==='data-catalogues'&&normalized==='KITCHEN_CATALOGUES.*.pdfUrl')return{label:'預覽與下載用的 PDF',help:'官網的「預覽」和「下載」會使用這份檔案。'}
+ if((resourceId==='data-catalogues'&&normalized.startsWith('KITCHEN_CATALOGUES.*.'))||(resourceId==='data-productCatalogues'&&normalized.startsWith('PRODUCT_CATALOGUES.*.'))){
+  if(key==='pdfUrl')return{label:'預覽與下載用的 PDF',help:'官網的「預覽」和「下載」會使用這份檔案。'}
+  if(key==='description')return{label:'型錄卡片說明',help:'這段文字顯示在官網型錄卡片名稱下方。'}
+  if(key==='title')return{label:'型錄卡片名稱'}
+ }
  if(resourceId==='view-pages-design-inspiration-index'&&normalized.startsWith('copy.')&&inspirationCopy[key])return{singleLine:true,help:'',...inspirationCopy[key]}
  if(resourceId==='view-pages-design-inspiration-id-'&&normalized.startsWith('copy.')){const label={text1:'沒有圖片時的提示文字',text2:'案例規格標題',text3:'返回列表按鈕文字'}[key];if(label)return{label,singleLine:true}}
  if(resourceId==='view-components-SiteHeader'&&normalized==='leftNav')return{label:'左側主導覽',positionLegacyLabel:'左側主選單'}

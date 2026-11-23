@@ -4,6 +4,7 @@ import {builderStrengthsDocument,builderStrengthsFields,isBuilderStrengthsCopy} 
 import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImage} from './builder-home-one.mjs'
 import {builderAppointmentDocument,builderAppointmentHeadingFields,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 import {builderCatalogueDocument,builderCatalogueNoticeFields,isBuilderCatalogueNotice} from './builder-catalogue.mjs'
+import {productCatalogueDocument,productCatalogueFields} from './product-catalogue.mjs'
 import {workspaceFor,firstImage} from './workflow.mjs'
 import {editingSchema,resourceGuide,homeResources,placeDestinations} from './presentation.mjs'
 import {positionGroup,positionField,pagePositions,decoratePosition,franchiseSupportImagePath} from './positions.mjs'
@@ -110,6 +111,10 @@ export const valueAt=(body,path)=>path.split('.').reduce((v,key)=>v?.[key],body)
 export const inRowScope=(schema,row)=>(!schema.rowFilter||valueAt(row,schema.rowFilter.path)===schema.rowFilter.value)&&(!schema.rowIds||schema.rowIds.includes(row?.id))
 export function pageFieldValue(bodies, field){
  const body=bodies?.[field.documentId]
+ if(field.documentId===productCatalogueDocument&&field.path.startsWith('copy.')){
+  const key=field.path.slice(5)
+  if(Object.hasOwn(productCatalogueFields,key))return body?.copy?.[key]??productCatalogueFields[key].fallback
+ }
  if(field.documentId===builderCatalogueDocument&&isBuilderCatalogueNotice(field.path)){
   return valueAt(body,field.path)??builderCatalogueNoticeFields[field.path.slice(5)].fallback
  }

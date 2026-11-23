@@ -5,6 +5,7 @@ import { ArrowUpRight, Download } from 'lucide-vue-next'
 import { KITCHEN_CATALOGUES as cmsSeed_KITCHEN_CATALOGUES } from '~/data/catalogues'
 import { KITCHEN_STYLES as cmsSeed_KITCHEN_STYLES } from '~/data/kitchenStyles'
 import { seriesCatalogueBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
+import { cataloguePreviewHref } from '~/shared/cms/product-catalogue.mjs'
 const { KITCHEN_CATALOGUES } = await useCmsResource('data-catalogues', { KITCHEN_CATALOGUES: cmsSeed_KITCHEN_CATALOGUES })
 const { KITCHEN_STYLES } = await useCmsResource('data-kitchenStyles', { KITCHEN_STYLES: cmsSeed_KITCHEN_STYLES })
 
@@ -54,7 +55,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           >
             <article>
               <a
-                :href="catalogue.pdfUrl"
+                :href="cataloguePreviewHref(catalogue.pdfUrl)"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="catalogue-card__preview-link"
@@ -73,7 +74,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </a>
               <div class="catalogue-card__text">
                 <div class="catalogue-card__title-row">
-                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer" class="catalogue-card__title-link">
+                  <a :href="cataloguePreviewHref(catalogue.pdfUrl)" target="_blank" rel="noopener noreferrer" class="catalogue-card__title-link">
                     <strong><InternalHeadingText :text="catalogue.title" /></strong>
                   </a>
                   <a
@@ -146,6 +147,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .catalogue-hero__trail a { color: inherit; transition: color .3s ease; }
 .catalogue-hero__trail a:hover,
 .catalogue-hero__trail a:focus-visible { color: #caa05c; }
+#series-catalogue-breadcrumb, #brand-series-catalogues { scroll-margin-top: var(--site-header-height, 60px); }
 
 .catalogue-projects {
   overflow: hidden;

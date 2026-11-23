@@ -6,7 +6,7 @@ import {seriesEditorSchema,seriesEditorSection} from '~/shared/cms/series-editor
 import {sameContent,itemPublication} from '~/shared/cms/changes.mjs'
 import {compareNewsDates} from '~/shared/cms/public-content.mjs'
 import {GripVertical,Plus} from 'lucide-vue-next'
-const props=defineProps<{modelValue:any[];schema:any;documentId?:string;path?:string;hasRelatedChanges?:(value:any)=>boolean;seriesPart?:string;fallbackImage?:string;displayLimit?:number}>()
+const props=defineProps<{modelValue:any[];schema:any;documentId?:string;path?:string;hasRelatedChanges?:(value:any)=>boolean;displayName?:(value:any)=>string;seriesPart?:string;fallbackImage?:string;displayLimit?:number}>()
 const emit=defineEmits<{'update:modelValue':[value:any[]];'cancel-related':[value:any]}>()
 const route=useRoute(),router=useRouter(),cancelOpen=ref(false),moreOpen=ref(false),directTarget=ref(''),itemNotice=ref('')
 const depth=inject('cms-array-depth',0);provide('cms-array-depth',depth+1)
@@ -44,7 +44,7 @@ const itemSchema=computed(()=>{
  return props.seriesPart?seriesEditorSchema(s,props.seriesPart):s
 })
 const label=computed(()=>props.schema.label||'內容')
-function caption(r:any){return itemCaption(r.value,r.index,props.schema)}
+function caption(r:any){return props.displayName?.(r.value)||itemCaption(r.value,r.index,props.schema)}
 function metadata(r:any){return workbench?.metadata.value?.[props.documentId||'']?.[r.key]||{}}
 function thumbnail(r:any){return itemThumbnail(r.value,props.schema,metadata(r))||props.fallbackImage||''}
 function changed(r:any){return !!tracking.value&&(!sameContent(tracking.value.saved[r.key],r.value)||!!props.hasRelatedChanges?.(r.value))}
@@ -136,7 +136,7 @@ watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||
   <Teleport v-if="editing&&active" to="#cms-item-editor" :disabled="!workbench">
    <fieldset class="cms-item-form" :disabled="workbench?.busy.value">
     <div class="cms-item-editor-heading" tabindex="-1"><AdminThumbnail :src="thumbnail(active)" :alt="caption(active)+'正在修改的圖片'" :contain="/標誌|標識|圖示/.test(label)" /><div><small>正在修改<span v-if="seriesPart"> · {{ seriesEditorSection(seriesPart).name }}</span><span v-if="typeof active.value?.enabled==='boolean'"> · {{ publication(active).label }}</span></small><strong>{{ caption(active) }}</strong></div><button type="button" class="cms-button" @click="back">返回清單</button></div>
-    <div v-if="workbench" class="cms-actions cms-item-primary"><button type="button" class="cms-button" @click="workbench.position()">看位置</button><button v-if="changed(active)" type="button" class="cms-button" @click="cancelOpen=true">取消本筆修改</button><slot name="item-actions" :row="active" /></div>
+    <div v-if="workbench" class="cms-actions cms-item-primary"><button type="button" class="cms-button" data-cms-keep-field @click="workbench.position()">看位置</button><button v-if="changed(active)" type="button" class="cms-button" @click="cancelOpen=true">取消本筆修改</button><slot name="item-actions" :row="active" /></div>
     <p v-if="itemNotice" class="cms-field-help" role="status">{{ itemNotice }}</p>
     <slot name="editor" :row="active"><AdminArticleFields v-if="path==='items'&&['news-articles','knowledge-articles'].includes(documentId||'')" :model-value="active.value" :schema="itemSchema" :document-id="documentId" :path="`${path?path+'.':''}${active.index}`" @update:model-value="item(active.index,$event)" /><AdminFields v-else :model-value="active.value" :schema="itemSchema" :document-id="documentId" :path="`${path?path+'.':''}${active.index}`" @update:model-value="item(active.index,$event)" /></slot>
     <slot name="item-settings" :row="active" />

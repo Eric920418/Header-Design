@@ -3,6 +3,7 @@ import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengt
 import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImages} from './builder-home-one.mjs'
 import {builderAppointmentDocument,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 import {builderCatalogueDocument,isBuilderCatalogueNotice} from './builder-catalogue.mjs'
+import {productCatalogueDocument,productCatalogueFields} from './product-catalogue.mjs'
 
 const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
@@ -45,10 +46,10 @@ const copyGroups={
  ],
  'builders-catalogues':[['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄區塊','型錄區塊名稱（僅供朗讀）'),text3:'下載按鈕文字'}]],
  'catalogues-catalog':[
-  ['頁面最上方',{text1:'主視覺標題'}],['型錄封面與下載',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}],
+  ['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄區塊','型錄區塊名稱（僅供朗讀）'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}],
   ['清潔與保養問答',{text9:'保養步驟編號前的文字',text10:'小提醒標題'}],
  ],
- 'catalogues-kitchenware-catalog':[['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄清單','清單名稱'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}]],
+ 'catalogues-kitchenware-catalog':[['主視覺標題',{text1:'主視覺標題'}],['型錄管理',{text2:readingField('型錄區塊','型錄區塊名稱（僅供朗讀）'),text3:'預覽按鈕文字',text4:'下載按鈕文字'}]],
  'franchising-intro':[
   ['主視覺標題',{field1:'背景圖片',field2:'背景圖片說明',text3:'區塊英文標籤',text4:'區塊中文主標題（第一段）',text5:'區塊中文主標題（第二段）',text7:'介紹文字第一段',text8:'介紹文字第二段',text9:'申請加盟按鈕文字',field10:'門市大圖',field11:'門市圖片說明',field12:'說明會前往頁面',text13:'說明會按鈕文字'}],
   ['加盟夥伴真實分享',{field17:'影片名稱'}],['加盟介紹輪播圖',{field18:franchiseMarqueeRows[0].label,field19:'上排圖片朗讀文字',field20:'上排接續圖片（桌機）',field22:franchiseMarqueeRows[1].label,field23:'下排圖片朗讀文字',field24:'下排接續圖片（桌機）'}],
@@ -142,10 +143,15 @@ export const pagePositions={
  'series-catalogue':{hero:commonHero,sections:[
   {...section('主視覺標題','型錄頁最上方的大標題','hero','catalogue-page-title'),aliases:['series-catalogue:頁面最上方']},
   section('麵包屑編輯設定','型錄頁上方的位置導覽文字','page-breadcrumb','series-catalogue-breadcrumb'),
-  {...section('型錄管理','管理型錄封面、預覽與下載檔案','catalogue','brand-series-catalogues'),aliases:['series-catalogue:型錄封面與下載']},
+  {...section('型錄管理','管理型錄封面、預覽與下載檔案','download-catalogue','brand-series-catalogues'),aliases:['series-catalogue:型錄封面與下載']},
  ]},
  ...Object.fromEntries(['sakura','svago','teka'].map(brand=>['products-'+brand,{hero:['data-productBrands','PRODUCT_BRANDS.'+brand+'.image'],sections:[section('品牌介紹','品牌名稱、介紹文字與圖片','cards'),{...section('商品頁型錄按鈕','品牌商品列表與內頁的共用連結','catalogue'),previewPage:'/products/'+brand+'/all#near-suction-catalogue-title',fixedAction:'廚房商品型錄下載'},section('商品顯示與排序','選擇商品，調整顯示與順序','products')]}])),
- 'product-catalogue':{hero:commonHero,sections:[section('頁面最上方','商品型錄頁最上方的大標題','hero','product-catalogue-title'),section('型錄封面與下載','型錄封面、預覽與下載按鈕','catalogue','product-catalogue-list-title'),section('清潔與保養問答','依商品分類的保養問題與圖文','faq','product-care-title')]},
+ 'product-catalogue':{hero:commonHero,sections:[
+  {...section('主視覺標題','商品型錄頁最上方的大標題','hero','product-catalogue-title'),aliases:['product-catalogue:頁面最上方']},
+  section('麵包屑編輯設定','商品型錄頁上方的位置導覽文字','page-breadcrumb','product-catalogue-breadcrumb'),
+  {...section('型錄管理','管理型錄封面、預覽與下載檔案','download-catalogue','product-catalogue-list'),aliases:['product-catalogue:型錄封面與下載']},
+  section('清潔與保養問答','選購指南標題、商品分類、保養問答及右側圖文','product-care','product-care-title'),
+ ]},
  stores:{hero:commonHero,sections:[
   section('主視覺標題','門市列表最上方的大標題','hero','gallery-page-title'),
   section('地區篩選列','區域與縣市的篩選名稱','filter','gallery-filter-title'),
@@ -239,7 +245,7 @@ const dataGroups={
  'data-franchise':{FRANCHISE_FORM_URL:'主視覺標題',FRANCHISE_OFFICIAL_FORM_URL:'主視覺標題',FRANCHISE_BROCHURE_URL:'加盟簡介與下載按鈕',franchiseAdvantages:'專業品牌實力',franchiseTestimonials:'加盟夥伴真實分享',franchiseMarketingStories:'品牌信賴',franchiseQualifications:'加盟資格與條件',franchiseSupportHighlights:'總部支援',franchiseFaqItems:'了解加盟資訊'},
  'data-builders':{BUILDER_APPOINTMENT_HASH:'主視覺標題'},
  'data-storeCases':{storeCases:'門市管理',regionCities:'區域與縣市'},
- 'data-productCatalogues':{PRODUCT_CARE_CATEGORIES:'清潔與保養問答'},
+ 'data-productCatalogues':{PRODUCT_CATALOGUES:'型錄管理',PRODUCT_CARE_CATEGORIES:'清潔與保養問答'},
  'data-kitchenSystemCabinet':{systemCabinetImportance:'系統櫃材質重點',systemCabinetMaterials:'系統櫃板材比較',systemCabinetSelectionSteps:'系統櫃挑選步驟',systemCabinetCaseStudies:'系統櫃推薦案例'},
 }
 export function positionGroup(page,id,path){
@@ -247,6 +253,11 @@ export function positionGroup(page,id,path){
  if(path==='cmsSettings'||path==='seo')return
  if(page==='series-catalogue'&&id===view('catalogues-kitchenware-catalog')&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
  if(page==='series-catalogue'&&id==='data-catalogues'&&path==='KITCHEN_CATALOGUES')return '型錄管理'
+ if(page==='product-catalogue'&&id===productCatalogueDocument){
+  if(path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
+  if(path==='copy.kitchenwareTitle')return '型錄管理'
+  if(path.startsWith('copy.')&&Object.hasOwn(productCatalogueFields,path.slice(5)))return '清潔與保養問答'
+ }
  if(id==='site-visuals'){
   if(page==='service')return '品牌影片'
   if(page==='pavilions')return '品牌館影片'

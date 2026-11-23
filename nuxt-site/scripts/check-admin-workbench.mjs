@@ -19,6 +19,7 @@ import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
 import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalogueNotice} from '../shared/cms/builder-catalogue.mjs'
+import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueFields,productCatalogueTitle} from '../shared/cms/product-catalogue.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
 import {builderHomeOneImage,builderHomeOneImages} from '../shared/cms/builder-home-one.mjs'
 import {builderAppointmentHeading,builderAppointmentHeadingFields} from '../shared/cms/builder-appointment.mjs'
@@ -154,12 +155,25 @@ checkPageBody(cataloguePage,catalogueCopy.id,catalogueCopy.body,catalogueCopyEdi
 validate(catalogueCopyEdit,catalogueCopy.schema)
 assert.deepEqual(changeImpacts([{documentId:catalogueCopy.id,path:'copy.breadcrumbList'}]).map(i=>i.href),[catalogueTrail.href])
 for(const id of ['series-catalogue','product-catalogue','builder-catalogues']){
- const block=id==='series-catalogue'?catalogueList:pageBlocks(pageEditors.find(p=>p.id===id),docs).find(b=>b.name===(id==='builder-catalogues'?'型錄管理':'型錄封面與下載'))
- assert.equal(block.fields.find(f=>f.path==='copy.text2')?.schema.readingGroup,id==='builder-catalogues'?'型錄區塊':'型錄清單')
+ const block=id==='series-catalogue'?catalogueList:pageBlocks(pageEditors.find(p=>p.id===id),docs).find(b=>b.name==='型錄管理')
+ assert.equal(block.fields.find(f=>f.path==='copy.text2')?.schema.readingGroup,'型錄區塊')
  assert(block.fields.find(f=>f.path==='copy.text2')?.schema.advanced)
  assert(block.fields.some(f=>f.label==='下載按鈕文字'&&!f.schema.advanced))
 }
 const builderCataloguePage=pageEditors.find(p=>p.id==='builder-catalogues')
+const productCataloguePage=pageEditors.find(p=>p.id==='product-catalogue')
+const [productHero,productTrail,productCards,productCare]=pageBlocks(productCataloguePage,docs)
+assert.deepEqual([productHero.name,productTrail.name,productCards.name,productCare.name],['主視覺標題','麵包屑編輯設定','型錄管理','清潔與保養問答'])
+const productDoc=docs.find(d=>d.id===productCatalogueDocument)
+const productEdit={...productDoc.body,copy:{...productDoc.body.copy,careChineseTitle:'我的選購指南',kitchenwareTitle:'配備型錄測試'}}
+validate(productEdit,productDoc.schema)
+checkPageBody(productCataloguePage,productDoc.id,productDoc.body,productEdit,productDoc.schema)
+assert(productCare.fields.some(f=>f.path==='copy.careChineseTitle'&&f.label===productCatalogueFields.careChineseTitle.label))
+assert.equal(productCatalogueText(productDoc.body.copy,'careChineseTitle'),'廚房選購指南')
+assert.equal(productCatalogueTitle({id:'kitchenware-2026',title:'推薦卡片名稱'},productEdit.copy),'配備型錄測試')
+assert.deepEqual(changeImpacts([{documentId:productDoc.id,path:'copy.careChineseTitle'}]).map(i=>i.href),[productCare.href])
+assert.equal(cataloguePreviewHref('/media/4c8ad00e-af11-43b1-856c-a49569fe3681'),'/media/4c8ad00e-af11-43b1-856c-a49569fe3681?preview=1')
+assert.equal(cataloguePreviewHref('https://example.test/file.pdf'),'https://example.test/file.pdf')
 const [builderCatalogueHero,builderCatalogueTrail,builderCatalogueCards]=pageBlocks(builderCataloguePage,docs)
 assert.deepEqual([builderCatalogueHero.name,builderCatalogueTrail.name,builderCatalogueCards.name],['主視覺標題','麵包屑編輯設定','型錄管理'])
 assert(builderCatalogueCards.aliases.includes('builder-catalogues:型錄封面與下載'))

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {ArrowRight,ArrowUpRight,Play,Plus,Search,MessageSquare,Download,MapPin,ExternalLink,Check,Clock3} from 'lucide-vue-next'
 import type {BrandPavilion} from '~/types/content'
+import type {ProductCatalogue} from '~/data/productCatalogues'
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
-import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,knowledgeBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
+import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,knowledgeBreadcrumb,productCatalogueBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueDocument,builderCatalogueNoticeFields,builderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
+import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueTitle,seriesCatalogueDocument} from '~/shared/cms/product-catalogue.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
 import {valueAt} from '~/shared/cms/page-editors.mjs'
 import {franchiseDownloadDocument,franchiseMarqueeDocument,franchiseMarqueeRows,franchiseSupportImagePath} from '~/shared/cms/positions.mjs'
@@ -21,6 +23,7 @@ const scene=computed(()=>pagePositionContent(props.block,props.bodies,props.pres
 const breadcrumb=computed(()=>newsBreadcrumbPosition(props.block,props.bodies,props.presentation))
 const isCatalogueTrail=computed(()=>props.block?.id.startsWith('series-catalogue:'))
 const isBuilderCatalogue=computed(()=>props.block?.id.startsWith('builder-catalogues:'))
+const isProductCatalogue=computed(()=>props.block?.id.startsWith('product-catalogue:'))
 const trailCopy=computed(()=>props.bodies[props.block?.fields[0]?.documentId]?.copy)
 const pageTrail=computed(()=>isCatalogueTrail.value?seriesCatalogueBreadcrumb(trailCopy.value):knowledgeBreadcrumb(trailCopy.value))
 const highlighted=(path:string)=>props.focusedField===path
@@ -66,7 +69,19 @@ const franchiseApplication=computed(()=>props.bodies['view-pages-franchising-for
 const buildersCopy=computed(()=>props.bodies['view-pages-builders-index']?.copy)
 const builderSeriesCopy=computed(()=>props.bodies['view-pages-builders-sakura-kitchen']?.copy)
 const builderCatalogueCopy=computed(()=>props.bodies[builderCatalogueDocument]?.copy)
-const builderTrail=computed(()=>builderCatalogueBreadcrumb(builderCatalogueCopy.value))
+const productCatalogueCopy=computed(()=>props.bodies[productCatalogueDocument]?.copy)
+const cataloguePageCopy=computed(()=>isBuilderCatalogue.value?builderCatalogueCopy.value:isProductCatalogue.value?productCatalogueCopy.value:isCatalogueTrail.value?props.bodies[seriesCatalogueDocument]?.copy:undefined)
+const catalogueTrail=computed(()=>isBuilderCatalogue.value?builderCatalogueBreadcrumb(cataloguePageCopy.value):isProductCatalogue.value?productCatalogueBreadcrumb(cataloguePageCopy.value):seriesCatalogueBreadcrumb(cataloguePageCopy.value))
+const catalogueListPath=computed(()=>isProductCatalogue.value?'PRODUCT_CATALOGUES':'KITCHEN_CATALOGUES')
+type CatalogueRow = ProductCatalogue & {downloadFilename?:string}
+const catalogueRows=computed<CatalogueRow[]>(()=>props.bodies[isProductCatalogue.value?'data-productCatalogues':'data-catalogues']?.[catalogueListPath.value]||[])
+const catalogueCards=computed(()=>{
+ const items=scene.value.items as {image:string;title:string;value:CatalogueRow}[]
+ const hardware=isProductCatalogue.value&&highlighted('copy.kitchenwareTitle')&&catalogueRows.value.find(row=>row.id==='kitchenware-2026')
+ if(hardware)return [{image:hardware.cover,title:productCatalogueTitle(hardware,productCatalogueCopy.value),value:hardware}]
+ return items.map(item=>({...item,title:isProductCatalogue.value?productCatalogueTitle(item.value,productCatalogueCopy.value):item.title}))
+})
+const catalogueItemPath=(id:string)=>catalogueListPath.value+'.'+catalogueRows.value.findIndex(row=>row.id===id)
 const builderBrandProject=computed(()=>(props.bodies['data-builders']?.builderProjectCards as typeof builderProjectCards|undefined)?.find(card=>card.type==='project'))
 const strengthsHeading=computed(()=>builderStrengthsCopy(props.bodies[builderStrengthsDocument]?.copy))
 const strengthIndex=computed(()=>props.selected?.path==='strengths'?props.selected.index:0)
@@ -84,10 +99,10 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
  <div class="cms-page-position-scene cms-website-scene" :data-position-kind="scene.kind">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
   <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','builder-series-hero','breadcrumb','page-breadcrumb','inactive','news-shared','franchise-application','franchise-download-breadcrumb'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image" :class="{'cms-franchise-download-context':franchiseDownloadCopy}">
-   <AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ franchiseDownloadCopy?.text4 || builderCatalogueCopy?.text1 || pageTitle }}</span>
+   <AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ franchiseDownloadCopy?.text4 || cataloguePageCopy?.text1 || pageTitle }}</span>
   </div>
   <section class="cms-scene-target" :aria-label="block?.name+'的位置示意'">
-   <span class="cms-scene-tag">{{ block?.name }}<template v-if="selected"> · {{ selected.caption }}</template></span>
+   <span class="cms-scene-tag">{{ block?.name }}<template v-if="selected"> · {{ isProductCatalogue&&scene.kind==='download-catalogue'?productCatalogueTitle(selected.value,productCatalogueCopy):selected.caption }}</template></span>
    <template v-if="scene.displaySettings.length">
     <div v-for="setting in scene.displaySettings" :key="setting.label" class="cms-scene-search-result">
      <small>{{ setting.label }}</small>
@@ -325,6 +340,20 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <span class="cms-builder-series-booking" :class="{'is-focused':['copy.field9','copy.text10','copy.text11'].includes(focusedField||'')}">{{ builderSeriesCopy.text10 }}<br />{{ builderSeriesCopy.text11 }}</span>
     </div>
    </div>
+   <div v-else-if="scene.kind==='download-catalogue'&&cataloguePageCopy" class="cms-builder-catalogue-cards cms-download-catalogue-cards">
+    <article v-for="item in catalogueCards" :key="item.value.id">
+     <div class="cms-builder-catalogue-cover">
+      <AdminThumbnail :src="item.image" :alt="item.title+'封面'" :class="{'is-focused':highlighted(catalogueItemPath(item.value.id)+'.cover')}" />
+      <a v-if="item.value.pdfUrl" :href="cataloguePreviewHref(item.value.pdfUrl)" target="_blank" rel="noopener noreferrer" class="cms-button" :class="{'is-focused':highlighted('copy.text3')||highlighted(catalogueItemPath(item.value.id)+'.pdfUrl')}">{{ cataloguePageCopy.text3 }} <ArrowUpRight :size="14" aria-hidden="true" /></a>
+     </div>
+     <div class="cms-builder-catalogue-title">
+      <h3 :class="{'is-focused':highlighted(catalogueItemPath(item.value.id)+'.title')&&(!isProductCatalogue||item.value.id!=='kitchenware-2026')||item.value.id==='kitchenware-2026'&&highlighted('copy.kitchenwareTitle')}">{{ item.title }}</h3>
+      <a v-if="item.value.pdfUrl" :href="'/api/catalogues/'+item.value.id" :download="item.value.downloadFilename||item.value.id+'.pdf'" class="cms-button" :class="{'is-focused':highlighted('copy.text4')||highlighted(catalogueItemPath(item.value.id)+'.pdfUrl')}"><Download :size="14" aria-hidden="true" />{{ cataloguePageCopy.text4 }}</a>
+     </div>
+     <p :class="{'is-focused':highlighted(catalogueItemPath(item.value.id)+'.description')}">{{ item.value.description }}</p>
+    </article>
+   </div>
+   <AdminProductCarePreview v-else-if="scene.kind==='product-care'&&productCatalogueCopy" :copy="productCatalogueCopy" :categories="bodies['data-productCatalogues']?.PRODUCT_CARE_CATEGORIES||[]" :selected="selected" :focused-field="focusedField" />
    <div v-else-if="scene.kind==='builder-catalogue-cards'&&builderCatalogueCopy" class="cms-builder-catalogue-cards">
     <article v-for="item in scene.items" :key="item.value.id">
      <div class="cms-builder-catalogue-cover">
@@ -378,16 +407,15 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <p v-else class="cms-field-help">官網側欄目前沒有文章。</p>
     </div>
    </div>
-   <header v-else-if="isBuilderCatalogue&&builderCatalogueCopy&&['hero','page-breadcrumb'].includes(scene.kind)" class="cms-scene-news-hero cms-builder-catalogue-hero">
+   <header v-else-if="cataloguePageCopy&&['hero','page-breadcrumb'].includes(scene.kind)" class="cms-scene-news-hero cms-builder-catalogue-hero">
     <AdminThumbnail v-if="scene.contextImage" :src="scene.contextImage" :alt="pageTitle+'頁首照片'" />
     <div>
-     <strong :class="{'is-focused':highlighted('copy.text1')}">{{ builderCatalogueCopy.text1 }}</strong>
+     <strong :class="{'is-focused':highlighted('copy.text1')}">{{ cataloguePageCopy.text1 }}</strong>
      <p aria-label="麵包屑">
-      <span :class="{'is-focused':highlighted('copy.breadcrumbHome')}">{{ builderTrail.breadcrumbHome }}</span>
-      <span aria-hidden="true"> / </span>
-      <span :class="{'is-focused':highlighted('copy.breadcrumbParent')}">{{ builderTrail.breadcrumbParent }}</span>
-      <span aria-hidden="true"> / </span>
-      <span :class="{'is-focused':highlighted('copy.breadcrumbList')}">{{ builderTrail.breadcrumbList }}</span>
+      <template v-for="(label,key,index) in catalogueTrail" :key="key">
+       <span v-if="index" aria-hidden="true"> / </span>
+       <span :class="{'is-focused':highlighted('copy.'+key)}">{{ label }}</span>
+      </template>
      </p>
     </div>
    </header>
@@ -474,7 +502,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="!storeExampleKind&&!['builder-series-hero','builder-catalogue-cards','breadcrumb','page-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="!storeExampleKind&&!['builder-series-hero','builder-catalogue-cards','download-catalogue','product-care','breadcrumb','page-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
    <p v-if="!['franchise-support','franchise-application','franchise-download-document'].includes(scene.kind)&&scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>

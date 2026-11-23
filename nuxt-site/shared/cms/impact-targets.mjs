@@ -5,6 +5,7 @@ import { builderStrengthsDocument, isBuilderStrengthsCopy } from './builder-stre
 import { builderHomeOneDocument, builderHomeOneField, builderHomeOneImages } from './builder-home-one.mjs'
 import { builderAppointmentDocument, isBuilderAppointmentCopy } from './builder-appointment.mjs'
 import { builderCatalogueDocument, builderCatalogueNoticeAnchor, isBuilderCatalogueNotice } from './builder-catalogue.mjs'
+import { productCatalogueDocument, productCatalogueFields, seriesCatalogueDocument } from './product-catalogue.mjs'
 
 const target = (label, href) => ({ label, href })
 const homePromise = target('首頁 → 品牌承諾', '/#brand-promise')
@@ -97,13 +98,14 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  if (documentId === 'view-pages-franchising-intro' && /^copy\.field(?:18|19|20|21|22|23|24|25)$/.test(path))
   return [target('加盟介紹 → 加盟介紹輪播圖','/franchising/intro#franchise-intro-marquee')]
  if (documentId === 'data-productCatalogues' && path) {
-  if (key === 'PRODUCT_CARE_CATEGORIES') return [target('廚房商品型錄 → 清潔與保養問答', '/catalogues/catalog')]
+  if (key === 'PRODUCT_CARE_CATEGORIES') return [target('廚房商品型錄 → 清潔與保養問答', '/catalogues/catalog#product-care-title')]
+  const catalogue = target('廚房商品型錄 → 型錄卡片', '/catalogues/catalog#product-catalogue-list')
   if (key === 'PRODUCT_CATALOGUES' && rowId && (
    !['sakura-kitchen-2026','kitchenware-2026'].includes(rowId) ||
    !['title','cover',undefined].includes(property) ||
    rowId==='kitchenware-2026'&&property==='title'
-  )) return targets.slice(0,1)
-  return [targets[0],target('三品牌商品列表與內頁 → 推薦型錄卡片', '/products/sakura/all#near-suction-catalogue-title')]
+  )) return [catalogue]
+  return [catalogue,target('三品牌商品列表與內頁 → 推薦型錄卡片', '/products/sakura/all#near-suction-catalogue-title')]
  }
  if (documentId === 'data-productBrands' && path && key === 'PRODUCT_BRANDS' && index) {
   const root='/products/'+index, brand=index.toUpperCase()
@@ -131,8 +133,15 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  }
  if (documentId === 'view-pages-knowledge-index' && path.startsWith('copy.breadcrumb'))
   return [target('廚房裝修指南列表 → 位置導覽','/knowledge#knowledge-breadcrumb'),target('廚房裝修指南所有文章 → 位置導覽','/knowledge/design/systemcabinet#knowledge-breadcrumb')]
- if (documentId === 'view-pages-catalogues-kitchenware-catalog' && path.startsWith('copy.breadcrumb'))
+ if (documentId === seriesCatalogueDocument && path.startsWith('copy.breadcrumb'))
   return [target('品牌系列型錄 → 位置導覽','/catalogues/kitchenware-catalog#series-catalogue-breadcrumb')]
+ if (documentId === 'data-catalogues' && key === 'KITCHEN_CATALOGUES' || documentId === seriesCatalogueDocument && /^copy\.text[2-4]$/.test(path))
+  return [target('品牌系列型錄 → 型錄卡片','/catalogues/kitchenware-catalog#brand-series-catalogues')]
+ if (documentId === productCatalogueDocument && path.startsWith('copy.')){
+  if(path.startsWith('copy.breadcrumb'))return [target('廚房商品型錄 → 麵包屑','/catalogues/catalog#product-catalogue-breadcrumb')]
+  if(path==='copy.kitchenwareTitle'||/^copy\.text[2-4]$/.test(path))return [target('廚房商品型錄 → 型錄卡片','/catalogues/catalog#product-catalogue-list')]
+  if(['copy.text9','copy.text10'].includes(path)||Object.hasOwn(productCatalogueFields,path.slice(5)))return [target('廚房商品型錄 → 清潔與保養問答','/catalogues/catalog#product-care-title')]
+ }
  if (documentId === builderCatalogueDocument && path.startsWith('copy.breadcrumb'))
   return [target('建商專區型錄 → 麵包屑','/builders/catalogues#builder-catalogue-breadcrumb')]
  if (documentId === builderCatalogueDocument && isBuilderCatalogueNotice(path))

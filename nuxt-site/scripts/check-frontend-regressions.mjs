@@ -9,6 +9,7 @@ import {updateFooterNavigation} from './update-footer-navigation-20261020.mjs'
 import {updateNewsHeroTitle} from './update-news-title-20261020.mjs'
 import {updateServiceHeroTitle} from './update-service-title-20261021.mjs'
 import {updateBrandFamilyTitle} from './update-brand-family-title-20261021.mjs'
+import {cataloguePreviewHref,productCatalogueText} from '../shared/cms/product-catalogue.mjs'
 
 for(const title of ['Creating Ideal Kitchens for Every Family','Creating the Ideal Kitchen for Every Family','Creating Kitchens for Every Family','Creating Kitchen For Every Family']){
   const original={copy:{text1:title,text2:'保留中文',text3:'保留說明'},cmsSettings:{visible:true}}
@@ -184,11 +185,11 @@ for(const path of ['/products/sakura/range-hood','/products/svago/all','/product
 const catalogueListHtml=await(await get('/catalogues/catalog')).text()
 const catalogueListMarkup=catalogueListHtml.match(/<ul[^>]*aria-label="廚房商品型錄清單"[^>]*>([\s\S]*?)<\/ul>/)?.[1]
 assert(catalogueListMarkup,'型錄列表應保留')
-const catalogueListTitles=[...catalogueListMarkup.matchAll(/<strong\b[^>]*>([^<]*)<\/strong>/g)].map(match=>match[1])
+const catalogueListTitles=[...catalogueListMarkup.matchAll(/<strong\b[^>]*>([\s\S]*?)<\/strong>/g)].map(match=>match[1].replace(/<[^>]*>/g,'').trim())
 assert(catalogueListTitles.includes('櫻花整廚廚房配備型錄'),'配備型錄列表與預覽需同名')
 assert(!catalogueListMarkup.includes('五金收納／水槽／龍頭／把手型錄'),'列表不得保留舊標題／替代文字／操作名稱')
 for(const label of ['開啟 PDF：櫻花整廚廚房配備型錄','下載 PDF：櫻花整廚廚房配備型錄','櫻花整廚廚房配備型錄封面'])assert(catalogueListMarkup.includes(label),'型錄無障礙名稱需同步')
-assert(catalogueListMarkup.includes('href="'+equipmentCatalogue.pdfUrl+'"')&&catalogueListMarkup.includes(equipmentCatalogue.cover),'封面與 PDF 仍沿用後台內容')
+assert(catalogueListMarkup.includes('href="'+cataloguePreviewHref(equipmentCatalogue.pdfUrl)+'"')&&catalogueListMarkup.includes(equipmentCatalogue.cover),'封面與 PDF 仍沿用後台內容')
 assert(catalogueListMarkup.includes('href="/api/catalogues/kitchenware-2026"')&&catalogueListMarkup.includes('download="kitchenware-2026.pdf"'),'下載路徑與檔名不可改變')
 for(const item of cataloguePreviewData.filter(item=>item.id!=='kitchenware-2026'))assert(catalogueListTitles.includes(item.title),'其他型錄標題不可修改')
 const equipmentPdf=Buffer.from(await(await get('/api/catalogues/kitchenware-2026')).arrayBuffer())
@@ -339,7 +340,9 @@ for(const item of cases.filter(i=>i.storeSlug)){
 const html=await(await get('/design-inspiration')).text()
 for(const slug of ['case10','case35','case56'])assert(html.includes(`/gallery/${slug}?from=inspiration`))
 const catalogue=(await content('data-productCatalogues')).PRODUCT_CATALOGUES.find(i=>i.id==='kitchenware-2026')
-const preview=Buffer.from(await(await get(catalogue.pdfUrl)).arrayBuffer())
+const previewResponse=await get(cataloguePreviewHref(catalogue.pdfUrl))
+assert(!/^attachment/i.test(previewResponse.headers.get('content-disposition')||''),'預覽應開啟 PDF 頁面')
+const preview=Buffer.from(await previewResponse.arrayBuffer())
 const download=Buffer.from(await(await get('/api/catalogues/kitchenware-2026')).arrayBuffer())
 assert.equal(preview.subarray(0,5).toString(),'%PDF-')
 assert(preview.equals(download),'預览與下載必須為同一份 PDF')
@@ -548,7 +551,8 @@ assert(/\.near-suction-catalogue__copy h2 span \{[^}]*font-size: 50px;/.test(pro
 console.log('PASS 廚電列表型錄介绍雙語標題')
 const guideHeadingSource=await readFile(new URL('../pages/knowledge/index.vue',import.meta.url),'utf8')
 const productCareHeadingSource=await readFile(new URL('../pages/catalogues/catalog.vue',import.meta.url),'utf8')
-assert(productCareHeadingSource.includes('class="product-care__chinese">廚房選購指南</span> Clear <span>Answers</span> To Your <span>Questions</span>'),'型錄問答需指定中文與新英文，Answers及Questions金色')
+assert.deepEqual(['careChineseTitle','careEnglishStart','careEnglishAccent','careEnglishMiddle','careEnglishEnd'].map(key=>productCatalogueText({},key)),['廚房選購指南','Clear','Answers','To Your','Questions'])
+assert(productCareHeadingSource.includes('<span><InternalHeadingText :text="careText(\'careEnglishAccent\')" /></span>')&&productCareHeadingSource.includes('<span><InternalHeadingText :text="careText(\'careEnglishEnd\')" /></span>'),'編輯選購指南標題時保留兩段金色強調')
 assert(/\.product-care__header h2 \{[^}]*font-size: 50px;/.test(productCareHeadingSource)&&/\.product-care__header h2 \.product-care__chinese \{[^}]*top: -.06em;[^}]*font-size: 40px;[^}]*font-weight: 600;[^}]*vertical-align: baseline;/.test(productCareHeadingSource),'選購問答需50／40px600及同列基線補償')
 console.log('PASS 型錄選購问答雙語標題')
 const serviceIntroHeadingSource=await readFile(new URL('../pages/service-process.vue',import.meta.url),'utf8')

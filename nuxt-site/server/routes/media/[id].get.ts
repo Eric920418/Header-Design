@@ -11,6 +11,7 @@ export default defineEventHandler(event=>cmsHandler(event,async()=>{
  if(!published)await cmsUser(event)
  const bytes=process.env.CMS_MEDIA_STORAGE==='sql'?(await query('SELECT bytes FROM cms.MediaBytes WHERE id=@id',{id})).recordset[0]?.bytes:await readFile(join(process.env.CMS_MEDIA_DIR||join(homedir(),'.sakura-cms','media'),m.filename))
  if(!bytes)fail(404,'素材檔案不存在')
- setResponseHeaders(event,{'Content-Type':m.mime,'Content-Length':String(bytes.length),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; sandbox",'Content-Disposition':`${m.mime==='application/pdf'?'attachment':'inline'}; filename="${m.filename}"`})
+ const disposition=m.mime==='application/pdf'&&getQuery(event).preview!=='1'?'attachment':'inline'
+ setResponseHeaders(event,{'Content-Type':m.mime,'Content-Length':String(bytes.length),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; sandbox",'Content-Disposition':`${disposition}; filename="${m.filename}"`})
  return sendStream(event,Readable.from((function*(){for(let i=0;i<bytes.length;i+=65536)yield bytes.subarray(i,i+65536)})()))
 }))

@@ -7,6 +7,7 @@ import {builderStrengthsCopy,builderStrengthsDocument,builderStrengthsFields,isB
 import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImage,builderHomeOneImages} from './builder-home-one.mjs'
 import {builderAppointmentDocument,builderAppointmentHeadingFields,builderAppointmentHeadingValue,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 import {builderCatalogueDocument,builderCatalogueNoticeFields,builderCatalogueNotice,isBuilderCatalogueNotice} from './builder-catalogue.mjs'
+import {productCatalogueDocument,productCatalogueFields,productCatalogueText} from './product-catalogue.mjs'
 
 export function sameContent(a,b){
  if(a===b)return true
@@ -82,6 +83,11 @@ export function pageChanges(blocks,documents,previous,next,context={}){
    change.label=builderCatalogueNoticeFields[key].label
    change.before=builderCatalogueNotice(previous[d.id]?.copy,key)
    change.after=builderCatalogueNotice(next[d.id]?.copy,key)
+  }
+  if(d.id===productCatalogueDocument&&change.path.startsWith('copy.')&&Object.hasOwn(productCatalogueFields,change.path.slice(5))){
+   const key=change.path.slice(5)
+   change.before=productCatalogueText(previous[d.id]?.copy,key)
+   change.after=productCatalogueText(next[d.id]?.copy,key)
   }
   const homeOne=d.id===builderHomeOneDocument&&builderHomeOneField(change.path)
   if(homeOne){

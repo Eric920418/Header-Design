@@ -3,23 +3,21 @@ const cmsCopy = await useCmsResource('view-pages-catalogues-catalog', {"copy":{"
 
 import { ArrowUpRight, ChevronRight, Download } from 'lucide-vue-next'
 import { PRODUCT_CARE_CATEGORIES as cmsSeed_PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES as cmsSeed_PRODUCT_CATALOGUES } from '~/data/productCatalogues'
+import { productCatalogueBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
+import { cataloguePreviewHref, productCatalogueText, productCatalogueTitle, productCareDescription } from '~/shared/cms/product-catalogue.mjs'
 const { PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES } = await useCmsResource('data-productCatalogues', { PRODUCT_CARE_CATEGORIES: cmsSeed_PRODUCT_CARE_CATEGORIES, PRODUCT_CATALOGUES: cmsSeed_PRODUCT_CATALOGUES })
-const catalogueList = PRODUCT_CATALOGUES.map(item => item.id === 'kitchenware-2026' ? { ...item, title: '櫻花整廚廚房配備型錄' } : item)
+const catalogueList = PRODUCT_CATALOGUES.map(item => ({ ...item, title: productCatalogueTitle(item, cmsCopy.copy) }))
+const breadcrumb = productCatalogueBreadcrumb(cmsCopy.copy)
+const careText = (key: string) => productCatalogueText(cmsCopy.copy, key)
 
 const activeCategoryIndex = ref(1)
 const activeQuestionIndex = ref(0)
 
-const activeCategory = computed(() => PRODUCT_CARE_CATEGORIES[activeCategoryIndex.value] ?? PRODUCT_CARE_CATEGORIES[0]!)
-const activeQuestion = computed(() => activeCategory.value.questions[activeQuestionIndex.value] ?? activeCategory.value.questions[0]!)
-const activeFeatureImage = computed(() => activeQuestion.value.image || activeCategory.value.questions.find(question => question.image)?.image || '')
-const activeFeatureImageAlt = computed(() => activeQuestion.value.imageAlt || `${activeCategory.value.label}產品保養圖解`)
-const activeFeatureDescription = computed(() => (
-  activeQuestion.value.intro
-  || activeQuestion.value.details?.[0]?.body
-  || activeQuestion.value.steps?.[0]
-  || activeQuestion.value.tip
-  || '查看本題的產品保養重點與使用注意事項。'
-))
+const activeCategory = computed(() => PRODUCT_CARE_CATEGORIES[activeCategoryIndex.value] ?? PRODUCT_CARE_CATEGORIES[0])
+const activeQuestion = computed(() => activeCategory.value?.questions[activeQuestionIndex.value] ?? activeCategory.value?.questions[0])
+const activeFeatureImage = computed(() => activeQuestion.value?.image || activeCategory.value?.questions.find(question => question.image)?.image || '')
+const activeFeatureImageAlt = computed(() => activeQuestion.value?.imageAlt || `${activeCategory.value?.label}產品保養圖解`)
+const activeFeatureDescription = computed(() => productCareDescription(activeQuestion.value, cmsCopy.copy))
 
 function selectCategory(index: number) {
   activeCategoryIndex.value = index
@@ -47,8 +45,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <span class="product-catalogue-hero__overlay" aria-hidden="true" />
       <div v-reveal="{ anim: 'opalMoveUp' }" class="product-catalogue-hero__inner">
         <h1 id="product-catalogue-title">{{ cmsCopy.copy.text1 }}</h1>
-        <nav aria-label="麵包屑" class="product-catalogue-hero__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "SAKURA 廚電", to: "/products/sakura" }, { label: "廚房商品型錄" }]' v-slot="{ items, follow }">
+        <nav id="product-catalogue-breadcrumb" aria-label="麵包屑" class="product-catalogue-hero__trail">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumb.breadcrumbHome, to: '/' }, { label: breadcrumb.breadcrumbParent, to: '/products/sakura' }, { label: breadcrumb.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>
@@ -59,7 +57,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       </div>
     </section>
 
-    <section class="product-catalogue-projects" aria-labelledby="product-catalogue-list-title">
+    <section id="product-catalogue-list" class="product-catalogue-projects" aria-labelledby="product-catalogue-list-title">
       <div class="product-catalogue-rail internal-rail-safe">
         <h2 id="product-catalogue-list-title" class="sr-only">{{ cmsCopy.copy.text2 }}</h2>
         <ul class="product-catalogue-grid" aria-label="廚房商品型錄清單">
@@ -71,7 +69,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           >
             <article>
               <a
-                :href="catalogue.pdfUrl"
+                :href="cataloguePreviewHref(catalogue.pdfUrl)"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="product-catalogue-card__link"
@@ -90,7 +88,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               </a>
               <div class="product-catalogue-card__text">
                 <div class="product-catalogue-card__title-row">
-                  <a :href="catalogue.pdfUrl" target="_blank" rel="noopener noreferrer"><strong><InternalHeadingText :text="catalogue.title" /></strong></a>
+                  <a :href="cataloguePreviewHref(catalogue.pdfUrl)" target="_blank" rel="noopener noreferrer"><strong><InternalHeadingText :text="catalogue.title" /></strong></a>
                   <a :href="`/api/catalogues/${catalogue.id}`" :download="`${catalogue.id}.pdf`" class="product-catalogue-card__download" :aria-label="`下載 PDF：${catalogue.title}`"><Download aria-hidden="true" /><span>{{ cmsCopy.copy.text4 }}</span></a>
                 </div>
                 <span>{{ catalogue.description }}</span>
@@ -104,11 +102,11 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <section class="product-care" aria-labelledby="product-care-title">
       <div class="product-catalogue-rail internal-rail-safe">
         <header v-reveal="{ anim: 'opalMoveUp' }" class="product-care__header">
-          <InternalTemplateHeadingRail label="Popular Queries" class="product-care__eyebrow" />
-          <h2 id="product-care-title"><span class="product-care__chinese"><InternalHeadingText text="廚房選購指南" /></span><InternalHeadingText text=" Clear " /><span><InternalHeadingText text="Answers" /></span><InternalHeadingText text=" To Your " /><span><InternalHeadingText text="Questions" /></span></h2>
+          <InternalTemplateHeadingRail :label="careText('careEyebrow')" class="product-care__eyebrow" />
+          <h2 id="product-care-title"><span class="product-care__chinese"><InternalHeadingText :text="careText('careChineseTitle')" /></span><InternalHeadingText :text="' '+careText('careEnglishStart')+' '" /><span><InternalHeadingText :text="careText('careEnglishAccent')" /></span><InternalHeadingText :text="' '+careText('careEnglishMiddle')+' '" /><span><InternalHeadingText :text="careText('careEnglishEnd')" /></span></h2>
         </header>
 
-        <div class="product-care__layout">
+        <div v-if="activeCategory" class="product-care__layout">
           <div class="product-care__faq">
             <div class="product-care__filters" aria-label="產品保養問題分類">
           <button
@@ -169,7 +167,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </div>
           </div>
 
-          <aside class="product-care__feature" aria-live="polite">
+          <aside v-if="activeQuestion" class="product-care__feature" aria-live="polite">
             <a
               v-if="activeFeatureImage"
               :href="activeFeatureImage"
@@ -216,6 +214,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .product-catalogue-hero__trail a { color: inherit; transition: color .3s ease; }
 .product-catalogue-hero__trail a:hover,
 .product-catalogue-hero__trail a:focus-visible { color: #caa05c; }
+#product-catalogue-breadcrumb, #product-catalogue-list, #product-care-title { scroll-margin-top: var(--site-header-height, 60px); }
 
 .product-catalogue-projects { padding: 100px 30px 60px; background: #fff; }
 .product-catalogue-card__title-row { display: flex; align-items: baseline; gap: 14px; justify-content: space-between; }

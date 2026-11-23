@@ -13,6 +13,11 @@ const seriesCatalogueLabels = {
   breadcrumbHome: inspirationLabels.breadcrumbHome,
   breadcrumbList: { fallback: '品牌系列型錄', label: '型錄頁目前位置文字' },
 }
+const productCatalogueLabels = {
+  breadcrumbHome: inspirationLabels.breadcrumbHome,
+  breadcrumbParent: { fallback: 'SAKURA 廚電', label: 'SAKURA 廚電連結文字' },
+  breadcrumbList: { fallback: '廚房商品型錄', label: '型錄頁目前位置文字' },
+}
 
 const latestNewsLabels = {
   breadcrumbHome: inspirationLabels.breadcrumbHome,
@@ -39,6 +44,7 @@ function breadcrumb(copy, labels) {
 export const inspirationBreadcrumb = (copy = {}) => breadcrumb(copy, inspirationLabels)
 export const knowledgeBreadcrumb = (copy = {}) => breadcrumb(copy, knowledgeLabels)
 export const seriesCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, seriesCatalogueLabels)
+export const productCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, productCatalogueLabels)
 export const latestNewsBreadcrumb = (copy = {}) => breadcrumb(copy, latestNewsLabels)
 export const franchiseDownloadBreadcrumb = (copy = {}) => breadcrumb(copy, franchiseDownloadLabels)
 export const builderCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, builderCatalogueLabels)
@@ -47,6 +53,7 @@ export function breadcrumbSchema(id, schema) {
   const labels = id === 'view-pages-design-inspiration-index' ? inspirationLabels
     : id === 'view-pages-knowledge-index' ? knowledgeLabels
     : id === 'view-pages-catalogues-kitchenware-catalog' ? seriesCatalogueLabels
+    : id === 'view-pages-catalogues-catalog' ? productCatalogueLabels
     : id === 'view-pages-news-latest-index' ? latestNewsLabels
     : id === 'view-pages-franchising-download' ? franchiseDownloadLabels
     : id === 'view-pages-builders-catalogues' ? builderCatalogueLabels : null
