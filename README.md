@@ -5186,3 +5186,4 @@ final result: passed
 - 優惠活動文章標題已使用 `InternalHeadingText` 分色元件，原檢查仍比對直接插入文字的舊 Vue 寫法。三類消息的標題檢查改讀實際 SSR，確認完整 CMS 標題、單一 h1、entry-title 及文章的 aria-labelledby 關聯，並保留頁首字級與 CMS 文案檢查。
 - 可執行 `TEST_BASE_URL=http://127.0.0.1:3101 pnpm --dir nuxt-site exec node scripts/check-news-headings.mjs` 驗證三類消息的全部已發布文章。完整前台回歸也使用同一檢查，後續另遇品牌優勢家庭標題的舊來源碼斷言。
 - 本機九篇消息標題回歸通過，兩個正式網域的三篇優惠活動完成列表進入、原標題、封面解碼、內文及返回連結驗證，並檢查 1440、1024、768、390px。
+- `37dcc017` 已部署至 `dpl_JFRi5xgSTv86qD4ZUL3zWTyZBjv4`，兩個正式網域完成發布後相同驗證，文章標題、封面、內文及設定與發布前比對一致。本次為測試更新，無需資料庫遷移。
