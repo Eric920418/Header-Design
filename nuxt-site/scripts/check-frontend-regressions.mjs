@@ -10,6 +10,7 @@ import {updateNewsHeroTitle} from './update-news-title-20261020.mjs'
 import {updateServiceHeroTitle} from './update-service-title-20261021.mjs'
 import {updateBrandFamilyTitle} from './update-brand-family-title-20261021.mjs'
 import {cataloguePreviewHref,productCatalogueText} from '../shared/cms/product-catalogue.mjs'
+import {checkNewsHeadings} from './check-news-headings.mjs'
 
 for(const title of ['Creating Ideal Kitchens for Every Family','Creating the Ideal Kitchen for Every Family','Creating Kitchens for Every Family','Creating Kitchen For Every Family']){
   const original={copy:{text1:title,text2:'保留中文',text3:'保留說明'},cmsSettings:{visible:true}}
@@ -233,20 +234,21 @@ assert(brandHeroGlobalStyles.includes('section.hero-includes-header:is(.knowledg
 console.log('PASS 指南文章Hero沿用案例招牌安全區與共同留白，無額外標題佔位')
 const activityHeroSource=await readFile(new URL('../pages/news/activities/[slug].vue',import.meta.url),'utf8')
 assert(/@media \(min-width: 1024px\) \{\s*\.activity-detail-breadcrumb__title \{ font-size: 80px; line-height: 1\.1; \}/.test(activityHeroSource),'優惠活動內頁Promotions桌機80px，行高需容納大字且不得擴大全站p')
-assert(activityHeroSource.includes('<p class="activity-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>')&&activityHeroSource.includes('class="entry-title">{{ article.title }}</h1>'),'保留CMS Hero文案與原文章h1，不更改標籤層級')
+assert(activityHeroSource.includes('<p class="activity-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>'),'優惠活動頁首需讀取CMS文案')
 assert(activityHeroSource.includes('.activity-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }'),'手機原30px標題與35px行高保留')
 console.log('PASS 優惠活動內頁Hero桌機80px／手機30px，保留CMS標題與文章h1')
 const latestHeroSource=await readFile(new URL('../pages/news/latest/[slug].vue',import.meta.url),'utf8')
 assert(/@media \(min-width: 1024px\) \{\s*\.latest-detail-breadcrumb__title \{ font-size: 80px; line-height: 1\.1; \}/.test(latestHeroSource),'最新消息內頁桌機80px／1.1行高')
 assert(/\.latest-detail-breadcrumb__title \{[^}]*text-transform: none;/.test(latestHeroSource)&&latestHeroSource.includes('<p class="latest-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>'),'大小寫使用CMS原文，不以轉換或硬編碼掩蓋資料')
-assert(latestHeroSource.includes('.latest-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }')&&latestHeroSource.includes('class="entry-title">{{ article.title }}</h1>'),'保留手機30px／35px與原文章h1')
+assert(latestHeroSource.includes('.latest-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }'),'保留手機30px／35px')
 assert.equal((await content('view-pages-news-latest-slug-')).copy.text1,'News','本機已發布CMS必須實際改為News，不能只改Vue範例')
 console.log('PASS 最新消息內頁Hero實際CMS News、桌機80px／手機30px及文章主標保留')
 const mediaHeroSource=await readFile(new URL('../pages/news/video/[slug].vue',import.meta.url),'utf8')
 assert(/@media \(min-width: 1024px\) \{\s*\.media-detail-breadcrumb__title \{ font-size: 80px; line-height: 1\.1; \}/.test(mediaHeroSource),'媒體影音內頁Media桌機80px／1.1行高')
-assert(mediaHeroSource.includes('<p class="media-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>')&&mediaHeroSource.includes('class="entry-title">{{ article.title }}</h1>'),'保留CMS Hero文案及正文h1')
+assert(mediaHeroSource.includes('<p class="media-detail-breadcrumb__title">{{ cmsCopy.copy.text1 }}</p>'),'媒體影音頁首需讀取CMS文案')
 assert(mediaHeroSource.includes('.media-detail-breadcrumb__title { margin-bottom: 15px; font-size: 30px; line-height: 35px; }')&&mediaHeroSource.includes(':video-id="detail.videoId"'),'保留手機30px／35px及原影片來源')
 console.log('PASS 媒體影音內頁Hero桌機80px／手機30px，保留CMS文案、文章主標及影片來源')
+await checkNewsHeadings(get,content)
 assert(brandHeroGlobalStyles.includes('h1:not(.sr-only, .hero-template-title)'),'局部hero-template-title需避開全站80px!important覆寫，不修改全站規則')
 assert(brandHeroSource.includes('.brand-h8-copy h1 span { color: #caa05c; }')&&brandHeroSource.includes('.brand-h8-copy h1 { color: #fff; }'),'桌機保留白色兩行及品牌金色')
 assert(brandHeroSource.includes('inset: calc(-25% + (var(--site-header-height) + 16px) * 1.25) 50% 0 0;')&&/\.brand-h8-hero \{[^}]*container-type: inline-size;/.test(brandHeroSource)&&brandHeroSource.includes("url('/section-3/store-chengde.jpg')) calc(29.2% - 14.6cqw + max(30px, (100cqw - 1770px) / 2)) 20% / cover no-repeat"),'品牌原圖招牌需依滿寬Hero對齊1770px版心內的小標籤，不使用扣除內距的內容寬')
