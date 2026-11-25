@@ -85,7 +85,7 @@ async function get(path,status=200){const r=await fetch(base+path,{signal:AbortS
 const content=async id=>(await get('/api/content/'+id)).json()
 const floatingMarkup=(await(await get('/')).text()).match(/<aside\b[^>]*aria-label="快速服務"[\s\S]*?<\/aside>/)?.[0]||''
 const pailipeiLink=floatingMarkup.match(/<a\b[^>]*aria-label="拍立配（另開分頁）"[^>]*>[\s\S]*?<\/a>/)?.[0]||''
-assert(pailipeiLink.includes('href="https://ai.sakura.com.tw/lens/kitchen"'),'拍立配需使用指定正式網址')
+assert(pailipeiLink.includes('href="https://www.sakura-kitchenlife.com.tw/news/latest/sakuralens-go-live"'),'拍立配需使用指定 SAKURA LENS 消息頁')
 assert(pailipeiLink.includes('target="_blank"')&&pailipeiLink.includes('rel="noopener noreferrer"'),'拍立配需安全另開分頁')
 assert(pailipeiLink.includes('/floating-icons/pailipei.svg')&&!pailipeiLink.includes('disabled'),'原圖示保留並解除停用')
 assert(!floatingMarkup.includes('拍立配連結待提供'),'不可仍顯示過期的待提供提示')

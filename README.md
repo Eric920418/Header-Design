@@ -5212,3 +5212,8 @@ final result: passed
 
 - 僅更新導覽「門市與服務 → 免費丈量」與桌面／手機浮動服務列免費丈量入口，目的地為 https://icare.sakura.com.tw/auth/login?toph=/member/measuring&FS=kitchen，完整保留 toph 與大寫 FS 參數。元件預設值與初始化資料同步，導覽的 iCare 標誌判斷支援新舊連結。
 - 正式 CMS 使用 update-free-measuring-link-20261125.mjs 限定兩個唯一入口、已知原連結與無未發布草稿，在同一交易內透過既有儲存／發布機制更新，保留其他欄位、其他文件與全部舊版本。pnpm --dir nuxt-site build（含型別檢查）與腳本語法檢查通過；精準欄位／輸入不變／其他內容保留／可重跑／自訂及重複入口拒絕的自我檢查通過。正式 dry-run 確認 SiteHeader revision 7、FloatingButtons revision 3，皆無未發布草稿且唯一入口符合已知原連結。12a5e0b2 已部署 Production dpl_5qZ4D3wYpkNJLoxzVcYBTBwreuRd（Ready）。正式 CMS 兩入口在同一交易內發布：SiteHeader revision 7→9、新版 8f5a1d25-56af-495b-9c31-6c6dcf7fecbf；FloatingButtons revision 3→5、新版 367e098f-3197-45fe-baeb-a28752b1ef38。兩舊版皆保留，其他文件及所有原版本逐項比較一致。兩正式網域 CMS 與首頁／加盟 SSR 核對完整新網址；主站桌面選單、iCare 標誌、手機選單／浮動列及另一網域 320／390px 均確認新網址、_blank／noopener noreferrer、圖示載入與無水平溢位。實際點擊手機浮動免費丈量，成功開啟指定 iCare 丈量登入頁且參數完整，未登入或提交。目的站畫面另顯示 reCAPTCHA Enterprise 免費配額超限提示，屬外部站需維護方確認；本輪未實測 Safari。CMS 更新、桌面／手機截圖、目的頁及 JSON 證據存 .gstack/qa-reports/free-measuring-link-20261125/。
+
+## 2026-11-25 拍立配浮動圖示改連 SAKURA LENS 消息
+
+- 桌面／手機共用拍立配圖示連結改為 https://www.sakura-kitchenlife.com.tw/news/latest/sakuralens-go-live，元件預設與無效值的備用網址、初始化資料及既有回歸斷言同步。正式資料僅更新 FloatingButtons.copy.field3，沿用圖示、尺寸、另開分頁及安全 rel；免費丈量與客服連結保留。
+- update-pailipei-link-20261125.mjs 使用既有版本儲存／發布機制，檢查已知舊值、正式目標與無未發布草稿，保留其他欄位、其他文件及全部舊版本。pnpm --dir nuxt-site build（含型別檢查）與目的地精準替換／其他欄位與輸入保留／可重跑／自訂目的地拒絕的自我檢查通過。正式 dry-run 確認 FloatingButtons revision 5、無未發布草稿。瀏覽器實際開啟指定官方網址顯示 404「頁面不存在」，新站相同路徑亦回傳 HTTP404；依截圖保留指定目的網址並明確記錄此狀態，消息需發布後才能正常開啟。證據存 .gstack/qa-reports/pailipei-link-20261125/。正式發布結果待補記。
