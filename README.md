@@ -5217,3 +5217,8 @@ final result: passed
 
 - 桌面／手機共用拍立配圖示連結改為 https://www.sakura-kitchenlife.com.tw/news/latest/sakuralens-go-live，元件預設與無效值的備用網址、初始化資料及既有回歸斷言同步。正式資料僅更新 FloatingButtons.copy.field3，沿用圖示、尺寸、另開分頁及安全 rel；免費丈量與客服連結保留。
 - update-pailipei-link-20261125.mjs 使用既有版本儲存／發布機制，檢查已知舊值、正式目標與無未發布草稿，保留其他欄位、其他文件及全部舊版本。pnpm --dir nuxt-site build（含型別檢查）與目的地精準替換／其他欄位與輸入保留／可重跑／自訂目的地拒絕的自我檢查通過。正式 dry-run 確認 FloatingButtons revision 5、無未發布草稿。瀏覽器實際開啟指定官方網址顯示 404「頁面不存在」，新站相同路徑亦回傳 HTTP404；依截圖保留指定目的網址並明確記錄此狀態，消息需發布後才能正常開啟。證據存 .gstack/qa-reports/pailipei-link-20261125/。b4be4b06 已部署 Production dpl_3xBoAWst7SCRRUrGPNsJfPo3RKRR（Ready），兩正式網域各自查詢均為同一部署。正式 FloatingButtons 以既有版本發布從 revision 5→7，新版 27da24cd-a87f-4588-b479-65d3ba9010e0，舊版 367e098f-3197-45fe-baeb-a28752b1ef38 保留；其他文件、全部原版本及免費丈量內容逐項比較不變。主站 320／390／768／1440px、另一網域 390px 均核對拍立配新網址、_blank／noopener noreferrer、原圖示載入、免費丈量保留新 iCare 連結與無水平溢位。實際點擊正常另開指定網址，目的站仍顯示 404，不能視為文章可正常閱讀。正式 UI／CMS 入口更新完成，目的文章可用性仍待發布；本輪未實測 Safari。兩正式網域首頁／加盟頁的拍立配既有回歸斷言與正式 CMS 回讀通過，新目的地、原圖示及免費丈量保留。截圖、CMS 更新及 DOM JSON 存於同一證據目錄。
+
+## 2026-11-25 加盟表單居住地標籤簡化
+
+- 依截圖刪除「居住地」旁的「（必填）」文字，標籤統一為「居住地 *」。required、共用驗證、錯誤提示及原欄位設定保留；不修改 CMS 或資料庫。
+- pnpm --dir nuxt-site build（含型別檢查）及既有居住地驗證函式的空白／空格／有值檢查通過。Chrome 320／390／768／1440px 標籤皆為居住地 *、required 與 500 字上限保留、無水平溢位。390px 正常聚焦後 Tab 離開空欄，aria-invalid 為 true 並顯示原「居住地須為 1–500 個字元。」提示，未提交表單；瀏覽器無錯誤或警告。本輪未實測 Safari。截圖與量測存 .gstack/qa-reports/franchise-residence-label-20261125/。正式發布結果待補記。
