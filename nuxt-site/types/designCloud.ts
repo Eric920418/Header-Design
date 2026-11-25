@@ -8,6 +8,7 @@ export interface DesignCasePage {
   items: DesignCase[]; total: number; page: number; pageSize: number; totalPages: number;
 }
 export interface DesignCaseDetail extends DesignCase {
+  source?: 'design-cloud' | 'custom';
   images: string[];
   specs: { name: string; value: string }[];
 }

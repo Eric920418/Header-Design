@@ -42,7 +42,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           <aside class="case-detail-sidebar">
             <div class="case-detail-sidebar__sticky">
               <a :href="galleryCopy.field1" target="_blank" rel="noopener noreferrer" class="case-detail-booking site-content-cta group/cta">
-                <span>{{ galleryCopy.text2 }}</span><span class="site-cta-icon"><ArrowRight aria-hidden="true" /></span>
+                <span>{{ item.source === 'design-cloud' ? '立即預約' : galleryCopy.text2 }}</span><span class="site-cta-icon"><ArrowRight aria-hidden="true" /></span>
               </a>
               <section v-if="item.specs.length" class="case-detail-widget" aria-labelledby="design-case-specs-title">
                 <h2 id="design-case-specs-title"><InternalHeadingText :text="cmsCopy.copy.text2" /></h2>
