@@ -582,7 +582,9 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
   .builders-strengths-copy { position: static; height: auto; }
   .builders-strengths-content > .builders-solution__copy { display: none; }
-  .builders-solution__caption { display: block; }
+  .builders-solution__caption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 8px; text-align: center; }
+  .builders-solution__caption h3 { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .builders-solution[data-strength-index="2"] .builders-solution__caption h3 { margin-top: 0; }
   .builders-strengths-content { display: block; min-height: auto; padding: 0; transform: none; }
   .builders-strengths-heading h2 { margin-bottom: 20px; font-size: 30px; }
   .builders-strengths-heading h2 b { font-size: 28px; }

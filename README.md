@@ -5187,3 +5187,8 @@ final result: passed
 - 可執行 `TEST_BASE_URL=http://127.0.0.1:3101 pnpm --dir nuxt-site exec node scripts/check-news-headings.mjs` 驗證三類消息的全部已發布文章。完整前台回歸也使用同一檢查，後續另遇品牌優勢家庭標題的舊來源碼斷言。
 - 本機九篇消息標題回歸通過，兩個正式網域的三篇優惠活動完成列表進入、原標題、封面解碼、內文及返回連結驗證，並檢查 1440、1024、768、390px。
 - `37dcc017` 已部署至 `dpl_JFRi5xgSTv86qD4ZUL3zWTyZBjv4`，兩個正式網域完成發布後相同驗證，文章標題、封面、內文及設定與發布前比對一致。本次為測試更新，無需資料庫遷移。
+
+## 2026-11-25 建商專區手機圖下數據橫排
+
+- 依手機版參考圖，三張實力圖片下的前綴、金色數據及兩段說明改為橫向置中排列；沿用原手機字級、配色與圖片比例，以 8px 間距及自然換行適配窄螢幕。管理平台手機說明取消直排時的上方間距，桌面原有 12px 間距與固定捲動配置保留。
+- pnpm --dir nuxt-site build 通過；check-builder-strengths.mjs 的 315 組幾何、原計數、CMS／SSR／實際 JS 與三張圖 HTTP 檢查通過。Chrome 320／375／390／430／767／768／1024／1440px 無水平溢位，手機三組皆完整顯示，320px 自然置中分兩行；1440px 正常捲動至末圖仍顯示管理平台，原 12px 間距保留。截圖與 DOM 量測存 .gstack/qa-reports/builders-mobile-caption-20261125/。另行執行的舊 check-builder-strengths-scroll.mjs 缺少 useReducedMotion 測試替身而失敗，本次以正常瀏覽器捲動確認；未修改該舊腳本，尚未實測本輪實機 Safari。正式發布結果稍後補記。
