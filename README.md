@@ -5221,4 +5221,4 @@ final result: passed
 ## 2026-11-25 加盟表單居住地標籤簡化
 
 - 依截圖刪除「居住地」旁的「（必填）」文字，標籤統一為「居住地 *」。required、共用驗證、錯誤提示及原欄位設定保留；不修改 CMS 或資料庫。
-- pnpm --dir nuxt-site build（含型別檢查）及既有居住地驗證函式的空白／空格／有值檢查通過。Chrome 320／390／768／1440px 標籤皆為居住地 *、required 與 500 字上限保留、無水平溢位。390px 正常聚焦後 Tab 離開空欄，aria-invalid 為 true 並顯示原「居住地須為 1–500 個字元。」提示，未提交表單；瀏覽器無錯誤或警告。本輪未實測 Safari。截圖與量測存 .gstack/qa-reports/franchise-residence-label-20261125/。正式發布結果待補記。
+- pnpm --dir nuxt-site build（含型別檢查）及既有居住地驗證函式的空白／空格／有值檢查通過。Chrome 320／390／768／1440px 標籤皆為居住地 *、required 與 500 字上限保留、無水平溢位。390px 正常聚焦後 Tab 離開空欄，aria-invalid 為 true 並顯示原「居住地須為 1–500 個字元。」提示，未提交表單；瀏覽器無錯誤或警告。本輪未實測 Safari。截圖與量測存 .gstack/qa-reports/franchise-residence-label-20261125/。67587d1a 已部署 Production dpl_57oydeWigdfYxhNnHystuDjxdAPP（Ready），綁定兩個正式網域。兩站正式 SSR 均顯示居住地 * 並保留 required／maxlength=500。主站 320／390／768／1440px 複驗通過；正常點入再 Tab 離開空白欄位後，原驗證提示與 aria-invalid=true 正常，未提交表單。正式標籤截圖 production-label.jpg、驗證及兩站 SSR JSON 存於同一證據目錄。瀏覽器無錯誤或警告，無 CMS 或資料庫異動。
