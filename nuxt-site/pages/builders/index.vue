@@ -47,12 +47,20 @@ function updateStrengthsSticky() {
     copy.style.removeProperty('--strengths-sticky-top')
     copy.style.removeProperty('--strengths-copy-height')
     copy.style.removeProperty('--strengths-list-height')
+    list.style.removeProperty('--strengths-intro-offset')
     return
   }
   const headerHeight = document.querySelector<HTMLElement>('header[data-breadcrumb-root]')?.offsetHeight ?? 60
   const viewportHeight = window.visualViewport?.height ?? window.innerHeight
   copy.style.setProperty('--strengths-list-height', `${list.getBoundingClientRect().height}px`)
   const contentHeight = content.offsetHeight
+  const firstVisual = list.querySelector<HTMLElement>('.builders-solution__visual')
+  if (firstVisual?.offsetHeight) {
+    // Let the first photo reach the bottom of the first figure before the next photo enters.
+    // The first figure has 6px of bottom padding; the last figure removes it.
+    const introOffset = Math.max(0, contentHeight - 6 - firstVisual.offsetHeight)
+    list.style.setProperty('--strengths-intro-offset', `${introOffset}px`)
+  }
   // In a short viewport, scroll the heading first and keep the figures in view.
   const top = Math.min(headerHeight + 15, viewportHeight - contentHeight - 20)
   copy.style.setProperty('--strengths-sticky-top', `${top}px`)
@@ -446,7 +454,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 .builders-strengths-heading h2 b { color: #fff; display: block; margin-bottom: 16px; font-family: var(--font-cjk-serif); font-size: 40px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
 .builders-strengths-heading h2 span { color: #caa05c; }
 .builders-strengths-heading > p { max-width: 444px; margin: 0; font-family: var(--font-cjk-sans); font-size: 15px; line-height: 25px; }
-.builders-strengths-list { display: grid; align-self: start; gap: 30px; min-width: 0; padding-bottom: var(--strengths-sticky-tail); }
+.builders-strengths-list { display: grid; align-self: start; gap: 30px; min-width: 0; padding-top: var(--strengths-intro-offset, 0px); padding-bottom: var(--strengths-sticky-tail); }
 .builders-strengths-list :deep(.builder-image) { height: auto; background: #fff; }
 .builders-capability__showcase { width: min(1280px, 100%); margin: 70px auto 0; container-type: inline-size; font-family: var(--font-cjk-sans); }
 .builders-capability__showcase :deep(.builder-image) { height: auto; background: transparent; }
@@ -581,6 +589,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
   .builders-strengths-section { --strengths-sticky-tail: 0px; padding: 60px 15px; }
   .builders-strengths-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
   .builders-strengths-copy { position: static; height: auto; }
+  .builders-strengths-list { padding-top: 0; }
   .builders-strengths-content > .builders-solution__copy { display: none; }
   .builders-solution__caption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 8px; text-align: center; }
   .builders-solution__caption h3 { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }

@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { transpileModule, ScriptTarget } from 'typescript'
 
 const source = readFileSync(new URL('../pages/builders/index.vue', import.meta.url), 'utf8')
-const script = source.slice(source.indexOf('const strengthsList ='), source.indexOf('const selectPavilion ='))
+const script = 'const strengthsList = ref();\n' + source.slice(source.indexOf('const activeStrengthIndex ='), source.indexOf('const selectPavilion ='))
 const js = transpileModule(script, { compilerOptions: { target: ScriptTarget.ES2022 } }).outputText
 const items = [0, 1, 2].map(index => ({ dataset: { strengthIndex: String(index) }, rect: {top: 2000, bottom: 2300, height: 300}, getBoundingClientRect() { return this.rect } }))
 const mounted = [], unmounted = [], observed = [], strengths = [{ value: ['45', '萬'] }, { value: ['AI', '智能'] }, { value: ['管理', '平台'] }]

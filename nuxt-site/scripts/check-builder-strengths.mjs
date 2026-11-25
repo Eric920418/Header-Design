@@ -24,14 +24,15 @@ const js=transpileModule(stickySource,{compilerOptions:{target:ScriptTarget.ES20
 function harness({width=1280,height=720,copyHeight=560,headerHeight=60,observer=true,visual=true,fonts=true}={}){
   const events=()=>({listeners:new Map(),addEventListener(type,fn){this.listeners.set(type,fn)},removeEventListener(type,fn){assert.equal(this.listeners.get(type),fn);this.listeners.delete(type)}})
   const mounted=[],unmounted=[],styles=new Map(),content={offsetHeight:copyHeight},copy={style:{setProperty:(key,value)=>styles.set(key,value),removeProperty:key=>styles.delete(key)}},header={offsetHeight:headerHeight}
-  const list={height:900,getBoundingClientRect(){return {height:this.height}}}
+  const listStyles=new Map(),firstVisual={offsetHeight:300}
+  const list={height:900,getBoundingClientRect(){return {height:this.height}},querySelector(selector){assert.equal(selector,'.builders-solution__visual');return firstVisual},style:{setProperty:(key,value)=>listStyles.set(key,value),removeProperty:key=>listStyles.delete(key)}}
   const viewport={...events(),height},window={...events(),innerWidth:width,innerHeight:height,...(visual?{visualViewport:viewport}:{}),...(observer?{ResizeObserver:true}:{})},fontSet=events()
   const document={querySelector:selector=>{assert.equal(selector,'header[data-breadcrumb-root]');return header},...(fonts?{fonts:fontSet}:{})}
   let io
   class Observer{constructor(callback){this.callback=callback;this.targets=[];this.disconnected=false;io=this}observe(target){this.targets.push(target)}disconnect(){this.disconnected=true}}
   const api=new Function('ref','onMounted','onBeforeUnmount','window','document','ResizeObserver',js+';return {strengthsCopy,strengthsContent,strengthsList,updateStrengthsSticky};')(value=>({value}),fn=>mounted.push(fn),fn=>unmounted.push(fn),window,document,Observer)
   api.strengthsCopy.value=copy;api.strengthsContent.value=content;api.strengthsList.value=list;mounted.forEach(fn=>fn())
-  return {api,window,viewport,fontSet,styles,copy,content,list,header,get io(){return io},top:()=>Number.parseFloat(styles.get('--strengths-sticky-top')),unmount:()=>{unmounted.forEach(fn=>fn());api.strengthsCopy.value=undefined;api.strengthsContent.value=undefined;api.strengthsList.value=undefined}}
+  return {api,window,viewport,fontSet,styles,listStyles,firstVisual,copy,content,list,header,get io(){return io},top:()=>Number.parseFloat(styles.get('--strengths-sticky-top')),unmount:()=>{unmounted.forEach(fn=>fn());api.strengthsCopy.value=undefined;api.strengthsContent.value=undefined;api.strengthsList.value=undefined}}
 }
 for(const width of [768,1024,1199,1280,1366,1440,1920])for(const height of [480,600,667,700,720,768,800,900,1080])for(const copyHeight of [320,420,560,684,1000]){
   const test=harness({width,height,copyHeight})
@@ -39,6 +40,7 @@ for(const width of [768,1024,1199,1280,1366,1440,1920])for(const height of [480,
   assert(test.top()+copyHeight<=height-20,'固定時統計底部需保留 20px')
   assert.equal(Number.parseFloat(test.styles.get('--strengths-copy-height')),copyHeight,'不得用縮小整組的方式讓內容塞進視窗')
   assert.equal(test.styles.get('--strengths-list-height'),'900px')
+  assert.equal(Number.parseFloat(test.listStyles.get('--strengths-intro-offset'))+test.firstVisual.offsetHeight,copyHeight-6,'首圖底部對齊文字底部，不攔截捲動')
   assert.deepEqual(test.io.targets,[test.content,test.list,test.header])
   const stable=[...test.styles];test.io.callback();assert.deepEqual([...test.styles],stable,'重複量測不得累積縮放')
   test.unmount();assert(test.io.disconnected);assert.equal(test.window.listeners.size+test.viewport.listeners.size+test.fontSet.listeners.size,0)
@@ -48,7 +50,9 @@ resizing.viewport.height=600;resizing.viewport.listeners.get('resize')();assert.
 resizing.content.offsetHeight=400;resizing.fontSet.listeners.get('loadingdone')();assert.equal(resizing.top(),75)
 resizing.header.offsetHeight=80;resizing.io.callback();assert.equal(resizing.top(),95,'導覽高度變更也必須重算')
 resizing.list.height=585.5;resizing.io.callback();assert.equal(resizing.styles.get('--strengths-list-height'),'585.5px','圖片欄高度更新需保留小數精度')
-resizing.window.innerWidth=767;resizing.window.listeners.get('resize')();assert.equal(resizing.styles.size,0,'進入手機版移除桌機位置')
+resizing.firstVisual.offsetHeight=500;resizing.io.callback();assert.equal(resizing.listStyles.get('--strengths-intro-offset'),'0px','圖片高於文字時不可產生負留白')
+resizing.firstVisual.offsetHeight=250;resizing.io.callback();assert.equal(resizing.listStyles.get('--strengths-intro-offset'),'144px','圖片載入或重排後重算首圖對齊')
+resizing.window.innerWidth=767;resizing.window.listeners.get('resize')();assert.equal(resizing.styles.size,0,'進入手機版移除桌機位置');assert.equal(resizing.listStyles.size,0,'手機不得繼承桌機首圖留白')
 resizing.window.innerWidth=1280;resizing.window.listeners.get('resize')();assert.equal(resizing.top(),95)
 resizing.unmount();const before=[...resizing.styles];resizing.io.callback();assert.deepEqual([...resizing.styles],before,'卸載後遲到回呼不得更新')
 const fallback=harness({observer:false,visual:false,fonts:false});assert.equal(fallback.top(),75);fallback.window.innerHeight=600;fallback.window.listeners.get('resize')();assert.equal(fallback.top(),20);fallback.unmount()

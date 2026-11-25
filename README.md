@@ -5192,3 +5192,8 @@ final result: passed
 
 - 依手機版參考圖，三張實力圖片下的前綴、金色數據及兩段說明改為橫向置中排列；沿用原手機字級、配色與圖片比例，以 8px 間距及自然換行適配窄螢幕。管理平台手機說明取消直排時的上方間距，桌面原有 12px 間距與固定捲動配置保留。
 - pnpm --dir nuxt-site build 通過；check-builder-strengths.mjs 的 315 組幾何、原計數、CMS／SSR／實際 JS 與三張圖 HTTP 檢查通過。Chrome 320／375／390／430／767／768／1024／1440px 無水平溢位，手機三組皆完整顯示，320px 自然置中分兩行；1440px 正常捲動至末圖仍顯示管理平台，原 12px 間距保留。截圖與 DOM 量測存 .gstack/qa-reports/builders-mobile-caption-20261125/。另行執行的舊 check-builder-strengths-scroll.mjs 缺少 useReducedMotion 測試替身而失敗，本次以正常瀏覽器捲動確認；未修改該舊腳本，尚未實測本輪實機 Safari。fc53f5e3 已發布 Production dpl_DS55L6FWJpBDmZibTu9R2H2mqsvH，Ready 且綁定兩個正式網域；主正式站正常捲動複驗三張圖載入、390px 三組完整橫排、320px 完整置中換行及無水平溢位，證據 production-390.jpg、production-320.jpg 與對應 JSON。兩正式網域 check-builder-strengths.mjs 均通過並載入同一 /_nuxt/BW8p07i7.js。無資料庫異動。
+
+## 2026-11-25 建商首圖與第一組說明底部對齊
+
+- 桌面雙欄依左側內容高度與第一張圖的實際高度計算右欄起始留白，讓「多元選擇」底部先與第一張圖底部對齊，再自然向上捲動進入第二張圖。沿用原圖片比例、三組切換、固定文字與末圖管理平台對齊；手機圖下橫排保留。
+- pnpm --dir nuxt-site build（含型別檢查）、315 組固定與首圖對齊幾何、窄屏移除留白、圖片重排、原計數器、三組正反切換、CMS／SSR／實際 JS 與三圖 HTTP 檢查通過。修正 check-builder-strengths-scroll.mjs 的擷取範圍，讓切換測試不再誤含計數器而缺少 useReducedMotion 替身。Chrome 正常動畫下，768×1024、1024×600、1280×686、1440×900 首圖與第一組說明底緣差距均小於 1px；三組順逆切換及末圖文字顯示正常，320／390px 仍為圖下橫排且起始留白為 0，無水平溢位或瀏覽器錯誤。證據存 .gstack/qa-reports/builders-first-alignment-20261125/。未驗證本輪實機 Safari。正式發布結果待補記。
