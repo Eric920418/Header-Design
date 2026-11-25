@@ -5207,3 +5207,8 @@ final result: passed
 
 - 僅設計雲串接的案例詳細頁 CTA 改為「立即預約」。案例 API 依實際取得資料的分支標記 design-cloud／custom，前台依來源判斷，避免相同網址版型下的後台自建案例被一併改字；門市案例與自建案例沿用原 CMS 文案。預約目的地、另開分頁、按鈕尺寸與樣式保留，不寫入 CMS 或資料庫。
 - pnpm --dir nuxt-site build（含型別檢查）通過。從正式列表四頁盤點 25 個設計雲與 3 個門市案例，本機逐頁 SSR 確認 25 個均為立即預約、3 個門市維持到店預約，原目的地／_blank／rel 保留；來源分支隔離測試確認自建案例不查設計雲且強制標記 custom，設計雲原文案、圖片與規格保留。正式目前無自建案例，自建分支以隔離測試驗證。Chrome 320／390／768／1440px 按鈕皆高 60px、連結原樣、無水平溢位，門市 case10 的主 CTA 與門市資訊 CTA 仍為到店預約。本輪未實測 Safari，證據存 .gstack/qa-reports/design-cloud-booking-20261125/。7873163a 已發布 Production dpl_9JzGQ4m5C5goq9s4eHxh9A6MVut4（Ready），兩正式網域均完成 25 個設計雲案例與 3 個門市案例逐頁回讀，文案及原預約連結／另開分頁皆通過。主站正常瀏覽器於 320／390／768／1440px 確認立即預約、60px 原高度與無水平溢位；門市 case10 主 CTA 與資訊 CTA 仍為到店預約，兩原連結保留，瀏覽器無錯誤或警告。正式截圖 production-cta.jpg、production-desktop.jpg、量測及各站逐頁 JSON 存於同一證據目錄。無 CMS 或資料庫異動。
+
+## 2026-11-25 免費丈量改為 iCare 丈量登入連結
+
+- 僅更新導覽「門市與服務 → 免費丈量」與桌面／手機浮動服務列免費丈量入口，目的地為 https://icare.sakura.com.tw/auth/login?toph=/member/measuring&FS=kitchen，完整保留 toph 與大寫 FS 參數。元件預設值與初始化資料同步，導覽的 iCare 標誌判斷支援新舊連結。
+- 正式 CMS 使用 update-free-measuring-link-20261125.mjs 限定兩個唯一入口、已知原連結與無未發布草稿，在同一交易內透過既有儲存／發布機制更新，保留其他欄位、其他文件與全部舊版本。pnpm --dir nuxt-site build（含型別檢查）與腳本語法檢查通過；精準欄位／輸入不變／其他內容保留／可重跑／自訂及重複入口拒絕的自我檢查通過。正式 dry-run 確認 SiteHeader revision 7、FloatingButtons revision 3，皆無未發布草稿且唯一入口符合已知原連結。正式發布及瀏覽器結果待補記。

@@ -12300,7 +12300,7 @@
       },
       "serviceItems": [
         {
-          "href": "https://www.sakura-kitchenlife.com.tw/measuring",
+          "href": "https://icare.sakura.com.tw/auth/login?toph=/member/measuring&FS=kitchen",
           "icon": "/floating-icons/official-quick-link-2.svg",
           "label": "到府丈量",
           "newTab": true
@@ -12376,7 +12376,7 @@
             ]
           },
           "template": {
-            "href": "https://www.sakura-kitchenlife.com.tw/measuring",
+            "href": "https://icare.sakura.com.tw/auth/login?toph=/member/measuring&FS=kitchen",
             "icon": "/floating-icons/official-quick-link-2.svg",
             "label": "到府丈量",
             "newTab": true
@@ -12823,7 +12823,7 @@
             },
             {
               "label": "到府丈量",
-              "to": "https://www.sakura-kitchenlife.com.tw/measuring",
+              "to": "https://icare.sakura.com.tw/auth/login?toph=/member/measuring&FS=kitchen",
               "external": true
             },
             {

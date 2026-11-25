@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const cmsCopy = await useCmsResource('view-components-FloatingButtons', {"primaryItem":{"href":"/design-inspiration","icon":"/floating-icons/case.png","label":"設計案例"},"serviceItems":[{"href":"https://www.sakura-kitchenlife.com.tw/measuring","icon":"/floating-icons/free-measuring.svg","label":"免費丈量","newTab":true},{"href":"https://icare.sakura.com.tw","icon":"/floating-icons/official-quick-link-3.svg","label":"線上客服","newTab":true}],"copy":{"field1":"","field2":"","field3":"https://ai.sakura.com.tw/lens/kitchen","field4":"/floating-icons/pailipei.svg","field5":""},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const cmsCopy = await useCmsResource('view-components-FloatingButtons', {"primaryItem":{"href":"/design-inspiration","icon":"/floating-icons/case.png","label":"設計案例"},"serviceItems":[{"href":"https://icare.sakura.com.tw/auth/login?toph=/member/measuring&FS=kitchen","icon":"/floating-icons/free-measuring.svg","label":"免費丈量","newTab":true},{"href":"https://icare.sakura.com.tw","icon":"/floating-icons/official-quick-link-3.svg","label":"線上客服","newTab":true}],"copy":{"field1":"","field2":"","field3":"https://ai.sakura.com.tw/lens/kitchen","field4":"/floating-icons/pailipei.svg","field5":""},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
 const primaryItem = cmsCopy.primaryItem
 
