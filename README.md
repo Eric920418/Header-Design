@@ -5298,3 +5298,4 @@ final result: passed
 - 修正廚房商品型錄自訂名稱在返回清單時觸發重複更新的問題，保留欄位連動與原項目焦點返回。
 - 兩個型錄頁實際操作通過：右側表單、中欄清單、看位置、真實草稿預覽、取消本筆（含配備型錄連動名稱）、搜尋後返回、鍵盤焦點及 1440／1024／768／390px 版面。另抽查首頁輪播、品牌系列、服務流程、消息、知識文章、建商圖文／型錄、門市、加盟與商品保養問答的共用右側編輯，無瀏覽器例外或原文件異動。測試帳號與預覽已清除，原文件／版本／結構指紋一致。既有後台完整性與工作流程檢查通過。
 - 型別檢查與正式建置通過。部署前兩正式網域各確認八份品牌系列型錄及五份廚房商品型錄的原封面、說明、預覽與 PDF 下載，四種寬度正常。
+- `167fe9a3` 已部署至 Production `dpl_2HiLtnQUTHRAnen3P5RvaiARBKFc`，Ready 並綁定兩正式網域。兩站實際提供統一右側編輯程式，已移除型錄中欄特例，相關資源雜湊一致。部署後各完成八份系列與五份商品型錄的封面、說明、預覽、PDF 下載及四種寬度複驗，公開文件／文字／圖片／連結與部署前逐項一致，未修改正式資料庫。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 right-item-editors-local.json、series-catalogue-right-editor.jpg、product-catalogue-right-editor.jpg、right-item-editors-production-assets.json、catalogue-list-label-before／after.json 及 right-editors-product-public-before／after.json。
