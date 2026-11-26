@@ -19,6 +19,7 @@ import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
 import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalogueNotice} from '../shared/cms/builder-catalogue.mjs'
+import {headingFieldLabel} from '../shared/cms/heading-labels.mjs'
 import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueFields,productCatalogueTitle} from '../shared/cms/product-catalogue.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
 import {builderHomeOneImage,builderHomeOneImages} from '../shared/cms/builder-home-one.mjs'
@@ -68,6 +69,7 @@ for(const p of pageEditors){
   assert.equal(scene.kind,b.kind);assert.equal(JSON.stringify(values),snapshot,'Position views must never change content')
   if(scene.image)assert.match(scene.image,/^(?:\/|https?:|data:image)/)
   assert(!b.fields.some(f=>/版面文字|顯示文字（第|內容欄位/.test(f.label)),p.id+' '+b.name+' contains an unclear field name')
+  for(const f of b.fields)assert.equal(f.label,headingFieldLabel(f.label),p.id+' '+b.name+'標題欄位命名須統一')
  }
 }
 const home=workbenchBlocks('home',pageBlocks(pageEditors[0],docs))
@@ -168,7 +170,7 @@ const productDoc=docs.find(d=>d.id===productCatalogueDocument)
 const productEdit={...productDoc.body,copy:{...productDoc.body.copy,careChineseTitle:'我的選購指南',kitchenwareTitle:'配備型錄測試'}}
 validate(productEdit,productDoc.schema)
 checkPageBody(productCataloguePage,productDoc.id,productDoc.body,productEdit,productDoc.schema)
-assert(productCare.fields.some(f=>f.path==='copy.careChineseTitle'&&f.label===productCatalogueFields.careChineseTitle.label))
+assert(productCare.fields.some(f=>f.path==='copy.careChineseTitle'&&f.label===headingFieldLabel(productCatalogueFields.careChineseTitle.label)))
 assert.equal(productCatalogueText(productDoc.body.copy,'careChineseTitle'),'廚房選購指南')
 assert.equal(productCatalogueTitle({id:'kitchenware-2026',title:'推薦卡片名稱'},productEdit.copy),'配備型錄測試')
 assert.deepEqual(changeImpacts([{documentId:productDoc.id,path:'copy.careChineseTitle'}]).map(i=>i.href),[productCare.href])
@@ -341,12 +343,12 @@ const downloadBreadcrumb=downloadBlocks.find(b=>b.name==='麵包屑編輯設定'
 assert.deepEqual(downloadBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','型錄管理','區塊共用設定'])
 assert(downloadHero.aliases.includes('franchise-download:頁面最上方'))
 assert.equal(downloadHero.href,'/franchising/download#franchise-download-title')
-assert.deepEqual(downloadHero.fields.filter(f=>f.path.startsWith('copy.text')).map(f=>[f.path,f.label]),[['copy.text3','區塊英文標籤'],['copy.text4','區塊英文主標題']])
+assert.deepEqual(downloadHero.fields.filter(f=>f.path.startsWith('copy.text')).map(f=>[f.path,f.label]),[['copy.text3','區塊英文標籤'],['copy.text4','區塊英文主標題（第一段）']])
 assert.equal(pagePositionContent(downloadHero,previewBodies).image,previewBodies['view-pages-franchising-download'].copy.field1)
 assert(downloadDocument.aliases.includes('franchise-download:加盟簡介與檔案'))
 assert(['加盟簡介與下載按鈕','型錄載入提示','頁面底部返回按鈕'].every(name=>downloadDocument.aliases.includes('franchise-download:'+name)))
 assert.equal(downloadDocument.href,'/franchising/download#franchise-document-title')
-assert.deepEqual(downloadDocument.fields.slice(0,2).map(f=>[f.path,f.label]),[['copy.text5','區塊中文主標題（第一行）'],['copy.text6','區塊中文主標題（第二行）']])
+assert.deepEqual(downloadDocument.fields.slice(0,2).map(f=>[f.path,f.label]),[['copy.text5','區塊中文主標題（第一段）'],['copy.text6','區塊中文主標題（第二段）']])
 assert.deepEqual(downloadCatalogue.fields.map(f=>f.path),['brochurePages','FRANCHISE_BROCHURE_URL'])
 assert(downloadCatalogue.aliases.includes('franchise-download:型錄預覽圖片'))
 assert.equal(downloadCatalogue.href,'/franchising/download#franchise-catalogue-preview')

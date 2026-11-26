@@ -1,5 +1,6 @@
 import {valueAt,pageFieldValue,pageEditors,pageBlocks,inRowScope} from './page-editors.mjs'
 import {effectiveHomeHeadingBody} from './home-headings.mjs'
+import {headingFieldLabel} from './heading-labels.mjs'
 import {editingSchema} from './presentation.mjs'
 import {itemCaption,itemKey,itemThumbnail} from './workbench.mjs'
 import {fieldImpacts} from './impact-targets.mjs'
@@ -96,7 +97,7 @@ export function pageChanges(blocks,documents,previous,next,context={}){
    change.before=display(pageFieldValue(previous,field))
    change.after=display(pageFieldValue(next,field))
   }
-  return {...change,keyParts,stable,...scope,blockId:block?.id,location:block?.name||(owner?owner.page.name+' › '+owner.block.name:'其他已儲存內容'),impacts:fieldImpacts({...scope,path:change.path},context,previous[d.id],next[d.id])}
+  return {...change,label:headingFieldLabel(change.label),keyParts,stable,...scope,blockId:block?.id,location:block?.name||(owner?owner.page.name+' › '+owner.block.name:'其他已儲存內容'),impacts:fieldImpacts({...scope,path:change.path},context,previous[d.id],next[d.id])}
  }))
 }
 

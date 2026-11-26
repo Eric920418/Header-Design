@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { HOME_SERVICES_ID, homeChineseTitle } from '~/shared/cms/home-headings.mjs'
+import { homeServicesHeading } from '~/shared/cms/home-headings.mjs'
 const cmsCopy = await useCmsResource('view-components-home-HomeServices', {"services":[{"n":"01","img":"/services/sakura-product.png","logo":"/services/sakura-logo-white.png","alt":"SAKURA","logoClass":"h-[24px] sm:h-[26px] antra:h-[28px]","captionTop":false,"excerpt":"享受智能 樂在生活 以科技預判需求，讓廚衛設備主動貼心 成就更輕鬆的便利生活廚房空間"},{"n":"02","img":"/services/svago-product.png","logo":"/services/svago-logo-white.png","alt":"SVAGO","logoClass":"h-[31px] sm:h-[35px] antra:h-[38px]","captionTop":true,"excerpt":"歐洲品牌 高質感美學 台灣櫻花獨家銷售 設計師好評推薦 引領歐式廚房美學 享樂高效料理生活"},{"n":"03","img":"/services/teka-product.png","logo":"/services/teka-logo-white.svg","alt":"TEKA","logoClass":"h-[32px] sm:h-[36px] antra:h-[39px]","captionTop":false,"excerpt":"德國百年品味不凡 全球知名歐洲廚房電器製造商 秉承德系精工品質 全球累計超過1億家庭使用"}],"copy":{"text1":"廚房","text2":"產品","field3":""},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
-const chineseTitle = homeChineseTitle(HOME_SERVICES_ID, cmsCopy.copy)
+const heading = homeServicesHeading(cmsCopy.copy)
 
 import { NuxtLink } from '#components'
 import emblaCarouselVue from 'embla-carousel-vue'
@@ -26,13 +26,13 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <div aria-hidden class="absolute inset-0 bg-black/[.76]" />
     <div class="relative z-10 mx-auto max-w-[1410px]">
       <div class="home-services-heading relative mx-auto mb-[30px] grid max-w-[1410px] grid-cols-1 min-[768px]:mb-[60px] min-[768px]:grid-cols-[30%_70%]">
-        <InternalTemplateHeadingRail v-reveal="{ anim: 'opalMoveRight' }" label="KITCHEN PRODUCTS" tone="dark" source="home6" class="home-services-heading__rail" />
+        <InternalTemplateHeadingRail v-if="heading.englishLabel" v-reveal="{ anim: 'opalMoveRight' }" :label="heading.englishLabel" tone="dark" source="home6" class="home-services-heading__rail" />
         <div v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="home-services-heading__copy">
           <h2 id="services-heading" class="home-services-title">
-            <span class="bilingual-heading-lead"><span class="home-services-title__eyebrow">Explore Our</span>
-            <span class="home-services-title__chinese">{{ chineseTitle }}</span></span>
-            <span class="bilingual-heading-english" style="color: #CAA05C"><span class="home-services-title__english">Smart Appliances</span><br />
-            Designed For <span class="text-[#CAA05C]">Better Living</span></span>
+            <span class="bilingual-heading-lead"><span v-if="heading.englishLead" class="home-services-title__eyebrow">{{ heading.englishLead }}</span>
+            <span class="home-services-title__chinese">{{ heading.chineseTitle }}</span></span>
+            <span v-if="heading.englishTitleFirst||heading.englishTitleSecond" class="bilingual-heading-english" style="color: #CAA05C"><span v-if="heading.englishTitleFirst" class="home-services-title__english">{{ heading.englishTitleFirst }}</span><br v-if="heading.englishTitleFirst&&heading.englishTitleSecond" />
+            {{ heading.englishTitleSecond }}</span>
           </h2>
         </div>
       </div>

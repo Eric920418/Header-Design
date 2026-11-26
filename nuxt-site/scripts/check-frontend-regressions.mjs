@@ -11,6 +11,7 @@ import {updateServiceHeroTitle} from './update-service-title-20261021.mjs'
 import {updateBrandFamilyTitle} from './update-brand-family-title-20261021.mjs'
 import {cataloguePreviewHref,productCatalogueText} from '../shared/cms/product-catalogue.mjs'
 import {checkNewsHeadings} from './check-news-headings.mjs'
+import {homeServicesHeading} from '../shared/cms/home-headings.mjs'
 
 for(const title of ['Creating Ideal Kitchens for Every Family','Creating the Ideal Kitchen for Every Family','Creating Kitchens for Every Family','Creating Kitchen For Every Family']){
   const original={copy:{text1:title,text2:'保留中文',text3:'保留說明'},cmsSettings:{visible:true}}
@@ -401,7 +402,7 @@ assert(homeRailCss.includes('.home-project-title { font-size: 50px; }')&&homeRai
 assert(homeBilingualProject.includes('class="bilingual-heading-lead"'),'首頁品牌系列眉標與中文需由共用行框置中')
 const homeBilingualServices=await readFile(new URL('../components/home/HomeServices.vue',import.meta.url),'utf8')
 assert(homeBilingualServices.includes('class="bilingual-heading-lead"'),'廚房產品眉標與中文需由共用行框置中')
-assert(homeBilingualServices.includes('Designed For <span class="text-[#CAA05C]">Better Living</span>')&&!homeBilingualServices.includes('Designed for'),'首頁廚房產品只補For大寫，保留Better Living金色及共用置中位置')
+assert(homeBilingualServices.includes('{{ heading.englishTitleSecond }}')&&homeBilingualServices.includes('style="color: #CAA05C"')&&homeServicesHeading().englishTitleSecond==='Designed For Better Living','廚房產品英文主標讀取CMS，保留原For大寫及金色')
 assert(homeRailCss.includes('.home-project-title__eyebrow')&&homeRailCss.includes('font-size: 18px;')&&homeRailCss.includes('.home-project-title__break { display: initial; }'),'品牌系列小標18px及手機分行需保留')
 assert(homeBilingualGallery.includes('class="gallery-heading-title__chinese">{{ cmsCopy.copy.text3 }}</span>Kitchen<br />Design'),'設計案例需保留CMS中文並以兩行呈現英文')
 assert(homeRailCss.includes('.gallery-heading-title { font-size: 80px; }')&&homeRailCss.includes('.gallery-heading-title__chinese { font-size: 38px; }'),'設計案例桌機英文80px／中文38px')

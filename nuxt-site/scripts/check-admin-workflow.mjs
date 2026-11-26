@@ -9,7 +9,7 @@ import {workspaceInput} from '../server/cms/workspaces.mjs'
 import {pageEditors,pageEditor,pageBlocks,legacyPage,legacyPageLink,pageEditorLink,searchPages,pageSummary,valueAt,withValue,pageFieldValue} from '../shared/cms/page-editors.mjs'
 import {checkPageBody,pageEditorInput,editorSchema,changePageEditor} from '../server/cms/page-editors.mjs'
 import {validate} from '../server/cms/content.mjs'
-import {HOME_PROJECT_ID,HOME_SERVICES_ID,homeProjectHeading} from '../shared/cms/home-headings.mjs'
+import {HOME_PROJECT_ID,HOME_SERVICES_ID,homeProjectHeading,homeServicesHeading} from '../shared/cms/home-headings.mjs'
 import {hasPageChanges,pageChanges} from '../shared/cms/changes.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 assert.deepEqual(['copy.field1','copy.text2','copy.text3','copy.text4'].map(path=>fieldPresentation('view-pages-privacy',path).label),['頁面英文標題','條款介紹文字','最後修訂日期','公司名稱'])
@@ -31,6 +31,15 @@ assert.equal(pageChanges(homeBlocks,[headingDoc],beforeHeading,{[HOME_PROJECT_ID
 assert.throws(()=>checkPageBody(homePage,HOME_PROJECT_ID,headingDoc.body,{...editedHeading,copy:{...editedHeading.copy,text1:'越過欄位限制'}},headingDoc.schema),e=>e.statusCode===400)
 const serviceHeadingDoc=pageDocuments.find(d=>d.id===HOME_SERVICES_ID),serviceTitleField=homeBlocks.flatMap(b=>b.fields).find(f=>f.documentId===HOME_SERVICES_ID&&f.path==='copy.chineseTitle')
 assert.equal(pageFieldValue({[HOME_SERVICES_ID]:serviceHeadingDoc.body},serviceTitleField),'廚房產品')
+const serviceFields=homeBlocks.find(b=>b.id==='home:廚房產品').fields.filter(f=>f.documentId===HOME_SERVICES_ID&&f.path.startsWith('copy.')&&f.path!=='copy.field3')
+assert.deepEqual(serviceFields.map(f=>f.label),headingFields.slice(0,5).map(f=>f.label))
+const serviceEdit=structuredClone(serviceHeadingDoc.body)
+Object.assign(serviceEdit.copy,{englishLabel:'APPLIANCES',englishLead:'Discover',chineseTitle:'智慧廚電',englishTitleFirst:'First Line',englishTitleSecond:'Second Line'})
+checkPageBody(homePage,HOME_SERVICES_ID,serviceHeadingDoc.body,serviceEdit,serviceHeadingDoc.schema)
+validate(serviceEdit,serviceHeadingDoc.schema)
+assert.equal(homeServicesHeading({...serviceEdit.copy,englishLabel:''}).englishLabel,'')
+assert(!hasPageChanges(homeBlocks,{[HOME_SERVICES_ID]:serviceHeadingDoc.body},{[HOME_SERVICES_ID]:{...serviceHeadingDoc.body,copy:{...serviceHeadingDoc.body.copy,...homeServicesHeading(serviceHeadingDoc.body.copy)}}}),'Reading original service headings does not create pending changes')
+assert.equal(pageChanges(homeBlocks,[serviceHeadingDoc],{[HOME_SERVICES_ID]:serviceHeadingDoc.body},{[HOME_SERVICES_ID]:serviceEdit}).find(c=>c.path==='copy.englishLabel').before,'KITCHEN PRODUCTS')
 for(const w of workspaces)assert(legacyPage(w.id),'Missing page: '+w.id)
 assert.equal(workspaceFor('catalog-cases'),undefined)
 assert.equal(legacyPage('catalog-cases').id,'inspiration')

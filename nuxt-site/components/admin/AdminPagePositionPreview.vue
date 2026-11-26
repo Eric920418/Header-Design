@@ -30,7 +30,7 @@ const highlighted=(path:string)=>props.focusedField===path
 const isLabel=(label:string)=>/標籤|小標|前置英文/.test(label)
 const headings=computed(()=>scene.value.heading.filter((f:any)=>!isLabel(f.label)&&!/語音/.test(f.label)))
 const eyebrows=computed(()=>scene.value.heading.filter((f:any)=>isLabel(f.label)))
-const seriesHeading=computed(()=>props.block?.id==='home:品牌系列'?scene.value.heading.filter((f:any)=>['copy.englishLabel','copy.englishLead','copy.chineseTitle','copy.englishTitleFirst','copy.englishTitleSecond'].includes(f.path)):null)
+const seriesHeading=computed(()=>['home:品牌系列','home:廚房產品'].includes(props.block?.id)?scene.value.heading.filter((f:any)=>['copy.englishLabel','copy.englishLead','copy.chineseTitle','copy.englishTitleFirst','copy.englishTitleSecond'].includes(f.path)):null)
 const regions=computed(()=>Object.entries(props.bodies['data-storeCases']?.regionCities||{}) as [string,string[]][])
 const filterCities=computed(()=>props.block?.storeRegion?regions.value.find(([region])=>region===props.block.storeRegion)?.[1]||[]:regions.value[0]?.[1]?.slice(0,3)||[])
 const filterImage=computed(()=>props.block?.storeRegion
@@ -456,7 +456,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <h3>{{ scene.fixedAction==='廚房商品型錄下載'?'廚房商品型錄':'延伸閱讀' }}</h3>
      <div class="cms-scene-buttons"><span :class="{'is-focused':scene.destination&&highlighted(scene.destination.path)}">{{ scene.fixedAction }}<ArrowRight :size="13" /></span></div>
     </header>
-    <header v-else-if="seriesHeading" class="cms-scene-series-heading">
+    <header v-else-if="seriesHeading" class="cms-scene-series-heading" :class="{'cms-scene-services-heading':block?.id==='home:廚房產品'}">
      <template v-for="f in seriesHeading" :key="f.path">
       <small v-if="f.path==='copy.englishLabel'" class="cms-series-heading-label" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</small>
       <small v-else-if="f.path==='copy.englishLead'" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</small>

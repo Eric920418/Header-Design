@@ -1,3 +1,5 @@
+import {headingLabels} from './heading-labels.mjs'
+
 export const HOME_PROJECT_ID = 'view-components-home-HomeProject'
 export const HOME_SERVICES_ID = 'view-components-home-HomeServices'
 
@@ -6,6 +8,12 @@ const projectDefaults = {
   englishLead: 'Explore Our',
   englishTitleFirst: 'Creative Projects',
   englishTitleSecond: 'That Define Our Style',
+}
+const servicesDefaults = {
+  englishLabel: 'KITCHEN PRODUCTS',
+  englishLead: 'Explore Our',
+  englishTitleFirst: 'Smart Appliances',
+  englishTitleSecond: 'Designed For Better Living',
 }
 
 export function homeChineseTitle(id, copy = {}) {
@@ -24,18 +32,27 @@ export function homeProjectHeading(copy = {}) {
   }
 }
 
+export function homeServicesHeading(copy = {}) {
+  return {
+    englishLabel: copy.englishLabel ?? servicesDefaults.englishLabel,
+    englishLead: copy.englishLead ?? servicesDefaults.englishLead,
+    chineseTitle: homeChineseTitle(HOME_SERVICES_ID, copy),
+    englishTitleFirst: copy.englishTitleFirst ?? servicesDefaults.englishTitleFirst,
+    englishTitleSecond: copy.englishTitleSecond ?? servicesDefaults.englishTitleSecond,
+  }
+}
+
 export function homeHeadingSchema(id, schema) {
   if (id !== HOME_PROJECT_ID && id !== HOME_SERVICES_ID) return schema
   const copy = schema.fields.copy
-  const keys = id === HOME_PROJECT_ID ? Object.keys(homeProjectHeading()) : ['chineseTitle']
-  const fields = Object.fromEntries(keys.map(key => [key, { type: 'string' }]))
+  const fields = Object.fromEntries(Object.entries(headingLabels).map(([key,label]) => [key, { type: 'string', label, singleLine:true }]))
   // Archived versions still contain the two original title strings.
   return { ...schema, fields: { ...schema.fields, copy: { ...copy, fields: { ...fields, ...copy.fields } } } }
 }
 
 export function effectiveHomeHeadingBody(id, body) {
   if (!body?.copy || (id !== HOME_PROJECT_ID && id !== HOME_SERVICES_ID)) return body
-  const heading = id === HOME_PROJECT_ID ? homeProjectHeading(body.copy) : { chineseTitle: homeChineseTitle(id, body.copy) }
+  const heading = id === HOME_PROJECT_ID ? homeProjectHeading(body.copy) : homeServicesHeading(body.copy)
   const { text1, text2, ...copy } = body.copy
   return { ...body, copy: { ...copy, ...heading } }
 }

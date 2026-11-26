@@ -4,6 +4,7 @@ import {builderHomeOneDocument,builderHomeOneField,builderHomeOneImages} from '.
 import {builderAppointmentDocument,isBuilderAppointmentHeading} from './builder-appointment.mjs'
 import {builderCatalogueDocument,isBuilderCatalogueNotice} from './builder-catalogue.mjs'
 import {productCatalogueDocument,productCatalogueFields} from './product-catalogue.mjs'
+import {headingFieldLabel} from './heading-labels.mjs'
 
 const view=id=>'view-pages-'+id
 export const readingField=(readingGroup,label=readingGroup+'名稱')=>({readingGroup,label,advanced:true,help:''})
@@ -121,7 +122,7 @@ const componentCopyGroups={
 const fields=new Map()
 for(const [id,groups]of [...Object.entries(copyGroups).map(([id,g])=>[view(id),g]),...Object.entries(componentCopyGroups)])for(const[name,items]of groups)for(const[key,item]of Object.entries(items)){
  const field=typeof item==='string'?{label:item}:item
- fields.set(id+':copy.'+key,{name,...field,singleLine:!/(介紹|說明|文字第一段|文字第二段|連結前|連結後|結語)/.test(field.label)})
+ fields.set(id+':copy.'+key,{name,...field,label:headingFieldLabel(field.label),singleLine:!/(介紹|說明|文字第一段|文字第二段|連結前|連結後|結語)/.test(field.label)})
 }
 export const positionField=(id,path)=>fields.get(id+':'+path)
 

@@ -3,6 +3,7 @@ import { homeHeroSchema, HOME_HERO_ID } from './hero-media.mjs'
 import { homeGallerySchema, HOME_GALLERY_ID } from './gallery-cases.mjs'
 import {positionField,readingField} from './positions.mjs'
 import {homeHeadingSchema,HOME_SERVICES_ID} from './home-headings.mjs'
+import {headingLabels,headingFieldLabel} from './heading-labels.mjs'
 import {pageDestinationSchema} from './page-destinations.mjs'
 import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
 import {builderHomeOneDocument,builderHomeOneField} from './builder-home-one.mjs'
@@ -149,6 +150,7 @@ export function placeDestinations(fields, keyOf, afterOf) {
 
 export function fieldPresentation(resourceId,path,schema={}){
  const normalized=path.replace(/^\./,'').replace(/\.\d+(?=\.|$)/g,'.*'),key=normalized.split('.').at(-1)
+ if(['view-components-home-HomeProject',HOME_SERVICES_ID].includes(resourceId)&&normalized==='copy.'+key&&Object.hasOwn(headingLabels,key))return{label:headingLabels[key],singleLine:true}
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁品牌館資訊與預約','建商首頁的預約區']}
  if(resourceId===builderAppointmentDocument&&isBuilderAppointmentHeading(normalized))return{label:schema.label}
@@ -275,6 +277,7 @@ export function editingSchema(schema,resourceId,path=''){
   Object.assign(result,readingField('圖片',label),{imageReading:true})
  }
  if(schema.format==='youtube')result.label='YouTube 影片連結'
+ if(result.label){const label=headingFieldLabel(result.label);if(label!==result.label){result.positionLegacyLabel ||= result.label;result.label=label}}
  if(resourceId==='site-visuals'&&path==='brandVideoId')Object.assign(result,{label:'YouTube 影片連結',advanced:true,disclosureTitle:'首頁舊版影片（保留資料）',help:'目前首頁使用影片檔案；此欄保留舊設定，不會取代目前播放的影片。'})
  if(result.type==='string'&&!result.format&&/名稱|標題|英文標籤|按鈕|日期/.test(result.label))result.singleLine=true
  if(path==='copy')result.hidden=Object.values(result.fields||{}).every(f=>f.hidden)
