@@ -5281,3 +5281,4 @@ final result: passed
 - SQL 交易內確認三份頁面搜尋設定的預覽、儲存與發布，其他原欄位完整保留；完整後台工作流程檢查通過。測試後回滾，原文件／版本／結構指紋一致，臨時帳號與預覽已清除。部署前兩正式站各確認指南列表及三篇內頁的原文、圖片、標題、摘要與實際返回連結，四種寬度正常。
 
 - 欄位／入口完整性、後台工作流程、命名與欄位來源檢查、型別檢查及正式建置通過。本次只調整介面與共用預設值來源，不需資料庫結構更新。
+- `50da8a59` 已部署至 Production `dpl_8Bx8P4wiGMV8Zedn1RwmvuhiqQwQ`，Ready 並綁定兩正式網域。兩站實際提供新版設定入口、選填提示與原文搜尋預覽，相關資源雜湊一致。部署後兩站各完成指南列表及三篇內頁的原文、圖片、標題、摘要、實際返回連結與四種寬度複驗，所有公開文件與畫面文字／圖片／連結均與部署前逐項一致。未改寫正式資料庫內容或結構。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/，包含 search-settings-local.json、knowledge-search-settings.jpg、knowledge-seo-public-before／after.json 及 search-settings-production-assets.json。
