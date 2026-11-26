@@ -5351,4 +5351,5 @@ final result: passed
 - 門市案例的「門市內頁預約按鈕」簡化為「預約按鈕」，「門市內頁上一篇與下一篇」簡化為「上一篇與下一篇」。右側區塊名稱及實際位置錨點同步對應，保留舊區塊網址與原案例門市舊入口轉向。
 - 沿用原共用文字與連結欄位，不變更預約目的地、案例順序、前後篇計算或資料庫。
 - 本機確認兩個新名稱、四種舊入口、官網正確錨點、文字及目的地欄位焦點對位、原案例前後篇標題、三個文字欄位的真實草稿預覽與四種寬度；完整預覽中預約網址及前後篇連結不變。原文件無異動，清除臨時帳號與預覽後文件／版本／結構指紋一致。後台工作流程、命名、欄位來源、型別檢查與正式建置通過。
-- 部署前兩正式網域均逐一實際點選三篇案例的上一篇／下一篇，確認從設計靈感進入時保留型式、風格及頁碼；預約按鈕實際開啟櫻花官方 iCare 頁面，回應正常。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 case-actions-local／before.json、case-actions-booking.jpg 及 case-actions-navigation.jpg。部署結果待正式站複驗後補記。
+- 部署前兩正式網域均逐一實際點選三篇案例的上一篇／下一篇，確認從設計靈感進入時保留型式、風格及頁碼；預約按鈕實際開啟櫻花官方 iCare 頁面，回應正常。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 case-actions-local／before.json、case-actions-booking.jpg 及 case-actions-navigation.jpg。
+- `0da2724d` 已部署至 Production `dpl_GYkmKeaXMx6ktLn7t6fBJsv9HEpr`，Ready 並綁定兩正式網域。兩站實際提供「預約按鈕」與「上一篇與下一篇」新版區塊設定，資源雜湊一致；部署後再逐篇實際點選三篇案例的前後篇與設計靈感條件保留，預約按鈕實際開啟官方 iCare 登入表單，頁面回應 200。原公開文件、預約目的地、前後篇標題／網址及條件參數與部署前一致，未修改正式資料庫。證據另包含 case-actions-after.json、case-actions-production-assets.json 及兩正式網域的外部登入頁截圖。
