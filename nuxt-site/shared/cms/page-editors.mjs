@@ -92,7 +92,7 @@ export function storeCaseRedirect(query={}){
  const detailLegacy=query.legacy===storeDetailsResource||oldSection==='整頁共用文字'
  if(!detailBlock&&!detailLegacy&&query.list!==storeCasesScope&&query.legacy!==storeCasesResource&&oldSection!=='門市與案例')return
  const {legacy,...params}=query
- const block=detailBlock||(detailLegacy?storeCasesPageId+':門市內頁預約按鈕':storeCasesBlock)
+ const block=detailBlock||(detailLegacy?storeCasesPageId+':預約按鈕':storeCasesBlock)
  const link=pageEditorLink(storeCasesPageId,params,block)
  if(query.list===storeCasesScope&&typeof query.item==='string')Object.assign(link.query,{list:storeCasesScope,item:query.item})
  return link

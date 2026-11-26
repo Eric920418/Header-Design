@@ -72,8 +72,8 @@ const copyGroups={
  ],
  'gallery-slug-':[
   ['主視覺標題',{heroTitle:'主視覺標題'}],['麵包屑編輯設定',{breadcrumbHome:'首頁連結文字',breadcrumbParent:'案例門市連結文字',breadcrumbDetail:'門市內頁目前位置文字'}],
-  ['門市內頁預約按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['案例規格',{text3:'案例規格標題',text4:'門市資訊標題',text5:'LINE 按鈕文字',text6:'地圖按鈕文字',storeBookingDestination:'前往頁面'}],
-  ['門市內頁上一篇與下一篇',{text7:'上一篇按鈕文字',text8:'下一篇按鈕文字'}],['顧客評論',{text9:'留言區標題'}],
+  ['預約按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['案例規格',{text3:'案例規格標題',text4:'門市資訊標題',text5:'LINE 按鈕文字',text6:'地圖按鈕文字',storeBookingDestination:'前往頁面'}],
+  ['上一篇與下一篇',{text7:'上一篇按鈕文字',text8:'下一篇按鈕文字'}],['顧客評論',{text9:'留言區標題'}],
  ],
  'knowledge-index':[['主視覺標題',{text1:'主視覺標題'}]],
  'knowledge-design-slug-':[['文章底部返回按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['延伸文章按鈕',{moreDestination:'前往頁面'}]],
@@ -169,9 +169,9 @@ export const pagePositions={
   section('主視覺標題','所有門市案例內頁共用的頁首標題','case-header','store-case-hero'),
   section('麵包屑編輯設定','首頁、案例門市與目前位置的導覽文字','case-breadcrumb','store-case-breadcrumb'),
   {...section('案例管理','選擇案例，修改文章、照片及門市資料','stores'),aliases:['store-cases:門市管理']},
-  section('門市內頁預約按鈕','所有門市案例共用的預約按鈕','store-booking','case-booking'),
+  {...section('預約按鈕','所有門市案例共用的預約按鈕','store-booking','case-booking'),aliases:['store-cases:門市內頁預約按鈕']},
   {...section('案例規格','所有門市案例共用的規格標題、聯絡按鈕與地圖文字','store-info','case-spec-title'),aliases:['store-cases:門市內頁規格與資訊']},
-  section('門市內頁上一篇與下一篇','所有門市案例共用的前後篇按鈕文字','store-navigation','case-navigation'),
+  {...section('上一篇與下一篇','所有門市案例共用的前後篇按鈕文字','store-navigation','case-navigation'),aliases:['store-cases:門市內頁上一篇與下一篇']},
   {...section('顧客評論','所有門市案例共用的評論區標題','store-reviews','case-reviews-title'),aliases:['store-cases:門市內頁顧客評論']},
  ]},
  service:{hero:taichungHero,sections:[

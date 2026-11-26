@@ -759,11 +759,11 @@ for(const row of storeDoc.body.storeCases){
 const noCasePhotos=structuredClone(storeDoc.body);noCasePhotos.storeCases.forEach(row=>row.images=[])
 assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:noCasePhotos}),'','Missing case photos cannot silently borrow storefront covers')
 assert.equal(itemThumbnail({...storeDoc.body.storeCases[0],images:[]},storeRows.schema),'')
-const sharedSections=['門市內頁預約按鈕','案例規格','門市內頁上一篇與下一篇','顧客評論']
+const sharedSections=['預約按鈕','案例規格','上一篇與下一篇','顧客評論']
 assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理',...sharedSections])
 assert.equal(storeRows.label,'案例清單')
 assert.equal(storeRows.schema.searchLabel,'搜尋案例名稱')
-for(const [oldName,name] of [['門市管理','案例管理'],['門市內頁規格與資訊','案例規格'],['門市內頁顧客評論','顧客評論']]){
+for(const [oldName,name] of [['門市管理','案例管理'],['門市內頁規格與資訊','案例規格'],['門市內頁顧客評論','顧客評論'],['門市內頁預約按鈕','預約按鈕'],['門市內頁上一篇與下一篇','上一篇與下一篇']]){
  const block=caseCard.page.blocks.find(b=>b.name===name)
  assert(block.aliases.includes('store-cases:'+oldName),'Previous bookmarked block links remain usable')
  assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:'+oldName}).query.block,'store-cases:'+name)
