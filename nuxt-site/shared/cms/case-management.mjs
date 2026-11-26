@@ -18,7 +18,7 @@ export function filterCaseManagement(rows,source='',search=''){
 }
 export function storeCaseManagementLink(row,query={},state={}){
  if(row.source!=='門市案例')return undefined
- const link=pageEditorLink(storeCasesPageId,query,storeCasesPageId+':門市管理')
+ const link=pageEditorLink(storeCasesPageId,query,storeCasesPageId+':案例管理')
  return {...link,query:{...link.query,list:'data-storeCases:storeCases',item:row.slug,returnToCases:'1',caseSource:state.source||undefined,caseQuery:state.search||undefined,casePage:String(state.page||1)}}
 }
 export function caseManagementReturn(query={}){

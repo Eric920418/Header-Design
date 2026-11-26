@@ -16,7 +16,7 @@ const page=(id,section,name,ids,extra={})=>({id,section,name,ids:[...new Set(ids
 export const storeCasesPageId='store-cases'
 const storeCasesResource='data-storeCases',storeDetailsResource=view('gallery-slug-')
 const storeCasesScope=storeCasesResource+':storeCases'
-const storeCasesBlock=storeCasesPageId+':門市管理'
+const storeCasesBlock=storeCasesPageId+':案例管理'
 export const pageEditors=[
  page('home','home','首頁',homeResources,{href:'/',extra:['site-visuals'],scopes:{'site-visuals':['brandVideoSrc','images.asset_10b5a86c']}}),
  page('series','design','品牌系列',['data-kitchenSeries'],{href:'/home-style/aikitchen'}),
@@ -87,7 +87,8 @@ export function seriesCardRedirect(query={}){
 export function storeCaseRedirect(query={}){
  if(query.sitePage!=='stores')return
  const oldSection=typeof query.block==='string'&&query.block.startsWith('stores:')?query.block.slice('stores:'.length):''
- const detailBlock=pagePositions[storeCasesPageId].sections.some(s=>s.name===oldSection)?storeCasesPageId+':'+oldSection:undefined
+ const detailSection=pagePositions[storeCasesPageId].sections.find(s=>s.name===oldSection||s.aliases?.includes(storeCasesPageId+':'+oldSection))
+ const detailBlock=detailSection?storeCasesPageId+':'+detailSection.name:undefined
  const detailLegacy=query.legacy===storeDetailsResource||oldSection==='整頁共用文字'
  if(!detailBlock&&!detailLegacy&&query.list!==storeCasesScope&&query.legacy!==storeCasesResource&&oldSection!=='門市與案例')return
  const {legacy,...params}=query

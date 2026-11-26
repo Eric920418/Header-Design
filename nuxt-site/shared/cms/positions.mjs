@@ -72,8 +72,8 @@ const copyGroups={
  ],
  'gallery-slug-':[
   ['主視覺標題',{heroTitle:'主視覺標題'}],['麵包屑編輯設定',{breadcrumbHome:'首頁連結文字',breadcrumbParent:'案例門市連結文字',breadcrumbDetail:'門市內頁目前位置文字'}],
-  ['門市內頁預約按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['門市內頁規格與資訊',{text3:'案例規格標題',text4:'門市資訊標題',text5:'LINE 按鈕文字',text6:'地圖按鈕文字',storeBookingDestination:'前往頁面'}],
-  ['門市內頁上一篇與下一篇',{text7:'上一篇按鈕文字',text8:'下一篇按鈕文字'}],['門市內頁顧客評論',{text9:'留言區標題'}],
+  ['門市內頁預約按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['案例規格',{text3:'案例規格標題',text4:'門市資訊標題',text5:'LINE 按鈕文字',text6:'地圖按鈕文字',storeBookingDestination:'前往頁面'}],
+  ['門市內頁上一篇與下一篇',{text7:'上一篇按鈕文字',text8:'下一篇按鈕文字'}],['顧客評論',{text9:'留言區標題'}],
  ],
  'knowledge-index':[['主視覺標題',{text1:'主視覺標題'}]],
  'knowledge-design-slug-':[['文章底部返回按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['延伸文章按鈕',{moreDestination:'前往頁面'}]],
@@ -168,11 +168,11 @@ export const pagePositions={
  'store-cases':{hero:commonHero,sections:[
   section('主視覺標題','所有門市案例內頁共用的頁首標題','case-header','store-case-hero'),
   section('麵包屑編輯設定','首頁、案例門市與目前位置的導覽文字','case-breadcrumb','store-case-breadcrumb'),
-  section('門市管理','選擇門市，修改文章、照片及門市資料','stores'),
+  {...section('案例管理','選擇案例，修改文章、照片及門市資料','stores'),aliases:['store-cases:門市管理']},
   section('門市內頁預約按鈕','所有門市案例共用的預約按鈕','store-booking','case-booking'),
-  section('門市內頁規格與資訊','所有門市案例共用的規格標題、聯絡按鈕與地圖文字','store-info','case-spec-title'),
+  {...section('案例規格','所有門市案例共用的規格標題、聯絡按鈕與地圖文字','store-info','case-spec-title'),aliases:['store-cases:門市內頁規格與資訊']},
   section('門市內頁上一篇與下一篇','所有門市案例共用的前後篇按鈕文字','store-navigation','case-navigation'),
-  section('門市內頁顧客評論','所有門市案例共用的評論區標題','store-reviews','case-reviews-title'),
+  {...section('顧客評論','所有門市案例共用的評論區標題','store-reviews','case-reviews-title'),aliases:['store-cases:門市內頁顧客評論']},
  ]},
  service:{hero:taichungHero,sections:[
   section('主視覺標題','頁面最上方的大標題','hero','service-page-title'),
@@ -252,7 +252,7 @@ const dataGroups={
  'data-brandPavilions':{brandPavilions:'品牌館地址與時間',pavilionNotice:'參觀注意事項'},
  'data-franchise':{FRANCHISE_FORM_URL:'主視覺標題',FRANCHISE_OFFICIAL_FORM_URL:'主視覺標題',FRANCHISE_BROCHURE_URL:'加盟簡介與下載按鈕',franchiseAdvantages:'專業品牌實力',franchiseTestimonials:'加盟夥伴真實分享',franchiseMarketingStories:'品牌信賴',franchiseQualifications:'加盟資格與條件',franchiseSupportHighlights:'總部支援',franchiseFaqItems:'了解加盟資訊'},
  'data-builders':{BUILDER_APPOINTMENT_HASH:'主視覺標題'},
- 'data-storeCases':{storeCases:'門市管理',regionCities:'區域與縣市'},
+ 'data-storeCases':{storeCases:'案例管理',regionCities:'區域與縣市'},
  'data-productCatalogues':{PRODUCT_CATALOGUES:'型錄管理',PRODUCT_CARE_CATEGORIES:'清潔與保養問答'},
  'data-kitchenSystemCabinet':{systemCabinetImportance:'系統櫃材質重點',systemCabinetMaterials:'系統櫃板材比較',systemCabinetSelectionSteps:'系統櫃挑選步驟',systemCabinetCaseStudies:'系統櫃推薦案例'},
 }
@@ -280,7 +280,7 @@ export function positionGroup(page,id,path){
  if(page==='news-latest'&&id===view('news-latest-index')&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
  if(id==='news-articles')return page==='franchise'?'最新加盟資訊':page==='news'?'最新消息列表':page==='news-latest'?'消息文章管理':page==='news-activities'?'活動管理':'影音管理'
  if(id.startsWith('catalog-'))return '商品顯示與排序'
- if(path==='metaLabels')return '門市內頁規格與資訊'
+ if(path==='metaLabels')return '案例規格'
  if(id===view('news-index')&&path==='newsCategories')return '最新消息分類標籤'
  if(page==='privacy'&&['sections','numbers'].includes(path))return '隱私權條款'
  if(path==='sitemapGroups')return '網站地圖與隱私權入口'

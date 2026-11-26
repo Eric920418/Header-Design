@@ -285,7 +285,7 @@ previewBodies['view-pages-design-inspiration-index'].copy.text5='套用篩選';p
  assert.equal(filterCaseManagement(rows,'門市案例','門市甲')[0].slug,'store-x')
  assert.equal(filterCaseManagement(rows,'自建案例').length,2)
  const link=storeCaseManagementLink(rows[0],{q:'舊搜尋',item:'old',list:'old',casePage:'99'},{source:'門市案例',search:'門市甲',page:2})
- assert.equal(link.query.sitePage,'store-cases');assert.equal(link.query.list,'data-storeCases:storeCases');assert.equal(link.query.item,'store-x')
+ assert.equal(link.query.sitePage,'store-cases');assert.equal(link.query.block,'store-cases:案例管理');assert.equal(link.query.list,'data-storeCases:storeCases');assert.equal(link.query.item,'store-x')
  assert.deepEqual(caseManagementReturn(link.query),{path:'/admin/content',query:{section:'design',sitePage:'inspiration',block:'inspiration:案例管理',caseSource:'門市案例',caseQuery:'門市甲',casePage:'2'}})
  assert.equal(storeCaseManagementLink(rows.find(r=>r.source==='系統同步')),undefined)
  assert.equal(caseManagementReturn({returnToCases:'https://evil.invalid'}),undefined)
@@ -749,7 +749,7 @@ const serviceCards=searchPages(servicePages,'')
 assert.deepEqual(serviceCards.map(r=>r.page.title),['案例門市','服務流程','門市案例'])
 const caseCard=serviceCards[2],storeDoc=docs.find(d=>d.id==='data-storeCases')
 assert.equal(caseCard.page.thumbnail,storeDoc.body.storeCases[0].images[0])
-const storeManagement=caseCard.page.blocks.find(b=>b.name==='門市管理'),storeRows=storeManagement.fields.find(f=>f.path==='storeCases')
+const storeManagement=caseCard.page.blocks.find(b=>b.name==='案例管理'),storeRows=storeManagement.fields.find(f=>f.path==='storeCases')
 assert.equal(storeRows.schema.rowImage,'images')
 assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:storeDoc.body}),storeDoc.body.storeCases[0].images[0])
 for(const row of storeDoc.body.storeCases){
@@ -759,14 +759,21 @@ for(const row of storeDoc.body.storeCases){
 const noCasePhotos=structuredClone(storeDoc.body);noCasePhotos.storeCases.forEach(row=>row.images=[])
 assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:noCasePhotos}),'','Missing case photos cannot silently borrow storefront covers')
 assert.equal(itemThumbnail({...storeDoc.body.storeCases[0],images:[]},storeRows.schema),'')
-const sharedSections=['門市內頁預約按鈕','門市內頁規格與資訊','門市內頁上一篇與下一篇','門市內頁顧客評論']
-assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','門市管理',...sharedSections])
+const sharedSections=['門市內頁預約按鈕','案例規格','門市內頁上一篇與下一篇','顧客評論']
+assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理',...sharedSections])
+assert.equal(storeRows.label,'案例清單')
+assert.equal(storeRows.schema.searchLabel,'搜尋案例名稱')
+for(const [oldName,name] of [['門市管理','案例管理'],['門市內頁規格與資訊','案例規格'],['門市內頁顧客評論','顧客評論']]){
+ const block=caseCard.page.blocks.find(b=>b.name===name)
+ assert(block.aliases.includes('store-cases:'+oldName),'Previous bookmarked block links remain usable')
+ assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:'+oldName}).query.block,'store-cases:'+name)
+}
 const listPage=servicePages[0]
-assert(!listPage.blocks.some(b=>sharedSections.includes(b.name)||b.name==='門市管理'))
+assert(!listPage.blocks.some(b=>sharedSections.includes(b.name)||b.name==='案例管理'))
 assert.deepEqual(searchResultLink(searchPages(servicePages,'門市案例')[0],{section:'service',q:'門市案例'}).query,{section:'service',q:'門市案例',sitePage:storeCasesPageId})
 for(const name of sharedSections)assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:'+name}).query.block,storeCasesPageId+':'+name)
 const oldStoreLink={section:'service',sitePage:'stores',q:'安康店',page:'2',block:'stores:門市與案例',list:'data-storeCases:storeCases',item:storeDoc.body.storeCases[0].slug}
-assert.deepEqual(storeCaseRedirect(oldStoreLink).query,{...oldStoreLink,sitePage:storeCasesPageId,block:storeCasesPageId+':門市管理'})
+assert.deepEqual(storeCaseRedirect(oldStoreLink).query,{...oldStoreLink,sitePage:storeCasesPageId,block:storeCasesPageId+':案例管理'})
 assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:區域與縣市'}),undefined)
 const changedRegion=structuredClone(storeDoc.body)
 changedRegion.regionCities['北部'].reverse()
@@ -860,7 +867,7 @@ assert(sameContent({title:'相同',image:'/a.jpg'},{image:'/a.jpg',title:'相同
 
 {
  const page=pageEditors.find(p=>p.id===storeCasesPageId),document=docs.find(d=>d.id==='view-pages-gallery-slug-'),blocks=workbenchBlocks(page.id,pageBlocks(page,docs))
- assert.deepEqual(blocks.filter(b=>!b.secondary).slice(0,3).map(b=>b.name),['主視覺標題','麵包屑編輯設定','門市管理'])
+ assert.deepEqual(blocks.filter(b=>!b.secondary).slice(0,3).map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理'])
  assert.deepEqual(blocks.find(b=>b.name==='主視覺標題').fields.map(f=>f.path),['copy.heroTitle'])
  assert.deepEqual(blocks.find(b=>b.name==='麵包屑編輯設定').fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbParent','copy.breadcrumbDetail'])
  assert.deepEqual(storeCaseBreadcrumb({}),{breadcrumbHome:'首頁',breadcrumbParent:'案例門市',breadcrumbDetail:'門市案例'})
