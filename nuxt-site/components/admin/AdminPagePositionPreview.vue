@@ -14,6 +14,7 @@ import {builderStrengthsDocument,builderStrengthsCopy,builderStrengthImageAlt} f
 import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
 import {builderAppointmentHeading} from '~/shared/cms/builder-appointment.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
+import {HOME_PROMISE_ID,homeChineseTitle} from '~/shared/cms/home-headings.mjs'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
 const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
@@ -31,6 +32,8 @@ const isLabel=(label:string)=>/標籤|小標|前置英文/.test(label)
 const headings=computed(()=>scene.value.heading.filter((f:any)=>!isLabel(f.label)&&!/語音/.test(f.label)))
 const eyebrows=computed(()=>scene.value.heading.filter((f:any)=>isLabel(f.label)))
 const seriesHeading=computed(()=>['home:品牌系列','home:廚房產品'].includes(props.block?.id)?scene.value.heading.filter((f:any)=>['copy.englishLabel','copy.englishLead','copy.chineseTitle','copy.englishTitleFirst','copy.englishTitleSecond'].includes(f.path)):null)
+const promiseCopy=computed(()=>props.bodies[HOME_PROMISE_ID]?.copy)
+const promiseVisuals=computed(()=>props.bodies['site-visuals'])
 const regions=computed(()=>Object.entries(props.bodies['data-storeCases']?.regionCities||{}) as [string,string[]][])
 const filterCities=computed(()=>props.block?.storeRegion?regions.value.find(([region])=>region===props.block.storeRegion)?.[1]||[]:regions.value[0]?.[1]?.slice(0,3)||[])
 const filterImage=computed(()=>props.block?.storeRegion
@@ -98,7 +101,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
 <template>
  <div class="cms-page-position-scene cms-website-scene" :data-position-kind="scene.kind">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
-  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['hero','builder-series-hero','breadcrumb','page-breadcrumb','inactive','news-shared','franchise-application','franchise-download-breadcrumb'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image" :class="{'cms-franchise-download-context':franchiseDownloadCopy}">
+  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['home-promise','hero','builder-series-hero','breadcrumb','page-breadcrumb','inactive','news-shared','franchise-application','franchise-download-breadcrumb'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image" :class="{'cms-franchise-download-context':franchiseDownloadCopy}">
    <AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ franchiseDownloadCopy?.text4 || cataloguePageCopy?.text1 || pageTitle }}</span>
   </div>
   <section class="cms-scene-target" :aria-label="block?.name+'的位置示意'">
@@ -115,6 +118,19 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     </div>
    </template>
    <p v-else-if="scene.kind==='inactive'" class="cms-scene-a11y">官網目前沒有顯示區塊，這些設定不會出現在頁面上。</p>
+   <div v-else-if="scene.kind==='home-promise'&&promiseCopy" class="cms-home-promise">
+    <div class="cms-home-promise-copy">
+     <small class="cms-home-promise-label" :class="{'is-focused':highlighted('copy.text3')}">{{ promiseCopy.text3 }}</small>
+     <h3 :class="{'is-focused':highlighted('copy.chineseTitle')}">{{ homeChineseTitle(HOME_PROMISE_ID,promiseCopy) }}</h3>
+     <div class="cms-home-promise-english"><span :class="{'is-focused':highlighted('copy.text4')}">{{ promiseCopy.text4 }}</span><span :class="{'is-focused':highlighted('copy.text5')}">{{ promiseCopy.text5 }}</span></div>
+     <h4 :class="{'is-focused':highlighted('copy.text6')}">{{ promiseCopy.text6 }}</h4>
+     <p :class="{'is-focused':highlighted('copy.text7')}">{{ promiseCopy.text7 }}</p>
+     <span class="cms-button" :class="{'is-focused':highlighted('copy.text9')||highlighted('copy.field8')}">{{ promiseCopy.text9 }}<ArrowRight :size="13" aria-hidden="true" /></span>
+    </div>
+    <div class="cms-home-promise-video" :class="{'is-focused':highlighted('images.asset_10b5a86c')||highlighted('copy.field10')||highlighted('brandVideoSrc')}">
+     <InternalBrandVideo :cover="promiseVisuals?.images?.asset_10b5a86c" :alt="promiseCopy.field10" :src="promiseVisuals?.brandVideoSrc||'/section-3/service-process/video/service-guide-2027-20261027.mp4'" title="SAKURA 整體廚房品牌承諾影片" flat />
+    </div>
+   </div>
    <div v-else-if="scene.kind==='franchise-marquee'" class="cms-franchise-marquee-preview">
     <figure v-for="row in marqueeRows" :key="row.image">
      <figcaption>{{ row.label }}</figcaption>
@@ -502,7 +518,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="!storeExampleKind&&!['builder-series-hero','builder-catalogue-cards','download-catalogue','product-care','breadcrumb','page-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="!storeExampleKind&&!['home-promise','builder-series-hero','builder-catalogue-cards','download-catalogue','product-care','breadcrumb','page-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
    <p v-if="!['franchise-support','franchise-application','franchise-download-document'].includes(scene.kind)&&scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>

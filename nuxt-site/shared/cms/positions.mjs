@@ -109,6 +109,9 @@ const copyGroups={
  ],
 }
 const componentCopyGroups={
+ 'view-components-home-HomeWhatWeDo':[
+  ['品牌承諾',{text3:'區塊英文標籤',chineseTitle:'區塊中文主標題',text4:'區塊英文主標題（第一段）',text5:'區塊英文主標題（第二段）'}],
+ ],
  'view-components-SiteHeader':[
   ['左側主導覽',{field1:'前往頁面',text2:'型錄按鈕文字'}],['品牌系列選單設定',{text3:'區塊英文標籤',text4:'第一組系列標題',text5:'系列英文標籤',text6:'第二組系列標題',text7:'開放系列提示',text8:'尚未開放提示'}],
   ['桌機品牌標誌',{field9:'標誌前往頁面',field10:'品牌標誌圖片',field11:'圖片說明'}],['手機品牌標誌',{field12:'標誌前往頁面',field13:'品牌標誌圖片',field14:'圖片說明'}],
@@ -130,7 +133,7 @@ const section=(name,hint,kind='text',anchor='',image)=>({name,hint,kind,anchor,i
 const commonHero=['site-visuals','images.asset_7692def0']
 const taichungHero=['site-visuals','images.asset_44761f00']
 export const pagePositions={
- home:{hero:['view-components-home-HomeHero','slides.0.image'],sections:[section('首頁輪播圖片','首頁圖片、標題與連結','hero','hero-title'),section('品牌系列','首頁系列卡片與區塊介紹','cards','kitchen-series'),section('設計風格圖片','風格圖示、廚房圖片與連結','cards','home-styles'),section('廚房產品','品牌產品圖片與介紹','cards','services-heading'),section('集團品牌標誌','品牌標誌與前往頁面','logos','brand-logos'),section('設計案例','首頁輪播案例與更多按鈕','cards','gallery-heading'),section('品牌承諾','品牌介紹、影片封面與連結','video','brand-promise',['site-visuals','images.asset_10b5a86c']),section('全台門市據點','門市地圖、聯絡資料與查詢','map','contact')]},
+ home:{hero:['view-components-home-HomeHero','slides.0.image'],sections:[section('首頁輪播圖片','首頁圖片、標題與連結','hero','hero-title'),section('品牌系列','首頁系列卡片與區塊介紹','cards','kitchen-series'),section('設計風格圖片','風格圖示、廚房圖片與連結','cards','home-styles'),section('廚房產品','品牌產品圖片與介紹','cards','services-heading'),section('集團品牌標誌','品牌標誌與前往頁面','logos','brand-logos'),section('設計案例','首頁輪播案例與更多按鈕','cards','gallery-heading'),section('品牌承諾','品牌介紹、影片封面與連結','home-promise','brand-promise',['site-visuals','images.asset_10b5a86c']),section('全台門市據點','門市地圖、聯絡資料與查詢','map','contact')]},
  series:{hero:['data-kitchenSeries','KITCHEN_SERIES_PAGES.0.heroSlides'],sections:[
   {...section('品牌系列內頁','選擇系列，修改介紹、圖片與組合','cards'),aliases:['series:系列內頁']},
  ]},

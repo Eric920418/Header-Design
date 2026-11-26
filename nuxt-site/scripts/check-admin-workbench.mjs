@@ -120,6 +120,11 @@ for(const key of ['field1','field2']){
 }
 assert(promiseFields.some(f=>f.documentId===promise.id&&f.path==='copy.field8'&&f.schema.destination))
 assert(promiseFields.some(f=>f.path==='images.asset_10b5a86c'))
+assert.deepEqual(promiseFields.filter(f=>['copy.text3','copy.chineseTitle','copy.text4','copy.text5'].includes(f.path)).map(f=>f.label),['區塊英文標籤','區塊中文主標題','區塊英文主標題（第一段）','區塊英文主標題（第二段）'])
+const promiseEdit={...promise.body,copy:{...promise.body.copy,chineseTitle:'品牌承諾驗收'}}
+checkPageBody(pageEditors[0],promise.id,promise.body,promiseEdit,promise.schema)
+validate(promiseEdit,promise.schema)
+assert.equal(pageChanges(home,[promise],{[promise.id]:promise.body},{[promise.id]:promiseEdit}).find(change=>change.path==='copy.chineseTitle').before,'品牌承諾')
 const inspiration=workbenchBlocks('inspiration',pageBlocks(pageEditors.find(p=>p.id==='inspiration'),docs))
 assert.deepEqual(inspiration.map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理','頁面共用設定'])
 const inspirationShared=inspiration.find(b=>b.name==='頁面共用設定')
