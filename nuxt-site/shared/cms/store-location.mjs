@@ -2,6 +2,13 @@ import regions from './store-regions.json' with {type:'json'}
 export const HOME_STORES_ID='view-components-home-HomeStoreLocation'
 export const storeRegionCities=regions
 
+// Presentation-only filtering keeps the original array indexes and saved bodies intact.
+export function homeStoreListSchema(schema,region){
+ if(!Object.hasOwn(storeRegionCities,region))return schema
+ return {...schema,label:region+'門市',searchLabel:'搜尋'+region+'門市名稱',homeStoreRegion:region,
+  rowFilter:{path:'region',value:region},template:{...schema.template,region,city:''}}
+}
+
 export function newStoreId(stores){
  const used=new Set(stores.map(store=>store.id))
  let id

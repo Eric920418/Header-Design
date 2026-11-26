@@ -8,7 +8,7 @@ import {franchiseDownloadActions,franchiseDownloadSettings,franchiseMarqueeDocum
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
-import {storeRegionCities} from '~/shared/cms/store-location.mjs'
+import {HOME_STORES_ID,homeStoreListSchema,storeRegionCities} from '~/shared/cms/store-location.mjs'
 import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
 import {builderCatalogueNoticeAnchor,isBuilderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
 import {productCatalogueDocument,productCatalogueTitle} from '~/shared/cms/product-catalogue.mjs'
@@ -24,6 +24,9 @@ const franchiseNews=computed(()=>active.value?.kind==='franchise-news')
 const newsArticleList=computed(()=>newsRecent.value||franchiseNews.value||active.value?.kind==='news-overview')
 const regionField=computed(()=>active.value?.fields.find((field:any)=>field.documentId==='data-storeCases'&&field.path==='regionCities'))
 const regionNames=Object.keys(storeRegionCities),storeRegion=ref(regionNames[0]!),regionLabelId=useId()
+const homeStoreField=computed(()=>props.id==='home'?active.value?.fields.find((field:any)=>field.documentId===HOME_STORES_ID&&field.path==='stores'):undefined)
+const homeStoreSchema=computed(()=>homeStoreField.value?homeStoreListSchema(homeStoreField.value.schema,storeRegion.value):undefined)
+const homeStoreScope=HOME_STORES_ID+':stores',homeStoreTarget=ref('')
 const cityListPath=computed(()=>`regionCities.${storeRegion.value}`)
 const cityListScope='data-storeCases:regionCities.'
 function selectStoreRegion(region:string){
@@ -32,9 +35,16 @@ function selectStoreRegion(region:string){
 watch(()=>route.query.list,list=>{
  if(props.id==='stores'&&typeof list==='string'&&list.startsWith(cityListScope))selectStoreRegion(list.slice(cityListScope.length))
 },{immediate:true})
+watch([()=>route.query.list,()=>route.query.item,()=>bodies.value[HOME_STORES_ID]?.stores],()=>{
+ const target=String(route.query.list)+':'+String(route.query.item)
+ if(props.id!=='home'||route.query.list!==homeStoreScope){homeStoreTarget.value='';return}
+ if(homeStoreTarget.value===target)return
+ const store=bodies.value[HOME_STORES_ID]?.stores?.find((s:any)=>String(s.id)===String(route.query.item))
+ if(store){homeStoreTarget.value=target;selectStoreRegion(store.region)}
+},{immediate:true})
 function changeStoreRegion(event:Event){
  selectStoreRegion((event.target as HTMLSelectElement).value)
- if(typeof route.query.list==='string'&&route.query.list.startsWith(cityListScope))
+ if(typeof route.query.list==='string'&&(route.query.list.startsWith(cityListScope)||route.query.list===homeStoreScope))
   void router.replace({query:{...route.query,list:undefined,item:undefined}})
 }
 const workbench={focused:ref(''),editing:ref(''),selection:ref<any>(null),rows:ref<Record<string,any>>({}),baseline,documents:docs,metadata:computed(()=>pageData.value?.rowPresentation||{}),busy,returnFocus:()=>{},position:()=>{positionOpen.value=true},select:(edit:boolean)=>{positionOpen.value=!edit&&window.innerWidth<1024}}
@@ -66,6 +76,7 @@ const positionBlock=computed(()=>{
  }
  if(newsArticleList.value&&!workbench.editing.value)return {...block,previewPage:block.href}
  if(sharedNews.value&&focusedGroup.value===newsTopLinks&&block.href.endsWith('#article-categories'))return {...block,previewPage:block.href.replace(/#article-categories$/,'#article-header-categories')}
+ if(homeStoreField.value)return {...block,homeStoreRegion:storeRegion.value}
  if(regionField.value)return {...block,storeRegion:storeRegion.value,previewPage:`/gallery?region=${encodeURIComponent(storeRegion.value)}#gallery-filter-title`}
  if(seriesPart.value&&block)return {...block,name:seriesPart.value.name,seriesPart:seriesPart.value.id}
  if(knowledgeArticles.value){
@@ -304,6 +315,7 @@ async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;co
  const index=Number(issue.path.slice(f.path.length+1).split('.')[0])
  return recentArticleIndexes(pageFieldValue(bodies.value,f),ids).includes(index)
  }));if(block&&(!seriesPart.value||block.id!==active.value?.id))await selectBlock(block.id);const part=seriesPart.value&&issue.documentId==='data-kitchenSeries'&&sectionForSeriesField(issue.path);if(part)await chooseLocation(part.id);if(issue.documentId===headerId&&desktopCatalogueFields.includes(issue.path))await openCatalogueEditor();if(props.id==='knowledge'&&isSystemCabinetDocument(issue.documentId)){const field=systemCabinetFields.value.find((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.')));await openSystemCabinet('knowledge:'+(field?.formGroup||'系統櫃材質重點'))}
+ if(homeStoreField.value&&issue.documentId===HOME_STORES_ID&&issue.path.startsWith('stores.')){const store=bodies.value[HOME_STORES_ID]?.stores?.[Number(issue.path.split('.')[1])];if(store)selectStoreRegion(store.region)}
  if(regionField.value&&issue.documentId===regionField.value.documentId&&issue.path.startsWith('regionCities.'))selectStoreRegion(issue.path.split('.')[1])
  await nextTick();await nextTick();const input=formRoot.value?.querySelector<HTMLElement>('[aria-invalid=true]');for(let p=input?.parentElement;p;p=p.parentElement)if(p instanceof HTMLDetailsElement)p.open=true;input?.focus()}
 function reload(){if(!dirty.value||window.confirm('重新載入會捨棄本頁尚未儲存的修改，確定繼續？'))void load()}
@@ -434,6 +446,9 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
       <AdminFields :model-value="row.value.copy.join('\n')" :schema="{...f.schema.item.fields.copy,type:'string',help:'每行顯示為一句服務說明。'}" :document-id="f.documentId" :path="`services.${row.index}.copy`" @update:model-value="updateHomeOneService(f,row.index,'copy',$event)" />
      </template>
     </AdminItems>
+   </div><div v-else-if="f===homeStoreField" class="cms-block-field cms-home-store-manager">
+    <div class="cms-field cms-region-picker"><label :for="regionLabelId">區域</label><select :id="regionLabelId" :value="storeRegion" @change="changeStoreRegion"><option v-for="region in regionNames" :key="region" :value="region">{{ region }}</option></select></div>
+    <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="homeStoreSchema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
    </div><div v-else class="cms-block-field"><AdminFields :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path.split('.').at(-1)" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" /></div></template></fieldset>
    <fieldset v-if="builderNoticeFields.length" :disabled="busy" class="cms-edit-form cms-builder-notice-settings" :data-position-group="builderCatalogueNoticeAnchor">
     <legend>型錄下方說明</legend>

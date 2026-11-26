@@ -20,6 +20,7 @@ import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/pub
 import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalogueNotice} from '../shared/cms/builder-catalogue.mjs'
 import {remainingHomeHeadings,homeRemainingHeading,effectiveHomeHeadingBody} from '../shared/cms/home-headings.mjs'
+import {HOME_STORES_ID,homeStoreListSchema} from '../shared/cms/store-location.mjs'
 import {headingFieldLabel} from '../shared/cms/heading-labels.mjs'
 import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueFields,productCatalogueTitle} from '../shared/cms/product-catalogue.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
@@ -651,6 +652,40 @@ assert.equal(ui.active.value.key,'direct-8');assert.equal(ui.page.value,2);asser
 ui.item(8,{...model.modelValue[8],title:'仍在編輯'});await nextTick();assert.equal(ui.active.value.key,'direct-8');await ui.back();await nextTick();assert.equal(route.query.item,undefined);assert.equal(route.query.list,undefined);route.query={list:'direct-test:items',item:'direct-8'};await nextTick();await nextTick();assert.equal(workbench.editing.value,'direct-test:items','The same search result must be able to reopen after returning')
 const shortcutBefore=model.modelValue.length;model.schema.source=false;route.query={create:'direct-test:items'};await nextTick();await new Promise(resolve=>setImmediate(resolve));assert.equal(model.modelValue.length,shortcutBefore+1);assert.equal(route.query.create,undefined);await nextTick();assert.equal(model.modelValue.length,shortcutBefore+1,'An already-consumed create link must not add another item')
 let returnedToAdd=0;ui.root.value={querySelector:selector=>selector.includes('data-row-key')?null:{focus:()=>returnedToAdd++}};ui.focusRow();await nextTick();assert.equal(returnedToAdd,1,'Cancelling the last new item returns focus to add/search instead of the page body');ui.root.value=undefined
+// Region management filters the view while preserving global indexes and editing state.
+model.documentId=HOME_STORES_ID;model.path='stores'
+const storeSchema=home.find(b=>b.id==='home:全台門市據點').fields.find(f=>f.path==='stores').schema
+const storeRows=Array.from({length:10},(_,i)=>({id:200+i,name:'門市 '+i,region:i%3===1?'中部':'北部',city:i%3===1?'臺中市':'臺北市',address:'原地址 '+i,phone:'原電話 '+i}))
+model.modelValue=structuredClone(storeRows);workbench.baseline.value={[HOME_STORES_ID]:{stores:structuredClone(storeRows)}};workbench.rows.value={};state.value={};route.query={};errors.value=[];workbench.focused.value='';workbench.editing.value=''
+model.schema=homeStoreListSchema(storeSchema,'北部');await nextTick()
+assert.equal(ui.rows.value.length,7);assert.equal(ui.visible.value.length,6)
+assert.equal(ui.rows.value[1].index,2,'Filtering keeps the original write index')
+const storesBefore=JSON.stringify(model.modelValue)
+ui.page.value=2;await nextTick();ui.search.value='門市 9';await nextTick();assert.equal(ui.rows.value.length,1)
+model.schema=homeStoreListSchema(storeSchema,'中部');workbench.focused.value='';workbench.editing.value='';await nextTick()
+assert.equal(ui.rows.value.length,3);assert.equal(ui.search.value,'');assert.equal(ui.page.value,1)
+assert.equal(JSON.stringify(model.modelValue),storesBefore,'Changing region must not write store data')
+const central=ui.rows.value[1];ui.choose(central,true)
+ui.item(central.index,{...central.value,region:'南部',city:''});await nextTick()
+assert.equal(ui.active.value.key,central.key,'Changing region keeps the editor open for city selection')
+ui.item(central.index,{...ui.active.value.value,city:'高雄市'});await nextTick()
+assert.equal(ui.active.value.value.city,'高雄市')
+ui.cancelItem();await nextTick();assert.equal(JSON.stringify(model.modelValue),storesBefore,'Cancel restores the original region and city')
+ui.choose(ui.rows.value[0],true);const movedIndex=ui.active.value.index
+ui.item(movedIndex,{...ui.active.value.value,region:'南部',city:'高雄市'});await nextTick();await ui.back();await nextTick()
+assert.equal(ui.page.value,1);assert(ui.active.value?.value.region==='中部','Returning selects a remaining store in this region')
+assert.equal(JSON.stringify(model.modelValue.filter(s=>s.region==='北部')),JSON.stringify(storeRows.filter(s=>s.region==='北部')),'Other regions remain untouched')
+model.schema=homeStoreListSchema(storeSchema,'南部');workbench.focused.value='';workbench.editing.value='';await nextTick()
+assert.equal(ui.rows.value.length,1);assert.equal(ui.rows.value[0].index,movedIndex)
+ui.add();await nextTick();assert.equal(ui.active.value.value.region,'南部');assert.equal(ui.active.value.value.city,'');assert.equal(ui.active.value.value.name,'新增門市')
+ui.cancelItem();await nextTick();assert.equal(model.modelValue.length,10,'Cancel a new store removes only the new item')
+model.schema=homeStoreListSchema(storeSchema,'離島');workbench.focused.value='';workbench.editing.value='';workbench.selection.value=null;await nextTick()
+assert.equal(ui.rows.value.length,0);assert.equal(workbench.selection.value,null)
+model.schema=homeStoreListSchema(storeSchema,'北部');workbench.focused.value='';await nextTick()
+assert.equal(ui.search.value,'門市 9','Search is scoped to each region')
+assert.equal(ui.rows.value.length,1)
+const errorIndex=model.modelValue.findIndex(s=>s.region==='中部');errors.value=[{documentId:HOME_STORES_ID,path:'stores.'+errorIndex+'.name',message:'請填寫門市名稱'}];await nextTick();model.schema=homeStoreListSchema(storeSchema,'中部');workbench.focused.value='';workbench.editing.value='';await nextTick();assert.equal(ui.active.value.index,errorIndex,'A server error must open the original row after switching to its region');assert.equal(workbench.editing.value,HOME_STORES_ID+':stores');errors.value=[]
+console.log('PASS: homepage store region counts, original write indexes, per-region search/page, cross-region editing and cancellation, new-store defaults, empty regions and other-region preservation')
 scope.stop()
 const nestedModel=reactive({modelValue:['一','二'],schema:{type:'array',item:{type:'string'},template:''},documentId:'nested',path:'paragraphs'}),nestedState=ref({}),nested={...context,defineProps:()=>nestedModel,defineEmits:()=>((_,v)=>nestedModel.modelValue=v),inject:(key,fallback)=>key==='cms-array-depth'?1:key==='cms-item-selections'?nestedState:fallback}
 const nestedScope=effectScope();nestedScope.run(()=>runInNewContext(code,nested));nested.ui.add();await nextTick();assert.equal(nested.ui.active.value.index,2,'Nested text/image additions must open the new item');nested.ui.choose(nested.ui.rows.value[0]);nested.ui.move(0,1);await nextTick();assert.equal(nested.ui.active.value.value,'一','Moving a nested item must keep editing the same content');nestedScope.stop()

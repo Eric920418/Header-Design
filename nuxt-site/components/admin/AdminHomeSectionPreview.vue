@@ -14,7 +14,8 @@ const galleryCards=computed(()=>[1,2].flatMap(offset=>{
 }))
 const stores=computed(()=>props.bodies[HOME_STORES_ID])
 const storeHeading=computed(()=>homeRemainingHeading(HOME_STORES_ID,stores.value?.copy))
-const store=computed(()=>props.selected?.path==='stores'?props.selected.value:stores.value?.stores?.[0])
+const store=computed(()=>props.selected?.path==='stores'?props.selected.value:stores.value?.stores?.find((s:any)=>!props.block.homeStoreRegion||s.region===props.block.homeStoreRegion))
+const mapStore=computed(()=>store.value||stores.value?.stores?.[0])
 const styles=computed(()=>props.bodies['view-components-home-HomeStyleMarquee']?.styles||[])
 const style=computed(()=>props.selected?.path==='styles'?props.selected.value:styles.value[0])
 const logos=computed(()=>props.selected?.path==='logos'?[props.selected.value]:props.bodies['view-components-home-LogoMarquee']?.logos||[])
@@ -46,12 +47,12 @@ const logos=computed(()=>props.selected?.path==='logos'?[props.selected.value]:p
      <strong :class="{'is-focused':focus('copy.englishTitleThird')}">{{ storeHeading.englishTitleThird }}</strong>
     </div>
    </header>
-   <div v-if="store" class="cms-home-store-layout">
-    <div class="cms-home-store-map"><GoogleStoreMap :address="store.address" :name="store.name" :focus="Boolean(selected)" /></div>
+   <div class="cms-home-store-layout">
+    <div class="cms-home-store-map"><GoogleStoreMap v-if="mapStore" :address="mapStore.address" :name="mapStore.name" :focus="Boolean(selected&&store)" /></div>
     <div class="cms-home-store-information">
-     <div class="cms-home-store-filters"><span :class="{'is-focused':focus('copy.text4')}">{{ stores?.copy.text4 }} <MapPin :size="12" /></span><span>{{ store.region }}</span><span>{{ store.city }}</span></div>
-     <article><h4 :class="{'is-focused':itemFocus('stores','name')}">{{ store.name }}</h4><p :class="{'is-focused':itemFocus('stores','address')}">{{ store.address }}</p><p :class="{'is-focused':itemFocus('stores','phone')}">{{ store.phone }}</p></article>
-     <p v-if="focus('copy.text5')" class="is-focused">{{ stores?.copy.text5 }}</p>
+     <div class="cms-home-store-filters"><span :class="{'is-focused':focus('copy.text4')}">{{ stores?.copy.text4 }} <MapPin :size="12" /></span><span>{{ store?.region||block.homeStoreRegion }}</span><span>{{ store?.city||'選擇城市' }}</span></div>
+     <article v-if="store"><h4 :class="{'is-focused':itemFocus('stores','name')}">{{ store.name }}</h4><p :class="{'is-focused':itemFocus('stores','address')}">{{ store.address }}</p><p :class="{'is-focused':itemFocus('stores','phone')}">{{ store.phone }}</p></article>
+     <p v-if="!store||focus('copy.text5')" :class="{'is-focused':focus('copy.text5')}">{{ stores?.copy.text5 }}</p>
     </div>
    </div>
   </section>

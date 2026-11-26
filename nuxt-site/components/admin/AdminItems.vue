@@ -12,7 +12,7 @@ const route=useRoute(),router=useRouter(),cancelOpen=ref(false),moreOpen=ref(fal
 const depth=inject('cms-array-depth',0);provide('cms-array-depth',depth+1)
 const workbench=depth===0?inject<any>('cms-workbench',null):null
 const state=inject<any>('cms-item-selections',ref({})),errors=inject<any>('cms-field-errors',ref([])),root=ref<HTMLElement>()
-const scope=computed(()=>props.documentId+':'+props.path),fixedArticleIds=computed(()=>props.schema.rowIds||props.schema.recentArticleIds),viewScope=computed(()=>scope.value+(fixedArticleIds.value?':recent':''))
+const scope=computed(()=>props.documentId+':'+props.path),fixedArticleIds=computed(()=>props.schema.rowIds||props.schema.recentArticleIds),viewScope=computed(()=>scope.value+(fixedArticleIds.value?':recent':'')+(props.schema.homeStoreRegion?':region:'+props.schema.homeStoreRegion:''))
 const selected=computed({get:()=>state.value[viewScope.value],set:value=>state.value={...state.value,[viewScope.value]:value}})
 const tracking=computed(()=>{
  if(!workbench?.rows)return null
@@ -26,14 +26,15 @@ function syncTracking(){const t=tracking.value;if(!t)return;const keys=(props.mo
 const search=computed({get:()=>state.value[viewScope.value+':search']||'',set:value=>state.value={...state.value,[viewScope.value+':search']:value}}),page=computed({get:()=>Number(state.value[viewScope.value+':page']||1),set:value=>state.value={...state.value,[viewScope.value+':page']:String(value)}})
 const pageSize=workbench?6:10
 const caseTable=computed(()=>props.schema.editor==='case-table'),dragged=ref(''),dropTarget=ref(''),orderNotice=ref('')
+const sourceRows=computed(()=>(props.modelValue||[]).map((value,index)=>({value,index,key:tracking.value?.order[index]??itemKey(value,index)})))
 const allRows=computed(()=>{
- const rows=(props.modelValue||[]).map((value,index)=>({value,index,key:tracking.value?.order[index]??itemKey(value,index)}))
+ const rows=sourceRows.value
  if(fixedArticleIds.value)return recentArticleIndexes(props.modelValue,fixedArticleIds.value).map(index=>rows[index]!)
  const items=rows.filter(r=>!props.schema.rowFilter||valueAt(r.value,props.schema.rowFilter.path)===props.schema.rowFilter.value)
  return props.schema.newsOverview?items.sort((a,b)=>compareNewsDates(a.value.summary.publishedAt,b.value.summary.publishedAt)):items
 })
 const rows=computed(()=>allRows.value.filter(r=>caption(r).toLocaleLowerCase().includes(search.value.toLocaleLowerCase())))
-const active=computed(()=>allRows.value.find(r=>r.key===selected.value)),pages=computed(()=>Math.max(1,Math.ceil(rows.value.length/pageSize))),visible=computed(()=>rows.value.slice((page.value-1)*pageSize,page.value*pageSize))
+const active=computed(()=>(props.schema.homeStoreRegion&&workbench?.editing.value===scope.value?sourceRows.value:allRows.value).find(r=>r.key===selected.value)),pages=computed(()=>Math.max(1,Math.ceil(rows.value.length/pageSize))),visible=computed(()=>rows.value.slice((page.value-1)*pageSize,page.value*pageSize))
 const editing=computed(()=>active.value&&(!workbench||workbench.editing.value===scope.value))
 const itemSchema=computed(()=>{
  const s=JSON.parse(JSON.stringify(props.schema.item))
@@ -53,7 +54,7 @@ function cancelItem(){const row=active.value,t=tracking.value;if(!row||!t)return
 function announce(){if(!workbench||workbench.focused.value!==scope.value)return;workbench.selection.value=active.value?{scope:scope.value,caption:caption(active.value),image:thumbnail(active.value),value:active.value.value,documentId:props.documentId,path:props.path,index:active.value.index,href:metadata(active.value).href}:null}
 function focusRow(){nextTick(()=>{const row=root.value?.querySelector<HTMLElement>(`[data-row-key="${CSS.escape(selected.value||'')}"] .cms-item-open`);(row||root.value?.querySelector<HTMLElement>('.cms-case-empty button,.cms-items-tools button,input[type=search]'))?.focus()})}
 function choose(row:any,edit=false,openPosition=true){if(!row)return;selected.value=row.key;moreOpen.value=false;itemNotice.value='';if(workbench){workbench.focused.value=scope.value;workbench.editing.value=edit?scope.value:'';workbench.returnFocus=focusRow;announce();if(edit||openPosition)workbench.select?.(edit)}nextTick(()=>{if(edit||!workbench)document.querySelector<HTMLElement>(workbench?'#cms-item-editor .cms-item-editor-heading':'.cms-item-editor-heading')?.focus()})}
-async function back(){if(workbench){const row=active.value;workbench.editing.value='';if(row&&!rows.value.some(r=>r.key===row.key)){search.value='';await nextTick();page.value=Math.floor(allRows.value.findIndex(r=>r.key===row.key)/pageSize)+1;selected.value=row.key;announce()}if(route.query.list===scope.value)await router.replace({query:{...route.query,list:undefined,item:undefined}});focusRow()}else{selected.value=undefined;nextTick(()=>root.value?.querySelector<HTMLElement>('.cms-item-open')?.focus())}}
+async function back(){if(workbench){const row=active.value;workbench.editing.value='';if(row&&!rows.value.some(r=>r.key===row.key)){search.value='';await nextTick();const index=allRows.value.findIndex(r=>r.key===row.key);page.value=index<0?1:Math.floor(index/pageSize)+1;selected.value=index<0?allRows.value[0]?.key:row.key;announce()}if(route.query.list===scope.value)await router.replace({query:{...route.query,list:undefined,item:undefined}});focusRow()}else{selected.value=undefined;nextTick(()=>root.value?.querySelector<HTMLElement>('.cms-item-open')?.focus())}}
 async function clearCaseSearch(){
  search.value=''
  await nextTick()
@@ -66,7 +67,7 @@ function add(){
   if('id'in t)t.id=props.schema.idGenerator==='store'?newStoreId(props.modelValue):typeof t.id==='number'?Math.max(0,...props.modelValue.map(v=>Number(v.id)||0))+1:crypto.randomUUID()
   if('slug'in t)t.slug='new-'+crypto.randomUUID().slice(0,8)
   if(t.summary){t.summary.title='新增'+(props.schema.newItemLabel||'文章');if(props.schema.newCategory)t.summary.category=props.schema.newCategory;t.summary.categoryLabel=({latest:'最新消息',activities:'優惠活動',video:'媒體影音'} as any)[t.summary.category]||'廚房知識';t.summary.publishedAt=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());t.summary.displayDate=articleDateLabel(t.summary.publishedAt)}
-  if('title'in t)t.title=props.documentId==='custom-cases'?'新增案例':props.documentId==='view-components-home-HomeHero'?'新增輪播':'新增內容';if('name'in t)t.name='新增內容'
+  if('title'in t)t.title=props.documentId==='custom-cases'?'新增案例':props.documentId==='view-components-home-HomeHero'?'新增輪播':'新增內容';if('name'in t)t.name=props.schema.homeStoreRegion?'新增門市':'新增內容'
  }
  const index=props.schema.newsOverview?allRows.value.filter(row=>compareNewsDates(row.value.summary.publishedAt,t.summary.publishedAt)<=0).length:allRows.value.length
  const key=tracking.value&&!(t&&typeof t==='object'&&(t.id??t.slug)!==undefined)?crypto.randomUUID():itemKey(t,props.modelValue.length);tracking.value?.order.push(key);emit('update:modelValue',[...props.modelValue,t]);search.value='';page.value=Math.floor(index/pageSize)+1;choose({key},true)
@@ -88,7 +89,7 @@ watch(search,()=>page.value=1)
 watch(pages,n=>{if(page.value>n)page.value=n})
 watch([visible,active,()=>workbench?.focused.value],()=>{if(!workbench)return;if(!workbench.focused.value&&visible.value.length)workbench.focused.value=scope.value;if(!active.value&&visible.value[0])selected.value=visible.value[0].key;announce()},{immediate:true})
 watch([page,search],()=>{if(workbench&&visible.value[0]&&!visible.value.some(r=>r.key===selected.value))choose(visible.value[0],false,false)})
-watch(()=>errors.value,()=>{const prefix=(props.path?props.path+'.':''),issue=errors.value?.find((e:any)=>e.documentId===props.documentId&&e.path.startsWith(prefix));const index=allRows.value.findIndex(r=>r.index===Number(issue?.path.slice(prefix.length).split('.')[0]));if(issue&&index>=0){search.value='';page.value=Math.floor(index/pageSize)+1;choose(allRows.value[index],true)}},{deep:true,immediate:true})
+watch([()=>errors.value,()=>props.schema.homeStoreRegion],()=>{const prefix=(props.path?props.path+'.':''),issue=errors.value?.find((e:any)=>e.documentId===props.documentId&&e.path.startsWith(prefix));const index=allRows.value.findIndex(r=>r.index===Number(issue?.path.slice(prefix.length).split('.')[0]));if(issue&&index>=0){search.value='';page.value=Math.floor(index/pageSize)+1;choose(allRows.value[index],true)}},{deep:true,immediate:true})
 watch([()=>route.query.item,()=>route.query.list,allRows],()=>{const target=String(route.query.list)+':'+String(route.query.item);if(!workbench)return;if(route.query.list!==scope.value){directTarget.value='';return}if(directTarget.value===target)return;const row=allRows.value.find(r=>r.key===route.query.item);if(!row)return;directTarget.value=target;search.value='';page.value=Math.floor(allRows.value.indexOf(row)/pageSize)+1;nextTick(()=>choose(row,true))},{immediate:true})
 watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||fixedArticleIds.value||target!==scope.value)return;await nextTick();if(route.query.create!==scope.value)return;await router.replace({query:{...route.query,create:undefined}});add()},{immediate:true})
 </script>
