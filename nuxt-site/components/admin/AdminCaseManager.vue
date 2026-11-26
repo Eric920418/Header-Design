@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {GripVertical,Plus} from 'lucide-vue-next'
 import {caseSources,caseManagementRows,filterCaseManagement,storeCaseManagementLink} from '~/shared/cms/case-management.mjs'
-const props=defineProps<{library:any[];customRows:any[];publishedCustom:any[];choose:(row:any,edit?:boolean)=>void;add:()=>void;reorder:(from:number,to:number)=>void;publication:(row:any)=>any}>()
+const props=defineProps<{library:any[];customRows:any[];publishedCustom:any[];choose:(row:any,edit?:boolean,openPosition?:boolean)=>void;add:()=>void;reorder:(from:number,to:number)=>void;publication:(row:any)=>any}>()
 const route=useRoute(),workbench=inject<any>('cms-workbench'),sourceId=useId(),searchId=useId()
 const source=ref(caseSources.includes(String(route.query.caseSource))?String(route.query.caseSource):'')
 const search=ref(typeof route.query.caseQuery==='string'?route.query.caseQuery:'')
-const page=ref(Number.isSafeInteger(Number(route.query.casePage))&&Number(route.query.casePage)>0?Number(route.query.casePage):1),pageSize=6,dragged=ref<number|null>(null)
+const page=ref(Number.isSafeInteger(Number(route.query.casePage))&&Number(route.query.casePage)>0?Number(route.query.casePage):1),pageSize=6,dragged=ref<number|null>(null),returning=ref(false)
 const all=computed(()=>caseManagementRows(props.library,props.customRows,props.publishedCustom))
 const filtered=computed(()=>filterCaseManagement(all.value,source.value,search.value))
 const pages=computed(()=>Math.max(1,Math.ceil(filtered.value.length/pageSize)))
@@ -20,7 +20,7 @@ function choose(row:any){
  workbench.selection.value={scope:'case-library',caption:row.title,image:row.image,source:row.source,value:{...row,id:row.slug},documentId:row.source==='門市案例'?'data-storeCases':'catalog-cases',path:row.source==='門市案例'?'storeCases':'items',index:-1,href:row.route}
  workbench.select?.(false)
 }
-function addCase(){source.value='自建案例';search.value='';props.add();page.value=Math.floor(props.customRows.length/pageSize)+1}
+async function addCase(){source.value='自建案例';search.value='';props.add();await nextTick();page.value=Math.floor(Math.max(0,props.customRows.length-1)/pageSize)+1}
 function moveCase(from:number,to:number){
  if(!sortable.value||to<0||to>=props.customRows.length)return
  props.reorder(from,to);page.value=Math.floor(to/pageSize)+1
@@ -32,7 +32,20 @@ function drop(event:DragEvent,row:any){
 }
 watch([source,search],()=>page.value=1)
 watch(pages,count=>{if(page.value>count)page.value=count},{immediate:true})
-watch([visible,()=>workbench?.focused.value],()=>{if(workbench?.editing.value)return;if(!visible.value.length){if(workbench)workbench.selection.value=null;return}if(!visible.value.some(selected))choose(visible.value[0])},{immediate:true})
+watch(()=>workbench?.editing.value,async (editing,previous)=>{
+ if(editing||!previous)return
+ const row=all.value.find(selected)
+ if(!row?.customRow)return
+ returning.value=true
+ if(source.value&&source.value!==row.source)source.value=row.source
+ if(!filterCaseManagement([row],source.value,search.value).length)search.value=''
+ await nextTick()
+ const index=filtered.value.findIndex((item:any)=>item.key===row.key)
+ if(index>=0){page.value=Math.floor(index/pageSize)+1;props.choose(row.customRow,false,false)}
+ await nextTick();returning.value=false
+ document.querySelector<HTMLElement>('.cms-case-manager-row.is-selected .cms-item-open')?.focus()
+})
+watch([visible,()=>workbench?.focused.value,()=>workbench?.editing.value],()=>{if(returning.value||workbench?.editing.value)return;if(!visible.value.length){if(workbench)workbench.selection.value=null;return}if(!visible.value.some(selected))choose(visible.value[0])},{immediate:true})
 </script>
 <template>
  <section class="cms-case-manager-list" aria-label="全部案例管理">
