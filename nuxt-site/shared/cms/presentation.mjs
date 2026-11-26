@@ -158,6 +158,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁品牌館資訊與預約','建商首頁的預約區']}
  if(resourceId===builderAppointmentDocument&&isBuilderAppointmentHeading(normalized))return{label:schema.label}
+ if(resourceId==='data-catalogues'&&normalized==='KITCHEN_CATALOGUES')return{label:'型錄清單',searchLabel:'搜尋型錄名稱'}
  if(resourceId===builderStrengthsDocument&&normalized==='strengths')return{label:'智能整合圖文',newItemLabel:'圖文項目'}
  if(resourceId===builderStrengthsDocument&&isBuilderStrengthsCopy(normalized))return{label:schema.label}
  if(resourceId===builderHomeOneDocument){
