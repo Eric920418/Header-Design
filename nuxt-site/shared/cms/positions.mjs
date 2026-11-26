@@ -67,7 +67,7 @@ const copyGroups={
   ['區塊共用設定',{text5:'區塊中文主標題（第一行）',text6:'區塊中文主標題（第二行）',field7:'品牌標誌',field8:'標誌圖片說明',text9:'檔案介紹文字',text10:'格式欄位名稱',text11:'檔案格式文字',text12:'頁數欄位名稱',text13:'頁數文字',text14:'大小欄位名稱',text15:'檔案大小文字',text16:'線上預覽按鈕文字',text17:'下載按鈕文字',text18:'載入中的提示文字',text19:'載入失敗的提示文字',text20:'重試按鈕文字',text21:'頁碼前的文字',field22:'返回按鈕前往頁面',text23:'返回按鈕文字'}],
  ],
  'gallery-index':[
-  ['主視覺標題',{text1:'主視覺標題'}],['地區篩選列',{text2:readingField('門市篩選列','篩選區塊名稱'),text3:'區域標籤文字',text4:'全部區域按鈕文字',text5:'縣市標籤文字'}],
+  ['主視覺標題',{text1:'主視覺標題'}],['麵包屑編輯設定',{breadcrumbHome:'首頁連結文字',breadcrumbList:'門市列表目前位置文字'}],['地區篩選列',{text2:readingField('門市篩選列','篩選區塊名稱'),text3:'區域標籤文字',text4:'全部區域按鈕文字',text5:'縣市標籤文字'}],
   ['搜尋結果提示',{text6:'門市筆數後的文字'}],['無符合門市提示',{text7:'提示標題',text8:'提示說明',text9:'查看全部按鈕文字'}],
  ],
  'gallery-slug-':[
@@ -158,6 +158,7 @@ export const pagePositions={
  ]},
  stores:{hero:commonHero,sections:[
   section('主視覺標題','門市列表最上方的大標題','hero','gallery-page-title'),
+  section('麵包屑編輯設定','門市列表主視覺下方的位置導覽文字','page-breadcrumb','gallery-breadcrumb'),
   section('地區篩選列','區域與縣市的篩選名稱','filter','gallery-filter-title'),
   section('搜尋結果提示','篩選後的門市筆數說明','results','gallery-filter-title'),
   section('無符合門市提示','沒有符合條件門市時的訊息','empty','gallery-filter-title'),

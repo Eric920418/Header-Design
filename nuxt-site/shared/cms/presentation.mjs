@@ -177,7 +177,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='data-franchise'&&normalized==='franchiseFaqItems')return{label:'加盟問答',searchLabel:'搜尋加盟問題',newItemLabel:'問題'}
  if(resourceId==='view-pages-news-latest-slug-'&&normalized==='copy.text6')return{label:'報名 QR Code 下方文字',hidden:true,readOnly:true}
  if(resourceId===productCatalogueDocument&&normalized.startsWith('copy.')&&(normalized.startsWith('copy.breadcrumb')||Object.hasOwn(productCatalogueFields,key)))return{label:schema.label}
- if(['view-pages-design-inspiration-index','view-pages-knowledge-index','view-pages-catalogues-kitchenware-catalog','view-pages-news-latest-index','view-pages-franchising-download','view-pages-builders-catalogues'].includes(resourceId)&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
+ if(['view-pages-design-inspiration-index','view-pages-knowledge-index','view-pages-gallery-index','view-pages-catalogues-kitchenware-catalog','view-pages-news-latest-index','view-pages-franchising-download','view-pages-builders-catalogues'].includes(resourceId)&&normalized.startsWith('copy.breadcrumb')&&schema.label)return{label:schema.label}
  if(resourceId==='view-pages-builders-sakura-kitchen'&&['copy.field4','copy.field6'].includes(normalized))return{label:positionField(resourceId,normalized).label,previewTone:'dark'}
  if(resourceId===builderCatalogueDocument){
   if(isBuilderCatalogueNotice(normalized))return{label:schema.label}

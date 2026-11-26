@@ -17,7 +17,7 @@ import {normalizeVideos,validate} from '../server/cms/content.mjs'
 import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
-import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
+import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,storeBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalogueNotice} from '../shared/cms/builder-catalogue.mjs'
 import {remainingHomeHeadings,homeRemainingHeading,effectiveHomeHeadingBody} from '../shared/cms/home-headings.mjs'
 import {caseManagementRows,filterCaseManagement,storeCaseManagementLink,caseManagementReturn} from '../shared/cms/case-management.mjs'
@@ -831,4 +831,19 @@ assert(sameContent({title:'相同',image:'/a.jpg'},{image:'/a.jpg',title:'相同
  assert.equal(headingFieldLabel('區塊英文主標題（第二段）'),'區塊英文主標題（第二段）')
  assert.deepEqual(document.body,before)
  console.log('PASS service title labels, editable original rail label, combined legacy English title, preserved old fields, scoped review and immutable fallback')
+}
+
+{
+ const page=pageEditors.find(p=>p.id==='stores'),document=docs.find(d=>d.id==='view-pages-gallery-index'),blocks=workbenchBlocks('stores',pageBlocks(page,docs))
+ assert.deepEqual(blocks.filter(b=>!b.secondary).slice(0,3).map(b=>b.name),['主視覺標題','麵包屑編輯設定','地區篩選列'])
+ const trail=blocks.find(b=>b.name==='麵包屑編輯設定')
+ assert.deepEqual(trail.fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbList'])
+ assert.equal(trail.anchor,'gallery-breadcrumb');assert.equal(trail.href,'/gallery#gallery-breadcrumb')
+ assert.deepEqual(storeBreadcrumb({}),{breadcrumbHome:'首頁',breadcrumbList:'案例門市'})
+ assert.deepEqual(storeBreadcrumb({breadcrumbHome:' ',breadcrumbList:''}),storeBreadcrumb({}))
+ const before=structuredClone(document.body),after=structuredClone(before);Object.assign(after.copy,{breadcrumbHome:'網站首頁',breadcrumbList:'體驗門市'})
+ checkPageBody(page,document.id,before,after,document.schema);validate(after,document.schema)
+ const changes=pageChanges(blocks,[document],{[document.id]:before},{[document.id]:after})
+ assert.equal(changes.length,2);assert(changes.every(c=>c.impacts.some(i=>i.href==='/gallery#gallery-breadcrumb')))
+ assert.deepEqual(document.body,before)
 }

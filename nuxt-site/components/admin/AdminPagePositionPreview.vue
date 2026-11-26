@@ -3,7 +3,7 @@ import {ArrowRight,ArrowUpRight,Play,Plus,Search,MessageSquare,Download,MapPin,E
 import type {BrandPavilion} from '~/types/content'
 import type {ProductCatalogue} from '~/data/productCatalogues'
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
-import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,knowledgeBreadcrumb,productCatalogueBreadcrumb,seriesCatalogueBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
+import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,knowledgeBreadcrumb,productCatalogueBreadcrumb,seriesCatalogueBreadcrumb,storeBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueDocument,builderCatalogueNoticeFields,builderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
 import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueTitle,seriesCatalogueDocument} from '~/shared/cms/product-catalogue.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
@@ -28,7 +28,7 @@ const isCatalogueTrail=computed(()=>props.block?.id.startsWith('series-catalogue
 const isBuilderCatalogue=computed(()=>props.block?.id.startsWith('builder-catalogues:'))
 const isProductCatalogue=computed(()=>props.block?.id.startsWith('product-catalogue:'))
 const trailCopy=computed(()=>props.bodies[props.block?.fields[0]?.documentId]?.copy)
-const pageTrail=computed(()=>isCatalogueTrail.value?seriesCatalogueBreadcrumb(trailCopy.value):knowledgeBreadcrumb(trailCopy.value))
+const pageTrail=computed(()=>props.block?.id==='stores:麵包屑編輯設定'?storeBreadcrumb(trailCopy.value):isCatalogueTrail.value?seriesCatalogueBreadcrumb(trailCopy.value):knowledgeBreadcrumb(trailCopy.value))
 const highlighted=(path:string)=>props.focusedField===path
 const isLabel=(label:string)=>/標籤|小標|前置英文/.test(label)
 const headings=computed(()=>scene.value.heading.filter((f:any)=>!isLabel(f.label)&&!/語音/.test(f.label)))
@@ -446,7 +446,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
       <p><span :class="{'is-focused':highlighted('copy.breadcrumbHome')}">{{ pageTrail.breadcrumbHome }}</span> / <span :class="{'is-focused':highlighted('copy.breadcrumbList')}">{{ pageTrail.breadcrumbList }}</span></p>
      </div>
     </header>
-    <p class="cms-field-help">{{ isCatalogueTrail?'從系列內頁進入型錄時，中間會顯示該系列的返回連結。':'列表與文章會使用同一組導覽文字。' }}</p>
+    <p class="cms-field-help">{{ block?.id==='stores:麵包屑編輯設定'?'編輯案例門市列表上方的導覽文字；首頁連結仍返回首頁。':isCatalogueTrail?'從系列內頁進入型錄時，中間會顯示該系列的返回連結。':'列表與文章會使用同一組導覽文字。' }}</p>
    </template>
    <template v-else-if="scene.kind==='breadcrumb'||scene.kind==='news-shared'">
     <header v-if="scene.kind==='breadcrumb'" class="cms-scene-news-hero">

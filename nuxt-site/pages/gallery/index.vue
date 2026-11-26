@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-gallery-index', {"copy":{"text1":"Stores","text2":"依地區篩選案例門市","text3":"區域","text4":"全部","text5":"縣市","text6":" 間案例門市","text7":"此區域尚無案例資料","text8":"目前沒有符合條件的正式案例，請選擇其他區域或縣市。","text9":"查看全部案例"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
+import { storeBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
+const breadcrumb=computed(()=>storeBreadcrumb(cmsCopy.copy))
+
 import { MapPin } from 'lucide-vue-next'
 import { regionCities as cmsSeed_regionCities, storeCaseSummaries as cmsSeed_storeCaseSummaries } from '~/data/storeCases'
 const { regionCities, storeCaseSummaries } = await useCmsResource('data-storeCases', { regionCities: cmsSeed_regionCities, storeCaseSummaries: cmsSeed_storeCaseSummaries })
@@ -59,8 +62,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="antra-gallery-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-gallery-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="gallery-page-title">{{ cmsCopy.copy.text1 }}</h1>
-        <nav aria-label="麵包屑" class="antra-gallery-breadcrumb__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "案例門市" }]' v-slot="{ items, follow }">
+        <nav id="gallery-breadcrumb" aria-label="麵包屑" class="antra-gallery-breadcrumb__trail">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumb.breadcrumbHome, to: '/' }, { label: breadcrumb.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>

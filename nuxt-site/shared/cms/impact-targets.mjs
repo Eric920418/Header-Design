@@ -135,6 +135,7 @@ export function fieldImpacts({ documentId, path = '', category, slug, rowId, blo
  }
  if (documentId === 'view-pages-knowledge-index' && path.startsWith('copy.breadcrumb'))
   return [target('廚房裝修指南列表 → 位置導覽','/knowledge#knowledge-breadcrumb'),target('廚房裝修指南所有文章 → 位置導覽','/knowledge/design/systemcabinet#knowledge-breadcrumb')]
+ if(documentId==='view-pages-gallery-index'&&path.startsWith('copy.breadcrumb'))return[target('案例門市列表 → 位置導覽','/gallery#gallery-breadcrumb')]
  if (documentId === seriesCatalogueDocument && path.startsWith('copy.breadcrumb'))
   return [target('品牌系列型錄 → 位置導覽','/catalogues/kitchenware-catalog#series-catalogue-breadcrumb')]
  if (documentId === 'data-catalogues' && key === 'KITCHEN_CATALOGUES' || documentId === seriesCatalogueDocument && /^copy\.text[2-4]$/.test(path))
