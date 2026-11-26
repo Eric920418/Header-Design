@@ -10,6 +10,7 @@ import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,is
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
 import {HOME_STORES_ID,homeStoreListSchema,storeRegionCities} from '~/shared/cms/store-location.mjs'
 import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
+import {caseManagementReturn} from '~/shared/cms/case-management.mjs'
 import {builderCatalogueNoticeAnchor,isBuilderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
 import {productCatalogueDocument,productCatalogueTitle} from '~/shared/cms/product-catalogue.mjs'
 const props=defineProps<{id:string}>()
@@ -175,6 +176,7 @@ function updateHomeOneService(field:any,index:number,path:'title'|'copy',value:s
  update(field,services.map((service:any,i:number)=>i===index?{...service,[path]:path==='copy'?value.split('\n'):value}:service))
 }
 const caseManagement=computed(()=>active.value?.preview==='inspiration-cases')
+const publishedCustomCases=computed(()=>docs.value.find(d=>d.id==='custom-cases')?.publishedBody?.items||[])
 const headerId='view-components-SiteHeader'
 const catalogueIndex=computed(()=>bodies.value[headerId]?.leftNav?.findIndex(usesDesktopCatalogue)??-1)
 const catalogueFields=computed(()=>active.value?.id==='menu:左側主導覽'&&catalogueIndex.value>=0
@@ -279,7 +281,7 @@ const impactContext=computed(()=>({heroTitlePages:pageData.value?.positionPresen
 const changeDetails=computed(()=>pageChanges(blocks.value,docs.value,baseline.value,bodies.value,impactContext.value)),changesOpen=ref(false)
 const status=computed(()=>dirty.value?`尚未儲存 · ${changeDetails.value.length} 處修改`:pending.value?'已儲存，官網尚未更新':'官網已更新')
 const shared=computed(()=>changeImpacts(changeDetails.value).filter(i=>i.href.split('#')[0]!==pageData.value?.href.split('#')[0]||/全站|所有官網頁面/.test(i.label)))
-const returnLink=computed(()=>{const {sitePage,block,edit,part,seriesPart,legacy,field,item,list,create,returnPath,returnSection,...query}=route.query;if(typeof returnSection==='string')query.section=returnSection;return{path:returnPath==='/admin/content'?'/admin/content':props.id==='home'?'/admin':'/admin/content',query}})
+const returnLink=computed(()=>{const cases=props.id===storeCasesPageId&&caseManagementReturn(route.query);if(cases)return cases;const {sitePage,block,edit,part,seriesPart,legacy,field,item,list,create,returnPath,returnSection,...query}=route.query;if(typeof returnSection==='string')query.section=returnSection;return{path:returnPath==='/admin/content'?'/admin/content':props.id==='home'?'/admin':'/admin/content',query}})
 const activeDocs=computed(()=>docs.value.filter(d=>visibleFields.value.some((f:any)=>f.documentId===d.id)))
 const historyDocs=computed(()=>activeDocs.value.filter(d=>!franchiseNews.value||d.id!=='news-articles'))
 const unpublishDocuments=computed(()=>docs.value.filter(d=>d.publishedId&&(!pageData.value?.unpublishIds||pageData.value.unpublishIds.includes(d.id))))
@@ -332,6 +334,7 @@ const choices=computed(()=>docs.value.flatMap(d=>{
 const locationHref=computed(()=>{const selected=workbench.selection.value,item=selected?.value;if(item?.enabled===false||item?.available===false)return pageData.value?.href||'/';return seriesLocation(positionBlock.value?.previewPage||(props.id==='home'?'':selected?.href||itemWebsitePath(selected?.documentId,item))||positionBlock.value?.href||pageData.value?.href||'/')})
 const publicLocation=computed(()=>{
  const selected=workbench.selection.value
+ if(caseManagement.value&&selected?.source&&selected.href)return selected.href
  if(newsArticleList.value&&!workbench.editing.value){
   const listId=franchiseNews.value?franchiseMarqueeDocument:props.id==='news-latest'?'view-pages-news-latest-index':'view-pages-news-index'
   return docs.value.find(d=>d.id===listId)?.publishedBody?positionBlock.value?.href:''
@@ -382,7 +385,7 @@ onBeforeRouteLeave(()=>!dirty.value||window.confirm('本頁還有尚未儲存的
 onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.value||window.confirm('本頁還有尚未儲存的修改，確定離開？'))
 </script>
 <template><section ref="formRoot" class="cms-page-editor cms-work-editor cms-workbench cms-position-workbench" :class="{'cms-is-editing':!!workbench.editing.value&&!catalogueWorkbench,'cms-catalogue-item-editing':catalogueItemEditing,'cms-text-editing':!collections.length,'cms-inspiration-workbench':id==='inspiration','cms-home-workbench':id==='home'}" :aria-busy="busy" @focusin="trackField">
- <header class="cms-page-editor-heading"><div class="cms-title-group"><NuxtLink :to="returnLink" class="cms-editor-breadcrumb">← 返回</NuxtLink><h1>{{ title }}<span>｜{{ id==='inspiration'?active?.name:'內容管理' }}</span></h1></div><AdminContentSearch /><a v-if="publicLocation" :href="publicLocation" target="_blank" rel="noopener noreferrer" class="cms-button">查看官網 ↗</a><button v-else type="button" class="cms-button" @click="preparePreview">預覽草稿</button></header>
+ <header class="cms-page-editor-heading"><div class="cms-title-group"><NuxtLink :to="returnLink" class="cms-editor-breadcrumb">{{ id===storeCasesPageId&&route.query.returnToCases==='1'?'← 返回案例管理':'← 返回' }}</NuxtLink><h1>{{ title }}<span>｜{{ id==='inspiration'?active?.name:'內容管理' }}</span></h1></div><AdminContentSearch /><a v-if="publicLocation" :href="publicLocation" target="_blank" rel="noopener noreferrer" class="cms-button">查看官網 ↗</a><button v-else type="button" class="cms-button" @click="preparePreview">預覽草稿</button></header>
  <p v-if="error" class="cms-error" role="alert">{{ error }} <button type="button" class="cms-button" @click="reload">查看最新內容</button></p><p v-if="notice" class="cms-notice" role="status">{{ notice }}</p><p v-if="!pageData&&!error" class="cms-empty" role="status">正在載入頁面內容…</p>
  <template v-if="pageData">
  <button type="button" class="cms-button cms-location-toggle" :aria-expanded="locationOpen" @click="locationOpen=true">選擇區塊：{{ seriesPart?.name||active?.name }} ▾</button>
@@ -390,12 +393,12 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
   <nav class="cms-block-nav cms-panel" aria-label="官網區塊"><h2>選擇{{ title==='首頁'?'首頁':'官網' }}區塊</h2><button v-for="b in navigationBlocks.filter(b=>!('secondary' in b&&b.secondary))" :key="b.id" type="button" :aria-current="currentLocation===b.id?'location':undefined" @click="chooseLocation(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span><strong>{{ b.name }}</strong><small>{{ b.hint }}</small></span><i v-if="modified.some(m=>m.id===b.id)" aria-label="尚未儲存">●</i></button><details v-if="blocks.some(b=>b.secondary)"><summary>其他設定</summary><button v-for="b in blocks.filter(b=>b.secondary)" :key="b.id" type="button" @click="selectBlock(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span>{{ b.name }}</span></button></details></nav>
   <div class="cms-page-form cms-panel">
    <div v-if="catalogueWorkbench" id="cms-item-editor" v-show="catalogueItemEditing" />
-   <div class="cms-block-heading"><div><h2 class="cms-block-title" tabindex="-1">{{ caseManagement?'自建案例':seriesPart?.name||active?.name }}</h2><p v-if="!caseManagement" class="cms-field-help">{{ seriesPart?.hint||active?.hint }}<template v-if="collections.length&&!newsArticleList">；選內容看位置，按「編輯」修改。</template></p></div><button type="button" class="cms-button cms-position-toggle" data-cms-keep-field @click="positionOpen=true">看位置</button></div>
+   <div class="cms-block-heading"><div><h2 class="cms-block-title" tabindex="-1">{{ seriesPart?.name||active?.name }}</h2><p v-if="!caseManagement" class="cms-field-help">{{ seriesPart?.hint||active?.hint }}<template v-if="collections.length&&!newsArticleList">；選內容看位置，按「編輯」修改。</template></p></div><button type="button" class="cms-button cms-position-toggle" data-cms-keep-field @click="positionOpen=true">看位置</button></div>
    <div v-if="active?.id==='franchise:加盟資料下載入口'" class="cms-download-editor-link">
     <p class="cms-field-help">這裡編輯加盟介紹上的入口。下載頁的大圖、主標題和按鈕請到下載頁編輯。</p>
     <NuxtLink :to="pageEditorLink('franchise-download',route.query)" class="cms-button">編輯「加盟資料下載」頁 →</NuxtLink>
    </div>
-   <p v-if="caseManagement" class="cms-case-scope">這裡管理從後台新增的案例。請到<NuxtLink :to="pageEditorLink(storeCasesPageId,route.query)">「門市案例」</NuxtLink>修改門市文章與照片。從其他系統同步的案例請回原系統修改。</p>
+   <p v-if="caseManagement" class="cms-case-scope">這裡列出官網案例與自建草稿。選擇案例可看右側位置；門市案例可前往編輯，自建案例可在這裡編輯，系統同步案例請回原系統修改。</p>
    <p v-if="franchiseNews" class="cms-case-scope">按「編輯文章」修改標題、封面、摘要或內文。更新後，「優惠消息」也會使用修改後的文章。</p>
    <fieldset v-if="homeOneSettings.length" :disabled="busy" class="cms-edit-form cms-home-one-images">
     <legend>區塊圖片</legend>
@@ -435,6 +438,10 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
        </details>
       </section>
      </template>
+    </AdminItems>
+   </div><div v-else-if="caseManagement&&f.documentId==='custom-cases'" class="cms-block-field">
+    <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)">
+     <template #list="{rows,choose,add,reorder,publication}"><AdminCaseManager :library="pageData.positionPresentation?.caseLibrary||[]" :custom-rows="rows" :published-custom="publishedCustomCases" :choose="choose" :add="add" :reorder="reorder" :publication="publication" /></template>
     </AdminItems>
    </div><div v-else-if="active?.kind==='franchise-support'||franchiseFaq" class="cms-block-field">
     <p v-if="franchiseFaq" class="cms-field-help">官網顯示排序前 {{ FRANCHISE_FAQ_DISPLAY_LIMIT }} 題。</p>

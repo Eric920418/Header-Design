@@ -4,7 +4,7 @@ import {inspirationPosition} from '~/shared/cms/workbench.mjs'
 const props=defineProps<{kind:string;bodies:Record<string,any>;presentation?:any;selected?:any;focusedField?:string}>()
 const view=computed(()=>inspirationPosition(props.bodies,props.presentation,props.selected))
 const target=(part:string)=>props.kind==='inspiration-'+part
-const sourceLabels:Record<string,string>={'門市案例':'門市案例','自建案例':'自建案例','來源案例':'系統同步'}
+const sourceLabels:Record<string,string>={'門市案例':'門市案例','自建案例':'自建案例','來源案例':'系統同步','系統同步':'系統同步'}
 const filterReading=computed(()=>target('filters')&&['copy.text2','copy.text3','copy.text4'].includes(props.focusedField||'')?view.value.copy[props.focusedField!.split('.').at(-1)!]:null)
 </script>
 <template>

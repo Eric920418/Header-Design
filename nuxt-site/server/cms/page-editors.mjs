@@ -48,7 +48,7 @@ async function positionPresentation(p){
  if(p.id==='inspiration'){
   const cases=await caseLibrary(),stores=bodies['data-storeCases']?.storeCases||[],custom=bodies['custom-cases']?.items||[]
   const describe=c=>({...c,description:stores.find(i=>i.slug===c.slug)?.article?.[0]?.paragraphs?.[0]||custom.find(i=>i.id===c.slug)?.excerpt||''})
-  return{...result,heroImage:bodies['site-visuals']?.images?.asset_7692def0||'/section-3/store-songzhu.jpg',cases:cases.slice(0,3).map(describe),detailCase:cases.find(c=>c.route.startsWith('/design-inspiration/'))}
+  return{...result,heroImage:bodies['site-visuals']?.images?.asset_7692def0||'/section-3/store-songzhu.jpg',cases:cases.slice(0,3).map(describe),caseLibrary:cases.map(describe),detailCase:cases.find(c=>c.route.startsWith('/design-inspiration/'))}
  }
  const articles=bodies['news-articles']?.items?.filter(i=>i.enabled&&(!p.category||i.summary.category===p.category))||[]
  if(p.id==='news'){

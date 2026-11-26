@@ -96,6 +96,7 @@ watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||
 <template>
  <section ref="root" class="cms-items" :class="{'cms-items-workbench':workbench,'cms-case-manager':caseTable}">
   <template v-if="workbench||!active">
+   <slot name="list" :rows="allRows" :choose="choose" :add="add" :reorder="reorder" :publication="publication">
    <div v-if="caseTable&&!allRows.length" class="cms-case-empty">
     <h3>還沒有自建案例</h3>
     <p>新增後可填寫案例標題、介紹、廚房型式和設計風格，並上傳封面和內頁照片。</p>
@@ -133,6 +134,7 @@ watch(()=>route.query.create,async target=>{if(!workbench||props.schema.source||
     <p v-if="caseTable&&rows.length&&allRows.length>1" id="cms-custom-case-order-help" class="cms-case-sort-help">{{ search?'清除搜尋後可調整順序。':'拖曳或用上下方向鍵移動順序。官網會把自建案例排在門市案例之後。' }}</p>
     <p v-if="caseTable&&rows.length&&orderNotice" class="cms-field-help" role="status">{{ orderNotice }}</p>
    </template>
+   </slot>
   </template>
   <Teleport v-if="editing&&active" to="#cms-item-editor" :disabled="!workbench">
    <fieldset class="cms-item-form" :disabled="workbench?.busy.value">

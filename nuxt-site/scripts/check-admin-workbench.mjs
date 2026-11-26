@@ -20,6 +20,7 @@ import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/pub
 import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalogueNotice} from '../shared/cms/builder-catalogue.mjs'
 import {remainingHomeHeadings,homeRemainingHeading,effectiveHomeHeadingBody} from '../shared/cms/home-headings.mjs'
+import {caseManagementRows,filterCaseManagement,storeCaseManagementLink,caseManagementReturn} from '../shared/cms/case-management.mjs'
 import {HOME_STORES_ID,homeStoreListSchema} from '../shared/cms/store-location.mjs'
 import {headingFieldLabel} from '../shared/cms/heading-labels.mjs'
 import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueFields,productCatalogueTitle} from '../shared/cms/product-catalogue.mjs'
@@ -250,6 +251,26 @@ assert(homeHeroPosition(previewBodies).styles.length);assert.equal(homeHeroPosit
 const heroCommon=home.find(b=>b.id==='home:主視覺輪播').fields
 assert.equal(heroCommon.find(f=>f.path==='copy.text8').label,'滑過時按鈕文字（第一行）');assert(heroCommon.filter(f=>/^copy.field[1-4]$/.test(f.path)).every(f=>f.schema.advanced))
 previewBodies['view-pages-design-inspiration-index'].copy.text5='套用篩選';previewBodies['view-pages-design-inspiration-index'].copy.text9='沒有符合的案例'
+{
+ const library=[{slug:'store-x',store:'門市甲',title:'門市作品',image:'/store.jpg',route:'/gallery/store-x',source:'門市案例'},{slug:'cloud-x',title:'同步作品',image:'/cloud.jpg',route:'/design-inspiration/cloud-x',source:'來源案例'},{slug:'removed',title:'待刪除案例',route:'/design-inspiration/removed',source:'自建案例'}]
+ const custom=[{key:'draft',index:4,value:{id:'draft',title:'草稿作品',cover:'/draft.jpg',enabled:false}}],original=JSON.stringify({library,custom})
+ const rows=caseManagementRows(library,custom)
+ assert.equal(rows.length,4);assert.equal(rows.find(r=>r.slug==='draft').customRow.index,4)
+ assert.equal(rows.find(r=>r.slug==='removed').draftRemoved,true)
+ assert.equal(caseManagementRows([],[],[{id:'newly-published',title:'剛刊登的案例',enabled:true},{id:'hidden',enabled:false}])[0].draftRemoved,true,'Published custom records remain listed when removed from the current draft before reloading the page')
+ assert.equal(filterCaseManagement(rows,'系統同步','同步').length,1)
+ assert.equal(filterCaseManagement(rows,'門市案例','門市甲')[0].slug,'store-x')
+ assert.equal(filterCaseManagement(rows,'自建案例').length,2)
+ const link=storeCaseManagementLink(rows[0],{q:'舊搜尋',item:'old',list:'old',casePage:'99'},{source:'門市案例',search:'門市甲',page:2})
+ assert.equal(link.query.sitePage,'store-cases');assert.equal(link.query.list,'data-storeCases:storeCases');assert.equal(link.query.item,'store-x')
+ assert.deepEqual(caseManagementReturn(link.query),{path:'/admin/content',query:{section:'design',sitePage:'inspiration',block:'inspiration:案例管理',caseSource:'門市案例',caseQuery:'門市甲',casePage:'2'}})
+ assert.equal(storeCaseManagementLink(rows.find(r=>r.source==='系統同步')),undefined)
+ assert.equal(caseManagementReturn({returnToCases:'https://evil.invalid'}),undefined)
+ assert.equal(caseManagementReturn({returnToCases:'1',caseSource:'invalid',casePage:'-1'}).query.casePage,undefined)
+ const selected=rows.find(r=>r.source==='系統同步')
+ assert.equal(inspirationPosition({}, {cases:library.slice(0,1)}, {caption:selected.title,source:selected.source,image:selected.image,value:{id:selected.slug}}).cases[0].source,'系統同步')
+ assert.equal(JSON.stringify({library,custom}),original,'Combining cases must never copy external records into the custom document')
+}
 const samplePosition=inspirationPosition(previewBodies,presentation)
 assert.equal(samplePosition.copy.text5,'套用篩選');assert.equal(samplePosition.copy.text9,'沒有符合的案例');assert.equal(samplePosition.cases[0].title,'真實案例')
 assert.equal(inspirationPosition(previewBodies,presentation,{caption:'正在編輯',image:'/selected.jpg'}).cases[0].image,'/selected.jpg');assert.equal(JSON.stringify(presentation),serialized,'The schematic cannot mutate published case samples')

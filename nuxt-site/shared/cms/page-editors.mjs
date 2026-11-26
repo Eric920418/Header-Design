@@ -60,7 +60,7 @@ export function legacyPage(id){
  return pageEditors.find(p=>p.ids.includes(w?.id||id)&&!p.extra?.includes(w?.id||id))||pageEditors.find(p=>p.ids.includes(w?.id||id))
 }
 export function pageEditorLink(id,query={},block){
- const p=pageEditor(id),{edit,part,area,sitePage,block:oldBlock,field,item,list,create,returnPath,...rest}=query
+ const p=pageEditor(id),{edit,part,area,sitePage,block:oldBlock,field,item,list,create,returnPath,returnToCases,caseSource,caseQuery,casePage,...rest}=query
  const originalSection=rest.returnSection||rest.section
  return{path:p?.section==='home'?'/admin/home':'/admin/content',query:{...rest,...(p?.section!=='home'?{section:p?.section||'all',...(originalSection&&originalSection!==p?.section?{returnSection:originalSection}:{})}:rest.section?{returnPath:'/admin/content'}:{}),sitePage:id,...(block?{block}:{})}}
 }
@@ -172,7 +172,7 @@ export const inspirationSharedGroups={
 const inspirationSections={
  '主視覺標題':{hint:'頁面最上方的大標題',icon:'hero',preview:'inspiration-hero',aliases:['inspiration:列表標題與按鈕'],href:'/design-inspiration#design-projects-title'},
  '麵包屑編輯設定':{hint:'編輯主視覺下方的位置導覽文字',preview:'inspiration-breadcrumb',href:'/design-inspiration#design-inspiration-breadcrumb',help:'首頁與設計靈感的文字會用在列表和案例內頁，連結維持原本的頁面。'},
- '案例管理':{hint:'新增完工案例、設定顯示與順序',icon:'list',preview:'inspiration-cases',aliases:['inspiration:案例管理與顯示排序','inspiration:案例內容','inspiration:案例顯示與順序','inspiration:案例列表'],href:'/design-inspiration#design-projects-grid'},
+ '案例管理':{hint:'全部案例、來源與編輯入口',icon:'list',preview:'inspiration-cases',aliases:['inspiration:案例管理與顯示排序','inspiration:案例內容','inspiration:案例顯示與順序','inspiration:案例列表'],href:'/design-inspiration#design-projects-grid'},
  '頁面共用設定':{hint:'篩選、案例按鈕、搜尋提示及內頁文字',preview:'inspiration-filters',aliases:['inspiration:整頁共用文字'],href:'/design-inspiration#design-projects-filter-title'},
 }
 function fieldGroup(p,id,path,schema){

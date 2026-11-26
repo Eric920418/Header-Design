@@ -107,9 +107,9 @@ export function positionContent(block,bodies,selected){
 }
 export function inspirationPosition(bodies,presentation={},selected){
  const copy=bodies['view-pages-design-inspiration-index']?.copy||{},detail=bodies['view-pages-design-inspiration-id-']?.copy||{}
- const slug=selected?.value?.id
+ const slug=selected?.value?.id||selected?.value?.slug
  const cases=(presentation.cases||[]).filter(c=>!slug||c.slug!==slug).slice(0,selected?2:3)
- if(selected)cases.unshift({slug,title:selected.caption,image:selected.image,description:selected.value?.description,source:'自建案例',selected:true,enabled:selected.value?.enabled!==false})
+ if(selected)cases.unshift({slug,title:selected.caption,image:selected.image,description:selected.value?.description,source:selected.source||'自建案例',selected:true,enabled:selected.value?.enabled!==false})
  return{copy,detail,breadcrumb:inspirationBreadcrumb(copy),cases,detailCase:presentation.detailCase||cases[0],heroImage:presentation.heroImage}
 }
 export function homeHeroPosition(bodies,selected){
