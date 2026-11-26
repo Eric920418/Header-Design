@@ -265,7 +265,7 @@ export function pageSummary(p,rows,documents=[]){
  return{...p,title,sectionTitle:primary?.sectionTitle||p.name,thumbnail:thumbnail||summaries.map(w=>w.thumbnail).find(Boolean)||'',pending:summaries.some(w=>w.pending),updatedAt:summaries.map(w=>w.updatedAt).filter(Boolean).sort((a,b)=>new Date(b)-new Date(a))[0],blocks,searchTerms:[p.name,title,...summaries.map(w=>w.searchTerms),...blocks.flatMap(b=>[b.name,...b.fields.map(f=>f.label)])].join(' ')}
 }
 export function blockThumbnail(block,bodies){
- const images=block.fields.filter(f=>!/(?:pdf|brochure)Url$|FRANCHISE_BROCHURE_URL$/i.test(f.path)&&!/(?:PDF|型錄|下載)檔案/.test(f.label)).map(f=>{let value=valueAt(bodies[f.documentId],f.path);if(Array.isArray(value)&&f.schema.rowFilter)value=value.filter(v=>valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value);const image=firstImage(value);return{image,priority:/封面|主視覺/.test(f.label)?0:/裝飾|線稿|標誌|logo|\/decor\//i.test(f.label+' '+image)?2:1}}).filter(i=>i.image)
+ const images=block.fields.filter(f=>!/(?:pdf|brochure)Url$|FRANCHISE_BROCHURE_URL$/i.test(f.path)&&!/(?:PDF|型錄|下載)檔案/.test(f.label)).map(f=>{let value=valueAt(bodies[f.documentId],f.path);if(Array.isArray(value)&&f.schema.rowFilter)value=value.filter(v=>valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value);if(Array.isArray(value)&&f.schema.rowImage)value=value.map(row=>valueAt(row,f.schema.rowImage));const image=firstImage(value);return{image,priority:/封面|主視覺/.test(f.label)?0:/裝飾|線稿|標誌|logo|\/decor\//i.test(f.label+' '+image)?2:1}}).filter(i=>i.image)
  return images.sort((a,b)=>a.priority-b.priority)[0]?.image||''
 }
 export function searchPages(pages,search){

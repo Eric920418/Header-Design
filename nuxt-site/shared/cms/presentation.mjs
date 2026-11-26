@@ -234,6 +234,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(contextual[normalized])return{label:contextual[normalized]}
  if(key==='id'&&schema.format==='youtube')return{label:'YouTube 影片連結或識別碼'}
  if(resourceId==='view-components-home-HomeServices'&&normalized==='services.*.alt')return{label:'品牌名稱',singleLine:true}
+ if(resourceId==='data-storeCases'&&normalized==='storeCases')return{label:labels.storeCases,rowImage:'images'}
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.cover')return{label:'案例門市列表封面',help:'用於案例門市列表；設計靈感列表使用下方圖片集中的第一張圖片。'}
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.images')return{label:'案例內頁圖片集',help:'第一張圖片也用於設計靈感列表的門市案例卡片。'}
  if(resourceId==='data-storeCases'&&normalized.startsWith('regionCities.'))return schema.type==='array'?{label:key+'縣市',newItemLabel:'縣市'}:{label:'縣市名稱',singleLine:true}

@@ -518,7 +518,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else-if="scene.kind==='map'||scene.kind==='stores'">
      <p v-if="block?.id==='home:全台門市據點'" class="cms-scene-map-label"><MapPin :size="17" aria-hidden="true" /> 官網地圖旁的門市資料</p>
      <article v-for="store in previewStores" :key="store.name" class="cms-scene-store-card">
-      <AdminThumbnail v-if="store.image" :src="store.image" :alt="store.name+'照片'" class="cms-scene-wide-image" />
+      <AdminThumbnail v-if="store.image" :src="store.image" :alt="store.name+(block?.id==='store-cases:門市管理'?'案例照片':'照片')" class="cms-scene-wide-image" :class="{'cms-scene-case-photo':block?.id==='store-cases:門市管理'}" />
       <h3 class="cms-scene-item-title">{{ store.name }}</h3>
       <p v-if="store.address">{{ store.address }}</p><p v-if="store.hours">{{ store.hours }}</p><p v-if="store.phone">{{ store.phone }}</p>
      </article>

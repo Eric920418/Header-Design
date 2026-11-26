@@ -749,6 +749,16 @@ const serviceCards=searchPages(servicePages,'')
 assert.deepEqual(serviceCards.map(r=>r.page.title),['案例門市','服務流程','門市案例'])
 const caseCard=serviceCards[2],storeDoc=docs.find(d=>d.id==='data-storeCases')
 assert.equal(caseCard.page.thumbnail,storeDoc.body.storeCases[0].images[0])
+const storeManagement=caseCard.page.blocks.find(b=>b.name==='門市管理'),storeRows=storeManagement.fields.find(f=>f.path==='storeCases')
+assert.equal(storeRows.schema.rowImage,'images')
+assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:storeDoc.body}),storeDoc.body.storeCases[0].images[0])
+for(const row of storeDoc.body.storeCases){
+ assert.equal(itemThumbnail(row,storeRows.schema),row.images[0],'Case editor thumbnails must match the public case photo, not the storefront cover')
+ assert.notEqual(itemThumbnail(row,storeRows.schema),row.cover)
+}
+const noCasePhotos=structuredClone(storeDoc.body);noCasePhotos.storeCases.forEach(row=>row.images=[])
+assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:noCasePhotos}),'','Missing case photos cannot silently borrow storefront covers')
+assert.equal(itemThumbnail({...storeDoc.body.storeCases[0],images:[]},storeRows.schema),'')
 const sharedSections=['門市內頁預約按鈕','門市內頁規格與資訊','門市內頁上一篇與下一篇','門市內頁顧客評論']
 assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','門市管理',...sharedSections])
 const listPage=servicePages[0]
