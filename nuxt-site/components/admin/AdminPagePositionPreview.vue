@@ -3,7 +3,7 @@ import {ArrowRight,ArrowUpRight,Play,Plus,Search,MessageSquare,Download,MapPin,E
 import type {BrandPavilion} from '~/types/content'
 import type {ProductCatalogue} from '~/data/productCatalogues'
 import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
-import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,knowledgeBreadcrumb,productCatalogueBreadcrumb,seriesCatalogueBreadcrumb,storeBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
+import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,knowledgeBreadcrumb,productCatalogueBreadcrumb,seriesCatalogueBreadcrumb,storeBreadcrumb,storeCaseBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueDocument,builderCatalogueNoticeFields,builderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
 import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueTitle,seriesCatalogueDocument} from '~/shared/cms/product-catalogue.mjs'
 import {pagePositionContent,newsBreadcrumbPosition} from '~/shared/cms/workbench.mjs'
@@ -43,6 +43,8 @@ const filterImage=computed(()=>props.block?.storeRegion
  ? props.bodies['data-storeCases']?.storeCases?.find((store:any)=>store.region===props.block.storeRegion&&store.cover)?.cover
  : props.presentation?.specialImage)
 const storeExampleKind=computed(()=>scene.value.kind.startsWith('store-'))
+const caseHeader=computed(()=>['case-header','case-breadcrumb'].includes(scene.value.kind))
+const caseHeaderTrail=computed(()=>storeCaseBreadcrumb(storeDetails.value?.copy))
 const storeDetails=computed(()=>props.bodies['view-pages-gallery-slug-'])
 const storeCases=computed<any[]>(()=>props.bodies['data-storeCases']?.storeCases||[])
 const storeExample=computed(()=>storeCases.value.find(store=>store.slug===props.presentation?.storeCaseExamples?.[scene.value.kind]?.slug))
@@ -104,7 +106,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
 <template>
  <div class="cms-page-position-scene cms-website-scene" :data-position-kind="scene.kind">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
-  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['home-promise','hero','builder-series-hero','breadcrumb','page-breadcrumb','inactive','news-shared','franchise-application','franchise-download-breadcrumb'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image" :class="{'cms-franchise-download-context':franchiseDownloadCopy}">
+  <div v-if="scene.contextImage&&!scene.displaySettings.length&&!['home-promise','hero','builder-series-hero','breadcrumb','page-breadcrumb','case-header','case-breadcrumb','inactive','news-shared','franchise-application','franchise-download-breadcrumb'].includes(scene.kind)&&!scene.fixedAction" class="cms-scene-context-image" :class="{'cms-franchise-download-context':franchiseDownloadCopy}">
    <AdminThumbnail :src="scene.contextImage" :alt="pageTitle+'頁面位置參照'" /><span>{{ franchiseDownloadCopy?.text4 || cataloguePageCopy?.text1 || pageTitle }}</span>
   </div>
   <section class="cms-scene-target" :aria-label="block?.name+'的位置示意'">
@@ -438,6 +440,14 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </p>
     </div>
    </header>
+   <template v-else-if="caseHeader">
+    <header class="cms-scene-news-hero cms-store-case-header">
+     <AdminThumbnail v-if="scene.contextImage" :src="scene.contextImage" alt="門市案例頁首背景" />
+     <div><strong v-if="storeDetails?.copy?.heroTitle" :class="{'is-focused':highlighted('copy.heroTitle')}">{{ storeDetails.copy.heroTitle }}</strong><p><template v-for="(label,key,index) in caseHeaderTrail" :key="key"><span v-if="index" aria-hidden="true"> / </span><span :class="{'is-focused':highlighted('copy.'+key)}">{{ label }}</span></template></p></div>
+    </header>
+    <p v-if="!storeDetails?.copy?.heroTitle&&scene.kind==='case-header'" class="cms-field-help">目前頁首只顯示位置導覽。填寫標題後，會顯示在導覽上方。</p>
+    <p v-if="scene.kind==='case-breadcrumb'" class="cms-field-help">從設計靈感進入時，中間的連結會保留設計靈感及原本的篩選條件。</p>
+   </template>
    <template v-else-if="scene.kind==='page-breadcrumb'">
     <header class="cms-scene-news-hero">
      <AdminThumbnail v-if="scene.contextImage" :src="scene.contextImage" :alt="pageTitle+'頁首照片'" />
@@ -525,12 +535,12 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="!storeExampleKind&&!['home-promise','builder-series-hero','builder-catalogue-cards','download-catalogue','product-care','breadcrumb','page-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="!storeExampleKind&&!['home-promise','builder-series-hero','builder-catalogue-cards','download-catalogue','product-care','breadcrumb','page-breadcrumb','case-header','case-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
    <p v-if="!['franchise-support','franchise-application','franchise-download-document'].includes(scene.kind)&&scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>
    <dl v-if="scene.auxiliary.some((f:any)=>highlighted(f.path))" class="cms-scene-details"><template v-for="field in scene.auxiliary.filter((f:any)=>highlighted(f.path))" :key="field.path"><dt>螢幕閱讀器會讀到</dt><dd>{{ field.value }}</dd></template></dl>
-   <p v-if="!['breadcrumb','page-breadcrumb','news-shared','inactive','filter'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
+   <p v-if="!['breadcrumb','page-breadcrumb','case-header','case-breadcrumb','news-shared','inactive','filter'].includes(scene.kind)&&!scene.fixedAction&&!scene.displaySettings.length&&!scene.image&&!scene.items.length&&!scene.texts.length&&!scene.details.length" class="cms-scene-a11y">{{ scene.auxiliary.length?'選取朗讀欄位，可查看訪客會聽到的文字。':'此位置目前沒有可顯示的內容。' }}</p>
   </section>
  </div>
 </template>

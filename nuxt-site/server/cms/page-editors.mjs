@@ -80,12 +80,15 @@ async function positionPresentation(p){
   const first=storeCases[0],spec=storeCases.find(store=>Object.values(store.meta||{}).some(Boolean)),contact=storeCases.find(store=>store.contact)
   result.detailPath='/gallery/'+encodeURIComponent(first.slug)
   result.storeCaseExamples={
+   'case-header':{slug:first.slug,anchor:'store-case-hero'},
+   'case-breadcrumb':{slug:first.slug,anchor:'store-case-breadcrumb'},
    'store-booking':{slug:storeCases.find(store=>store.meta||store.contact)?.slug,anchor:'case-booking'},
    'store-info':{slug:(spec||contact)?.slug,anchor:spec?'case-spec-title':'case-store-title'},
    'store-navigation':{slug:first.slug,anchor:'case-navigation'},
    'store-reviews':{slug:storeCases.find(store=>store.reviews?.length)?.slug,anchor:'case-reviews-title'},
   }
   for(const section of definition.sections){
+   if(['case-header','case-breadcrumb'].includes(section.kind)){result.blockImages[p.id+':'+section.name]=heroImage;continue}
    const example=storeCases.find(store=>store.slug===result.storeCaseExamples[section.kind]?.slug)
    if(example)result.blockImages[p.id+':'+section.name]=firstImage(example.images)||example.cover
   }

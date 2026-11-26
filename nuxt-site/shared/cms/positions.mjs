@@ -71,6 +71,7 @@ const copyGroups={
   ['搜尋結果提示',{text6:'門市筆數後的文字'}],['無符合門市提示',{text7:'提示標題',text8:'提示說明',text9:'查看全部按鈕文字'}],
  ],
  'gallery-slug-':[
+  ['主視覺標題',{heroTitle:'主視覺標題'}],['麵包屑編輯設定',{breadcrumbHome:'首頁連結文字',breadcrumbParent:'案例門市連結文字',breadcrumbDetail:'門市內頁目前位置文字'}],
   ['門市內頁預約按鈕',{field1:'前往頁面',text2:'按鈕文字'}],['門市內頁規格與資訊',{text3:'案例規格標題',text4:'門市資訊標題',text5:'LINE 按鈕文字',text6:'地圖按鈕文字',storeBookingDestination:'前往頁面'}],
   ['門市內頁上一篇與下一篇',{text7:'上一篇按鈕文字',text8:'下一篇按鈕文字'}],['門市內頁顧客評論',{text9:'留言區標題'}],
  ],
@@ -165,6 +166,8 @@ export const pagePositions={
   section('區域與縣市','調整官網地區篩選的縣市選項與順序','filter','gallery-filter-title'),
  ]},
  'store-cases':{hero:commonHero,sections:[
+  section('主視覺標題','所有門市案例內頁共用的頁首標題','case-header','store-case-hero'),
+  section('麵包屑編輯設定','首頁、案例門市與目前位置的導覽文字','case-breadcrumb','store-case-breadcrumb'),
   section('門市管理','選擇門市，修改文章、照片及門市資料','stores'),
   section('門市內頁預約按鈕','所有門市案例共用的預約按鈕','store-booking','case-booking'),
   section('門市內頁規格與資訊','所有門市案例共用的規格標題、聯絡按鈕與地圖文字','store-info','case-spec-title'),

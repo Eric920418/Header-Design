@@ -17,6 +17,11 @@ const storeLabels = {
   breadcrumbHome: inspirationLabels.breadcrumbHome,
   breadcrumbList: { fallback: '案例門市', label: '門市列表目前位置文字' },
 }
+const storeCaseLabels = {
+  breadcrumbHome: inspirationLabels.breadcrumbHome,
+  breadcrumbParent: { fallback: '案例門市', label: '案例門市連結文字' },
+  breadcrumbDetail: { fallback: '門市案例', label: '門市內頁目前位置文字' },
+}
 const productCatalogueLabels = {
   breadcrumbHome: inspirationLabels.breadcrumbHome,
   breadcrumbParent: { fallback: 'SAKURA 廚電', label: 'SAKURA 廚電連結文字' },
@@ -46,6 +51,7 @@ function breadcrumb(copy, labels) {
 }
 
 export const inspirationBreadcrumb = (copy = {}) => breadcrumb(copy, inspirationLabels)
+export const storeCaseBreadcrumb = (copy = {}) => breadcrumb(copy, storeCaseLabels)
 export const storeBreadcrumb = (copy = {}) => breadcrumb(copy, storeLabels)
 export const knowledgeBreadcrumb = (copy = {}) => breadcrumb(copy, knowledgeLabels)
 export const seriesCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, seriesCatalogueLabels)
@@ -57,6 +63,7 @@ export const builderCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, builde
 export function breadcrumbSchema(id, schema) {
   const labels = id === 'view-pages-design-inspiration-index' ? inspirationLabels
     : id === 'view-pages-gallery-index' ? storeLabels
+    : id === 'view-pages-gallery-slug-' ? storeCaseLabels
     : id === 'view-pages-knowledge-index' ? knowledgeLabels
     : id === 'view-pages-catalogues-kitchenware-catalog' ? seriesCatalogueLabels
     : id === 'view-pages-catalogues-catalog' ? productCatalogueLabels
@@ -68,5 +75,6 @@ export function breadcrumbSchema(id, schema) {
   const fields = Object.fromEntries(Object.entries(labels).map(([key, { label, fallback }]) => [
     key, { type: 'string', label, singleLine: true, help: `留空會顯示「${fallback}」。` },
   ]))
+  if(id==='view-pages-gallery-slug-')fields.heroTitle={type:'string',label:'主視覺標題',singleLine:true,help:'所有門市案例內頁共用。留空維持目前只有位置導覽的頁首。'}
   return { ...schema, fields: { ...schema.fields, copy: { ...copy, fields: { ...copy.fields, ...fields } } } }
 }

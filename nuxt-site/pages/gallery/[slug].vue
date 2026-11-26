@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-gallery-slug-', {"metaLabels":{"style":"設計風格","color":"設計顏色","series":"設計系列","form":"設計形式","size":"設計尺寸","kitchenArea":"廚房坪數","budget":"廚具預算","countertop":"檯面材質","household":"家的組成","designer":"設計師"},"copy":{"field1":"https://pse.is/9kq37z","text2":"到店預約","text3":"案例規格","text4":"門市資訊","text5":"LINE 諮詢","text6":"Google Map","text7":"Previous Post","text8":"Next Post","text9":"顧客評論","text10":"Take a look at ","text11":"our latest blog","text12":" & articles."},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
+import {storeCaseBreadcrumb} from '~/shared/cms/page-breadcrumbs.mjs'
+const breadcrumb=computed(()=>storeCaseBreadcrumb(cmsCopy.copy))
+const heroTitle=computed(()=>(cmsCopy.copy as typeof cmsCopy.copy & {heroTitle?:string}).heroTitle||'')
+
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ArrowLeft, ArrowRight, ArrowUpRight, CalendarClock, MapPin, Phone, UserRound } from 'lucide-vue-next'
 import { storeCases as cmsSeed_storeCases } from '~/data/storeCases'
@@ -52,7 +56,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <main class="case-detail-page">
-    <InternalCaseBreadcrumbHero />
+    <InternalCaseBreadcrumbHero :labels="breadcrumb" :title="heroTitle" />
 
     <section class="case-detail-content" :aria-labelledby="`case-title-${item.slug}`">
       <div class="case-detail-rail internal-rail-safe">

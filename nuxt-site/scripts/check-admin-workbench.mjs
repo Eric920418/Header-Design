@@ -17,7 +17,7 @@ import {normalizeVideos,validate} from '../server/cms/content.mjs'
 import {readableError,workspaceSummariesFromRows} from '../server/cms/workspaces.mjs'
 import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
-import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,storeBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
+import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb,storeBreadcrumb,storeCaseBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalogueNotice} from '../shared/cms/builder-catalogue.mjs'
 import {remainingHomeHeadings,homeRemainingHeading,effectiveHomeHeadingBody} from '../shared/cms/home-headings.mjs'
 import {caseManagementRows,filterCaseManagement,storeCaseManagementLink,caseManagementReturn} from '../shared/cms/case-management.mjs'
@@ -750,7 +750,7 @@ assert.deepEqual(serviceCards.map(r=>r.page.title),['案例門市','服務流程
 const caseCard=serviceCards[2],storeDoc=docs.find(d=>d.id==='data-storeCases')
 assert.equal(caseCard.page.thumbnail,storeDoc.body.storeCases[0].images[0])
 const sharedSections=['門市內頁預約按鈕','門市內頁規格與資訊','門市內頁上一篇與下一篇','門市內頁顧客評論']
-assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['門市管理',...sharedSections])
+assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','門市管理',...sharedSections])
 const listPage=servicePages[0]
 assert(!listPage.blocks.some(b=>sharedSections.includes(b.name)||b.name==='門市管理'))
 assert.deepEqual(searchResultLink(searchPages(servicePages,'門市案例')[0],{section:'service',q:'門市案例'}).query,{section:'service',q:'門市案例',sitePage:storeCasesPageId})
@@ -845,5 +845,18 @@ assert(sameContent({title:'相同',image:'/a.jpg'},{image:'/a.jpg',title:'相同
  checkPageBody(page,document.id,before,after,document.schema);validate(after,document.schema)
  const changes=pageChanges(blocks,[document],{[document.id]:before},{[document.id]:after})
  assert.equal(changes.length,2);assert(changes.every(c=>c.impacts.some(i=>i.href==='/gallery#gallery-breadcrumb')))
+ assert.deepEqual(document.body,before)
+}
+
+{
+ const page=pageEditors.find(p=>p.id===storeCasesPageId),document=docs.find(d=>d.id==='view-pages-gallery-slug-'),blocks=workbenchBlocks(page.id,pageBlocks(page,docs))
+ assert.deepEqual(blocks.filter(b=>!b.secondary).slice(0,3).map(b=>b.name),['主視覺標題','麵包屑編輯設定','門市管理'])
+ assert.deepEqual(blocks.find(b=>b.name==='主視覺標題').fields.map(f=>f.path),['copy.heroTitle'])
+ assert.deepEqual(blocks.find(b=>b.name==='麵包屑編輯設定').fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbParent','copy.breadcrumbDetail'])
+ assert.deepEqual(storeCaseBreadcrumb({}),{breadcrumbHome:'首頁',breadcrumbParent:'案例門市',breadcrumbDetail:'門市案例'})
+ const before=structuredClone(document.body),after=structuredClone(before);Object.assign(after.copy,{heroTitle:'門市體驗案例',breadcrumbHome:'網站首頁',breadcrumbParent:'體驗門市',breadcrumbDetail:'案例介紹'})
+ checkPageBody(page,document.id,before,after,document.schema);validate(after,document.schema)
+ const changes=pageChanges(blocks,[document],{[document.id]:before},{[document.id]:after})
+ assert.equal(changes.length,4);assert(changes.every(c=>c.impacts.some(i=>i.href.startsWith('/gallery/case10#store-case-'))))
  assert.deepEqual(document.body,before)
 }
