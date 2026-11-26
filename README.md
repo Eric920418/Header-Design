@@ -5288,3 +5288,4 @@ final result: passed
 - 品牌系列型錄「型錄管理」內的列表名稱改為「型錄清單」，搜尋提示改為「搜尋型錄名稱」，讓頁面名稱、管理入口與實際清單用途清楚區分。沿用原資料路徑，保留封面、說明、順序、預覽與 PDF 下載設定；不需資料庫更新。
 - 本機實際確認新版清單名稱、搜尋、分頁、編輯入口、所選型錄右欄預覽與四種寬度正常，原文件無變動；臨時本機測試帳號已清除，文件／版本／結構指紋一致。既有後台欄位與入口完整性及命名檢查通過。部署前兩正式站各確認原有八份型錄的封面、說明、預覽與 PDF 下載正常。
 - 型別檢查與正式建置通過。
+- `7164473a` 已部署至 Production `dpl_97yDGY9UacTyozxmKCeV7g7wmCgZ`，Ready 並綁定兩正式網域。兩站確認已提供「型錄清單」與「搜尋型錄名稱」新版程式，資源雜湊一致；部署後各完成八份型錄的封面、說明、預覽與 PDF 下載及四種寬度複驗，公開文件、文字、圖片、連結與部署前逐項一致。未修改正式資料庫。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 catalogue-list-label-local／before／after.json、catalogue-list-label-desktop.jpg 與 catalogue-list-label-production-assets.json。
