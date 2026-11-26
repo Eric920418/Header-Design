@@ -9,6 +9,7 @@ import { productCatalogueDocument, productCatalogueFields, seriesCatalogueDocume
 
 const target = (label, href) => ({ label, href })
 const homePromise = target('首頁 → 品牌承諾', '/#brand-promise')
+const serviceHeadingPaths=['copy.englishLabel','copy.text2','copy.englishTitle','copy.text6']
 const serviceVideo = target('服務流程 → 品牌影片', '/service-process')
 const pavilion = target('集團品牌館 → 主視覺', '/about/exhibition')
 const franchise = target('加盟介紹', '/franchising/intro')
@@ -42,6 +43,7 @@ const visuals = {
 }
 
 export function fieldImpacts({ documentId, path = '', category, slug, rowId, blockHref }, context = {}, previous, next) {
+ if(documentId==='view-pages-service-process'&&serviceHeadingPaths.includes(path))return[target('服務流程 → 介紹標題與英文標籤','/service-process#service-intro-title')]
  const targets = resourceGuide(documentId)?.impacts || []
  const [key, index, property] = path.split('.')
  if (documentId === HOME_HERO_ID && (!path || /^slides(?:\.\d+(?:\.(?:title|route))?)?$/.test(path))) {

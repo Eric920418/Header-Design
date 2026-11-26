@@ -23,6 +23,8 @@ import {remainingHomeHeadings,homeRemainingHeading,effectiveHomeHeadingBody} fro
 import {caseManagementRows,filterCaseManagement,storeCaseManagementLink,caseManagementReturn} from '../shared/cms/case-management.mjs'
 import {HOME_STORES_ID,homeStoreListSchema} from '../shared/cms/store-location.mjs'
 import {knowledgeSearchExample,knowledgeListSearchDefaults} from '../shared/cms/search-settings.mjs'
+import {serviceHeading,serviceHeadingDocument} from '../shared/cms/service-headings.mjs'
+import {pageFieldValue} from '../shared/cms/page-editors.mjs'
 import {headingFieldLabel} from '../shared/cms/heading-labels.mjs'
 import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueFields,productCatalogueTitle} from '../shared/cms/product-catalogue.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
@@ -412,7 +414,7 @@ const downloadBreadcrumb=downloadBlocks.find(b=>b.name==='麵包屑編輯設定'
 assert.deepEqual(downloadBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','型錄管理','區塊共用設定'])
 assert(downloadHero.aliases.includes('franchise-download:頁面最上方'))
 assert.equal(downloadHero.href,'/franchising/download#franchise-download-title')
-assert.deepEqual(downloadHero.fields.filter(f=>f.path.startsWith('copy.text')).map(f=>[f.path,f.label]),[['copy.text3','區塊英文標籤'],['copy.text4','區塊英文主標題（第一段）']])
+assert.deepEqual(downloadHero.fields.filter(f=>f.path.startsWith('copy.text')).map(f=>[f.path,f.label]),[['copy.text3','區塊英文標籤'],['copy.text4','區塊英文主標題']])
 assert.equal(pagePositionContent(downloadHero,previewBodies).image,previewBodies['view-pages-franchising-download'].copy.field1)
 assert(downloadDocument.aliases.includes('franchise-download:加盟簡介與檔案'))
 assert(['加盟簡介與下載按鈕','型錄載入提示','頁面底部返回按鈕'].every(name=>downloadDocument.aliases.includes('franchise-download:'+name)))
@@ -809,3 +811,24 @@ assert(!articleUi.extra.value.includes('slug'));const oldDetail=JSON.stringify(a
 console.log('PASS: identical-version workspace counts and all original article settings remain reachable without changing custom content')
 
 assert(sameContent({title:'相同',image:'/a.jpg'},{image:'/a.jpg',title:'相同'}),'Object key order is not a content change');assert(!sameContent(['甲','乙'],['乙','甲']),'Visible list order remains a real change')
+
+{
+ const page=pageEditors.find(p=>p.id==='service'),document=docs.find(d=>d.id===serviceHeadingDocument),before=structuredClone(document.body)
+ const blocks=pageBlocks(page,docs),intro=blocks.find(b=>b.name==='服務流程')
+ assert.deepEqual(intro.fields.filter(f=>f.documentId===serviceHeadingDocument&&f.path!=='copy.text6').map(f=>f.label),['區塊英文標籤','區塊中文主標題','區塊英文主標題'])
+ assert(!blocks.some(b=>b.fields.some(f=>f.documentId===serviceHeadingDocument&&['copy.text3','copy.text4','copy.text5'].includes(f.path))))
+ assert.equal(pageFieldValue({[document.id]:before},{documentId:document.id,path:'copy.englishLabel'}),'Service Process')
+ assert.equal(serviceHeading(before.copy).englishTitle,before.copy.text3+before.copy.text4+before.copy.text5)
+ const after=structuredClone(before);Object.assign(after.copy,{englishLabel:'SERVICE STEPS',text2:'專業服務每一步',englishTitle:'Design Your Dream Kitchen'})
+ checkPageBody(page,document.id,before,after,document.schema);validate(after,document.schema)
+ const changes=pageChanges(blocks,[document],{[document.id]:before},{[document.id]:after})
+ assert.equal(changes.length,3)
+ assert.equal(changes.find(c=>c.path==='copy.englishTitle').before,serviceHeading(before.copy).englishTitle)
+ assert(changes.every(c=>c.impacts.some(i=>i.href==='/service-process#service-intro-title')))
+ for(const key of ['text3','text4','text5'])assert.equal(after.copy[key],before.copy[key])
+ assert.equal(serviceHeading({englishLabel:'',englishTitle:''}).englishTitle,'')
+ assert.equal(headingFieldLabel('區塊英文主標題'),'區塊英文主標題')
+ assert.equal(headingFieldLabel('區塊英文主標題（第二段）'),'區塊英文主標題（第二段）')
+ assert.deepEqual(document.body,before)
+ console.log('PASS service title labels, editable original rail label, combined legacy English title, preserved old fields, scoped review and immutable fallback')
+}

@@ -1,3 +1,4 @@
+import {effectiveServiceHeadingBody} from './service-headings.mjs'
 import {valueAt,pageFieldValue,pageEditors,pageBlocks,inRowScope} from './page-editors.mjs'
 import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {headingFieldLabel} from './heading-labels.mjs'
@@ -56,7 +57,7 @@ export function contentChanges(previous,next,schema,path='',labels=[]){
 }
 
 export function pageChanges(blocks,documents,previous,next,context={}){
- return documents.flatMap(d=>contentChanges(effectiveHomeHeadingBody(d.id,previous[d.id]),effectiveHomeHeadingBody(d.id,next[d.id]),editingSchema(d.schema,d.id))
+ return documents.flatMap(d=>contentChanges(effectiveHomeHeadingBody(d.id,effectiveServiceHeadingBody(d.id,previous[d.id])),effectiveHomeHeadingBody(d.id,effectiveServiceHeadingBody(d.id,next[d.id])),editingSchema(d.schema,d.id))
   .filter(change=>d.id!=='data-builders'||!overlaps('builderPartners',change.path)).map(change=>{
   const body=change.kind==='remove'?previous[d.id]:next[d.id]
   const owns=f=>f.documentId===d.id&&overlaps(f.path,change.path)&&inRowScope(f.schema,change.path.startsWith(f.path+'.')?valueAt(body,f.path+'.'+change.path.slice(f.path.length+1).split('.')[0]):undefined)

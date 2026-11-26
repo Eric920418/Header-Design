@@ -14,6 +14,7 @@ import {builderStrengthsDocument,builderStrengthsCopy,builderStrengthImageAlt} f
 import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
 import {builderAppointmentHeading} from '~/shared/cms/builder-appointment.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
+import {serviceHeading,serviceHeadingDocument} from '~/shared/cms/service-headings.mjs'
 import {knowledgeSearchExample} from '~/shared/cms/search-settings.mjs'
 import {HOME_PROMISE_ID,homeChineseTitle} from '~/shared/cms/home-headings.mjs'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
@@ -33,6 +34,7 @@ const isLabel=(label:string)=>/標籤|小標|前置英文/.test(label)
 const headings=computed(()=>scene.value.heading.filter((f:any)=>!isLabel(f.label)&&!/語音/.test(f.label)))
 const eyebrows=computed(()=>scene.value.heading.filter((f:any)=>isLabel(f.label)))
 const seriesHeading=computed(()=>['home:品牌系列','home:廚房產品'].includes(props.block?.id)?scene.value.heading.filter((f:any)=>['copy.englishLabel','copy.englishLead','copy.chineseTitle','copy.englishTitleFirst','copy.englishTitleSecond'].includes(f.path)):null)
+const serviceIntro=computed(()=>props.block?.id==='service:服務流程'?serviceHeading(props.bodies[serviceHeadingDocument]?.copy):null)
 const promiseCopy=computed(()=>props.bodies[HOME_PROMISE_ID]?.copy)
 const promiseVisuals=computed(()=>props.bodies['site-visuals'])
 const regions=computed(()=>Object.entries(props.bodies['data-storeCases']?.regionCities||{}) as [string,string[]][])
@@ -49,7 +51,7 @@ const storeNeighbors=computed(()=>{
  return index<0?[]:[rows[(index-1+rows.length)%rows.length],rows[(index+1)%rows.length]]
 })
 const storeSpecs=computed(()=>Object.entries(storeDetails.value?.metaLabels||{}).flatMap(([key,label])=>storeExample.value?.meta?.[key]?[{key,label,value:storeExample.value.meta[key]}]:[]))
-const captions=computed(()=>scene.value.bodyText.filter((f:any)=>!/供語音|載入|失敗|格式欄位|頁數欄位|大小欄位/.test(f.label)))
+const captions=computed(()=>scene.value.bodyText.filter((f:any)=>(!serviceIntro.value||f.path!=='copy.text6')&&!/供語音|載入|失敗|格式欄位|頁數欄位|大小欄位/.test(f.label)))
 const media=computed(()=>scene.value.media.filter((f:any,index:number)=>index<3||highlighted(f.path)))
 const itemText=(item:any)=>{const text=item.value?.summary?.excerpt||item.value?.intro?.paragraphs||item.value?.description||item.value?.paragraphs||item.value?.detail||item.value?.copy||item.value?.quote||item.value?.excerpt||item.value?.summary||'';return Array.isArray(text)?text.join('\n'):typeof text==='string'?text:''}
 const marqueeRows=computed(()=>{
@@ -480,6 +482,10 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
       <h3 v-else-if="f.path==='copy.chineseTitle'" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</h3>
       <strong v-else :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</strong>
      </template>
+    </header>
+    <header v-else-if="serviceIntro" class="cms-service-intro-heading">
+     <small :class="{'is-focused':highlighted('copy.englishLabel')}">{{ serviceIntro.englishLabel }}</small>
+     <div><h3 :class="{'is-focused':highlighted('copy.text2')}">{{ bodies[serviceHeadingDocument]?.copy?.text2 }}</h3><strong :class="{'is-focused':highlighted('copy.englishTitle')}">{{ serviceIntro.englishTitle }}</strong><p :class="{'is-focused':highlighted('copy.text6')}">{{ bodies[serviceHeadingDocument]?.copy?.text6 }}</p></div>
     </header>
     <header v-else-if="headings.length||eyebrows.length" class="cms-scene-heading"><small v-for="f in eyebrows" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</small><h3 v-for="f in headings" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</h3></header>
     <template v-if="scene.kind==='filter'">

@@ -7,8 +7,7 @@ export const headingLabels = {
 }
 
 const aliases = {
-  區塊英文主標題: headingLabels.englishTitleFirst,
-  區塊英文標題: headingLabels.englishTitleFirst,
+  區塊英文標題: '區塊英文主標題',
   選購指南英文標籤: headingLabels.englishLabel,
   選購指南中文標題: headingLabels.chineseTitle,
   英文標題第一段: headingLabels.englishTitleFirst,

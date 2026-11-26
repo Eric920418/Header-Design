@@ -10,10 +10,11 @@ import { builderStrengthsSchema } from './builder-strengths.mjs'
 import { builderHomeOneSchema } from './builder-home-one.mjs'
 import { builderAppointmentSchema } from './builder-appointment.mjs'
 import { builderCatalogueSchema } from './builder-catalogue.mjs'
+import { serviceHeadingSchema } from './service-headings.mjs'
 import { productCatalogueSchema } from './product-catalogue.mjs'
 
 export function documentSchema(id, schema) {
-  for (const extend of [homeHeroSchema, homeGallerySchema, builderSeriesSchema, kitchenSeriesHeroSchema, customCasesSchema, homeHeadingSchema, pageDestinationSchema, breadcrumbSchema, builderStrengthsSchema, builderHomeOneSchema, builderAppointmentSchema, builderCatalogueSchema, productCatalogueSchema]) {
+  for (const extend of [homeHeroSchema, homeGallerySchema, builderSeriesSchema, kitchenSeriesHeroSchema, customCasesSchema, homeHeadingSchema, pageDestinationSchema, breadcrumbSchema, builderStrengthsSchema, builderHomeOneSchema, builderAppointmentSchema, builderCatalogueSchema, productCatalogueSchema, serviceHeadingSchema]) {
     schema = extend(id, schema)
   }
   return schema

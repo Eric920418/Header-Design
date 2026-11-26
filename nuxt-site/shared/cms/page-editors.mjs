@@ -1,3 +1,4 @@
+import {effectiveServiceHeadingBody} from './service-headings.mjs'
 import {isSystemCabinetDocument,legacyKnowledgeSection} from './knowledge-editor.mjs'
 import {effectiveHomeHeadingBody} from './home-headings.mjs'
 import {builderStrengthsDocument,builderStrengthsFields,isBuilderStrengthsCopy} from './builder-strengths.mjs'
@@ -131,7 +132,7 @@ export function pageFieldValue(bodies, field){
   const key=field.path.slice(5)
   return body?.copy?.[key]??builderStrengthsFields[key].fallback
  }
- return valueAt(effectiveHomeHeadingBody(field.documentId,body),field.path)
+ return valueAt(effectiveHomeHeadingBody(field.documentId,effectiveServiceHeadingBody(field.documentId,body)),field.path)
 }
 export function withValue(body,path,value){
  const keys=path.split('.');if(keys.some(k=>['__proto__','constructor','prototype'].includes(k)))throw Error('不支援的修改位置')

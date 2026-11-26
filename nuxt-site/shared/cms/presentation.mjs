@@ -1,3 +1,4 @@
+import {serviceHeadingDocument,serviceHeadingFields,serviceHeadingSchema} from './service-headings.mjs'
 import copyFields from './presentation-copy.json' with {type:'json'}
 import { homeHeroSchema, HOME_HERO_ID } from './hero-media.mjs'
 import { homeGallerySchema, HOME_GALLERY_ID } from './gallery-cases.mjs'
@@ -159,6 +160,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁品牌館資訊與預約','建商首頁的預約區']}
  if(resourceId===builderAppointmentDocument&&isBuilderAppointmentHeading(normalized))return{label:schema.label}
  if(resourceId==='data-catalogues'&&normalized==='KITCHEN_CATALOGUES')return{label:'型錄清單',searchLabel:'搜尋型錄名稱'}
+ if(resourceId===serviceHeadingDocument&&normalized.startsWith('copy.')&&Object.hasOwn(serviceHeadingFields,key))return{label:serviceHeadingFields[key].label,singleLine:true}
  if(resourceId===builderStrengthsDocument&&normalized==='strengths')return{label:'智能整合圖文',newItemLabel:'圖文項目'}
  if(resourceId===builderStrengthsDocument&&isBuilderStrengthsCopy(normalized))return{label:schema.label}
  if(resourceId===builderHomeOneDocument){
@@ -242,7 +244,7 @@ export function fieldPresentation(resourceId,path,schema={}){
  return{label:'內容欄位',help:'此欄位尚未提供位置說明，請先確認對應範圍。',unmapped:true}
 }
 export function editingSchema(schema,resourceId,path=''){
- if(!path)schema=pageDestinationSchema(resourceId,homeHeadingSchema(resourceId,homeGallerySchema(resourceId,homeHeroSchema(resourceId,schema))))
+ if(!path)schema=serviceHeadingSchema(resourceId,pageDestinationSchema(resourceId,homeHeadingSchema(resourceId,homeGallerySchema(resourceId,homeHeroSchema(resourceId,schema)))))
  const result={...schema},info=fieldPresentation(resourceId,path,schema)
  if(path)Object.assign(result,info)
  const caption=copyButtonText[resourceId.slice(5)]?.[path.match(/^copy\.field(\d+)$/)?.[1]]

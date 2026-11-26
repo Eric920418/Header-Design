@@ -1,3 +1,4 @@
+import {serviceHeadingDocument,serviceHeadingFields} from '../shared/cms/service-headings.mjs'
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
 import {resourceGuide,resourceSearchText,editingSchema,homeResources} from '../shared/cms/presentation.mjs'
@@ -139,6 +140,7 @@ for(const[id,file]of Object.entries(files)){
  const source=await readFile(new URL(file,root),'utf8'),schema=editingSchema(seed.find(d=>d.id===id).schema,id)
  const linkSource=id==='view-pages-knowledge-design-slug-'?await readFile(new URL('components/internal/KnowledgeRelatedCarousel.vue',root),'utf8'):source
  const used=new Set([...source.matchAll(/cmsCopy\.copy\.([a-zA-Z0-9_]+)/g)].map(m=>m[1]))
+ if(id===serviceHeadingDocument&&source.includes('serviceHeading(cmsCopy.copy)'))for(const key of Object.keys(serviceHeadingFields))if(source.includes('introHeading.'+key))used.add(key)
  if(id===HOME_PROJECT_ID&&source.includes('homeProjectHeading(cmsCopy.copy)'))for(const key of Object.keys(homeProjectHeading()))if(source.includes('heading.'+key))used.add(key)
  if(id===HOME_SERVICES_ID&&source.includes('homeServicesHeading(cmsCopy.copy)'))for(const key of Object.keys(homeServicesHeading()))if(source.includes('heading.'+key))used.add(key)
  if(remainingHomeHeadings[id]&&source.includes('homeRemainingHeading('))for(const key of Object.keys(remainingHomeHeadings[id]))if(source.includes('heading.'+key))used.add(key)

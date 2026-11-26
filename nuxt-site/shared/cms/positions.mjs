@@ -105,7 +105,7 @@ const copyGroups={
  ],
  privacy:[['頁面標題與修訂日期',{field1:'頁面英文標題',text2:'條款介紹文字',text3:'最後修訂日期',text4:'公司名稱'}]],
  'service-process':[
-  ['主視覺標題',{text1:'主視覺標題'}],['服務流程',{text2:'區塊中文主標題',text3:'區塊英文主標題（第一段）',text4:'區塊英文主標題（第二段）',text5:'區塊英文主標題（第三段）',text6:'介紹文字'}],['品牌影片',{field7:'影片圖片說明'}],
+  ['主視覺標題',{text1:'主視覺標題'}],['服務流程',{englishLabel:'區塊英文標籤',text2:'區塊中文主標題',englishTitle:'區塊英文主標題',text6:'介紹文字'}],['品牌影片',{field7:'影片圖片說明'}],
  ],
 }
 const componentCopyGroups={
