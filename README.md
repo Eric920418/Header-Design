@@ -5317,3 +5317,4 @@ final result: passed
 - 本機確認入口順序、兩個文字欄位、留空預設、右欄焦點對位、查看官網錨點與真實草稿預覽（含首頁連結），四種寬度正常。SQL 交易內確認預覽／儲存／發布僅產生一份修改文件版本，原標題、門市資料及其他文件完整保留；交易回滾並清除測試帳號／預覽，原文件／版本／結構指紋一致。既有欄位完整性、後台工作流程、命名與欄位來源檢查通過。
 - 部署前兩正式站各確認三間原門市與封面、各區域／縣市篩選、篩選後前往門市內頁及帶條件返回、首頁連結與四種寬度，並保存公開內容供部署後比對。
 - 型別檢查與正式建置通過，無資料庫結構更新或正式資料改寫。
+- `e2e78774` 已部署至 Production `dpl_3HxhFaRZUJrqwMrSzovMeWed3kdB`，Ready 並綁定兩正式網域。兩站實際提供案例門市麵包屑欄位與正確頁首預覽，資源雜湊一致；部署後各完成三間原門市／封面、區域與縣市篩選、帶條件進入門市內頁與返回、首頁連結及四種寬度複驗，公開文件、文字、圖片、連結及各篩選結果與部署前逐項一致。未修改正式資料庫。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 store-breadcrumb-local／before／after.json、store-breadcrumb-editor.jpg 及 store-breadcrumb-production-assets.json。
