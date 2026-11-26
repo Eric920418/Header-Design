@@ -50,8 +50,6 @@ function changeStoreRegion(event:Event){
 }
 const workbench={focused:ref(''),editing:ref(''),selection:ref<any>(null),rows:ref<Record<string,any>>({}),baseline,documents:docs,metadata:computed(()=>pageData.value?.rowPresentation||{}),busy,returnFocus:()=>{},position:()=>{positionOpen.value=true},select:(edit:boolean)=>{positionOpen.value=!edit&&window.innerWidth<1024}}
 provide('cms-workbench',workbench)
-const catalogueWorkbench=computed(()=>['series-catalogue','product-catalogue'].includes(props.id))
-const catalogueItemEditing=computed(()=>catalogueWorkbench.value&&!!workbench.editing.value)
 const seriesPart=computed(()=>props.id==='series'?seriesEditorSection(route.query.seriesPart):null)
 const focusedGroup=ref('')
 const franchiseCatalogue=computed(()=>active.value?.kind==='franchise-download-catalogue')
@@ -154,6 +152,7 @@ function editableBlockFields(block:any){
 }
 const visibleFields=computed(()=>editableBlockFields(active.value))
 const hardwareTitleField=computed(()=>props.id==='product-catalogue'?visibleFields.value.find((f:any)=>f.path==='copy.kitchenwareTitle'):undefined)
+function catalogueDisplayName(row:any){return productCatalogueTitle(row,bodies.value[productCatalogueDocument]?.copy)}
 function restoreHardwareTitle(){
  const field=hardwareTitleField.value
  if(field)update(field,valueAt(baseline.value[field.documentId],field.path))
@@ -384,7 +383,7 @@ onBeforeUnmount(()=>{sequence++;controller?.abort();observer?.disconnect();clear
 onBeforeRouteLeave(()=>!dirty.value||window.confirm('本頁還有尚未儲存的修改，確定離開？'))
 onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.value||window.confirm('本頁還有尚未儲存的修改，確定離開？'))
 </script>
-<template><section ref="formRoot" class="cms-page-editor cms-work-editor cms-workbench cms-position-workbench" :class="{'cms-is-editing':!!workbench.editing.value&&!catalogueWorkbench,'cms-catalogue-item-editing':catalogueItemEditing,'cms-text-editing':!collections.length,'cms-inspiration-workbench':id==='inspiration','cms-home-workbench':id==='home'}" :aria-busy="busy" @focusin="trackField">
+<template><section ref="formRoot" class="cms-page-editor cms-work-editor cms-workbench cms-position-workbench" :class="{'cms-is-editing':!!workbench.editing.value,'cms-text-editing':!collections.length,'cms-inspiration-workbench':id==='inspiration','cms-home-workbench':id==='home'}" :aria-busy="busy" @focusin="trackField">
  <header class="cms-page-editor-heading"><div class="cms-title-group"><NuxtLink :to="returnLink" class="cms-editor-breadcrumb">{{ id===storeCasesPageId&&route.query.returnToCases==='1'?'← 返回案例管理':'← 返回' }}</NuxtLink><h1>{{ title }}<span>｜{{ id==='inspiration'?active?.name:'內容管理' }}</span></h1></div><AdminContentSearch /><a v-if="publicLocation" :href="publicLocation" target="_blank" rel="noopener noreferrer" class="cms-button">查看官網 ↗</a><button v-else type="button" class="cms-button" @click="preparePreview">預覽草稿</button></header>
  <p v-if="error" class="cms-error" role="alert">{{ error }} <button type="button" class="cms-button" @click="reload">查看最新內容</button></p><p v-if="notice" class="cms-notice" role="status">{{ notice }}</p><p v-if="!pageData&&!error" class="cms-empty" role="status">正在載入頁面內容…</p>
  <template v-if="pageData">
@@ -392,7 +391,6 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
  <div class="cms-page-edit-layout">
   <nav class="cms-block-nav cms-panel" aria-label="官網區塊"><h2>選擇{{ title==='首頁'?'首頁':'官網' }}區塊</h2><button v-for="b in navigationBlocks.filter(b=>!('secondary' in b&&b.secondary))" :key="b.id" type="button" :aria-current="currentLocation===b.id?'location':undefined" @click="chooseLocation(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span><strong>{{ b.name }}</strong><small>{{ b.hint }}</small></span><i v-if="modified.some(m=>m.id===b.id)" aria-label="尚未儲存">●</i></button><details v-if="blocks.some(b=>b.secondary)"><summary>其他設定</summary><button v-for="b in blocks.filter(b=>b.secondary)" :key="b.id" type="button" @click="selectBlock(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'區塊縮圖'" /><span>{{ b.name }}</span></button></details></nav>
   <div class="cms-page-form cms-panel">
-   <div v-if="catalogueWorkbench" id="cms-item-editor" v-show="catalogueItemEditing" />
    <div class="cms-block-heading"><div><h2 class="cms-block-title" tabindex="-1">{{ seriesPart?.name||active?.name }}</h2><p v-if="!caseManagement" class="cms-field-help">{{ seriesPart?.hint||active?.hint }}<template v-if="collections.length&&!newsArticleList">；選內容看位置，按「編輯」修改。</template></p></div><button type="button" class="cms-button cms-position-toggle" data-cms-keep-field @click="positionOpen=true">看位置</button></div>
    <div v-if="active?.id==='franchise:加盟資料下載入口'" class="cms-download-editor-link">
     <p class="cms-field-help">這裡編輯加盟介紹上的入口。下載頁的大圖、主標題和按鈕請到下載頁編輯。</p>
@@ -418,7 +416,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
      </fieldset></template>
     </AdminItems>
    </div><div v-else-if="hardwareTitleField&&f.path==='PRODUCT_CATALOGUES'" class="cms-block-field">
-    <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :display-name="row=>productCatalogueTitle(row,bodies[productCatalogueDocument]?.copy)" :has-related-changes="row=>row.id==='kitchenware-2026'&&valueAt(bodies[hardwareTitleField.documentId],hardwareTitleField.path)!==valueAt(baseline[hardwareTitleField.documentId],hardwareTitleField.path)" @update:model-value="update(f,$event)" @cancel-related="restoreHardwareTitle">
+    <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :display-name="catalogueDisplayName" :has-related-changes="row=>row.id==='kitchenware-2026'&&valueAt(bodies[hardwareTitleField.documentId],hardwareTitleField.path)!==valueAt(baseline[hardwareTitleField.documentId],hardwareTitleField.path)" @update:model-value="update(f,$event)" @cancel-related="restoreHardwareTitle">
      <template #editor="{row}">
       <AdminFields v-if="row.value.id==='kitchenware-2026'" :model-value="pageFieldValue(bodies,hardwareTitleField)" :schema="hardwareTitleField.schema" :document-id="hardwareTitleField.documentId" :path="hardwareTitleField.path" @update:model-value="update(hardwareTitleField,$event)" />
       <AdminFields :model-value="row.value" :schema="productCatalogueItemSchema(f.schema.item,row.value.id)" :document-id="f.documentId" :path="f.path+'.'+row.index" @update:model-value="editCatalogueItem(f,row.index,$event)" />
@@ -515,7 +513,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
    <details v-if="session?.role==='admin'" class="cms-secondary"><summary>其他操作</summary><button type="button" class="cms-button" :disabled="busy||dirty||!unpublishDocuments.length" @click="unpublish">暫停本頁內容</button></details>
    <details class="cms-secondary"><summary>過去的修改</summary><p v-if="franchiseNews" class="cms-field-help">文章版本可從<NuxtLink :to="pageEditorLink('news',route.query,'news:最新消息列表')">「優惠消息」</NuxtLink>查看。</p><section v-for="d in historyDocs" :key="d.id"><h3>{{ resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0] }}</h3><div v-for="v in d.versions" :key="v.id" class="cms-history-row"><span>{{ cmsDate(v.createdAt) }} · {{ v.actor||'初始內容' }}</span><button v-if="session?.role==='admin'" type="button" class="cms-button" :disabled="busy||dirty" @click="restore(d,v.id)">取回這份內容</button></div></section></details>
   </div>
-  <aside class="cms-inspector cms-panel" :class="{'is-editing':!!workbench.editing.value&&!catalogueWorkbench}" aria-label="位置示意與編輯"><AdminPositionPreview v-if="!workbench.editing.value||catalogueWorkbench" :block="positionBlock" :bodies="bodies" :selected="positionSelection" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /><div v-if="!catalogueWorkbench" id="cms-item-editor" /></aside>
+  <aside class="cms-inspector cms-panel" :class="{'is-editing':!!workbench.editing.value}" aria-label="位置示意與編輯"><AdminPositionPreview v-if="!workbench.editing.value" :block="positionBlock" :bodies="bodies" :selected="positionSelection" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /><div id="cms-item-editor" /></aside>
  </div>
  <footer class="cms-savebar" aria-label="目前內容操作"><span class="cms-save-status" role="status">{{ status }} <button v-if="dirty" type="button" class="cms-change-link" @click="changesOpen=true">查看修改</button></span><div class="cms-actions"><button type="button" class="cms-button cms-preview-button" :disabled="busy" @click="preparePreview">預覽效果</button><button type="button" class="cms-button" :class="{'cms-button-gold':dirty}" :disabled="busy||!dirty" @click="requestSave">{{ busy?'處理中…':'儲存草稿' }}</button><button v-if="session?.role==='admin'" type="button" class="cms-button cms-button-gold" :disabled="busy||validating||(!dirty&&!pending)" @click="confirmPublish">{{ validating?'正在確認…':'更新官網' }}</button></div></footer>
  <AdminDialog :open="changesOpen" title="本頁尚未儲存的修改" wide @close="changesOpen=false"><AdminChangeList :changes="changeDetails" /><p v-if="!dirty" role="status">目前沒有尚未儲存的修改。</p></AdminDialog>

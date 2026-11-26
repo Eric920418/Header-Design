@@ -1041,7 +1041,6 @@
 .cms .cms-builder-catalogue-notice span{display:block;text-wrap:balance;}
 .cms .cms-builder-notice-settings{margin:16px 0;padding:10px 12px 12px;border:1px solid var(--cms-line);border-radius:5px;}
 .cms .cms-builder-notice-settings legend{padding-inline:4px;font-weight:650;}
-.cms .cms-catalogue-item-editing .cms-page-form > :not(#cms-item-editor){display:none;}
 .cms .cms-product-care-scene{display:grid;gap:12px;min-width:0;}
 .cms .cms-product-care-scene h3{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 7px;}
 .cms .cms-product-care-scene header p{width:fit-content;margin-bottom:6px;padding:2px 8px;border:1px solid var(--cms-line);border-radius:999px;}
