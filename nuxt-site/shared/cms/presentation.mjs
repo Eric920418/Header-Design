@@ -150,6 +150,8 @@ export function placeDestinations(fields, keyOf, afterOf) {
 
 export function fieldPresentation(resourceId,path,schema={}){
  const normalized=path.replace(/^\./,'').replace(/\.\d+(?=\.|$)/g,'.*'),key=normalized.split('.').at(-1)
+ if(['cmsSettings.seoTitle','seo.title'].includes(normalized))return{label:'搜尋結果標題',singleLine:true,placeholder:'留空使用官網原本的標題',help:resourceId==='view-pages-knowledge-design-slug-'?'留空會自動使用各文章的標題；填寫後會套用到所有一般文章。':'選填；留空沿用官網原本的標題，不需重複填寫。'}
+ if(['cmsSettings.seoDescription','seo.description'].includes(normalized))return{label:'搜尋結果摘要',placeholder:'留空使用官網原本的摘要',help:resourceId==='view-pages-knowledge-design-slug-'?'留空會自動使用各文章的摘要；填寫後會套用到所有一般文章。':'選填；留空沿用官網原本的摘要，不需重複填寫。'}
  if(remainingHomeHeadings[resourceId]?.[key]&&normalized==='copy.'+key)return{label:remainingHomeHeadings[resourceId][key].label,singleLine:true}
  if(resourceId===HOME_PROMISE_ID&&normalized==='copy.chineseTitle')return{label:headingLabels.chineseTitle,singleLine:true}
  if(['view-components-home-HomeProject',HOME_SERVICES_ID].includes(resourceId)&&normalized==='copy.'+key&&Object.hasOwn(headingLabels,key))return{label:headingLabels[key],singleLine:true}

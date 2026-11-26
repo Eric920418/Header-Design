@@ -22,6 +22,7 @@ import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalog
 import {remainingHomeHeadings,homeRemainingHeading,effectiveHomeHeadingBody} from '../shared/cms/home-headings.mjs'
 import {caseManagementRows,filterCaseManagement,storeCaseManagementLink,caseManagementReturn} from '../shared/cms/case-management.mjs'
 import {HOME_STORES_ID,homeStoreListSchema} from '../shared/cms/store-location.mjs'
+import {knowledgeSearchExample,knowledgeListSearchDefaults} from '../shared/cms/search-settings.mjs'
 import {headingFieldLabel} from '../shared/cms/heading-labels.mjs'
 import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueFields,productCatalogueTitle} from '../shared/cms/product-catalogue.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
@@ -102,12 +103,32 @@ const oldCards=seriesCardRedirect({sitePage:'series',block:'series:首頁與選�
 assert.deepEqual(oldCards,{path:'/admin/home',query:{section:'design',q:'AI',page:'2',returnPath:'/admin/content',sitePage:'home',block:'home:品牌系列',list:'data-kitchenStyles:KITCHEN_STYLES',item:'aikitchen'}})
 assert.equal(seriesCardRedirect({sitePage:'series',block:'series:系列內頁'}),undefined)
 const guidePage=pageEditors.find(p=>p.id==='knowledge'),guideBlocks=pageBlocks(guidePage,docs)
-assert.deepEqual(guideBlocks.map(b=>b.name),['主視覺標題','麵包屑編輯設定','文章管理','頁面共用設定'])
+assert.deepEqual(guideBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','文章管理','頁面共用設定'])
 const guideArticles=guideBlocks.find(b=>b.name==='文章管理'),guideShared=guideBlocks.find(b=>b.name==='頁面共用設定')
 assert(guideArticles.aliases.includes('knowledge:系統櫃板材比較'))
 assert(guideShared.aliases.includes('knowledge:延伸文章按鈕'))
 assert.deepEqual(guideArticles.fields.filter(f=>!f.formGroup).map(f=>[f.documentId,f.path]),[['knowledge-articles','items']])
 assert(guideArticles.fields.some(f=>f.path==='systemCabinetMaterials'&&f.formGroup==='系統櫃板材比較'))
+const guideSearch=guideBlocks.find(b=>b.name==='顯示與搜尋設定')
+assert(guideSearch.secondary);assert.equal(guideSearch.fields.length,3)
+assert(guideSearch.aliases.includes('knowledge:文章顯示設定'))
+for(const p of pageEditors){
+ const blocks=workbenchBlocks(p.id,pageBlocks(p,docs))
+ for(const block of blocks)for(const field of block.fields)if(['cmsSettings','seo'].includes(field.path)){
+  assert(block.secondary,p.id+': search settings must be under Other settings')
+  assert.equal(block.name,'顯示與搜尋設定');assert(!field.schema.advanced)
+  assert.equal(block.hint,'官網顯示開關與搜尋結果文字')
+ }
+}
+const seoBodies=Object.fromEntries(docs.map(d=>[d.id,d.body])),seoBefore=JSON.stringify(seoBodies)
+assert.deepEqual(knowledgeSearchExample('view-pages-knowledge-index',seoBodies,{}).title,knowledgeListSearchDefaults.title)
+for(const [id,system] of [['view-pages-knowledge-design-systemcabinet',true],['view-pages-knowledge-design-slug-',false]]){
+ const article=seoBodies['knowledge-articles'].items.find(i=>i.enabled!==false&&(system?i.slug==='systemcabinet':i.slug!=='systemcabinet'))
+ const example=knowledgeSearchExample(id,seoBodies,{seoTitle:'',seoDescription:''})
+ assert.equal(example.title,article.summary.title+'｜SAKURA 整體廚房');assert.equal(example.description,article.summary.excerpt)
+ assert.equal(knowledgeSearchExample(id,seoBodies,{seoTitle:'自訂搜尋標題',seoDescription:'自訂摘要'}).title,'自訂搜尋標題')
+}
+assert.equal(JSON.stringify(seoBodies),seoBefore,'Automatic SEO examples must not write duplicate data')
 const knowledgeListing=docs.find(d=>d.id==='view-pages-knowledge-index')
 const relabelledGuide=structuredClone(knowledgeListing.body)
 relabelledGuide.copy.breadcrumbList='裝修指南測試'
@@ -149,11 +170,11 @@ checkPageBody(pageEditors[0],promise.id,promise.body,promiseEdit,promise.schema)
 validate(promiseEdit,promise.schema)
 assert.equal(pageChanges(home,[promise],{[promise.id]:promise.body},{[promise.id]:promiseEdit}).find(change=>change.path==='copy.chineseTitle').before,'品牌承諾')
 const inspiration=workbenchBlocks('inspiration',pageBlocks(pageEditors.find(p=>p.id==='inspiration'),docs))
-assert.deepEqual(inspiration.map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理','頁面共用設定'])
+assert.deepEqual(inspiration.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理','頁面共用設定'])
 const inspirationShared=inspiration.find(b=>b.name==='頁面共用設定')
 const inspirationBreadcrumb=inspiration.find(b=>b.preview==='inspiration-breadcrumb')
-assert.equal(inspirationShared.fields.filter(f=>f.formGroup==='顯示與搜尋設定'&&f.schema.advanced).length,2)
-assert(inspirationShared.aliases.includes('inspiration:顯示與搜尋設定'))
+assert(!inspirationShared.fields.some(f=>['cmsSettings','seo'].includes(f.path)))
+assert.equal(inspiration.find(b=>b.secondary&&b.name==='顯示與搜尋設定').fields.length,2)
 assert.deepEqual(inspirationBreadcrumb.fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbList','copy.breadcrumbDetail'])
 const breadcrumbDocument=docs.find(d=>d.id==='view-pages-design-inspiration-index')
 assert(!Object.hasOwn(breadcrumbDocument.body.copy,'breadcrumbHome'),'Older data must work without a migration')

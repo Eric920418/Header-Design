@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {knowledgeListSearchDefaults} from '~/shared/cms/search-settings.mjs'
 const cmsCopy = await useCmsResource('view-pages-knowledge-index', {"copy":{"text1":"Kitchen Knowledge","text2":" Take A Look At ","text3":"Our Latest Blog","text4":" & Articles. "},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 import { knowledgeBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
 const breadcrumbs = knowledgeBreadcrumb(cmsCopy.copy)
@@ -10,8 +11,8 @@ const { KITCHEN_GUIDE_ARTICLES } = await useCmsResource('data-kitchenGuides', { 
 const featuredArticle = KITCHEN_GUIDE_ARTICLES[0]!
 
 useSeoMeta({
-  title: '廚房裝修指南｜SAKURA 整體廚房',
-  description: '從系統櫃材質、廚房插座到中島餐桌規劃，閱讀 SAKURA 整體廚房精選裝修指南。',
+  title: knowledgeListSearchDefaults.title,
+  description: knowledgeListSearchDefaults.description,
   ogTitle: '廚房裝修指南｜SAKURA 整體廚房',
   ogDescription: '廚房系統櫃、插座配置與中島餐桌的實用規劃知識。',
   ogImage: featuredArticle.cover,

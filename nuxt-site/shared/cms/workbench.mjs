@@ -21,7 +21,7 @@ export function workbenchBlocks(page,blocks,recentArticles){
   const h=page==='home'&&home.find(i=>b.id==='home:'+i[0])
   const old=page==='knowledge'&&b.name==='文章管理'?'文章列表':page.startsWith('news-')&&/管理$/.test(b.name)?'消息列表':''
   const fields=b.fields.map(f=>f.documentId==='news-articles'?{...f,schema:{...f.schema,label:({'news':'文章清單','news-latest':'最新消息','news-activities':'優惠活動','news-video':'媒體影音','franchise':'加盟文章'})[page]||f.label,newItemLabel:({'news':'消息','news-latest':'消息','news-activities':'活動','news-video':'影片'})[page]||'文章',...(f.schema.newsOverview?{searchLabel:'搜尋文章標題'}:{})}}:f)
-  result.push(decoratePosition(page,{...b,name:h?.[1]||b.name,hint:b.hint||h?.[2]||(b.fields.some(f=>f.schema.type==='array')?'圖片、文字與順序':'標題、介紹與按鈕'),kind:b.kind||h?.[3]||(/門市|品牌館/.test(b.name)?'stores':/型錄/.test(b.name)?'catalogue':'content'),fields,aliases:[...new Set([b.id,...b.aliases||[],...(old?[page+':'+old]:[])])]}))
+  result.push(decoratePosition(page,{...b,name:h?.[1]||b.name,hint:b.hint||h?.[2]||(b.secondary&&b.name==='顯示與搜尋設定'?'官網顯示開關與搜尋結果文字':undefined)||(b.fields.some(f=>f.schema.type==='array')?'圖片、文字與順序':'標題、介紹與按鈕'),kind:b.kind||h?.[3]||(/門市|品牌館/.test(b.name)?'stores':/型錄/.test(b.name)?'catalogue':'content'),fields,aliases:[...new Set([b.id,...b.aliases||[],...(old?[page+':'+old]:[])])]}))
  }
  if(page==='home')result.sort((a,b)=>(home.findIndex(i=>a.id==='home:'+i[0])+1||99)-(home.findIndex(i=>b.id==='home:'+i[0])+1||99))
  if(page==='news'&&recentArticles){
@@ -167,7 +167,7 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
  const detail=fields.some(f=>/-slug-$/.test(f.documentId))||/系統櫃/.test(block?.name)
  const contextImage=(detail?presentation.detailHeroImage:'')||firstImage(positionImage(definition?.hero,bodies))||presentation.heroImage||''
  const auxiliary=fields.filter(f=>typeof f.value==='string'&&f.schema.readingGroup).map(f=>({path:f.path,label:f.label,value:f.value}))
- const displaySettings=fields.filter(f=>['cmsSettings','seo'].includes(f.path)).map(f=>({label:f.label,value:f.value||{}}))
+ const displaySettings=fields.filter(f=>['cmsSettings','seo'].includes(f.path)).map(f=>({documentId:f.documentId,path:f.path,label:f.label,value:f.value||{}}))
  const destinations=fields.filter(f=>typeof f.value==='string'&&f.schema.format==='url'&&f.schema.destination)
  const destination=destinations.find(f=>f.path===focusedPath)||destinations[0]
  const item=selected?.value,paragraphs=item?.intro?.paragraphs||item?.paragraphs||item?.description||item?.summary?.excerpt||item?.detail||item?.quote||item?.summary||''

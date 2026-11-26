@@ -6,7 +6,6 @@ export const knowledgeArticleSections = {
   '系統櫃挑選步驟': { title: '挑選步驟與推薦連結', kind: 'steps', anchor: 'system-cabinet-steps' },
   '系統櫃推薦案例': { title: '推薦案例', kind: 'cards', anchor: 'system-cabinet-cases' },
   '系統櫃文章結語': { title: '文章結語與型錄連結', kind: 'article', anchor: 'system-cabinet-closing' },
-  '文章顯示設定': { title: '顯示與搜尋設定', kind: 'content', anchor: '' },
 }
 
 export function isSystemCabinetDocument(id) {

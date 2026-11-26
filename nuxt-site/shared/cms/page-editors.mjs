@@ -222,23 +222,23 @@ export function pageBlocks(p,documents){
    const previous=fieldGroup(p,d.id,path,s),displaySettings=previous==='顯示與搜尋設定'
    const positionName=positionGroup(p.id,d.id,path)||previous
    const systemArticle=p.id==='knowledge'&&isSystemCabinetDocument(d.id)
-   const formGroup=systemArticle?(displaySettings?'文章顯示設定':positionName)
-    :p.id==='inspiration'&&(displaySettings||Object.hasOwn(inspirationSharedGroups,previous))?previous
+   const formGroup=displaySettings?undefined:systemArticle?positionName
+    :p.id==='inspiration'&&Object.hasOwn(inspirationSharedGroups,previous)?previous
     :p.id==='news-latest'&&positionName==='頁面共用設定'?(/^copy\.(field2|text3|field4|text5)$/.test(path)?'文章標題上方的分類連結':'文章底部的分類選單')
     :p.id==='knowledge'&&d.id!==view('knowledge-index')&&d.id!=='knowledge-articles'?positionName:undefined
    const guideBreadcrumb=p.id==='knowledge'&&d.id===view('knowledge-index')&&path.startsWith('copy.breadcrumb')
-   const name=systemArticle?'文章管理':guideBreadcrumb?'麵包屑編輯設定':(formGroup||p.id==='knowledge'&&displaySettings)?'頁面共用設定':positionName
+   const name=displaySettings?'顯示與搜尋設定':systemArticle?'文章管理':guideBreadcrumb?'麵包屑編輯設定':formGroup?'頁面共用設定':positionName
    const id=p.id+':'+name,location=positionField(d.id,path)
    let block=blocks.find(b=>b.id===id)
    if(!block){block={id,name,secondary:name==='顯示與搜尋設定',href:p.id==='home'?resourceGuide(workspaceFor(d.id).id).href:p.href,...(p.id==='inspiration'?inspirationSections[name]:{}),fields:[]};blocks.push(block)}
-   const aliases=[previous,positionName].filter(alias=>alias!==name&&(!systemArticle||!['顯示與搜尋設定','整頁共用文字'].includes(alias)))
+   const aliases=[previous,positionName,...(displaySettings&&systemArticle?['文章顯示設定']:[])].filter(alias=>alias!==name&&(!systemArticle||!['顯示與搜尋設定','整頁共用文字'].includes(alias)))
    if(aliases.length)block.aliases=[...new Set([...(block.aliases||[]),...aliases.map(alias=>p.id+':'+alias)])]
    if(p.id==='visuals'&&path.startsWith('images.'))block.aliases=[...new Set([...(block.aliases||[]),'visuals:圖片集'])]
    if(p.id==='home'&&d.id==='data-kitchenStyles'&&path==='KITCHEN_STYLES')block.aliases=[...(block.aliases||[]),'home:首頁與選單系列卡片']
    const cleanLabel=(s.destination||s.imageReading?s.label:location?.label)||(displaySettings?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,''))
    const labels=s=>[s.label||'',s.positionLegacyLabel||'',s.readingGroup?'朗讀 輔助閱讀 螢幕閱讀器':'',s.imageReading?'圖片說明 圖片替代文字':'',...(s.destination?[s.help]:[]),...Object.values(s.fields||{}).flatMap(labels),...(s.item?labels(s.item):[])]
    const newsList=d.id==='news-articles'&&(p.id==='franchise'?{newsOverview:true,rowIds:franchiseNewsIds}:p.category?{rowFilter:{path:'summary.category',value:p.category},newCategory:p.category,...(p.id==='news-latest'?{newsOverview:true}:{})}:{newsOverview:true,newCategory:'latest'})
-   block.fields.push({documentId:d.id,path,label:cleanLabel,...(formGroup?{formGroup}:{}),searchTerms:labels(s).join(' '),schema:{...s,label:cleanLabel,...(displaySettings&&(p.id==='inspiration'||p.id==='knowledge'&&!systemArticle)?{advanced:true}:{}),...(location?{singleLine:location.singleLine}:{}),...(location?.readingGroup?{advanced:true,readingGroup:location.readingGroup,help:location.help}:{}),...newsList}})
+   block.fields.push({documentId:d.id,path,label:cleanLabel,...(formGroup?{formGroup}:{}),searchTerms:labels(s).join(' '),schema:{...s,label:cleanLabel,...(location?{singleLine:location.singleLine}:{}),...(location?.readingGroup?{advanced:true,readingGroup:location.readingGroup,help:location.help}:{}),...newsList}})
   }
   if(p.scopes?.[d.id]){for(const path of p.scopes[d.id]){const s=path.split('.').reduce((s,key)=>s?.fields?.[key],schema);if(s)add(path,s)}continue}
   for(const[key,s]of Object.entries(schema.fields||{})){

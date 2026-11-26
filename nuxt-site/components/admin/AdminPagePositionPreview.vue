@@ -14,6 +14,7 @@ import {builderStrengthsDocument,builderStrengthsCopy,builderStrengthImageAlt} f
 import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
 import {builderAppointmentHeading} from '~/shared/cms/builder-appointment.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
+import {knowledgeSearchExample} from '~/shared/cms/search-settings.mjs'
 import {HOME_PROMISE_ID,homeChineseTitle} from '~/shared/cms/home-headings.mjs'
 const props=defineProps<{block:any;bodies:Record<string,any>;selected?:any;pageTitle:string;presentation?:any;focusedField?:string}>()
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
@@ -111,9 +112,9 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <small>{{ setting.label }}</small>
      <span v-if="'visible' in setting.value">{{ setting.value.visible?'允許顯示於官網':'本區塊已設定隱藏' }}</span>
      <template v-if="'seoTitle' in setting.value||'seoDescription' in setting.value||'title' in setting.value||'description' in setting.value">
-      <b>{{ setting.value.seoTitle||setting.value.title||pageTitle }}</b>
-      <p v-if="setting.value.seoDescription||setting.value.description">{{ setting.value.seoDescription||setting.value.description }}</p>
-      <small v-else>搜尋結果使用原有摘要</small>
+      <b>{{ knowledgeSearchExample(setting.documentId,bodies,setting.value)?.title||setting.value.seoTitle||setting.value.title||pageTitle }}</b>
+      <p v-if="knowledgeSearchExample(setting.documentId,bodies,setting.value)?.description||setting.value.seoDescription||setting.value.description">{{ knowledgeSearchExample(setting.documentId,bodies,setting.value)?.description||setting.value.seoDescription||setting.value.description }}</p>
+      <small v-else>搜尋結果使用原有摘要</small><small v-if="knowledgeSearchExample(setting.documentId,bodies,setting.value)?.note">{{ knowledgeSearchExample(setting.documentId,bodies,setting.value)?.note }}</small>
      </template>
     </div>
    </template>

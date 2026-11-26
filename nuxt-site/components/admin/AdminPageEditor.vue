@@ -307,7 +307,7 @@ function update(f:any,value:any){
   :f.documentId===franchiseMarqueeDocument&&franchiseFaq.value&&f.path==='copy.field52'?updateFranchiseFaqDestination(body,value):withValue(body,f.path,value)
  bodies.value={...bodies.value,[f.documentId]:next}
 }
-async function load(){error.value='';try{const result=await api('page-editors/'+props.id,{timeout:20000,retry:0});if(!Array.isArray(result?.documents)||!Array.isArray(result?.blocks))throw Error('伺服器未回傳完整頁面內容，請確認連線後重試。');workbench.rows.value={};pageData.value=result;docs.value=result.documents;bodies.value=Object.fromEntries(result.documents.map((d:any)=>[d.id,d.body]));baseline.value=JSON.parse(JSON.stringify(bodies.value));if(props.id==='knowledge'&&(isSystemCabinetDocument(route.query.legacy)||knowledgeSection.value)){
+async function load(){error.value='';try{const result=await api('page-editors/'+props.id,{timeout:20000,retry:0});if(!Array.isArray(result?.documents)||!Array.isArray(result?.blocks))throw Error('伺服器未回傳完整頁面內容，請確認連線後重試。');workbench.rows.value={};pageData.value=result;docs.value=result.documents;bodies.value=Object.fromEntries(result.documents.map((d:any)=>[d.id,d.body]));baseline.value=JSON.parse(JSON.stringify(bodies.value));if(props.id==='knowledge'&&!active.value?.secondary&&(isSystemCabinetDocument(route.query.legacy)||knowledgeSection.value)){
  await openSystemCabinet(knowledgeSection.value?String(route.query.block):'knowledge:系統櫃材質重點')
  }else if(route.query.legacy){const b=result.blocks.find((b:any)=>b.fields.some((f:any)=>f.documentId===route.query.legacy));if(b)await router.replace({query:{...route.query,block:b.id,legacy:undefined}})}if(props.id==='menu'&&route.query.block==='menu:展開選單中的型錄入口')await openCatalogueEditor()}catch(e){error.value=message(e)}}
 async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;const block=[active.value,...blocks.value].find(b=>editableBlockFields(b).some((f:any)=>{
@@ -316,7 +316,7 @@ async function focusError(){const issue=fieldErrors.value[0];if(!issue)return;co
  if(!ids)return true
  const index=Number(issue.path.slice(f.path.length+1).split('.')[0])
  return recentArticleIndexes(pageFieldValue(bodies.value,f),ids).includes(index)
- }));if(block&&(!seriesPart.value||block.id!==active.value?.id))await selectBlock(block.id);const part=seriesPart.value&&issue.documentId==='data-kitchenSeries'&&sectionForSeriesField(issue.path);if(part)await chooseLocation(part.id);if(issue.documentId===headerId&&desktopCatalogueFields.includes(issue.path))await openCatalogueEditor();if(props.id==='knowledge'&&isSystemCabinetDocument(issue.documentId)){const field=systemCabinetFields.value.find((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.')));await openSystemCabinet('knowledge:'+(field?.formGroup||'系統櫃材質重點'))}
+ }));if(block&&(!seriesPart.value||block.id!==active.value?.id))await selectBlock(block.id);const part=seriesPart.value&&issue.documentId==='data-kitchenSeries'&&sectionForSeriesField(issue.path);if(part)await chooseLocation(part.id);if(issue.documentId===headerId&&desktopCatalogueFields.includes(issue.path))await openCatalogueEditor();if(props.id==='knowledge'&&!active.value?.secondary&&isSystemCabinetDocument(issue.documentId)){const field=systemCabinetFields.value.find((f:any)=>f.documentId===issue.documentId&&(issue.path===f.path||issue.path.startsWith(f.path+'.')));await openSystemCabinet('knowledge:'+(field?.formGroup||'系統櫃材質重點'))}
  if(homeStoreField.value&&issue.documentId===HOME_STORES_ID&&issue.path.startsWith('stores.')){const store=bodies.value[HOME_STORES_ID]?.stores?.[Number(issue.path.split('.')[1])];if(store)selectStoreRegion(store.region)}
  if(regionField.value&&issue.documentId===regionField.value.documentId&&issue.path.startsWith('regionCities.'))selectStoreRegion(issue.path.split('.')[1])
  await nextTick();await nextTick();const input=formRoot.value?.querySelector<HTMLElement>('[aria-invalid=true]');for(let p=input?.parentElement;p;p=p.parentElement)if(p instanceof HTMLDetailsElement)p.open=true;input?.focus()}
@@ -398,6 +398,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <p class="cms-field-help">這裡編輯加盟介紹上的入口。下載頁的大圖、主標題和按鈕請到下載頁編輯。</p>
     <NuxtLink :to="pageEditorLink('franchise-download',route.query)" class="cms-button">編輯「加盟資料下載」頁 →</NuxtLink>
    </div>
+   <p v-if="active?.secondary&&active.name==='顯示與搜尋設定'" class="cms-field-help">搜尋標題與摘要為選填，留空沿用官網原本內容。顯示設定會控制對應頁面或區塊是否出現在官網。</p>
    <p v-if="caseManagement" class="cms-case-scope">這裡列出官網案例與自建草稿。選擇案例可看右側位置；門市案例可前往編輯，自建案例可在這裡編輯，系統同步案例請回原系統修改。</p>
    <p v-if="franchiseNews" class="cms-case-scope">按「編輯文章」修改標題、封面、摘要或內文。更新後，「優惠消息」也會使用修改後的文章。</p>
    <fieldset v-if="homeOneSettings.length" :disabled="busy" class="cms-edit-form cms-home-one-images">
