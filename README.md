@@ -5335,4 +5335,5 @@ final result: passed
 - 門市管理的區塊縮圖、案例清單與右側位置預覽改用案例內頁圖片集的第一張照片，對應官網案例內頁及設計靈感卡片。案例門市列表繼續使用原門市外觀封面，不修改原圖片、排序或資料。
 - 區塊縮圖沿用清單設定的圖片欄位，避免導覽與清單顯示不同來源。右側案例照片採 16:9 滿版裁切，對應此預覽寬度下的官網案例輪播；其他門市／型錄預覽維持原方式。
 - 本次只調整後台圖片來源與顯示，不需資料庫結構更新。本機實際確認三篇案例的導覽／清單／選取／編輯／看位置圖片、16:9 裁切及完整草稿預覽；1440／1024／768／390px 正常，無瀏覽器例外。原文件無異動，臨時帳號與預覽已清除，文件／版本／結構指紋一致。
-- 後台工作流程、命名及欄位來源回歸、缺少案例照片時不可冒用外觀封面的檢查、型別檢查與正式建置通過。部署前兩正式網域各完成三間原門市封面、三篇案例原文／圖片／連結、區域／縣市篩選與兩種來源的帶條件返回及四種寬度驗證。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 case-images-local.json、case-images-editor.jpg、case-header-before.json 與 store-breadcrumb-before.json。部署結果待正式站複驗後補記。
+- 後台工作流程、命名及欄位來源回歸、缺少案例照片時不可冒用外觀封面的檢查、型別檢查與正式建置通過。部署前兩正式網域各完成三間原門市封面、三篇案例原文／圖片／連結、區域／縣市篩選與兩種來源的帶條件返回及四種寬度驗證。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 case-images-local.json、case-images-editor.jpg、case-header-before.json 與 store-breadcrumb-before.json。
+- `b8b57afa` 已部署至 Production `dpl_GGegcfmn57sWnb19CAtq8hL6vf3H`，Ready 並綁定兩正式網域。兩站實際提供新版案例照片選擇及橫式預覽程式，資源雜湊一致；部署後各完成三篇案例原文／照片／連結、原門市封面、區域／縣市篩選、兩種來源帶條件返回及四種寬度複驗，公開文件與內容均與部署前一致（文字比對僅排除 Google Maps 瞬時載入提示）。未修改正式資料庫內容或結構。證據另包含 case-images-production-assets.json、case-header-after.json 與 store-breadcrumb-after.json。
