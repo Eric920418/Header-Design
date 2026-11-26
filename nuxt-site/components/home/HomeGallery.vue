@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import {HOME_GALLERY_ID,homeRemainingHeading} from '~/shared/cms/home-headings.mjs'
 const cmsCopy = await useCmsResource('view-components-home-HomeGallery', {"cases":[{"slug":"case10","store":"安康店","image":"/section-3/cases/case10/case10_content_asset_03_20260904.webp"},{"slug":"case56","store":"承德店","image":"/section-3/cases/case56/case56_content_asset_04_20260904.webp"},{"slug":"case35","store":"松竹店","image":"/section-3/cases/case35/case35_content_asset_11_20260904.webp"}],"copy":{"field1":"","text2":"SHOWROOM PROJECTS","text3":"設計案例","field4":"/design-inspiration","text5":"更多設計","field6":""},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
+const heading = computed(() => homeRemainingHeading(HOME_GALLERY_ID,cmsCopy.copy))
 
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import { galleryCaseRoute, galleryCaseLabel } from '~/shared/cms/gallery-cases.mjs'
@@ -32,7 +34,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
     <div class="gallery-content-shell pointer-events-none relative z-10 w-full"><div class="gallery-main-layout">
       <div class="gallery-heading-column pointer-events-auto">
         <div v-reveal="{ anim: 'opalMoveRight' }" class="mb-[26px]"><InternalSectionPill tone="dark">{{ cmsCopy.copy.text2 }}</InternalSectionPill></div>
-        <h2 id="gallery-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="gallery-heading-title text-white"><span class="gallery-heading-title__chinese">{{ cmsCopy.copy.text3 }}</span>Kitchen<br />Design</h2>
+        <h2 id="gallery-heading" v-reveal="{ anim: 'opalMoveLeft', delay: 100 }" class="gallery-heading-title text-white"><span class="gallery-heading-title__chinese">{{ cmsCopy.copy.text3 }}</span>{{ heading.englishTitleFirst }}<br />{{ heading.englishTitleSecond }}</h2>
         <div v-reveal="{ anim: 'opalScaleUp', delay: 260 }">
           <NuxtLink :to="cmsCopy.copy.field4" class="site-content-cta group/cta mt-[40px] inline-flex h-[60px] items-center gap-[8px] rounded-full border border-[rgba(159,159,164,.64)] py-[9px] pl-[30px] pr-[9px] text-white hover:border-[#CAA05C] hover:bg-[#CAA05C]"><span class="font-cjk-sans text-[15px]">{{ cmsCopy.copy.text5 }}</span><span class="site-cta-icon flex h-[40px] w-[40px] -rotate-45 items-center justify-center rounded-full bg-[#CAA05C] transition-transform group-hover/cta:rotate-0"><ArrowRight class="h-5 w-5" /></span></NuxtLink>
         </div>

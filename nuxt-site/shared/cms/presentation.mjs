@@ -2,7 +2,7 @@ import copyFields from './presentation-copy.json' with {type:'json'}
 import { homeHeroSchema, HOME_HERO_ID } from './hero-media.mjs'
 import { homeGallerySchema, HOME_GALLERY_ID } from './gallery-cases.mjs'
 import {positionField,readingField} from './positions.mjs'
-import {homeHeadingSchema,HOME_SERVICES_ID,HOME_PROMISE_ID} from './home-headings.mjs'
+import {homeHeadingSchema,HOME_SERVICES_ID,HOME_PROMISE_ID,remainingHomeHeadings} from './home-headings.mjs'
 import {headingLabels,headingFieldLabel} from './heading-labels.mjs'
 import {pageDestinationSchema} from './page-destinations.mjs'
 import {builderStrengthsDocument,isBuilderStrengthsCopy} from './builder-strengths.mjs'
@@ -150,6 +150,7 @@ export function placeDestinations(fields, keyOf, afterOf) {
 
 export function fieldPresentation(resourceId,path,schema={}){
  const normalized=path.replace(/^\./,'').replace(/\.\d+(?=\.|$)/g,'.*'),key=normalized.split('.').at(-1)
+ if(remainingHomeHeadings[resourceId]?.[key]&&normalized==='copy.'+key)return{label:remainingHomeHeadings[resourceId][key].label,singleLine:true}
  if(resourceId===HOME_PROMISE_ID&&normalized==='copy.chineseTitle')return{label:headingLabels.chineseTitle,singleLine:true}
  if(['view-components-home-HomeProject',HOME_SERVICES_ID].includes(resourceId)&&normalized==='copy.'+key&&Object.hasOwn(headingLabels,key))return{label:headingLabels[key],singleLine:true}
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
 import {resourceGuide,resourceSearchText,editingSchema,homeResources} from '../shared/cms/presentation.mjs'
-import {HOME_PROJECT_ID,HOME_SERVICES_ID,HOME_PROMISE_ID,homeProjectHeading,homeServicesHeading} from '../shared/cms/home-headings.mjs'
+import {HOME_PROJECT_ID,HOME_SERVICES_ID,HOME_PROMISE_ID,homeProjectHeading,homeServicesHeading,remainingHomeHeadings} from '../shared/cms/home-headings.mjs'
 import {pageBlocks,pageEditors} from '../shared/cms/page-editors.mjs'
 import copyFields from '../shared/cms/presentation-copy.json' with {type:'json'}
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
@@ -141,6 +141,7 @@ for(const[id,file]of Object.entries(files)){
  const used=new Set([...source.matchAll(/cmsCopy\.copy\.([a-zA-Z0-9_]+)/g)].map(m=>m[1]))
  if(id===HOME_PROJECT_ID&&source.includes('homeProjectHeading(cmsCopy.copy)'))for(const key of Object.keys(homeProjectHeading()))if(source.includes('heading.'+key))used.add(key)
  if(id===HOME_SERVICES_ID&&source.includes('homeServicesHeading(cmsCopy.copy)'))for(const key of Object.keys(homeServicesHeading()))if(source.includes('heading.'+key))used.add(key)
+ if(remainingHomeHeadings[id]&&source.includes('homeRemainingHeading('))for(const key of Object.keys(remainingHomeHeadings[id]))if(source.includes('heading.'+key))used.add(key)
  if(id===HOME_PROMISE_ID&&source.includes('homeChineseTitle(HOME_PROMISE_ID,cmsCopy.copy)'))used.add('chineseTitle')
  for(const[key,s]of Object.entries(schema.fields.copy?.fields||{}))if(!Object.hasOwn(s,'fixed')){
   if(s.autoDestination&&linkSource.includes('.'+key))used.add(key)

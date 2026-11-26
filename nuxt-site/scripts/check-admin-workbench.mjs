@@ -19,6 +19,7 @@ import {editingSchema} from '../shared/cms/presentation.mjs'
 import {compareNewsDates,franchiseNewsIds,publicContent} from '../shared/cms/public-content.mjs'
 import {builderCatalogueBreadcrumb,franchiseDownloadBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
 import {builderCatalogueNoticeAnchor,builderCatalogueNoticeFields,builderCatalogueNotice} from '../shared/cms/builder-catalogue.mjs'
+import {remainingHomeHeadings,homeRemainingHeading,effectiveHomeHeadingBody} from '../shared/cms/home-headings.mjs'
 import {headingFieldLabel} from '../shared/cms/heading-labels.mjs'
 import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,productCatalogueFields,productCatalogueTitle} from '../shared/cms/product-catalogue.mjs'
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
@@ -112,6 +113,26 @@ checkPageBody(guidePage,knowledgeListing.id,knowledgeListing.body,relabelledGuid
 validate(relabelledGuide,knowledgeListing.schema)
 assert.deepEqual(changeImpacts([{documentId:knowledgeListing.id,path:'copy.breadcrumbList'}]).map(i=>i.href),['/knowledge#knowledge-breadcrumb','/knowledge/design/systemcabinet#knowledge-breadcrumb'])
 assert.equal(searchResultLink({page:guidePage,block:guideArticles},{q:'系統櫃板材比較'}).query.block,'knowledge:系統櫃板材比較')
+for(const [id,definitions] of Object.entries(remainingHomeHeadings)){
+ const doc=docs.find(d=>d.id===id),snapshot=structuredClone(doc.body)
+ const block=home.find(b=>b.fields.some(f=>f.documentId===id))
+ const fields=Object.keys(definitions).map(key=>block.fields.find(f=>f.path==='copy.'+key))
+ assert(fields.every(Boolean),'Every visible heading needs an editable field')
+ assert.deepEqual(fields.map(f=>f.label),Object.values(definitions).map(f=>f.label))
+ const original={[id]:doc.body},materialized={[id]:effectiveHomeHeadingBody(id,doc.body)}
+ assert.equal(hasPageChanges(home,original,materialized),false,'Default values must not create changes')
+ for(const [key,definition] of Object.entries(definitions)){
+  const next={...doc.body,copy:{...doc.body.copy,[key]:'編輯 '+key}}
+  const change=pageChanges(home,[doc],original,{[id]:next}).find(c=>c.path==='copy.'+key)
+  assert.equal(change.before,definition.value)
+  assert.equal(change.after,'編輯 '+key)
+  assert.equal(change.impacts[0].href,id.endsWith('HomeGallery')?'/#gallery-heading':'/#contact')
+  checkPageBody(pageEditors[0],id,doc.body,next,doc.schema)
+  validate(next,doc.schema)
+  assert.equal(homeRemainingHeading(id,{[key]:''})[key],'','Intentional blank must remain blank')
+ }
+ assert.deepEqual(doc.body,snapshot,'Reading defaults must preserve archived documents')
+}
 const promise=docs.find(d=>d.id==='view-components-home-HomeWhatWeDo'),promiseFields=home.find(b=>b.id==='home:品牌承諾').fields
 for(const key of ['field1','field2']){
  assert(!promiseFields.some(f=>f.documentId===promise.id&&f.path==='copy.'+key))
