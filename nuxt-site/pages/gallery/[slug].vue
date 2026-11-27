@@ -65,7 +65,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <h1 :id="`case-title-${item.slug}`"><InternalHeadingText :text="item.title" /></h1>
           </header>
 
-          <div class="case-detail-carousel" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
+          <div id="case-carousel" class="case-detail-carousel" v-reveal="{ anim: 'opalScaleUp', delay: 100 }">
             <InternalCaseCarousel :images="item.images" :title="item.title" />
           </div>
 
@@ -126,6 +126,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
             <section
               v-for="(block, blockIndex) in item.article"
               :key="block.title ?? `intro-${blockIndex}`"
+              :id="`case-article-${blockIndex+1}`"
               class="case-detail-story-block"
               v-reveal="{ anim: 'opalMoveUp' }"
             >
@@ -133,6 +134,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <p v-for="paragraph in block.paragraphs" :key="paragraph">{{ paragraph }}</p>
               <div
                 v-if="block.images?.length"
+                :id="`case-article-images-${blockIndex+1}`"
                 class="case-detail-story-media"
                 :class="{ 'case-detail-story-media--pair': block.imageLayout === 'pair' }"
                 v-reveal="{ anim: 'opalScaleUp', delay: 100 }"

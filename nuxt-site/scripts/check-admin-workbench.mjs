@@ -30,6 +30,7 @@ import {cataloguePreviewHref,productCatalogueDocument,productCatalogueText,produ
 import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/builder-strengths.mjs'
 import {builderHomeOneImage,builderHomeOneImages} from '../shared/cms/builder-home-one.mjs'
 import {builderAppointmentHeading,builderAppointmentHeadingFields} from '../shared/cms/builder-appointment.mjs'
+import {storeCaseContentPosition} from '../shared/cms/store-case-content.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 {
@@ -751,6 +752,23 @@ const caseCard=serviceCards[2],storeDoc=docs.find(d=>d.id==='data-storeCases')
 assert.equal(caseCard.page.thumbnail,storeDoc.body.storeCases[0].images[0])
 const storeManagement=caseCard.page.blocks.find(b=>b.name==='案例管理'),storeRows=storeManagement.fields.find(f=>f.path==='storeCases')
 assert.equal(storeRows.schema.rowImage,'images')
+assert.equal(storeRows.schema.item.fields.images.label,'頁首輪播圖片')
+assert.equal(storeRows.schema.item.fields.article.item.fields.images.label,'文章段落圖片')
+{
+ const selected={documentId:'data-storeCases',path:'storeCases',index:0,value:storeDoc.body.storeCases[0]}
+ const original=structuredClone(selected.value)
+ const carousel=storeCaseContentPosition(storeManagement,selected,'storeCases.0.images.2')
+ assert.equal(carousel.kind,'store-case-carousel');assert.equal(carousel.photoIndex,2)
+ assert.equal(carousel.previewPage,'/gallery/'+selected.value.slug+'#case-carousel')
+ const story=storeCaseContentPosition(storeManagement,selected,'storeCases.0.article.0.images.1')
+ assert.equal(story.kind,'store-case-story');assert.equal(story.sectionIndex,0);assert.equal(story.photoIndex,1)
+ assert.equal(story.previewPage,'/gallery/'+selected.value.slug+'#case-article-images-1')
+ assert.equal(storeCaseContentPosition(storeManagement,selected,'storeCases.0.article.1.title').previewPage,'/gallery/'+selected.value.slug+'#case-article-2')
+ assert.equal(storeCaseContentPosition(storeManagement,selected,'storeCases.1.images'),storeManagement,'A stale field from another case cannot select the wrong photo')
+ const noImages=structuredClone(selected);delete noImages.value.article[1].images
+ assert.equal(storeCaseContentPosition(storeManagement,noImages,'storeCases.0.article.1.images').previewPage,'/gallery/'+selected.value.slug+'#case-article-2','An empty photo group links to its existing article section')
+ assert.deepEqual(selected.value,original,'Position changes never modify images or article data')
+}
 assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:storeDoc.body}),storeDoc.body.storeCases[0].images[0])
 for(const row of storeDoc.body.storeCases){
  assert.equal(itemThumbnail(row,storeRows.schema),row.images[0],'Case editor thumbnails must match the public case photo, not the storefront cover')

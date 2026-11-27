@@ -236,7 +236,9 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(resourceId==='view-components-home-HomeServices'&&normalized==='services.*.alt')return{label:'品牌名稱',singleLine:true}
  if(resourceId==='data-storeCases'&&normalized==='storeCases')return{label:labels.storeCases,searchLabel:'搜尋案例名稱',rowImage:'images'}
  if(resourceId==='data-storeCases'&&normalized==='storeCases.*.cover')return{label:'案例門市列表封面',help:'用於案例門市列表；設計靈感列表使用下方圖片集中的第一張圖片。'}
- if(resourceId==='data-storeCases'&&normalized==='storeCases.*.images')return{label:'案例內頁圖片集',help:'第一張圖片也用於設計靈感列表的門市案例卡片。'}
+ if(resourceId==='data-storeCases'&&normalized==='storeCases.*.images')return{label:'頁首輪播圖片',help:'案例內頁最上方的輪播；第一張也用於設計靈感案例卡片。文章段落圖片需另外編輯。'}
+ if(resourceId==='data-storeCases'&&normalized==='storeCases.*.article')return{label:'文章段落',newItemLabel:'段落'}
+ if(resourceId==='data-storeCases'&&normalized==='storeCases.*.article.*.images')return{label:'文章段落圖片',help:'只更換這一段的配圖，不會同步更換頁首輪播圖片。'}
  if(resourceId==='data-storeCases'&&normalized.startsWith('regionCities.'))return schema.type==='array'?{label:key+'縣市',newItemLabel:'縣市'}:{label:'縣市名稱',singleLine:true}
  const copy=copyFields[resourceId]?.[normalized]
  if(copy){const position=positionField(resourceId,normalized);return position?{...copy,label:position.label,singleLine:position.singleLine,positionLegacyLabel:copy.label,...(position.readingGroup?readingField(position.readingGroup,position.label):{})}:copy}

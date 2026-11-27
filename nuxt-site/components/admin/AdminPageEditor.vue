@@ -10,6 +10,7 @@ import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,is
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
 import {HOME_STORES_ID,homeStoreListSchema,storeRegionCities} from '~/shared/cms/store-location.mjs'
 import {builderHomeOneDocument,builderHomeOneImage,builderHomeOneImages} from '~/shared/cms/builder-home-one.mjs'
+import {storeCaseContentPosition} from '~/shared/cms/store-case-content.mjs'
 import {caseManagementReturn} from '~/shared/cms/case-management.mjs'
 import {builderCatalogueNoticeAnchor,isBuilderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
 import {productCatalogueDocument,productCatalogueTitle} from '~/shared/cms/product-catalogue.mjs'
@@ -64,7 +65,7 @@ const knowledgeArticles=computed(()=>active.value?.id==='knowledge:文章管理'
 const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fields.filter((f:any)=>isSystemCabinetDocument(f.documentId)):[])
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
 const positionBlock=computed(()=>{
- const block=active.value
+ const block=storeCaseContentPosition(active.value,workbench.selection.value,focusedField.value)
  if(sharedStoreCases.value)return storeCaseSharedPosition(block,pageData.value?.positionPresentation,focusedGroup.value,String(route.query.block||''))
  if(block?.kind==='builder-catalogue-cards'&&focusedGroup.value===builderCatalogueNoticeAnchor)
   return {...block,previewPage:'/builders/catalogues#'+builderCatalogueNoticeAnchor}
@@ -260,7 +261,9 @@ function blockPicture(block:any){
 function trackField(event:FocusEvent){
  const target=event.target as HTMLElement
  if(target.closest('[data-cms-keep-field]'))return
- focusedField.value=target.closest('[data-cms-path]')?.getAttribute('data-cms-path')||''
+ const path=target.closest('[data-cms-path]')?.getAttribute('data-cms-path')||''
+ if(!path&&props.id===storeCasesPageId&&workbench.editing.value==='data-storeCases:storeCases')return
+ focusedField.value=path
  const group=target.closest<HTMLElement>('[data-position-group]')?.dataset.positionGroup
  if(group||(franchiseDownloadCommon.value||franchiseCatalogue.value||builderNoticeFields.value.length)&&focusedField.value)focusedGroup.value=group||''
  if(active.value?.preview==='inspiration-breadcrumb'&&focusedField.value.startsWith('copy.breadcrumb'))
@@ -287,7 +290,7 @@ const activeDocs=computed(()=>docs.value.filter(d=>visibleFields.value.some((f:a
 const historyDocs=computed(()=>activeDocs.value.filter(d=>!franchiseNews.value||d.id!=='news-articles'))
 const unpublishDocuments=computed(()=>docs.value.filter(d=>d.publishedId&&(!pageData.value?.unpublishIds||pageData.value.unpublishIds.includes(d.id))))
 const impacts=computed(()=>{
- const block=active.value
+ const block=storeCaseContentPosition(active.value,workbench.selection.value,focusedField.value)
  const changes=pending.value?pageChanges(blocks.value,activeDocs.value,Object.fromEntries(activeDocs.value.map(d=>[d.id,d.publishedBody??d.body])),bodies.value,impactContext.value):changeDetails.value
  if(franchiseFaq.value){
   const related=changes.filter((change:{blockId?:string;documentId:string;path:string})=>change.blockId===block.id||visibleFields.value.some((f:any)=>f.documentId===change.documentId&&f.path===change.path))
@@ -342,7 +345,7 @@ const publicLocation=computed(()=>{
  }
  if(props.id!=='home'&&selected&&(itemWebsitePath(selected.documentId,selected.value)||selected.href)){
   const published=itemPublication(docs.value.find(d=>d.id===selected.documentId),selected.path,selected.value,selected.index)
-  return published.visible?seriesLocation(positionBlock.value?.previewPage&&knowledgeArticles.value?positionBlock.value.previewPage:itemWebsitePath(selected.documentId,published.item)||selected.href||'/'):''
+  return published.visible?seriesLocation(positionBlock.value?.previewPage&&(knowledgeArticles.value||props.id===storeCasesPageId)?positionBlock.value.previewPage:itemWebsitePath(selected.documentId,published.item)||selected.href||'/'):''
  }
  return activeDocs.value.length&&activeDocs.value.every(d=>d.publishedBody)?positionBlock.value?.previewPage||positionBlock.value?.href||pageData.value?.href||'/':''
 })
