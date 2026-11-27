@@ -5464,3 +5464,5 @@ final result: passed
 - 聚焦標題欄位時，同時移除分類清單上一筆的選取色，讓中間表單與右側預覽只指向同一個正在編輯的位置。
 - 本機實測標題欄位位於清單之前且直接可見、只有標題焦點、舊選取色清除、切回標題自動關閉分類表單且保留未存資料、名稱／網址明確對位、兩次真實草稿預覽、原其他分類連結保留與取消還原、四種寬度及原文件不變。清除臨時帳號與預覽後文件／版本／結構指紋一致；部署前兩正式網域各核對 13 個原總覽／分類／文章頁面原文、圖片與連結。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 news-category-clarity-local.json、news-category-clarity-editor.jpg 與 news-category-clarity-before.json。
 - 最終後台工作流程、命名、欄位來源、連結用途與預覽狀態回歸通過；型別檢查與正式建置成功，不需資料庫遷移。
+- `c5afdbb0` 已部署至 Production `dpl_ACrCx31ieduLNtCmNJELn1oNEWL5`，Ready 並綁定兩正式網域。本次 Git 推送未觸發建置，改用已登入 CLI 呼叫既有專案部署 API，以固定提交 SHA 建置；回應 Git 來源 SHA 相符，未調整專案設定。
+- 兩站確認提供直接可見的標題欄位、具體按鈕名稱、明確編輯位置與單一焦點預覽，相關資源雜湊一致；上線後各複驗 13 個原總覽／分類／文章頁面的文字、圖片來源與完整連結、實際文章／首頁導覽及四種寬度。原公開文件與內容／連結和部署前逐項一致，未修改正式資料庫。證據另包含 news-category-clarity-after.json、news-category-clarity-production-assets.json 與 news-category-clarity-deployment.json。
