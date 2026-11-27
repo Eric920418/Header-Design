@@ -54,8 +54,9 @@ for(const item of series){
     assert.equal(metadata.format,'webp');assert.equal(metadata.width,2400)
   }
 }
-for(const path of ['../server/cms/content.mjs','../server/api/admin/[...path].ts'])assert(read(path).includes('builderSeriesSchema('),'CMS讀取與修改都需使用同一可選schema')
-assert(read('../nuxt.config.ts').includes('store-location|builder-series'),'共用schema必須內嵌Nitro，避免dev載入工作區外路徑')
+for(const path of ['../server/cms/content.mjs','../server/api/admin/[...path].ts','../server/cms/page-editors.mjs'])assert(read(path).includes('documentSchema('),'CMS讀取與修改都需使用共用schema入口')
+assert(read('../shared/cms/document-schema.mjs').includes('builderSeriesSchema'),'共用schema入口必須保留建商系列可選欄位')
+assert(read('../nuxt.config.ts').includes('/shared\\/cms\\/.*\\.mjs$/'),'共用schema必須內嵌Nitro，避免dev載入工作區外路徑')
 
 // Execute the page's actual handlers with native-dialog/focus stubs; not a browser acceptance test.
 const handlers=source.slice(source.indexOf('async function openSeries'),source.indexOf('useSeoMeta('))

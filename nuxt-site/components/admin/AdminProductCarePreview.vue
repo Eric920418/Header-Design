@@ -54,7 +54,7 @@ const questionField = (key: string) => focused(selection.value.questionPath + '.
     </ul>
     <ol v-if="selection.question.steps?.length">
      <li v-for="(step,index) in selection.question.steps" :key="index">
-      <strong :class="{'is-focused':focused('copy.text9')}">{{ copy.text9 }}{{ index+1 }}</strong>
+      <strong :class="{'is-focused':index===0&&focused('copy.text9')}">{{ copy.text9 }}{{ index+1 }}</strong>
       <span :class="{'is-focused':questionField('steps.'+index)}">{{ step }}</span>
      </li>
     </ol>

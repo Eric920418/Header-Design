@@ -23,7 +23,7 @@ export function storeCaseSharedPosition(block,presentation={},focusedGroup='',le
  const group=storeCaseSharedGroup(focusedGroup)||storeCaseSharedGroup(legacyBlock)||'上方到店預約'
  const section=storeCaseSharedSections[group],fieldMatches=section.paths.some(path=>focusedField===path||focusedField.startsWith(path+'.'))
  const example=(fieldMatches&&presentation.storeCaseFieldExamples?.[focusedField])||presentation.storeCaseExamples?.[section.kind],anchor=example?.anchor||section.anchor
- return {...block,name:section.title,kind:section.kind,anchor,previewCaseSlug:example?.slug,fields:block.fields.filter(f=>f.formGroup===group),previewPage:example?.slug?'/gallery/'+encodeURIComponent(example.slug)+'#'+anchor:block.href}
+ return {...block,name:section.title,kind:section.kind,anchor,previewCaseSlug:example?.slug,fields:block.fields.filter(f=>f.formGroup===group),previewPage:example?.slug?'/gallery/'+encodeURIComponent(example.slug)+'#'+anchor:block.href.split('#')[0]+'#'+anchor}
 }
 export const franchiseMarqueeDocument=view('franchising-intro')
 export const franchiseDownloadDocument=view('franchising-download')

@@ -1,3 +1,4 @@
+import {previewFieldRole,clarifySharedBlock} from './shared-settings.mjs'
 import {inspirationBreadcrumb,latestNewsBreadcrumb} from './page-breadcrumbs.mjs'
 import {firstImage,rowName} from './workflow.mjs'
 import {blockThumbnail,pageFieldValue,valueAt,withValue,desktopCatalogueFields,usesDesktopCatalogue} from './page-editors.mjs'
@@ -29,7 +30,7 @@ export function workbenchBlocks(page,blocks,recentArticles){
   const articles=result.find(block=>block.kind==='news-overview')?.fields.find(field=>field.documentId==='news-articles')
   if(recent&&articles)recent.fields.unshift({...articles,label:'側欄文章',schema:{...articles.schema,label:'側欄文章',recentArticleIds:recentArticles.map(article=>article.id)}})
  }
- return result
+ return result.map(block=>clarifySharedBlock(page,block))
 }
 /**
  * @param {{id: string | number}[] | undefined} items
@@ -137,7 +138,7 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
   const value=pageFieldValue(bodies,f)
   return {...f,value:block?.kind==='franchise-support'&&f.path==='copy.supportDestination'?value||bodies['data-franchise']?.FRANCHISE_FORM_URL:value}
  })
- const texts=fields.filter(f=>typeof f.value==='string'&&!f.schema.format&&!f.schema.enum&&!f.schema.advanced).map(f=>({path:f.path,label:f.label,value:f.value}))
+ const texts=fields.filter(f=>typeof f.value==='string'&&!f.schema.format&&!f.schema.enum&&!f.schema.advanced).map(f=>({path:f.path,label:f.label,value:f.value,...(f.schema.sharedSetting?{role:previewFieldRole(f)}:{})}))
  const arrays=fields.filter(f=>f.schema.type==='array'&&!f.schema.newsOverview).flatMap(f=>(f.value||[]).filter(v=>!f.schema.rowFilter||valueAt(v,f.schema.rowFilter.path)===f.schema.rowFilter.value).slice(0,3).map((v,i)=>({title:itemCaption(v,i,f.schema),image:itemThumbnail(v,f.schema,presentation.rows?.[f.documentId]?.[v?.id]),value:v})))
  const recentField=fields.find(f=>f.schema.recentArticleIds)
  const recentItems=recentField?recentArticleIndexes(recentField.value,recentField.schema.recentArticleIds).map(index=>{
@@ -163,7 +164,7 @@ export function pagePositionContent(block,bodies,presentation={},selected,focuse
   :block?.kind==='franchise-support'?franchiseSupportImage(bodies):blockImage||serviceCover
  const image=block?.kind==='franchise-news'?franchiseItems[0]?.image||mappedImage:block?.kind==='news-recent'?recentItems[0]?.image||mappedImage:selected?selected.image||mappedImage:focusedImage||arrays.find(i=>i.image)?.image||base.image||mappedImage||videoImage||''
  const media=fields.filter(f=>f.schema.format==='media').map(f=>({path:f.path,label:f.label,image:firstImage(f.value)})).filter(f=>f.image)
- const heading=texts.filter(f=>/標題|小標|品牌名稱|區塊(?:英|中)文標籤/.test(f.label)),buttons=texts.filter(f=>/按鈕|連結文字/.test(f.label)&&!/介紹|說明/.test(f.label))
+ const heading=texts.filter(f=>f.role?['heading','eyebrow'].includes(f.role):/標題|小標|品牌名稱|區塊(?:英|中)文標籤/.test(f.label)),buttons=texts.filter(f=>f.role?f.role==='button':/按鈕|連結文字/.test(f.label)&&!/介紹|說明/.test(f.label))
  const detail=fields.some(f=>/-slug-$/.test(f.documentId))||/系統櫃/.test(block?.name)
  const contextImage=(detail?presentation.detailHeroImage:'')||firstImage(positionImage(definition?.hero,bodies))||presentation.heroImage||''
  const auxiliary=fields.filter(f=>typeof f.value==='string'&&f.schema.readingGroup).map(f=>({path:f.path,label:f.label,value:f.value}))

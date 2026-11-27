@@ -16,7 +16,7 @@ assert.deepEqual(['copy.field1','copy.text2','copy.text3','copy.text4'].map(path
 const pageDocuments=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 const homePage=pageEditor('home'), headingDoc=pageDocuments.find(d=>d.id===HOME_PROJECT_ID), homeBlocks=pageBlocks(homePage,pageDocuments)
 const headingFields=homeBlocks.find(b=>b.id==='home:品牌系列').fields.filter(f=>f.documentId===HOME_PROJECT_ID)
-assert.deepEqual(headingFields.map(f=>f.label),['區塊英文標籤','主標題前置英文','區塊中文主標題','區塊英文主標題（第一段）','區塊英文主標題（第二段）','介紹文字'])
+assert.deepEqual(headingFields.map(f=>f.schema.sharedSetting?.sourceLabel||f.label),['區塊英文標籤','主標題前置英文','區塊中文主標題','區塊英文主標題（第一段）','區塊英文主標題（第二段）','介紹文字'])
 const beforeHeading={[HOME_PROJECT_ID]:headingDoc.body}
 assert.deepEqual(headingFields.slice(0,5).map(f=>pageFieldValue(beforeHeading,f)),['BRAND SERIES','Explore Our',headingDoc.body.copy.text1+headingDoc.body.copy.text2,'Creative Projects','That Define Our Style'])
 const editedHeading=structuredClone(headingDoc.body)
@@ -32,7 +32,7 @@ assert.throws(()=>checkPageBody(homePage,HOME_PROJECT_ID,headingDoc.body,{...edi
 const serviceHeadingDoc=pageDocuments.find(d=>d.id===HOME_SERVICES_ID),serviceTitleField=homeBlocks.flatMap(b=>b.fields).find(f=>f.documentId===HOME_SERVICES_ID&&f.path==='copy.chineseTitle')
 assert.equal(pageFieldValue({[HOME_SERVICES_ID]:serviceHeadingDoc.body},serviceTitleField),'廚房產品')
 const serviceFields=homeBlocks.find(b=>b.id==='home:廚房產品').fields.filter(f=>f.documentId===HOME_SERVICES_ID&&f.path.startsWith('copy.')&&f.path!=='copy.field3')
-assert.deepEqual(serviceFields.map(f=>f.label),headingFields.slice(0,5).map(f=>f.label))
+assert.deepEqual(serviceFields.map(f=>f.schema.sharedSetting?.sourceLabel||f.label),headingFields.slice(0,5).map(f=>f.schema.sharedSetting?.sourceLabel||f.label))
 const serviceEdit=structuredClone(serviceHeadingDoc.body)
 Object.assign(serviceEdit.copy,{englishLabel:'APPLIANCES',englishLead:'Discover',chineseTitle:'智慧廚電',englishTitleFirst:'First Line',englishTitleSecond:'Second Line'})
 checkPageBody(homePage,HOME_SERVICES_ID,serviceHeadingDoc.body,serviceEdit,serviceHeadingDoc.schema)

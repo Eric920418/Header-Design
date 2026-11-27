@@ -280,7 +280,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           </article>
 
           <article v-reveal="{ anim: 'opalMoveLeft', delay: 90 }" class="franchise-qualification-panel">
-            <h3><InternalHeadingText :text="cmsCopy.copy.text47" /></h3>
+            <h3 id="franchise-qualification-title"><InternalHeadingText :text="cmsCopy.copy.text47" /></h3>
             <div class="franchise-qualification-list">
               <div v-for="(item, index) in franchiseQualifications" :key="item.title" v-reveal="{ anim: 'opalMoveUp', delay: index * 65 }" class="franchise-qualification-item">
                 <InternalFranchiseImage :src="item.icon" :alt="`${item.title}圖示`" fit="contain" />

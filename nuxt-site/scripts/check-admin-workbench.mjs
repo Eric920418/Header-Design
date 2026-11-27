@@ -133,6 +133,7 @@ for(const [id,system] of [['view-pages-knowledge-design-systemcabinet',true],['v
  assert.equal(knowledgeSearchExample(id,seoBodies,{seoTitle:'自訂搜尋標題',seoDescription:'自訂摘要'}).title,'自訂搜尋標題')
 }
 assert.equal(JSON.stringify(seoBodies),seoBefore,'Automatic SEO examples must not write duplicate data')
+const sourceFieldLabel=f=>f.schema.sharedSetting?.sourceLabel||f.label
 const knowledgeListing=docs.find(d=>d.id==='view-pages-knowledge-index')
 const relabelledGuide=structuredClone(knowledgeListing.body)
 relabelledGuide.copy.breadcrumbList='裝修指南測試'
@@ -145,7 +146,7 @@ for(const [id,definitions] of Object.entries(remainingHomeHeadings)){
  const block=home.find(b=>b.fields.some(f=>f.documentId===id))
  const fields=Object.keys(definitions).map(key=>block.fields.find(f=>f.path==='copy.'+key))
  assert(fields.every(Boolean),'Every visible heading needs an editable field')
- assert.deepEqual(fields.map(f=>f.label),Object.values(definitions).map(f=>f.label))
+ assert.deepEqual(fields.map(f=>f.schema.sharedSetting?.sourceLabel||f.label),Object.values(definitions).map(f=>f.label))
  const original={[id]:doc.body},materialized={[id]:effectiveHomeHeadingBody(id,doc.body)}
  assert.equal(hasPageChanges(home,original,materialized),false,'Default values must not create changes')
  for(const [key,definition] of Object.entries(definitions)){
@@ -213,7 +214,7 @@ for(const id of ['series-catalogue','product-catalogue','builder-catalogues']){
  const block=id==='series-catalogue'?catalogueList:pageBlocks(pageEditors.find(p=>p.id===id),docs).find(b=>b.name==='型錄管理')
  assert.equal(block.fields.find(f=>f.path==='copy.text2')?.schema.readingGroup,'型錄區塊')
  assert(block.fields.find(f=>f.path==='copy.text2')?.schema.advanced)
- assert(block.fields.some(f=>f.label==='下載按鈕文字'&&!f.schema.advanced))
+ assert(block.fields.some(f=>sourceFieldLabel(f)==='下載按鈕文字'&&!f.schema.advanced))
 }
 const builderCataloguePage=pageEditors.find(p=>p.id==='builder-catalogues')
 const productCataloguePage=pageEditors.find(p=>p.id==='product-catalogue')
@@ -223,7 +224,7 @@ const productDoc=docs.find(d=>d.id===productCatalogueDocument)
 const productEdit={...productDoc.body,copy:{...productDoc.body.copy,careChineseTitle:'我的選購指南',kitchenwareTitle:'配備型錄測試'}}
 validate(productEdit,productDoc.schema)
 checkPageBody(productCataloguePage,productDoc.id,productDoc.body,productEdit,productDoc.schema)
-assert(productCare.fields.some(f=>f.path==='copy.careChineseTitle'&&f.label===headingFieldLabel(productCatalogueFields.careChineseTitle.label)))
+assert(productCare.fields.some(f=>f.path==='copy.careChineseTitle'&&sourceFieldLabel(f)===headingFieldLabel(productCatalogueFields.careChineseTitle.label)))
 assert.equal(productCatalogueText(productDoc.body.copy,'careChineseTitle'),'廚房選購指南')
 assert.equal(productCatalogueTitle({id:'kitchenware-2026',title:'推薦卡片名稱'},productEdit.copy),'配備型錄測試')
 assert.deepEqual(changeImpacts([{documentId:productDoc.id,path:'copy.careChineseTitle'}]).map(i=>i.href),[productCare.href])
@@ -374,7 +375,7 @@ const franchise=workbenchBlocks('franchise',pageBlocks(pageEditors.find(p=>p.id=
  assert.equal(block.name,'加盟申請表單')
  assert(block.aliases.includes('franchise-form:申請表單上方'))
  assert.equal(block.href,'/franchising/form#franchise-application-title')
- assert.deepEqual(block.fields.slice(0,2).map(f=>f.label),['區塊英文標籤','區塊中文主標題'])
+ assert.deepEqual(block.fields.slice(0,2).map(sourceFieldLabel),['區塊英文標籤','區塊中文主標題'])
  const copy=previewBodies['view-pages-franchising-form'].copy
  const scene=pagePositionContent(block,previewBodies)
  assert.equal(scene.heading.find(f=>f.path==='copy.text2').value,copy.text2)
@@ -421,7 +422,7 @@ assert.equal(pagePositionContent(downloadHero,previewBodies).image,previewBodies
 assert(downloadDocument.aliases.includes('franchise-download:加盟簡介與檔案'))
 assert(['加盟簡介與下載按鈕','型錄載入提示','頁面底部返回按鈕'].every(name=>downloadDocument.aliases.includes('franchise-download:'+name)))
 assert.equal(downloadDocument.href,'/franchising/download#franchise-document-title')
-assert.deepEqual(downloadDocument.fields.slice(0,2).map(f=>[f.path,f.label]),[['copy.text5','區塊中文主標題（第一段）'],['copy.text6','區塊中文主標題（第二段）']])
+assert.deepEqual(downloadDocument.fields.slice(0,2).map(f=>[f.path,sourceFieldLabel(f)]),[['copy.text5','區塊中文主標題（第一段）'],['copy.text6','區塊中文主標題（第二段）']])
 assert.deepEqual(downloadCatalogue.fields.map(f=>f.path),['brochurePages','FRANCHISE_BROCHURE_URL'])
 assert(downloadCatalogue.aliases.includes('franchise-download:型錄預覽圖片'))
 assert.equal(downloadCatalogue.href,'/franchising/download#franchise-catalogue-preview')
@@ -890,7 +891,7 @@ assert(sameContent({title:'相同',image:'/a.jpg'},{image:'/a.jpg',title:'相同
 {
  const page=pageEditors.find(p=>p.id==='service'),document=docs.find(d=>d.id===serviceHeadingDocument),before=structuredClone(document.body)
  const blocks=pageBlocks(page,docs),intro=blocks.find(b=>b.name==='服務流程')
- assert.deepEqual(intro.fields.filter(f=>f.documentId===serviceHeadingDocument&&f.path!=='copy.text6').map(f=>f.label),['區塊英文標籤','區塊中文主標題','區塊英文主標題'])
+ assert.deepEqual(intro.fields.filter(f=>f.documentId===serviceHeadingDocument&&f.path!=='copy.text6').map(sourceFieldLabel),['區塊英文標籤','區塊中文主標題','區塊英文主標題'])
  assert(!blocks.some(b=>b.fields.some(f=>f.documentId===serviceHeadingDocument&&['copy.text3','copy.text4','copy.text5'].includes(f.path))))
  assert.equal(pageFieldValue({[document.id]:before},{documentId:document.id,path:'copy.englishLabel'}),'Service Process')
  assert.equal(serviceHeading(before.copy).englishTitle,before.copy.text3+before.copy.text4+before.copy.text5)

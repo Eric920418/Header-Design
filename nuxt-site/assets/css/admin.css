@@ -1328,3 +1328,5 @@
 .cms .cms-link-target-caption{padding:9px 12px;background:#fff7e5;border-radius:5px;}
 .cms .cms-link-target code,.cms .cms-link-current code{display:block;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;}
 .cms .cms-link-current{margin:0;color:var(--cms-muted);font-size:12px;overflow-wrap:anywhere;}
+
+.cms-shared-settings{margin:0 0 20px;padding:0 0 18px;border-bottom:1px solid #e6e3dd}.cms-shared-settings>h3{font-size:15px;margin:0 0 14px}.cms-shared-target p{margin:6px 0}

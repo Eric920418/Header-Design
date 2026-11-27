@@ -1,3 +1,4 @@
+import {clarifySharedBlock} from './shared-settings.mjs'
 import {effectiveServiceHeadingBody} from './service-headings.mjs'
 import {isSystemCabinetDocument,legacyKnowledgeSection} from './knowledge-editor.mjs'
 import {effectiveHomeHeadingBody} from './home-headings.mjs'
@@ -253,7 +254,7 @@ export function pageBlocks(p,documents){
  }
  for(const block of blocks)block.fields=placeDestinations(block.fields,f=>f.documentId+':'+f.path,f=>f.schema.destinationAfter)
  const sorted=pagePositions[p.id]?.sections.length?pagePositions[p.id].sections.map(s=>s.name):order[p.id]||[]
- return blocks.map(b=>{const positioned=decoratePosition(p.id,b);return positioned.anchor?{...positioned,href:p.href.split('#')[0]+'#'+positioned.anchor}:positioned}).sort((a,b)=>Number(a.secondary)-Number(b.secondary)||(sorted.includes(a.name)?sorted.indexOf(a.name):99)-(sorted.includes(b.name)?sorted.indexOf(b.name):99))
+ return blocks.map(b=>{const positioned=decoratePosition(p.id,b),located=positioned.anchor?{...positioned,href:p.href.split('#')[0]+'#'+positioned.anchor}:positioned;return clarifySharedBlock(p.id,located)}).sort((a,b)=>Number(a.secondary)-Number(b.secondary)||(sorted.includes(a.name)?sorted.indexOf(a.name):99)-(sorted.includes(b.name)?sorted.indexOf(b.name):99))
 }
 export function pageSummary(p,rows,documents=[]){
  const summaries=rows.filter(w=>w.ids.some(id=>p.ids.includes(id)))
