@@ -1,4 +1,5 @@
 import {serviceHeadingDocument,serviceHeadingFields,serviceHeadingSchema} from './service-headings.mjs'
+import {linkFieldPresentation,linkCaptionPresentation} from './link-settings.mjs'
 import copyFields from './presentation-copy.json' with {type:'json'}
 import { homeHeroSchema, HOME_HERO_ID } from './hero-media.mjs'
 import { homeGallerySchema, HOME_GALLERY_ID } from './gallery-cases.mjs'
@@ -262,9 +263,10 @@ export function editingSchema(schema,resourceId,path=''){
   if(!result.destinationAfter&&result.label&&!genericDestinationLabel.test(result.label))result.help ||= result.label.replace(/(?:前往頁面|連結|網址)$/,'')
   result.destination=true
   result.positionLegacyLabel ||= result.label
-  result.label='前往頁面'
+  result.label=linkFieldPresentation(resourceId,path)?.label||result.label
  }
  if(schema.format==='url'&&resourceId==='site-visuals'&&['brandVideoSrc','serviceVideoSrc'].includes(path))result.help='更換影片時，請貼上 MP4 檔案網址。'
+ if(path)Object.assign(result,result.destination||/\.pdfUrl$/.test(path)?linkFieldPresentation(resourceId,path):linkCaptionPresentation(resourceId,path,result.label))
  if(schema.fields){
   const fieldPath=key=>path?path+'.'+key:key
   const entries=Object.entries(schema.fields).map(([key,value])=>[key,editingSchema(value,resourceId,fieldPath(key))])
@@ -278,7 +280,7 @@ export function editingSchema(schema,resourceId,path=''){
  }
  if(path==='items'&&['news-articles','knowledge-articles','custom-cases'].includes(resourceId)){result.label=resourceId==='news-articles'?'消息、活動與影片':resourceId==='knowledge-articles'?'廚房知識文章':'自行建置案例';result.newItemLabel=resourceId==='news-articles'?'消息或活動':resourceId==='knowledge-articles'?'文章':'案例'}
  if(resourceId==='data-builders'&&['builderProjectCards','builderPartners'].includes(path)||resourceId==='data-franchise'&&path==='franchiseProcessSteps')result.hidden=true
- if(path==='sitemapGroups.*.links.*')result.itemLabels=['連結文字','前往頁面']
+ if(path==='sitemapGroups.*.links.*')result.itemLabels=['頁尾網站地圖項目文字','頁尾網站地圖項目連結']
  if(path.split('.').at(-1)==='imageLayout'||path.split('.').at(-1)==='logoClass'&&!(resourceId==='view-components-home-HomeServices'&&path==='services.*.logoClass'))result.hidden=true
  if(['id','articleId','slug','code'].includes(path.split('.').at(-1))&&schema.format!=='youtube')result.hidden=true
  const imageAlt=['alt','imageAlt'].includes(path.split('.').at(-1))&&!(resourceId===HOME_SERVICES_ID&&path==='services.*.alt')

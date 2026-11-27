@@ -5,7 +5,7 @@ import {kitchenHeroStory} from '~/shared/cms/kitchen-series-hero.mjs'
 import {seriesEditorSection} from '~/shared/cms/series-editor.mjs'
 import {KITCHEN_EQUIPMENT_CUTOUTS} from '~/data/kitchenEquipmentCutouts'
 
-const props=defineProps<{part:string;item?:any}>()
+const props=defineProps<{part:string;item?:any;focusedField?:string}>()
 const section=computed(()=>seriesEditorSection(props.part))
 const heroImage=computed(()=>firstImage(props.item?.heroSlides))
 const suiteImage=computed(()=>firstImage(props.item?.suites))
@@ -13,7 +13,9 @@ const story=computed(()=>props.item&&kitchenHeroStory(props.item,heroImage.value
 const cards=computed(()=>{
  const rows=props.item?.[props.part]
  if(!Array.isArray(rows))return []
- return rows.slice(0,3).map((row:any,index:number)=>({
+ const index=props.focusedField?.match(new RegExp('\\.'+props.part+'\\.(\\d+)(?:\\.|$)'))?.[1]
+ const shown=index!==undefined&&rows[Number(index)]?[rows[Number(index)]]:rows.slice(0,3)
+ return shown.map((row:any,index:number)=>({
   title:rowName(row,index),
   caption:props.part==='finishes'?row.code:props.part==='equipment'?row.model:'',
   image:props.part==='equipment'?(KITCHEN_EQUIPMENT_CUTOUTS[row.image]||row.image):firstImage(row),
@@ -46,7 +48,7 @@ const buttons:Record<string,string>={catalogue:'品牌系列型錄',explore:'探
     </div>
     <p v-else class="cms-field-help">{{ part==='cases'?'此系列目前尚無公開推薦案例。':'此系列目前沒有這個區塊的項目。' }}</p>
     <div v-if="section.buttons.length&&(part!=='cases'||!cards.length)" class="cms-scene-buttons">
-     <span v-for="key in section.buttons" :key="key">{{ buttons[key] }}<ArrowRight :size="13" aria-hidden="true" /></span>
+     <span v-for="key in section.buttons" :key="key" :class="{'is-focused':focusedField?.endsWith('.buttonDestinations.'+key)}">{{ buttons[key] }}<ArrowRight :size="13" aria-hidden="true" /></span>
     </div>
    </template>
   </section>

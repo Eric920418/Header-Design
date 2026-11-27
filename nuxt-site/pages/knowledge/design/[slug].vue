@@ -81,6 +81,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="knowledge-detail__content">
         <section
           v-for="(section, sectionIndex) in detail.sections"
+          :id="'cms-article-section-'+(sectionIndex+1)"
           :key="section.heading ?? `section-${sectionIndex}`"
           class="knowledge-detail-section"
           :class="{
@@ -120,7 +121,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
           />
         </section>
 
-        <section class="knowledge-detail-section knowledge-detail-closing" v-reveal="{ anim: 'opalMoveUp' }">
+        <section id="knowledge-closing-links" class="knowledge-detail-section knowledge-detail-closing" v-reveal="{ anim: 'opalMoveUp' }">
           <p>{{ detail.closing }}</p>
           <div class="knowledge-detail-links">
             <a v-for="link in detail.links" :key="link.url" :href="link.url" target="_blank" rel="noopener noreferrer">

@@ -24,7 +24,7 @@ const logos=computed(()=>props.selected?.path==='logos'?[props.selected.value]:p
  <div class="cms-home-section-preview">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
   <section v-if="block.id==='home:設計案例'" class="cms-home-gallery" aria-label="設計案例的位置示意">
-   <AdminThumbnail v-if="galleryCase" :src="galleryCase.image" :alt="galleryCase.store||galleryCase.title||'案例背景'" class="cms-home-gallery-background" :class="{'is-focused':itemFocus('cases','image')}" />
+   <AdminThumbnail v-if="galleryCase" :src="galleryCase.image" :alt="galleryCase.store||galleryCase.title||'案例背景'" class="cms-home-gallery-background" :class="{'is-focused':itemFocus('cases','image')||itemFocus('cases','route')}" />
    <div class="cms-home-gallery-layout">
     <div class="cms-home-gallery-copy">
      <small :class="{'is-focused':focus('copy.text2')}">{{ gallery?.copy.text2 }}</small>
@@ -57,9 +57,9 @@ const logos=computed(()=>props.selected?.path==='logos'?[props.selected.value]:p
    </div>
   </section>
   <section v-else-if="block.id==='home:設計風格'" class="cms-home-style-preview" aria-label="設計風格的位置示意">
-   <div class="cms-home-style-strip"><div v-for="(item,index) in (selected?[style]:styles.slice(0,3))" :key="index"><AdminThumbnail :src="item.logo" :alt="item.zh+'圖示'" contain :class="{'is-focused':itemFocus('styles','logo')}" /><span><strong :class="{'is-focused':itemFocus('styles','zh')}">{{ item.zh }}</strong><small :class="{'is-focused':itemFocus('styles','en')}">{{ item.en }}</small></span></div></div>
+   <div class="cms-home-style-strip"><div v-for="(item,index) in (selected?[style]:styles.slice(0,3))" :key="index"><AdminThumbnail :src="item.logo" :alt="item.zh+'圖示'" contain :class="{'is-focused':itemFocus('styles','logo')}" /><span><strong :class="{'is-focused':itemFocus('styles','zh')||itemFocus('styles','route')}">{{ item.zh }}</strong><small :class="{'is-focused':itemFocus('styles','en')}">{{ item.en }}</small></span></div></div>
    <figure v-if="style?.images?.length"><figcaption>滑過「{{ style.zh }}」時的圖片預覽</figcaption><div class="cms-home-style-images"><AdminThumbnail v-for="(src,index) in style.images" :key="index" :src="src" :alt="style.zh+'廚房照片'" /></div></figure>
   </section>
-  <section v-else class="cms-home-logo-preview" aria-label="集團品牌標誌的位置示意"><AdminThumbnail v-for="(logo,index) in logos" :key="index" :src="logo.src" :alt="logo.name" contain :class="{'is-focused':itemFocus('logos','src')||itemFocus('logos','name')}" /></section>
+  <section v-else class="cms-home-logo-preview" aria-label="集團品牌標誌的位置示意"><AdminThumbnail v-for="(logo,index) in logos" :key="index" :src="logo.src" :alt="logo.name" contain :class="{'is-focused':itemFocus('logos','src')||itemFocus('logos','name')||itemFocus('logos','to')}" /></section>
  </div>
 </template>

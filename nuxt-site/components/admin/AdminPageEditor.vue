@@ -14,6 +14,7 @@ import {storeCaseContentPosition} from '~/shared/cms/store-case-content.mjs'
 import {caseManagementReturn} from '~/shared/cms/case-management.mjs'
 import {builderCatalogueNoticeAnchor,isBuilderCatalogueNotice} from '~/shared/cms/builder-catalogue.mjs'
 import {productCatalogueDocument,productCatalogueTitle} from '~/shared/cms/product-catalogue.mjs'
+import {focusedLinkSetting,linkSettingLocation} from '~/shared/cms/link-settings.mjs'
 const props=defineProps<{id:string}>()
 const route=useRoute(),router=useRouter(),{api,session,message}=useCmsAdmin()
 const {data:namedPages}=useNuxtData<any[]>('cms-pages')
@@ -52,7 +53,7 @@ function changeStoreRegion(event:Event){
 const workbench={focused:ref(''),editing:ref(''),selection:ref<any>(null),rows:ref<Record<string,any>>({}),baseline,documents:docs,metadata:computed(()=>pageData.value?.rowPresentation||{}),busy,returnFocus:()=>{},position:()=>{positionOpen.value=true},select:(edit:boolean)=>{positionOpen.value=!edit&&window.innerWidth<1024}}
 provide('cms-workbench',workbench)
 const seriesPart=computed(()=>props.id==='series'?seriesEditorSection(route.query.seriesPart):null)
-const focusedGroup=ref('')
+const focusedGroup=ref(''),focusedDocument=ref('')
 const franchiseCatalogue=computed(()=>active.value?.kind==='franchise-download-catalogue')
 const franchiseDownloadCommon=computed(()=>active.value?.kind==='franchise-download-document')
 const legacyDownloadGroup=computed(()=>franchiseDownloadSettings.find(group=>route.query.block==='franchise-download:'+group.name))
@@ -64,7 +65,7 @@ const newsTopLinks='文章標題上方的分類連結'
 const knowledgeArticles=computed(()=>active.value?.id==='knowledge:文章管理')
 const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fields.filter((f:any)=>isSystemCabinetDocument(f.documentId)):[])
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
-const positionBlock=computed(()=>{
+const basePositionBlock=computed(()=>{
  const block=storeCaseContentPosition(active.value,workbench.selection.value,focusedField.value,bodies.value['data-storeCases']?.storeCases)
  if(sharedStoreCases.value)return storeCaseSharedPosition(block,pageData.value?.positionPresentation,focusedGroup.value,String(route.query.block||''),focusedField.value)
  if(block?.kind==='builder-catalogue-cards'&&focusedGroup.value===builderCatalogueNoticeAnchor)
@@ -110,8 +111,19 @@ const positionBlock=computed(()=>{
  if(!target)return block
  return {...block,preview:target.preview,href:target.anchor?'/design-inspiration#'+target.anchor:detail||block.href}
 })
-const positionSelection=computed(()=>knowledgeArticles.value&&positionBlock.value?.previewPage?undefined:workbench.selection.value)
-watch(()=>route.query.block,()=>{focusedGroup.value='';if(pageData.value&&knowledgeSection.value)void openSystemCabinet()})
+const focusedLink=computed(()=>focusedLinkSetting(basePositionBlock.value,bodies.value,workbench.selection.value,focusedField.value,focusedDocument.value))
+const positionBlock=computed(()=>{
+ const block=basePositionBlock.value,target=focusedLink.value
+ if(!target)return block
+ const selected=workbench.selection.value
+ const base=block?.previewPage||(props.id==='home'?'/':itemWebsitePath(selected?.documentId,selected?.value)||selected?.href)||block?.href||pageData.value?.href||'/'
+ return {...block,previewPage:linkSettingLocation(target,block,bodies.value,base)}
+})
+const positionSelection=computed(()=>{
+ if(focusedLink.value)return focusedLink.value.item&&focusedLink.value.documentId===workbench.selection.value?.documentId?workbench.selection.value:undefined
+ return knowledgeArticles.value&&positionBlock.value?.previewPage?undefined:workbench.selection.value
+})
+watch(()=>route.query.block,()=>{focusedGroup.value='';focusedField.value='';focusedDocument.value='';if(pageData.value&&knowledgeSection.value)void openSystemCabinet()})
 
 const builderCatalogueShortcuts=computed(()=>{
  if(props.id!=='builder-series')return []
@@ -138,7 +150,7 @@ async function chooseLocation(id:string){
  formRoot.value?.querySelector<HTMLElement>(workbench.editing.value?'.cms-item-editor-heading':'.cms-block-title')?.focus({preventScroll:true})
 }
 function seriesLocation(path:string){
- return seriesPart.value&&path.startsWith('/home-style/')?path.split('#')[0]+'#'+seriesPart.value.anchor:path
+ return seriesPart.value&&path.startsWith('/home-style/')&&!path.includes('#')?path+'#'+seriesPart.value.anchor:path
 }
 
 provide('cms-media-context',computed(()=>pageMedia(docs.value,bodies.value,blocks.value)))
@@ -262,8 +274,9 @@ function trackField(event:FocusEvent){
  const target=event.target as HTMLElement
  if(target.closest('[data-cms-keep-field]'))return
  const path=target.closest('[data-cms-path]')?.getAttribute('data-cms-path')||''
- if(!path&&props.id===storeCasesPageId&&(workbench.editing.value==='data-storeCases:storeCases'||sharedStoreCases.value))return
+ if(!path)return
  focusedField.value=path
+ focusedDocument.value=target.closest('[data-cms-document]')?.getAttribute('data-cms-document')||''
  const group=target.closest<HTMLElement>('[data-position-group]')?.dataset.positionGroup
  if(group||(franchiseDownloadCommon.value||franchiseCatalogue.value||builderNoticeFields.value.length)&&focusedField.value)focusedGroup.value=group||''
  if(active.value?.preview==='inspiration-breadcrumb'&&focusedField.value.startsWith('copy.breadcrumb'))
@@ -335,9 +348,9 @@ const choices=computed(()=>docs.value.flatMap(d=>{
  const b=bodies.value[d.id],items=d.id==='data-kitchenSeries'?b?.KITCHEN_SERIES_PAGES:d.id==='data-storeCases'?b?.storeCases:['custom-cases','knowledge-articles','news-articles'].includes(d.id)?b?.items:[]
  return(items||[]).filter((i:any)=>i.enabled!==false&&(!pageData.value?.category||i.summary?.category===pageData.value.category)).map((i:any)=>({label:i.summary?.title||i.title||i.name||i.slug,path:seriesLocation(itemWebsitePath(d.id,i)||'')}))
 }))
-const locationHref=computed(()=>{const selected=workbench.selection.value,item=selected?.value;if(item?.enabled===false||item?.available===false)return pageData.value?.href||'/';return seriesLocation(positionBlock.value?.previewPage||(props.id==='home'?'':selected?.href||itemWebsitePath(selected?.documentId,item))||positionBlock.value?.href||pageData.value?.href||'/')})
+const locationHref=computed(()=>{const selected=positionSelection.value,item=selected?.value;if(item?.enabled===false||item?.available===false)return pageData.value?.href||'/';return seriesLocation(positionBlock.value?.previewPage||(props.id==='home'?'':selected?.href||itemWebsitePath(selected?.documentId,item))||positionBlock.value?.href||pageData.value?.href||'/')})
 const publicLocation=computed(()=>{
- const selected=workbench.selection.value
+ const selected=positionSelection.value
  if(caseManagement.value&&selected?.source&&selected.href)return selected.href
  if(newsArticleList.value&&!workbench.editing.value){
   const listId=franchiseNews.value?franchiseMarqueeDocument:props.id==='news-latest'?'view-pages-news-latest-index':'view-pages-news-index'
@@ -345,7 +358,7 @@ const publicLocation=computed(()=>{
  }
  if(props.id!=='home'&&selected&&(itemWebsitePath(selected.documentId,selected.value)||selected.href)){
   const published=itemPublication(docs.value.find(d=>d.id===selected.documentId),selected.path,selected.value,selected.index)
-  return published.visible?seriesLocation(positionBlock.value?.previewPage&&(knowledgeArticles.value||props.id===storeCasesPageId)?positionBlock.value.previewPage:itemWebsitePath(selected.documentId,published.item)||selected.href||'/'):''
+  return published.visible?seriesLocation(positionBlock.value?.previewPage&&(focusedLink.value||knowledgeArticles.value||props.id===storeCasesPageId)?positionBlock.value.previewPage:itemWebsitePath(selected.documentId,published.item)||selected.href||'/'):''
  }
  return activeDocs.value.length&&activeDocs.value.every(d=>d.publishedBody)?positionBlock.value?.previewPage||positionBlock.value?.href||pageData.value?.href||'/':''
 })
@@ -518,12 +531,12 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
    <details v-if="session?.role==='admin'" class="cms-secondary"><summary>其他操作</summary><button type="button" class="cms-button" :disabled="busy||dirty||!unpublishDocuments.length" @click="unpublish">暫停本頁內容</button></details>
    <details class="cms-secondary"><summary>過去的修改</summary><p v-if="franchiseNews" class="cms-field-help">文章版本可從<NuxtLink :to="pageEditorLink('news',route.query,'news:最新消息列表')">「優惠消息」</NuxtLink>查看。</p><section v-for="d in historyDocs" :key="d.id"><h3>{{ resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0] }}</h3><div v-for="v in d.versions" :key="v.id" class="cms-history-row"><span>{{ cmsDate(v.createdAt) }} · {{ v.actor||'初始內容' }}</span><button v-if="session?.role==='admin'" type="button" class="cms-button" :disabled="busy||dirty" @click="restore(d,v.id)">取回這份內容</button></div></section></details>
   </div>
-  <aside class="cms-inspector cms-panel" :class="{'is-editing':!!workbench.editing.value}" aria-label="位置示意與編輯"><AdminPositionPreview v-if="!workbench.editing.value" :block="positionBlock" :bodies="bodies" :selected="positionSelection" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /><div id="cms-item-editor" /></aside>
+  <aside class="cms-inspector cms-panel" :class="{'is-editing':!!workbench.editing.value}" aria-label="位置示意與編輯"><AdminPositionPreview v-if="!workbench.editing.value" :block="positionBlock" :bodies="bodies" :selected="positionSelection" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" :link-target="focusedLink" /><div id="cms-item-editor" /></aside>
  </div>
  <footer class="cms-savebar" aria-label="目前內容操作"><span class="cms-save-status" role="status">{{ status }} <button v-if="dirty" type="button" class="cms-change-link" @click="changesOpen=true">查看修改</button></span><div class="cms-actions"><button type="button" class="cms-button cms-preview-button" :disabled="busy" @click="preparePreview">預覽效果</button><button type="button" class="cms-button" :class="{'cms-button-gold':dirty}" :disabled="busy||!dirty" @click="requestSave">{{ busy?'處理中…':'儲存草稿' }}</button><button v-if="session?.role==='admin'" type="button" class="cms-button cms-button-gold" :disabled="busy||validating||(!dirty&&!pending)" @click="confirmPublish">{{ validating?'正在確認…':'更新官網' }}</button></div></footer>
  <AdminDialog :open="changesOpen" title="本頁尚未儲存的修改" wide @close="changesOpen=false"><AdminChangeList :changes="changeDetails" /><p v-if="!dirty" role="status">目前沒有尚未儲存的修改。</p></AdminDialog>
  </template>
- <AdminDialog :open="positionOpen" title="官網位置示意" @close="positionOpen=false"><AdminPositionPreview :block="positionBlock" :bodies="bodies" :selected="positionSelection" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" /></AdminDialog>
+ <AdminDialog :open="positionOpen" title="官網位置示意" @close="positionOpen=false"><AdminPositionPreview :block="positionBlock" :bodies="bodies" :selected="positionSelection" :page-title="title" :presentation="positionPresentation" :focused-field="focusedField" :link-target="focusedLink" /></AdminDialog>
  <AdminDialog :open="previewOpen" title="預覽效果" wide class="cms-live-preview" @close="closePreview"><aside v-if="previewOpen" class="cms-effect-panel" aria-label="官網效果"><div class="cms-effect-toolbar"><strong>完整官網效果</strong><button type="button" class="cms-button" @click="mobile=!mobile">{{ mobile?'看桌機':'看手機' }}</button><button type="button" class="cms-button" @click="reloadPreview()">重試</button><button type="button" class="cms-button" @click="closePreview">返回修改</button></div><select v-if="choices.length" v-model="previewPath" aria-label="選擇預覽頁面"><option value="">目前頁面</option><option v-for="p in choices" :key="p.path" :value="p.path">{{ p.label }}</option></select><p class="cms-field-help" role="status">{{ previewState }}</p><p v-if="previewError" class="cms-error" role="alert">{{ previewError }} <a v-if="previewResult&&initialToken" :href="previewUrl" target="_blank" rel="noopener noreferrer" class="cms-button">另開效果畫面 ↗</a></p><div class="cms-effect-viewport" :class="{'cms-effect-mobile':mobile}"><iframe v-if="previewResult" :key="initialToken" ref="previewFrame" :style="frameStyle" :src="previewUrl" title="目前輸入的官網效果" @error="failPreview('預覽載入失敗，請重試；目前輸入仍保留。')" /></div></aside></AdminDialog>
  <AdminDialog :open="locationOpen" title="選擇要修改的位置" @close="locationOpen=false"><nav class="cms-block-nav cms-block-picker" aria-label="選擇官網區塊"><button v-for="b in navigationBlocks" :key="b.id" type="button" :aria-current="currentLocation===b.id?'location':undefined" @click="chooseLocation(b.id)"><AdminThumbnail :src="blockPicture(b)" :alt="b.name+'縮圖'" /><span><strong>{{ b.name }}</strong><small>{{ b.hint }}</small></span></button></nav></AdminDialog>
  <AdminDialog :open="confirming" :title="confirmMode==='unpublish'?'確認暫停本頁內容':confirmMode==='save'?'確認儲存共用內容':'確認要更新到官網的內容'" wide @close="confirming=false"><p>{{ confirmMode==='unpublish'?(pageData?.unpublishIds?'暫停後，官網將隱藏此頁面。請先確認下方的使用位置。':'這會暫停本頁管理的所有內容。使用共用資料的頁面也可能無法載入。'):confirmMode==='save'?'儲存草稿後，官網不會立即改變。':'以下修改會一起更新到官網，請確認項目與修改前後內容。' }}</p><p v-if="confirmMode!=='unpublish'&&confirmation&&!confirmation.current?.length&&!confirmation.saved?.length" class="cms-notice" role="status">已儲存內容與官網相同；確認後只會同步更新狀態，文字與圖片不會改變。</p><section v-if="confirmation?.current?.length"><h3>本次尚未儲存的修改（{{ confirmation.current.length }}）</h3><AdminChangeList :changes="confirmation.current" /></section><section v-if="confirmation?.saved?.length"><h3>其他已儲存、尚未更新的修改（{{ confirmation.saved.length }}）</h3><AdminChangeList :changes="confirmation.saved" /></section><details v-if="confirmation?.impacts?.length" open><summary>這些內容的官網使用位置</summary><ul><li v-for="i in confirmation.impacts" :key="i.href+i.label">{{ i.label }}</li></ul></details><p v-if="error" class="cms-error" role="alert">{{ error }}</p><div class="cms-actions"><button type="button" class="cms-button" :disabled="busy" @click="confirming=false">返回修改</button><button type="button" class="cms-button cms-button-gold" :disabled="busy" @click="save(confirmMode)">{{ busy?'處理中…':confirmMode==='unpublish'?'確認暫停':confirmMode==='save'?'確認儲存':'確認更新官網' }}</button></div></AdminDialog>

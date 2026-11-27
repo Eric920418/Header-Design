@@ -28,7 +28,7 @@ function remove(index:number){if(props.modelValue.length>1&&window.confirm('移�
           <label v-if="row.value.title" class="cms-field">案例標題<input :value="row.value.title" readonly /></label>
           <label class="cms-field">門市名稱<input :value="row.value.store" @input="set(row.index,'store',($event.target as HTMLInputElement).value)" /></label>
           <AdminFields :model-value="row.value.image" :schema="{type:'string',format:'media',label:'案例圖片'}" :document-id="documentId" :path="`${path}.${row.index}.image`" label="image" @update:model-value="set(row.index,'image',$event)" />
-          <label class="cms-field">案例連結<input :value="galleryCaseRoute(row.value)" readonly /></label>
+          <label class="cms-field" :data-cms-document="documentId" :data-cms-path="`${path}.${row.index}.route`">首頁案例卡片連結（隨選取案例帶入）<input :value="galleryCaseRoute(row.value)" readonly /></label>
         </div>
       </template>
     </AdminItems>

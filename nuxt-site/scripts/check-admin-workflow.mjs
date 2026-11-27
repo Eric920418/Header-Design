@@ -98,7 +98,7 @@ for(const [id,key,route] of homeLinkCards){
  checkPageBody(homePage,id,d.body,next,d.schema)
  validate(next,d.schema)
  const change=pageChanges(homeBlocks,[d],{[id]:d.body},{[id]:next})[0]
- assert.equal(change.path,key+'.0.route');assert.match(change.label,/前往頁面$/)
+ assert.equal(change.path,key+'.0.route');assert(change.label.endsWith(key==='styles'?'設計風格選項連結':'廚電品牌卡片連結'))
  next[key][0].route='invalid://destination'
  assert.throws(()=>validate(next,d.schema),e=>e.statusCode===400&&e.message.includes('.route'))
 }

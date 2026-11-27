@@ -68,6 +68,15 @@ function activateSuite(index: number) {
   activeSuiteIndex.value = index
   activeSuiteImageIndex.value = 0
 }
+const seriesRoute = useRoute()
+watch(() => seriesRoute.hash, hash => {
+  const index = data.suites.findIndex(suite => '#suite-tab-' + suite.id === hash)
+  if (index >= 0) activateSuite(index)
+})
+function revealSuiteFromHash() {
+  const index = data.suites.findIndex(suite => '#suite-tab-' + suite.id === window.location.hash)
+  if (index >= 0) activateSuite(index)
+}
 
 function handleSuiteKeydown(event: KeyboardEvent) {
   const last = data.suites.length - 1
@@ -165,6 +174,8 @@ watch(casesApi, (api, _oldApi, onCleanup) => {
 }, { immediate: true })
 
 onMounted(() => {
+  revealSuiteFromHash()
+  window.addEventListener('hashchange', revealSuiteFromHash)
   window.addEventListener('resize', scheduleCaseMorph, { passive: true })
   stopMotionWatch = watch(reducedMotion, (reduced) => {
     if (heroTimer) clearInterval(heroTimer)
@@ -180,6 +191,7 @@ onMounted(() => {
   }, { immediate: true })
 })
 onBeforeUnmount(() => {
+  window.removeEventListener('hashchange', revealSuiteFromHash)
   if (heroTimer) clearInterval(heroTimer)
   if (casesTimer) clearInterval(casesTimer)
   if (caseMorphFrame !== undefined) window.cancelAnimationFrame(caseMorphFrame)

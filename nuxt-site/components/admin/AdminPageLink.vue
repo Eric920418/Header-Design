@@ -3,7 +3,7 @@ import {destinationGroups,destinationName} from '~/shared/cms/navigation.mjs'
 
 const {data:workspaces}=useNuxtData<any[]>('cms-workspaces')
 const {data:sitePages}=useNuxtData<any[]>('cms-pages')
-const props=defineProps<{modelValue:string;label:string;invalid?:boolean;describedby?:string;autoDestination?:boolean}>()
+const props=defineProps<{modelValue:string;label:string;invalid?:boolean;describedby?:string;autoDestination?:boolean;readonly?:boolean}>()
 const emit=defineEmits<{'update:modelValue':[value:string|undefined]}>()
 const groups=computed(()=>destinationGroups(sitePages.value||[],workspaces.value||[]))
 const custom=ref(false)
@@ -25,7 +25,8 @@ function updateUrl(event:Event){
 </script>
 <template>
  <div class="cms-field">
-  <label>{{ label }}
+  <label v-if="props.readonly">{{ label }}<input :value="modelValue" readonly :aria-describedby="describedby" /></label>
+  <label v-else>{{ label }}
    <select :aria-invalid="invalid" :aria-describedby="describedby" :value="custom?'custom':selected" @change="choose">
     <option value="" disabled>選擇官網頁面</option>
     <option v-if="autoDestination" value="default">沿用既有連結</option>
@@ -37,8 +38,10 @@ function updateUrl(event:Event){
     <option value="custom">自行輸入連結</option>
    </select>
   </label>
-  <label v-if="custom">連結網址
+  <label v-if="custom&&!props.readonly">連結網址
    <input :aria-invalid="invalid" :aria-describedby="describedby" :value="modelValue" placeholder="https://…、tel:… 或 mailto:…" @input="updateUrl" />
   </label>
+  <p v-if="modelValue" class="cms-link-current">目前輸入的連結<code>{{ modelValue }}</code></p>
+  <p v-else-if="autoDestination" class="cms-field-help">沿用官網原本連結，尚未另外設定。</p>
  </div>
 </template>

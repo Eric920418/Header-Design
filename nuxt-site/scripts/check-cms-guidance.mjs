@@ -5,6 +5,7 @@ import {resourceGuide,resourceSearchText,editingSchema,homeResources} from '../s
 import {HOME_PROJECT_ID,HOME_SERVICES_ID,HOME_PROMISE_ID,homeProjectHeading,homeServicesHeading,remainingHomeHeadings} from '../shared/cms/home-headings.mjs'
 import {pageBlocks,pageEditors} from '../shared/cms/page-editors.mjs'
 import copyFields from '../shared/cms/presentation-copy.json' with {type:'json'}
+import {linkSetting} from '../shared/cms/link-settings.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
 const aliases=new Set(['data-news','data-latestArticles','data-activityArticles','data-mediaVideos','data-kitchenGuides','data-kitchenGuideDetails'])
 const docs=seed.filter(d=>!aliases.has(d.id)),ids=new Set(docs.map(d=>d.id))
@@ -27,7 +28,7 @@ for(const doc of docs)verify(doc)
 assert.equal(homeResources.length,8)
 const galleryCopy=editingSchema(seed.find(d=>d.id==='view-components-home-HomeGallery').schema,'view-components-home-HomeGallery').fields.copy
 assert.equal(galleryCopy.label,'標題與按鈕設定')
-assert.deepEqual(['text2','text3','field4','text5'].map(key=>galleryCopy.fields[key].label),['區塊英文標籤','區塊中文主標題','前往頁面','按鈕文字'])
+assert.deepEqual(['text2','text3','field4','text5'].map(key=>galleryCopy.fields[key].label),['區塊英文標籤','區塊中文主標題','設計案例區查看更多按鈕連結','設計案例區查看更多按鈕文字'])
 assert.equal(Object.keys(galleryCopy.fields)[Object.keys(galleryCopy.fields).indexOf('text5')+1],'field4')
 const blocks=pageEditors.flatMap(page=>pageBlocks(page,seed))
 for(const field of blocks.flatMap(block=>block.fields)){
@@ -46,11 +47,11 @@ assert.deepEqual(heroFields.slice(0,6).map(f=>f.path),['copy.text6','copy.text7'
 assert(heroFields[4].searchTerms.includes('圓形按鈕前往頁面'))
 let destinations=0
 for(const block of blocks){
- const fields=block.fields.filter(f=>!f.schema.advanced&&f.schema.type!=='array')
+ const fields=block.fields.filter(f=>f.schema.type!=='array')
  for(const [i,field] of fields.entries()){
   if(!field.schema.destinationAfter)continue
   destinations++
-  assert.equal(field.label,'前往頁面')
+  assert.equal(field.label,linkSetting(field.documentId,field.path)?.label)
   const prior=fields[i-1]
   assert.equal(prior?.documentId+':'+prior?.path,field.schema.destinationAfter,block.id)
  }
@@ -65,7 +66,9 @@ function checkDestinationLabel(schema,id,path){
  if(schema.hidden||Object.hasOwn(schema,'fixed'))return
  if(schema.format==='url'){
   const fileLabel=mediaUrlLabels[id+':'+path]
-  assert.equal(schema.label,fileLabel||'前往頁面',id+':'+path)
+  const setting=linkSetting(id,path)
+  assert(fileLabel||setting,id+':'+path+' needs an explicit button or link purpose')
+  assert.equal(schema.label,fileLabel||setting.label,id+':'+path)
   assert.equal(!!schema.destination,!fileLabel,id+':'+path)
  }
  for(const [key,field] of Object.entries(schema.fields||{}))checkDestinationLabel(field,id,path+'.'+key)
@@ -73,17 +76,17 @@ function checkDestinationLabel(schema,id,path){
 }
 for(const b of blocks)for(const f of b.fields)checkDestinationLabel(f.schema,f.documentId,f.path)
 const logoField=blocks.find(b=>b.id==='home:集團品牌標誌').fields.find(f=>f.path==='logos')
-assert.equal(logoField.schema.item.fields.to.label,'前往頁面')
+assert.equal(logoField.schema.item.fields.to.label,'集團品牌標誌連結')
 assert(logoField.searchTerms.includes('按鈕連結'))
 const footerField=blocks.find(b=>b.id==='footer:數位展板與社群連結').fields.find(f=>f.path==='copy.field4')
 assert.equal(footerField.schema.help,'數位展板')
 const footerGroups=blocks.find(b=>b.id==='footer:網站地圖與隱私權入口').fields.find(f=>f.path==='sitemapGroups')
-assert.deepEqual(footerGroups.schema.item.fields.links.item.itemLabels,['連結文字','前往頁面'])
+assert.deepEqual(footerGroups.schema.item.fields.links.item.itemLabels,['頁尾網站地圖項目文字','頁尾網站地圖項目連結'])
 const styleSchema=editingSchema(seed.find(d=>d.id==='view-components-home-HomeStyleMarquee').schema,'view-components-home-HomeStyleMarquee').fields.styles
 assert.equal(styleSchema.label,'設計風格')
 assert.equal(styleSchema.rowLabel,'zh')
 assert.equal(styleSchema.rowImage,'images')
-assert.equal(styleSchema.item.fields.route.label,'前往頁面')
+assert.equal(styleSchema.item.fields.route.label,'設計風格選項連結')
 assert(styleSchema.item.fields.route.autoDestination)
 assert(editingSchema(seed.find(d=>d.id==='view-components-home-HomeStyleMarquee').schema,'view-components-home-HomeStyleMarquee').fields.copy.hidden,'Preview teleport target is a template setting, not editable website copy')
 const storeSchema=editingSchema(seed.find(d=>d.id==='view-components-home-HomeStoreLocation').schema,'view-components-home-HomeStoreLocation')
@@ -112,7 +115,7 @@ assert.equal(brands.item.fields.captionTop.label,'品牌標誌與介紹置於圖
 assert(brands.item.fields.captionTop.help.includes('569px'))
 assert.equal(brands.item.fields.alt.label,'品牌名稱')
 assert(!brands.item.fields.alt.imageReading)
-assert.equal(brands.item.fields.route.label,'前往頁面')
+assert.equal(brands.item.fields.route.label,'廚電品牌卡片連結')
 assert(brands.item.fields.route.autoDestination)
 for(const brand of seed.find(d=>d.id==='view-components-home-HomeServices').data.services)assert(brands.item.fields.logoClass.enum.includes(brand.logoClass),'Existing brand sizes must retain their original values')
 for(const [name,title]of [['HomeServices','廚房產品'],['HomeGallery','設計案例'],['HomeStyleMarquee','設計風格']]){

@@ -80,7 +80,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
         <div class="media-detail-body entry-content">
           <section class="media-detail-copy" v-reveal="{ anim: 'opalMoveUp' }">
             <p v-for="paragraph in detail.paragraphs" :key="paragraph">{{ paragraph }}</p>
-            <a :href="detail.caseLink.url" target="_blank" rel="noopener noreferrer">
+            <a id="video-case-link" :href="detail.caseLink.url" target="_blank" rel="noopener noreferrer">
               {{ detail.caseLink.label }}
             </a>
           </section>

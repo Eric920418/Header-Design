@@ -84,7 +84,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <li v-for="bullet in section.bullets" :key="bullet">{{ bullet }}</li>
             </ul>
 
-            <div v-if="section.links?.length" class="activity-detail-links">
+            <div v-if="section.links?.length" :id="'cms-article-links-'+(sectionIndex+1)" class="activity-detail-links">
               <a
                 v-for="link in section.links"
                 :key="link.url"

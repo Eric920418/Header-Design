@@ -238,7 +238,7 @@ export function pageBlocks(p,documents){
    if(aliases.length)block.aliases=[...new Set([...(block.aliases||[]),...aliases.map(alias=>p.id+':'+alias)])]
    if(p.id==='visuals'&&path.startsWith('images.'))block.aliases=[...new Set([...(block.aliases||[]),'visuals:圖片集'])]
    if(p.id==='home'&&d.id==='data-kitchenStyles'&&path==='KITCHEN_STYLES')block.aliases=[...(block.aliases||[]),'home:首頁與選單系列卡片']
-   const cleanLabel=(s.destination||s.imageReading?s.label:location?.label)||(displaySettings?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,''))
+   const cleanLabel=(s.destination||s.imageReading||s.linkCaption?s.label:location?.label)||(displaySettings?(resourceGuide(d.id)?.tabTitle||resourceGuide(d.id)?.location[0]||p.name)+'的顯示與搜尋設定':(s.label||'內容').replace(/^.*?・/,''))
    const labels=s=>[s.label||'',s.positionLegacyLabel||'',s.readingGroup?'朗讀 輔助閱讀 螢幕閱讀器':'',s.imageReading?'圖片說明 圖片替代文字':'',...(s.destination?[s.help]:[]),...Object.values(s.fields||{}).flatMap(labels),...(s.item?labels(s.item):[])]
    const newsList=d.id==='news-articles'&&(p.id==='franchise'?{newsOverview:true,rowIds:franchiseNewsIds}:p.category?{rowFilter:{path:'summary.category',value:p.category},newCategory:p.category,...(p.id==='news-latest'?{newsOverview:true}:{})}:{newsOverview:true,newCategory:'latest'})
    block.fields.push({documentId:d.id,path,label:cleanLabel,...(formGroup?{formGroup}:{}),searchTerms:labels(s).join(' '),schema:{...s,label:cleanLabel,...(location?{singleLine:location.singleLine}:{}),...(location?.readingGroup?{advanced:true,readingGroup:location.readingGroup,help:location.help}:{}),...newsList}})

@@ -107,6 +107,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 
               <div
                 v-if="section.links?.length"
+                :id="'cms-article-links-'+(sectionIndex+1)"
                 class="latest-detail-links"
               >
                 <a

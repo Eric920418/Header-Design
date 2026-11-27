@@ -4,6 +4,8 @@ const cmsCopy = await useCmsResource('view-components-SiteFooter', {"sitemapGrou
 import { ArrowUp, ChevronDown } from 'lucide-vue-next'
 
 const sitemapOpen = ref(false)
+const footerRoute = useRoute()
+watch(() => footerRoute.hash, hash => { if (hash === '#footer-sitemap') sitemapOpen.value = true })
 const sitemapGroups = cmsCopy.sitemapGroups
 
 const footerSocialLeft = ref('0px')
@@ -44,8 +46,17 @@ function alignSocialLinksWithHeader() {
 }
 
 watch(sitemapOpen, () => nextTick(alignSocialLinksWithHeader))
+function revealSitemapFromHash() {
+  if (window.location.hash !== '#footer-sitemap') return
+  sitemapOpen.value = true
+  nextTick(() => {
+    if (footerSitemap.value) window.scrollTo({ top: footerSitemap.value.getBoundingClientRect().top + window.scrollY, behavior: 'instant' })
+  })
+}
 
 onMounted(() => {
+  revealSitemapFromHash()
+  window.addEventListener('hashchange', revealSitemapFromHash)
   nextTick(() => {
     alignSocialLinksWithHeader()
     window.addEventListener('resize', alignSocialLinksWithHeader, { passive: true })
@@ -61,6 +72,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener('hashchange', revealSitemapFromHash)
   window.removeEventListener('resize', alignSocialLinksWithHeader)
   headerResizeObserver?.disconnect()
 })

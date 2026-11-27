@@ -9,7 +9,7 @@ const alternate=computed(()=>focus('copy.text8','copy.text9'))
 <template>
  <div class="cms-home-hero-preview" aria-label="首頁輪播位置示意">
   <div class="cms-position-sitebar"><span>設計案例 · 廚房產品 · 門市與服務</span><img src="/home-2026/logos/sakura-kitchen-horizontal.svg" alt="SAKURA KITCHEN" /><span>品牌承諾 · 我要加盟</span></div>
-  <div v-if="view.slide?.image" class="cms-home-hero-frame" :style="{'--hero-pan-x':view.pan}">
+  <div v-if="view.slide?.image" class="cms-home-hero-frame" :class="{'is-focused':focus('slides.'+view.index+'.route')}" :style="{'--hero-pan-x':view.pan}">
    <HomeHeroImage :slide="view.slide" viewport="desktop" :alt="(view.slide.title||'首頁輪播')+'官網裁切位置'" image-class="hero-page1-image-settled" />
    <div class="cms-home-hero-shade" aria-hidden="true" />
    <div class="cms-home-hero-copy"><h3 class="font-display">{{ view.slide.title }}</h3><p>{{ view.slide.description }}</p></div>

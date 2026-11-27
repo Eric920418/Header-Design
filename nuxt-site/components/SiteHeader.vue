@@ -138,6 +138,7 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
 <template>
   <template v-if="cmsCopy.cmsSettings.visible">
   <header
+    id="site-header"
     ref="headerElement"
     data-breadcrumb-root
     class="fixed inset-x-0 top-0 z-[100] h-[var(--site-header-height)] font-cjk-sans"

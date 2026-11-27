@@ -440,7 +440,7 @@ assert.deepEqual(franchiseDownloadBreadcrumb({breadcrumbHome:' ',breadcrumbParen
  const page=pageEditors.find(p=>p.id==='franchise'),support=franchise.find(b=>b.name==='總部支援')
  const intro=docs.find(d=>d.id==='view-pages-franchising-intro'),visuals=docs.find(d=>d.id==='site-visuals')
  assert.equal(support.href,'/franchising/intro#franchise-support')
- assert.deepEqual(support.fields.filter(f=>f.schema.type==='string').map(f=>f.label),['按鈕文字','前往頁面','總部支援背景圖片'])
+ assert.deepEqual(support.fields.filter(f=>f.schema.type==='string').map(f=>f.label),['總部支援申請按鈕文字','總部支援申請按鈕連結','總部支援背景圖片'])
  assert.equal(pagePositionContent(support,previewBodies).destination.value,previewBodies['data-franchise'].FRANCHISE_FORM_URL)
  assert.equal(pagePositionContent(support,previewBodies).mappedImage,visuals.body.images.asset_1795db00)
  const edited={...intro.body,copy:{...intro.body.copy,supportDestination:'/franchising/download'}}

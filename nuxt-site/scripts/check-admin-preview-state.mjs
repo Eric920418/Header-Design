@@ -92,13 +92,16 @@ assert.match(pageSource,/<aside v-if="previewOpen"/)
 console.log('PASS: actual page editor is idle until preview is opened, defaults to phone on narrow screens, cancels on close, keeps confirmation separate, and retains input on malformed save responses')
 // Execute the header's actual route decisions: new/hidden rows use private preview only.
 const selection=ref({documentId:'news-articles',path:'items',index:0,value:{id:'new',slug:'new-test',enabled:true,summary:{category:'latest'}}})
-const routeState={computed,itemPublication,itemWebsitePath,props:{id:'news-latest'},workbench:{selection},docs:ref([{id:'news-articles',publishedBody:{items:[]}}]),active:ref({href:'/news/latest'}),activeDocs:ref([{publishedBody:{copy:{}}}]),pageData:ref({href:'/news/latest'})}
+const routeState={computed,itemPublication,itemWebsitePath,props:{id:'news-latest'},workbench:{selection},positionSelection:selection,docs:ref([{id:'news-articles',publishedBody:{items:[]}}]),active:ref({href:'/news/latest'}),activeDocs:ref([{publishedBody:{copy:{}}}]),pageData:ref({href:'/news/latest'}),caseManagement:ref(false),newsArticleList:ref(false),franchiseNews:ref(false),knowledgeArticles:ref(false),focusedLink:ref(null),positionBlock:ref(null),seriesLocation:path=>path,storeCasesPageId:'store-cases'}
 const routing=pageParsed.statements.filter(s=>ts.isVariableStatement(s)&&['const locationHref=','const publicLocation='].some(start=>s.getText(pageParsed).startsWith(start))).map(s=>s.getText(pageParsed)).join('\n')
 runInNewContext(ts.transpileModule(routing+'\nthis.privatePath=locationHref;this.publicPath=publicLocation;',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,routeState)
 assert.equal(routeState.publicPath.value,'');assert.equal(routeState.privatePath.value,'/news/latest/new-test')
 routeState.docs.value[0].publishedBody.items=[JSON.parse(JSON.stringify(selection.value.value))];assert.equal(routeState.publicPath.value,'/news/latest/new-test')
 selection.value.value.enabled=false;assert.equal(routeState.publicPath.value,'/news/latest/new-test','Draft hiding must not change the real website link');assert.equal(routeState.privatePath.value,'/news/latest','A hidden draft is previewed on its list, not a nonexistent detail')
 routeState.docs.value[0].publishedBody.items[0].enabled=false;assert.equal(routeState.publicPath.value,'')
+routeState.docs.value[0].publishedBody.items[0].enabled=true;selection.value.value.enabled=true
+routeState.focusedLink.value={path:'items.0.detail.sections.0.links.0.url'};routeState.positionBlock.value={previewPage:'/news/latest/new-test#cms-article-links-1'}
+assert.equal(routeState.publicPath.value,'/news/latest/new-test#cms-article-links-1');assert.equal(routeState.privatePath.value,'/news/latest/new-test#cms-article-links-1')
 console.log('PASS: new and hidden content cannot expose a public 404 link; published links use the actual published identity')
 const lateMessages=[],lateFrame={postMessage:m=>lateMessages.push(m)}
 idle.previewFrame.value={contentWindow:lateFrame};idle.api=async()=>({previewToken:'late-ready',documents:[{id:'home',body:JSON.parse(JSON.stringify(idle.bodies.value.home))}]})
