@@ -5443,3 +5443,4 @@ final result: passed
 - 保留「最新消息列表／全部消息列表」舊直達網址及搜尋入口，維持文章來源、排序、分類、編輯功能與官網連結，不改資料庫。
 - 本機實測新名稱的左／中／右一致、兩種舊直達入口、三類原文章的編輯入口及官網連結、四種寬度與原文件不變；清除測試帳號與預覽後，文件／版本／結構指紋一致。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 news-overview-name-local.json 與 news-overview-name-editor.jpg。
 - 最終後台工作流程、命名及欄位來源回歸、型別檢查與正式建置通過。部署前兩正式網域各核對總覽、三分類列表與九篇文章共 13 頁的原文、圖片、完整連結及實際文章／首頁導覽，四種寬度正常。基準另存 news-overview-name-before.json。
+- `ce4d29e5` 已部署至 Production `dpl_HfD62v536dpCNkWPdUccy9tnBAXz`，Ready 並綁定兩正式網域。兩站提供「優惠消息列表」新版名稱、共用說明、更新捷徑與舊入口支援，相關資源雜湊一致；上線後各複驗 13 個原總覽／分類／文章頁面的文字、圖片來源與完整連結，實際文章／首頁導覽及四種寬度正常。原公開文件與內容／連結和部署前逐項一致，未修改正式資料庫。證據另包含 news-overview-name-after.json 與 news-overview-name-production-assets.json。
