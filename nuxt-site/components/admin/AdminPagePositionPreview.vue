@@ -226,6 +226,13 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      <div v-if="scene.kind==='store-booking'" class="cms-scene-buttons">
       <span :class="{'is-focused':highlighted('copy.text2')||highlighted('copy.field1')}">{{ storeDetails.copy.text2 }}<ArrowRight :size="13" /></span>
      </div>
+     <code v-if="scene.kind==='store-booking'" class="cms-store-booking-url">{{ storeDetails.copy.field1 }}</code>
+     <section v-else-if="scene.kind==='store-contact-booking'&&storeExample.contact" class="cms-store-booking-context">
+      <header><h3>{{ storeDetails.copy.text4 }}</h3><div class="cms-scene-buttons"><span :class="{'is-focused':highlighted('copy.storeBookingDestination')}">{{ storeDetails.copy.text2 }}<ArrowUpRight :size="13" /></span></div></header>
+      <strong>{{ storeExample.contact.name }}</strong><p>{{ storeExample.contact.address }}</p><p>{{ storeExample.contact.phone }}</p>
+      <code class="cms-store-booking-url">{{ storeDetails.copy.storeBookingDestination||'https://www.sakura-kitchenlife.com.tw/measuring' }}</code>
+      <small>此按鈕位於門市資訊標題旁。</small>
+     </section>
      <template v-else-if="scene.kind==='store-info'">
       <h3 v-if="storeSpecs.length" :class="{'is-focused':highlighted('copy.text3')}">{{ storeDetails.copy.text3 }}</h3>
       <dl v-if="storeSpecs.length" class="cms-scene-details">

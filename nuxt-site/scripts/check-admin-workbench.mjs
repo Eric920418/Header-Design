@@ -798,8 +798,9 @@ for(const [oldName,name] of [['門市管理','案例管理'],['門市內頁規�
  assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:'+oldName}).query.block,'store-cases:'+name)
 }
 const sharedCase=caseCard.page.blocks.find(b=>b.name==='頁面共用設定')
-assert.deepEqual(sharedCase.fields.map(f=>f.path).sort(),['copy.field1','copy.text2','copy.text7','copy.text8'])
-const examples={storeCaseExamples:{'store-booking':{slug:'booking-case'},'store-navigation':{slug:'navigation-case'}}}
+assert.deepEqual(sharedCase.fields.map(f=>f.path).sort(),['copy.field1','copy.storeBookingDestination','copy.text2','copy.text7','copy.text8'])
+assert(!caseCard.page.blocks.find(b=>b.name==='案例規格').fields.some(f=>f.path==='copy.storeBookingDestination'),'The contact booking destination must have exactly one edit location')
+const examples={storeCaseExamples:{'store-booking':{slug:'booking-case'},'store-contact-booking':{slug:'contact-case'},'store-navigation':{slug:'navigation-case'}}}
 for(const [name,section]of Object.entries(storeCaseSharedSections)){
  const preview=storeCaseSharedPosition(sharedCase,examples,name)
  assert.equal(preview.name,name);assert.equal(preview.kind,section.kind)
@@ -813,8 +814,8 @@ for(const [name,section]of Object.entries(storeCaseSharedSections)){
   assert.equal(storeCaseSharedPosition(sharedCase,examples,'',redirect.query.block).name,name)
  }
 }
-assert.equal(storeCaseSharedPosition(sharedCase,examples).name,'預約按鈕')
-assert.equal(storeCaseSharedPosition(sharedCase,examples,'預約按鈕','store-cases:上一篇與下一篇').name,'預約按鈕','Current field focus overrides a legacy bookmark')
+assert.equal(storeCaseSharedPosition(sharedCase,examples).name,'上方到店預約')
+assert.equal(storeCaseSharedPosition(sharedCase,examples,'上方到店預約','store-cases:上一篇與下一篇').name,'上方到店預約','Current field focus overrides a legacy bookmark')
 assert.equal(storeCaseRedirect({sitePage:'stores',legacy:'view-pages-gallery-slug-'}).query.block,'store-cases:頁面共用設定')
 const listPage=servicePages[0]
 assert(!listPage.blocks.some(b=>sharedSections.includes(b.name)||b.name==='案例管理'))

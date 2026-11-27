@@ -1317,3 +1317,9 @@
 .cms .cms-store-case-link-group{margin:18px 0;padding:14px;border:1px solid var(--cms-line);border-radius:6px;min-width:0;}
 .cms .cms-store-case-contact{margin-top:24px;}
 .cms .cms-store-case-content-preview code{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;}
+
+.cms .cms-store-booking-context{display:grid;gap:10px;border:1px solid var(--cms-line);padding:14px;border-radius:6px;}
+.cms .cms-store-booking-context>header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;}
+.cms .cms-store-booking-context h3,.cms .cms-store-booking-context p{margin:0;}
+
+.cms .cms-store-booking-url{display:block;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;}

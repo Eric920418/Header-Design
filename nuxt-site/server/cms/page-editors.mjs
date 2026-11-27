@@ -83,6 +83,7 @@ async function positionPresentation(p){
    'case-header':{slug:first.slug,anchor:'store-case-hero'},
    'case-breadcrumb':{slug:first.slug,anchor:'store-case-breadcrumb'},
    'store-booking':{slug:storeCases.find(store=>store.meta||store.contact)?.slug,anchor:'case-booking'},
+   'store-contact-booking':{slug:contact?.slug,anchor:'case-store-booking'},
    'store-info':{slug:(spec||contact)?.slug,anchor:spec?'case-spec-title':'case-store-title'},
    'store-navigation':{slug:first.slug,anchor:'case-navigation'},
    'store-reviews':{slug:storeCases.find(store=>store.reviews?.length)?.slug,anchor:'case-reviews-title'},
