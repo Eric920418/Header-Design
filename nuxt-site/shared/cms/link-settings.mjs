@@ -30,7 +30,7 @@ export const linkSettings={
   'items.*.detail.sections.*.links.*.url':link('消息文章段落文字連結','','items.*.detail.sections.*.links.*.label',{articleSection:true}),
   'items.*.detail.caseLink.url':link('影音文章下方案例連結','video-case-link','items.*.detail.caseLink.label',{conditional:'video-article'}),
  },
- 'view-pages-news-index':{'newsCategories.*.to':link('消息分類標籤連結','news-tags-title','newsCategories.*.label')},
+ 'view-pages-news-index':{'newsCategories.*.to':link('側欄分類按鈕連結','news-tags-title','newsCategories.*.label')},
  'view-pages-about-exhibition':copy({bookingDestination:link('品牌館資訊「立即預約」按鈕連結','pavilion-booking-notice','',{button:'立即預約',fallback:'/builders#appointment'})}),
  'data-franchise':{
   FRANCHISE_FORM_URL:link('加盟申請按鈕共用連結','franchise-page-title','',{button:'申請加盟',shared:true,note:'同時用於主視覺、加盟邀請；總部支援未另設連結時也沿用此網址。'}),

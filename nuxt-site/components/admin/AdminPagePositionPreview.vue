@@ -29,6 +29,8 @@ const isBuilderCatalogue=computed(()=>props.block?.id.startsWith('builder-catalo
 const isProductCatalogue=computed(()=>props.block?.id.startsWith('product-catalogue:'))
 const trailCopy=computed(()=>props.bodies[props.block?.fields[0]?.documentId]?.copy)
 const pageTrail=computed(()=>props.block?.id==='news:麵包屑編輯設定'?newsBreadcrumb(trailCopy.value):props.block?.id==='stores:麵包屑編輯設定'?storeBreadcrumb(trailCopy.value):isCatalogueTrail.value?seriesCatalogueBreadcrumb(trailCopy.value):knowledgeBreadcrumb(trailCopy.value))
+const newsCategoryTitleActive=computed(()=>!props.focusedField||props.focusedField==='copy.text3')
+const newsCategoryEditing=computed(()=>newsCategoryTitleActive.value?'正在編輯：分類按鈕上方的標題':props.selected?.value?.label?'正在編輯：分類按鈕「'+props.selected.value.label+'」'+(props.focusedField?.endsWith('.to')?'的連結':props.focusedField?.endsWith('.label')?'的名稱':''):'正在編輯：側欄分類按鈕')
 const highlighted=(path:string)=>props.focusedField===path
 const isLabel=(label:string)=>/標籤|小標|前置英文/.test(label)
 const headings=computed(()=>scene.value.heading.filter((f:any)=>!isLabel(f.label)&&!/語音/.test(f.label)))
@@ -419,16 +421,19 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </div>
     </article>
    </div>
-   <div v-else-if="block?.id==='news:頁面共用設定'" class="cms-scene-news-recent">
+   <div v-else-if="block?.id==='news:頁面共用設定'" class="cms-news-category-preview">
+    <p class="cms-field-help" role="status">{{ newsCategoryEditing }}</p>
+    <div class="cms-scene-news-recent">
     <figure v-if="presentation?.samples?.[0]" class="cms-scene-news-recent-main">
      <AdminThumbnail :src="presentation.samples[0].image" :alt="presentation.samples[0].title+'封面'" />
      <figcaption>{{ presentation.samples[0].title }}</figcaption>
     </figure>
     <div class="cms-scene-news-recent-sidebar">
-     <h3 :class="{'is-focused':highlighted('copy.text3')}">{{ bodies['view-pages-news-index']?.copy?.text3 }}</h3>
+     <h3 data-news-category-title :class="{'is-focused':newsCategoryTitleActive}">{{ bodies['view-pages-news-index']?.copy?.text3 }}</h3>
      <div class="cms-scene-buttons" aria-label="消息分類標籤的位置示意">
-      <span v-for="(category,index) in bodies['view-pages-news-index']?.newsCategories||[]" :key="index" :class="{'is-focused':focusedField?.startsWith('newsCategories.'+index+'.')||!focusedField&&selected?.path==='newsCategories'&&selected.index===index}">{{ category.label }}</span>
+      <span v-for="(category,index) in bodies['view-pages-news-index']?.newsCategories||[]" :key="index" :class="{'is-focused':!newsCategoryTitleActive&&(focusedField?.startsWith('newsCategories.'+index+'.')||selected?.path==='newsCategories'&&selected.index===index)}">{{ category.label }}</span>
      </div>
+    </div>
     </div>
    </div>
    <div v-else-if="scene.kind==='news-recent'" class="cms-scene-news-recent">
@@ -554,7 +559,7 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
     <template v-else><div v-if="media.length>1" class="cms-scene-media-grid"><figure v-for="f in media" :key="f.path" :class="{'is-focused':highlighted(f.path)}"><AdminThumbnail :src="f.image" :alt="f.label+'對應圖片'" /><figcaption>{{ f.label }}</figcaption></figure></div><AdminThumbnail v-else-if="scene.image" :src="scene.image" :alt="block?.name+(scene.image?'對應圖片':'位置示意圖')" class="cms-scene-wide-image" :contain="!scene.image||scene.kind==='logos'" /><dl v-if="scene.details.length" class="cms-scene-details"><template v-for="f in scene.details" :key="f.label"><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></template></dl></template>
     <div v-if="!['filter','results','empty','navigation','footer','form','table','comments','download'].includes(scene.kind)" class="cms-scene-reading"><p v-for="f in captions" :key="f.path" :class="{'is-focused':highlighted(f.path)}">{{ f.value }}</p></div>
    </template>
-   <div v-if="!storeExampleKind&&!['home-promise','builder-series-hero','builder-catalogue-cards','download-catalogue','product-care','breadcrumb','page-breadcrumb','case-header','case-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
+   <div v-if="block?.id!=='news:頁面共用設定'&&!storeExampleKind&&!['home-promise','builder-series-hero','builder-catalogue-cards','download-catalogue','product-care','breadcrumb','page-breadcrumb','case-header','case-breadcrumb','news-shared','franchise-support','franchise-download-document','franchise-download-catalogue','franchise-download-breadcrumb','franchise-application'].includes(scene.kind)&&scene.buttons.length" class="cms-scene-buttons">
     <span v-for="field in scene.buttons" :key="field.path" :class="{'is-focused':highlighted(field.path)}">{{ field.value }}<ArrowRight :size="13" /></span>
    </div>
    <p v-if="!['franchise-support','franchise-application','franchise-download-document'].includes(scene.kind)&&scene.destination&&(scene.fixedAction||highlighted(scene.destination.path))" class="cms-scene-a11y">前往頁面 <span>{{ destinationTitle }}</span></p>

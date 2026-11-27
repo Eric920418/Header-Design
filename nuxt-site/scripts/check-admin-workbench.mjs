@@ -558,7 +558,7 @@ for(const [name,oldName,anchor,fields] of overviewSections){
  assert.deepEqual(block.fields.map(f=>f.path).sort(),[...fields].sort())
  assert.equal(searchPages([newsOverview],oldName)[0].block.id,block.id)
 }
-assert.equal(newsOverview.blocks.find(b=>b.name==='頁面共用設定').fields.find(f=>f.path==='newsCategories').schema.label,'消息分類標籤')
+assert.equal(newsOverview.blocks.find(b=>b.name==='頁面共用設定').fields.find(f=>f.path==='newsCategories').schema.label,'側欄分類按鈕')
 assert.equal(searchPages([newsOverview],'最新消息分類標籤')[0].block.id,'news:頁面共用設定')
 assert(newsOverview.blocks.find(b=>b.name==='優惠消息列表').aliases.includes('news:最新消息列表'))
 assert.equal(searchPages([newsOverview],'最新消息列表')[0].block.id,'news:優惠消息列表')

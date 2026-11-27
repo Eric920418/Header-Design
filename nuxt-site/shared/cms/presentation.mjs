@@ -160,7 +160,9 @@ export function fieldPresentation(resourceId,path,schema={}){
  if(schema.autoDestination||key==='buttonDestinations'&&resourceId==='data-kitchenSeries')return{label:schema.label}
  if(resourceId==='data-builders'&&normalized==='BUILDER_APPOINTMENT_HASH')return{label:'預約按鈕前往位置',enum:['#appointment','/builders#appointment'],optionLabels:['本頁品牌館資訊與預約','建商首頁的預約區']}
  if(resourceId===builderAppointmentDocument&&isBuilderAppointmentHeading(normalized))return{label:schema.label}
- if(resourceId==='view-pages-news-index'&&normalized==='newsCategories')return{label:'消息分類標籤',searchLabel:'搜尋分類標籤名稱',newItemLabel:'分類標籤'}
+ if(resourceId==='view-pages-news-index'&&normalized==='copy.text3')return{label:'分類按鈕上方的標題文字',singleLine:true,help:'顯示在官網文章右側，「優惠活動／最新消息／媒體影音」三個按鈕上方。'}
+ if(resourceId==='view-pages-news-index'&&normalized==='newsCategories.*.label')return{label:'分類按鈕名稱',singleLine:true}
+ if(resourceId==='view-pages-news-index'&&normalized==='newsCategories')return{label:'側欄分類按鈕',searchLabel:'搜尋分類按鈕名稱',newItemLabel:'分類按鈕'}
  if(resourceId==='data-catalogues'&&normalized==='KITCHEN_CATALOGUES')return{label:'型錄清單',searchLabel:'搜尋型錄名稱'}
  if(resourceId==='view-pages-gallery-slug-'&&normalized==='copy.heroTitle')return{label:'主視覺標題',singleLine:true}
  if(resourceId===serviceHeadingDocument&&normalized.startsWith('copy.')&&Object.hasOwn(serviceHeadingFields,key))return{label:serviceHeadingFields[key].label,singleLine:true}

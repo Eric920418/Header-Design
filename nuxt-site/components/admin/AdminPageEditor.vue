@@ -22,6 +22,7 @@ const pageData=ref<any>(),docs=ref<any[]>([]),bodies=ref<Record<string,any>>({})
 provide('cms-field-errors',fieldErrors);provide('cms-item-selections',selections)
 const blocks=computed<any[]>(()=>{const named=namedPages.value?.find(p=>p.id===props.id);return workbenchBlocks(props.id,(pageData.value?.blocks||[]).map((b:any)=>({...b,name:named?.blocks.find((n:any)=>n.id===b.id)?.name||b.name})),pageData.value?.positionPresentation?.recentArticles||[])})
 const active=computed(()=>blocks.value.find(b=>b.aliases.includes(route.query.block))||blocks.value[0])
+const newsOverviewSettings=computed(()=>active.value?.id==='news:頁面共用設定')
 const newsRecent=computed(()=>active.value?.kind==='news-recent')
 const franchiseNews=computed(()=>active.value?.kind==='franchise-news')
 const newsArticleList=computed(()=>newsRecent.value||franchiseNews.value||active.value?.kind==='news-overview')
@@ -120,6 +121,7 @@ const positionBlock=computed(()=>{
  return {...block,previewPage:linkSettingLocation(target,block,bodies.value,base)}
 })
 const positionSelection=computed(()=>{
+ if(newsOverviewSettings.value&&(!focusedField.value||focusedField.value==='copy.text3'))return undefined
  if(focusedLink.value)return focusedLink.value.item&&focusedLink.value.documentId===workbench.selection.value?.documentId?workbench.selection.value:undefined
  return knowledgeArticles.value&&positionBlock.value?.previewPage?undefined:workbench.selection.value
 })
@@ -276,6 +278,7 @@ function trackField(event:FocusEvent){
  const path=target.closest('[data-cms-path]')?.getAttribute('data-cms-path')||''
  if(!path)return
  focusedField.value=path
+ if(newsOverviewSettings.value&&path==='copy.text3'){workbench.focused.value='news-category-title';if(workbench.editing.value==='view-pages-news-index:newsCategories')workbench.editing.value=''}
  focusedDocument.value=target.closest('[data-cms-document]')?.getAttribute('data-cms-document')||''
  const group=target.closest<HTMLElement>('[data-position-group]')?.dataset.positionGroup
  if(group||(franchiseDownloadCommon.value||franchiseCatalogue.value||builderNoticeFields.value.length)&&focusedField.value)focusedGroup.value=group||''
@@ -426,6 +429,9 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <AdminFields v-for="f in commonFields" :key="f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :label="f.path" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
     <p class="cms-field-help">「線上預覽」與「下載 PDF」共用此檔案。下方圖片顯示在官網頁面中。</p>
    </fieldset>
+   <fieldset v-if="newsOverviewSettings" :disabled="busy" class="cms-edit-form cms-news-category-title-settings">
+    <AdminFields v-for="f in commonFields" :key="f.documentId+':'+f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
+   </fieldset>
    <fieldset :disabled="busy" class="cms-edit-form cms-collection-fields"><template v-for="f in collections" :key="f.documentId+':'+f.path+(newsRecent?':recent':'')"><div v-if="f.documentId===headerId&&f.path==='leftNav'" class="cms-block-field">
     <AdminItems :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" :has-related-changes="catalogueChanged" @update:model-value="update(f,$event)" @cancel-related="restoreCatalogue">
      <template #item-settings="{row}"><fieldset v-if="usesDesktopCatalogue(row.value)&&catalogueFields.length" class="cms-fields">
@@ -479,8 +485,8 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <p class="cms-field-help">這兩段文字會顯示在官網型錄卡片下方。</p>
     <AdminFields v-for="f in builderNoticeFields" :key="f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
    </fieldset>
-   <details v-if="collections.length&&commonFields.length&&!franchiseCatalogue" class="cms-common-settings" :open="['builders-appointment','product-care'].includes(active?.kind)||undefined">
-    <summary>{{ active?.id==='news:頁面共用設定'?'分類標籤區標題設定':franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.kind==='product-care'?'選購指南標題與共用文字':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary>
+   <details v-if="collections.length&&commonFields.length&&!franchiseCatalogue&&!newsOverviewSettings" class="cms-common-settings" :open="['builders-appointment','product-care'].includes(active?.kind)||undefined">
+    <summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.kind==='product-care'?'選購指南標題與共用文字':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary>
     <p v-if="active?.kind==='builders-strengths'" class="cms-field-help">這些文字顯示在官網圖文旁，留空時沿用官網原文。</p>
     <p v-if="active?.kind==='builders-appointment'" class="cms-field-help">中英文主標題及前置英文留空時沿用官網原文。</p>
     <fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}">
