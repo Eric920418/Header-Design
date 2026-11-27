@@ -103,7 +103,7 @@ const copyGroups={
  'news-index':[
   ['主視覺標題',{text1:'主視覺標題'}],
   ['麵包屑編輯設定',{breadcrumbHome:'首頁連結文字',breadcrumbList:'優惠消息目前位置文字'}],
-  ['最新消息列表',{text2:readingField('總覽頁文章列表','清單名稱')}],
+  ['優惠消息列表',{text2:readingField('總覽頁文章列表','清單名稱')}],
   ['最新消息分類標籤',{text3:'分類標籤區標題'}],
   ['最新文章',{text4:'最新文章區標題'}],
  ],
@@ -198,9 +198,9 @@ export const pagePositions={
  news:{hero:commonHero,sections:[
   section('主視覺標題','消息總覽最上方的大標題','hero','news-page-title'),
   {...section('麵包屑編輯設定','消息總覽主視覺下方的位置導覽文字','page-breadcrumb','news-breadcrumb'),help:'只調整優惠消息總覽的導覽文字；首頁連結仍返回首頁，文章內頁的導覽維持原設定。'},
-  {...section('最新消息列表','找到文章後按「編輯文章」，可修改封面、標題、摘要與內文。','news-overview','news-list-title'),aliases:['news:全部消息列表']},
+  {...section('優惠消息列表','找到文章後按「編輯文章」，可修改封面、標題、摘要與內文。','news-overview','news-list-title'),aliases:['news:最新消息列表','news:全部消息列表']},
   {...section('最新消息分類標籤','列表旁的分類名稱與連結','navigation','news-tags-title'),aliases:['news:消息分類選單']},
-  {...section('最新文章','官網右側顯示的文章與側欄標題','news-recent','sidebar-recent-title'),aliases:['news:最近文章推薦'],help:'文章與「最新消息列表」共用。修改封面、標題、摘要或內文，會同步更新該篇文章。'},
+  {...section('最新文章','官網右側顯示的文章與側欄標題','news-recent','sidebar-recent-title'),aliases:['news:最近文章推薦'],help:'文章與「優惠消息列表」共用。修改封面、標題、摘要或內文，會同步更新該篇文章。'},
  ]},
  'news-latest':{hero:commonHero,sections:[
   section('主視覺標題','列表最上方的大標題','hero','latest-page-title'),
@@ -294,7 +294,7 @@ export function positionGroup(page,id,path){
  if(page==='franchise'&&path==='FRANCHISE_BROCHURE_URL')return '加盟資料下載入口'
  if(id==='knowledge-articles')return '文章管理'
  if(page==='news-latest'&&id===view('news-latest-index')&&path.startsWith('copy.breadcrumb'))return '麵包屑編輯設定'
- if(id==='news-articles')return page==='franchise'?'最新加盟資訊':page==='news'?'最新消息列表':page==='news-latest'?'消息文章管理':page==='news-activities'?'活動管理':'影音管理'
+ if(id==='news-articles')return page==='franchise'?'最新加盟資訊':page==='news'?'優惠消息列表':page==='news-latest'?'消息文章管理':page==='news-activities'?'活動管理':'影音管理'
  if(id.startsWith('catalog-'))return '商品顯示與排序'
  if(path==='metaLabels')return '案例規格'
  if(id===view('news-index')&&path==='newsCategories')return '最新消息分類標籤'

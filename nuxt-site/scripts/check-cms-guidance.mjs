@@ -172,7 +172,7 @@ console.log(`PASS ${docs.length} content locations, ${fields} visible labels, 8 
 const overview=seed.find(d=>d.id==='view-pages-news-index'),overviewOriginal=JSON.stringify(overview)
 const overviewDocs=seed.map(d=>({...d,schema:documentSchema(d.id,d.schema)}))
 const overviewBlocks=pageBlocks(pageEditors.find(p=>p.id==='news'),overviewDocs)
-assert.deepEqual(overviewBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','最新消息列表','最新消息分類標籤','最新文章'])
+assert.deepEqual(overviewBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','優惠消息列表','最新消息分類標籤','最新文章'])
 const overviewTrail=overviewBlocks.find(b=>b.name==='麵包屑編輯設定')
 assert.deepEqual(overviewTrail.fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbList'])
 assert.equal(overviewTrail.href,'/news#news-breadcrumb')

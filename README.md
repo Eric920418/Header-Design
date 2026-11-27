@@ -5436,3 +5436,10 @@ final result: passed
 - 清除測試帳號與預覽後，文件／版本／結構指紋一致。部署前兩正式網域各確認總覽、三分類列表與九篇文章共 13 頁的原文、圖片來源、完整連結，以及文章點選／返回、首頁連結與四種寬度。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 news-breadcrumb-local.json、news-breadcrumb-editor.jpg 與 news-breadcrumb-before.json。
 - 最終後台工作流程、命名、欄位來源與連結用途回歸、型別檢查及正式建置通過；不需資料庫遷移。
 - `05ea6095` 已部署至 Production `dpl_9UHttGkJTrxQvfboofJDcjWk48w8`，Ready 並綁定兩正式網域。兩站提供新麵包屑入口、明確欄名與主視覺下方位置預覽，相關資源雜湊一致；上線後各完成 13 個原總覽／分類／文章頁面的文字、圖片與完整連結比對，實際點選文章／返回、首頁連結、位置錨點及四種寬度均正常。原公開文件與上述內容／連結逐項和部署前一致，未改寫正式資料庫。證據另包含 news-breadcrumb-after.json 與 news-breadcrumb-production-assets.json。
+
+## 2026-11-27 優惠消息總覽列表名稱修正
+
+- 將包含三類文章的總覽區塊「最新消息列表」改為「優惠消息列表」，同步左側入口、中間標題、右側預覽與加盟文章版本捷徑的名稱。最新消息分類頁繼續使用原名稱。
+- 保留「最新消息列表／全部消息列表」舊直達網址及搜尋入口，維持文章來源、排序、分類、編輯功能與官網連結，不改資料庫。
+- 本機實測新名稱的左／中／右一致、兩種舊直達入口、三類原文章的編輯入口及官網連結、四種寬度與原文件不變；清除測試帳號與預覽後，文件／版本／結構指紋一致。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 news-overview-name-local.json 與 news-overview-name-editor.jpg。
+- 最終後台工作流程、命名及欄位來源回歸、型別檢查與正式建置通過。部署前兩正式網域各核對總覽、三分類列表與九篇文章共 13 頁的原文、圖片、完整連結及實際文章／首頁導覽，四種寬度正常。基準另存 news-overview-name-before.json。

@@ -546,7 +546,7 @@ const legacyVideo={...serviceVideo,fields:serviceVideo.fields.filter(f=>f.docume
 assert.equal(pagePositionContent(legacyVideo,{},{serviceVideoCover:'/service-poster.webp'}).image,'/service-poster.webp')
 const newsOverview=pageSummary(pageEditors.find(p=>p.id==='news'),[],docs)
 const overviewSections=[
- ['最新消息列表','全部消息列表','news-list-title',['items','copy.text2']],
+ ['優惠消息列表','全部消息列表','news-list-title',['items','copy.text2']],
  ['最新消息分類標籤','消息分類選單','news-tags-title',['newsCategories','copy.text3']],
  ['最新文章','最近文章推薦','sidebar-recent-title',['copy.text4']],
 ]
@@ -558,10 +558,12 @@ for(const [name,oldName,anchor,fields] of overviewSections){
  assert.deepEqual(block.fields.map(f=>f.path).sort(),[...fields].sort())
  assert.equal(searchPages([newsOverview],oldName)[0].block.id,block.id)
 }
+assert(newsOverview.blocks.find(b=>b.name==='優惠消息列表').aliases.includes('news:最新消息列表'))
+assert.equal(searchPages([newsOverview],'最新消息列表')[0].block.id,'news:優惠消息列表')
 const newsSamples={samples:[{title:'總覽文章'}],recentArticles:[{title:'側欄文章'}]}
-assert.equal(pagePositionContent(newsOverview.blocks.find(b=>b.name==='最新消息列表'),{},newsSamples).items[0].title,'總覽文章')
+assert.equal(pagePositionContent(newsOverview.blocks.find(b=>b.name==='優惠消息列表'),{},newsSamples).items[0].title,'總覽文章')
 assert.equal(pagePositionContent(newsOverview.blocks.find(b=>b.name==='最新文章'),{},newsSamples).items[0].title,'側欄文章')
-const overviewField=newsOverview.blocks.find(b=>b.name==='最新消息列表').fields.find(f=>f.documentId==='news-articles')
+const overviewField=newsOverview.blocks.find(b=>b.name==='優惠消息列表').fields.find(f=>f.documentId==='news-articles')
 assert(overviewField.schema.newsOverview&&!overviewField.schema.rowFilter)
 assert(!newsOverview.unpublishIds.includes('news-articles'))
 const overviewNewsDoc=docs.find(d=>d.id==='news-articles'),overviewEdit=structuredClone(overviewNewsDoc.body)
