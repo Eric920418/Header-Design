@@ -12,15 +12,18 @@ export const storeCaseSharedSections={
  '上方到店預約':{title:'上方到店預約',kind:'store-booking',anchor:'case-booking',paths:['copy.field1','copy.text2'],aliases:['預約按鈕','門市內頁預約按鈕'],help:'案例規格上方的到店預約按鈕。下方按鈕文字同時用於兩處，目的地各自設定。'},
  '門市資訊旁到店預約':{title:'門市資訊旁到店預約',kind:'store-contact-booking',anchor:'case-store-booking',paths:['copy.storeBookingDestination'],aliases:[],help:'門市資訊標題旁的到店預約按鈕；沿用既有連結時保留原免費丈量預約頁。'},
  '上下篇按鈕':{title:'上下篇按鈕',kind:'store-navigation',anchor:'case-navigation',paths:['copy.text7','copy.text8'],aliases:['上一篇與下一篇','門市內頁上一篇與下一篇'],help:'案例內文下方的前後篇切換，所有門市案例共用。'},
+ '案例規格':{title:'案例規格',kind:'store-info',anchor:'case-spec-title',paths:['metaLabels','copy.text3','copy.text4','copy.text5','copy.text6'],aliases:['門市內頁規格與資訊'],help:'所有門市案例共用的規格欄位名稱、區塊標題與聯絡按鈕文字。每篇案例的規格值、門市資料與連結請在「案例管理」編輯。'},
+ '顧客評論':{title:'顧客評論',kind:'store-reviews',anchor:'case-reviews-title',paths:['copy.text9'],aliases:['門市內頁顧客評論'],help:'所有門市案例共用的評論區標題。每篇案例的評論內容請在「案例管理」編輯。'},
 }
 export function storeCaseSharedGroup(value){
  const name=String(value||'').split(':').at(-1)
  return Object.keys(storeCaseSharedSections).find(key=>key===name||storeCaseSharedSections[key].aliases.includes(name))
 }
-export function storeCaseSharedPosition(block,presentation={},focusedGroup='',legacyBlock=''){
+export function storeCaseSharedPosition(block,presentation={},focusedGroup='',legacyBlock='',focusedField=''){
  const group=storeCaseSharedGroup(focusedGroup)||storeCaseSharedGroup(legacyBlock)||'上方到店預約'
- const section=storeCaseSharedSections[group],example=presentation.storeCaseExamples?.[section.kind]
- return {...block,name:section.title,kind:section.kind,anchor:section.anchor,fields:block.fields.filter(f=>f.formGroup===group),previewPage:example?.slug?'/gallery/'+encodeURIComponent(example.slug)+'#'+section.anchor:block.href}
+ const section=storeCaseSharedSections[group],fieldMatches=section.paths.some(path=>focusedField===path||focusedField.startsWith(path+'.'))
+ const example=(fieldMatches&&presentation.storeCaseFieldExamples?.[focusedField])||presentation.storeCaseExamples?.[section.kind],anchor=example?.anchor||section.anchor
+ return {...block,name:section.title,kind:section.kind,anchor,previewCaseSlug:example?.slug,fields:block.fields.filter(f=>f.formGroup===group),previewPage:example?.slug?'/gallery/'+encodeURIComponent(example.slug)+'#'+anchor:block.href}
 }
 export const franchiseMarqueeDocument=view('franchising-intro')
 export const franchiseDownloadDocument=view('franchising-download')
@@ -183,9 +186,7 @@ export const pagePositions={
   section('主視覺標題','所有門市案例內頁共用的頁首標題','case-header','store-case-hero'),
   section('麵包屑編輯設定','首頁、案例門市與目前位置的導覽文字','case-breadcrumb','store-case-breadcrumb'),
   {...section('案例管理','選擇案例，修改文章、照片及門市資料','stores'),aliases:['store-cases:門市管理']},
-  {...section('案例規格','所有門市案例共用的規格標題、聯絡按鈕與地圖文字','store-info','case-spec-title'),aliases:['store-cases:門市內頁規格與資訊']},
-  {...section('顧客評論','所有門市案例共用的評論區標題','store-reviews','case-reviews-title'),aliases:['store-cases:門市內頁顧客評論']},
-  {...section('頁面共用設定','兩處到店預約目的地、共用按鈕文字與上下篇按鈕','store-shared'),aliases:Object.entries(storeCaseSharedSections).flatMap(([name,s])=>[name,...s.aliases].map(alias=>'store-cases:'+alias))},
+  {...section('頁面共用設定','預約、上下篇按鈕、案例規格與顧客評論共用文字','store-shared'),aliases:Object.entries(storeCaseSharedSections).flatMap(([name,s])=>[name,...s.aliases].map(alias=>'store-cases:'+alias))},
  ]},
  service:{hero:taichungHero,sections:[
   section('主視覺標題','頁面最上方的大標題','hero','service-page-title'),

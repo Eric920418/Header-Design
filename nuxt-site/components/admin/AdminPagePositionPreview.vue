@@ -47,7 +47,7 @@ const caseHeader=computed(()=>['case-header','case-breadcrumb'].includes(scene.v
 const caseHeaderTrail=computed(()=>storeCaseBreadcrumb(storeDetails.value?.copy))
 const storeDetails=computed(()=>props.bodies['view-pages-gallery-slug-'])
 const storeCases=computed<any[]>(()=>props.bodies['data-storeCases']?.storeCases||[])
-const storeExample=computed(()=>storeCases.value.find(store=>store.slug===props.presentation?.storeCaseExamples?.[scene.value.kind]?.slug))
+const storeExample=computed(()=>storeCases.value.find(store=>store.slug===(props.block?.previewCaseSlug||props.presentation?.storeCaseExamples?.[scene.value.kind]?.slug)))
 const storeNeighbors=computed(()=>{
  const rows=storeCases.value,index=rows.indexOf(storeExample.value)
  return index<0?[]:[rows[(index-1+rows.length)%rows.length],rows[(index+1)%rows.length]]

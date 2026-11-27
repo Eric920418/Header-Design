@@ -88,6 +88,13 @@ async function positionPresentation(p){
    'store-navigation':{slug:first.slug,anchor:'case-navigation'},
    'store-reviews':{slug:storeCases.find(store=>store.reviews?.length)?.slug,anchor:'case-reviews-title'},
   }
+  const fieldExample=(store,anchor)=>({slug:store?.slug,anchor})
+  result.storeCaseFieldExamples={
+   ...Object.fromEntries(Object.keys(bodies['view-pages-gallery-slug-']?.metaLabels||{}).map(key=>['metaLabels.'+key,fieldExample(storeCases.find(store=>store.meta?.[key]),'case-spec-title')])),
+   'copy.text4':fieldExample(contact,'case-store-title'),
+   'copy.text5':fieldExample(storeCases.find(store=>store.contact?.lineUrl),'case-line-link'),
+   'copy.text6':fieldExample(storeCases.find(store=>store.contact?.mapUrl),'case-map-link'),
+  }
   for(const section of definition.sections){
    if(['case-header','case-breadcrumb'].includes(section.kind)){result.blockImages[p.id+':'+section.name]=heroImage;continue}
    const example=storeCases.find(store=>store.slug===result.storeCaseExamples[section.kind==='store-shared'?'store-booking':section.kind]?.slug)

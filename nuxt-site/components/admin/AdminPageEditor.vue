@@ -66,7 +66,7 @@ const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fiel
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
 const positionBlock=computed(()=>{
  const block=storeCaseContentPosition(active.value,workbench.selection.value,focusedField.value,bodies.value['data-storeCases']?.storeCases)
- if(sharedStoreCases.value)return storeCaseSharedPosition(block,pageData.value?.positionPresentation,focusedGroup.value,String(route.query.block||''))
+ if(sharedStoreCases.value)return storeCaseSharedPosition(block,pageData.value?.positionPresentation,focusedGroup.value,String(route.query.block||''),focusedField.value)
  if(block?.kind==='builder-catalogue-cards'&&focusedGroup.value===builderCatalogueNoticeAnchor)
   return {...block,previewPage:'/builders/catalogues#'+builderCatalogueNoticeAnchor}
  if(franchiseCatalogue.value&&focusedGroup.value==='franchise-pdf-actions')
@@ -402,7 +402,6 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <NuxtLink :to="pageEditorLink('franchise-download',route.query)" class="cms-button">編輯「加盟資料下載」頁 →</NuxtLink>
    </div>
    <p v-if="active?.secondary&&active.name==='顯示與搜尋設定'" class="cms-field-help">搜尋標題與摘要為選填，留空沿用官網原本內容。顯示設定會控制對應頁面或區塊是否出現在官網。</p>
-   <p v-if="id===storeCasesPageId&&active?.kind==='store-info'" class="cms-field-help">門市資訊旁的「到店預約」連結已移至 <NuxtLink :to="pageEditorLink(storeCasesPageId,route.query,'store-cases:門市資訊旁到店預約')">頁面共用設定 → 門市資訊旁到店預約</NuxtLink>。</p>
    <p v-if="caseManagement" class="cms-case-scope">這裡列出官網案例與自建草稿。選擇案例可看右側位置；門市案例可前往編輯，自建案例可在這裡編輯，系統同步案例請回原系統修改。</p>
    <p v-if="franchiseNews" class="cms-case-scope">按「編輯文章」修改標題、封面、摘要或內文。更新後，「優惠消息」也會使用修改後的文章。</p>
    <fieldset v-if="homeOneSettings.length" :disabled="busy" class="cms-edit-form cms-home-one-images">

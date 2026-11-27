@@ -788,19 +788,19 @@ for(const row of storeDoc.body.storeCases){
 const noCasePhotos=structuredClone(storeDoc.body);noCasePhotos.storeCases.forEach(row=>row.images=[])
 assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:noCasePhotos}),'','Missing case photos cannot silently borrow storefront covers')
 assert.equal(itemThumbnail({...storeDoc.body.storeCases[0],images:[]},storeRows.schema),'')
-const sharedSections=['案例規格','顧客評論','頁面共用設定']
+const sharedSections=['頁面共用設定']
 assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理',...sharedSections])
 assert.equal(storeRows.label,'案例清單')
 assert.equal(storeRows.schema.searchLabel,'搜尋案例名稱')
-for(const [oldName,name] of [['門市管理','案例管理'],['門市內頁規格與資訊','案例規格'],['門市內頁顧客評論','顧客評論']]){
+for(const [oldName,name] of [['門市管理','案例管理']]){
  const block=caseCard.page.blocks.find(b=>b.name===name)
  assert(block.aliases.includes('store-cases:'+oldName),'Previous bookmarked block links remain usable')
  assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:'+oldName}).query.block,'store-cases:'+name)
 }
 const sharedCase=caseCard.page.blocks.find(b=>b.name==='頁面共用設定')
-assert.deepEqual(sharedCase.fields.map(f=>f.path).sort(),['copy.field1','copy.storeBookingDestination','copy.text2','copy.text7','copy.text8'])
-assert(!caseCard.page.blocks.find(b=>b.name==='案例規格').fields.some(f=>f.path==='copy.storeBookingDestination'),'The contact booking destination must have exactly one edit location')
-const examples={storeCaseExamples:{'store-booking':{slug:'booking-case'},'store-contact-booking':{slug:'contact-case'},'store-navigation':{slug:'navigation-case'}}}
+assert.deepEqual(sharedCase.fields.map(f=>f.path).sort(),['metaLabels','copy.field1','copy.storeBookingDestination',...Array.from({length:8},(_,i)=>'copy.text'+(i+2))].sort())
+assert(!caseCard.page.blocks.some(b=>['案例規格','顧客評論'].includes(b.name)),'Shared specifications and review settings must have a single edit location')
+const examples={storeCaseExamples:{'store-booking':{slug:'booking-case'},'store-contact-booking':{slug:'contact-case'},'store-navigation':{slug:'navigation-case'},'store-info':{slug:'spec-case'},'store-reviews':{slug:'review-case'}},storeCaseFieldExamples:{'copy.text5':{slug:'line-case',anchor:'case-line-link'},'metaLabels.style':{slug:'style-case',anchor:'case-spec-title'}}}
 for(const [name,section]of Object.entries(storeCaseSharedSections)){
  const preview=storeCaseSharedPosition(sharedCase,examples,name)
  assert.equal(preview.name,name);assert.equal(preview.kind,section.kind)
@@ -815,6 +815,11 @@ for(const [name,section]of Object.entries(storeCaseSharedSections)){
  }
 }
 assert.equal(storeCaseSharedPosition(sharedCase,examples).name,'上方到店預約')
+for(const [field,slug,anchor]of [['copy.text5','line-case','case-line-link'],['metaLabels.style','style-case','case-spec-title']]){
+ const preview=storeCaseSharedPosition(sharedCase,examples,'案例規格','',field)
+ assert.equal(preview.previewPage,'/gallery/'+slug+'#'+anchor);assert.equal(preview.previewCaseSlug,slug)
+}
+assert.equal(storeCaseSharedPosition(sharedCase,examples,'顧客評論','','copy.text5').previewPage,'/gallery/review-case#case-reviews-title','A previous field cannot redirect another group')
 assert.equal(storeCaseSharedPosition(sharedCase,examples,'上方到店預約','store-cases:上一篇與下一篇').name,'上方到店預約','Current field focus overrides a legacy bookmark')
 assert.equal(storeCaseRedirect({sitePage:'stores',legacy:'view-pages-gallery-slug-'}).query.block,'store-cases:頁面共用設定')
 const listPage=servicePages[0]
