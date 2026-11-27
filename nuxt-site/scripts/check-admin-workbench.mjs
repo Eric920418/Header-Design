@@ -8,7 +8,7 @@ import {pageEditors,pageBlocks,searchResultLink,seriesCardRedirect} from '../sha
 import {checkPageBody,editorSchema} from '../server/cms/page-editors.mjs'
 import {workbenchBlocks,itemKey,itemCaption,itemThumbnail,positionContent,freshArticleValue,thumbnailPlaceholder,inspirationPosition,pagePositionContent,newsBreadcrumbPosition,homeHeroPosition,itemWebsitePath,articleDateLabel,updateArticleField,recentArticleIndexes,updateFranchiseMarqueeImage,updateFranchiseFaqDestination} from '../shared/cms/workbench.mjs'
 import {seriesEditorSections,seriesEditorSchema,sectionForSeriesField} from '../shared/cms/series-editor.mjs'
-import {pagePositions} from '../shared/cms/positions.mjs'
+import {pagePositions,storeCaseSharedSections,storeCaseSharedGroup,storeCaseSharedPosition} from '../shared/cms/positions.mjs'
 import {firstImage} from '../shared/cms/workflow.mjs'
 import {blockThumbnail} from '../shared/cms/page-editors.mjs'
 import {valueAt,searchPages,pageTaskLink,pageSummary,storeCasesPageId,storeCaseRedirect,retiredBuilderPartnersRedirect} from '../shared/cms/page-editors.mjs'
@@ -759,15 +759,34 @@ for(const row of storeDoc.body.storeCases){
 const noCasePhotos=structuredClone(storeDoc.body);noCasePhotos.storeCases.forEach(row=>row.images=[])
 assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:noCasePhotos}),'','Missing case photos cannot silently borrow storefront covers')
 assert.equal(itemThumbnail({...storeDoc.body.storeCases[0],images:[]},storeRows.schema),'')
-const sharedSections=['預約按鈕','案例規格','上一篇與下一篇','顧客評論']
+const sharedSections=['案例規格','顧客評論','頁面共用設定']
 assert.deepEqual(caseCard.page.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','案例管理',...sharedSections])
 assert.equal(storeRows.label,'案例清單')
 assert.equal(storeRows.schema.searchLabel,'搜尋案例名稱')
-for(const [oldName,name] of [['門市管理','案例管理'],['門市內頁規格與資訊','案例規格'],['門市內頁顧客評論','顧客評論'],['門市內頁預約按鈕','預約按鈕'],['門市內頁上一篇與下一篇','上一篇與下一篇']]){
+for(const [oldName,name] of [['門市管理','案例管理'],['門市內頁規格與資訊','案例規格'],['門市內頁顧客評論','顧客評論']]){
  const block=caseCard.page.blocks.find(b=>b.name===name)
  assert(block.aliases.includes('store-cases:'+oldName),'Previous bookmarked block links remain usable')
  assert.equal(storeCaseRedirect({sitePage:'stores',block:'stores:'+oldName}).query.block,'store-cases:'+name)
 }
+const sharedCase=caseCard.page.blocks.find(b=>b.name==='頁面共用設定')
+assert.deepEqual(sharedCase.fields.map(f=>f.path).sort(),['copy.field1','copy.text2','copy.text7','copy.text8'])
+const examples={storeCaseExamples:{'store-booking':{slug:'booking-case'},'store-navigation':{slug:'navigation-case'}}}
+for(const [name,section]of Object.entries(storeCaseSharedSections)){
+ const preview=storeCaseSharedPosition(sharedCase,examples,name)
+ assert.equal(preview.name,name);assert.equal(preview.kind,section.kind)
+ assert.deepEqual(preview.fields.map(f=>f.path).sort(),[...section.paths].sort())
+ assert.equal(preview.previewPage,'/gallery/'+examples.storeCaseExamples[section.kind].slug+'#'+section.anchor)
+ for(const alias of [name,...section.aliases]){
+  assert.equal(storeCaseSharedGroup('store-cases:'+alias),name)
+  assert(sharedCase.aliases.includes('store-cases:'+alias))
+  const redirect=storeCaseRedirect({sitePage:'stores',block:'stores:'+alias})
+  assert.equal(redirect.query.block,'store-cases:'+alias)
+  assert.equal(storeCaseSharedPosition(sharedCase,examples,'',redirect.query.block).name,name)
+ }
+}
+assert.equal(storeCaseSharedPosition(sharedCase,examples).name,'預約按鈕')
+assert.equal(storeCaseSharedPosition(sharedCase,examples,'預約按鈕','store-cases:上一篇與下一篇').name,'預約按鈕','Current field focus overrides a legacy bookmark')
+assert.equal(storeCaseRedirect({sitePage:'stores',legacy:'view-pages-gallery-slug-'}).query.block,'store-cases:頁面共用設定')
 const listPage=servicePages[0]
 assert(!listPage.blocks.some(b=>sharedSections.includes(b.name)||b.name==='案例管理'))
 assert.deepEqual(searchResultLink(searchPages(servicePages,'門市案例')[0],{section:'service',q:'門市案例'}).query,{section:'service',q:'門市案例',sitePage:storeCasesPageId})

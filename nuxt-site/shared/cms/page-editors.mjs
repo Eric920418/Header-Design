@@ -8,7 +8,7 @@ import {builderCatalogueDocument,builderCatalogueNoticeFields,isBuilderCatalogue
 import {productCatalogueDocument,productCatalogueFields} from './product-catalogue.mjs'
 import {workspaceFor,firstImage} from './workflow.mjs'
 import {editingSchema,resourceGuide,homeResources,placeDestinations} from './presentation.mjs'
-import {positionGroup,positionField,pagePositions,decoratePosition,franchiseSupportImagePath} from './positions.mjs'
+import {positionGroup,positionField,pagePositions,decoratePosition,franchiseSupportImagePath,storeCaseSharedSections,storeCaseSharedGroup} from './positions.mjs'
 import {franchiseNewsIds} from './public-content.mjs'
 
 const view=id=>'view-pages-'+id
@@ -88,11 +88,11 @@ export function storeCaseRedirect(query={}){
  if(query.sitePage!=='stores')return
  const oldSection=typeof query.block==='string'&&query.block.startsWith('stores:')?query.block.slice('stores:'.length):''
  const detailSection=pagePositions[storeCasesPageId].sections.find(s=>s.name===oldSection||s.aliases?.includes(storeCasesPageId+':'+oldSection))
- const detailBlock=detailSection?storeCasesPageId+':'+detailSection.name:undefined
+ const detailBlock=detailSection?storeCasesPageId+':'+(storeCaseSharedGroup(oldSection)?oldSection:detailSection.name):undefined
  const detailLegacy=query.legacy===storeDetailsResource||oldSection==='整頁共用文字'
  if(!detailBlock&&!detailLegacy&&query.list!==storeCasesScope&&query.legacy!==storeCasesResource&&oldSection!=='門市與案例')return
  const {legacy,...params}=query
- const block=detailBlock||(detailLegacy?storeCasesPageId+':預約按鈕':storeCasesBlock)
+ const block=detailBlock||(detailLegacy?storeCasesPageId+':頁面共用設定':storeCasesBlock)
  const link=pageEditorLink(storeCasesPageId,params,block)
  if(query.list===storeCasesScope&&typeof query.item==='string')Object.assign(link.query,{list:storeCasesScope,item:query.item})
  return link
@@ -225,6 +225,7 @@ export function pageBlocks(p,documents){
    const positionName=positionGroup(p.id,d.id,path)||previous
    const systemArticle=p.id==='knowledge'&&isSystemCabinetDocument(d.id)
    const formGroup=displaySettings?undefined:systemArticle?positionName
+    :p.id===storeCasesPageId&&d.id===storeDetailsResource?Object.keys(storeCaseSharedSections).find(group=>storeCaseSharedSections[group].paths.includes(path))
     :p.id==='inspiration'&&Object.hasOwn(inspirationSharedGroups,previous)?previous
     :p.id==='news-latest'&&positionName==='頁面共用設定'?(/^copy\.(field2|text3|field4|text5)$/.test(path)?'文章標題上方的分類連結':'文章底部的分類選單')
     :p.id==='knowledge'&&d.id!==view('knowledge-index')&&d.id!=='knowledge-articles'?positionName:undefined

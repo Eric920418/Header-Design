@@ -89,7 +89,7 @@ async function positionPresentation(p){
   }
   for(const section of definition.sections){
    if(['case-header','case-breadcrumb'].includes(section.kind)){result.blockImages[p.id+':'+section.name]=heroImage;continue}
-   const example=storeCases.find(store=>store.slug===result.storeCaseExamples[section.kind]?.slug)
+   const example=storeCases.find(store=>store.slug===result.storeCaseExamples[section.kind==='store-shared'?'store-booking':section.kind]?.slug)
    if(example)result.blockImages[p.id+':'+section.name]=firstImage(example.images)||example.cover
   }
  }

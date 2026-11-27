@@ -4,7 +4,7 @@ import {cmsDate,firstImage} from '~/shared/cms/workflow.mjs'
 import {imageReadingHelp,resourceGuide} from '~/shared/cms/presentation.mjs'
 import {pageChanges,changeImpacts,blockImpacts,pageMedia,hasPageChanges,itemPublication} from '~/shared/cms/changes.mjs'
 import {workbenchBlocks,pagePositionContent,itemWebsitePath,itemKey,recentArticleIndexes,updateFranchiseMarqueeImage,franchiseSupportImage,updateFranchiseFaqDestination} from '~/shared/cms/workbench.mjs'
-import {franchiseDownloadActions,franchiseDownloadSettings,franchiseMarqueeDocument,franchiseMarqueeRows} from '~/shared/cms/positions.mjs'
+import {franchiseDownloadActions,franchiseDownloadSettings,franchiseMarqueeDocument,franchiseMarqueeRows,storeCaseSharedSections,storeCaseSharedPosition} from '~/shared/cms/positions.mjs'
 import {FRANCHISE_FAQ_DISPLAY_LIMIT} from '~/data/franchise'
 import {knowledgeArticlePath,knowledgeArticleSections,knowledgeSharedSections,isSystemCabinetDocument,legacyKnowledgeSection} from '~/shared/cms/knowledge-editor.mjs'
 import {seriesEditorSections,seriesEditorSection,sectionForSeriesField} from '~/shared/cms/series-editor.mjs'
@@ -58,12 +58,14 @@ const legacyDownloadGroup=computed(()=>franchiseDownloadSettings.find(group=>rou
 const sharedInspiration=computed(()=>active.value?.id==='inspiration:頁面共用設定')
 const sharedKnowledge=computed(()=>active.value?.id==='knowledge:頁面共用設定')
 const sharedNews=computed(()=>active.value?.kind==='news-shared')
+const sharedStoreCases=computed(()=>active.value?.kind==='store-shared')
 const newsTopLinks='文章標題上方的分類連結'
 const knowledgeArticles=computed(()=>active.value?.id==='knowledge:文章管理')
 const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fields.filter((f:any)=>isSystemCabinetDocument(f.documentId)):[])
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
 const positionBlock=computed(()=>{
  const block=active.value
+ if(sharedStoreCases.value)return storeCaseSharedPosition(block,pageData.value?.positionPresentation,focusedGroup.value,String(route.query.block||''))
  if(block?.kind==='builder-catalogue-cards'&&focusedGroup.value===builderCatalogueNoticeAnchor)
   return {...block,previewPage:'/builders/catalogues#'+builderCatalogueNoticeAnchor}
  if(franchiseCatalogue.value&&focusedGroup.value==='franchise-pdf-actions')
@@ -189,7 +191,7 @@ const brochureSettings=computed(()=>franchiseDownloadCommon.value?commonFields.v
 const downloadSettings=computed(()=>franchiseDownloadCommon.value?franchiseDownloadSettings.map(group=>({...group,fields:commonFields.value.filter(f=>group.fields.includes(f.path))})):[])
 const mainFields=computed(()=>commonFields.value.filter(f=>!brochureSettings.value.includes(f)&&!downloadSettings.value.some(group=>group.fields.includes(f))))
 const sharedFormGroups=computed(()=>{
- const groups=sharedNews.value?{'文章底部的分類選單':{},[newsTopLinks]:{}}:sharedKnowledge.value?knowledgeSharedSections:inspirationSharedGroups
+ const groups=sharedStoreCases.value?storeCaseSharedSections:sharedNews.value?{'文章底部的分類選單':{},[newsTopLinks]:{}}:sharedKnowledge.value?knowledgeSharedSections:inspirationSharedGroups
  return Object.entries(groups).map(([key,group])=>({
   key,title:'title' in group?group.title:key,help:'help' in group?group.help:'',fields:commonFields.value.filter((f:any)=>f.formGroup===key),
  })).filter(group=>group.fields.length)
@@ -471,7 +473,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
      </div>
     </fieldset>
    </details>
-   <fieldset v-else-if="sharedInspiration||sharedKnowledge||sharedNews" :disabled="busy" class="cms-edit-form">
+   <fieldset v-else-if="sharedInspiration||sharedKnowledge||sharedNews||sharedStoreCases" :disabled="busy" class="cms-edit-form">
     <fieldset v-for="group in sharedFormGroups" :key="group.key" :data-position-group="group.key" class="cms-inspiration-form-group" :class="{'cms-news-link-settings':sharedNews}">
      <legend>{{ group.title }}</legend>
      <p v-if="group.help" class="cms-field-help">{{ group.help }}</p>
