@@ -5359,4 +5359,5 @@ final result: passed
 - 將門市案例的預約入口及前後篇設定統一收進「頁面共用設定」，分為「預約按鈕」與「上下篇按鈕」兩組。案例規格與顧客評論保留原入口，不變更官網內容與資料路徑。
 - 依正在編輯的組別切換右側位置預覽及查看官網／完整預覽的錨點；保留歷次舊網址，從舊入口進入會選到原本對應的設定組。無資料庫遷移。
 - 本機實際驗證六個主要入口與兩個共用設定組、十種新舊直達網址、按鈕文字／目的地的焦點對位、兩種完整草稿預覽錨點、原預約目的地與前後篇連結、原案例資料保留，以及 1440／1024／768／390px 的分組與手機位置視窗。無瀏覽器例外或持久資料修改；清除臨時帳號及預覽後文件／版本／結構指紋一致。後台工作流程、命名、欄位來源、分組／舊入口回歸、型別檢查及正式建置通過。
-- 部署前兩正式網域均實際點選三篇案例的預約與前後篇，確認櫻花 iCare 登入表單及設計靈感篩選條件保留正常。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 store-case-shared-local.json、store-case-shared-booking.jpg、store-case-shared-navigation.jpg 與 case-actions-before.json。部署結果待正式站複驗後補記。
+- 部署前兩正式網域均實際點選三篇案例的預約與前後篇，確認櫻花 iCare 登入表單及設計靈感篩選條件保留正常。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 store-case-shared-local.json、store-case-shared-booking.jpg、store-case-shared-navigation.jpg 與 case-actions-before.json。
+- `0a04ede4` 已部署至 Production `dpl_3AqsGV8NZwnCSZVuup1vurdCPCT1`，Ready 並綁定兩正式網域。兩站確認提供共用設定分組與動態位置對位的新版程式，資源雜湊一致；部署後各完成三篇案例前後篇的實際切換、設計靈感條件保留，以及預約連結開啟官方 iCare 登入表單的檢查。原公開文件、按鈕文字、預約目的地與前後篇網址／條件均與部署前一致，未修改正式資料庫。證據另包含 store-case-shared-production-assets.json 與 case-actions-after.json。
