@@ -65,7 +65,7 @@ const knowledgeArticles=computed(()=>active.value?.id==='knowledge:文章管理'
 const systemCabinetFields=computed(()=>knowledgeArticles.value?active.value.fields.filter((f:any)=>isSystemCabinetDocument(f.documentId)):[])
 const knowledgeSection=computed(()=>legacyKnowledgeSection(route.query.block))
 const positionBlock=computed(()=>{
- const block=storeCaseContentPosition(active.value,workbench.selection.value,focusedField.value)
+ const block=storeCaseContentPosition(active.value,workbench.selection.value,focusedField.value,bodies.value['data-storeCases']?.storeCases)
  if(sharedStoreCases.value)return storeCaseSharedPosition(block,pageData.value?.positionPresentation,focusedGroup.value,String(route.query.block||''))
  if(block?.kind==='builder-catalogue-cards'&&focusedGroup.value===builderCatalogueNoticeAnchor)
   return {...block,previewPage:'/builders/catalogues#'+builderCatalogueNoticeAnchor}

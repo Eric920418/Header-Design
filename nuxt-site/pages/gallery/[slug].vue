@@ -96,19 +96,19 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
               <section v-if="item.contact" class="case-detail-widget" aria-labelledby="case-store-title" v-reveal="{ anim: 'opalMoveLeft', delay: 160 }">
                 <div class="case-detail-store-heading">
                   <h2 id="case-store-title"><InternalHeadingText :text="cmsCopy.copy.text4" /></h2>
-                  <a :href="storeBookingDestination" target="_blank" rel="noopener noreferrer" class="case-detail-store-booking">
+                  <a id="case-store-booking" :href="storeBookingDestination" target="_blank" rel="noopener noreferrer" class="case-detail-store-booking">
                     <span>{{ cmsCopy.copy.text2 }}</span><ArrowUpRight aria-hidden="true" />
                   </a>
                 </div>
                 <h3><InternalHeadingText :text="item.contact.name" /></h3>
                 <ul class="case-detail-contact-list">
                   <li v-if="item.contact.hours"><CalendarClock aria-hidden="true" /><span>{{ item.contact.hours }}</span></li>
-                  <li v-if="item.contact.phone"><Phone aria-hidden="true" /><a :href="`tel:${item.contact.phone.replace(/[^\d+]/g, '')}`">{{ item.contact.phone }}</a></li>
+                  <li v-if="item.contact.phone"><Phone aria-hidden="true" /><a id="case-phone-link" :href="`tel:${item.contact.phone.replace(/[^\d+]/g, '')}`">{{ item.contact.phone }}</a></li>
                   <li v-if="item.contact.address"><MapPin aria-hidden="true" /><span>{{ item.contact.address }}</span></li>
                 </ul>
                 <div class="case-detail-contact-links">
-                  <a v-if="item.contact.lineUrl" :href="item.contact.lineUrl" target="_blank" rel="noopener noreferrer">{{ cmsCopy.copy.text5 }}</a>
-                  <a v-if="item.contact.mapUrl" :href="item.contact.mapUrl" target="_blank" rel="noopener noreferrer">{{ cmsCopy.copy.text6 }}</a>
+                  <a id="case-line-link" v-if="item.contact.lineUrl" :href="item.contact.lineUrl" target="_blank" rel="noopener noreferrer">{{ cmsCopy.copy.text5 }}</a>
+                  <a id="case-map-link" v-if="item.contact.mapUrl" :href="item.contact.mapUrl" target="_blank" rel="noopener noreferrer">{{ cmsCopy.copy.text6 }}</a>
                 </div>
 
                 <InternalCaseMap

@@ -31,6 +31,7 @@ import {builderStrengthsCopy,builderStrengthsDocument} from '../shared/cms/build
 import {builderHomeOneImage,builderHomeOneImages} from '../shared/cms/builder-home-one.mjs'
 import {builderAppointmentHeading,builderAppointmentHeadingFields} from '../shared/cms/builder-appointment.mjs'
 import {storeCaseContentPosition} from '../shared/cms/store-case-content.mjs'
+import {storeCaseRecommendationDestination} from '../shared/cms/store-case-links.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url)))
 const docs=seed.map(d=>({...d,body:d.data,schema:editorSchema({...d,schemaJson:JSON.stringify(d.schema)})}))
 {
@@ -768,6 +769,16 @@ assert.equal(storeRows.schema.item.fields.article.item.fields.images.label,'æ–‡ç
  const noImages=structuredClone(selected);delete noImages.value.article[1].images
  assert.equal(storeCaseContentPosition(storeManagement,noImages,'storeCases.0.article.1.images').previewPage,'/gallery/'+selected.value.slug+'#case-article-2','An empty photo group links to its existing article section')
  assert.deepEqual(selected.value,original,'Position changes never modify images or article data')
+ for(const [path,mode,anchor]of [['contact.lineUrl','line','case-line-link'],['contact.mapUrl','map','case-map-link'],['contact.phone','phone','case-phone-link'],['contact.reservationUrl','unused','case-store-title']]){
+  const position=storeCaseContentPosition(storeManagement,selected,'storeCases.0.'+path,storeDoc.body.storeCases)
+  assert.equal(position.kind,'store-case-links');assert.equal(position.linkMode,mode)
+  assert.equal(position.previewPage,'/gallery/'+selected.value.slug+'#'+anchor)
+ }
+ const recommendation=storeCaseContentPosition(storeManagement,selected,'storeCases.0.reservationUrl',storeDoc.body.storeCases)
+ assert.equal(recommendation.previewPage,'/gallery/'+storeDoc.body.storeCases[1].slug+'#related-cases-title','A recommendation must be located on another case page, not the selected case itself')
+ assert.equal(storeCaseRecommendationDestination({reservationUrl:'/backup',contact:{lineUrl:'/line',reservationUrl:'/unused'}}),'/line')
+ assert.equal(storeCaseRecommendationDestination({reservationUrl:'/backup',contact:{lineUrl:'',reservationUrl:'/unused'}}),'/backup','Clearing LINE must enable the existing fallback instead of making an empty link')
+ assert.equal(storeCaseRecommendationDestination({contact:{reservationUrl:'/unused'}}),'','The unused legacy field cannot become an accidental booking destination')
 }
 assert.equal(blockThumbnail(storeManagement,{[storeDoc.id]:storeDoc.body}),storeDoc.body.storeCases[0].images[0])
 for(const row of storeDoc.body.storeCases){

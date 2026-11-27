@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { MapPin } from 'lucide-vue-next'
 import type { StoreCaseDetail } from '~/types/content'
+import {storeCaseRecommendationDestination} from '~/shared/cms/store-case-links.mjs'
 
 const props = withDefaults(defineProps<{
   item: StoreCaseDetail
@@ -29,7 +30,8 @@ const detailRoute = computed(() => props.source === 'inspiration'
         <InternalCaseImage :src="item.images[0]!" :alt="`${item.title}案例照片`" class="case-recommendation-card__image" />
       </NuxtLink>
       <a
-        :href="item.contact?.lineUrl ?? item.reservationUrl"
+        v-if="storeCaseRecommendationDestination(item)"
+        :href="storeCaseRecommendationDestination(item)"
         target="_blank"
         rel="noopener noreferrer"
         class="case-recommendation-card__booking"

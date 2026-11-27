@@ -5370,3 +5370,11 @@ final result: passed
 - 段落清單沿用共用項目按鈕的焦點入口；段落與單張圖片返回清單的鍵盤焦點、四種寬度及原資料未變已另行實測通過，最終型別檢查與建置通過。證據另存 store-case-content-focus-local.json。
 - 後台工作流程、命名、欄位來源、圖片位置對應、空配圖錨點回歸、型別檢查與正式建置通過。部署前兩正式網域各確認三篇案例的全部原圖片、輪播前進／後退／尾張回首張與縮圖點選、文章原文／圖片／連結及四種寬度。原案例頁面與返回條件亦已留存比對。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 store-case-content-local.json、store-case-story-editor.jpg、store-case-carousel-before.json 與 case-header-before.json。
 - 功能提交 `9de53af3` 與焦點修正 `ba9d2fe5` 已部署，最終 Production 為 `dpl_CKctUPHkhRkNWjHAiny1ccSLnnMi`，Ready 並綁定兩正式網域。兩站確認提供圖片／段落快捷入口、精確預覽及最終鍵盤焦點程式，資源雜湊一致；部署後各完成三篇案例全部原圖、輪播前後／尾張回首張／縮圖切換、文章原文及圖片／連結、輪播與各段落位置錨點、兩種來源返回條件及四種寬度複驗。原公開文件與案例內容和部署前逐項一致，未修改正式資料庫。案例比對排除無關的同步案例抓圖：舊跨頁測試曾在切頁完成前擷取上一頁，改以本次門市案例、明確頁面與返回條件進行比對，未修改原始基準內容。證據另包含 store-case-content-production-assets.json、store-case-carousel-after.json 及 store-case-content-public-after.json。
+
+
+## 2026-11-27 門市案例連結用途查核
+
+- 區分推薦案例卡片的預約備用網址、LINE 諮詢與 Google Map 按鈕，補上兩個案例內頁到店預約共用設定的入口。未被官網使用的舊門市預約欄位保留為唯讀查閱，不接到其他按鈕。
+- 右側依所選連結顯示對應按鈕與實際目的地；地圖按鈕與內嵌地圖地址分開說明。推薦案例在 LINE 清空後使用既有預約備用網址；兩者皆空時不顯示空連結。原有非空網址保持不變。驗證結果待查核後補記。
+- 部署前兩正式網域均核對三篇案例的實際按鈕、電話格式、推薦卡片來源與文章連結；13 組實際使用的對外網址皆回應 200，三間門市 LINE 官方帳號名稱與店別相符，地圖目的地／地址相符。上方到店預約連至櫻花 iCare，門市資訊旁到店預約連至免費丈量預約頁，舊 contact.reservationUrl 沒有官網使用處。
+- 本機實際驗證三篇案例的分組／唯讀舊值／位置錨點、LINE／地圖真實草稿連結、推薦卡片共用 LINE、清空 LINE 後備用及兩者皆空的狀態、共用設定捷徑、取消還原與四種寬度。原圖片／文章／其他案例／舊欄位保留，原文件無異動，清除測試帳號與預覽後文件／版本／結構指紋一致。後台回歸、型別檢查與正式建置通過，無資料庫遷移。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 store-case-links-before.json、store-case-link-editor-local.json 與 store-case-link-groups.jpg。部署結果待正式站複驗後補記。

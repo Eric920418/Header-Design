@@ -1,6 +1,8 @@
-export function storeCaseContentPosition(block,selected,field=''){
+import {storeCaseLinkPosition} from './store-case-links.mjs'
+export function storeCaseContentPosition(block,selected,field='',cases=[]){
  if(block?.id!=='store-cases:案例管理'||selected?.documentId!=='data-storeCases'||selected.path!=='storeCases')return block
  const prefix='storeCases.'+selected.index,relative=field.startsWith(prefix+'.')?field.slice(prefix.length+1):''
+ const link=storeCaseLinkPosition(block,selected,relative,cases);if(link)return link
  const story=relative.match(/^article(?:\.(\d+))?(?:\.|$)/),carousel=/^images(?:\.|$)/.test(relative)
  if(!story&&!carousel)return block
  const item=selected.value,sectionIndex=story?Number(story[1]??Math.max(0,(item.article||[]).findIndex(section=>section.images?.length))):0
