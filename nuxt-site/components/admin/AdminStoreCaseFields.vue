@@ -23,7 +23,7 @@ function jump(target:'carousel'|'story'){const heading=target==='carousel'?carou
    <AdminItems :model-value="modelValue.article||[]" :schema="schema.fields.article" :document-id="documentId" :path="path+'.article'" :display-name="(section:any)=>section.title||'文章開頭'" @update:model-value="update('article',$event)">
     <template #list="{rows,choose,add}">
      <div class="cms-items-tools"><strong>文章段落 <span class="cms-count">{{ rows.length }}</span></strong><button type="button" class="cms-button" @click="add">新增段落</button></div>
-     <div class="cms-store-case-story-list"><button v-for="row in rows" :key="row.key" type="button" class="cms-store-case-story-entry" @click="choose(row)">
+     <div class="cms-store-case-story-list"><button v-for="row in rows" :key="row.key" type="button" class="cms-item-open cms-store-case-story-entry" @click="choose(row)">
       <AdminThumbnail :src="row.value.images?.[0]" :alt="'第 '+(row.index+1)+' 段配圖'" />
       <span><strong>第 {{ row.index+1 }} 段 · {{ row.value.title||'文章開頭' }}</strong><small>{{ row.value.images?.length||0 }} 張圖片 · 編輯本段圖片與內文</small></span>
      </button></div>
