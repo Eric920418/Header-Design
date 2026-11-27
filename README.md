@@ -5394,3 +5394,4 @@ final result: passed
 - 右側及完整預覽依組別與焦點欄位，分別對應規格、門市資訊、LINE、地圖及評論區；選用實際有該內容的刊登案例。保留所有原內容與網址，無資料庫遷移。
 - 本機實測五組共用設定、八種新舊直達入口、六種焦點欄位的正確案例與錨點、六次真實草稿預覽、取消還原及 1440／1024／768／390px 的位置視窗；原案例資料、評論、規格值及獨立網址均保留。清除測試帳號與預覽後，原文件／版本／結構指紋一致。後台分組、命名、欄位來源與舊入口回歸通過。部署前兩正式網域各核對三篇案例的原規格、評論、按鈕文字與完整案例連結，8 組相關外部網址全部回應 200。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 shared-spec-reviews-local.json、shared-spec-reviews-editor.jpg 與 shared-spec-reviews-before.json。
 - 最終型別檢查與正式建置通過；本次僅調整後台設定入口與預覽對位，保留正式資料內容與既有連結。
+- `6b6b0832` 已部署至 Production `dpl_6PcioUCJ9WTxMFv9yppqaW9SukKz`，Ready 並綁定兩正式網域。兩站提供案例規格／顧客評論共用分組與逐欄位案例預覽的新程式，資源雜湊一致；上線後再次核對三篇案例的全部規格欄名與值、評論原文、按鈕文字及完整案例連結，8 組相關外部網址皆回應 200。原公開文件與上述內容／連結逐項和部署前一致，未修改正式資料庫。證據另包含 shared-spec-reviews-after.json 與 shared-spec-reviews-production-assets.json。
