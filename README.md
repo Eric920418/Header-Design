@@ -5435,3 +5435,4 @@ final result: passed
 - 本機已實測新入口排序、兩個文字欄位、留空預設值、逐欄焦點對位、真實草稿及原首頁連結、四種寬度與原文件不變；本機交易另驗證預覽／儲存／發布後完整還原，未留下內容版本。回歸測試以區塊名稱定位原列表與側欄，保留既有文章功能查核。
 - 清除測試帳號與預覽後，文件／版本／結構指紋一致。部署前兩正式網域各確認總覽、三分類列表與九篇文章共 13 頁的原文、圖片來源、完整連結，以及文章點選／返回、首頁連結與四種寬度。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 news-breadcrumb-local.json、news-breadcrumb-editor.jpg 與 news-breadcrumb-before.json。
 - 最終後台工作流程、命名、欄位來源與連結用途回歸、型別檢查及正式建置通過；不需資料庫遷移。
+- `05ea6095` 已部署至 Production `dpl_9UHttGkJTrxQvfboofJDcjWk48w8`，Ready 並綁定兩正式網域。兩站提供新麵包屑入口、明確欄名與主視覺下方位置預覽，相關資源雜湊一致；上線後各完成 13 個原總覽／分類／文章頁面的文字、圖片與完整連結比對，實際點選文章／返回、首頁連結、位置錨點及四種寬度均正常。原公開文件與上述內容／連結逐項和部署前一致，未改寫正式資料庫。證據另包含 news-breadcrumb-after.json 與 news-breadcrumb-production-assets.json。
