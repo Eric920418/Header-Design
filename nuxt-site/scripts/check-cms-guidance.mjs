@@ -5,6 +5,9 @@ import {resourceGuide,resourceSearchText,editingSchema,homeResources} from '../s
 import {HOME_PROJECT_ID,HOME_SERVICES_ID,HOME_PROMISE_ID,homeProjectHeading,homeServicesHeading,remainingHomeHeadings} from '../shared/cms/home-headings.mjs'
 import {pageBlocks,pageEditors} from '../shared/cms/page-editors.mjs'
 import copyFields from '../shared/cms/presentation-copy.json' with {type:'json'}
+import {documentSchema} from '../shared/cms/document-schema.mjs'
+import {newsBreadcrumb} from '../shared/cms/page-breadcrumbs.mjs'
+import {fieldImpacts} from '../shared/cms/impact-targets.mjs'
 import {linkSetting} from '../shared/cms/link-settings.mjs'
 const seed=JSON.parse(await readFile(new URL('../shared/cms/seed.json',import.meta.url),'utf8'))
 const aliases=new Set(['data-news','data-latestArticles','data-activityArticles','data-mediaVideos','data-kitchenGuides','data-kitchenGuideDetails'])
@@ -165,3 +168,16 @@ if(process.env.CMS_GUIDANCE_READ_DB==='1'){
  try{const rows=(await query("SELECT id,schemaJson FROM cms.Documents WHERE id NOT IN (N'data-kitchenGuides',N'data-kitchenGuideDetails',N'data-news',N'data-latestArticles',N'data-activityArticles',N'data-mediaVideos')")).recordset;for(const row of rows)verify({id:row.id,schema:JSON.parse(row.schemaJson),data:{}});console.log('PASS live local editing schemas (SELECT only):',rows.length)}finally{await(await database()).close()}
 }
 console.log(`PASS ${docs.length} content locations, ${fields} visible labels, 8 home entries, shared impacts, source copy usage, section links and unchanged schemas`)
+
+const overview=seed.find(d=>d.id==='view-pages-news-index'),overviewOriginal=JSON.stringify(overview)
+const overviewDocs=seed.map(d=>({...d,schema:documentSchema(d.id,d.schema)}))
+const overviewBlocks=pageBlocks(pageEditors.find(p=>p.id==='news'),overviewDocs)
+assert.deepEqual(overviewBlocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定','最新消息列表','最新消息分類標籤','最新文章'])
+const overviewTrail=overviewBlocks.find(b=>b.name==='麵包屑編輯設定')
+assert.deepEqual(overviewTrail.fields.map(f=>f.path),['copy.breadcrumbHome','copy.breadcrumbList'])
+assert.equal(overviewTrail.href,'/news#news-breadcrumb')
+assert.deepEqual(newsBreadcrumb(),{breadcrumbHome:'首頁',breadcrumbList:'優惠消息'})
+assert.deepEqual(newsBreadcrumb({breadcrumbHome:' ',breadcrumbList:'更新總覽'}),{breadcrumbHome:'首頁',breadcrumbList:'更新總覽'})
+for(const f of overviewTrail.fields)assert.deepEqual(fieldImpacts({documentId:f.documentId,path:f.path}),[{label:'優惠消息總覽 → 位置導覽',href:'/news#news-breadcrumb'}])
+assert.equal(JSON.stringify(overview),overviewOriginal)
+console.log('PASS news overview breadcrumb order, editable optional labels, original blank defaults, exact source anchor, isolated impacts and immutable source')

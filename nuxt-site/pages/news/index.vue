@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const cmsCopy = await useCmsResource('view-pages-news-index', {"newsCategories":[{"label":"優惠活動","to":"/news/activities"},{"label":"最新消息","to":"/news/latest"},{"label":"媒體影音","to":"/news/video"}],"copy":{"text1":"Updates","text2":"優惠消息文章列表","text3":"優惠消息","text4":"最新文章"},"cmsSettings":{"visible":true,"seoTitle":"","seoDescription":""}})
 
+import { newsBreadcrumb } from '~/shared/cms/page-breadcrumbs.mjs'
+const breadcrumb = computed(() => newsBreadcrumb(cmsCopy.copy))
+
 import { newsArticles as cmsSeed_newsArticles, recentNewsArticles as cmsSeed_recentNewsArticles } from '~/data/news'
 const { newsArticles, recentNewsArticles } = await useCmsResource('data-news', { newsArticles: cmsSeed_newsArticles, recentNewsArticles: cmsSeed_recentNewsArticles })
 
@@ -24,8 +27,8 @@ useHead(() => ({ ...(cmsCopy.cmsSettings.seoTitle ? {title:cmsCopy.cmsSettings.s
       <div class="antra-news-breadcrumb__overlay" aria-hidden="true" />
       <div class="antra-news-breadcrumb__inner" v-reveal="{ anim: 'opalMoveUp' }">
         <h1 id="news-page-title">{{ cmsCopy.copy.text1 }}</h1>
-        <nav aria-label="麵包屑" class="antra-news-breadcrumb__trail">
-          <InternalSmartBreadcrumb :fallback='[{ label: "首頁", to: "/" }, { label: "優惠消息" }]' v-slot="{ items, follow }">
+        <nav id="news-breadcrumb" aria-label="麵包屑" class="antra-news-breadcrumb__trail">
+          <InternalSmartBreadcrumb :fallback="[{ label: breadcrumb.breadcrumbHome, to: '/' }, { label: breadcrumb.breadcrumbList }]" v-slot="{ items, follow }">
             <template v-for="(item, index) in items" :key="index">
               <span v-if="index" aria-hidden="true">/</span>
               <NuxtLink v-if="item.to" :to="item.to" :aria-current="index === items.length - 1 ? 'page' : undefined" @click.capture="follow($event, item)">{{ item.label }}</NuxtLink>

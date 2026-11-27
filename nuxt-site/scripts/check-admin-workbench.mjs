@@ -550,7 +550,7 @@ const overviewSections=[
  ['最新消息分類標籤','消息分類選單','news-tags-title',['newsCategories','copy.text3']],
  ['最新文章','最近文章推薦','sidebar-recent-title',['copy.text4']],
 ]
-assert.deepEqual(newsOverview.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題',...overviewSections.map(row=>row[0])])
+assert.deepEqual(newsOverview.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定',...overviewSections.map(row=>row[0])])
 for(const [name,oldName,anchor,fields] of overviewSections){
  const block=newsOverview.blocks.find(b=>b.name===name)
  assert(block.aliases.includes('news:'+oldName))
@@ -559,9 +559,9 @@ for(const [name,oldName,anchor,fields] of overviewSections){
  assert.equal(searchPages([newsOverview],oldName)[0].block.id,block.id)
 }
 const newsSamples={samples:[{title:'總覽文章'}],recentArticles:[{title:'側欄文章'}]}
-assert.equal(pagePositionContent(newsOverview.blocks[1],{},newsSamples).items[0].title,'總覽文章')
-assert.equal(pagePositionContent(newsOverview.blocks[3],{},newsSamples).items[0].title,'側欄文章')
-const overviewField=newsOverview.blocks[1].fields.find(f=>f.documentId==='news-articles')
+assert.equal(pagePositionContent(newsOverview.blocks.find(b=>b.name==='最新消息列表'),{},newsSamples).items[0].title,'總覽文章')
+assert.equal(pagePositionContent(newsOverview.blocks.find(b=>b.name==='最新文章'),{},newsSamples).items[0].title,'側欄文章')
+const overviewField=newsOverview.blocks.find(b=>b.name==='最新消息列表').fields.find(f=>f.documentId==='news-articles')
 assert(overviewField.schema.newsOverview&&!overviewField.schema.rowFilter)
 assert(!newsOverview.unpublishIds.includes('news-articles'))
 const overviewNewsDoc=docs.find(d=>d.id==='news-articles'),overviewEdit=structuredClone(overviewNewsDoc.body)

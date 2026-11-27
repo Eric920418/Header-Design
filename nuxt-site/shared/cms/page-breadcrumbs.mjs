@@ -28,6 +28,11 @@ const productCatalogueLabels = {
   breadcrumbList: { fallback: '廚房商品型錄', label: '型錄頁目前位置文字' },
 }
 
+const newsLabels = {
+  breadcrumbHome: inspirationLabels.breadcrumbHome,
+  breadcrumbList: { fallback: '優惠消息', label: '優惠消息目前位置文字' },
+}
+
 const latestNewsLabels = {
   breadcrumbHome: inspirationLabels.breadcrumbHome,
   breadcrumbParent: { fallback: '優惠消息', label: '優惠消息連結文字' },
@@ -56,6 +61,7 @@ export const storeBreadcrumb = (copy = {}) => breadcrumb(copy, storeLabels)
 export const knowledgeBreadcrumb = (copy = {}) => breadcrumb(copy, knowledgeLabels)
 export const seriesCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, seriesCatalogueLabels)
 export const productCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, productCatalogueLabels)
+export const newsBreadcrumb = (copy = {}) => breadcrumb(copy, newsLabels)
 export const latestNewsBreadcrumb = (copy = {}) => breadcrumb(copy, latestNewsLabels)
 export const franchiseDownloadBreadcrumb = (copy = {}) => breadcrumb(copy, franchiseDownloadLabels)
 export const builderCatalogueBreadcrumb = (copy = {}) => breadcrumb(copy, builderCatalogueLabels)
@@ -67,6 +73,7 @@ export function breadcrumbSchema(id, schema) {
     : id === 'view-pages-knowledge-index' ? knowledgeLabels
     : id === 'view-pages-catalogues-kitchenware-catalog' ? seriesCatalogueLabels
     : id === 'view-pages-catalogues-catalog' ? productCatalogueLabels
+    : id === 'view-pages-news-index' ? newsLabels
     : id === 'view-pages-news-latest-index' ? latestNewsLabels
     : id === 'view-pages-franchising-download' ? franchiseDownloadLabels
     : id === 'view-pages-builders-catalogues' ? builderCatalogueLabels : null
