@@ -480,7 +480,7 @@ onBeforeRouteUpdate((to,from)=>to.query.sitePage===from.query.sitePage||!dirty.v
     <AdminFields v-for="f in builderNoticeFields" :key="f.path" :model-value="pageFieldValue(bodies,f)" :schema="f.schema" :document-id="f.documentId" :path="f.path" @update:model-value="update(f,$event)" />
    </fieldset>
    <details v-if="collections.length&&commonFields.length&&!franchiseCatalogue" class="cms-common-settings" :open="['builders-appointment','product-care'].includes(active?.kind)||undefined">
-    <summary>{{ franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.kind==='product-care'?'選購指南標題與共用文字':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary>
+    <summary>{{ active?.id==='news:頁面共用設定'?'分類標籤區標題設定':franchiseFaq?'右側加盟資料卡片':newsRecent?'側欄標題設定':active?.kind==='product-care'?'選購指南標題與共用文字':active?.id==='home:主視覺輪播'?'輪播區塊共用設定':'本區塊共用設定' }}</summary>
     <p v-if="active?.kind==='builders-strengths'" class="cms-field-help">這些文字顯示在官網圖文旁，留空時沿用官網原文。</p>
     <p v-if="active?.kind==='builders-appointment'" class="cms-field-help">中英文主標題及前置英文留空時沿用官網原文。</p>
     <fieldset :disabled="busy" class="cms-edit-form" :class="{'cms-franchise-support-settings':active?.kind==='franchise-support'}">

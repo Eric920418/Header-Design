@@ -419,6 +419,18 @@ const table=computed(()=>{const f=props.block?.fields.find((f:any)=>f.path==='sy
      </div>
     </article>
    </div>
+   <div v-else-if="block?.id==='news:頁面共用設定'" class="cms-scene-news-recent">
+    <figure v-if="presentation?.samples?.[0]" class="cms-scene-news-recent-main">
+     <AdminThumbnail :src="presentation.samples[0].image" :alt="presentation.samples[0].title+'封面'" />
+     <figcaption>{{ presentation.samples[0].title }}</figcaption>
+    </figure>
+    <div class="cms-scene-news-recent-sidebar">
+     <h3 :class="{'is-focused':highlighted('copy.text3')}">{{ bodies['view-pages-news-index']?.copy?.text3 }}</h3>
+     <div class="cms-scene-buttons" aria-label="消息分類標籤的位置示意">
+      <span v-for="(category,index) in bodies['view-pages-news-index']?.newsCategories||[]" :key="index" :class="{'is-focused':focusedField?.startsWith('newsCategories.'+index+'.')||!focusedField&&selected?.path==='newsCategories'&&selected.index===index}">{{ category.label }}</span>
+     </div>
+    </div>
+   </div>
    <div v-else-if="scene.kind==='news-recent'" class="cms-scene-news-recent">
     <figure v-if="presentation?.samples?.[0]" class="cms-scene-news-recent-main">
      <AdminThumbnail :src="presentation.samples[0].image" :alt="presentation.samples[0].title+'封面'" />

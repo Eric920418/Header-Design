@@ -547,8 +547,8 @@ assert.equal(pagePositionContent(legacyVideo,{},{serviceVideoCover:'/service-pos
 const newsOverview=pageSummary(pageEditors.find(p=>p.id==='news'),[],docs)
 const overviewSections=[
  ['優惠消息列表','全部消息列表','news-list-title',['items','copy.text2']],
- ['最新消息分類標籤','消息分類選單','news-tags-title',['newsCategories','copy.text3']],
  ['最新文章','最近文章推薦','sidebar-recent-title',['copy.text4']],
+ ['頁面共用設定','消息分類選單','news-tags-title',['newsCategories','copy.text3']],
 ]
 assert.deepEqual(newsOverview.blocks.filter(b=>!b.secondary).map(b=>b.name),['主視覺標題','麵包屑編輯設定',...overviewSections.map(row=>row[0])])
 for(const [name,oldName,anchor,fields] of overviewSections){
@@ -558,6 +558,8 @@ for(const [name,oldName,anchor,fields] of overviewSections){
  assert.deepEqual(block.fields.map(f=>f.path).sort(),[...fields].sort())
  assert.equal(searchPages([newsOverview],oldName)[0].block.id,block.id)
 }
+assert.equal(newsOverview.blocks.find(b=>b.name==='頁面共用設定').fields.find(f=>f.path==='newsCategories').schema.label,'消息分類標籤')
+assert.equal(searchPages([newsOverview],'最新消息分類標籤')[0].block.id,'news:頁面共用設定')
 assert(newsOverview.blocks.find(b=>b.name==='優惠消息列表').aliases.includes('news:最新消息列表'))
 assert.equal(searchPages([newsOverview],'最新消息列表')[0].block.id,'news:優惠消息列表')
 const newsSamples={samples:[{title:'總覽文章'}],recentArticles:[{title:'側欄文章'}]}
