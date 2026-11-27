@@ -5425,3 +5425,5 @@ final result: passed
 
 - 本機實測 93 個欄位、55 個實際位置錨點、8 次獨立真實草稿預覽與 3 組跨資源按鈕文字對位；單一連結修改不影響相鄰按鈕、共用來源或原預設值。1440／1024／768／390px 及位置視窗正常，原文件無異動。清除臨時帳號與預覽後，文件／版本／結構指紋一致。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 all-link-settings-local-inspection.json、all-link-settings-flows.json、all-link-settings-cross-document.json 與 all-link-settings-preview.jpg。
 - 最終後台工作流程、欄位命名、欄位來源、預覽狀態及新連結用途回歸全部通過；型別檢查與正式建置成功。沿用既有資料欄位，無資料庫遷移或正式資料寫入。
+- `cee7e99d` 已部署至 Production `dpl_33czQArSpXPh51Teq3s8VcjkNYfa`，Ready 並綁定兩正式網域。兩站確認提供新版明確欄名、原網址與精確位置預覽，相關資源雜湊一致。上線後各複驗 57 個公開資源、55 個實際頁面、163 組既有目的地（包含補解析的 3 個首頁案例卡片原連結）及 14 份 PDF；原公開文件、頁面文字與完整連結逐項和部署前一致。
+- 正式站另實測頁首、頁尾網站地圖、指定套系分頁、知識文章段落／結語、活動／消息文章連結與影音案例連結的精確位置；頁尾新開頁及頁面載入完成後只切換錨點均正常。位置測試先確認頁面載入完成，再操作頁內錨點，避免測試在前端初始化前連續導航。YouTube 原頻道於真實瀏覽器再次回應 200。未修改正式資料庫。證據另包含 all-link-settings-public-after.json、all-link-settings-production-assets.json、all-link-settings-production-positions.json 與 all-link-settings-youtube.json。
