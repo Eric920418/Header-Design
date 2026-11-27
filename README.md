@@ -5402,3 +5402,4 @@ final result: passed
 - 兩個共用「到店預約」提供獨立位置的快捷入口；LINE、推薦案例與 Google Map 使用明確欄位名稱。右側分別列出官網目前網址與正在編輯的備用網址，避免把未使用的備用欄位誤認為現行按鈕連結。保留原資料與連結優先順序。
 - 本機實測三篇案例的明確欄名、收合未使用備用設定、LINE／備用／皆空三種狀態、右側實際與備用網址、共用設定捷徑、真實草稿連結、推薦案例按鈕、取消還原及四種寬度；無效網址在預覽及欄位顯示錯誤，收合欄位自動展開。原案例、圖片、文章、舊欄位與其他案例均保留，清除臨時帳號與預覽後文件／版本／結構指紋一致。後台工作流程、命名與欄位來源回歸通過。部署前兩正式網域各核對三篇案例原內容與完整連結，8 組相關外部網址皆回應 200。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 booking-clarity-local.json、booking-clarity-preview.jpg 與 booking-clarity-public-before.json。
 - 最終型別檢查與正式建置通過，無資料庫遷移。
+- `d27bf695` 已部署至 Production `dpl_AURz6R17Z72GaeQqnnAk5PStJjdX`，Ready 並綁定兩正式網域。兩站提供明確的按鈕用途欄名、備用使用狀態及目前網址／編輯備用網址區分，新版資源雜湊一致；上線後複驗三篇案例原內容與完整連結，8 組相關外部網址皆回應 200。原公開文件、規格、評論、按鈕文字與各連結逐項和部署前一致，未改寫正式資料庫。證據另包含 booking-clarity-public-after.json 及 booking-clarity-production-assets.json。
