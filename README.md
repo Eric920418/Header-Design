@@ -5452,3 +5452,4 @@ final result: passed
 - 分類清單、搜尋與新增項目統一使用「分類標籤」用語；編輯區標題時，右側只標示標題焦點，避免同時標示先前選取的分類。
 - 本機實測新共用入口與兩種舊入口、側欄原分類與正確位置、兩次真實草稿預覽（標題及單一分類名稱／連結）、其他分類原網址保留、取消還原、四種寬度及原文件不變。清除臨時帳號與預覽後文件／版本／結構指紋一致。部署前兩正式網域各確認 13 個原總覽／分類／文章頁面的原文、圖片、連結及實際文章／首頁導覽。證據存於既有 .gstack/qa-reports/cms-destination-reading-release-20261122/ 的 news-shared-categories-local.json、news-shared-categories-editor.jpg 與 news-shared-categories-before.json。
 - 最終後台工作流程、命名、欄位來源及連結用途回歸、型別檢查與正式建置通過，不需資料庫遷移。
+- `172243e4` 已部署至 Production `dpl_J5c9RCBaxWQjYzB95XiVA49nMEcN`，Ready 並綁定兩正式網域。兩站提供新的頁面共用入口、分類標籤用語、舊入口支援及實際側欄預覽，相關資源雜湊一致；上線後各複驗 13 個原總覽／分類／文章頁面的文字、圖片來源與完整連結，原分類順序及網址保持不變，實際文章／首頁導覽與四種寬度正常。原公開文件與內容／連結和部署前逐項一致，未修改正式資料庫。證據另包含 news-shared-categories-after.json 與 news-shared-categories-production-assets.json。
